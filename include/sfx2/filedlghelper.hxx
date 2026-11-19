@@ -80,7 +80,7 @@ class SFX2_DLLPUBLIC FileDialogHelper
 {
 public:
     // context where the FileDialogHelper is used
-    enum Context
+    enum class Context
     {
         UnknownContext,
         AcceleratorConfig,

@@ -156,9 +156,12 @@ static std::optional<OUString> GetLastFilterConfigId( FileDialogHelper::Context 
 
     switch( _eContext )
     {
-        case FileDialogHelper::DrawExport: return aSD_EXPORT_IDENTIFIER;
-        case FileDialogHelper::ImpressExport: return aSI_EXPORT_IDENTIFIER;
-        case FileDialogHelper::WriterExport: return aSW_EXPORT_IDENTIFIER;
+        case FileDialogHelper::Context::DrawExport:
+            return aSD_EXPORT_IDENTIFIER;
+        case FileDialogHelper::Context::ImpressExport:
+            return aSI_EXPORT_IDENTIFIER;
+        case FileDialogHelper::Context::WriterExport:
+            return aSW_EXPORT_IDENTIFIER;
         default: break;
     }
 
@@ -936,7 +939,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     :msPreselectedDir( sPreselectedDir )
     ,maPreviewIdle("sfx2 FileDialogHelper_Impl maPreviewIdle")
     ,m_nDialogType          ( nDialogType )
-    ,meContext              ( FileDialogHelper::UnknownContext )
+    , meContext(FileDialogHelper::Context::UnknownContext)
 {
     OUString sServiceName;
     switch (eDialog)
@@ -2167,7 +2170,7 @@ void FileDialogHelper_Impl::saveConfig()
     }
 
     // Store to config, if explicit context is set (and default directory is not given)
-    if (meContext != FileDialogHelper::UnknownContext && msPreselectedDir.isEmpty())
+    if (meContext != FileDialogHelper::Context::UnknownContext && msPreselectedDir.isEmpty())
     {
         SaveLastDirectory(FileDialogHelper::contextToString(meContext), getPath());
     }
@@ -2178,7 +2181,7 @@ OUString FileDialogHelper_Impl::getInitPath(std::u16string_view _rFallback,
 {
     OUString sPath;
     // Load from config, if explicit context is set. Otherwise load from (global) runtime var.
-    if (meContext == FileDialogHelper::UnknownContext || !msPreselectedDir.isEmpty())
+    if (meContext == FileDialogHelper::Context::UnknownContext || !msPreselectedDir.isEmpty())
     {
         // For export, the default directory is passed on
         sPath = msPreselectedDir;
@@ -2493,115 +2496,115 @@ OUString FileDialogHelper::contextToString(Context context)
     // These strings are used in the configuration, to store the last used directory for each context.
     // Please don't change them.
     switch(context) {
-        case AcceleratorConfig:
+        case Context::AcceleratorConfig:
             return u"AcceleratorConfig"_ustr;
-        case AutoRedact:
+        case Context::AutoRedact:
             return u"AutoRedact"_ustr;
-        case BaseDataSource:
+        case Context::BaseDataSource:
             return u"BaseDataSource"_ustr;
-        case BaseSaveAs:
+        case Context::BaseSaveAs:
             return u"BaseSaveAs"_ustr;
-        case BasicExportDialog:
+        case Context::BasicExportDialog:
             return u"BasicExportDialog"_ustr;
-        case BasicExportPackage:
+        case Context::BasicExportPackage:
             return u"BasicExportPackage"_ustr;
-        case BasicExportSource:
+        case Context::BasicExportSource:
             return u"BasicExportSource"_ustr;
-        case BasicImportDialog:
+        case Context::BasicImportDialog:
             return u"BasicImportDialog"_ustr;
-        case BasicImportSource:
+        case Context::BasicImportSource:
             return u"BasicImportSource"_ustr;
-        case BasicInsertLib:
+        case Context::BasicInsertLib:
             return u"BasicInsertLib"_ustr;
-        case BulletsAddImage:
+        case Context::BulletsAddImage:
             return u"BulletsAddImage"_ustr;
-        case CalcDataProvider:
+        case Context::CalcDataProvider:
             return u"CalcDataProvider"_ustr;
-        case CalcDataStream:
+        case Context::CalcDataStream:
             return u"CalcDataStream"_ustr;
-        case CalcExport:
+        case Context::CalcExport:
             return u"CalcExport"_ustr;
-        case CalcSaveAs:
+        case Context::CalcSaveAs:
             return u"CalcSaveAs"_ustr;
-        case CalcXMLSource:
+        case Context::CalcXMLSource:
             return u"CalcXMLSource"_ustr;
-        case ExportImage:
+        case Context::ExportImage:
             return u"ExportImage"_ustr;
-        case ExtensionManager:
+        case Context::ExtensionManager:
             return u"ExtensionManager"_ustr;
-        case FormsAddInstance:
+        case Context::FormsAddInstance:
             return u"FormsAddInstance"_ustr;
-        case FormsInsertImage:
+        case Context::FormsInsertImage:
             return u"FormsInsertImage"_ustr;
-        case LinkClientOLE:
+        case Context::LinkClientOLE:
             return u"LinkClientOLE"_ustr;
-        case LinkClientFile:
+        case Context::LinkClientFile:
             return u"LinkClientFile"_ustr;
-        case DrawImpressInsertFile:
+        case Context::DrawImpressInsertFile:
             return u"DrawImpressInsertFile"_ustr;
-        case DrawImpressOpenSound:
+        case Context::DrawImpressOpenSound:
             return u"DrawImpressOpenSound"_ustr;
-        case DrawExport:
+        case Context::DrawExport:
             return u"DrawExport"_ustr;
-        case DrawSaveAs:
+        case Context::DrawSaveAs:
             return u"DrawSaveAs"_ustr;
-        case IconImport:
+        case Context::IconImport:
             return u"IconImport"_ustr;
-        case ImpressClickAction:
+        case Context::ImpressClickAction:
             return u"ImpressClickAction"_ustr;
-        case ImpressExport:
+        case Context::ImpressExport:
             return u"ImpressExport"_ustr;
-        case ImpressPhotoDialog:
+        case Context::ImpressPhotoDialog:
             return u"ImpressPhotoDialog"_ustr;
-        case ImpressSaveAs:
+        case Context::ImpressSaveAs:
             return u"ImpressSaveAs"_ustr;
-        case ImageMap:
+        case Context::ImageMap:
             return u"ImageMap"_ustr;
-        case InsertDoc:
+        case Context::InsertDoc:
             return u"InsertDoc"_ustr;
-        case InsertImage:
+        case Context::InsertImage:
             return u"InsertImage"_ustr;
-        case InsertOLE:
+        case Context::InsertOLE:
             return u"InsertOLE"_ustr;
-        case InsertMedia:
+        case Context::InsertMedia:
             return u"InsertMedia"_ustr;
-        case JavaClassPath:
+        case Context::JavaClassPath:
             return u"JavaClassPath"_ustr;
-        case ReportInsertImage:
+        case Context::ReportInsertImage:
             return u"ReportInsertImage"_ustr;
-        case ScreenshotAnnotation:
+        case Context::ScreenshotAnnotation:
             return u"ScreenshotAnnotation"_ustr;
-        case SignatureLine:
+        case Context::SignatureLine:
             return u"SignatureLine"_ustr;
-        case TemplateImport:
+        case Context::TemplateImport:
             return u"TemplateImport"_ustr;
-        case WriterCreateAddressList:
+        case Context::WriterCreateAddressList:
             return u"WriterCreateAddressList"_ustr;
-        case WriterExport:
+        case Context::WriterExport:
             return u"WriterExport"_ustr;
-        case WriterImportAutotext:
+        case Context::WriterImportAutotext:
             return u"WriterImportAutotext"_ustr;
-        case WriterInsertImage:
+        case Context::WriterInsertImage:
             return u"WriterInsertImage"_ustr;
-        case WriterInsertScript:
+        case Context::WriterInsertScript:
             return u"WriterInsertScript"_ustr;
-        case WriterLoadTemplate:
+        case Context::WriterLoadTemplate:
             return u"WriterLoadTemplate"_ustr;
-        case WriterMailMerge:
+        case Context::WriterMailMerge:
             return u"WriterMailMerge"_ustr;
-        case WriterMailMergeSaveAs:
+        case Context::WriterMailMergeSaveAs:
             return u"WriterMailMergeSaveAs"_ustr;
-        case WriterNewHTMLGlobalDoc:
+        case Context::WriterNewHTMLGlobalDoc:
             return u"WriterNewHTMLGlobalDoc"_ustr;
-        case WriterRegisterDataSource:
+        case Context::WriterRegisterDataSource:
             return u"WriterRegisterDataSource"_ustr;
-        case WriterSaveAs:
+        case Context::WriterSaveAs:
             return u"WriterSaveAs"_ustr;
-        case WriterSaveHTML:
+        case Context::WriterSaveHTML:
             return u"WriterSaveHTML"_ustr;
-        case XMLFilterSettings:
+        case Context::XMLFilterSettings:
             return u"XMLFilterSettings"_ustr;
-        case UnknownContext:
+        case Context::UnknownContext:
         default:
             return u""_ustr;
     }

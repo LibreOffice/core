@@ -312,7 +312,7 @@ void SvFileObject::Edit(weld::Window* pParent, sfx2::SvBaseLink* pLink, const Li
 
             ::sfx2::FileDialogHelper & rFileDlg =
                 pLink->GetInsertFileDialog( OUString() );
-            rFileDlg.SetContext(sfx2::FileDialogHelper::LinkClientOLE);
+            rFileDlg.SetContext(sfx2::FileDialogHelper::Context::LinkClientOLE);
             rFileDlg.StartExecuteModal(
                     LINK( this, SvFileObject, DialogClosedHdl ) );
         }
@@ -329,7 +329,7 @@ void SvFileObject::Edit(weld::Window* pParent, sfx2::SvBaseLink* pLink, const Li
 
             ::sfx2::FileDialogHelper & rFileDlg =
                 pLink->GetInsertFileDialog(sFactory);
-            rFileDlg.SetContext(sfx2::FileDialogHelper::LinkClientFile);
+            rFileDlg.SetContext(sfx2::FileDialogHelper::Context::LinkClientFile);
             rFileDlg.StartExecuteModal(
                     LINK( this, SvFileObject, DialogClosedHdl ) );
         }

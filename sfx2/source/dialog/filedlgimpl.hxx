@@ -180,9 +180,9 @@ public:
 
     /** sets the directory which should be browsed
 
-            <p>If the given path does not point to a valid (existent and accessible) folder, the request
-            is silently dropped</p>
-        */
+        <p>If the given path does not point to a valid (existent and accessible) folder, the request
+        is silently dropped</p>
+    */
     void displayFolder(const OUString& rPath);
     void setFileName(const OUString& _rFile);
 

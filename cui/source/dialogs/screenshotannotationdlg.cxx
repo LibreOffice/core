@@ -350,7 +350,7 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, weld::Button&, 
 
     sfx2::FileDialogHelper aFileDlg(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                                                              FileDialogFlags::NONE, mpParentWindow);
-    aFileDlg.SetContext(sfx2::FileDialogHelper::ScreenshotAnnotation);
+    aFileDlg.SetContext(sfx2::FileDialogHelper::Context::ScreenshotAnnotation);
 
     const uno::Reference< ui::dialogs::XFilePicker3 > xFilePicker = aFileDlg.GetFilePicker();
 

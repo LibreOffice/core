@@ -687,7 +687,7 @@ IMPL_LINK(SwGlossaryDlg, MenuHdl, const OUString&, rItemIdent, void)
         // call the FileOpenDialog do find WinWord - Files with templates
         FileDialogHelper aDlgHelper(TemplateDescription::FILEOPEN_SIMPLE,
                                     FileDialogFlags::NONE, m_xDialog.get());
-        aDlgHelper.SetContext(FileDialogHelper::WriterImportAutotext);
+        aDlgHelper.SetContext(FileDialogHelper::Context::WriterImportAutotext);
         uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
         SfxFilterMatcher aMatcher( SwDocShell::Factory().GetFactoryName() );

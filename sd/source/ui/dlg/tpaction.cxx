@@ -405,7 +405,7 @@ void SdTPAction::OpenFileDialog()
             sfx2::FileDialogHelper aFileDialog(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
                 FileDialogFlags::NONE, GetFrameWeld());
-            aFileDialog.SetContext(sfx2::FileDialogHelper::ImpressClickAction);
+            aFileDialog.SetContext(sfx2::FileDialogHelper::Context::ImpressClickAction);
 
             // The following is a workaround for #i4306#:
             // The addition of the implicitly existing "all files"

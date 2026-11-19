@@ -2722,7 +2722,7 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
 OUString SwDBManager::LoadAndRegisterDataSource(weld::Window* pParent, SwDocShell* pDocShell)
 {
     sfx2::FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, pParent);
-    aDlgHelper.SetContext(sfx2::FileDialogHelper::WriterRegisterDataSource);
+    aDlgHelper.SetContext(sfx2::FileDialogHelper::Context::WriterRegisterDataSource);
     uno::Reference < ui::dialogs::XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
     OUString sFilterAll(SwResId(STR_FILTER_ALL));

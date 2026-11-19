@@ -200,7 +200,7 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
     uno::Reference<ui::dialogs::XFilePicker3> xFilePicker = aDialogHelper.GetFilePicker();
 
     // fish out the graphic's name
-    aDialogHelper.SetContext(sfx2::FileDialogHelper::ExportImage);
+    aDialogHelper.SetContext(sfx2::FileDialogHelper::Context::ExportImage);
     aDialogHelper.SetTitle( SvxResId(RID_SVXSTR_EXPORT_GRAPHIC_TITLE));
     INetURLObject aURL;
     aURL.SetSmartURL( rGraphicName );
@@ -404,7 +404,7 @@ void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,
 
         sfx2::FileDialogHelper aDialogHelper(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION, FileDialogFlags::NONE, pParent);
         uno::Reference<ui::dialogs::XFilePicker3> xFilePicker = aDialogHelper.GetFilePicker();
-        aDialogHelper.SetContext(sfx2::FileDialogHelper::ExportImage);
+        aDialogHelper.SetContext(sfx2::FileDialogHelper::Context::ExportImage);
         aDialogHelper.SetTitle( SvxResId(RID_SVXSTR_SAVEAS_IMAGE) );
 
         // populate filter dialog filter list and select default filter to match graphic mime type

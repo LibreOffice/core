@@ -413,7 +413,7 @@ bool ExtMgrDialog::acceptLicense( const uno::Reference< deployment::XPackage > &
 uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
 {
     sfx2::FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, m_xDialog.get());
-    aDlgHelper.SetContext(sfx2::FileDialogHelper::ExtensionManager);
+    aDlgHelper.SetContext(sfx2::FileDialogHelper::Context::ExtensionManager);
     aDlgHelper.SetTitle(DpResId(RID_STR_ADD_PACKAGES));
 
     // collect and set filter list:

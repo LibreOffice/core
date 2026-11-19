@@ -213,7 +213,7 @@ SdOpenSoundFileDialog::SdOpenSoundFileDialog(weld::Window *pParent)
 {
     OUString aDescr = SdResId(STR_ALL_FILES);
     mpImpl->AddFilter( aDescr, u"*.*"_ustr);
-    mpImpl->SetContext(sfx2::FileDialogHelper::DrawImpressOpenSound);
+    mpImpl->SetContext(sfx2::FileDialogHelper::Context::DrawImpressOpenSound);
 
     // setup filter
 #if defined UNX

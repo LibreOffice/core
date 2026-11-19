@@ -783,7 +783,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                 FileDialogFlags::NONE, m_xAssistant.get());
-        aFileDlg.SetContext(sfx2::FileDialogHelper::BaseSaveAs);
+        aFileDlg.SetContext(sfx2::FileDialogHelper::Context::BaseSaveAs);
         std::shared_ptr<const SfxFilter> pFilter = getStandardDatabaseFilter();
         if ( pFilter )
         {

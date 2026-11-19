@@ -370,7 +370,7 @@ void SvxIMapDlg::DoOpen()
     aDlg.AddFilter( IMAP_BINARY_FILTER, IMAP_BINARY_TYPE );
 
     aDlg.SetCurrentFilter( aFilter );
-    aDlg.SetContext(sfx2::FileDialogHelper::ImageMap);
+    aDlg.SetContext(sfx2::FileDialogHelper::Context::ImageMap);
 
     if( aDlg.Execute() != ERRCODE_NONE )
         return;
@@ -413,7 +413,7 @@ bool SvxIMapDlg::DoSave()
     aDlg.AddFilter( aBinFilter, IMAP_BINARY_TYPE );
 
     aDlg.SetCurrentFilter( aCERNFilter );
-    aDlg.SetContext(sfx2::FileDialogHelper::ImageMap);
+    aDlg.SetContext(sfx2::FileDialogHelper::Context::ImageMap);
 
     if( aDlg.Execute() == ERRCODE_NONE )
     {

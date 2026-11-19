@@ -836,7 +836,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl, weld::Button&, void)
     sfx2::FileDialogHelper aDlg(TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, m_xDialog.get());
     aDlg.SetTitle( CuiResId( RID_CUISTR_ARCHIVE_TITLE ) );
     aDlg.AddFilter( CuiResId( RID_CUISTR_ARCHIVE_HEADLINE ), u"*.jar;*.zip"_ustr );
-    aDlg.SetContext(sfx2::FileDialogHelper::JavaClassPath);
+    aDlg.SetContext(sfx2::FileDialogHelper::Context::JavaClassPath);
     OUString sFolder;
     if (m_xPathList->count_selected_rows() > 0)
     {

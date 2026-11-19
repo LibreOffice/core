@@ -163,7 +163,7 @@ void ScXMLSourceDlg::SelectSourceFile()
 {
     sfx2::FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                                       FileDialogFlags::NONE, m_xDialog.get());
-    aDlgHelper.SetContext(sfx2::FileDialogHelper::CalcXMLSource);
+    aDlgHelper.SetContext(sfx2::FileDialogHelper::Context::CalcXMLSource);
 
     // Use the directory of current source file.
     INetURLObject aURL(maSrcPath);

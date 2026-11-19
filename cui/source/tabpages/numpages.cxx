@@ -1022,7 +1022,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, DoubleClickHdl_Impl, ValueSet*, void)
 IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, void)
 {
     sfx2::FileDialogHelper aFileDialog(0, FileDialogFlags::NONE, GetFrameWeld());
-    aFileDialog.SetContext(sfx2::FileDialogHelper::BulletsAddImage);
+    aFileDialog.SetContext(sfx2::FileDialogHelper::Context::BulletsAddImage);
     aFileDialog.SetTitle(CuiResId(RID_CUISTR_ADD_IMAGE));
     if ( aFileDialog.Execute() != ERRCODE_NONE )
         return;

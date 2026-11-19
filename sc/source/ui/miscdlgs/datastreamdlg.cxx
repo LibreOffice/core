@@ -54,7 +54,7 @@ DataStreamDlg::~DataStreamDlg() {}
 IMPL_LINK_NOARG(DataStreamDlg, BrowseHdl, weld::Button&, void)
 {
     sfx2::FileDialogHelper aFileDialog(0, FileDialogFlags::NONE, m_xDialog.get());
-    aFileDialog.SetContext(sfx2::FileDialogHelper::CalcDataStream);
+    aFileDialog.SetContext(sfx2::FileDialogHelper::Context::CalcDataStream);
     if (aFileDialog.Execute() != ERRCODE_NONE)
         return;
 

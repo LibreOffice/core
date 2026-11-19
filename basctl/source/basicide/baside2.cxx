@@ -422,7 +422,7 @@ void ModulWindow::LoadBasic()
 {
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                                 FileDialogFlags::NONE, this->GetFrameWeld());
-    aDlg.SetContext(sfx2::FileDialogHelper::BasicImportSource);
+    aDlg.SetContext(sfx2::FileDialogHelper::Context::BasicImportSource);
     Reference<XFilePicker3> xFP = aDlg.GetFilePicker();
 
     xFP->appendFilter( u"BASIC"_ustr , u"*.bas"_ustr );
@@ -466,7 +466,7 @@ void ModulWindow::SaveBasicSource()
 {
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                                 FileDialogFlags::NONE, this->GetFrameWeld());
-    aDlg.SetContext(sfx2::FileDialogHelper::BasicExportSource);
+    aDlg.SetContext(sfx2::FileDialogHelper::Context::BasicExportSource);
     const Reference<XFilePicker3>& xFP = aDlg.GetFilePicker();
 
     xFP.queryThrow<XFilePickerControlAccess>()->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, Any(true));

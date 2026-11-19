@@ -502,7 +502,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl, weld::Button&, void)
     ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILEOPEN_PREVIEW,
         FileDialogFlags::Graphic | FileDialogFlags::MultiSelection, m_xDialog.get());
-    aDlg.SetContext(sfx2::FileDialogHelper::ImpressPhotoDialog);
+    aDlg.SetContext(sfx2::FileDialogHelper::Context::ImpressPhotoDialog);
 
     if ( aDlg.Execute() == ERRCODE_NONE )
     {

@@ -423,7 +423,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE,
             FileDialogFlags::Graphic | FileDialogFlags::MultiSelection, GetFrameWeld()));
         pFileDlg->SetTitle(SwResId(STR_INSERT_GRAPHIC ));
-        pFileDlg->SetContext( FileDialogHelper::WriterInsertImage );
+        pFileDlg->SetContext(FileDialogHelper::Context::WriterInsertImage);
 
         uno::Reference < XFilePicker3 > xFP = pFileDlg->GetFilePicker();
         uno::Reference < XFilePickerControlAccess > xCtrlAcc(xFP, UNO_QUERY);

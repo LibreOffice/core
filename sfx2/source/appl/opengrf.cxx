@@ -93,7 +93,7 @@ SvxOpenGraphicDialog::SvxOpenGraphicDialog(const OUString& rTitle, weld::Window*
     : mpImpl(new SvxOpenGrf_Impl(pPreferredParent, ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW))
 {
     mpImpl->aFileDlg.SetTitle(rTitle);
-    mpImpl->aFileDlg.SetContext(sfx2::FileDialogHelper::InsertImage);
+    mpImpl->aFileDlg.SetContext(sfx2::FileDialogHelper::Context::InsertImage);
 }
 
 SvxOpenGraphicDialog::SvxOpenGraphicDialog(const OUString& rTitle, weld::Window* pPreferredParent,
@@ -101,7 +101,7 @@ SvxOpenGraphicDialog::SvxOpenGraphicDialog(const OUString& rTitle, weld::Window*
     : mpImpl(new SvxOpenGrf_Impl(pPreferredParent, nDialogType))
 {
     mpImpl->aFileDlg.SetTitle(rTitle);
-    mpImpl->aFileDlg.SetContext(sfx2::FileDialogHelper::InsertImage);
+    mpImpl->aFileDlg.SetContext(sfx2::FileDialogHelper::Context::InsertImage);
 }
 
 SvxOpenGraphicDialog::~SvxOpenGraphicDialog()

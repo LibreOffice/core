@@ -663,7 +663,7 @@ namespace dbaui
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
                 FileDialogFlags::NONE, u"sdatabase"_ustr, SfxFilterFlags::NONE, SfxFilterFlags::NONE, GetFrameWeld());
-        aFileDlg.SetContext(sfx2::FileDialogHelper::BaseDataSource);
+        aFileDlg.SetContext(sfx2::FileDialogHelper::Context::BaseDataSource);
         std::shared_ptr<const SfxFilter> pFilter = getStandardDatabaseFilter();
         if ( pFilter )
         {

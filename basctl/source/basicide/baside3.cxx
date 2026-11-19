@@ -606,7 +606,7 @@ void DialogWindow::SaveDialog()
 {
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                                 FileDialogFlags::NONE, this->GetFrameWeld());
-    aDlg.SetContext(sfx2::FileDialogHelper::BasicExportDialog);
+    aDlg.SetContext(sfx2::FileDialogHelper::Context::BasicExportDialog);
     Reference<XFilePicker3> xFP = aDlg.GetFilePicker();
 
     xFP.queryThrow<XFilePickerControlAccess>()->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, Any(true));
@@ -791,7 +791,7 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
     const Reference<uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                                 FileDialogFlags::NONE, pWin);
-    aDlg.SetContext(sfx2::FileDialogHelper::BasicImportDialog);
+    aDlg.SetContext(sfx2::FileDialogHelper::Context::BasicImportDialog);
     Reference<XFilePicker3> xFP = aDlg.GetFilePicker();
 
     OUString aDialogStr(IDEResId(RID_STR_STDDIALOGNAME));

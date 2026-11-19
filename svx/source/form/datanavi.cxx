@@ -3108,7 +3108,7 @@ namespace svxform
         ::sfx2::FileDialogHelper aDlg(
             css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             FileDialogFlags::NONE, m_xDialog.get());
-        aDlg.SetContext(sfx2::FileDialogHelper::FormsAddInstance);
+        aDlg.SetContext(sfx2::FileDialogHelper::Context::FormsAddInstance);
 
         aDlg.AddFilter( m_sAllFilterName, FILEDIALOG_FILTER_ALL );
         OUString sFilterName( u"XML"_ustr );

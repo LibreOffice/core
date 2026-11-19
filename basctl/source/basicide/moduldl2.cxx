@@ -597,7 +597,7 @@ void ImportLib(const ScriptDocument& rDocument, weld::Dialog* pDialog,
     const Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     // file open dialog
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, pDialog);
-    aDlg.SetContext(sfx2::FileDialogHelper::BasicInsertLib);
+    aDlg.SetContext(sfx2::FileDialogHelper::Context::BasicInsertLib);
     const Reference <XFilePicker3>& xFP = aDlg.GetFilePicker();
 
     xFP->setTitle(IDEResId(RID_STR_APPENDLIBS));
@@ -1053,7 +1053,7 @@ void ExportAsPackage(const ScriptDocument& rScriptDocument, const OUString& aLib
     // file open dialog
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_SIMPLE,
                                 FileDialogFlags::NONE, pDialog);
-    aDlg.SetContext(sfx2::FileDialogHelper::BasicExportPackage);
+    aDlg.SetContext(sfx2::FileDialogHelper::Context::BasicExportPackage);
     const Reference <XFilePicker3>& xFP = aDlg.GetFilePicker();
 
     const Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );

@@ -999,17 +999,17 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
             pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, eDialog, nMust, nDont, sPreselectedDir, rDenyList, pFrameWin ));
         }
 
-        sfx2::FileDialogHelper::Context eCtxt = sfx2::FileDialogHelper::UnknownContext;
+        sfx2::FileDialogHelper::Context eCtxt = sfx2::FileDialogHelper::Context::UnknownContext;
         if ( aDocServiceName == "com.sun.star.drawing.DrawingDocument" )
-            eCtxt = sfx2::FileDialogHelper::DrawExport;
+            eCtxt = sfx2::FileDialogHelper::Context::DrawExport;
         else if ( aDocServiceName == "com.sun.star.presentation.PresentationDocument" )
-            eCtxt = sfx2::FileDialogHelper::ImpressExport;
+            eCtxt = sfx2::FileDialogHelper::Context::ImpressExport;
         else if ( aDocServiceName == "com.sun.star.text.TextDocument" )
-            eCtxt = sfx2::FileDialogHelper::WriterExport;
+            eCtxt = sfx2::FileDialogHelper::Context::WriterExport;
         else if ( aDocServiceName == "com.sun.star.sheet.SpreadsheetDocument" )
-            eCtxt = sfx2::FileDialogHelper::CalcExport;
-        if ( eCtxt != sfx2::FileDialogHelper::UnknownContext )
-               pFileDlg->SetContext( eCtxt );
+            eCtxt = sfx2::FileDialogHelper::Context::CalcExport;
+        if (eCtxt != sfx2::FileDialogHelper::Context::UnknownContext)
+            pFileDlg->SetContext(eCtxt);
 
         pFileDlg->CreateMatcher( aDocServiceName );
 
@@ -1030,18 +1030,18 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
                                                   pFrameWin));
         pFileDlg->CreateMatcher( aDocServiceName );
 
-        sfx2::FileDialogHelper::Context eCtxt = sfx2::FileDialogHelper::UnknownContext;
+        sfx2::FileDialogHelper::Context eCtxt = sfx2::FileDialogHelper::Context::UnknownContext;
         if ( aDocServiceName == "com.sun.star.drawing.DrawingDocument" )
-            eCtxt = sfx2::FileDialogHelper::DrawSaveAs;
+            eCtxt = sfx2::FileDialogHelper::Context::DrawSaveAs;
         else if ( aDocServiceName == "com.sun.star.presentation.PresentationDocument" )
-            eCtxt = sfx2::FileDialogHelper::ImpressSaveAs;
+            eCtxt = sfx2::FileDialogHelper::Context::ImpressSaveAs;
         else if ( aDocServiceName == "com.sun.star.text.TextDocument" )
-            eCtxt = sfx2::FileDialogHelper::WriterSaveAs;
+            eCtxt = sfx2::FileDialogHelper::Context::WriterSaveAs;
         else if ( aDocServiceName == "com.sun.star.sheet.SpreadsheetDocument" )
-            eCtxt = sfx2::FileDialogHelper::CalcSaveAs;
+            eCtxt = sfx2::FileDialogHelper::Context::CalcSaveAs;
 
-        if ( eCtxt != sfx2::FileDialogHelper::UnknownContext )
-               pFileDlg->SetContext( eCtxt );
+        if (eCtxt != sfx2::FileDialogHelper::Context::UnknownContext)
+            pFileDlg->SetContext(eCtxt);
     }
 
     OUString aAdjustToType;
