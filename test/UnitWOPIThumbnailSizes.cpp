@@ -12,7 +12,7 @@
 #include <config.h>
 
 #include <WopiTestServer.hpp>
-#include <kit/ChildSession.hpp>
+#include <common/Session.hpp>
 #include <common/Unit.hpp>
 #include <lokassert.hpp>
 
@@ -110,7 +110,7 @@ public:
         // The session reads the sizes when it handles the load command, which may be after
         // the command was filtered, so wait until its state shows them.
         std::ostringstream state;
-        static_cast<ChildSession*>(_session)->dumpState(state);
+        _session->dumpState(state);
         if (state.str().find("thumbnailSizes: 1000x1000 256x256") != std::string::npos)
             exitTest(TestResult::Ok, "The session read the thumbnail sizes");
     }

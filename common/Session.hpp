@@ -454,8 +454,10 @@ protected:
         _lastActivityTime = std::chrono::steady_clock::now();
     }
 
+public:
     void dumpState(std::ostream& os) override;
 
+protected:
     std::string getLogPrefix() const { return _name + ": "; }
     void logPrefix(std::ostream& os) const { os <<  _name + ": "; }
 
