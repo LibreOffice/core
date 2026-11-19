@@ -7039,7 +7039,12 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
                             const_cast<SwSectionFormat*>(pSectionFormat), false);
             }
             else
-                nSlot = FN_EDIT_REGION;
+            {
+                SfxStringItem const aName(FN_EDIT_REGION, pCnt->GetName());
+                SfxPoolItem const* args[2] = { &aName, nullptr };
+                m_pActiveShell->GetView().GetViewFrame().
+                    GetDispatcher()->Execute(FN_EDIT_REGION, SfxCallMode::SYNCHRON, args);
+            }
         break;
 
         case ContentTypeId::URLFIELD:
