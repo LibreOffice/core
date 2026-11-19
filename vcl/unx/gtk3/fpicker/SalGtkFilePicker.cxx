@@ -2137,11 +2137,10 @@ SalGtkFilePicker::~SalGtkFilePicker()
 #endif
 }
 
-uno::Reference< ui::dialogs::XFilePicker2 >
-GtkInstance::createFilePicker( const css::uno::Reference< css::uno::XComponentContext > &xMSF )
+uno::Reference<ui::dialogs::XFilePicker3>
+GtkInstance::createFilePicker(const css::uno::Reference<css::uno::XComponentContext>& xMSF)
 {
-    return uno::Reference< ui::dialogs::XFilePicker2 >(
-                new SalGtkFilePicker( xMSF ) );
+    return rtl::Reference<SalGtkFilePicker>(new SalGtkFilePicker(xMSF));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

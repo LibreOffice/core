@@ -26,12 +26,12 @@
 
 #include <system_error>
 
-uno::Reference<ui::dialogs::XFilePicker2>
+uno::Reference<ui::dialogs::XFilePicker3>
 GtkInstance::createFilePicker(const uno::Reference<uno::XComponentContext>& xMSF)
 {
     try
     {
-        return uno::Reference<ui::dialogs::XFilePicker2>(new Gtk3KDE5FilePicker(xMSF));
+        return rtl::Reference<Gtk3KDE5FilePicker>(new Gtk3KDE5FilePicker(xMSF));
     }
     catch (const std::system_error& error)
     {

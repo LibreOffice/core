@@ -674,8 +674,7 @@ void QtFilePicker::applyTemplate(sal_Int16 nTemplateId)
             break;
 
         default:
-            throw lang::IllegalArgumentException(u"Unknown template"_ustr,
-                                                 static_cast<XFilePicker2*>(this), 1);
+            throw lang::IllegalArgumentException(u"Unknown template"_ustr, getXWeak(), 1);
     }
 
     TranslateId resId;

@@ -1649,8 +1649,8 @@ bool Application::hasNativeFileSelection()
     return GetSalInstance()->hasNativeFileSelection();
 }
 
-Reference< ui::dialogs::XFilePicker2 >
-Application::createFilePicker( const Reference< uno::XComponentContext >& xSM )
+Reference<ui::dialogs::XFilePicker3>
+Application::createFilePicker(const Reference<uno::XComponentContext>& xSM)
 {
     return GetSalInstance()->createFilePicker( xSM );
 }

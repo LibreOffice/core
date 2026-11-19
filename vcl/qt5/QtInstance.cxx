@@ -581,11 +581,10 @@ QtInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> const&
     return new QtFilePicker(context, eMode);
 }
 
-css::uno::Reference<css::ui::dialogs::XFilePicker2>
+css::uno::Reference<css::ui::dialogs::XFilePicker3>
 QtInstance::createFilePicker(const css::uno::Reference<css::uno::XComponentContext>& context)
 {
-    return css::uno::Reference<css::ui::dialogs::XFilePicker2>(
-        createPicker(context, QFileDialog::ExistingFile));
+    return createPicker(context, QFileDialog::ExistingFile);
 }
 
 css::uno::Reference<css::ui::dialogs::XFolderPicker2>

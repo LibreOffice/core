@@ -268,8 +268,8 @@ public:
     bool hasNativeColorChooserDialog() const override { return true; }
     virtual bool hasNativeFileSelection() const override { return true; }
 
-    virtual css::uno::Reference< css::ui::dialogs::XFilePicker2 >
-        createFilePicker( const css::uno::Reference< css::uno::XComponentContext >& ) override;
+    virtual css::uno::Reference<css::ui::dialogs::XFilePicker3>
+    createFilePicker(const css::uno::Reference<css::uno::XComponentContext>&) override;
     virtual css::uno::Reference< css::ui::dialogs::XFolderPicker2 >
         createFolderPicker( const css::uno::Reference< css::uno::XComponentContext >& ) override;
 

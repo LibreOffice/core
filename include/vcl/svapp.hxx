@@ -84,8 +84,8 @@ namespace com::sun::star::uno {
     class XComponentContext;
 }
 namespace com::sun::star::ui::dialogs {
-    class XFilePicker2;
-    class XFolderPicker2;
+class XFilePicker3;
+class XFolderPicker2;
 }
 namespace com::sun::star::awt {
     class XToolkit;
@@ -1299,8 +1299,8 @@ public:
 
      @returns File picker if available, otherwise an empty reference.
     */
-    static css::uno::Reference< css::ui::dialogs::XFilePicker2 >
-        createFilePicker( const css::uno::Reference< css::uno::XComponentContext >& rServiceManager );
+    static css::uno::Reference<css::ui::dialogs::XFilePicker3>
+    createFilePicker(const css::uno::Reference<css::uno::XComponentContext>& rServiceManager);
 
     /** Create a platform specific folder picker, if one is available, otherwise return an
      empty reference

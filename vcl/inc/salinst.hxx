@@ -36,7 +36,7 @@
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <memory>
 
@@ -212,8 +212,11 @@ public:
     virtual bool hasNativeColorChooserDialog() const { return false; }
     virtual bool            hasNativeFileSelection() const { return false; }
     // if you override this, make sure to override hasNativeFileSelection too.
-    virtual css::uno::Reference< css::ui::dialogs::XFilePicker2 > createFilePicker( const css::uno::Reference< css::uno::XComponentContext >& )
-        { return css::uno::Reference< css::ui::dialogs::XFilePicker2 >(); }
+    virtual css::uno::Reference<css::ui::dialogs::XFilePicker3>
+    createFilePicker(const css::uno::Reference<css::uno::XComponentContext>&)
+    {
+        return {};
+    }
     virtual css::uno::Reference< css::ui::dialogs::XFolderPicker2 > createFolderPicker( const css::uno::Reference< css::uno::XComponentContext >& )
         { return css::uno::Reference< css::ui::dialogs::XFolderPicker2 >(); }
 
