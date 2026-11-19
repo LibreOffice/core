@@ -69,7 +69,6 @@ public:
     SwNumFormat& operator=( const SwNumFormat& );
 
     bool operator==( const SwNumFormat& ) const;
-    bool operator!=( const SwNumFormat& r ) const { return !(*this == r); }
 
     SwCharFormat* GetCharFormat() const { return const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(GetRegisteredIn())); }
     void       SetCharFormat( SwCharFormat* );
@@ -156,7 +155,6 @@ public:
 
     SW_DLLPUBLIC SwNumRule& operator=( const SwNumRule& );
     SW_DLLPUBLIC bool operator==( const SwNumRule& ) const;
-    bool operator!=( const SwNumRule& r ) const { return !(*this == r); }
 
     void Reset( const UIName& rName );
 

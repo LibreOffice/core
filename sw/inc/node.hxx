@@ -330,7 +330,6 @@ public:
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     bool operator==(const SwNode& rOther) const { return this == &rOther; }
-    bool operator!=(const SwNode& rOther) const { return this != &rOther; }
     bool operator<(const SwNode& rOther) const { assert(&GetNodes() == &rOther.GetNodes()); return GetIndex() < rOther.GetIndex(); }
     bool operator<=(const SwNode& rOther) const { assert(&GetNodes() == &rOther.GetNodes()); return GetIndex() <= rOther.GetIndex(); }
     bool operator>(const SwNode& rOther) const { assert(&GetNodes() == &rOther.GetNodes()); return GetIndex() > rOther.GetIndex(); }

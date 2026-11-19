@@ -756,7 +756,6 @@ public:
     // Compare methods.
     bool IsEqualFlags ( const SwViewOption &rOpt ) const;
     inline bool operator == ( const SwViewOption &rOpt ) const;
-    bool operator != ( const SwViewOption &rOpt ) const  { return !(*this == rOpt); }
 
     // Options from nUIOptions
     bool    IsViewVScrollBar() const

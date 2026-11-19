@@ -34,8 +34,6 @@ struct SwDBData
         nCommandType(0){}
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
-    bool operator !=(const SwDBData& rCmp) const
-        {return rCmp.sDataSource != sDataSource || rCmp.sCommand != sCommand || rCmp.nCommandType != nCommandType;}
     bool operator ==(const SwDBData& rCmp) const
         {return rCmp.sDataSource == sDataSource && rCmp.sCommand == sCommand && rCmp.nCommandType == nCommandType;}
 };
