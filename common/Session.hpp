@@ -385,6 +385,8 @@ public:
 
     void setAccessibilityState(bool val) { _accessibilityState = val; }
 
+    bool getVectorRendering() const { return _vectorRendering; }
+
     void disableSpellCheckIfReadOnly();
 
     const std::string& getDocTemplate() const { return _docTemplate; }
@@ -610,6 +612,9 @@ protected:
 
     /// Specifies whether accessibility support is enabled for this session.
     bool _accessibilityState;
+
+    /// Whether the client draws slides from vector primitives instead of tiles.
+    bool _vectorRendering;
 
     /// Specifies whether certification verification for the wopi server
     /// should be disabled in core

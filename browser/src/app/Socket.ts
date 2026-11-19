@@ -555,6 +555,10 @@ class Socket {
 
 		msg += ' clientvisiblearea=' + window.makeClientVisibleArea();
 
+		if (cool.VectorRenderingConfig.isEnabled()) {
+			msg += ' vectorRendering=true';
+		}
+
 		this._doSend(msg);
 		for (let i = 0; i < this._msgQueue.length; i++) {
 			this._doSend(this._msgQueue[i]);

@@ -2666,6 +2666,7 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
         session->isReadOnly() ? "false" : session->getEnableMacrosExecution();
     const std::string& macroSecurityLevel = session->getMacroSecurityLevel();
     const std::string& clientVisibleArea = session->getInitialClientVisibleArea();
+    const std::string vectorRendering = session->getVectorRendering() ? "true" : "";
     const bool accessibilityState = session->getAccessibilityState();
     const std::string& userTimezone = session->getTimezone();
     const std::string& userPrivateInfo = session->getUserPrivateInfo();
@@ -2694,6 +2695,7 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
         { "ClientVisibleArea", clientVisibleArea },
         { "OriginalDocumentUrl", std::move(encodedOriginalDocUrl) },
         { "Timezone", userTimezone },
+        { "VectorRendering", vectorRendering },
     };
 
     std::string options;

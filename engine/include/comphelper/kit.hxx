@@ -195,6 +195,14 @@ public:
     SuppressDialogsLoadGuard& operator=(const SuppressDialogsLoadGuard&) = delete;
 };
 
+/// Whether the client draws the slides of the document from vector primitives, which carry the
+/// encoded bytes of each image instead of its pixels.
+COMPHELPER_DLLPUBLIC bool isDrawnFromVectors(ViewShellDocId nDocId);
+/// Marks the document as drawn from vector primitives for as long as it is open.
+COMPHELPER_DLLPUBLIC void setDrawnFromVectors(ViewShellDocId nDocId);
+/// Clears the marking of the document.
+COMPHELPER_DLLPUBLIC void clearDrawnFromVectors(ViewShellDocId nDocId);
+
 /// Set if we are doing idle layout.
 COMPHELPER_DLLPUBLIC void setIdleLayouting(bool bIdleLayouting);
 /// Check if we are painting the dialog.

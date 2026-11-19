@@ -2789,6 +2789,10 @@ function showWelcomeSVG() {
 				msg += ' timezone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
 				msg += ' clientvisiblearea=' + window.makeClientVisibleArea();
 
+				if (global.coolParams.get('vector') === 'true') {
+					msg += ' vectorRendering=true';
+				}
+
 				if (global.coolParams.get('welcome') === 'true') {
 					msg += ' batch=true';
 					showWelcomeSVG();

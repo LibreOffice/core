@@ -70,6 +70,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <tools/json_writer.hxx>
 
+#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
@@ -3926,6 +3927,111 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testClickBesideTextOfRotatedVerticalT
                                       aOnText.getY(), 1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(pView->IsTextEdit());
+}
+
+namespace
+{
+/// The images on the page.
+std::vector<const Graphic*> imagesOf(const SdPage& rPage)
+{
+    std::vector<const Graphic*> aImages;
+    for (const rtl::Reference<SdrObject>& pObject : rPage)
+    {
+        if (const auto* pGraphicObject = dynamic_cast<const SdrGrafObj*>(pObject.get()))
+            aImages.push_back(&pGraphicObject->GetGraphic());
+    }
+    return aImages;
+}
+
+/// The number of images on the page that are decoded.
+int countDecodedImages(const SdPage& rPage)
+{
+    int nDecoded = 0;
+    for (const Graphic* pImage : imagesOf(rPage))
+    {
+        if (pImage->isAvailable())
+            ++nDecoded;
+    }
+    return nDecoded;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideSwitchDecodesImagesForTileClient)
+{
+    // Given a presentation with two images on its second slide, drawn by a client from tiles:
+    SdXImpressDocument* pXImpressDocument = createDoc("two-images-on-second-slide.odp");
+    const SdPage* pPage = pXImpressDocument->GetDoc()->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), imagesOf(*pPage).size());
+    CPPUNIT_ASSERT_EQUAL(0, countDecodedImages(*pPage));
+
+    // When the client switches to the second slide:
+    pXImpressDocument->setPart(1);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then both images are decoded, ready to paint the tiles:
+    CPPUNIT_ASSERT_EQUAL(2, countDecodedImages(*pPage));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideSwitchKeepsImagesEncodedForVectorClient)
+{
+    // Given a presentation with two images on its second slide, drawn by a client from vector
+    // primitives:
+    const ViewShellDocId nDocId = comphelper::COKit::getDocId();
+    comphelper::COKit::setDrawnFromVectors(nDocId);
+    comphelper::ScopeGuard aGuard([nDocId] { comphelper::COKit::clearDrawnFromVectors(nDocId); });
+    SdXImpressDocument* pXImpressDocument = createDoc("two-images-on-second-slide.odp");
+    const SdPage* pPage = pXImpressDocument->GetDoc()->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), imagesOf(*pPage).size());
+
+    // When the client switches to the second slide:
+    pXImpressDocument->setPart(1);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then both images stay encoded, as the client is sent their encoded bytes:
+    CPPUNIT_ASSERT_EQUAL(0, countDecodedImages(*pPage));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTileClientJoiningVectorDocumentPaintsImages)
+{
+    // Given a presentation opened by a client that draws from vector primitives, with two images
+    // on its second slide:
+    const ViewShellDocId nDocId = comphelper::COKit::getDocId();
+    comphelper::COKit::setDrawnFromVectors(nDocId);
+    comphelper::ScopeGuard aGuard([nDocId] { comphelper::COKit::clearDrawnFromVectors(nDocId); });
+    SdXImpressDocument* pXImpressDocument = createDoc("two-images-on-second-slide.odp");
+    const SdPage* pPage = pXImpressDocument->GetDoc()->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), imagesOf(*pPage).size());
+
+    // When a second client that draws from tiles joins and switches to the second slide:
+    KitHelper::createView();
+    pXImpressDocument->initializeForTiledRendering({});
+    pXImpressDocument->setPart(1);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the switch leaves both images encoded, as the document belongs to the vector client:
+    CPPUNIT_ASSERT_EQUAL(0, countDecodedImages(*pPage));
+
+    // And when the tile client paints the whole slide, 28cm by 15.75cm, at 20 pixels per cm:
+    const Size aSlideSize(o3tl::toTwips(28000, o3tl::Length::mm100),
+                          o3tl::toTwips(15750, o3tl::Length::mm100));
+    const Size aTileSize(560, 315);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetOutputSizePixel(aTileSize);
+    pXImpressDocument->paintTile(*pDevice, aTileSize.Width(), aTileSize.Height(), 0, 0,
+                                 aSlideSize.Width(), aSlideSize.Height());
+    pDevice->EnableMapMode(false);
+    Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), aTileSize);
+
+    // Then the painting decodes both images and the tile shows them. The red image is centered at
+    // 6cm by 8cm and the blue one at 18cm by 8cm.
+    CPPUNIT_ASSERT_EQUAL(2, countDecodedImages(*pPage));
+    BitmapScopedReadAccess pAccess(aBitmap);
+    const Color aRed(pAccess->GetPixel(160, 120));
+    CPPUNIT_ASSERT_GREATER(sal_uInt8(150), aRed.GetRed());
+    CPPUNIT_ASSERT_LESS(sal_uInt8(100), aRed.GetBlue());
+    const Color aBlue(pAccess->GetPixel(160, 360));
+    CPPUNIT_ASSERT_GREATER(sal_uInt8(150), aBlue.GetBlue());
+    CPPUNIT_ASSERT_LESS(sal_uInt8(100), aBlue.GetRed());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

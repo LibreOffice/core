@@ -3658,6 +3658,11 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
             oss << " accessibilityState=" << getAccessibilityState();
         }
 
+        if (getVectorRendering())
+        {
+            oss << " vectorRendering=true";
+        }
+
         if (_wopiFileInfo && !_wopiFileInfo->getTemplateSource().empty())
         {
             oss << " template=" << _wopiFileInfo->getTemplateSource();

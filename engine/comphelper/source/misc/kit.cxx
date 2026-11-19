@@ -63,6 +63,9 @@ static ViewShellDocId g_nTiledPaintingDocId(NoDocId);
 static std::set<ViewShellDocId> g_aDialogsSuppressedDocIds;
 static ViewShellDocId g_nDialogsSuppressedLoadDocId(NoDocId);
 
+/// The documents whose client draws them from vector primitives.
+static std::set<ViewShellDocId> g_aDrawnFromVectorsDocIds;
+
 static bool g_bIdleLayouting(false);
 
 static bool g_bDialogPainting(false);
@@ -369,6 +372,15 @@ SuppressDialogsLoadGuard::~SuppressDialogsLoadGuard()
 {
     g_nDialogsSuppressedLoadDocId = m_nPrevDocId;
 }
+
+bool isDrawnFromVectors(ViewShellDocId nDocId)
+{
+    return g_aDrawnFromVectorsDocIds.find(nDocId) != g_aDrawnFromVectorsDocIds.end();
+}
+
+void setDrawnFromVectors(ViewShellDocId nDocId) { g_aDrawnFromVectorsDocIds.insert(nDocId); }
+
+void clearDrawnFromVectors(ViewShellDocId nDocId) { g_aDrawnFromVectorsDocIds.erase(nDocId); }
 
 void setIdleLayouting(bool bIdleLayouting)
 {

@@ -54,6 +54,7 @@ Session::Session(const std::shared_ptr<ProtocolHandlerInterface>& protocol, cons
     , _haveDocPassword(false)
     , _isDocPasswordProtected(false)
     , _accessibilityState(false)
+    , _vectorRendering(false)
     , _disableVerifyHost(false)
 {
 }
@@ -150,6 +151,10 @@ bool Session::applyBrowserLoadOption(const std::string& name, std::string&& valu
     else if (name == "accessibilityState")
     {
         _accessibilityState = value == "true";
+    }
+    else if (name == "vectorRendering")
+    {
+        _vectorRendering = value == "true";
     }
     else
     {
@@ -269,6 +274,7 @@ void Session::dumpState(std::ostream& os)
        << "\n\t\tuserName: " << Anonymizer::anonymize(_userName)
        << "\n\t\tlang: " << _lang
        << "\n\t\ttimezone: " << _timeZone
+       << "\n\t\tvectorRendering: " << _vectorRendering
        << '\n';
 }
 

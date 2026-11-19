@@ -1381,6 +1381,7 @@ COKitDocumentImpl::~COKitDocumentImpl()
         comphelper::COKit::clearOriginalDocumentUrl(maOriginalDocumentUrlKey);
 
     comphelper::COKit::clearDialogsSuppressed(ViewShellDocId(mnDocumentId));
+    comphelper::COKit::clearDrawnFromVectors(ViewShellDocId(mnDocumentId));
 
     if (comphelper::COKit::isForkedChild())
     {
@@ -1598,6 +1599,9 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         const OUString aDeviceFormFactor = extractParameter(aOptions, u"DeviceFormFactor");
         KitHelper::setDeviceFormFactor(aDeviceFormFactor);
 
+        // VectorRendering=true names a document whose client draws slides from vector primitives.
+        const bool bDrawnFromVectors = extractParameter(aOptions, u"VectorRendering") == "true";
+
         // Batch names a document that is loaded with nobody to answer a dialog. The document is
         // marked below, once it has an id. Until then the load itself carries the suppression,
         // because a document has no view to belong to while it loads.
@@ -1727,6 +1731,15 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         std::optional<comphelper::COKit::SuppressDialogsLoadGuard> oSuppressDialogsGuard;
         if (bSuppressDialogs)
             oSuppressDialogsGuard.emplace(ViewShellDocId(nThisDocumentId));
+
+        // The document is marked before it loads, because the load already shows its first page.
+        // A load that fails clears the marking.
+        if (bDrawnFromVectors)
+            comphelper::COKit::setDrawnFromVectors(ViewShellDocId(nThisDocumentId));
+        comphelper::ScopeGuard aDrawnFromVectorsGuard(
+            [nThisDocumentId]
+            { comphelper::COKit::clearDrawnFromVectors(ViewShellDocId(nThisDocumentId)); });
+
         uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL(
                                             aURL, u"_blank"_ustr, 0,
                                             aFilterOptions);
@@ -1741,6 +1754,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         assert(comphelper::COKit::getDocId() == ViewShellDocId(nThisDocumentId) && "incorrect docid set on document");
 
         COKitDocumentImpl* pDocument = new COKitDocumentImpl(xComponent, nThisDocumentId);
+        aDrawnFromVectorsGuard.dismiss();
         pDocument->maOriginalDocumentUrlKey = aOriginalDocumentUrlKey;
 
         // The kit asks the remote checkers' servers itself: the forkit's

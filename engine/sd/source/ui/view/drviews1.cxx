@@ -1086,10 +1086,16 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
 
         // Try to prefetch all graphics for the active page. This will be done
         // in threads to be more efficient than loading them on-demand one by one.
-        std::vector<Graphic*> graphics;
-        mpActualPage->getGraphicsForPrefetch(graphics);
-        if(graphics.size() > 1) // threading does not help with loading just one
-            GraphicFilter::GetGraphicFilter().MakeGraphicsAvailableThreaded(graphics);
+        // A client that draws from vector primitives is sent the encoded bytes of each image, so
+        // its images stay encoded.
+        const SfxViewShell* pSfxViewShell = GetViewShell();
+        if (!pSfxViewShell || !comphelper::COKit::isDrawnFromVectors(pSfxViewShell->GetDocId()))
+        {
+            std::vector<Graphic*> graphics;
+            mpActualPage->getGraphicsForPrefetch(graphics);
+            if (graphics.size() > 1) // threading does not help with loading just one
+                GraphicFilter::GetGraphicFilter().MakeGraphicsAvailableThreaded(graphics);
+        }
 
         if (meEditMode == EditMode::Page)
         {
