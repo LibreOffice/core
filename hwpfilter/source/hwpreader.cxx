@@ -61,6 +61,12 @@ constexpr OUString sBeginOfDoc(u"[\uBB38\uC11C\uC758 \uCC98\uC74C]"_ustr);
 // U+C74C HANGUL SYLLABLE EUM: "Begin of Document"
 }
 
+static void appendConvertedChars(hchar_string& rText, const hchar* pConverted, int nCount)
+{
+    for (int i = 0; i < nCount; ++i)
+        rText.push_back(pConverted[i] ? pConverted[i] : 0x25A1);
+}
+
 struct HwpReaderPrivate
 {
     HwpReaderPrivate()
@@ -2809,10 +2815,7 @@ void HwpReader::make_text_p0(HWPPara* para, bool bParaStart)
             else
                 firstspace = 1;
             res = hcharconv(box->hh, dest, UNICODE);
-            for (int j = 0; j < res; j++)
-            {
-                str.push_back(dest[j]);
-            }
+            appendConvertedChars(str, dest, res);
         }
     }
 }
@@ -2890,10 +2893,7 @@ void HwpReader::make_text_p1(HWPPara* para, bool bParaStart)
             else
                 firstspace = 1;
             res = hcharconv(box->hh, dest, UNICODE);
-            for (int j = 0; j < res; j++)
-            {
-                str.push_back(dest[j]);
-            }
+            appendConvertedChars(str, dest, res);
         }
         n += box->WSize();
     }
@@ -3030,10 +3030,7 @@ void HwpReader::make_text_p3(HWPPara* para, bool bParaStart)
             else
                 firstspace = 1;
             res = hcharconv(box->hh, dest, UNICODE);
-            for (int j = 0; j < res; j++)
-            {
-                str.push_back(dest[j]);
-            }
+            appendConvertedChars(str, dest, res);
         }
         else if (box->hh == CH_FIELD)
         {
@@ -4905,10 +4902,7 @@ void HwpReader::makeHidden(Hidden* hbox)
                 break;
 
             res = hcharconv(box->hh, dest, UNICODE);
-            for (int j = 0; j < res; j++)
-            {
-                str.push_back(dest[j]);
-            }
+            appendConvertedChars(str, dest, res);
         }
         para = para->Next();
     }
