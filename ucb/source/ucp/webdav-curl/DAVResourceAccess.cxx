@@ -29,6 +29,7 @@
 #include "webdavprovider.hxx"
 
 #include <officecfg/Office/Security.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/io/IOException.hpp>
@@ -1008,7 +1009,11 @@ void DAVResourceAccess::initialize()
     if ( m_aPath.isEmpty() )
     {
         CurlUri aURI(m_aURL);
-        assert(aURI.GetScheme() == HTTP_URL_SCHEME || aURI.GetScheme() == HTTPS_URL_SCHEME);
+        if (aURI.GetScheme() != HTTP_URL_SCHEME && aURI.GetScheme() != HTTPS_URL_SCHEME)
+        {
+            SAL_WARN("ucb.ucp.webdav", "unsupported scheme: " << aURI.GetScheme());
+            throw DAVException(DAVException::DAV_INVALID_ARG);
+        }
         if (aURI.GetScheme() == HTTP_URL_SCHEME)
         {
             if (!officecfg::Office::Security::Net::AllowInsecureProtocols::get())

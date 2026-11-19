@@ -80,6 +80,20 @@ static void InitCurl_easy(CURL* const pCURL)
         assert(rc == CURLE_OK);
 #endif
     }
+    else
+    {
+#if (LIBCURL_VERSION_MAJOR > 7) || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR >= 85)
+        rc = curl_easy_setopt(pCURL, CURLOPT_PROTOCOLS_STR, "http,https");
+        assert(rc == CURLE_OK);
+        rc = curl_easy_setopt(pCURL, CURLOPT_REDIR_PROTOCOLS_STR, "http,https");
+        assert(rc == CURLE_OK);
+#else
+        rc = curl_easy_setopt(pCURL, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+        assert(rc == CURLE_OK);
+        rc = curl_easy_setopt(pCURL, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+        assert(rc == CURLE_OK);
+#endif
+    }
 
     curl_version_info_data const* const pVersion(curl_version_info(CURLVERSION_NOW));
     assert(pVersion);
