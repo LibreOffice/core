@@ -6317,6 +6317,79 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDeleteVerticalTextBoxAfterClickBe
     CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testClickInternalHyperlinkKeepsCursor)
+{
+    // Given a hyperlink to a bookmark on the next page:
+    SwXTextDocument* pXTextDocument = createDoc("internal-hyperlink.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    // "Before the link " is 16 characters, so the 20th character is inside "go to target".
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 20, /*bBasicCall=*/false);
+    Point aOnLink = pWrtShell->GetCharRect().Center();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    const SwNode& rLinkNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
+
+    // When the user clicks the link without Ctrl:
+    lcl_click(pXTextDocument, aOnLink);
+
+    // Then the cursor stays in the link, so the client can show its hyperlink popup:
+    SwPosition* pPoint = pWrtShell->GetCursor()->GetPoint();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 9
+    // - Actual  : 10
+    // i.e. the click jumped to the bookmark in the second paragraph.
+    CPPUNIT_ASSERT_EQUAL(rLinkNode.GetIndex(), pPoint->GetNode().GetIndex());
+    CPPUNIT_ASSERT_GREATER(sal_Int32(16), pPoint->GetContentIndex());
+    CPPUNIT_ASSERT_LESS(sal_Int32(28), pPoint->GetContentIndex());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testClickTocHyperlinkJumps)
+{
+    // Given a table of contents on the first page, its entry linking to a heading on page two:
+    SwXTextDocument* pXTextDocument = createDoc("toc-hyperlink.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    CPPUNIT_ASSERT(pWrtShell->GetCurTOX());
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 5, /*bBasicCall=*/false);
+    Point aOnEntry = pWrtShell->GetCharRect().Center();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    const SwNode& rHeadingNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+
+    // When the user clicks the entry without Ctrl:
+    lcl_click(pXTextDocument, aOnEntry);
+
+    // Then the cursor jumps to the heading, without a stop at the hyperlink popup:
+    CPPUNIT_ASSERT_EQUAL(rHeadingNode.GetIndex(),
+                         pWrtShell->GetCursor()->GetPoint()->GetNode().GetIndex());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testClickBibliographyHyperlinkKeepsCursor)
+{
+    // Given a bibliography on the first page, its entry linking to a bookmark on page two:
+    SwXTextDocument* pXTextDocument = createDoc("bibliography-hyperlink.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    const SwTOXBase* pTOX = pWrtShell->GetCurTOX();
+    CPPUNIT_ASSERT(pTOX);
+    CPPUNIT_ASSERT_EQUAL(TOX_AUTHORITIES, pTOX->GetType());
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 5, /*bBasicCall=*/false);
+    Point aOnEntry = pWrtShell->GetCharRect().Center();
+    const SwNode& rEntryNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+
+    // When the user clicks the entry without Ctrl:
+    lcl_click(pXTextDocument, aOnEntry);
+
+    // Then the cursor stays in the entry, because only a table of contents jumps on a click:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 10
+    // - Actual  : 12
+    // i.e. the click jumped to the bookmark.
+    CPPUNIT_ASSERT_EQUAL(rEntryNode.GetIndex(),
+                         pWrtShell->GetCursor()->GetPoint()->GetNode().GetIndex());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

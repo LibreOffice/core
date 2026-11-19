@@ -148,6 +148,7 @@
 #include "../../core/crsr/callnk.hxx"
 #include <IDocumentOutlineNodes.hxx>
 #include <ndtxt.hxx>
+#include <txtinet.hxx>
 #include <cntfrm.hxx>
 #include <txtfrm.hxx>
 #include <strings.hrc>
@@ -5234,15 +5235,27 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             }
                             else if ( IsAttrAtPos::InetAttr == aContentAtPos.eContentAtPos )
                             {
-                                if (comphelper::COKit::isActive())
+                                const SwFormatINetFormat* pINetFormat
+                                    = static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr);
+                                if (comphelper::COKit::isActive() && pINetFormat && !bExecHyperlinks)
                                 {
-                                    OUString val((*static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr)).GetValue());
                                     // a phone has no ctrl, so a plain tap reports the link too
-                                    if (val.startsWith("#") || m_rView.isKitMobilePhone())
+                                    if (m_rView.isKitMobilePhone())
                                         bExecHyperlinks = true;
+                                    // a table of contents entry is there to be followed, so a
+                                    // plain click jumps to its heading
+                                    else if (pINetFormat->GetValue().startsWith("#"))
+                                    {
+                                        const SwTextINetFormat* pTextINet = pINetFormat->GetTextINetFormat();
+                                        const SwTOXBase* pTOX = pTextINet
+                                            ? SwDoc::GetCurTOX(SwPosition(pTextINet->GetTextNode()))
+                                            : nullptr;
+                                        if (pTOX && pTOX->GetType() == TOX_CONTENT)
+                                            bExecHyperlinks = true;
+                                    }
                                 }
-                                if ( bExecHyperlinks && aContentAtPos.aFnd.pAttr )
-                                    rSh.ClickToINetAttr( *static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr), nFilter );
+                                if ( bExecHyperlinks && pINetFormat )
+                                    rSh.ClickToINetAttr( *pINetFormat, nFilter );
                             }
 
                             rSh.LockView( bViewLocked );
