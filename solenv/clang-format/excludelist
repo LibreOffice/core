@@ -9957,7 +9957,6 @@ sfx2/source/dialog/dinfdlg.cxx
 sfx2/source/dialog/dockwin.cxx
 sfx2/source/dialog/documentfontsdialog.cxx
 sfx2/source/dialog/filedlghelper.cxx
-sfx2/source/dialog/filedlgimpl.hxx
 sfx2/source/dialog/filtergrouping.cxx
 sfx2/source/dialog/filtergrouping.hxx
 sfx2/source/dialog/mailmodel.cxx
