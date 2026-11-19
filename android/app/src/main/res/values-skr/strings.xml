@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name_settings">ترتیباں</string>
+    <string name="action_settings">ترتیباں</string>
+    <string name="action_about">تعارف</string>
+    <string name="title_activity_show_html">تعارف</string>
+    <string name="positive_ok">ٹھیک ہے</string>
+    <string name="password">پاس ورڈ</string>
+    <string name="theme">تھیم</string>
+    <string name="cancel_label">منسوخ</string>
+    <string name="negative_cancel">منسوخ</string>
+    <string name="action_cancel">منسوخ</string>
+</resources>
