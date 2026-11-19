@@ -6700,10 +6700,40 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
             EditEntry(*xFirst, EditEntryMode::RENAME);
         break;
         case 700:
+        {
+            bool bLockView = m_pActiveShell->IsViewLocked();
+            m_pActiveShell->LockView(true);
+
+            m_pActiveShell->Push();
+            m_pActiveShell->StartAction();
+            m_pActiveShell->KillPams();
+            m_pActiveShell->ClearMark();
+
+            SwCursor* pCursor = m_pActiveShell->getShellCursor(true);
+            const SwOutlineNodes& rOutlineNodes(m_pActiveShell->GetNodes().GetOutLineNds());
+
+            m_pActiveShell->EnterAddMode();
+            for (size_t nOutlineNodesSize = rOutlineNodes.size(), i = 0; i < nOutlineNodesSize; ++i)
             {
-                m_pActiveShell->GetView().GetViewFrame().GetDispatcher()->Execute(FN_OUTLINE_TO_CLIPBOARD);
-                break;
+                pCursor->GetMark()->Assign(*rOutlineNodes[i]);
+                m_pActiveShell->SttSelect();
+                SwNodeIndex aIdx(*rOutlineNodes[i]);
+                pCursor->GetPoint()->Assign(*SwNodes::GoNext(&aIdx));
+                m_pActiveShell->EndSelect();
             }
+            m_pActiveShell->LeaveAddMode();
+
+            m_pActiveShell->GetView().GetViewFrame().GetDispatcher()->Execute(SID_COPY);
+
+            m_pActiveShell->KillPams();
+            m_pActiveShell->EndAction();
+            m_pActiveShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
+
+            if (!bLockView)
+                m_pActiveShell->LockView(false);
+
+            break;
+        }
         case 800:
             ExpandOrCollapseAll(*m_xTreeView, *xFirst);
             break;
