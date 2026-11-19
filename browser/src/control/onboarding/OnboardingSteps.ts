@@ -8,7 +8,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-/* global _ */
+/* global _ brandProductName */
 
 /*
  * The stops of the onboarding tour, in the order the user walks through them.
@@ -22,9 +22,12 @@ function getOnboardingSteps(): OnboardingStep[] {
 	return [
 		{
 			id: 'intro',
-			title: window.ThisIsAnApp
-				? _('Welcome to Collabora Office')
-				: _('Welcome to Collabora Online'),
+			title: _('Welcome to {productname}').replace(
+				'{productname}',
+				typeof brandProductName !== 'undefined'
+					? brandProductName
+					: 'Collabora Office',
+			),
 			text: _(
 				'This short tour points out the parts of the screen you will use most.',
 			),
