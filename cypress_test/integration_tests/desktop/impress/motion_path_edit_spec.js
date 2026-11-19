@@ -4,7 +4,7 @@
 var helper = require('../../common/helper');
 
 // Editing the motion paths of an object on a vector slide by their handles. The slide holds a
-// rectangle that moves along a curve whose middle point is symmetric, a square that moves along a
+// rectangle with a line of text that moves along a curve whose middle point is symmetric, a square that moves along a
 // closed triangle, and a rectangle whose path was drawn beside it.
 describe(['tagdesktop'], 'Editing a motion path on a vector slide', function() {
 
@@ -369,5 +369,69 @@ describe(['tagdesktop'], 'Editing a motion path on a vector slide', function() {
 			expect(win.app.map.stateChangeHandler.getItemValue('.uno:Undo'), 'undo')
 				.to.equal('disabled');
 		});
+	});
+
+	it('A click where the path runs over the text of its object edits the text.', function() {
+		var win = this.win;
+		var curved;
+		cy.wrap(null).should(function() {
+			curved = objectWithPath(win, false);
+			expect(curved, 'the rectangle on a curve').to.not.equal(undefined);
+		});
+		select(win, function() { return curved; });
+
+		/*
+			A place on the line of the path where the hit test finds the text of the object, or
+			finds no text, away from every handle of the path. Where the text lies is the shape's
+			own layout, so it is asked for along the path rather than assumed.
+		*/
+		var placeOnThePath = function(onTheText) {
+			var object = geometry(win).objectOf(curved);
+			var points = win.cool.MotionPaths.placedOf(object)[0].polygons[0].points;
+			var handles = Object.values(motionHandles(win));
+			for (var edge = 0; edge + 1 < points.length; ++edge) {
+				var from = points[edge];
+				var to = points[edge + 1];
+				var out = { x: from.aheadX === undefined ? from.x : from.aheadX,
+					y: from.aheadY === undefined ? from.y : from.aheadY };
+				var into = { x: to.behindX === undefined ? to.x : to.behindX,
+					y: to.behindY === undefined ? to.y : to.behindY };
+				for (var t = 0.02; t < 1; t += 0.02) {
+					var u = 1 - t;
+					var x = u * u * u * from.x + 3 * u * u * t * out.x + 3 * u * t * t * into.x + t * t * t * to.x;
+					var y = u * u * u * from.y + 3 * u * u * t * out.y + 3 * u * t * t * into.y + t * t * t * to.y;
+					var nearAHandle = handles.some(function(handle) {
+						return Math.abs(handle.x - x) < 300 && Math.abs(handle.y - y) < 300;
+					});
+					if (!nearAHandle && (geometry(win).pointerAt(x, y) === 'text') === onTheText)
+						return { x: x, y: y };
+				}
+			}
+			return null;
+		};
+
+		var onTheText;
+		cy.then(function() {
+			onTheText = placeOnThePath(true);
+			expect(onTheText, 'a place where the path runs over the text').to.not.equal(null);
+			clickAt(win, onTheText.x, onTheText.y);
+		});
+		cy.wrap(null).should(function() {
+			expect(win.app.file.textCursor.visible, 'the text edited').to.equal(true);
+		});
+		cy.cGet('#motion-path-menu-entry-1').should('not.exist');
+
+		// beside the text the line opens the menu of the path, as before
+		helper.typeIntoDocument('{esc}');
+		cy.wrap(null).should(function() {
+			expect(win.app.file.textCursor.visible, 'the text left').to.equal(false);
+		});
+		select(win, function() { return curved; });
+		cy.then(function() {
+			var beside = placeOnThePath(false);
+			expect(beside, 'a place on the path beside the text').to.not.equal(null);
+			clickAt(win, beside.x, beside.y);
+		});
+		cy.cGet('#motion-path-menu-entry-1').should('be.visible');
 	});
 });

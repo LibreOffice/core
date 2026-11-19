@@ -3307,13 +3307,19 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 		};
 	}
 
-	/// The path among the object's paths and the polygon of it whose line runs at that place in
-	/// the document; nothing where none does, and while text is edited.
+	/*
+		The path among the object's paths and the polygon of it whose line runs at that place in
+		the document; nothing where none does, while text is edited, and on text: a path that runs
+		over the text of its object leaves a press there to the text, as the pointer says.
+	*/
 	private lineAt(
 		at: cool.SimplePoint,
 	): { path: number; polygon: number } | null {
 		const object = this.object();
 		if (!object || app.file.textCursor.visible) return null;
+
+		const pointer = RenderGeometrySection.pointerAt(at.x, at.y);
+		if (pointer === 'text' || pointer === 'pointer') return null;
 
 		const place = new cool.Point(at.x, at.y);
 		const paths = object.motionPaths ?? [];
