@@ -13,6 +13,7 @@
 
 #include <qt/RemoteOpen.hpp>
 #include <common/CODAConfig.hpp>
+#include <common/EditorFrameForm.hpp>
 #include <common/EditorFrameMessages.hpp>
 #include <common/EditorFrameScripts.hpp>
 #include <common/Log.hpp>
@@ -56,15 +57,10 @@
 #include <QWebEngineUrlRequestJob>
 #include <QWebEngineView>
 
-#include <Poco/Exception.h>
-#include <Poco/Net/HTMLForm.h>
-#include <Poco/Net/HTTPRequest.h>
-
 #include <chrono>
 #include <map>
 #include <memory>
 #include <optional>
-#include <sstream>
 #include <string>
 
 namespace
@@ -290,22 +286,6 @@ QUrl originOf(const QUrl& url)
     if (isDefaultHttpsPort || isDefaultHttpPort)
         origin.setPort(-1);
     return origin;
-}
-
-// The access token that coolwsd puts into its editor page for the integrator's form (read from the
-// form and URI-encoded the same way coolwsd does it):
-std::string editorPageAccessToken(QUrl const & formUrl, QByteArray const & form) {
-    try {
-        Poco::Net::HTTPRequest request(
-            Poco::Net::HTTPRequest::HTTP_POST, formUrl.toString(QUrl::FullyEncoded).toStdString());
-        request.setContentType("application/x-www-form-urlencoded");
-        std::istringstream body(form.toStdString());
-        Poco::Net::HTMLForm fields(request, body);
-        return Uri::encode(fields.get("access_token", ""), "'");
-    } catch (Poco::Exception const & e) {
-        LOG_WRN("account window: cannot read the integrator's form: " << e.displayText());
-        return "";
-    }
 }
 
 /// Other schemes would open other apps, so only web addresses go to the system browser.
@@ -739,7 +719,8 @@ void CloudAccountPage::putCodaPageIn(QWebEngineFrame& frame)
 
     QJsonObject config;
     config["formUrl"] = _formUrl.toString(QUrl::FullyEncoded);
-    config["accessToken"] = QString::fromStdString(editorPageAccessToken(_formUrl, _form));
+    config["accessToken"] = QString::fromStdString(EditorFrameForm::accessToken(
+        _formUrl.toString(QUrl::FullyEncoded).toStdString(), _form.toStdString()));
     config["base"] = COOLLOCAL_BUNDLED_URL;
     config["messageUrl"] = COOLLOCAL_MESSAGE_URL + "?session=" + _session;
 
