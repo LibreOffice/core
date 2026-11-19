@@ -1,0 +1,97 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: com.collaboraoffice.demo-text\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-02 11:43+0000\n"
+"PO-Revision-Date: 2026-11-17 09:56+0000\n"
+"Last-Translator: bittin1ddc447d824349b2 "
+"<bittin1ddc447d824349b2@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
+"extensions/demo-text/sv/>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.12.dev0\n"
+
+#: index.html:95
+msgid "%1 (%2) applied"
+msgstr "%1 (%2) tillämpad"
+
+#: index.html:31
+msgid "Apply"
+msgstr "Tillämpa"
+
+#: index.html:28
+msgid "Colorize paragraphs"
+msgstr "Färglägg paragrafer"
+
+#: index.html:23
+msgid "Greeting:"
+msgstr "Hälsning:"
+
+#: index.html:35
+msgid "Paragraph number (1-based):"
+msgstr "Paragraf nummer (1-baserad):"
+
+#: index.html:69
+msgid "Pick a color"
+msgstr "Välj en färg"
+
+#: index.html:42
+msgid "Pick paragraph color..."
+msgstr "Välj paragraf färg..."
+
+#: index.html:37
+msgid "Read Nth paragraph"
+msgstr "Läs N:te paragraf"
+
+#: manifest.json:name
+msgid "Text demo"
+msgstr "Text demo"
+
+#: index.html:84
+msgid "applying %1 (%2)..."
+msgstr "tillämpar %1 (%2)..."
+
+#: picker.html:31
+msgid "black"
+msgstr "svart"
+
+#: picker.html:28
+msgid "blue"
+msgstr "blå"
+
+#: index.html:74
+msgid "cancelled"
+msgstr "avbruten"
+
+#: picker.html:27
+msgid "green"
+msgstr "grön"
+
+#: picker.html:29
+msgid "indigo"
+msgstr "indigo"
+
+#: index.html:43
+msgid "no color picked yet"
+msgstr "ingen färg vald än"
+
+#: picker.html:25
+msgid "orange"
+msgstr "orange"
+
+#: picker.html:24
+msgid "red"
+msgstr "röd"
+
+#: picker.html:30
+msgid "violet"
+msgstr "violett"
+
+#: picker.html:26
+msgid "yellow"
+msgstr "gul"

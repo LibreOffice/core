@@ -8,8 +8,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-03 20:16+0000\n"
-"Last-Translator: Andras Timar <timar@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-17 10:31+0000\n"
+"Last-Translator: bittin1ddc447d824349b2 "
+"<bittin1ddc447d824349b2@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/sv/>\n"
 "Language: sv\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.11.1.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -3395,7 +3396,7 @@ msgstr "Rensar upp..."
 
 #: src/control/Control.CleanupSidebar.ts:737
 msgid "Saved %1"
-msgstr "Besparing %1"
+msgstr "Sparat %1"
 
 #: src/control/Control.CleanupSidebar.ts:744
 msgid "%1 thing to clean up"
@@ -3568,7 +3569,7 @@ msgstr "Dela"
 
 #: src/control/Control.BackstageView.ts:153
 msgid "Info"
-msgstr "Info"
+msgstr "Information"
 
 #: src/control/Control.BackstageView.ts:169
 #: src/control/Control.NotebookbarCalc.js:193
@@ -5262,7 +5263,7 @@ msgstr "Filterknappar"
 #: src/control/Notebookbar.ImpressAnimationTab.ts:24
 #: src/slideshow/engine/SlideShowHandler.ts:412
 msgid "Animation"
-msgstr "Animering"
+msgstr "Animation"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:41
 msgid "Applied animations"

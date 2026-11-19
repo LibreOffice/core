@@ -1,0 +1,93 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: com.collaboraoffice.demo-commands\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-02 11:43+0000\n"
+"PO-Revision-Date: 2026-11-17 09:52+0000\n"
+"Last-Translator: bittin1ddc447d824349b2 "
+"<bittin1ddc447d824349b2@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
+"extensions/demo-commands/sv/>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.12.dev0\n"
+
+#: ui.json:commands.makeBold
+msgid "Bold"
+msgstr "Fet"
+
+#: ui.json:commands.clearFormatting
+msgid "Clear Formatting"
+msgstr "Rensa formatering"
+
+#: ui.json:notebookbar.tab
+msgid "Commands Demo"
+msgstr "Kommandon Demo"
+
+#: manifest.json:name
+msgid "Commands demo"
+msgstr "Kommandon Demo"
+
+#: ui.json:notebookbar.group.dateGroup
+msgid "Date & Time"
+msgstr "Datum & tid"
+
+#: ui.json:notebookbar.menu
+msgid "Formats"
+msgstr "Format"
+
+#: ui.json:notebookbar.group.formattingGroup
+msgid "Formatting"
+msgstr "Formatering"
+
+#: ui.json:notebookbar.menu
+msgid "Heading"
+msgstr "Rubrik"
+
+#: ui.json:commands.heading1
+msgid "Heading 1"
+msgstr "Rubrik 1"
+
+#: ui.json:commands.heading2
+msgid "Heading 2"
+msgstr "Rubrik 2"
+
+#: ui.json:commands.heading3
+msgid "Heading 3"
+msgstr "Rubrik 3"
+
+#: ui.json:commands.insertIsoDate
+msgid "ISO 8601"
+msgstr "ISO 8601"
+
+#: ui.json:notebookbar.group.infoGroup
+msgid "Info"
+msgstr "Information"
+
+#: ui.json:commands.insertDate
+msgid "Insert Date"
+msgstr "Infoga datum"
+
+#: ui.json:commands.insertTime
+msgid "Insert Time"
+msgstr "Infoga tid"
+
+#: ui.json:commands.makeItalic
+msgid "Italic"
+msgstr "Kursiv"
+
+#: ui.json:commands.insertLocaleDate
+msgid "Long Format"
+msgstr "Långt format"
+
+#: ui.json:commands.makeUnderline
+msgid "Underline"
+msgstr "Understrykning"
+
+#: ui.json:commands.insertWordCount
+msgid "Word Count"
+msgstr "Ordräkning"
