@@ -759,11 +759,21 @@ void SdDrawDocument::StopOnlineSpelling()
     mpOnlineSpellingList.reset();
 }
 
+bool SdDrawDocument::IsOnlineSpellingRunning() const
+{
+    return mpOnlineSpellingIdle && mpOnlineSpellingIdle->IsActive();
+}
+
 // Start OnlineSpelling in the background
 void SdDrawDocument::StartOnlineSpelling(bool bForceSpelling)
 {
     if ( !mbOnlineSpell || !(bForceSpelling || mbInitialOnlineSpellingEnabled) ||
          !mpDocSh || mpDocSh->IsReadOnly() )
+        return;
+
+    // A pass that is under way goes on over the text objects it has left, and objects inserted
+    // meanwhile join it.
+    if (!bForceSpelling && IsOnlineSpellingRunning())
         return;
 
     StopOnlineSpelling();

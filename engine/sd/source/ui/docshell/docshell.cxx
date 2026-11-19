@@ -336,7 +336,10 @@ void DrawDocShell::Activate( bool bMDI)
     if (bMDI)
     {
         ApplySlotFilter();
-        mpDoc->StartOnlineSpelling();
+        // Each view in COKit has a frame of its own, so the document is activated again whenever
+        // the current view changes. There the pass under way goes on, and a document that was
+        // checked once stays checked.
+        mpDoc->StartOnlineSpelling(!comphelper::COKit::isActive());
         CheckPendingLinkUpdateInfobar();
     }
 }

@@ -999,6 +999,8 @@ public:
     SAL_DLLPRIVATE bool                GetOnlineSpell() const { return mbOnlineSpell; }
     SAL_DLLPRIVATE void                StopOnlineSpelling();
     SAL_DLLPRIVATE void                StartOnlineSpelling(bool bForceSpelling=true);
+    /// Whether a pass of background spell checking over the text objects is under way.
+    bool                               IsOnlineSpellingRunning() const;
 
     SAL_DLLPRIVATE void                InsertObject(SdrObject* pObj);
     SAL_DLLPRIVATE void                RemoveObject(SdrObject* pObj);

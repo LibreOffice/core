@@ -1576,6 +1576,7 @@ SdOutliner* SdDrawDocument::GetInternalOutliner(bool bCreateOutliner)
 // OnlineSpelling on/off
 void SdDrawDocument::SetOnlineSpell(bool bIn)
 {
+    const bool bChanged = bIn != mbOnlineSpell;
     mbOnlineSpell = bIn;
     EEControlBits nCntrl;
 
@@ -1616,7 +1617,9 @@ void SdDrawDocument::SetOnlineSpell(bool bIn)
 
     if (mbOnlineSpell)
     {
-        StartOnlineSpelling();
+        // Spell checking that was on already keeps its pass, and a document it has checked
+        // stays checked.
+        StartOnlineSpelling(bChanged);
     }
     else
     {

@@ -4076,6 +4076,33 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSpellOnlineRenderParameter)
     CPPUNIT_ASSERT_EQUAL(!bSet, pXImpressDocument->GetDoc()->GetOnlineSpell());
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSpellCheckingNotRestartedByOtherViews)
+{
+    // Background spell checking goes over the document once. Another user joining with spell
+    // checking on, as it is already, and switching between the views leave that pass finished.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    auto aSpellOnline = [](bool bOn) {
+        return comphelper::InitPropertySequence(
+            { { u".uno:SpellOnline"_ustr, cpo::uno::Any(bOn) } });
+    };
+
+    // Switching spell checking on starts a pass, and the pass finishes.
+    pXImpressDocument->initializeForTiledRendering(aSpellOnline(false));
+    pXImpressDocument->initializeForTiledRendering(aSpellOnline(true));
+    CPPUNIT_ASSERT(pDoc->IsOnlineSpellingRunning());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pDoc->IsOnlineSpellingRunning());
+
+    int nView0 = KitHelper::getCurrentView();
+    KitHelper::createView();
+    pXImpressDocument->initializeForTiledRendering(aSpellOnline(true));
+    CPPUNIT_ASSERT(!pDoc->IsOnlineSpellingRunning());
+
+    KitHelper::setView(nView0);
+    CPPUNIT_ASSERT(!pDoc->IsOnlineSpellingRunning());
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideDuplicateUndo)
 {
     // Create two views.
