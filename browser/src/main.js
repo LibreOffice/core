@@ -342,6 +342,9 @@ if (window.ThisIsTheEmscriptenApp) {
 			window._codaRemoteInfo = info;
 			window.app.console.log('CODA: remote doc, wopiSrc=' + info.wopiSrc);
 			global.collab.fetchFile(info.wopiSrc, info.accessToken, info.coolServer).then(function(result) {
+				if (!result.filename)
+					throw new Error('CheckFileInfo returned an empty BaseFileName');
+
 				// The file properties come before initUI, so controls such as Share follow them.
 				if (result.fileInfo) {
 					window.codaRemoteFileInfo = result.fileInfo;
@@ -359,10 +362,8 @@ if (window.ThisIsTheEmscriptenApp) {
 				}
 				initUI();
 				window.app.console.log('CODA: fetch URL: ' + result.url);
-				if (result.filename) {
-					map['wopi'].BaseFileName = result.filename;
-					map['wopi'].BreadcrumbDocName = result.filename;
-				}
+				map['wopi'].BaseFileName = result.filename;
+				map['wopi'].BreadcrumbDocName = result.filename;
 				return fetch(result.url).then(function(r) {
 					if (!r.ok)
 						throw new Error('GET ' + result.url + ' returned ' + r.status);
@@ -375,20 +376,17 @@ if (window.ThisIsTheEmscriptenApp) {
 						binary += String.fromCharCode(bytes[i]);
 					var b64 = btoa(binary);
 					return new Promise(function(r) {
-						window.bridge.writeRemoteDocFile(result.filename || 'document', b64, r);
+						window.bridge.writeRemoteDocFile(result.filename, b64, r);
 					});
 				}).then(function(localPath) {
 					if (!localPath)
-						throw new Error('writeRemoteDocFile failed');
+						throw new Error('the app could not write a local copy of the document');
 					window.app.console.log('CODA: wrote local temp file ' + localPath);
 					// Point the FakeWebSocket's load message at the
 					// just-written file before opening the socket.
 					global.docURL = 'file://' + localPath;
 					map.options.doc = global.docURL;
-					if (result.filename) {
-						var fileName = result.filename;
-						document.title = fileName + ' - ' + window.brandProductName;
-					}
+					document.title = result.filename + ' - ' + window.brandProductName;
 					// Mirror the auto-fire in global.js (now gated on
 					// docURL being non-empty): now that we have a path,
 					// kick HULLO + the FakeWebSocket's onopen so
