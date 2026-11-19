@@ -51,7 +51,8 @@ public:
     void setValue(sal_uInt16 nVal);
 
 private:
-    void init(const ScDocument& rDoc, SCROW nStartRow, SCROW nEndRow);
+    void init(const ScDocument& rDoc, sc::CellTextAttrStoreType& rAttrs, SCROW nStartRow,
+              SCROW nEndRow);
     void getDataIterators(size_t nOffsetInBlock);
     void checkEndRow();
 };

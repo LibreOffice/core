@@ -18,9 +18,7 @@ ScColumnTextWidthIterator::ScColumnTextWidthIterator(const ScDocument& rDoc, ScC
     mnEnd(static_cast<size_t>(nEndRow)),
     mnCurPos(0)
 {
-    miBlockCur = rCol.maCellTextAttrs.begin();
-    miBlockEnd = rCol.maCellTextAttrs.end();
-    init(rDoc, nStartRow, nEndRow);
+    init(rDoc, rCol.maCellTextAttrs, nStartRow, nEndRow);
 }
 
 ScColumnTextWidthIterator::ScColumnTextWidthIterator(const ScDocument& rDoc, const ScAddress& rStartPos, SCROW nEndRow) :
@@ -28,9 +26,7 @@ ScColumnTextWidthIterator::ScColumnTextWidthIterator(const ScDocument& rDoc, con
     mnCurPos(0)
 {
     auto & rCellTextAttrs = rDoc.maTabs[rStartPos.Tab()]->aCol[rStartPos.Col()].maCellTextAttrs;
-    miBlockCur = rCellTextAttrs.begin();
-    miBlockEnd = rCellTextAttrs.end();
-    init(rDoc, rStartPos.Row(), nEndRow);
+    init(rDoc, rCellTextAttrs, rStartPos.Row(), nEndRow);
 }
 
 void ScColumnTextWidthIterator::next()
@@ -87,53 +83,45 @@ void ScColumnTextWidthIterator::setValue(sal_uInt16 nVal)
     miDataCur->mnTextWidth = nVal;
 }
 
-void ScColumnTextWidthIterator::init(const ScDocument& rDoc, SCROW nStartRow, SCROW nEndRow)
+void ScColumnTextWidthIterator::init(const ScDocument& rDoc, sc::CellTextAttrStoreType& rAttrs,
+                                     SCROW nStartRow, SCROW nEndRow)
 {
+    miBlockEnd = rAttrs.end();
+    miBlockCur = miBlockEnd;
+
     if (!rDoc.ValidRow(nStartRow) || !rDoc.ValidRow(nEndRow))
-        miBlockCur = miBlockEnd;
+        return;
 
     size_t nStart = static_cast<size_t>(nStartRow);
+    if (nStart >= rAttrs.size())
+        return;
 
-    // Locate the start row position.
-    size_t nBlockStart = 0, nBlockEnd = 0;
-    for (; miBlockCur != miBlockEnd; ++miBlockCur, nBlockStart = nBlockEnd)
-    {
-        nBlockEnd = nBlockStart + miBlockCur->size; // non-inclusive end point.
-        if (nBlockStart <= nStart && nStart < nBlockEnd)
-        {
-            // Initial block is found!
-            break;
-        }
-    }
-
+    // Locate the block containing the start row. The store keeps the start row of every block,
+    // so this is a binary search, and its cost does not grow with the start row.
+    sc::CellTextAttrStoreType::position_type aPos = rAttrs.position(nStart);
+    miBlockCur = aPos.first;
     if (miBlockCur == miBlockEnd)
-        // Initial block not found for whatever reason... Bail out.
         return;
 
     // Locate the initial row position within this block.
     if (miBlockCur->type == sc::element_type_celltextattr)
     {
         // This block stores text widths for non-empty cells.
-        size_t nOffsetInBlock = nStart - nBlockStart;
         mnCurPos = nStart;
-        getDataIterators(nOffsetInBlock);
+        getDataIterators(aPos.second);
         checkEndRow();
         return;
     }
 
-    // Current block is not of ushort type.  Skip to the next block.
-    nBlockStart = nBlockEnd;
-    ++miBlockCur;
-
-    // Look for the first ushort block.
-    for (; miBlockCur != miBlockEnd; ++miBlockCur, nBlockStart = nBlockEnd)
+    // Current block is not of ushort type.  Look for the first ushort block
+    // below it.
+    for (++miBlockCur; miBlockCur != miBlockEnd; ++miBlockCur)
     {
-        nBlockEnd = nBlockStart + miBlockCur->size; // non-inclusive end point.
         if (miBlockCur->type != sc::element_type_celltextattr)
             continue;
 
         // Found!
-        mnCurPos = nBlockStart;
+        mnCurPos = miBlockCur->position;
         getDataIterators(0);
         checkEndRow();
         return;
