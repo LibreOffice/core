@@ -585,7 +585,7 @@ void GtkSalData::Init()
     gtk_style_context_add_provider_for_display(pGdkDisp, CreateStyleProvider(),
             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 #else
-    if (GdkScreen* pScreen = gdk_display_get_screen(pGdkDisp, 0))
+    if (GdkScreen* pScreen = gdk_display_get_default_screen(pGdkDisp))
     {
         m_pDisplay->screenSizeChanged( pScreen );
         m_pDisplay->monitorsChanged( pScreen );
