@@ -33,6 +33,7 @@ sed -i "s/text\/plain;//" "${2?}${3?}".writer.desktop
 
 desktop-file-edit --set-key=X-Endless-Alias --set-value=libreoffice-startcenter \
  --set-key=X-Flatpak-RenamedFrom --set-value='libreoffice-startcenter.desktop;' \
+ --set-key=Icon --set-value="${3?}" \
  "${2?}${3?}".desktop
 for i in base calc draw impress math writer xsltfilter
 do

@@ -36,10 +36,16 @@ OUString IconHelper::GetAppName(sal_uInt16 nIcon)
 
 OUString IconHelper::GetAppIconName(sal_uInt16 nIcon)
 {
-    static const OUString sPrefix = comphelper::flatpak::isFlatpak()
-                                        ? u"org.libreoffice.LibreOffice."_ustr
-                                        : u"libreoffice-"_ustr;
-    return sPrefix + GetAppName(nIcon);
+    const OUString sAppName = GetAppName(nIcon);
+    if (comphelper::flatpak::isFlatpak())
+    {
+        // Flatpak uses Flatpak ID as prefix and drops "startcenter" in icon and desktop file names
+        if (sAppName == u"startcenter"_ustr)
+            return u"org.libreoffice.LibreOffice"_ustr;
+        return u"org.libreoffice.LibreOffice."_ustr + sAppName;
+    }
+
+    return u"libreoffice-"_ustr + sAppName;
 }
 
 OUString IconHelper::GetInternalAppIconName(sal_uInt16 nIcon)
