@@ -634,6 +634,10 @@ void install_filepicker_provider(COKit &rOffice)
     DocumentData::get(document.appDocId).loKitDocument->saveAs([url UTF8String], [format UTF8String], [filterOptions UTF8String]);
 }
 
++ (bool)isKitDocumentLoaded:(Document *)document {
+    return DocumentData::loadedKitDocument(document.appDocId) != nullptr;
+}
+
 + (NSString *_Nullable)embeddedMediaPathWithDocument:(Document *)document tag:(NSString *)tag {
     // The broker is recorded under the appDocId once the engine has loaded the document.
     DocumentData *data = DocumentData::getIfExists(document.appDocId);

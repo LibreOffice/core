@@ -443,6 +443,11 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             return (nil, nil)
         }
         else if body == "PRINT" {
+            guard COWrapper.isKitDocumentLoaded(document) else {
+                COWrapper.LOG_ERR("PRINT was ignored: the document is not loaded yet")
+                return (nil, nil)
+            }
+
             document.printDocument(nil)
             return (nil, nil)
         }

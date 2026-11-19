@@ -33,6 +33,7 @@
 // Whether CODA's page in an integrator's editor frame may send this message to native code.
 + (bool)isAllowedFromEditorFrame:(NSString *_Nonnull)message NS_SWIFT_NAME(isAllowedFromEditorFrame(_:));
 + (void)saveAsWith:(Document *_Nonnull)document url:(NSString *_Nonnull)url format:(NSString *_Nonnull)format filterOptions:(NSString *_Nullable)filterOptions;
++ (bool)isKitDocumentLoaded:(Document *_Nonnull)document NS_SWIFT_NAME(isKitDocumentLoaded(_:));
 // The path on disk of the media file that the document's server side registered under the
 // given tag, or nil when this document is not loaded or the tag is not one of its media files.
 + (NSString *_Nullable)embeddedMediaPathWithDocument:(Document *_Nonnull)document
