@@ -68,13 +68,7 @@ OneInstanceOleWrapper::OneInstanceOleWrapper(  const Reference<XMultiServiceFact
     , m_factoryHandle(0)
     , m_smgr(smgr)
 {
-    Reference<XInterface> xInt = m_smgr->createInstance(u"com.sun.star.bridge.oleautomation.BridgeSupplier"_ustr);
-
-    if (xInt.is())
-    {
-        Any a= xInt->queryInterface( cppu::UnoType<XBridgeSupplier2>::get() );
-        a >>= m_bridgeSupplier;
-    }
+    m_bridgeSupplier.set(m_smgr->createInstance(u"com.sun.star.bridge.oleautomation.BridgeSupplier"_ustr), UNO_QUERY);
 }
 
 OneInstanceOleWrapper::~OneInstanceOleWrapper()
@@ -357,13 +351,7 @@ Reference< XInterface > OleConverter::createComWrapperInstance()
 OleClient::OleClient( const Reference<XMultiServiceFactory>& smgr):
     UnoConversionUtilities<OleClient>( smgr)
 {
-    Reference<XInterface> xInt;// = m_smgr->createInstance(L"com.sun.star.bridge.OleBridgeSupplier2");
-
-    if (xInt.is())
-    {
-        Any a= xInt->queryInterface(cppu::UnoType<XBridgeSupplier2>::get() );
-        a >>= m_bridgeSupplier;
-    }
+    // m_bridgeSupplier.set(m_smgr->createInstance(L"com.sun.star.bridge.OleBridgeSupplier2", UNO_QUERY);
 }
 
 OleClient::~OleClient()
@@ -449,13 +437,7 @@ Reference< XInterface > OleClient::createComWrapperInstance( )
 OleServer::OleServer( const Reference<XMultiServiceFactory>& smgr):
     m_smgr( smgr)
 {
-    Reference<XInterface> xInt = m_smgr->createInstance(u"com.sun.star.bridge.oleautomation.BridgeSupplier"_ustr);
-
-    if (xInt.is())
-    {
-        Any a= xInt->queryInterface( cppu::UnoType<XBridgeSupplier2>::get() );
-        a >>= m_bridgeSupplier;
-    }
+    m_bridgeSupplier.set(m_smgr->createInstance(u"com.sun.star.bridge.oleautomation.BridgeSupplier"_ustr), UNO_QUERY);
 
     (void) provideInstance( [&]
                             {

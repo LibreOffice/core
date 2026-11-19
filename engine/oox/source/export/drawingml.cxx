@@ -8437,10 +8437,10 @@ bool DrawingML::WriteCustomGeometry(
     const Reference< XShape >& rXShape,
     const SdrObjCustomShape& rSdrObjCustomShape)
 {
-    uno::Reference< beans::XPropertySet > aXPropSet;
-    cpo::uno::Any aAny( rXShape->queryInterface(cppu::UnoType<beans::XPropertySet>::get()));
+    cpo::uno::Any aAny;
+    uno::Reference< beans::XPropertySet > aXPropSet(rXShape, UNO_QUERY);
 
-    if ( ! (aAny >>= aXPropSet) )
+    if ( !aXPropSet )
         return false;
 
     try

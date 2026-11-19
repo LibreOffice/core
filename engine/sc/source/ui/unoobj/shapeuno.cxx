@@ -97,17 +97,12 @@ ScShapeObj::ScShapeObj( SvxShape* pShape ) :
 
     // We have to query these interfaces BEFORE we call setMaster. After we call setMaster there is no
     // way to acertain which sub-interfaces the SvxShape subclass implements.
-    uno::Reference<lang::XComponent> xComponent;
-    pShape->queryInterface( cppu::UnoType<lang::XComponent>::get()) >>= xComponent;
-    mpComponent = xComponent.get();
-    uno::Reference<text::XText> xText;
-    pShape->queryInterface( cppu::UnoType<text::XText>::get()) >>= xText;
+    mpComponent = pShape;
+    uno::Reference<text::XText> xText(static_cast<cppu::OWeakObject*>(pShape), uno::UNO_QUERY);
     mpText = xText.get();
-    uno::Reference<text::XSimpleText> xSimpleText;
-    pShape->queryInterface( cppu::UnoType<text::XSimpleText>::get()) >>= xSimpleText;
+    uno::Reference<text::XSimpleText> xSimpleText(static_cast<cppu::OWeakObject*>(pShape), uno::UNO_QUERY);
     mpSimpleText = xSimpleText.get();
-    uno::Reference<text::XTextRange> xTextRange;
-    pShape->queryInterface( cppu::UnoType<text::XTextRange>::get()) >>= xTextRange;
+    uno::Reference<text::XTextRange> xTextRange(static_cast<cppu::OWeakObject*>(pShape), uno::UNO_QUERY);
     mpTextRange = xTextRange.get();
 
     bIsTextShape = ( comphelper::getFromUnoTunnel<SvxUnoTextBase>( static_cast<cppu::OWeakObject*>(pShape) ) != nullptr );

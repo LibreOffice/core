@@ -924,11 +924,9 @@ SwXShape::SwXShape(
     if(!xShape.is())  // default Ctor
         return;
 
-    const cpo::uno::Type& rAggType = cppu::UnoType<cpo::uno::XAggregation>::get();
     //aAgg contains a reference of the SvxShape!
     {
-        cpo::uno::Any aAgg = xShape->queryInterface(rAggType);
-        aAgg >>= m_xShapeAgg;
+        m_xShapeAgg.set(xShape, uno::UNO_QUERY);
         // #i31698#
         if ( m_xShapeAgg.is() )
         {

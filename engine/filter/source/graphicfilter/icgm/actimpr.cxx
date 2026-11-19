@@ -828,49 +828,42 @@ void CGMImpressOutAct::DrawText(awt::Point const & rTextPos, awt::Size const & r
     {
         maXPropSet->setPropertyValue( u"TextAutoGrowHeight"_ustr, cpo::uno::Any(true) );
     }
-    uno::Reference< text::XText >  xText;
-    cpo::uno::Any aFirstQuery( maXShape->queryInterface( cppu::UnoType<text::XText>::get()));
-    if( aFirstQuery >>= xText )
+    uno::Reference< text::XText > xText(maXShape, uno::UNO_QUERY);
+    if( xText )
     {
         uno::Reference< text::XTextCursor >  aXTextCursor( xText->createTextCursor() );
         {
             aXTextCursor->gotoEnd( false );
-            uno::Reference< text::XTextRange >  aCursorText;
-            cpo::uno::Any aSecondQuery( aXTextCursor->queryInterface( cppu::UnoType<text::XTextRange>::get()));
-            if ( aSecondQuery >>= aCursorText )
+            uno::Reference< text::XTextRange > aCursorText(aXTextCursor);
+            uno::Reference< beans::XPropertySet > aCursorPropSet(aCursorText, uno::UNO_QUERY);
+            if( aCursorPropSet )
             {
-                uno::Reference< beans::XPropertySet >  aCursorPropSet;
-
-                cpo::uno::Any aQuery( aCursorText->queryInterface( cppu::UnoType<beans::XPropertySet>::get()));
-                if( aQuery >>= aCursorPropSet )
+                if ( nWidth != -1 )     // paragraph adjusting in a valid textbox ?
                 {
-                    if ( nWidth != -1 )     // paragraph adjusting in a valid textbox ?
+                    switch ( mpCGM->pElement->eTextAlignmentH )
                     {
-                        switch ( mpCGM->pElement->eTextAlignmentH )
-                        {
-                            case TAH_RIGHT :
-                                aAny <<= sal_Int16(style::HorizontalAlignment_RIGHT);
-                            break;
-                            case TAH_LEFT :
-                            case TAH_CONT :
-                            case TAH_NORMAL :
-                                aAny <<= sal_Int16(style::HorizontalAlignment_LEFT);
-                            break;
-                            case TAH_CENTER :
-                                aAny <<= sal_Int16(style::HorizontalAlignment_CENTER);
-                            break;
-                        }
-                        aCursorPropSet->setPropertyValue( u"ParaAdjust"_ustr, aAny );
+                        case TAH_RIGHT :
+                            aAny <<= sal_Int16(style::HorizontalAlignment_RIGHT);
+                        break;
+                        case TAH_LEFT :
+                        case TAH_CONT :
+                        case TAH_NORMAL :
+                            aAny <<= sal_Int16(style::HorizontalAlignment_LEFT);
+                        break;
+                        case TAH_CENTER :
+                            aAny <<= sal_Int16(style::HorizontalAlignment_CENTER);
+                        break;
                     }
-                    if ( nWidth > 0 && nHeight > 0 )    // restricted text
-                    {
-                        aAny <<= true;
-                        maXPropSet->setPropertyValue( u"TextFitToSize"_ustr, aAny );
-                    }
-                    aCursorText->setString(rString);
-                    aXTextCursor->gotoEnd( true );
-                    ImplSetTextBundle( aCursorPropSet );
+                    aCursorPropSet->setPropertyValue( u"ParaAdjust"_ustr, aAny );
                 }
+                if ( nWidth > 0 && nHeight > 0 )    // restricted text
+                {
+                    aAny <<= true;
+                    maXPropSet->setPropertyValue( u"TextFitToSize"_ustr, aAny );
+                }
+                aCursorText->setString(rString);
+                aXTextCursor->gotoEnd( true );
+                ImplSetTextBundle( aCursorPropSet );
             }
         }
     }
@@ -889,9 +882,8 @@ void CGMImpressOutAct::AppendText( const char* pString )
     if ( !aShape.is() )
         return;
 
-    uno::Reference< text::XText >  xText;
-    cpo::uno::Any aFirstQuery(  aShape->queryInterface( cppu::UnoType<text::XText>::get()) );
-    if( !(aFirstQuery >>= xText) )
+    uno::Reference< text::XText > xText(aShape, uno::UNO_QUERY);
+    if( !xText )
         return;
 
     OUString aStr(pString, strlen(pString), RTL_TEXTENCODING_ASCII_US);
@@ -901,18 +893,13 @@ void CGMImpressOutAct::AppendText( const char* pString )
         return;
 
     aXTextCursor->gotoEnd( false );
-    uno::Reference< text::XTextRange >  aCursorText;
-    cpo::uno::Any aSecondQuery(aXTextCursor->queryInterface( cppu::UnoType<text::XTextRange>::get()));
-    if ( aSecondQuery >>= aCursorText )
+    uno::Reference< text::XTextRange >  aCursorText(aXTextCursor);
+    uno::Reference< beans::XPropertySet >  aPropSet(aCursorText, uno::UNO_QUERY);
+    if( aPropSet )
     {
-        uno::Reference< beans::XPropertySet >  aPropSet;
-        cpo::uno::Any aQuery(aCursorText->queryInterface( cppu::UnoType<beans::XPropertySet>::get()));
-        if( aQuery >>= aPropSet )
-        {
-            aCursorText->setString( aStr );
-            aXTextCursor->gotoEnd( true );
-            ImplSetTextBundle( aPropSet );
-        }
+        aCursorText->setString( aStr );
+        aXTextCursor->gotoEnd( true );
+        ImplSetTextBundle( aPropSet );
     }
 }
 

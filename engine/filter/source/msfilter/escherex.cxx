@@ -1797,12 +1797,11 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<beans
 tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const uno::Reference< drawing::XShape > & rXShape )
 {
     tools::PolyPolygon aRetPolyPoly;
-    uno::Reference< beans::XPropertySet > aXPropSet;
-    cpo::uno::Any aAny( rXShape->queryInterface(
-        cppu::UnoType<beans::XPropertySet>::get()));
+    uno::Reference< beans::XPropertySet > aXPropSet(rXShape, uno::UNO_QUERY);
 
-    if ( aAny >>= aXPropSet )
+    if ( aXPropSet )
     {
+        cpo::uno::Any aAny;
         bool bHasProperty = EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, u"PolyPolygonBezier"_ustr, true );
         if ( !bHasProperty )
             bHasProperty = EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, u"PolyPolygon"_ustr, true );
@@ -2197,11 +2196,11 @@ bool EscherPropertyContainer::CreateConnectorProperties(
 
     if ( rXShape.is() )
     {
-        uno::Reference<beans::XPropertySet> aXPropSet;
         uno::Reference<drawing::XShape> aShapeA, aShapeB;
-        cpo::uno::Any aAny( rXShape->queryInterface( cppu::UnoType<beans::XPropertySet>::get()));
-        if ( aAny >>= aXPropSet )
+        uno::Reference<beans::XPropertySet> aXPropSet( rXShape, uno::UNO_QUERY );
+        if ( aXPropSet )
         {
+            cpo::uno::Any aAny;
             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, u"EdgeKind"_ustr, true ) )
             {
                 drawing::ConnectorType eCt;

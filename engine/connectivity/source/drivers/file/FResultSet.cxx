@@ -1062,17 +1062,15 @@ Error:
 
 void OResultSet::sortRows()
 {
-    if (!m_pSQLAnalyzer->hasRestriction() && m_aOrderbyColumnNumber.size() == 1)
+    if (!m_pSQLAnalyzer->hasRestriction() && m_aOrderbyColumnNumber.size() == 1
+        && m_pTable.is())
     {
         // is just one field given for sorting
         // and this field is indexed, then the Index will be used
-        Reference<XIndexesSupplier> xIndexSup;
-        m_pTable->queryInterface(cppu::UnoType<XIndexesSupplier>::get()) >>= xIndexSup;
 
-        Reference<XIndexAccess> xIndexes;
-        if(xIndexSup.is())
+        Reference<XIndexAccess> xIndexes(m_pTable->getIndexes(),UNO_QUERY);
+        if(xIndexes.is())
         {
-            xIndexes.set(xIndexSup->getIndexes(),UNO_QUERY);
             Reference<XPropertySet> xColProp;
             if(m_aOrderbyColumnNumber[0] < xIndexes->getCount())
             {
