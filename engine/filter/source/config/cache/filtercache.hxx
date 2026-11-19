@@ -33,7 +33,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-
+#include <mutex>
 
 namespace filter::config {
 
@@ -56,7 +56,7 @@ class CacheUpdateListener;
                 Further we make it public. So any user of this class
                 can lock us from outside too.
  */
-class FilterCache : public cppu::BaseMutex
+class FilterCache
 {
 
     // public types
@@ -161,6 +161,9 @@ class FilterCache : public cppu::BaseMutex
 
     private:
 
+        mutable std::mutex m_aMutex;
+
+        bool m_bClonedForFlush;
 
         /** @short  holds the used configuration provider alive, which
                     provides access to the list of types. */
@@ -263,7 +266,7 @@ class FilterCache : public cppu::BaseMutex
                     singleton reference should be "load()". There
                     a special fill state of this cache can be forced.
          */
-        FilterCache();
+        FilterCache(bool bClonedForFlush = false);
 
 
         /** @short  standard dtor.
@@ -271,7 +274,7 @@ class FilterCache : public cppu::BaseMutex
         ~FilterCache();
 
 
-        /** @short  creates a copy of this container.
+        /** @short  creates a copy of this container for use in flushing.
 
             @descr  Such copy can be used then to modify items (add/change/remove)
                     without the risk to damage the original container.
@@ -289,7 +292,7 @@ class FilterCache : public cppu::BaseMutex
                     configuration (update) access won't be copied. The cloned instance contains
                     a different one.
          */
-        std::unique_ptr<FilterCache> clone() const;
+        std::unique_ptr<FilterCache> cloneForFlush() const;
 
 
         /** @short  copy the cache content or rClone back to this instance.
@@ -412,6 +415,7 @@ class FilterCache : public cppu::BaseMutex
                         any longer, because any operation before damage it.
          */
         std::vector<OUString> getItemNames(EItemType eType) const;
+        std::vector<OUString> getItemNames(std::unique_lock<std::mutex>& rLock, EItemType eType) const;
 
 
         /** @short      check if the required item exist inside this container.
@@ -603,11 +607,11 @@ class FilterCache : public cppu::BaseMutex
             @throw      [cpo::uno::Exception]
                         if the required list does not exist.
          */
-        const CacheItemList& impl_getItemList(EItemType eType) const;
+        const CacheItemList& impl_getItemList(std::unique_lock<std::mutex>&, EItemType eType) const;
 
-        CacheItemList& impl_getItemList(EItemType eType);
+        CacheItemList& impl_getItemList(std::unique_lock<std::mutex>&, EItemType eType);
 
-        CacheItem& impl_getItem( EItemType eType, const OUString& sItem);
+        CacheItem& impl_getItem( std::unique_lock<std::mutex>&, EItemType eType, const OUString& sItem);
 
         /** @short      return a valid configuration update access
                         to the underlying configuration package, which
@@ -628,7 +632,7 @@ class FilterCache : public cppu::BaseMutex
                         all necessary listener connections will be established
                         too. So this cache will be informed about outside updates.
          */
-        cpo::uno::Reference< cpo::uno::XInterface > impl_openConfig(EConfigProvider eProvide);
+        cpo::uno::Reference< cpo::uno::XInterface > impl_openConfig(std::unique_lock<std::mutex>&, EConfigProvider eProvide);
 
 
         /** @short      tries to open the requested configuration root
@@ -649,7 +653,7 @@ class FilterCache : public cppu::BaseMutex
                         and initialized within the requested modes successfully;
                         a NULL reference otherwise.
          */
-        cpo::uno::Reference< cpo::uno::XInterface > impl_createConfigAccess(const OUString& sRoot       ,
+        static cpo::uno::Reference< cpo::uno::XInterface > impl_createConfigAccess(const OUString& sRoot       ,
                                                                                   bool         bReadOnly   ,
                                                                                   bool         bLocalesMode);
 
@@ -673,7 +677,7 @@ class FilterCache : public cppu::BaseMutex
                         Can be empty if an internal error occurred or if the requested
                         key does not exists!
          */
-        cpo::uno::Any impl_getDirectCFGValue(std::u16string_view sDirectKey);
+        static cpo::uno::Any impl_getDirectCFGValue(std::u16string_view sDirectKey);
 
 
         /** @short      load the underlying configuration into this cache.
@@ -688,7 +692,7 @@ class FilterCache : public cppu::BaseMutex
 
             @throws cpo::uno::Exception
          */
-        void impl_load(EFillState eRequiredState);
+        void impl_load(std::unique_lock<std::mutex>&, EFillState eRequiredState);
 
 
         /** @short      validate the whole cache and create
@@ -707,7 +711,7 @@ class FilterCache : public cppu::BaseMutex
             @throw      [cpo::uno::Exception]
                         if cache is invalid and could not be repaired.
          */
-        void impl_validateAndOptimize();
+        void impl_validateAndOptimize(std::unique_lock<std::mutex>&);
 
     private:
 
@@ -737,7 +741,8 @@ class FilterCache : public cppu::BaseMutex
             @throw  [cpo::uno::Exception]
                     if an unrecoverable error occurs inside this operation.
          */
-        void impl_loadSet(const cpo::uno::Reference< css::container::XNameAccess >& xConfig,
+        void impl_loadSet(std::unique_lock<std::mutex>& rLock,
+                                const cpo::uno::Reference< css::container::XNameAccess >& xConfig,
                                 EItemType                                           eType  ,
                                 EReadOption                                         eOption,
                                 CacheItemList*                                      pCache );
@@ -765,7 +770,8 @@ class FilterCache : public cppu::BaseMutex
             @throw  [cpo::uno::Exception]
                     if an unrecoverable error occurs inside this operation.
          */
-        CacheItem impl_loadItem(const cpo::uno::Reference< css::container::XNameAccess >& xSet   ,
+        CacheItem impl_loadItem(std::unique_lock<std::mutex>& rLock,
+                                const cpo::uno::Reference< css::container::XNameAccess >& xSet   ,
                                       EItemType                                           eType  ,
                                 const OUString&                                    sItem  ,
                                       EReadOption                                         eOption);
@@ -796,8 +802,9 @@ class FilterCache : public cppu::BaseMutex
             @throw  [cpo::uno::Exception]
                     if an unrecoverable error occurs inside this operation.
          */
-        CacheItemList::iterator impl_loadItemOnDemand(      EItemType        eType,
-                                                      const OUString& sItem);
+        CacheItemList::iterator impl_loadItemOnDemand( std::unique_lock<std::mutex>&,
+                                                       EItemType        eType,
+                                                       const OUString& sItem);
 
 
         /** TODO
@@ -813,7 +820,8 @@ class FilterCache : public cppu::BaseMutex
 
             @throws cpo::uno::Exception
         */
-        void impl_addItem2FlushList(      EItemType        eType,
+        void impl_addItem2FlushList( std::unique_lock<std::mutex>&,
+                                    EItemType        eType,
                                     const OUString& sItem);
 
 
@@ -863,7 +871,8 @@ class FilterCache : public cppu::BaseMutex
 
             @throws cpo::uno::Exception
         */
-        void impl_readPatchUINames(const cpo::uno::Reference< css::container::XNameAccess >& xNode,
+        void impl_readPatchUINames(std::unique_lock<std::mutex>& rLock,
+                                   const cpo::uno::Reference< css::container::XNameAccess >& xNode,
                                          CacheItem&                                          rItem);
 
 
@@ -875,13 +884,14 @@ class FilterCache : public cppu::BaseMutex
                                    const CacheItem&                                           rItem);
 
         /** TODO */
-        void impl_readOldFormat();
+        void impl_readOldFormat(std::unique_lock<std::mutex>&);
 
         /** TODO
 
             @throws cpo::uno::Exception
         */
-        CacheItem impl_readOldItem(const cpo::uno::Reference< css::container::XNameAccess >& xSet ,
+        CacheItem impl_readOldItem(std::unique_lock<std::mutex>& rLock,
+                                   const cpo::uno::Reference< css::container::XNameAccess >& xSet ,
                                          EItemType                                           eType,
                                    const OUString&                                    sItem);
 
@@ -905,8 +915,8 @@ class FilterCache : public cppu::BaseMutex
 
 #if OSL_DEBUG_LEVEL > 0
         /** TODO */
-        OUString impl_searchFrameLoaderForType(const OUString& sType) const;
-        OUString impl_searchContentHandlerForType(const OUString& sType) const;
+        OUString impl_searchFrameLoaderForType(std::unique_lock<std::mutex>& rLock, const OUString& sType) const;
+        OUString impl_searchContentHandlerForType(std::unique_lock<std::mutex>& rLock, const OUString& sType) const;
 #endif
 
 
@@ -917,7 +927,7 @@ class FilterCache : public cppu::BaseMutex
 
             @return true if the requested module is installed; false otherwise.
          */
-        bool impl_isModuleInstalled(const OUString& sModule);
+        bool impl_isModuleInstalled(std::unique_lock<std::mutex>&, const OUString& sModule);
 
 
         /** @short  convert a list of flag names to its int representation.

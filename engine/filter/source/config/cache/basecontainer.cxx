@@ -84,7 +84,7 @@ void BaseContainer::impl_loadOnDemand(std::unique_lock<std::mutex>& /*rGuard*/)
 void BaseContainer::impl_initFlushMode(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     if (!m_pFlushCache)
-        m_pFlushCache = GetTheFilterCache().clone();
+        m_pFlushCache = GetTheFilterCache().cloneForFlush();
     if (!m_pFlushCache)
         throw cpo::uno::RuntimeException( u"Can not create write copy of internal used cache on demand."_ustr,
                 getXWeak());
