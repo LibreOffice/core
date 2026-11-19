@@ -946,17 +946,17 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 break;
 
             case FID_MERGE_ON:
-                if ( rDoc.GetChangeTrack() || !pTabViewShell->TestMergeCells() )
+                if ( rDoc.GetChangeTrack() || !pTabViewShell->TestMergeCells() || pDocSh->IsReadOnly() )
                     rSet.DisableItem( nWhich );
                 break;
 
             case FID_MERGE_OFF:
-                if ( rDoc.GetChangeTrack() || !pTabViewShell->TestRemoveMerge() )
+                if ( rDoc.GetChangeTrack() || !pTabViewShell->TestRemoveMerge() || pDocSh->IsReadOnly() )
                     rSet.DisableItem( nWhich );
                 break;
 
             case FID_MERGE_TOGGLE:
-                if ( rDoc.GetChangeTrack() )
+                if ( rDoc.GetChangeTrack() || pDocSh->IsReadOnly() )
                     rSet.DisableItem( nWhich );
                 else
                 {
