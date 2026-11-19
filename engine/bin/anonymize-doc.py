@@ -23,6 +23,10 @@ What changes:
     and the like keep working.
   - document properties, custom XML, metadata, authors, comment authors,
     alt text, form field defaults, external link targets.
+  - the ODF office:meta element is emptied, which also drops the names of
+    custom properties, the template path and the editing statistics.
+  - links to files outside the package, such as a linked image or a relative
+    hyperlink, lose their path, because a path often names a user or a folder.
   - images, image previews and thumbnails become a 1x1 PNG (their displayed
     size is stored in the XML, so layout does not change).
   - binary OLE parts and macros are emptied; embedded ZIP documents are
@@ -136,6 +140,7 @@ OOXML_ANON_ATTRS = {
     ("listEntry", "val"), ("listItem", "displayText"), ("listItem", "value"),
     ("hyperlink", "tooltip"), ("textpath", "string"), ("imagedata", "title"),
     ("*", "creator"), ("*", "lastModifiedBy"), ("comment", "authorId"),
+    ("property", "name"),  # custom document property names in docProps/custom.xml
 }
 
 
@@ -194,11 +199,27 @@ def odf_text(path, stack, text):
     return anon(text)
 
 
+# Top-level entries of each ZIP package being transformed, innermost last. A link whose first
+# path segment is one of these points into the package and keeps its target.
+PACKAGE_ENTRIES = []
+
+
+def is_package_link(v):
+    if v.startswith("#"):
+        return True
+    if not PACKAGE_ENTRIES:
+        return False
+    v = v[2:] if v.startswith("./") else v
+    return v.split("/", 1)[0] in PACKAGE_ENTRIES[-1]
+
+
 def odf_attr(tag, tagtext, aname, value):
     if aname == "xlink:href":
         v = value[1:-1]
         if "://" in v or v.startswith(("mailto:", "file:")):
             return '"http://example.invalid/"'
+        if not is_package_link(v):
+            return anon(value)
         return value
     if aname in ODF_ANON_ATTRS:
         return anon(value)
@@ -218,14 +239,29 @@ def transform_xml(path, data):
     text_rule, attr_rule = (odf_text, odf_attr) if odf else (ooxml_text, ooxml_attr)
     out = []
     stack = []
+    meta_depth = None  # stack depth of an open office:meta element, whose content is dropped
     for m in TOKEN.finditer(s):
         tok = m.group(0)
+        if meta_depth is not None:
+            if tok.startswith("</") and len(stack) == meta_depth + 1:
+                meta_depth = None
+            elif tok.startswith("<") and not tok.startswith(("<?", "<!")):
+                if tok.startswith("</"):
+                    stack.pop()
+                elif not tok.endswith("/>"):
+                    stack.append(("", tok))
+                continue
+            else:
+                continue
         if tok.startswith("<"):
             if tok.startswith(("<?", "<!")):
                 out.append(tok)
                 continue
             tm = TAGNAME.match(tok)
             name = tm.group(1) if tm else ""
+            if (odf and name == "office:meta" and not tok.startswith("</")
+                    and not tok.endswith("/>")):
+                meta_depth = len(stack)
             if tok.startswith("</"):
                 if stack:
                     stack.pop()
@@ -268,6 +304,14 @@ def transform_part(path, data, report):
 
 def transform_zip(data, report, prefix_path=""):
     zin = zipfile.ZipFile(io.BytesIO(data))
+    PACKAGE_ENTRIES.append({n.split("/", 1)[0] for n in zin.namelist()})
+    try:
+        return _transform_zip(zin, report, prefix_path)
+    finally:
+        PACKAGE_ENTRIES.pop()
+
+
+def _transform_zip(zin, report, prefix_path):
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w") as zout:
         for info in zin.infolist():
