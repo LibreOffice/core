@@ -47,10 +47,11 @@ FREE_PORT = $(NODE) -e "const server = require('net').createServer(); \
 
 build-integration: $(BUILD_MARKER) $(RENDERER_BUNDLE)
 
-# The compiled tests go to the build tree, where node finds the modules they load.
+# The compiled tests go to the build tree, where node finds the modules they load (and tsc finds
+# them there through baseUrl, also when the build tree is not the source tree).
 $(BUILD_MARKER): $(SRCS) $(srcdir)/tsconfig.json
 	$(TSC) --project $(srcdir)/tsconfig.json --outDir $(WORKDIR) \
-		--typeRoots $(NODE_MODULES)/@types
+		--typeRoots $(NODE_MODULES)/@types --baseUrl $(NODE_MODULES)
 	touch $(BUILD_MARKER)
 
 # tsc can report a failure and still write the script, so a failure deletes it.
