@@ -3865,8 +3865,10 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     // states text as well, and the model fills an outline one with the prompt rather than
     // marking it as waiting for content. So the document itself says whether there was text
     // here: where it stated none, what the shape now holds is the prompt of whoever read it.
+    // The master part is written from those same pages, the model keeping none of its own for
+    // the master, so what the document said about an area holds wherever it is written.
     bool bIsPrompt = bIsEmptyPresObj;
-    if (mbMaster && !mbSlideMasterPart && !bIsPrompt)
+    if (mbMaster && !bIsPrompt)
     {
         const std::optional<bool> oStatedText = statedPlaceholderText(xShape);
         bIsPrompt = oStatedText.has_value() && !*oStatedText;

@@ -1760,6 +1760,31 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testMasterPlaceholderStatesNoPrompt)
                 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testMasterBodyStatesNoPrompt)
+{
+    // Given a document whose first layout states no areas at all, so that the master has to take
+    // the shape of its body from the next layout, which states one and no text for it:
+    createSdImpressDoc("pptx/master-placeholder-prompt.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlMaster = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 7
+    // i.e. the seven levels of the prompt a reader shows for an empty area were written to the
+    // file as the text of the master, in whichever language that reader happened to run in.
+    assertXPath(pXmlMaster,
+                "/p:sldMaster/p:cSld/p:spTree/p:sp[p:nvSpPr/p:nvPr/p:ph/@type='body']"
+                "/p:txBody/a:p/a:r",
+                0);
+    // The formatting the master gives each of those levels is stated all the same.
+    assertXPath(pXmlMaster,
+                "/p:sldMaster/p:cSld/p:spTree/p:sp[p:nvSpPr/p:nvPr/p:ph/@type='body']"
+                "/p:txBody/a:lstStyle/a:lvl7pPr",
+                1);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf106026)
 {
     createSdImpressDoc("odp/tdf106026.odp");

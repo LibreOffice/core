@@ -258,8 +258,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testAutomaticColorStaysOutOfAListStyle)
     assertXPath(pMaster, "//p:sp/p:txBody/a:lstStyle//a:defRPr/a:solidFill", 0);
 
     // The text itself still names a colour, because OOXML has no automatic one for a reader to
-    // resolve.
-    CPPUNIT_ASSERT(countXPathNodes(pMaster, "//p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill") > 0);
+    // resolve. The master states no text of its own, what it held being the prompt of whoever
+    // read it, so the slide beneath it is where that text is.
+    xmlDocUniquePtr pSlide = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    CPPUNIT_ASSERT(countXPathNodes(pSlide, "//p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill") > 0);
 }
 
 // The top and bottom insets of a shape stay where they are. A shape that states no height of its
