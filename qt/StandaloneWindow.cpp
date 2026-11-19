@@ -15,22 +15,22 @@
 #include "WebView.hpp"
 #include "WindowUtils.hpp"
 
+#include <common/WelcomeWindow.hpp>
+
 #include <QCloseEvent>
 #include <QGuiApplication>
 #include <QScreen>
 
-#include <algorithm>
 #include <utility>
 
 namespace
 {
-// Welcome dialog: 40% of screen width clamped to [800x450, 1280x720] at 16:9.
-// Starter / presenter console: 1.5x that.
+// The welcome slideshow gets the size of Desktop::welcomeWindowSize(), and the other standalone
+// windows, such as the starter screen and the presenter console, 1.5 times that.
 std::pair<int, int> standaloneWindowSize(bool isWelcome)
 {
     const int viewportWidth = QGuiApplication::primaryScreen()->availableGeometry().width();
-    int width = std::clamp(static_cast<int>(viewportWidth * 0.4), 800, 1280);
-    int height = std::clamp(static_cast<int>((width * 9.0) / 16.0), 450, 720);
+    auto [width, height] = Desktop::welcomeWindowSize(viewportWidth);
     if (!isWelcome)
     {
         width = static_cast<int>(1.5 * width);

@@ -78,6 +78,7 @@
 #include <common/SettingsStorage.hpp>
 #include <common/StringVector.hpp>
 #include <common/Uri.hpp>
+#include <common/WelcomeWindow.hpp>
 #include <net/FakeSocket.hpp>
 #include <wsd/Extensions.hpp>
 #include <wsd/COOLWSD.hpp>
@@ -5325,38 +5326,27 @@ static void moveTabToNewWindow(HWND hWnd, int tabId, const POINT* dropPoint)
     moveTabToWindow(tabId, createTabbedWindow(dropPoint), -1);
 }
 
-// The window the welcome slideshow plays in. It is displayed without
-// decorations, and at 16:9 because we know it is that aspect ratio.
+// The window the welcome slideshow plays in. It is displayed without decorations, with the size of
+// Desktop::welcomeWindowSize(), and centred in the work area of the primary monitor.
 static WindowState& createWelcomeWindow()
 {
-    int width, height;
+    // The work area and the window are in physical pixels, and the size is in device-independent
+    // ones, so the size is scaled by the DPI.
+    const UINT dpi = GetDpiForSystem();
+    int width = 1280, height = 720;
     int x = CW_USEDEFAULT, y = CW_USEDEFAULT;
 
     MONITORINFO monitorInfo;
     monitorInfo.cbSize = sizeof(monitorInfo);
     if (GetMonitorInfoW(primaryMonitor, &monitorInfo))
     {
-        double aspectRatio =
-            (double)(monitorInfo.rcWork.right - monitorInfo.rcWork.left) / (monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
-        if (aspectRatio < 16.0/9.0)
-        {
-            width = 0.9 * (monitorInfo.rcWork.right - monitorInfo.rcWork.left);
-            x = monitorInfo.rcWork.left + 0.05 * (monitorInfo.rcWork.right - monitorInfo.rcWork.left);
-            height = width / (16.0/9.0);
-            y = monitorInfo.rcWork.top + ((monitorInfo.rcWork.bottom - monitorInfo.rcWork.top) - height) / 2;
-        }
-        else
-        {
-            height = 0.9 * (monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
-            y = monitorInfo.rcWork.top + 0.05 * (monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
-            width = (16.0/9.0) * height;
-            x = monitorInfo.rcWork.left + ((monitorInfo.rcWork.right - monitorInfo.rcWork.left) - width) / 2;
-        }
-    }
-    else
-    {
-        width = 1280;
-        height = 720;
+        const RECT& work = monitorInfo.rcWork;
+        const auto [logicalWidth, logicalHeight] = Desktop::welcomeWindowSize(
+            MulDiv(work.right - work.left, USER_DEFAULT_SCREEN_DPI, dpi));
+        width = MulDiv(logicalWidth, dpi, USER_DEFAULT_SCREEN_DPI);
+        height = MulDiv(logicalHeight, dpi, USER_DEFAULT_SCREEN_DPI);
+        x = work.left + ((work.right - work.left) - width) / 2;
+        y = work.top + ((work.bottom - work.top) - height) / 2;
     }
 
     return createAppWindow(Util::string_to_wide_string(APP_NAME), WS_POPUP, x, y, width, height);

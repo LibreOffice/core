@@ -305,6 +305,9 @@ class Document: NSDocument {
             win.minSize = NSSize(width: 800, height: 480)
 
             if isWelcome {
+                // The size of the welcome window in CODA-Q and CODA-W: 16:9 and 40% of the width of
+                // the screen, but at least 800x450 and at most 1280x720.
+                win.minSize = NSSize(width: 800, height: 450)
                 win.maxSize = NSSize(width: 1280, height: 720)
                 FrameAutosaveHelper.applyDefaultFrame(win, widthFraction: 0.4, heightFraction: 0.4, ratio: 16.0/9.0)
             }
