@@ -25,6 +25,8 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <rtl/ustring.hxx>
 
+#include <string_view>
+
 namespace com::sun::star::lang { struct Locale; }
 
 enum class TransliterationFlags;
@@ -82,6 +84,9 @@ public:
     static const Mapping& getConditionalValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, css::lang::Locale const & aLocale, MappingType nMappingType);
     /// @throws cpo::uno::RuntimeException
     static sal_Unicode getNextChar(const sal_Unicode *str, sal_Int32& idx, sal_Int32 len, MappingElement& e, css::lang::Locale const & aLocale, MappingType nMappingtype, TransliterationFlags moduleLoaded);
+
+    /// Whether aText is all ASCII, and rLocale cases ASCII by the ASCII rules
+    static bool hasAsciiCaseMapping(std::u16string_view aText, const css::lang::Locale& rLocale);
 
     static sal_Int32 compare(
         const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,

@@ -183,13 +183,20 @@ is_ja_voice_sound_mark(sal_Unicode& current, sal_Unicode next)
         return c != 0;
 }
 
-static bool isAscii(const sal_Unicode *unistr, sal_Int32 nCount)
+static bool isAscii(std::u16string_view aText)
 {
-    auto p = unistr;
-    for (sal_Int32 i = 0; i < nCount; i++, ++p)
-        if (!rtl::isAscii(*p))
-            return false;
-    return true;
+    return std::ranges::all_of(aText, [](sal_Unicode c) { return rtl::isAscii(c); });
+}
+
+static bool hasAsciiCaseRules(const Locale& rLocale)
+{
+    // Turkic has a dotless i: https://en.wikipedia.org/wiki/Dotted_and_dotless_I_in_computing
+    return rLocale.Language != "tr" && rLocale.Language != "az";
+}
+
+bool casefolding::hasAsciiCaseMapping(std::u16string_view aText, const Locale& rLocale)
+{
+    return hasAsciiCaseRules(rLocale) && isAscii(aText);
 }
 
 #define NOT_END_OF_STR1 (nMatch1 < nCount1 || e1.current < e1.element.nmap)
@@ -209,15 +216,17 @@ casefolding::compare(
     // First check if we can do an ascii comparison. The check is cheap and
     // the optimised compare is much faster.
     // Width folding does not keep the ASCII order
-    if (!(moduleLoaded & TransliterationFlags::IGNORE_WIDTH) && isAscii(unistr1, nCount1)
-        && isAscii(unistr2, nCount2))
+    if (!(moduleLoaded & TransliterationFlags::IGNORE_WIDTH))
     {
+        const std::u16string_view aStr1(unistr1, nCount1);
+        const std::u16string_view aStr2(unistr2, nCount2);
         // The full comparison returns -1, 0 or 1
         if (!(moduleLoaded & TransliterationFlags::IGNORE_CASE))
-            return toSign(rtl_ustr_compare_WithLength(unistr1, nCount1, unistr2, nCount2));
-        // We avoid turkish because of https://en.wikipedia.org/wiki/Dotted_and_dotless_I_in_computing
-        const bool bTurkic = aLocale.Language == "tr" || aLocale.Language == "az";
-        if (!bTurkic)
+        {
+            if (isAscii(aStr1) && isAscii(aStr2))
+                return toSign(rtl_ustr_compare_WithLength(unistr1, nCount1, unistr2, nCount2));
+        }
+        else if (hasAsciiCaseRules(aLocale) && isAscii(aStr1) && isAscii(aStr2))
             return toSign(
                 rtl_ustr_compareIgnoreAsciiCase_WithLength(unistr1, nCount1, unistr2, nCount2));
     }

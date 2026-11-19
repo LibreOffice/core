@@ -214,6 +214,21 @@ public:
         transliteration_->loadModuleNew({ css::i18n::TransliterationModulesNew_IGNORE_CASE },
                                         aEnglish);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), transliteration_->compareString(u"a"_ustr, u"C"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                             transliteration_->compareString(u"Mix"_ustr, u"mIX"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), transliteration_->compareString(u"i"_ustr, u"I"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                             transliteration_->compareString(u"Stra\u00DFe"_ustr, u"STRASSE"_ustr));
+
+        // Turkic I folds to a dotless i
+        const css::lang::Locale aTurkish(u"tr"_ustr, u"TR"_ustr, {});
+        transliteration_->loadModuleNew({ css::i18n::TransliterationModulesNew_IGNORE_CASE },
+                                        aTurkish);
+        CPPUNIT_ASSERT(transliteration_->compareString(u"i"_ustr, u"I"_ustr) != 0);
+        const css::lang::Locale aAzerbaijani(u"az"_ustr, u"AZ"_ustr, {});
+        transliteration_->loadModuleNew({ css::i18n::TransliterationModulesNew_IGNORE_CASE },
+                                        aAzerbaijani);
+        CPPUNIT_ASSERT(transliteration_->compareString(u"i"_ustr, u"I"_ustr) != 0);
     }
 
     CPPUNIT_TEST_SUITE(Transliteration);
