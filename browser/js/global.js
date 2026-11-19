@@ -2645,6 +2645,15 @@ function showWelcomeSVG() {
 		return '0;0;' + width + ';' + height;
 	};
 
+	// A document starts out drawn from vector primitives when its parameter 'vector' says so.
+	// Without the parameter, the experimental features draw presentations from vector
+	// primitives and every other type from tiles.
+	global.startsDrawnFromVectors = function (docType) {
+		const vectorParameter = global.coolParams.get('vector');
+		if (vectorParameter !== '') return vectorParameter === 'true';
+		return !!global.enableExperimentalFeatures && docType === 'presentation';
+	};
+
 	// Encode a string to hex.
 	global.hexEncode = function (string) {
 		var bytes = new TextEncoder().encode(string);
@@ -2789,7 +2798,9 @@ function showWelcomeSVG() {
 				msg += ' timezone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
 				msg += ' clientvisiblearea=' + window.makeClientVisibleArea();
 
-				if (global.coolParams.get('vector') === 'true') {
+				// The type of the document is not known yet, so the answer is the
+				// one for a presentation.
+				if (global.startsDrawnFromVectors('presentation')) {
 					msg += ' vectorRendering=true';
 				}
 

@@ -309,6 +309,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		this._canonicalIdInitialized = false;
 
+		// The type of the document is known from here on, and the vector switch starts out
+		// at the default for it.
+		if (app.map && app.map._debug)
+			app.map._debug.startVectorFor(this._docType);
 		RenderManager.initialize(this._docType);
 	},
 

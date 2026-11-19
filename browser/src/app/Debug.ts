@@ -93,6 +93,8 @@ class DebugManager {
 	private tileOverlaysOn: boolean;
 	public renderGeometryOn: boolean;
 	public vectorOn: boolean;
+	/// True once the user has changed the vector switch in the panel.
+	private _vectorSwitched: boolean = false;
 	public predictedCaretOn: boolean;
 	public localCellCursorOn: boolean;
 
@@ -173,8 +175,9 @@ class DebugManager {
 		this.debugNeverStarted = true;
 
 		// The vector switch starts out at what the document was opened with, and is what the
-		// rendering follows from then on.
-		this.vectorOn = window.coolParams.get('vector') === 'true';
+		// rendering follows from then on. The type of the document is not known yet, so the
+		// switch starts out at the default for a document without a type.
+		this.vectorOn = cool.VectorRenderingConfig.startsOn();
 
 		// A round trip given with the document holds the messages back from the start, and the
 		// panel shows the delay as switched on with that round trip.
@@ -190,6 +193,13 @@ class DebugManager {
 			// No parameter was given - follow the vector switch.
 			this.localCellCursorOn = this.vectorOn;
 		else this.localCellCursorOn = localCellCursor === 'true';
+	}
+
+	/// Set the vector switch to the default for the type of the document, which is known once
+	/// the document has a layer. A switch that the user has changed stays as it is.
+	public startVectorFor(docType: string): void {
+		if (this._vectorSwitched) return;
+		this.vectorOn = cool.VectorRenderingConfig.startsOn(docType);
 	}
 
 	public toggle(): void {
@@ -499,6 +509,7 @@ class DebugManager {
 				startsOn: cool.VectorRenderingConfig.isEnabled(),
 				keepOnClose: true,
 				onAdd: function () {
+					self._vectorSwitched = true;
 					self.vectorOn = true;
 					RenderManager.reinitialize(self._docLayer._docType);
 					RenderManager.updateVectorSections();
@@ -507,6 +518,7 @@ class DebugManager {
 					app.sectionContainer.requestReDraw();
 				},
 				onRemove: function () {
+					self._vectorSwitched = true;
 					self.setDependentToolsEnabled('Vector', false);
 					self.vectorOn = false;
 					RenderManager.reinitialize(self._docLayer._docType);

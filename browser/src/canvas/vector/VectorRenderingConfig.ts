@@ -12,15 +12,27 @@
 namespace cool {
 	/// Return true if the vector rendering should be enabled
 	export namespace VectorRenderingConfig {
-		export function isEnabled(): boolean {
-			// The debug panel's switch decides once there is a map to hold it. It starts out at
-			// the parameter the document was opened with, so the parameter answers only while
-			// the map is still on its way.
-			if (app.map && app.map._debug) return app.map._debug.vectorOn;
-
+		/// Return true if a document of the type starts out drawn from vector primitives.
+		export function startsOn(docType?: string): boolean {
 			// A page without document parameters, such as a unit test, uses tiles.
-			if (!window.coolParams) return false;
-			return window.coolParams.get('vector') === 'true';
+			if (!window.coolParams || !window.startsDrawnFromVectors) return false;
+			return window.startsDrawnFromVectors(docType);
+		}
+
+		/// Return true if the client draws the slides of a presentation from vector primitives.
+		/// Before the document has a layer, its type is not known yet, and the answer is the one
+		/// for a presentation.
+		export function drawsSlidesFromVectors(): boolean {
+			if (app.map && app.map._docLayer) return isEnabled();
+			return startsOn('presentation');
+		}
+
+		export function isEnabled(): boolean {
+			// The debug panel's switch decides once there is a map to hold it. It starts out
+			// at the default for the type of the document, so the default applies only before
+			// the map exists.
+			if (app.map && app.map._debug) return app.map._debug.vectorOn;
+			return startsOn(app.map?._docLayer?._docType);
 		}
 	}
 }

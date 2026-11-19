@@ -535,6 +535,9 @@ interface Window {
 	deviceFormFactor?: string;
 	enableAccessibility: boolean;
 	enableExperimentalFeatures: boolean;
+	// Whether a document of the type starts out drawn from vector primitives. Defined in
+	// js/global.js.
+	startsDrawnFromVectors?: (docType?: string) => boolean;
 	// True when jsdialogs in the Qt shell render as their own native
 	// windows. Left unset in the application, so the value is false.
 	enablePopoutDialogs?: boolean;

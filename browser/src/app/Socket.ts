@@ -555,7 +555,7 @@ class Socket {
 
 		msg += ' clientvisiblearea=' + window.makeClientVisibleArea();
 
-		if (cool.VectorRenderingConfig.isEnabled()) {
+		if (cool.VectorRenderingConfig.drawsSlidesFromVectors()) {
 			msg += ' vectorRendering=true';
 		}
 
