@@ -791,7 +791,14 @@ class WindowsAppInitializer extends AppInitializer {
 			// The integrator around a remote page sends Host_PostmessageReady, as to a browser.
 			this._boundPostMessageHandler = this.postMessageHandler.bind(this);
 			window.addEventListener('message', this._boundPostMessageHandler, false);
-			this.setUpRemoteBridge((kind, msg) => window.postMobileCall(kind + ' ' + msg));
+			// CODA-W can show the server's own editor in the frame instead, for one of
+			// the reasons in common/EditorFrameScripts.hpp (also after the switch to the
+			// server, which mutes window.postMobileCall):
+			const call = window.postMobileCall;
+			const send = (kind, msg) => call(kind + ' ' + msg);
+			this.setUpRemoteBridge(send, {
+				useServerEditor: (reason) => { send('serverEditor', reason); },
+			});
 		}
 	}
 }

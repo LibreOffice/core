@@ -6088,6 +6088,12 @@ static void showServerEditorNotice(
             "server's own editor. To edit documents from " + server + " in " APP_NAME ", ask the "
             "server's administrator to allow that (client_document_loading.enable in "
             "coolwsd.xml).");
+    } else if (reason == EditorFrameScripts::outdatedReason) {
+        showNotice(
+            account,
+            "This version of " APP_NAME " is too old to edit documents from " + server + ", so the "
+            "document is open in the server's own editor. To edit documents from " + server + " in "
+            APP_NAME ", update your copy of " APP_NAME ".");
     } else {
         showNotice(
             account,
@@ -6110,11 +6116,10 @@ static void postServerEditorForm(
     frame->ExecuteScript(Util::string_to_wide_string(script).c_str(), nullptr);
 }
 
-// The editor frame's page found that the server allows no client document loading:
+// The editor frame's page asks for the server's own editor, for one of the reasons in
+// common/EditorFrameScripts.hpp:
 static void useServerEditor(DocumentTab & account, std::string const & reason) {
-    if (reason != EditorFrameScripts::disabledReason
-        && reason != EditorFrameScripts::unsupportedReason)
-    {
+    if (!EditorFrameScripts::isServerEditorReason(reason)) {
         LOG_WRN("The server's own editor was refused: an unknown reason");
         return;
     }
@@ -6122,11 +6127,19 @@ static void useServerEditor(DocumentTab & account, std::string const & reason) {
         LOG_WRN("The server's own editor was not shown: there is no editor frame");
         return;
     }
-    LOG_INF(
-        "The server allows no client document loading (" << reason
-        << "), so the editor frame shows the server's own editor");
-    account.serverEditorReasons[originOf(Poco::URI(account.frameFormUrl))] = reason;
-    showServerEditorNotice(account, account.frameFormUrl, reason);
+    // A document that the page switched to the server goes to the server's own editor without a
+    // notice, and the next document from that server goes to CODA's page again:
+    if (reason == EditorFrameScripts::switchReason) {
+        LOG_INF(
+            "The editor frame's page switched its document to the server, so the frame shows the "
+            "server's own editor");
+    } else {
+        LOG_INF(
+            "No client document loading (" << reason
+            << "), so the editor frame shows the server's own editor");
+        account.serverEditorReasons[originOf(Poco::URI(account.frameFormUrl))] = reason;
+        showServerEditorNotice(account, account.frameFormUrl, reason);
+    }
     postServerEditorForm(account.editorFrame.get(), account.frameFormUrl, account.frameForm);
 }
 
