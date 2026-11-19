@@ -623,7 +623,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		// after the focus returns from a context region, which describes the caret again
 		this._endContextJump();
 		this._updateArea(area);
-		this._keepCommentDetails(elements);
+		this._keepCommentDetails(elements, list, table);
 		this._setContextParagraphs(before, after, beforeRects, afterRects, beforeLevels,
 			afterLevels, elements);
 		this._setContextList(list);
@@ -650,7 +650,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._contextPending = Math.max(0, (this._contextPending || 0) - 1);
 		this._setHeadingLevel(headingLevel);
 		this._updateArea(area);
-		this._keepCommentDetails(elements);
+		this._keepCommentDetails(elements, list, table);
 		if (this._isComposing) {
 			this._remoteContent = content;
 			this._remoteElements = elements.paragraph;
@@ -740,7 +740,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 				stack.push(top);
 			}
 			const li = document.createElement('li');
-			li.append(...this._createLinkedNodes(item.text, { errors: item.errors }));
+			li.append(...this._createLinkedNodes(item.text, { errors: item.errors, comments: item.comments }));
 			if (window.L.Browser.win)
 				li.tabIndex = -1;
 			if (typeof item.rect === 'string')
@@ -748,6 +748,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			top.element.appendChild(li);
 		});
 		this._contextList.appendChild(root);
+		this._linkCommentDetails();
 	},
 
 	_setContextTable: function(table) {
@@ -779,7 +780,8 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 					td.rowSpan = parseInt(cell.rowSpan);
 				if (cell.colSpan !== undefined)
 					td.colSpan = parseInt(cell.colSpan);
-				td.append(...this._createLinkedNodes(cell.text, { errors: cell.errors }));
+				td.append(...this._createLinkedNodes(cell.text, { errors: cell.errors,
+					comments: cell.comments }));
 				if (window.L.Browser.win)
 					td.tabIndex = -1;
 				tr.appendChild(td);
@@ -787,6 +789,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			element.appendChild(tr);
 		});
 		this._contextTable.appendChild(element);
+		this._linkCommentDetails();
 	},
 
 	_requestHeadings: function() {
@@ -1044,7 +1047,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 
 	// the marks shown keep their details until the paragraphs given with these replace them
 	// elements: cool.ParagraphInlineElements
-	_keepCommentDetails: function(elements) {
+	_keepCommentDetails: function(elements, list, table) {
 		const previous = this._commentDetails || new Map();
 		this._commentDetails = new Map();
 		const keep = (id) => {
@@ -1069,8 +1072,14 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		};
 		add(elements.paragraph.comments);
 		for (const paragraphs of [elements.before.comments, elements.after.comments]) {
-			for (const list of Array.isArray(paragraphs) ? paragraphs : [])
-				add(list);
+			for (const comments of Array.isArray(paragraphs) ? paragraphs : [])
+				add(comments);
+		}
+		for (const item of list && Array.isArray(list.items) ? list.items : [])
+			add(item.comments);
+		for (const row of table && Array.isArray(table.rows) ? table.rows : []) {
+			for (const cell of Array.isArray(row.cells) ? row.cells : [])
+				add(cell.comments);
 		}
 	},
 
@@ -1641,7 +1650,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 	onAccessibilityFocusedCellChanged: function(outCount, inList, row, col, rowSpan, colSpan, paragraph) {
 		this._endContextJump();
 		const elements = cool.inlineElements(paragraph);
-		this._keepCommentDetails(elements);
+		this._keepCommentDetails(elements, paragraph.list, paragraph.table);
 		this._requestHeadings();
 		this._setContextParagraphs(paragraph.before, paragraph.after, paragraph.beforeRects, paragraph.afterRects,
 			paragraph.beforeLevels, paragraph.afterLevels, elements);
