@@ -8297,6 +8297,21 @@ static bool encodeImageAsHTML(
     OStringBuffer aBase64Data;
     comphelper::Base64::encode(aBase64Data, aSeq);
 
+    // If this image has an ODF equivalent as well, expose that in a data-coolxml attribute.
+    OString aCoolXmlAttr;
+    OString aEmbedData;
+    const OString aEmbedMime
+        = SotExchange::GetFormatMimeType(SotClipboardFormatId::EMBED_SOURCE).toUtf8();
+    if (getFromTransferable(xTransferable, aEmbedMime, aEmbedData))
+    {
+        auto aEmbedSeq
+            = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aEmbedData.getStr()),
+                                 aEmbedData.getLength());
+        OStringBuffer aBase64Embed;
+        comphelper::Base64::encode(aBase64Embed, aEmbedSeq);
+        aCoolXmlAttr = " data-coolxml=\"" + aBase64Embed + "\"";
+    }
+
     // Embed in HTML.
     aRet = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n"
         "<html><head>"
@@ -8305,7 +8320,7 @@ static bool encodeImageAsHTML(
         + getGenerator().toUtf8()
         + "\"/>"
         "</head><body><img src=\"data:" + aMimeType + ";base64,"
-        + aBase64Data + "\"/></body></html>";
+        + aBase64Data + "\"" + aCoolXmlAttr + "/></body></html>";
 
     return true;
 }

@@ -56,7 +56,39 @@ public:
         test::BootstrapFixture::tearDown();
         comphelper::COKit::setActive(false);
     }
+
+protected:
+    /// Loads a blank Impress document with a plain graphic shape selected.
+    std::unique_ptr<COKitDocumentImpl> loadImpressWithSelectedShape();
 };
+
+std::unique_ptr<COKitDocumentImpl>
+KitClipboardTest::loadImpressWithSelectedShape()
+{
+    // Reset the doc id, so the order of test cases in the suite doesn't matter.
+    const int nDocId = 0;
+    comphelper::COKit::setDocId(ViewShellDocId(nDocId));
+    mxComponent = loadFromDesktop(createFileURL(u"blank_presentation.odp"),
+                                  u"com.sun.star.presentation.PresentationDocument"_ustr);
+    auto pDocument = std::make_unique<COKitDocumentImpl>(mxComponent, nDocId);
+    pDocument->initializeForRendering("{}");
+    uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(
+        xSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr),
+        uno::UNO_QUERY);
+    xPage->add(xShape);
+    xShape->setSize(awt::Size(5000, 3000));
+    xShape->setPosition(awt::Point(1000, 1000));
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XSelectionSupplier> xSelection(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    xSelection->select(cpo::uno::Any(xShape));
+    Scheduler::ProcessEventsToIdle();
+    return pDocument;
+}
 
 namespace
 {
@@ -92,28 +124,7 @@ CPPUNIT_TEST_FIXTURE(KitClipboardTest, testClipboardShapeAdvertisesHtml)
         [&aOffice] { aOffice.installClipboardProvider(nullptr); });
 
     // Given an Impress document with a plain graphic shape selected:
-    // Reset the doc id, so the order of test cases in the suite doesn't matter.
-    const int nDocId = 0;
-    comphelper::COKit::setDocId(ViewShellDocId(nDocId));
-    mxComponent = loadFromDesktop(createFileURL(u"blank_presentation.odp"),
-                                  u"com.sun.star.presentation.PresentationDocument"_ustr);
-    auto pDocument = std::make_unique<COKitDocumentImpl>(mxComponent, nDocId);
-    pDocument->initializeForRendering("{}");
-    uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xPage(
-        xSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(
-        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr),
-        uno::UNO_QUERY);
-    xPage->add(xShape);
-    xShape->setSize(awt::Size(5000, 3000));
-    xShape->setPosition(awt::Point(1000, 1000));
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<view::XSelectionSupplier> xSelection(
-        xModel->getCurrentController(), uno::UNO_QUERY);
-    xSelection->select(cpo::uno::Any(xShape));
-    Scheduler::ProcessEventsToIdle();
+    auto pDocument = loadImpressWithSelectedShape();
 
     // When copying it to the clipboard:
     g_aShapeAdvertise.clear();
@@ -132,6 +143,27 @@ CPPUNIT_TEST_FIXTURE(KitClipboardTest, testClipboardShapeAdvertisesHtml)
     // Without the accompanying fix in place, this test would have failed, no text/html
     // was advertised for a shape selection.
     CPPUNIT_ASSERT(bHasHtml);
+}
+
+CPPUNIT_TEST_FIXTURE(KitClipboardTest, testClipboardShapeHtmlHasCoolXml)
+{
+    // Given an Impress document with a plain graphic shape selected:
+    auto pDocument = loadImpressWithSelectedShape();
+
+    // When copying it to the clipboard:
+    pDocument->postUnoCommand(".uno:Copy", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then make sure the HTML <img> of the shape also contains ODF:
+    const char* pMimeTypes[] = { "text/html", nullptr };
+    const std::vector<COKitClipboardItem> aItems = pDocument->getClipboard(pMimeTypes);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aItems.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("text/html"), aItems[0].aMimeType);
+    const OString aHtml(aItems[0].aData.data(), aItems[0].aData.size());
+    CPPUNIT_ASSERT(!aHtml.isEmpty());
+    // Without the accompanying fix in place, this test would have failed, the
+    // ODF package of the shape was dropped when the HTML <img> was built.
+    CPPUNIT_ASSERT(aHtml.indexOf(" data-coolxml=\"") != -1);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
