@@ -1698,7 +1698,7 @@ void doubleToString(rtl_tString** pResult, sal_Int32* pResultCapacity, sal_Int32
     if (eFormat == rtl_math_StringFormat_E || eFormat == rtl_math_StringFormat_E2
         || eFormat == rtl_math_StringFormat_E1)
     {
-        if (p == pBuf)
+        if (p == pBuf + (bSign ? 1 : 0))
             *p++ = '1';
         // maybe no nDigits if nDecPlaces < 0
 

@@ -537,6 +537,12 @@ public:
         fVal = 0.99999999999999933;
         aRes = rtl::math::doubleToUString(fVal, rtl_math_StringFormat_F, rtl_math_DecimalPlaces_Max, '.', true);
         CPPUNIT_ASSERT_EQUAL(u"0.999999999999999"_ustr, aRes);
+
+        // No digits left: the sign must not replace the leading '1'
+        aRes = rtl::math::doubleToUString(5.0, rtl_math_StringFormat_E, -2, '.', false);
+        CPPUNIT_ASSERT_EQUAL(u"1E+000"_ustr, aRes);
+        aRes = rtl::math::doubleToUString(-5.0, rtl_math_StringFormat_E, -2, '.', false);
+        CPPUNIT_ASSERT_EQUAL(u"-1E+000"_ustr, aRes);
     }
 
     void test_approx() {
