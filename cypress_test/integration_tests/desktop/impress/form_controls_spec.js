@@ -104,10 +104,14 @@ describe(['tagdesktop'], 'Form controls on a vector slide', function() {
 			cy.wrap(calendar).contains('span', /^15$/).click();
 		});
 		formHelper.expectSent(win, 'date', /\d{4}-\d{2}-15/);
-		cy.then(function() {
-			return helper.processToIdle(win);
+		// The field shows the date once the server sends the control back and its element is
+		// made anew, which can come after the office is idle, so the field is looked up again on
+		// each try.
+		cy.wrap(null).should(function() {
+			var control = formHelper.controlAt(win, 'day');
+			expect(control, 'the element of day').to.not.equal(null);
+			expect(control.querySelector('input').value, 'the date of the field').to.not.equal('');
 		});
-		formHelper.getPart(win, 'day', 'input').should('not.have.value', '');
 
 		// A time field takes the time in the browser's time input.
 		formHelper.getPart(win, 'hour', 'input').should('have.attr', 'type', 'time');
