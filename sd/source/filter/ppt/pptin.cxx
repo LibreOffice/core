@@ -848,10 +848,11 @@ SdPPTImport::SdPPTImport(SdDrawDocument& rDocument, SvStream& rDocStream, SotSto
 
                     const sal_uInt64 nPicturesSize = pPicturesCopy->TellEnd();
 
-                    if (nPicturesSize > std::numeric_limits<size_t>::max())
+                    std::vector<sal_uInt8> aDecryptedPictures;
+                    if (nPicturesSize > aDecryptedPictures.max_size())
                         return false;
 
-                    std::vector<sal_uInt8> aDecryptedPictures(static_cast<size_t>(nPicturesSize));
+                    aDecryptedPictures.resize(static_cast<size_t>(nPicturesSize));
 
                     if (!checkSeek(*pPicturesCopy, 0)
                         || pPicturesCopy->ReadBytes(
