@@ -6,7 +6,7 @@ var calcHelper = require('../../common/calc_helper');
 describe(['tagdesktop'], 'Pasting a copied shape in Calc', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/empty-selections.ods');
+		helper.setupAndLoadDocument('calc/empty-selections.ods', false, false, undefined, 'vector=false');
 	});
 
 	// The document coordinates of the shape that is selected right now, in twips. They do not

@@ -14,7 +14,7 @@ describe(['tagdesktop'], 'Calc cell announcement', { testIsolation: false }, fun
 	const CONTENT = 'announced cell';
 
 	before(function () {
-		helper.setupAndLoadDocument('calc/top_toolbar.ods');
+		helper.setupAndLoadDocument('calc/top_toolbar.ods', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

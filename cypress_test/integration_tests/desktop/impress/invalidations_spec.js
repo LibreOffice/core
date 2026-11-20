@@ -11,7 +11,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Impress invalidation tests
 	// Switching to a slide with an empty outline placeholder should not
 	// produce full-slide (EMPTY) invalidations.
 	it('Slide switch invalidation count.', function() {
-		helper.setupAndLoadDocument('impress/empty-placeholder.fodp');
+		helper.setupAndLoadDocument('impress/empty-placeholder.fodp', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

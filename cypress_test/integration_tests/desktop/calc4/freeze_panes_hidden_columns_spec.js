@@ -14,7 +14,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop'], 'Calc: freeze columns with leading hidden columns (cool#13295)', function() {
 
 	it('freezes at the cursor column, not at the number of hidden columns before it', function() {
-		helper.setupAndLoadDocument('calc/empty-selections.ods');
+		helper.setupAndLoadDocument('calc/empty-selections.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function(win) {
 			var sg = win.app.map._docLayer.sheetGeometry;
 			var colELeftBeforeHide = sg.getCellRect(4, 0).min.x;

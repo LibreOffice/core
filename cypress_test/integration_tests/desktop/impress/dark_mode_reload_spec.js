@@ -22,7 +22,7 @@ describe(['tagdesktop'], 'Dark mode chosen just before a reload is kept', functi
 	beforeEach(function() {
 		cy.task('writeUserSetting', { userId: USER, settings: { darkTheme: 'false' } });
 		filePath = helper.setupAndLoadDocument('impress/slideshow.odp', false, false, undefined,
-			userQuery);
+			userQuery + '&vector=false');
 		desktopHelper.switchUIToNotebookbar();
 	});
 
@@ -46,7 +46,7 @@ describe(['tagdesktop'], 'Dark mode chosen just before a reload is kept', functi
 			expect(win.prefs._settingUpdateJSON.darkTheme).to.equal('true');
 		});
 
-		helper.reloadDocument(filePath, userQuery);
+		helper.reloadDocument(filePath, userQuery + '&vector=false');
 
 		// The server's copy is what the page reads after a reload, so check it as
 		// well as the theme on the page.

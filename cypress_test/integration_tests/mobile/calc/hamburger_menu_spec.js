@@ -8,7 +8,7 @@ var repairHelper = require('../../common/repair_document_helper');
 describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 
 	it('Save', function() {
-		var newFilePath = helper.setupAndLoadDocument('calc/hamburger_menu.ods');
+		var newFilePath = helper.setupAndLoadDocument('calc/hamburger_menu.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		calcHelper.selectEntireSheet();
@@ -22,7 +22,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 		mobileHelper.selectHamburgerMenuItem(['File', 'Save']);
 
 		// Reopen the document and check content.
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 
 		mobileHelper.enableEditingMobile();
 		calcHelper.selectEntireSheet();
@@ -30,7 +30,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Print', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		// A new window should be opened with the PDF.
@@ -45,7 +45,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Download as PDF', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		mobileHelper.selectHamburgerMenuItem(['Download as', 'PDF Document (.pdf)']);
@@ -54,7 +54,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Download as ODS', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		mobileHelper.selectHamburgerMenuItem(['Download as', 'ODF spreadsheet (.ods)']);
@@ -62,7 +62,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Download as XLS', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		mobileHelper.selectHamburgerMenuItem(['Download as', 'Excel 2003 Spreadsheet (.xls)']);
@@ -70,7 +70,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Download as XLSX', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		mobileHelper.selectHamburgerMenuItem(['Download as', 'Excel Spreadsheet (.xlsx)']);
@@ -78,7 +78,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Undo/redo.', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		// Type a new character
@@ -105,7 +105,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Repair Document', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		// Type a new character
@@ -127,7 +127,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Cut.', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		calcHelper.selectEntireSheet();
@@ -136,7 +136,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Copy.', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		calcHelper.selectEntireSheet();
@@ -145,7 +145,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Paste.', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		calcHelper.selectEntireSheet();
@@ -154,7 +154,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Select all.', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		mobileHelper.selectHamburgerMenuItem(['Edit', 'Select All']);
@@ -163,7 +163,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Search some word.', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu_search.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu_search.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		mobileHelper.selectHamburgerMenuItem(['Search']);
@@ -178,7 +178,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Sheet: insert row before.', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu_sheet.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu_sheet.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		calcHelper.clickOnFirstCell();
@@ -195,7 +195,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Sheet: insert row after.', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu_sheet.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu_sheet.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		calcHelper.clickOnFirstCell();
@@ -212,7 +212,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Sheet: insert column before.', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu_sheet.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu_sheet.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		calcHelper.clickOnFirstCell();
@@ -229,7 +229,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Sheet: insert column after.', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu_sheet.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu_sheet.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		calcHelper.clickOnFirstCell();
@@ -246,7 +246,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Sheet: delete rows.', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu_sheet.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu_sheet.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		calcHelper.clickOnFirstCell();
@@ -261,7 +261,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Sheet: delete columns.', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu_sheet.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu_sheet.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		calcHelper.clickOnFirstCell();
@@ -276,7 +276,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Data: sort ascending.', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu_sort.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu_sort.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		// Sort the first column's data
@@ -295,7 +295,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Data: sort descending.', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu_sort.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu_sort.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		// Sort the first column's data
@@ -314,7 +314,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Data: grouping / ungrouping.', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		// Group first
@@ -327,7 +327,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Data: remove grouping outline.', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		// Group first
@@ -341,7 +341,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Data: show / hide grouping details.', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		// Group first
@@ -374,7 +374,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	});
 
 	it('Check version information.', function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		mobileHelper.selectHamburgerMenuItem(['About']);
@@ -392,7 +392,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 describe(['tagmobile'], 'Page setup from the hamburger menu.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 		cy.getFrameWindow().then(function(win) {
 			cy.spy(win.app.map, 'sendUnoCommand').as('sendUnoCommand');

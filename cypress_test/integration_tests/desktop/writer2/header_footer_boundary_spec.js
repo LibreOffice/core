@@ -5,7 +5,7 @@ var helper = require("../../common/helper");
 describe(["tagdesktop"], "Header/footer boundary indicator.", function () {
 	beforeEach(function () {
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument("writer/header_footer_boundary.odt");
+		helper.setupAndLoadDocument("writer/header_footer_boundary.odt", false, false, undefined, 'vector=false');
 	});
 
 	it("Shows the header boundary in edit mode and hides it on leaving.", function () {

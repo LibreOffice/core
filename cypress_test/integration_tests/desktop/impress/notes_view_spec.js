@@ -33,7 +33,7 @@ describe(['tagdesktop'], 'Impress notes view editing.', function() {
 
 	beforeEach(function() {
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('impress/empty-placeholder.fodp');
+		helper.setupAndLoadDocument('impress/empty-placeholder.fodp', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

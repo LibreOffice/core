@@ -12,7 +12,7 @@ describe(['tagdesktop'], 'Calc Table Design tab (Online-native).', function() {
 	beforeEach(function() {
 		// wide enough for the table style gallery to stay in the notebookbar, unfolded
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('calc/testfile.xlsx');
+		helper.setupAndLoadDocument('calc/testfile.xlsx', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

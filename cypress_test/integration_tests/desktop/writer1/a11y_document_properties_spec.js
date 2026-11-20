@@ -9,7 +9,7 @@ describe(['tagdesktop'], 'Accessibility of the document properties', { testIsola
 	let rows;
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/file_properties.odt');
+		helper.setupAndLoadDocument('writer/file_properties.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 
 		cy.getFrameWindow().then(function (frameWindow) {

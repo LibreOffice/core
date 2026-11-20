@@ -8,7 +8,7 @@ describe(['tagredline', 'tagnextcloud', 'tagproxy'], 'Track Changes as comments'
 
 	beforeEach(function () {
 		cy.viewport(1400, 600);
-		helper.setupAndLoadDocument('writer/track_changes.odt');
+		helper.setupAndLoadDocument('writer/track_changes.odt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

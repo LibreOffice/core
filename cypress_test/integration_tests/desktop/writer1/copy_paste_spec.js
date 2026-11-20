@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop', 'tagnextcloud'], 'Clipboard operations.', function() {
 
 	it('Copy and Paste text.', function() {
-		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		helper.setupAndLoadDocument('writer/copy_paste.odt', false, false, undefined, 'vector=false');
 		// Select some text
 		helper.selectAllText();
 
@@ -22,7 +22,7 @@ describe(['tagdesktop', 'tagnextcloud'], 'Clipboard operations.', function() {
 	});
 
 	it('Copy plain text.', function() {
-		helper.setupAndLoadDocument('writer/copy_paste_simple.odt');
+		helper.setupAndLoadDocument('writer/copy_paste_simple.odt', false, false, undefined, 'vector=false');
 
 		helper.setDummyClipboardForCopy('text/plain');
 		helper.selectAllText();
@@ -34,7 +34,7 @@ describe(['tagdesktop', 'tagnextcloud'], 'Clipboard operations.', function() {
 
 	it('Copy text as markdown.', function() {
 		// Given a document with 3 words: middle word is italic:
-		helper.setupAndLoadDocument('writer/copy_markdown.odt');
+		helper.setupAndLoadDocument('writer/copy_markdown.odt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function(win) {
 			cy.stub(win.parent, 'postMessage').as('postMessage');
 		});
@@ -69,7 +69,7 @@ describe(['tagdesktop', 'tagnextcloud'], 'Clipboard operations.', function() {
 
 	it('Copy Markdown using the UI.', function() {
 		// Given a document with 3 words: middle word is italic:
-		helper.setupAndLoadDocument('writer/copy_markdown.odt');
+		helper.setupAndLoadDocument('writer/copy_markdown.odt', false, false, undefined, 'vector=false');
 		helper.setDummyClipboardForCopy('text/plain');
 		helper.selectAllText();
 
@@ -88,7 +88,7 @@ describe(['tagdesktop', 'tagnextcloud'], 'Clipboard operations.', function() {
 	});
 
 	it('Right-click Paste does not duplicate when execCommand fires paste event synchronously but returns false.', function() {
-		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		helper.setupAndLoadDocument('writer/copy_paste.odt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function(win) {
 			const app = win.app;
@@ -133,7 +133,7 @@ describe(['tagdesktop', 'tagnextcloud'], 'Clipboard operations.', function() {
 	});
 
 	it('Copy and Paste text with DisableCopy', function () {
-		helper.setupAndLoadDocument('writer/copy_paste.odt', /* isMultiUser */ false, /* copy .wopi.json */ true);
+		helper.setupAndLoadDocument('writer/copy_paste.odt', /* isMultiUser */ false, /* copy .wopi.json */ true, undefined, 'vector=false');
 		// Select some text
 		helper.selectAllText();
 
@@ -166,7 +166,7 @@ describe(['tagdesktop', 'tagnextcloud'], 'Clipboard operations.', function() {
 	});
 
 	it('Failed clipboard download does not report success.', function() {
-		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		helper.setupAndLoadDocument('writer/copy_paste.odt', false, false, undefined, 'vector=false');
 
 		cy.intercept('GET', '**/cool/clipboard*', {
 			statusCode: 403,
@@ -191,7 +191,7 @@ describe(['tagdesktop', 'tagnextcloud'], 'Clipboard operations.', function() {
 
 	it('Paste of <img src="..."> HTML pastes the SVG image', function() {
 		// Given a clipboard with just text/html referring to an image URL:
-		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		helper.setupAndLoadDocument('writer/copy_paste.odt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function(win) {
 			const clip = win.app.map._clip;
 			const imageUrl = win.location.origin + '/browser/'
@@ -247,7 +247,7 @@ describe(['tagdesktop', 'tagnextcloud'], 'Clipboard operations.', function() {
 	it('Async paste special offers both HTML and plain text when the clipboard has both', function() {
 		// Given a Writer document and a fake async clipboard exposing both
 		// text/html and text/plain:
-		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		helper.setupAndLoadDocument('writer/copy_paste.odt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function(win) {
 			const clip = win.app.map._clip;
@@ -295,7 +295,7 @@ describe(['tagdesktop', 'tagnextcloud'], 'Clipboard operations.', function() {
 	});
 
 	it('Cross-document paste failure shows the reason from the source stub.', function() {
-		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		helper.setupAndLoadDocument('writer/copy_paste.odt', false, false, undefined, 'vector=false');
 
 		cy.intercept('GET', '**/cool/clipboard*', {
 			statusCode: 403,
@@ -316,7 +316,7 @@ describe(['tagdesktop', 'tagnextcloud'], 'Clipboard operations.', function() {
 
 	it('Merge Formatting paste keeps bold but drops the source color.', function() {
 		// Given a HTML that contains both an explicit red color and bold:
-		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		helper.setupAndLoadDocument('writer/copy_paste.odt', false, false, undefined, 'vector=false');
 		helper.clearAllText();
 
 		cy.getFrameWindow().then(function(win) {
@@ -365,7 +365,7 @@ describe(['tagdesktop', 'tagnextcloud'], 'Clipboard operations.', function() {
 	});
 
 	it('Copy shows a progress indicator', function() {
-		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		helper.setupAndLoadDocument('writer/copy_paste.odt', false, false, undefined, 'vector=false');
 		helper.selectAllText();
 
 		// Given a test clipboard where write() blocks till the test resolves its promise:
@@ -411,7 +411,7 @@ describe(['tagdesktop', 'tagnextcloud'], 'Clipboard operations.', function() {
 	it('Copy publishes a pending stub before the real content.', function() {
 		// Given a Writer document with some text selected, and a test clipboard
 		// that records writes but otherwise resolves them straight away:
-		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		helper.setupAndLoadDocument('writer/copy_paste.odt', false, false, undefined, 'vector=false');
 		helper.selectAllText();
 		cy.getFrameWindow().then(function(win) {
 			win._writeCalls = [];

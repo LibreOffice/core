@@ -84,7 +84,7 @@ describe(['tagdesktop'], 'Zotero citations', function() {
 	// socket.
 	describe('Insert citation', { testIsolation: false }, function() {
 		before(function() {
-			helper.setupAndLoadDocument('writer/copy_paste_simple.odt');
+			helper.setupAndLoadDocument('writer/copy_paste_simple.odt', false, false, undefined, 'vector=false');
 		});
 
 		beforeEach(function() {
@@ -160,7 +160,7 @@ describe(['tagdesktop'], 'Zotero citations', function() {
 		const BIB_HTML = '<div class="csl-entry">A reference</div>';
 
 		before(function() {
-			helper.setupAndLoadDocument('writer/copy_paste_simple.odt');
+			helper.setupAndLoadDocument('writer/copy_paste_simple.odt', false, false, undefined, 'vector=false');
 		});
 
 		beforeEach(function() {
@@ -215,7 +215,7 @@ describe(['tagdesktop'], 'Zotero citations', function() {
 	// opens a warning, so the document is loaded once and stays as it arrived.
 	describe('Unlink citations', { testIsolation: false }, function() {
 		before(function() {
-			helper.setupAndLoadDocument('writer/copy_paste_simple.odt');
+			helper.setupAndLoadDocument('writer/copy_paste_simple.odt', false, false, undefined, 'vector=false');
 		});
 
 		beforeEach(function() {
@@ -280,7 +280,7 @@ describe(['tagdesktop'], 'Zotero citations', function() {
 		// "sdfsdf", and "[2]" (a second citation, the last line).
 		beforeEach(function() {
 			cy.viewport(1400, 1000);
-			helper.setupAndLoadDocument('writer/zotero.odt');
+			helper.setupAndLoadDocument('writer/zotero.odt', false, false, undefined, 'vector=false');
 			cy.getFrameWindow().then((win) => { this.win = win; });
 		});
 

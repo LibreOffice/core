@@ -117,13 +117,15 @@ function loadDocument(filePath, skipDocumentChecks, isMultiUser, lang, extraQuer
  * call setupDocument and loadDocument directly. loadDocument must be called
  * with skipDocumentChecks: true otherwise it will fail in preview.
  * filePath: test document path, for example: 'calc/hello-world.ods'
+ * extraQuery: more query parameters for the document, for example 'vector=false'.
  */
-function setupAndPreviewDocument(filePath) {
+function setupAndPreviewDocument(filePath, extraQuery) {
 	cy.log('>> setupAndPreviewDocument - start');
 
 	cy.viewport(350, 221);
 	var newFilePath = setupDocument(filePath, false);
-	loadDocument(newFilePath, true, undefined, undefined, 'interactivepreview=true');
+	loadDocument(newFilePath, true, undefined, undefined,
+		'interactivepreview=true' + (extraQuery ? '&' + extraQuery : ''));
 
 	cy.log('<< setupAndPreviewDocument - end');
 	return newFilePath;
@@ -160,9 +162,10 @@ function setupAndLoadDocument(filePath, isMultiUser = false, copyCertificates = 
 /*
  * Sets up two independent documents and opens each in its own multiuser
  * iframe (iframe1 and iframe2). The cypress-multiuser.html template reads
- * file_path for iframe1 and file_path2 for iframe2.
+ * file_path for iframe1 and file_path2 for iframe2. extraQuery holds more query parameters
+ * for both documents, for example 'vector=false'.
  */
-function setupAndLoadTwoDocuments(filePath1, filePath2, lang) {
+function setupAndLoadTwoDocuments(filePath1, filePath2, lang, extraQuery) {
 	cy.log('>> setupAndLoadTwoDocuments - start');
 
 	var newFilePath1 = setupDocument(filePath1);
@@ -175,6 +178,8 @@ function setupAndLoadTwoDocuments(filePath1, filePath2, lang) {
 		+ '?lang=' + (lang || 'en-US')
 		+ '&file_path=' + Cypress.env('DATA_WORKDIR') + newFilePath1
 		+ '&file_path2=' + Cypress.env('DATA_WORKDIR') + newFilePath2;
+	if (extraQuery)
+		URI += '&' + extraQuery;
 
 	cy.visit(URI, {
 		onBeforeLoad: function(win) {

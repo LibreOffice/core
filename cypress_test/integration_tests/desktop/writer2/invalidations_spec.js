@@ -16,7 +16,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Invalidation tests.', func
 
 	// Clicking in an empty header area shouldn't invalidate anything
 	it('Click Empty Header.', function() {
-		helper.setupAndLoadDocument('writer/invalidations.odt');
+		helper.setupAndLoadDocument('writer/invalidations.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.cGet('div.clipboard').as('clipboard');
 		cy.cGet('#stylesview .ui-iconview-entry img').should('exist');
@@ -50,7 +50,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Invalidation tests.', func
 
 	// Clicking in an existing header area shouldn't result in useless invalidations
 	it('Click Existing Header.', function() {
-		helper.setupAndLoadDocument('writer/invalidations_headers.odt');
+		helper.setupAndLoadDocument('writer/invalidations_headers.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.cGet('#stylesview .ui-iconview-entry img').should('exist');
 
@@ -92,7 +92,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Invalidation tests.', func
 
 	// Entering a bullet portion shouldn't invalidate anything
 	it('Enter Numbering Portion.', function() {
-		helper.setupAndLoadDocument('writer/invalidations.odt');
+		helper.setupAndLoadDocument('writer/invalidations.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.cGet('div.clipboard').as('clipboard');
 		cy.cGet('#stylesview .ui-iconview-entry img').should('exist');

@@ -7,7 +7,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile', 'tagnextcloud'], 'Calc autofill marker on mobile.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/formulabar.ods');
+		helper.setupAndLoadDocument('calc/formulabar.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

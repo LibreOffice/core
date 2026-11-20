@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'Image Operation Tests', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/image_operation.ods');
+		helper.setupAndLoadDocument('calc/image_operation.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.viewport(1920,1080);
 	});

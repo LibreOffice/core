@@ -6,7 +6,7 @@ var impressHelper = require('../../common/impress_helper');
 describe(['tagdesktop'], 'Impress list keyboard shortcuts', function() {
 
 	it('Ctrl Shift 7 and Ctrl Shift 8 apply the two kinds of list', function() {
-		helper.setupAndLoadDocument('impress/apply_paragraph_props_text.odp');
+		helper.setupAndLoadDocument('impress/apply_paragraph_props_text.odp', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function(win) {
 			impressHelper.triggerNewSVGForShapeInTheCenter();

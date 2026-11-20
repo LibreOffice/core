@@ -6,7 +6,7 @@ var calcHelper = require('../../common/calc_helper');
 describe(['tagdesktop'], 'Calc focus tests', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/focus.ods');
+		helper.setupAndLoadDocument('calc/focus.ods', false, false, undefined, 'vector=false');
 		cy.viewport(1920,1080);
 	});
 

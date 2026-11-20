@@ -10,7 +10,7 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 	let newFileName;
 
 	beforeEach(function () {
-		newFileName = helper.setupAndLoadDocument('impress/empty-placeholder.fodp');
+		newFileName = helper.setupAndLoadDocument('impress/empty-placeholder.fodp', false, false, undefined, 'vector=false');
 	});
 
 	function openNotesPane() {
@@ -217,7 +217,7 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		);
 
 		cy.getFrameWindow().then((win) => { helper.processToIdle(win); });
-		helper.reloadDocument(newFileName);
+		helper.reloadDocument(newFileName, 'vector=false');
 		openNotesPane();
 
 		cy.cGet('#notespanel-container .ui-editengine-paragraph').should(
@@ -1098,7 +1098,7 @@ describe(['tagdesktop'], 'Impress speaker notes pane on load', function () {
 					appWindow.localStorage.removeItem(name);
 				});
 		});
-		helper.setupAndLoadDocument('impress/empty-placeholder.fodp');
+		helper.setupAndLoadDocument('impress/empty-placeholder.fodp', false, false, undefined, 'vector=false');
 
 		cy.cGet('#notespanel-dock-wrapper').should('be.visible');
 		cy.cGet('#notespanel-container .ui-editengine').should(
@@ -1123,7 +1123,7 @@ describe(['tagdesktop'], 'Impress speaker notes pane on load', function () {
 describe(['tagdesktop'], 'Impress speaker notes pane in viewing mode', function () {
 	beforeEach(function () {
 		helper.setupAndLoadDocument('impress/empty-placeholder.fodp', false, false, undefined,
-			'tooltips=true');
+			'tooltips=true&vector=false');
 	});
 
 	it('typing in the notes shows how to switch to editing', function () {

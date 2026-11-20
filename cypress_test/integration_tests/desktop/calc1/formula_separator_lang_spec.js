@@ -20,7 +20,7 @@ function cellValue(win, address, expected) {
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Formula separators in a comma-decimal language', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/cell_edit.fods', false, false, 'de-DE');
+		helper.setupAndLoadDocument('calc/cell_edit.fods', false, false, 'de-DE', 'vector=false');
 		cy.getFrameWindow().then((win) => { this.win = win; });
 	});
 
@@ -36,7 +36,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Formula separators in a co
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Formula separators in a dot-decimal language', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/cell_edit.fods', false, false, 'en-US');
+		helper.setupAndLoadDocument('calc/cell_edit.fods', false, false, 'en-US', 'vector=false');
 		cy.getFrameWindow().then((win) => { this.win = win; });
 	});
 

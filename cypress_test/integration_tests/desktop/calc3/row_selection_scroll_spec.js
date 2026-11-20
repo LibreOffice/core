@@ -6,7 +6,7 @@ var calcHelper = require('../../common/calc_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll while extending a whole-row selection', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/autofill.fods');
+		helper.setupAndLoadDocument('calc/autofill.fods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;
 		}.bind(this));

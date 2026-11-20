@@ -8,7 +8,7 @@ describe(['tagdesktop'], 'Notebookbar tests', function() {
 	var newFilePath;
 
 	beforeEach(function() {
-		newFilePath = helper.setupAndLoadDocument('impress/statusbar.odp');
+		newFilePath = helper.setupAndLoadDocument('impress/statusbar.odp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 	});
 
@@ -37,7 +37,7 @@ describe(['tagdesktop'], 'Notebookbar tests', function() {
 		cy.cGet('.cool-ruler').should('be.visible');
 
 		// Reload
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 
 		// Verify ruler is still visible
 		cy.cGet('.cool-ruler').should('be.visible');
@@ -75,7 +75,7 @@ describe(['tagdesktop'], 'Notebookbar tests', function() {
 describe(['tagdesktop'], 'Notebookbar contextual tabs (Impress)', function() {
 
 	function loadDocument(fileName) {
-		helper.setupAndLoadDocument(fileName);
+		helper.setupAndLoadDocument(fileName, false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		desktopHelper.hideSidebarImpress();
 	}

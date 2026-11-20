@@ -6,7 +6,7 @@ describe(['tagdesktop'], 'Signature operations.', function() {
 
 	it('Create a visual signature.', { env: { 'pdf-view': true } }, function() {
 		// Given a document that can be signed:
-		helper.setupAndLoadDocument('draw/sign.pdf', /*isMultiUser=*/false, /*copyCertificates=*/true);
+		helper.setupAndLoadDocument('draw/sign.pdf', /*isMultiUser=*/false, /*copyCertificates=*/true, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (win) {
 			return helper.processToIdle(win);

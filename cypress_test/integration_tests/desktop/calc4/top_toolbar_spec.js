@@ -328,7 +328,7 @@ describe(['tagdesktop'], 'Top toolbar save test.', function() {
 	var newFilePath;
 
 	beforeEach(function() {
-		newFilePath = helper.setupAndLoadDocument('calc/top_toolbar.ods');
+		newFilePath = helper.setupAndLoadDocument('calc/top_toolbar.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToCompact();
 		helper.typeIntoInputField(helper.addressInputSelector, 'A1');
 	});
@@ -338,7 +338,7 @@ describe(['tagdesktop'], 'Top toolbar save test.', function() {
 		cy.cGet('#save').click();
 		helper.waitUntilDocumentSaved();
 
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 
 		cy.cGet(helper.addressInputSelector)
 		.should('exist');

@@ -6,7 +6,7 @@ describe(['tagmultiuser'], 'Multiuser slide delete thumbnails', function() {
 	var win1, win2;
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/impress-edit.fodp', true);
+		helper.setupAndLoadDocument('impress/impress-edit.fodp', true, false, undefined, 'vector=false');
 		cy.getFrameWindow('#iframe1').then(function(win) { win1 = win; });
 		cy.getFrameWindow('#iframe2').then(function(win) { win2 = win; });
 	});

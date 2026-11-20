@@ -8,7 +8,7 @@ const a11yHelper = require('../../common/a11y_helper');
 describe(['tagdesktop'], 'Table Design tab', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/table_operation.odp');
+		helper.setupAndLoadDocument('impress/table_operation.odp', false, false, undefined, 'vector=false');
 		cy.viewport(1920, 1080);
 
 		desktopHelper.switchUIToNotebookbar();

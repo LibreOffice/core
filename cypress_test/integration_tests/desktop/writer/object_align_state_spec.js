@@ -9,7 +9,7 @@ describe(['tagdesktop'], 'Object alignment buttons follow the selection', functi
 
 	beforeEach(function() {
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('writer/image_operation.odt');
+		helper.setupAndLoadDocument('writer/image_operation.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;

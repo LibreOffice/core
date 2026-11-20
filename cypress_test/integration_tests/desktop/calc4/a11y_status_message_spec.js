@@ -15,7 +15,7 @@ describe(['tagdesktop'], 'Status message accessibility', { testIsolation: false 
 		// The sidecar advertises EnableShare with nothing behind it, which is
 		// what puts the button in the File tab and leaves the postMessage
 		// handshake unanswered.
-		helper.setupAndLoadDocument('calc/switch.ods', false, true);
+		helper.setupAndLoadDocument('calc/switch.ods', false, true, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

@@ -7,7 +7,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'JSDialog widgets visual te
 	beforeEach(function() {
 		cy.viewport(1600, helper.maxScreenshotableViewportHeight);
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('writer/help_dialog.odt');
+		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 			cy.cGet('#Help-tab-label').click();

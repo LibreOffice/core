@@ -219,7 +219,7 @@ describe(['tagdesktop'], 'File Property Tests on a binary format', function() {
 
 	beforeEach(function() {
 		cy.viewport(1400, 1000);
-		helper.setupAndLoadDocument('writer/testfile.doc');
+		helper.setupAndLoadDocument('writer/testfile.doc', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

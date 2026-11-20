@@ -11,7 +11,7 @@ describe(['taglighthouse'], 'Accessibility Draw Notebookbar Tests', { testIsolat
 	let win;
 
 	before(function () {
-		helper.setupAndLoadDocument('draw/insert_position.fodg');
+		helper.setupAndLoadDocument('draw/insert_position.fodg', false, false, undefined, 'vector=false');
 
 		desktopHelper.switchUIToNotebookbar();
 

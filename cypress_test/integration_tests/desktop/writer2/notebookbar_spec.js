@@ -8,7 +8,7 @@ const onboardingHelper = require('../../common/onboarding_helper');
 describe(['tagdesktop'], 'Notebookbar tests.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/notebookbar.odt');
+		helper.setupAndLoadDocument('writer/notebookbar.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.viewport(1920,1080);
 
@@ -173,7 +173,7 @@ describe(['tagdesktop'], 'Notebookbar checkbox widgets', function() {
 	var newFilePath;
 
 	beforeEach(function() {
-		newFilePath = helper.setupAndLoadDocument('writer/notebookbar.odt');
+		newFilePath = helper.setupAndLoadDocument('writer/notebookbar.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.cGet('#View-tab-label').click();
 		cy.getFrameWindow().then((win) => {
@@ -271,7 +271,7 @@ describe(['tagdesktop'], 'Notebookbar checkbox widgets', function() {
 		cy.cGet('.cool-ruler').should('be.visible');
 
 		// Reload
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 
 		// Verify ruler is still visible
 		cy.cGet('.cool-ruler').should('be.visible');
@@ -295,7 +295,7 @@ describe(['tagdesktop'], 'Notebookbar checkbox widgets', function() {
 describe(['tagdesktop'], 'Notebookbar review operations.', function() {
 	it.skip('Go to the next change', function() {
 		// Given a document where the first redline is inside a table:
-		helper.setupAndLoadDocument('writer/notebookbar-redline.odt');
+		helper.setupAndLoadDocument('writer/notebookbar-redline.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.viewport(1920,1080);
 
@@ -317,7 +317,7 @@ describe(['tagdesktop'], 'Notebookbar review operations.', function() {
 describe(['tagdesktop'], 'Notebookbar contextual tabs.', function() {
 
 	it('Image inside a table offers both the Picture and the Table tab', function() {
-		helper.setupAndLoadDocument('writer/table_operation.odt');
+		helper.setupAndLoadDocument('writer/table_operation.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.viewport(1920,1080);
 
@@ -340,7 +340,7 @@ describe(['tagdesktop'], 'Notebookbar contextual tabs.', function() {
 
 	it('Image not in a table does not offer the Table tab', function() {
 		// A document without any table.
-		helper.setupAndLoadDocument('writer/image_operation.odt');
+		helper.setupAndLoadDocument('writer/image_operation.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.viewport(1920,1080);
 
@@ -355,7 +355,7 @@ describe(['tagdesktop'], 'Notebookbar contextual tabs.', function() {
 
 describe(['tagdesktop'], 'HideChangeTrackingControls mode tests.', function() {
 	it('Check that track change controls are not shown', function() {
-		helper.setupAndLoadDocument('writer/hide_change_tracking_controls.odt', /* isMultiUser */ false, /* copyCertificates copies .wopi.json */ true);
+		helper.setupAndLoadDocument('writer/hide_change_tracking_controls.odt', /* isMultiUser */ false, /* copyCertificates copies .wopi.json */ true, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.viewport(1920,1080);
 
@@ -380,7 +380,7 @@ describe(['tagdesktop'], 'Notebookbar of a document opened in compact view.', fu
 		cy.viewport(1920,1080);
 		cy.task('writeUserSetting', { userId: USER, settings: { compactMode: 'true' } });
 		var newFilePath = helper.setupDocument('writer/notebookbar.odt');
-		helper.loadDocument(newFilePath, /*skipDocumentChecks*/ true, undefined, undefined, 'userid=' + USER);
+		helper.loadDocument(newFilePath, /*skipDocumentChecks*/ true, undefined, undefined, 'userid=' + USER + '&vector=false');
 		cy.cGet('#map').should('have.class', 'initialized');
 		cy.cGet('body').should('have.attr', 'data-userInterfaceMode', 'classic');
 		cy.cGet('#busypopup-overlay').should('not.exist');
@@ -415,7 +415,7 @@ describe(['tagdesktop'], 'Onboarding tour on a first visit.', function() {
 		// This user has not been shown the tour yet.
 		localStorage.setItem(onboardingHelper.tourSeenKey('text'), 'false');
 
-		helper.setupAndLoadDocument('writer/notebookbar.odt');
+		helper.setupAndLoadDocument('writer/notebookbar.odt', false, false, undefined, 'vector=false');
 		cy.viewport(1920,1080);
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
@@ -449,7 +449,7 @@ describe(['tagdesktop'], 'Onboarding tour on a later visit.', function() {
 		// and each test below decides when the tour starts.
 		localStorage.setItem(onboardingHelper.tourSeenKey('text'), 'true');
 
-		helper.setupAndLoadDocument('writer/notebookbar.odt');
+		helper.setupAndLoadDocument('writer/notebookbar.odt', false, false, undefined, 'vector=false');
 		cy.viewport(1920,1080);
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

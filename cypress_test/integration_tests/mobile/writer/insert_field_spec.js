@@ -7,7 +7,7 @@ var writerHelper = require('../../common/writer_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Insert fields via insertion wizard.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/insert_field.odt');
+		helper.setupAndLoadDocument('writer/insert_field.odt', false, false, undefined, 'vector=false');
 		// Click on edit button
 		mobileHelper.enableEditingMobile();
 		mobileHelper.openInsertionWizard();

@@ -21,7 +21,7 @@ function dispatchBackspace(win, modifiers) {
 
 describe(['tagdesktop'], 'Backspace modifiers on macOS', function () {
 	it('sends the same word-delete modifier as Ctrl+Backspace for Option+Backspace', function () {
-		helper.setupAndLoadDocument('writer/testfile.fodt');
+		helper.setupAndLoadDocument('writer/testfile.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (win) {
 			// Simulate a macOS client: Map.Keyboard reads this to remap Option+Backspace.
@@ -43,7 +43,7 @@ describe(['tagdesktop'], 'Backspace modifiers on macOS', function () {
 	});
 
 	it('sends a delete-to-paragraph-start key for Cmd+Backspace', function () {
-		helper.setupAndLoadDocument('writer/testfile.fodt');
+		helper.setupAndLoadDocument('writer/testfile.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (win) {
 			win.L.Browser.mac = true;
@@ -62,7 +62,7 @@ describe(['tagdesktop'], 'Backspace modifiers on macOS', function () {
 	});
 
 	it('leaves Backspace modifiers alone on other platforms', function () {
-		helper.setupAndLoadDocument('writer/testfile.fodt');
+		helper.setupAndLoadDocument('writer/testfile.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (win) {
 			win.L.Browser.mac = false;

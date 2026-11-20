@@ -6,7 +6,7 @@ var calcHelper = require('../../common/calc_helper');
 describe.skip('Repair Document', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/repair_doc.ods',true);
+		helper.setupAndLoadDocument('calc/repair_doc.ods',true, false, undefined, 'vector=false');
 	});
 
 	function repairDoc(frameId1, frameId2) {

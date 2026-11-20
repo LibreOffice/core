@@ -46,7 +46,7 @@ function checkIfIsInteractiveAgain(selectViaNameBox) {
 
 describe(['tagdesktop'], 'Idle', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/idle.ods');
+		helper.setupAndLoadDocument('calc/idle.ods', false, false, undefined, 'vector=false');
 	});
 
 	it('Check idle out of focus', function() {
@@ -98,7 +98,7 @@ describe(['tagdesktop'], 'Idle', function() {
 
 describe(['tagdesktop'], 'Idle recover with comment', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/far_comment.ods');
+		helper.setupAndLoadDocument('calc/far_comment.ods', false, false, undefined, 'vector=false');
 	});
 
 	it('Check if we jump to comment on activation', function() {

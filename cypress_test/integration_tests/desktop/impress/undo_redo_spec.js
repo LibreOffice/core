@@ -8,7 +8,7 @@ var repairHelper = require('../../common/repair_document_helper');
 describe(['tagdesktop'], 'Editing Operations', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/undo_redo.odp');
+		helper.setupAndLoadDocument('impress/undo_redo.odp', false, false, undefined, 'vector=false');
 		desktopHelper.closeNavigatorSidebar();
 		desktopHelper.selectZoomLevel('30', false);
 

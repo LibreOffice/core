@@ -6,7 +6,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Image Operation Tests', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/image_operation.ods');
+		helper.setupAndLoadDocument('calc/image_operation.ods', false, false, undefined, 'vector=false');
 
 		// Click on edit button
 		mobileHelper.enableEditingMobile();

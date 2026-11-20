@@ -7,7 +7,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Annotation Tests',function(
 	var newFilePath;
 
 	beforeEach(function() {
-		newFilePath = helper.setupAndLoadDocument('calc/annotation.ods');
+		newFilePath = helper.setupAndLoadDocument('calc/annotation.ods', false, false, undefined, 'vector=false');
 
 		// Click on edit button
 		mobileHelper.enableEditingMobile();
@@ -19,7 +19,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Annotation Tests',function(
 		mobileHelper.selectHamburgerMenuItem(['File', 'Save']);
 		helper.waitUntilDocumentSaved();
 
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		mobileHelper.enableEditingMobile();
 		mobileHelper.openCommentWizard();
 		cy.cGet('#mobile-wizard-content').should('exist');

@@ -17,7 +17,7 @@ function waitForAllPages(frames) {
 describe(['tagmultiuser'], 'Check cursor and view behavior', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/cursor_jump.odt', true);
+		helper.setupAndLoadDocument('writer/cursor_jump.odt', true, false, undefined, 'vector=false');
 		waitForAllPages(['#iframe1', '#iframe2']);
 		desktopHelper.switchUIToNotebookbar();
 	});
@@ -178,7 +178,7 @@ describe(['tagmultiuser'], 'Keep the view fixed while another view edits', funct
 		cy.task('writeUserSetting', { userId: 'cursor-first', settings: {} });
 		cy.task('writeUserSetting', { userId: 'cursor-second', settings: {} });
 		helper.setupAndLoadDocument('writer/cursor_jump.odt', true, false, undefined,
-			'userid1=cursor-first&userid2=cursor-second');
+			'userid1=cursor-first&userid2=cursor-second&vector=false');
 		waitForAllPages(['#iframe1', '#iframe2']);
 		desktopHelper.switchUIToNotebookbar();
 	});
@@ -325,7 +325,7 @@ describe(['tagmultiuser'], 'A user with two connections', function() {
 		// One user opens the document in iframe2 and in iframe3, so that user has
 		// two connections. iframe1 is somebody else and does the following.
 		helper.setupAndLoadDocument('writer/cursor_jump.odt', true, false, undefined,
-			'userid1=test&userid2=test2&userid3=test2');
+			'userid1=test&userid2=test2&userid3=test2&vector=false');
 
 		cy.cSetActiveFrame('#iframe3');
 		helper.documentChecks(true);

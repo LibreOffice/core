@@ -31,7 +31,7 @@ describe(['tagmultiuser'], 'Recording tracked changes and the selected tab', fun
 	}
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/track_changes.odt', true);
+		helper.setupAndLoadDocument('writer/track_changes.odt', true, false, undefined, 'vector=false');
 		Cypress.env('USER_INTERFACE', 'notebookbar');
 
 		cy.cSetActiveFrame('#iframe2');

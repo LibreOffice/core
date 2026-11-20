@@ -7,7 +7,7 @@ var desktopHelper = require('../../common/desktop_helper')
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Impress shape SVG flicker.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/undo_redo.odp');
+		helper.setupAndLoadDocument('impress/undo_redo.odp', false, false, undefined, 'vector=false');
 		cy.viewport(1920, 1080);
 	});
 

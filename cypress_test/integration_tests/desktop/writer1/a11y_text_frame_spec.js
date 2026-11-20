@@ -7,7 +7,7 @@ describe(['tagdesktop'], 'Writer text frames for the reader', { testIsolation: f
 	let win;
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/a11y_text_frame.fodt');
+		helper.setupAndLoadDocument('writer/a11y_text_frame.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

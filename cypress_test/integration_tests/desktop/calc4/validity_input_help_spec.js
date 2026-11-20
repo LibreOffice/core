@@ -8,7 +8,7 @@ var helper = require('../../common/helper');
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Validity input help', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/validity_input_help.fods');
+		helper.setupAndLoadDocument('calc/validity_input_help.fods', false, false, undefined, 'vector=false');
 	});
 
 	it('Input help stays visible after the document loads on its cell', function() {

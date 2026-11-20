@@ -7,7 +7,7 @@ var impressHelper = require('../../common/impress_helper');
 describe.skip(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Table Operation', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/table_operation.odp');
+		helper.setupAndLoadDocument('impress/table_operation.odp', false, false, undefined, 'vector=false');
 
 		mobileHelper.enableEditingMobile();
 

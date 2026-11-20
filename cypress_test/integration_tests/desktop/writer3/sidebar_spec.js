@@ -7,7 +7,7 @@ describe(['tagdesktop'], 'Sidebar tests', function() {
 
 	beforeEach(function() {
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('writer/sidebar.odt');
+		helper.setupAndLoadDocument('writer/sidebar.odt', false, false, undefined, 'vector=false');
 		cy.viewport(1920,1080);
 	});
 

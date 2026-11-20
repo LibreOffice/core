@@ -6,7 +6,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile', 'tagproxy'], 'On-screen keyboard only on request.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/focus.odt');
+		helper.setupAndLoadDocument('writer/focus.odt', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 		helper.clickIntoDocument();
 	});

@@ -37,7 +37,7 @@ describe(['tagdesktop'], 'Calc navigation onto a cell wider than the free pane',
 	beforeEach(function() {
 		// Column B of this document is 100cm wide, so it cannot fit in the
 		// pane to the right of a freeze at any viewport this suite uses.
-		helper.setupAndLoadDocument('calc/wide-cell.fods');
+		helper.setupAndLoadDocument('calc/wide-cell.fods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function(win) {
 			win.app.map.sendUnoCommand('.uno:FreezePanesColumn'); // Freeze first column.
 			return helper.processToIdle(win);
@@ -97,7 +97,7 @@ describe(['tagdesktop'], 'Calc navigation onto a cell taller than the free pane'
 	beforeEach(function() {
 		// Row 3 of this document is 100cm tall, so it cannot fit in the pane
 		// below a freeze at any viewport this suite uses.
-		helper.setupAndLoadDocument('calc/tall-cell.fods');
+		helper.setupAndLoadDocument('calc/tall-cell.fods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function(win) {
 			win.app.map.sendUnoCommand('.uno:FreezePanesRow'); // Freeze first row.
 			return helper.processToIdle(win);

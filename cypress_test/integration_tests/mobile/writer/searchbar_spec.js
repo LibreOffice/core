@@ -8,7 +8,7 @@ var writerHelper = require('../../common/writer_helper');
 describe.skip('Searching via search bar.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/search_bar.odt');
+		helper.setupAndLoadDocument('writer/search_bar.odt', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 		searchHelper.showSearchBar();
 	});

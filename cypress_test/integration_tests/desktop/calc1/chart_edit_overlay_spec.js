@@ -22,7 +22,7 @@ function readShadedFraction(win) {
 
 describe(['tagdesktop'], 'Chart edit mode dark overlay', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/empty-selections.ods');
+		helper.setupAndLoadDocument('calc/empty-selections.ods', false, false, undefined, 'vector=false');
 		cy.viewport(1920, 720);
 	});
 

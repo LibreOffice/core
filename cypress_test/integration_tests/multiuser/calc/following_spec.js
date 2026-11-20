@@ -7,7 +7,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagmultiuser'], 'Check following the other views', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/following.ods',true);
+		helper.setupAndLoadDocument('calc/following.ods',true, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 	});
 
@@ -89,7 +89,7 @@ describe(['tagmultiuser'], 'A user with two connections', function() {
 		// The document has content down to row 588, so a view can scroll to the
 		// cells the test works in.
 		helper.setupAndLoadDocument('calc/cell_cursor_jump.ods', true, false, undefined,
-			'userid1=test&userid2=test2&userid3=test2');
+			'userid1=test&userid2=test2&userid3=test2&vector=false');
 
 		cy.cSetActiveFrame('#iframe3');
 		helper.documentChecks(true);

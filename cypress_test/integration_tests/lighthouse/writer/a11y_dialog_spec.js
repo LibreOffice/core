@@ -54,7 +54,7 @@ describe(['taglighthouse'], 'Accessibility Writer Dialog Tests', { testIsolation
     let hasLinguisticData = false;
 
     before(function () {
-        helper.setupAndLoadDocument('writer/help_dialog.odt', /*isMultiUser=*/false, /*copyCertificates=*/true);
+        helper.setupAndLoadDocument('writer/help_dialog.odt', /*isMultiUser=*/false, /*copyCertificates=*/true, undefined, 'vector=false');
 
         // to make insertImage use the correct buttons
         desktopHelper.switchUIToNotebookbar();

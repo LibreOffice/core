@@ -7,7 +7,7 @@ var calcHelper = require('../../common/calc_helper');
 describe.skip(['tagmobile'], 'Calc focus tests', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/focus.ods');
+		helper.setupAndLoadDocument('calc/focus.ods', false, false, undefined, 'vector=false');
 
 		// Wait until the Formula-Bar is loaded.
 		cy.cGet('.inputbar_container', {timeout : 10000});

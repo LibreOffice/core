@@ -11,7 +11,7 @@ describe(['taglighthouse'], 'Accessibility Impress Notebookbar Tests', { testIso
     var win;
 
     before(function () {
-        helper.setupAndLoadDocument('impress/help_dialog.odp');
+        helper.setupAndLoadDocument('impress/help_dialog.odp', false, false, undefined, 'vector=false');
 
         desktopHelper.switchUIToNotebookbar();
 

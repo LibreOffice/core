@@ -7,7 +7,7 @@ var impressHelper = require('../../common/impress_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Spell checking menu.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/spellchecking.odp');
+		helper.setupAndLoadDocument('impress/spellchecking.odp', false, false, undefined, 'vector=false');
 
 		// Click on edit button
 		mobileHelper.enableEditingMobile();

@@ -7,7 +7,7 @@ describe(['tagdesktop'], 'Shapes deck icon theme', { testIsolation: false }, fun
 	let win;
 
 	before(function() {
-		helper.setupAndLoadDocument('impress/help_dialog.odp');
+		helper.setupAndLoadDocument('impress/help_dialog.odp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 
 		cy.getFrameWindow().then(function(frameWindow) {

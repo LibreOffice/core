@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagmultiuser'], 'Multiuser Annotation Tests', function () {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/annotation.odt',true);
+		helper.setupAndLoadDocument('writer/annotation.odt',true, false, undefined, 'vector=false');
 		cy.viewport(2400,800);
 		desktopHelper.switchUIToNotebookbar();
 		cy.cSetActiveFrame('#iframe1');

@@ -7,7 +7,7 @@ describe(['tagdesktop'], 'Test style sidebar', function() {
 	beforeEach(function() {
 		cy.viewport(1920,1080);
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('writer/stylebar.odt');
+		helper.setupAndLoadDocument('writer/stylebar.odt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

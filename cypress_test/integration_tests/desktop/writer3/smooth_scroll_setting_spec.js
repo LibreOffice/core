@@ -13,7 +13,7 @@ describe(['tagdesktop'], 'Smooth scrolling can be turned off', function() {
 
 	beforeEach(function() {
 		cy.task('writeUserSetting', { userId: USER, settings: { smoothScroll: 'false' } });
-		helper.setupAndLoadDocument('writer/scrolling.odt', false, false, undefined, userQuery);
+		helper.setupAndLoadDocument('writer/scrolling.odt', false, false, undefined, userQuery + '&vector=false');
 	});
 
 	it('The wheel scrolls in discrete steps when the setting is off', function() {

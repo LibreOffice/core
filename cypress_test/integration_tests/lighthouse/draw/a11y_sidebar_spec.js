@@ -13,7 +13,7 @@ describe(['taglighthouse'], 'Accessibility Draw Sidebar Tests', { testIsolation:
 
 	before(function () {
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('draw/insert_position.fodg');
+		helper.setupAndLoadDocument('draw/insert_position.fodg', false, false, undefined, 'vector=false');
 
 		// to make insertImage use the correct buttons
 		desktopHelper.switchUIToNotebookbar();

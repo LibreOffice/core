@@ -7,7 +7,7 @@ var calcHelper = require('../../common/calc_helper');
 describe(['tagdesktop'], 'Annotation Tests', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/annotation.ods');
+		helper.setupAndLoadDocument('calc/annotation.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
@@ -367,7 +367,7 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 	var newFilePath;
 
 	beforeEach(function() {
-		newFilePath = helper.setupAndLoadDocument('calc/annotation.ods');
+		newFilePath = helper.setupAndLoadDocument('calc/annotation.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 	});
 
@@ -378,7 +378,7 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		cy.cGet('.annotation-button-delete').should('be.visible');
 		cy.cGet('.cool-annotation-edit.modify-annotation').should('be.visible');
 
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		cy.cGet('.cool-annotation').should('exist');
 		cy.cGet('#comment-container-1').then(function (element) {
 			element[0].style.visibility = '';
@@ -405,7 +405,7 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		cy.cGet('#comment-container-1').trigger('mouseover', {force: true});
 		cy.cGet('#annotation-content-area-1').should('have.text','some text0');
 
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		cy.cGet('.cool-annotation').should('exist');
 		cy.cGet('#comment-container-1').then(function (element) {
 			element[0].style.visibility = '';
@@ -426,7 +426,7 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		cy.cGet('.annotation-button-autosaved').should('not.exist');
 		cy.cGet('.annotation-button-delete').should('not.exist');
 
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		cy.cGet('.cool-annotation').should('not.exist');
 	});
 
@@ -449,7 +449,7 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		cy.cGet('.annotation-button-delete').should('be.visible');
 		cy.cGet('.cool-annotation-edit.modify-annotation').should('be.visible');
 
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		cy.cGet('.cool-annotation').should('exist');
 		cy.cGet('#comment-container-1').then(function (element) {
 			element[0].style.visibility = '';
@@ -486,7 +486,7 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		cy.cGet('#annotation-content-area-1').should('have.text','some text0, some other text');
 		cy.cGet('#comment-container-1').should('exist');
 
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		cy.cGet('.cool-annotation').should('exist');
 		cy.cGet('#comment-container-1').then(function (element) {
 			element[0].style.visibility = '';
@@ -523,7 +523,7 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		cy.cGet('#annotation-content-area-1').should('have.text','some text0');
 		cy.cGet('#comment-container-1').should('exist');
 
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		cy.cGet('.cool-annotation').should('exist');
 		cy.cGet('#comment-container-1').then(function (element) {
 			element[0].style.visibility = '';

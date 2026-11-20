@@ -7,7 +7,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'Image Operation Tests', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/image_operation.odt');
+		helper.setupAndLoadDocument('writer/image_operation.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.viewport(1920,1080);
 		// The viewport change fires map 'resize' which triggers

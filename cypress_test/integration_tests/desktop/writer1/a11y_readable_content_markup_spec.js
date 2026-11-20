@@ -6,7 +6,7 @@ describe(['tagdesktop'], 'Writer readable content with markup characters', { tes
 	let win;
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/readable_content_markup.fodt');
+		helper.setupAndLoadDocument('writer/readable_content_markup.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

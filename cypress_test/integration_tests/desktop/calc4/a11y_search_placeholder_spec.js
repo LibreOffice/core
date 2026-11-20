@@ -14,7 +14,7 @@ describe(['tagdesktop'], 'Search placeholder', { testIsolation: false }, functio
 		cy.viewport(1920, 1080);
 		const brand = Cypress.env('brandTheme');
 		helper.setupAndLoadDocument('calc/switch.ods', false, false, undefined,
-			brand ? 'theme=' + brand : undefined);
+			(brand ? 'theme=' + brand + '&' : '') + 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) { win = frameWindow; });
 

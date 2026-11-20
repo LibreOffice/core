@@ -19,7 +19,7 @@ describe(['tagmultiuser'], 'Local cell cursor with two views', function() {
 
 	beforeEach(function() {
 		// Turn on the local cell cursor in both views, which is off by default.
-		helper.setupAndLoadDocument('calc/cell_cursor_jump.ods', true, false, undefined, 'localcellcursor=true');
+		helper.setupAndLoadDocument('calc/cell_cursor_jump.ods', true, false, undefined, 'localcellcursor=true&vector=false');
 	});
 
 	it('draws the cell selection of the other view from cell ranges', function() {

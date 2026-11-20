@@ -5,7 +5,7 @@ var mobileHelper = require('../../common/mobile_helper');
 
 describe(['tagmobile'], 'Toolbar tests', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/search_bar.odt');
+		helper.setupAndLoadDocument('writer/search_bar.odt', false, false, undefined, 'vector=false');
 	});
 
 	it('Hides the FAB on search.', function() {

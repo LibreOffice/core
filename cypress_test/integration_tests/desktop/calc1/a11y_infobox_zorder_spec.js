@@ -7,7 +7,7 @@ describe(['tagdesktop'], 'Accelerator info box z-order', function () {
 	var win;
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('calc/focus.ods');
+		helper.setupAndLoadDocument('calc/focus.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.cGet('#Home-tab-label').should('be.visible');
 		cy.getFrameWindow().then(function (w) {

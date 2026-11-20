@@ -24,7 +24,7 @@ var desktopHelper = require('../../common/desktop_helper');
 				// canvas has its final size before the click below aims at the text box.
 				helper.documentChecks(true);
 			} else
-				helper.loadDocument(path);
+				helper.loadDocument(path, false, false, undefined, 'vector=false');
 			cy.getFrameWindow().then(function(w) {
 				win = w;
 				// A vector view has no tiles, so it waits for the slides instead.

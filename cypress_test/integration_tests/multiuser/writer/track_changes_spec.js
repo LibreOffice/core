@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe.skip(['tagmultiuser'], 'Track Changes', function () {
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('writer/track_changes.odt',true);
+		helper.setupAndLoadDocument('writer/track_changes.odt',true, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

@@ -7,7 +7,7 @@ var impressHelper = require('../../common/impress_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide pane context menu', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/slideshow.odp');
+		helper.setupAndLoadDocument('impress/slideshow.odp', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

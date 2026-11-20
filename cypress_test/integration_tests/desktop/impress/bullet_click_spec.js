@@ -24,7 +24,7 @@ var desktopHelper = require('../../common/desktop_helper');
 				helper.loadDocument(path, true, undefined, undefined, 'vector=true');
 				helper.documentChecks(true);
 			} else
-				helper.loadDocument(path);
+				helper.loadDocument(path, false, false, undefined, 'vector=false');
 			cy.getFrameWindow().then(function(w) {
 				win = w;
 				cy.wrap(null).should(function() {

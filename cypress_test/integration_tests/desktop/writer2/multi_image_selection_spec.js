@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'Writer multi image selection', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/image_operation.odt');
+		helper.setupAndLoadDocument('writer/image_operation.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.viewport(1920, 1080);
 		cy.getFrameWindow().then((win) => {

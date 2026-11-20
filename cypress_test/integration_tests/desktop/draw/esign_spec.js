@@ -6,7 +6,7 @@ describe(['tagdesktop'], 'Electronic sign operations.', function() {
 
 	it('Create an electronic signature.', { env: { 'pdf-view': true } }, function() {
 		// Given a document that can be signed:
-		helper.setupAndLoadDocument('draw/esign.pdf', /*isMultiUser=*/false, /*copyCertificates=*/true);
+		helper.setupAndLoadDocument('draw/esign.pdf', /*isMultiUser=*/false, /*copyCertificates=*/true, undefined, 'vector=false');
 
 		let sendHashResult;
 		cy.fixture('fixtures/eideasy-send-hash.json').then((result) => {

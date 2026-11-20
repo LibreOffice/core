@@ -107,7 +107,7 @@ describe(['tagmultiuser'], 'Multiuser Writer drag and drop of a text selection',
 
 	beforeEach(function() {
 		// Three paragraphs: Test1, Test3, Test2, opened by two users.
-		helper.setupAndLoadDocument('writer/drag_drop_text.fodt', true);
+		helper.setupAndLoadDocument('writer/drag_drop_text.fodt', true, false, undefined, 'vector=false');
 		cy.cSetActiveFrame('#iframe1');
 		cy.getFrameWindow().then((win) => {
 			this.win1 = win;

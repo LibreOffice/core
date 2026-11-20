@@ -35,13 +35,15 @@ function symbolOnly(nodes) {
 //
 // moreTests, when given, adds the tests of one app, and is handed the window
 // and symbolOnly, which lists the nodes named only with symbols.
-function sweepDecorativeGlyphs(app, documentPath, moreTests) {
+//
+// extraQuery: more query parameters for the document, for example 'vector=false'.
+function sweepDecorativeGlyphs(app, documentPath, moreTests, extraQuery) {
 	describe(['tagdesktop'], app + ' decorative glyphs', { testIsolation: false }, function () {
 		let win;
 
 		before(function () {
 			cy.viewport(1920, 1080);
-			helper.setupAndLoadDocument(documentPath);
+			helper.setupAndLoadDocument(documentPath, false, false, undefined, extraQuery);
 
 			cy.getFrameWindow().then(function (frameWindow) { win = frameWindow; });
 			cy.cGet('#sidebar-dock-wrapper').should('be.visible');

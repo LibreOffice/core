@@ -10,7 +10,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Calc spell checking menu.',
 		// Calc starts with automatic spell checking off, so ask for it before
 		// the document loads - the suggestions below need the marked word.
 		localStorage.setItem('spreadsheet.spellOnline', true);
-		helper.setupAndLoadDocument('calc/spellchecking.ods');
+		helper.setupAndLoadDocument('calc/spellchecking.ods', false, false, undefined, 'vector=false');
 
 		// Click on edit button
 		mobileHelper.enableEditingMobile();

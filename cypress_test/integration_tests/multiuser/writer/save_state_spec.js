@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagmultiuser'], 'Multiuser Writer Save State', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/invalidations.odt', true);
+		helper.setupAndLoadDocument('writer/invalidations.odt', true, false, undefined, 'vector=false');
 
 		cy.cSetActiveFrame('#iframe1');
 		cy.getFrameWindow().then((win) => { this.win1 = win; });

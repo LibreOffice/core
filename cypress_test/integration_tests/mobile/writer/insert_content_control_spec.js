@@ -6,7 +6,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Insert objects via insertion wizard.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/insert_object.odt');
+		helper.setupAndLoadDocument('writer/insert_object.odt', false, false, undefined, 'vector=false');
 
 		// Click on edit button
 		mobileHelper.enableEditingMobile();

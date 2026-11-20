@@ -15,7 +15,7 @@ describe(['tagdesktop'], 'Screen Reading button', { testIsolation: false }, func
 		cy.viewport(1920, 1080);
 		const brand = Cypress.env('brandTheme');
 		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, undefined,
-			brand ? 'theme=' + brand : undefined);
+			(brand ? 'theme=' + brand + '&' : '') + 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

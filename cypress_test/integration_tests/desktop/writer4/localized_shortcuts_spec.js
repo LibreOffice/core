@@ -10,7 +10,7 @@ describe(['tagdesktop'], 'Localized keyboard shortcuts', function() {
 	});
 
 	it('English Ctrl+Alt+F still inserts a footnote', function() {
-		helper.setupAndLoadDocument('writer/find_replace.odt');
+		helper.setupAndLoadDocument('writer/find_replace.odt', false, false, undefined, 'vector=false');
 
 		helper.typeIntoDocument('xxxx');
 
@@ -33,7 +33,7 @@ describe(['tagdesktop'], 'Localized keyboard shortcuts', function() {
 	// The menu names the key that German uses, not the one English uses
 	// for the same command.
 	it('German labels Find and Replace with the key that opens it', function() {
-		helper.setupAndLoadDocument('writer/find_replace.odt', false, false, 'de');
+		helper.setupAndLoadDocument('writer/find_replace.odt', false, false, 'de', 'vector=false');
 
 		cy.getFrameWindow().then((win) => {
 			expect(win.JSDialog.ShortcutsUtil.getShortcutText('.uno:SearchDialog'))
@@ -47,7 +47,7 @@ describe(['tagdesktop'], 'Localized keyboard shortcuts', function() {
 	// German LibreOffice gives Ctrl+1 to line spacing 1, Online applies the
 	// heading style there in every language.
 	it('German Ctrl+1 applies the first heading style', function() {
-		helper.setupAndLoadDocument('writer/find_replace.odt', false, false, 'de');
+		helper.setupAndLoadDocument('writer/find_replace.odt', false, false, 'de', 'vector=false');
 		helper.setDummyClipboardForCopy();
 
 		helper.typeIntoDocument('xxxx');

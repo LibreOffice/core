@@ -9,7 +9,7 @@ describe(['tagdesktop'], 'Style gallery after WebSocket reconnection', function 
 		// wide enough for the style gallery to stay in the notebookbar, unfolded, so it shows
 		// its previews
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('writer/writer-edit.fodt');
+		helper.setupAndLoadDocument('writer/writer-edit.fodt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

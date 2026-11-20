@@ -8,7 +8,7 @@ describe(['tagdesktop', 'tagnextcloud'], 'Track Changes', function () {
 
 	beforeEach(function () {
 		cy.viewport(1400, 600);
-		helper.setupAndLoadDocument('writer/track_changes.odt');
+		helper.setupAndLoadDocument('writer/track_changes.odt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});
@@ -478,7 +478,7 @@ describe(['tagdesktop'], 'Restricted user tracked changes dialog button state', 
 
 	it('Accept and reject buttons are disabled for restricted user', function() {
 		helper.setupAndLoadDocument('writer/manage_tracking_changes.odt',
-			/* isMultiUser */ false, /* copyCertificates copies .wopi.json */ true);
+			/* isMultiUser */ false, /* copyCertificates copies .wopi.json */ true, undefined, 'vector=false');
 		openManageChangesDialog();
 
 		// When loading writer/manage_tracking_changes.odt.wopi.json, which
@@ -492,7 +492,7 @@ describe(['tagdesktop'], 'Restricted user tracked changes dialog button state', 
 
 	it('Accept and reject buttons are enabled for unrestricted user', function() {
 		helper.setupAndLoadDocument('writer/manage_tracking_changes.odt',
-			/* isMultiUser */ false, /* copyCertificates copies .wopi.json */ false);
+			/* isMultiUser */ false, /* copyCertificates copies .wopi.json */ false, undefined, 'vector=false');
 		openManageChangesDialog();
 
 		// Without the .wopi.json the user is not restricted,
@@ -511,7 +511,7 @@ describe(['tagdesktop'], 'Restricted user review mode and record menu', function
 	function loadDocument(fileName, restricted) {
 		cy.viewport(2048, 1080);
 		helper.setupAndLoadDocument('writer/' + fileName,
-			/* isMultiUser */ false, /* copyCertificates copies .wopi.json */ restricted);
+			/* isMultiUser */ false, /* copyCertificates copies .wopi.json */ restricted, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow().then(function(win) {
 			helper.processToIdle(win);

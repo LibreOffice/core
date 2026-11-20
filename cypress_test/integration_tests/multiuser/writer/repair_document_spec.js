@@ -6,7 +6,7 @@ var repairHelper = require('../../common/repair_document_helper');
 describe.skip(['tagmultiuser'], 'Repair Document', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/repair_doc.odt',true);
+		helper.setupAndLoadDocument('writer/repair_doc.odt',true, false, undefined, 'vector=false');
 	});
 
 	function repairDoc(frameId1, frameId2) {

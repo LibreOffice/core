@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'WebSocket reconnection', function () {
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('writer/writer-edit.fodt');
+		helper.setupAndLoadDocument('writer/writer-edit.fodt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

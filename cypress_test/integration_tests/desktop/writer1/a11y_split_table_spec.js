@@ -95,7 +95,7 @@ describe(['tagdesktop'], 'Writer table split across pages', { testIsolation: fal
 	}
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/split_table_context.fodt');
+		helper.setupAndLoadDocument('writer/split_table_context.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

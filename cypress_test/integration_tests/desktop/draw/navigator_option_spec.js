@@ -17,7 +17,7 @@ describe(['tagdesktop'], 'Navigator option in Draw', function() {
 	var filePath;
 
 	beforeEach(function() {
-		filePath = helper.setupAndLoadDocument('draw/navigator.odg');
+		filePath = helper.setupAndLoadDocument('draw/navigator.odg', false, false, undefined, 'vector=false');
 	});
 
 	it('the Navigator option hides and shows the slide panel, also after a reload', function() {
@@ -26,7 +26,7 @@ describe(['tagdesktop'], 'Navigator option in Draw', function() {
 		desktopHelper.toggleInterfaceSetting('drawing', 'ShowNavigator', true);
 		assertPanelShown(false);
 
-		helper.reloadDocument(filePath);
+		helper.reloadDocument(filePath, 'vector=false');
 		assertPanelShown(false);
 
 		// The test WOPI server does not hand the saved settings back to the reloaded document, so
@@ -37,7 +37,7 @@ describe(['tagdesktop'], 'Navigator option in Draw', function() {
 		assertPanelShown(true);
 		cy.cGet('#tab-slide-sorter').should('have.class', 'selected');
 
-		helper.reloadDocument(filePath);
+		helper.reloadDocument(filePath, 'vector=false');
 		assertPanelShown(true);
 	});
 
@@ -47,13 +47,13 @@ describe(['tagdesktop'], 'Navigator option in Draw', function() {
 		desktopHelper.closeNavigatorSidebar();
 		assertPanelShown(false);
 
-		helper.reloadDocument(filePath);
+		helper.reloadDocument(filePath, 'vector=false');
 		assertPanelShown(false);
 
 		cy.cGet('#floating-navigator').click();
 		assertPanelShown(true);
 
-		helper.reloadDocument(filePath);
+		helper.reloadDocument(filePath, 'vector=false');
 		assertPanelShown(true);
 	});
 });

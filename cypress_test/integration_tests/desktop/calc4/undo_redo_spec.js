@@ -7,7 +7,7 @@ var repairHelper = require('../../common/repair_document_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Editing Operations', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/undo_redo.ods');
+		helper.setupAndLoadDocument('calc/undo_redo.ods', false, false, undefined, 'vector=false');
 	});
 
 	function undo() {

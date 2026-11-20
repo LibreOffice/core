@@ -56,7 +56,7 @@ describe(['tagdesktop'], 'Writer table given to the reader', { testIsolation: fa
 	}
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/table_context.fodt');
+		helper.setupAndLoadDocument('writer/table_context.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

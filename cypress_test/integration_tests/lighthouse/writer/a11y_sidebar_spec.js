@@ -8,7 +8,7 @@ describe(['taglighthouse'], 'Accessibility Writer Sidebar Tests', { testIsolatio
 	let win;
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/help_dialog.odt');
+		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, undefined, 'vector=false');
 
 		// to make insertImage use the correct buttons
 		desktopHelper.switchUIToNotebookbar();

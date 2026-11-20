@@ -7,7 +7,7 @@ describe(['tagdesktop'], 'Writer spelling errors reach the reader', { testIsolat
 	let win;
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/spelling_context.fodt');
+		helper.setupAndLoadDocument('writer/spelling_context.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

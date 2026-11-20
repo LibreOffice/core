@@ -13,7 +13,7 @@ describe(['tagdesktop'], 'Calc F6 region navigation', function () {
 	let win;
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('calc/focus.ods');
+		helper.setupAndLoadDocument('calc/focus.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 
 		// make sure the sidebar is part of the ring

@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop'], 'Save indicator', function() {
 
 	function editAndSave(fixture) {
-		helper.setupAndLoadDocument(fixture);
+		helper.setupAndLoadDocument(fixture, false, false, undefined, 'vector=false');
 		cy.cGet('[id^="save"].unotoolbutton').should('be.visible');
 
 		helper.typeIntoDocument('hello');
@@ -25,7 +25,7 @@ describe(['tagdesktop'], 'Save indicator', function() {
 	});
 
 	it('reports save progress from the engine on a DOCX document', function() {
-		helper.setupAndLoadDocument('writer/testfile.docx');
+		helper.setupAndLoadDocument('writer/testfile.docx', false, false, undefined, 'vector=false');
 		cy.cGet('[id^="save"].unotoolbutton').should('be.visible');
 
 		cy.getFrameWindow().then(function(win) {

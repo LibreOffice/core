@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'File menu offers Rename Document in Calc', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/top_toolbar.ods');
+		helper.setupAndLoadDocument('calc/top_toolbar.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToCompact();
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;

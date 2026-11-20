@@ -6,7 +6,7 @@ const desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'AutoCorrect Options in Calc.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/BottomBar.ods');
+		helper.setupAndLoadDocument('calc/BottomBar.ods', false, false, undefined, 'vector=false');
 		// Wide enough for the Review tab not to fold the button into a menu.
 		cy.viewport(1920, 1080);
 	});

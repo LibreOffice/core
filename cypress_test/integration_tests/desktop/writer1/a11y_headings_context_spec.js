@@ -121,7 +121,7 @@ describe(['tagdesktop'], 'Writer headings given to the reader', { testIsolation:
 	}
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/headings_context.fodt');
+		helper.setupAndLoadDocument('writer/headings_context.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

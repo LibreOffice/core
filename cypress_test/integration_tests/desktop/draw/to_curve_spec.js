@@ -6,7 +6,7 @@ const desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'Convert to curve', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('draw/to_curve.fodg');
+		helper.setupAndLoadDocument('draw/to_curve.fodg', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.viewport(1920, 1080);
 	});

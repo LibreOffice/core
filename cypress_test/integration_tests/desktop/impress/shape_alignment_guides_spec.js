@@ -6,7 +6,7 @@ var impressHelper = require('../../common/impress_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Shape alignment guides.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/shape_alignment_guides.fodp');
+		helper.setupAndLoadDocument('impress/shape_alignment_guides.fodp', false, false, undefined, 'vector=false');
 	});
 
 	function getHandlesSection(win) {

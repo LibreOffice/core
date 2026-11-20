@@ -6,7 +6,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide Navigation', function() {
 
     beforeEach(function() {
-        helper.setupAndLoadDocument('impress/slide_navigation.odp');
+        helper.setupAndLoadDocument('impress/slide_navigation.odp', false, false, undefined, 'vector=false');
         cy.getFrameWindow().then(function(win) {
             this.win = win;
         }.bind(this));

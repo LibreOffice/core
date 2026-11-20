@@ -35,7 +35,7 @@ describe(['tagdesktop'], 'Dark mode follows the OS setting', function() {
 	}
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/cell_cursor.ods');
+		helper.setupAndLoadDocument('calc/cell_cursor.ods', false, false, undefined, 'vector=false');
 	});
 
 	it('Follows the OS mode when no theme was chosen', function() {

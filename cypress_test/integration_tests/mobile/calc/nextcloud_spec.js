@@ -7,7 +7,7 @@ var nextcloudHelper = require('../../common/nextcloud_helper');
 describe(['tagnextcloud'], 'Nextcloud specific tests.', function() {
 
 	it('Insert image from storage.', function() {
-		helper.setupAndLoadDocument('calc/nextcloud.ods');
+		helper.setupAndLoadDocument('calc/nextcloud.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		helper.upLoadFileToNextCloud('calc/image_to_insert.png');
@@ -19,7 +19,7 @@ describe(['tagnextcloud'], 'Nextcloud specific tests.', function() {
 	});
 
 	it('Save as.', function() {
-		var newFilePath = helper.setupAndLoadDocument('calc/nextcloud.ods');
+		var newFilePath = helper.setupAndLoadDocument('calc/nextcloud.ods', false, false, undefined, 'vector=false');
 		var newFileName = helper.getFileName(newFilePath);
 		mobileHelper.enableEditingMobile();
 
@@ -44,7 +44,7 @@ describe(['tagnextcloud'], 'Nextcloud specific tests.', function() {
 	});
 
 	it('Share.', function() {
-		helper.setupAndLoadDocument('calc/nextcloud.ods');
+		helper.setupAndLoadDocument('calc/nextcloud.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 
 		nextcloudHelper.checkAndCloseSharing();

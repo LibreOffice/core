@@ -9,7 +9,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	var newFilePath;
 
 	beforeEach(function() {
-		newFilePath = helper.setupAndLoadDocument('writer/hamburger_menu.odt');
+		newFilePath = helper.setupAndLoadDocument('writer/hamburger_menu.odt', false, false, undefined, 'vector=false');
 
 		mobileHelper.enableEditingMobile();
 	});
@@ -47,7 +47,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 		helper.expectTextForClipboard('new');
 		mobileHelper.selectHamburgerMenuItem(['File', 'Save']);
 		// Reopen the document and check content.
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		mobileHelper.enableEditingMobile();
 		writerHelper.selectAllTextOfDoc();
 		helper.expectTextForClipboard('new');

@@ -60,7 +60,7 @@ function liveLabelColor(widgets, doc) {
 
 describe(['tagdesktop'], 'Impress Header and Footer dialog', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/help_dialog.odp');
+		helper.setupAndLoadDocument('impress/help_dialog.odp', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

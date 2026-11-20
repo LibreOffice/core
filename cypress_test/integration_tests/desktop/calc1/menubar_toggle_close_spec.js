@@ -7,7 +7,7 @@ describe(['tagdesktop'], 'Menubar top-level item closes on repeated click', func
 	beforeEach(function () {
 		cy.viewport(1280, 500);
 
-		helper.setupAndLoadDocument('calc/focus.ods');
+		helper.setupAndLoadDocument('calc/focus.ods', false, false, undefined, 'vector=false');
 		// The classic menubar (#menu-*) only exists in the compact UI; the
 		// desktop default renders the notebookbar.
 		desktopHelper.switchUIToCompact();

@@ -57,7 +57,7 @@ function settledInk(name, counts) {
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Calc sheet view tests', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/sheetview.fods');
+		helper.setupAndLoadDocument('calc/sheetview.fods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;

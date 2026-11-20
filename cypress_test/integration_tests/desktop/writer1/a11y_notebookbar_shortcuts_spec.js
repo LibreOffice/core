@@ -9,7 +9,7 @@ describe(['tagdesktop'], 'Accessibility notebookbar shortcut tests', { testIsola
 	let targets;
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/help_dialog.odt');
+		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 
 		cy.cGet('.notebookbar-tabs-container').should('be.visible');

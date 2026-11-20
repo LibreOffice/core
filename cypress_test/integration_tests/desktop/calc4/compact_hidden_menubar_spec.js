@@ -7,7 +7,7 @@ describe(['tagdesktop'], 'Compact view: the document button brings back a hidden
 
 	beforeEach(function() {
 		cy.viewport(1280, 800);
-		helper.setupAndLoadDocument('calc/top_toolbar.ods');
+		helper.setupAndLoadDocument('calc/top_toolbar.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToCompact();
 		cy.cGet('#toolbar-up').should('be.visible');
 		cy.getFrameWindow().then(function(win) {

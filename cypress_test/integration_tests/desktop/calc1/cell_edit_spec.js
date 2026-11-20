@@ -8,7 +8,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test rendering of a cell o
 
 	beforeEach(function() {
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('calc/cell_edit.fods');
+		helper.setupAndLoadDocument('calc/cell_edit.fods', false, false, undefined, 'vector=false');
 		desktopHelper.selectZoomLevel(200); // make differences more significant
 
 		cy.viewport(800, helper.maxScreenshotableViewportHeight);

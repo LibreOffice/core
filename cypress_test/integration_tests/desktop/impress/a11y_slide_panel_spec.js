@@ -6,7 +6,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide panel accessibility', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/slide_navigation.odp');
+		helper.setupAndLoadDocument('impress/slide_navigation.odp', false, false, undefined, 'vector=false');
 		// Wait until the panel has rendered its previews before asserting.
 		cy.cGet('#slide-sorter .preview-img').should('have.length.at.least', 3);
 	});

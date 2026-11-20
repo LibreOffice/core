@@ -6,7 +6,7 @@ describe(['tagdesktop'], 'Menubar refresh', function () {
         beforeEach(function () {
                 // A read-only view has no notebookbar, which the usual load checks wait for.
                 var filePath = helper.setupDocument('calc/focus.ods');
-                helper.loadDocument(filePath, true, undefined, undefined, 'permission=readonly');
+                helper.loadDocument(filePath, true, undefined, undefined, 'permission=readonly&vector=false');
                 cy.getFrameWindow().should((win) => {
                         expect(win.app.map._docLoaded, 'document loaded').to.equal(true);
                         this.win = win;

@@ -8,7 +8,7 @@ describe(['tagdesktop'], 'Navigator accessibility tree', { testIsolation: false 
 
 	before(function () {
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('calc/top_toolbar.ods');
+		helper.setupAndLoadDocument('calc/top_toolbar.ods', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

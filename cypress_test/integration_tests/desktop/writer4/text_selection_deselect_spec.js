@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Writer text selection deselect redraw.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		helper.setupAndLoadDocument('writer/copy_paste.odt', false, false, undefined, 'vector=false');
 		cy.viewport(1920, 1080);
 	});
 

@@ -7,7 +7,7 @@ var writerHelper = require('../../common/writer_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Text cursor tests.', function() {
 
 	function before(filePath) {
-		helper.setupAndLoadDocument(filePath);
+		helper.setupAndLoadDocument(filePath, false, false, undefined, 'vector=false');
 
 		mobileHelper.enableEditingMobile();
 	}

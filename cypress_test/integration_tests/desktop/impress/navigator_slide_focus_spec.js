@@ -4,7 +4,7 @@ var helper = require('../../common/helper');
 
 describe(['tagdesktop'], 'Navigator slide-sorter focus', function() {
 	it('reopening the navigator focuses the current slide so arrows navigate', function() {
-		helper.setupAndLoadDocument('impress/navigator.odp');
+		helper.setupAndLoadDocument('impress/navigator.odp', false, false, undefined, 'vector=false');
 
 		// close the navigation panel, which reveals the floating navigator icon
 		cy.cGet('.close-navigation-button').click();

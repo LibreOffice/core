@@ -8,6 +8,7 @@ const a11yHelper = require('./a11y_helper');
 // Each app builds its own notebookbar, so each app runs the sweep on a document of its own.
 //
 // options.galleries: whether a tab of this app's notebookbar shows a gallery.
+// options.extraQuery: more query parameters for the document, for example 'vector=false'.
 function sweepNotebookbar(app, documentPath, options) {
 	const galleries = !options || options.galleries !== false;
 
@@ -19,8 +20,13 @@ function sweepNotebookbar(app, documentPath, options) {
 		before(function () {
 			cy.viewport(1920, 1080);
 			const brand = Cypress.env('brandTheme');
+			const query = [];
+			if (brand)
+				query.push('theme=' + brand);
+			if (options && options.extraQuery)
+				query.push(options.extraQuery);
 			helper.setupAndLoadDocument(documentPath, false, false, undefined,
-				brand ? 'theme=' + brand : undefined);
+				query.length ? query.join('&') : undefined);
 
 			cy.getFrameWindow().then(function (frameWindow) {
 				win = frameWindow;

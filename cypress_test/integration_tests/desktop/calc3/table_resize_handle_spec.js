@@ -6,7 +6,7 @@ var calcHelper = require('../../common/calc_helper');
 describe(['tagdesktop'], 'Calc styled table resize handle.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/table_resize_handles.xlsx');
+		helper.setupAndLoadDocument('calc/table_resize_handles.xlsx', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});
@@ -86,7 +86,7 @@ describe(['tagdesktop'], 'Calc styled table resize handle.', function() {
 describe(['tagdesktop'], 'Calc sparkline group marker.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/sparkline_group.fods');
+		helper.setupAndLoadDocument('calc/sparkline_group.fods', false, false, undefined, 'vector=false');
 	});
 
 	// One sparkline group in E1:E2. It is filled only while the cell cursor is on one of its
@@ -118,7 +118,7 @@ describe(['tagdesktop'], 'Calc sparkline group marker.', function() {
 describe(['tagdesktop'], 'Calc styled table resize handle below the fold.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/table_resize_handles_below_fold.xlsx');
+		helper.setupAndLoadDocument('calc/table_resize_handles_below_fold.xlsx', false, false, undefined, 'vector=false');
 	});
 
 	// 12 styled tables down to row 55, most of them outside the initial viewport. Nothing is

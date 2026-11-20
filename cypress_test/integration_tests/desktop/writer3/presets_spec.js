@@ -8,7 +8,7 @@ var writerHelper = require('../../common/writer_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Preset tests.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/presets.odt');
+		helper.setupAndLoadDocument('writer/presets.odt', false, false, undefined, 'vector=false');
 		cy.cGet('div.clipboard').as('clipboard');
 		helper.setDummyClipboardForCopy();
 		desktopHelper.switchUIToNotebookbar();

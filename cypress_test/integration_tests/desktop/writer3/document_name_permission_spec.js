@@ -9,7 +9,7 @@ describe(['tagdesktop'], 'Document name editability', { testIsolation: false }, 
 
 	before(function() {
 		helper.setupAndLoadDocument('writer/document_name_permission.fodt',
-			/* isMultiUser */ false, /* copy the .wopi.json next to it */ true);
+			/* isMultiUser */ false, /* copy the .wopi.json next to it */ true, undefined, 'vector=false');
 	});
 
 	function documentNameInput() {

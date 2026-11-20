@@ -9,7 +9,7 @@ describe(['tagdesktop'], 'Shapes deck tooltips', { testIsolation: false }, funct
 	before(function () {
 		cy.viewport(1920, 1080);
 		helper.setupAndLoadDocument('impress/help_dialog.odp', false, false, undefined,
-			'tooltips=true');
+			'tooltips=true&vector=false');
 		desktopHelper.switchUIToNotebookbar();
 
 		cy.getFrameWindow().then(function (frameWindow) {

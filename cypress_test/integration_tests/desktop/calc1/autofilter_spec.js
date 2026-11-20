@@ -13,7 +13,7 @@ function toggleAutofilter() {
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'AutoFilter Complex', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/autofilter-complex.ods');
+		helper.setupAndLoadDocument('calc/autofilter-complex.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToCompact();
 
 		// make deterministic jump, so in retry we have similar scrollbar values
@@ -57,7 +57,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'AutoFilter Complex', funct
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'AutoFilter', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/autofilter.ods');
+		helper.setupAndLoadDocument('calc/autofilter.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToCompact();
 		toggleAutofilter();
 		helper.setDummyClipboardForCopy();
@@ -214,7 +214,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'AutoFilter Scroll Position
 	}
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/autofilter-complex.ods');
+		helper.setupAndLoadDocument('calc/autofilter-complex.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToCompact();
 
 		cy.getFrameWindow().then(function(win) {
@@ -320,7 +320,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'AutoFilter Search', functi
 	beforeEach(function() {
 		// The column holds the numbers 1 to 30, which is more values than the
 		// popup shows at once, so the search field is the way to reach one.
-		helper.setupAndLoadDocument('calc/autofilter-search.fods');
+		helper.setupAndLoadDocument('calc/autofilter-search.fods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToCompact();
 		toggleAutofilter();
 		helper.setDummyClipboardForCopy();

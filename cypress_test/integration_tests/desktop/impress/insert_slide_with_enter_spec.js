@@ -4,7 +4,7 @@ var helper = require('../../common/helper');
 
 describe(['tagdesktop'], 'Insert a new slide from the slide panel', function () {
 	it('pressing Enter with the slide panel focused creates a new slide', function () {
-		helper.setupAndLoadDocument('impress/comment_switching.odp');
+		helper.setupAndLoadDocument('impress/comment_switching.odp', false, false, undefined, 'vector=false');
 
 		cy.cGet('.preview-img-currentpart').click();
 		cy.cGet('.preview-img-currentpart').should('have.focus');

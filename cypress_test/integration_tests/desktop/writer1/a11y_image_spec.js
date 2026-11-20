@@ -29,7 +29,7 @@ describe(['tagdesktop'], 'Writer images for the reader', { testIsolation: false 
 	}
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/a11y_image.fodt');
+		helper.setupAndLoadDocument('writer/a11y_image.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

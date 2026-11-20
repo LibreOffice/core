@@ -13,7 +13,7 @@ describe(['tagmobile'], 'Annotation tests.', function() {
 	var newFilePath;
 
 	beforeEach(function() {
-		newFilePath = helper.setupAndLoadDocument('writer/annotation.odt');
+		newFilePath = helper.setupAndLoadDocument('writer/annotation.odt', false, false, undefined, 'vector=false');
 
 		mobileHelper.enableEditingMobile();
 		cy.getFrameWindow().then(function(win) {
@@ -26,7 +26,7 @@ describe(['tagmobile'], 'Annotation tests.', function() {
 		mobileHelper.insertComment();
 		mobileHelper.selectHamburgerMenuItem(['File', 'Save']);
 		helper.waitUntilDocumentSaved();
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		mobileHelper.enableEditingMobile();
 		// The reload gives the frame a new window.
 		cy.getFrameWindow().then(function(win) {
@@ -101,7 +101,7 @@ describe(['tagmobile'], 'Annotation tests.', function() {
 
 describe(['tagmobile'], 'Annotation tests.', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/annotation.odt');
+		helper.setupAndLoadDocument('writer/annotation.odt', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;

@@ -29,7 +29,7 @@ describe(['tagmultiuser'], 'Joining a document should not trigger an invalidatio
 		localStorage.setItem('text.spellOnline', false);
 		helper.setupAndLoadDocument('writer/invalidations.odt',
 																/* skipDocumentCheck */ true,
-																/* isMulti */ true);
+																/* isMulti */ true, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow('#iframe1').then(function(win) {
 			this.win1 = win;

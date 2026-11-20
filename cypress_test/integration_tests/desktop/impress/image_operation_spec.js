@@ -7,7 +7,7 @@ var { triggerNewSVGForShapeInTheCenter } = require('../../common/impress_helper'
 describe(['tagdesktop'], 'Image Operation Tests', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/image_operation.odp');
+		helper.setupAndLoadDocument('impress/image_operation.odp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.viewport(1920,1080);
 

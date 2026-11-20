@@ -18,7 +18,7 @@ describe(['tagdesktop'], 'Tile rehydrate from cache.', function() {
 		// Fix: when a visible tile has cached rawDeltas but no image,
 		// rehydrate it from the cache instead of waiting for a tile
 		// message that never arrives.
-		helper.setupAndLoadDocument('writer/copy_paste_simple.odt');
+		helper.setupAndLoadDocument('writer/copy_paste_simple.odt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function(win) {
 			helper.processToIdle(win);
@@ -92,7 +92,7 @@ describe(['tagdesktop'], 'Tile rehydrate from cache.', function() {
 		// every scroll takes, requestVisibleTiles. The fetch has to wait for
 		// the request cooldown, and the tile must be drawn from its cached
 		// deltas in the meantime.
-		helper.setupAndLoadDocument('writer/copy_paste_simple.odt');
+		helper.setupAndLoadDocument('writer/copy_paste_simple.odt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function(win) {
 			helper.processToIdle(win);
@@ -147,7 +147,7 @@ describe(['tagdesktop'], 'Tile rehydrate from cache.', function() {
 		// A tile invalidated with its own wire id is requested again with
 		// that id. The server has nothing newer, so it answers with an empty
 		// delta and the same id, and the tile must be up to date after that.
-		helper.setupAndLoadDocument('writer/copy_paste_simple.odt');
+		helper.setupAndLoadDocument('writer/copy_paste_simple.odt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function(win) {
 			helper.processToIdle(win);

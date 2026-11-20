@@ -5,7 +5,7 @@ let helper = require('../../common/helper');
 
 describe(['tagdesktop', 'tagpreview'], 'Impress preview', function() {
 	beforeEach(function() {
-		helper.setupAndPreviewDocument('impress/slide_navigation.odp');
+		helper.setupAndPreviewDocument('impress/slide_navigation.odp', 'vector=false');
 	});
 
 	it('shows the preview of the presentation', function() {

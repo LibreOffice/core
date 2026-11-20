@@ -8,7 +8,7 @@ var impressHelper = require('../../common/impress_helper');
 describe.skip('Searching via search bar.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/search_bar.odp');
+		helper.setupAndLoadDocument('impress/search_bar.odp', false, false, undefined, 'vector=false');
 
 		mobileHelper.enableEditingMobile();
 

@@ -8,7 +8,7 @@ var a11yHelper = require('../../common/a11y_helper');
 // and move keyboard focus into it, so it can be driven without the mouse.
 describe(['tagdesktop'], 'Calc keyboard context menu', function () {
 	beforeEach(function () {
-		helper.setupAndLoadDocument('calc/context_menu.ods');
+		helper.setupAndLoadDocument('calc/context_menu.ods', false, false, undefined, 'vector=false');
 
 		// start with the keyboard focus in the sheet grid on a known cell
 		calcHelper.clickOnFirstCell();

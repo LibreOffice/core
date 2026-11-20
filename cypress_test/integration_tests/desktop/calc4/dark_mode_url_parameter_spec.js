@@ -9,7 +9,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop'], 'darkTheme URL parameter', function() {
 
 	function loadWithQuery(query) {
-		helper.setupAndLoadDocument('calc/cell_cursor.ods', false, false, undefined, query);
+		helper.setupAndLoadDocument('calc/cell_cursor.ods', false, false, undefined, query + '&vector=false');
 	}
 
 	function assertThemeIs(theme) {

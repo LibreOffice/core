@@ -23,7 +23,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Impress hyperlink popup te
 	// Every test reads the same text, so the shape holds "before <hyperlink>
 	// after" for the whole file and is built once.
 	before(function() {
-		helper.setupAndLoadDocument('impress/top_toolbar.odp');
+		helper.setupAndLoadDocument('impress/top_toolbar.odp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToCompact();
 
 		if (Cypress.env('INTEGRATION') === 'nextcloud') {

@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagmultiuser'], 'Multiuser Annotation Tests', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/annotation.ods',true);
+		helper.setupAndLoadDocument('calc/annotation.ods',true, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 	});
 
@@ -91,7 +91,7 @@ describe(['tagmultiuser'], 'Multiuser Annotation Autosave Tests', function() {
 
 	beforeEach(function() {
 
-		helper.setupAndLoadDocument('calc/annotation.ods',true);
+		helper.setupAndLoadDocument('calc/annotation.ods',true, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 	});
 

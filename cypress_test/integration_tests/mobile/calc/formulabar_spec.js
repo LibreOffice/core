@@ -7,7 +7,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile', 'tagnextcloud'], 'Formula bar tests.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/formulabar.ods');
+		helper.setupAndLoadDocument('calc/formulabar.ods', false, false, undefined, 'vector=false');
 
 		mobileHelper.enableEditingMobile();
 	});
@@ -247,7 +247,7 @@ describe(['tagmobile'], 'Formula bar context menu tests.', function() {
 	var cellText = 'long line long line long line';
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/formulabar.ods');
+		helper.setupAndLoadDocument('calc/formulabar.ods', false, false, undefined, 'vector=false');
 
 		mobileHelper.enableEditingMobile();
 
@@ -431,7 +431,7 @@ describe(['tagmobile', 'tagnextcloud'], 'The view while a formula is edited.', f
 	var formulaText = '#sc_input_window.formulabar .ui-custom-textarea-text-layer';
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/formulabar.ods');
+		helper.setupAndLoadDocument('calc/formulabar.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

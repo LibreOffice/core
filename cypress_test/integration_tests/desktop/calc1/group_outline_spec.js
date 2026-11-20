@@ -12,7 +12,7 @@ describe(['tagdesktop'], 'Calc outline group controls when opening scrolled', fu
 		// the geometry first arrives for the top of the sheet, then the view
 		// jumps to the saved position; the group controls must appear there
 		// without any edit.
-		helper.setupAndLoadDocument('calc/group_outline_scrolled.fods');
+		helper.setupAndLoadDocument('calc/group_outline_scrolled.fods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function(win) {
 			helper.processToIdle(win);
 		});

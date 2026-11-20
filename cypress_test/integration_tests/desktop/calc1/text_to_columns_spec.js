@@ -13,7 +13,7 @@ describe(['tagdesktop'], 'Text to Columns', function () {
 
 		cy.viewport(1280, 960);
 
-		helper.setupAndLoadDocument('calc/empty-selections.ods');
+		helper.setupAndLoadDocument('calc/empty-selections.ods', false, false, undefined, 'vector=false');
 
 		// Put a single delimited-looking value into A1 and re-select it. Text
 		// to Columns is only offered for a single-column selection.
@@ -118,7 +118,7 @@ describe(['tagdesktop'], 'Text to Columns', function () {
 
 		cy.viewport(1280, 960);
 
-		helper.setupAndLoadDocument('calc/empty-selections.ods');
+		helper.setupAndLoadDocument('calc/empty-selections.ods', false, false, undefined, 'vector=false');
 
 		helper.typeIntoInputField(helper.addressInputSelector, 'B1');
 		helper.typeIntoDocument('KEEPME{enter}');

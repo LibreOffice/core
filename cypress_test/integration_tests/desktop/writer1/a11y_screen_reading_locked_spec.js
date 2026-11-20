@@ -17,7 +17,7 @@ describe(['tagdesktop'], 'Screen Reading button locked on', { testIsolation: fal
 		const brand = Cypress.env('brandTheme');
 		const query = 'userid=a11ylocked' + (brand ? '&theme=' + brand : '');
 
-		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, undefined, query);
+		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, undefined, query + '&vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) { win = frameWindow; });
 

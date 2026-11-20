@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/scrolling.odt');
+		helper.setupAndLoadDocument('writer/scrolling.odt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

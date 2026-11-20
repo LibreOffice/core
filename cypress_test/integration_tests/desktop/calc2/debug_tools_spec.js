@@ -4,7 +4,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Debug tools', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/debug_tools.ods');
+		helper.setupAndLoadDocument('calc/debug_tools.ods', false, false, undefined, 'vector=false');
 	});
 
 	it('Enter and exit debug mode', function() {

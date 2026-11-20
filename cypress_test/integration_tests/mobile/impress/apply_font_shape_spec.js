@@ -7,7 +7,7 @@ var impressHelper = require('../../common/impress_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply font on selected shape.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/apply_font_shape.odp');
+		helper.setupAndLoadDocument('impress/apply_font_shape.odp', false, false, undefined, 'vector=false');
 
 		mobileHelper.enableEditingMobile();
 

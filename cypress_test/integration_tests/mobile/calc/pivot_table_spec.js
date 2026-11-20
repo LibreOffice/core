@@ -7,7 +7,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Pivot table', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/autofilter.ods');
+		helper.setupAndLoadDocument('calc/autofilter.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 		helper.setDummyClipboardForCopy();
 	});

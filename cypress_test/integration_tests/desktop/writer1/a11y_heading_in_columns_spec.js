@@ -7,7 +7,7 @@ describe(['tagdesktop'], 'Writer headings in a page with columns', { testIsolati
 	let win;
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/heading_in_columns.fodt');
+		helper.setupAndLoadDocument('writer/heading_in_columns.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

@@ -40,7 +40,7 @@ describe(['tagdesktop'], 'Writer paragraph swap for the reader', { testIsolation
 	}
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/a11y_paragraph_swap.fodt');
+		helper.setupAndLoadDocument('writer/a11y_paragraph_swap.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

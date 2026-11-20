@@ -7,7 +7,7 @@ var writerHelper = require('../../common/writer_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply font changes.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/apply_font.odt');
+		helper.setupAndLoadDocument('writer/apply_font.odt', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 		writerHelper.selectAllTextOfDoc();
 		mobileHelper.openMobileWizard();

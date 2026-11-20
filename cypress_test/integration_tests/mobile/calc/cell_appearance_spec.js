@@ -7,7 +7,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Change cell appearance.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/cell_appearance.ods');
+		helper.setupAndLoadDocument('calc/cell_appearance.ods', false, false, undefined, 'vector=false');
 
 		// Click on edit button
 		mobileHelper.enableEditingMobile();

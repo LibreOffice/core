@@ -7,7 +7,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagmultiuser'], 'Check cell cursor and view behavior', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/cell_cursor_jump.ods',true);
+		helper.setupAndLoadDocument('calc/cell_cursor_jump.ods',true, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		// wide enough that the Home tab's cells group stays open in both views
 		cy.viewport(3000,1080);

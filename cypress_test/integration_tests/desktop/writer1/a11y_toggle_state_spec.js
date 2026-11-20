@@ -18,7 +18,7 @@ describe(['tagdesktop'], 'Writer toggle state', { testIsolation: false }, functi
 
 	before(function () {
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		helper.setupAndLoadDocument('writer/copy_paste.odt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

@@ -9,7 +9,7 @@ describe(['tagdesktop'], 'Sidebar accelerator info boxes', function () {
 
 	before(function () {
 		cy.viewport(1920, 1024);
-		helper.setupAndLoadDocument('writer/help_dialog.odt');
+		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 
 		cy.getFrameWindow().then(function (frameWindow) {

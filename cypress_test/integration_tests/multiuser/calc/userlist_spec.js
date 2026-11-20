@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagmultiuser'], 'User list dropdown', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/following.ods', true);
+		helper.setupAndLoadDocument('calc/following.ods', true, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.cSetActiveFrame('#iframe1');
 	});

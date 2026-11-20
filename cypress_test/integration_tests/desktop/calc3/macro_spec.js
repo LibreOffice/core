@@ -8,7 +8,7 @@ describe(['tagdesktop', 'tagproxy'], 'macro dialog tests', function() {
 	beforeEach(function() {
 		var newFilePath = helper.setupDocument('calc/macro.ods');
 		// Skip document check to click through accept macro dialog first
-		helper.loadDocument(newFilePath,true);
+		helper.loadDocument(newFilePath,true, false, undefined, 'vector=false');
 		acceptMacroExecution();
 		helper.documentChecks();
 	});

@@ -110,7 +110,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching via quickfind in
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Opening quickfind', function() {
 
     beforeEach(function() {
-        helper.setupAndLoadDocument('writer/search_bar.odt');
+        helper.setupAndLoadDocument('writer/search_bar.odt', false, false, undefined, 'vector=false');
     });
 
     it('Ctrl F should open and focus quickfind', function() {
@@ -148,7 +148,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching in comments via 
     beforeEach(function() {
         // Wide enough for the comments to be shown next to the page.
         cy.viewport(1400, 600);
-        helper.setupAndLoadDocument('writer/quickfind_comments.fodt');
+        helper.setupAndLoadDocument('writer/quickfind_comments.fodt', false, false, undefined, 'vector=false');
         cy.getFrameWindow().then((win) => writerHelper.waitForCommentListLoad(win));
         writerHelper.openQuickFind();
     });
@@ -261,7 +261,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching in comments via 
     beforeEach(function() {
         // Wide enough for the comments to be shown next to the page.
         cy.viewport(1400, 600);
-        helper.setupAndLoadDocument('writer/quickfind_comments.fodt');
+        helper.setupAndLoadDocument('writer/quickfind_comments.fodt', false, false, undefined, 'vector=false');
         cy.getFrameWindow().then(function(win) {
             this.win = win;
             return writerHelper.waitForCommentListLoad(win);
@@ -317,7 +317,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching in resolved comm
     beforeEach(function() {
         // Wide enough for the comments to be shown next to the page.
         cy.viewport(1400, 600);
-        helper.setupAndLoadDocument('writer/quickfind_resolved_comment.fodt');
+        helper.setupAndLoadDocument('writer/quickfind_resolved_comment.fodt', false, false, undefined, 'vector=false');
         cy.getFrameWindow().then((win) => writerHelper.waitForCommentListLoad(win));
         writerHelper.openQuickFind();
     });
@@ -352,7 +352,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching in long replies 
     beforeEach(function() {
         // Wide enough for the comments to be shown next to the page.
         cy.viewport(1400, 600);
-        helper.setupAndLoadDocument('writer/quickfind_long_comment.fodt');
+        helper.setupAndLoadDocument('writer/quickfind_long_comment.fodt', false, false, undefined, 'vector=false');
         cy.getFrameWindow().then((win) => writerHelper.waitForCommentListLoad(win));
         writerHelper.openQuickFind();
     });
@@ -384,7 +384,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching in comments with
     beforeEach(function() {
         // Wide enough for the comments to be shown next to the page.
         cy.viewport(1400, 600);
-        helper.setupAndLoadDocument('writer/quickfind_link_comment.fodt');
+        helper.setupAndLoadDocument('writer/quickfind_link_comment.fodt', false, false, undefined, 'vector=false');
         cy.getFrameWindow().then((win) => writerHelper.waitForCommentListLoad(win));
         writerHelper.openQuickFind();
     });

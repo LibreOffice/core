@@ -6,7 +6,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Track Changes', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/track_changes.odt');
+		helper.setupAndLoadDocument('writer/track_changes.odt', false, false, undefined, 'vector=false');
 
 		// Click on edit button
 		mobileHelper.enableEditingMobile();

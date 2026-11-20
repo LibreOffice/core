@@ -8,7 +8,7 @@ var repairHelper = require('../../common/repair_document_helper');
 describe.skip(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Editing Operations', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/undo_redo.odp');
+		helper.setupAndLoadDocument('impress/undo_redo.odp', false, false, undefined, 'vector=false');
 
 		// Click on edit button
 		mobileHelper.enableEditingMobile();

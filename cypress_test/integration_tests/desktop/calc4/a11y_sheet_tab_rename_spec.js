@@ -10,7 +10,7 @@ describe(['tagdesktop'], 'Sheet tab rename by keyboard', { testIsolation: false 
 
 	before(function () {
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('calc/switch.ods');
+		helper.setupAndLoadDocument('calc/switch.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function (frameWindow) { win = frameWindow; });
 		cy.then(function () { return helper.processToIdle(win); });
 	});

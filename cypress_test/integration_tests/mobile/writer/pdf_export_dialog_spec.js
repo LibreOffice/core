@@ -6,7 +6,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'PDF export dialog.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/hamburger_menu.odt');
+		helper.setupAndLoadDocument('writer/hamburger_menu.odt', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 		mobileHelper.selectHamburgerMenuItem(['Download as', 'PDF Document (.pdf) as...']);
 		cy.cGet('.mobile-wizard #PdfOptionsDialog').should('exist');

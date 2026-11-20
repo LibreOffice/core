@@ -7,7 +7,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Interact with bottom toolbar.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/bottom_toolbar.ods');
+		helper.setupAndLoadDocument('calc/bottom_toolbar.ods', false, false, undefined, 'vector=false');
 
 		// Click on edit button
 		mobileHelper.enableEditingMobile();

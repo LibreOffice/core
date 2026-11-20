@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop'], 'Import Options dialog for HTML content', function () {
 	it('an .xls file holding HTML opens after the import options are confirmed', { defaultCommandTimeout: 60000 }, function () {
 		var filePath = helper.setupDocument('calc/text_import_html.xls');
-		helper.loadDocument(filePath, true);
+		helper.loadDocument(filePath, true, false, undefined, 'vector=false');
 
 		cy.cGet('form.jsdialog-container.lokdialog_container').should('exist');
 		cy.cGet('#automatic-input').should('be.checked');

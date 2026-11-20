@@ -83,7 +83,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 	describe('PPTX format', function() {
 
 		beforeEach(function() {
-			this.newFilePath = helper.setupAndLoadDocument('impress/slide-section-test.pptx');
+			this.newFilePath = helper.setupAndLoadDocument('impress/slide-section-test.pptx', false, false, undefined, 'vector=false');
 			desktopHelper.switchUIToNotebookbar();
 			cy.getFrameWindow().then((win) => {
 				this.win = win;
@@ -109,7 +109,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 
 			// Reload and verify persistence
 			helper.processToIdle(this.win);
-			helper.reloadDocument(this.newFilePath);
+			helper.reloadDocument(this.newFilePath, 'vector=false');
 
 			assertSectionHeaders(['Section-1', 'Section-2', 'Section-3', 'Untitled Section']);
 		});
@@ -125,7 +125,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 
 			// Reload and verify persistence
 			helper.processToIdle(this.win);
-			helper.reloadDocument(this.newFilePath);
+			helper.reloadDocument(this.newFilePath, 'vector=false');
 
 			assertSectionHeaders(['Renamed Section', 'Section-2', 'Section-3']);
 		});
@@ -143,7 +143,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 
 			// Reload and verify persistence
 			helper.processToIdle(this.win);
-			helper.reloadDocument(this.newFilePath);
+			helper.reloadDocument(this.newFilePath, 'vector=false');
 
 			assertSectionHeaders(['Section-2', 'Section-1', 'Section-3']);
 		});
@@ -161,7 +161,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 
 			// Reload and verify persistence
 			helper.processToIdle(this.win);
-			helper.reloadDocument(this.newFilePath);
+			helper.reloadDocument(this.newFilePath, 'vector=false');
 
 			assertSectionHeaders(['Section-2', 'Section-1', 'Section-3']);
 		});
@@ -595,7 +595,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 				});
 
 				helper.processToIdle(this.win);
-				helper.reloadDocument(this.newFilePath);
+				helper.reloadDocument(this.newFilePath, 'vector=false');
 				cy.getFrameWindow().then((win) => {
 					this.win = win;
 				});
@@ -674,7 +674,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 				// Reload to confirm the dropped section survives a PPTX
 				// round-trip and the remaining sections persist correctly.
 				helper.processToIdle(this.win);
-				helper.reloadDocument(this.newFilePath);
+				helper.reloadDocument(this.newFilePath, 'vector=false');
 				cy.getFrameWindow().then((win) => {
 					this.win = win;
 				});
@@ -900,7 +900,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 
 			// Reload and verify the deletion persisted.
 			helper.processToIdle(this.win);
-			helper.reloadDocument(this.newFilePath);
+			helper.reloadDocument(this.newFilePath, 'vector=false');
 			assertSectionHeaders(['Section-1', 'Section-3']);
 		});
 	});
@@ -908,7 +908,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 	describe('ODP format', function() {
 
 		beforeEach(function() {
-			this.newFilePath = helper.setupAndLoadDocument('impress/slide-section-test.odp');
+			this.newFilePath = helper.setupAndLoadDocument('impress/slide-section-test.odp', false, false, undefined, 'vector=false');
 			desktopHelper.switchUIToNotebookbar();
 			cy.getFrameWindow().then((win) => {
 				this.win = win;
@@ -934,7 +934,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 
 			// Reload and verify persistence
 			helper.processToIdle(this.win);
-			helper.reloadDocument(this.newFilePath);
+			helper.reloadDocument(this.newFilePath, 'vector=false');
 
 			assertSectionHeaders(['Section-1', 'Section-2', 'Section-3', 'Untitled Section']);
 		});
@@ -950,7 +950,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 
 			// Reload and verify persistence
 			helper.processToIdle(this.win);
-			helper.reloadDocument(this.newFilePath);
+			helper.reloadDocument(this.newFilePath, 'vector=false');
 
 			assertSectionHeaders(['Renamed Section', 'Section-2', 'Section-3']);
 		});
@@ -968,7 +968,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 
 			// Reload and verify persistence
 			helper.processToIdle(this.win);
-			helper.reloadDocument(this.newFilePath);
+			helper.reloadDocument(this.newFilePath, 'vector=false');
 
 			assertSectionHeaders(['Section-2', 'Section-1', 'Section-3']);
 		});
@@ -986,7 +986,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 
 			// Reload and verify persistence
 			helper.processToIdle(this.win);
-			helper.reloadDocument(this.newFilePath);
+			helper.reloadDocument(this.newFilePath, 'vector=false');
 
 			assertSectionHeaders(['Section-2', 'Section-1', 'Section-3']);
 		});
@@ -1021,7 +1021,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 
 			// Reload and verify the deletion persisted.
 			helper.processToIdle(this.win);
-			helper.reloadDocument(this.newFilePath);
+			helper.reloadDocument(this.newFilePath, 'vector=false');
 			assertSectionHeaders(['Section-1', 'Section-3']);
 		});
 	});

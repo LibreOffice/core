@@ -28,7 +28,7 @@ function selectTextShape(i) {
 describe(['taga11yenabled'], 'Editable area - Basic typing and caret moving', function() {
 
     beforeEach(function () {
-        helper.setupAndLoadDocument('impress/two_text_shapes.odp');
+        helper.setupAndLoadDocument('impress/two_text_shapes.odp', false, false, undefined, 'vector=false');
         cy.cGet('#optionstoolboxdown .unoModifyPage').click();
         // do not cover shapes with sidebar
         cy.cGet('#sidebar-panel').should('not.be.visible');

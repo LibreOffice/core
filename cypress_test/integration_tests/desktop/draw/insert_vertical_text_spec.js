@@ -7,7 +7,7 @@ var impressHelper = require('../../common/impress_helper');
 describe(['tagdesktop'], 'Insert vertical text', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('draw/vertical_text.fodg');
+		helper.setupAndLoadDocument('draw/vertical_text.fodg', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 	});
 

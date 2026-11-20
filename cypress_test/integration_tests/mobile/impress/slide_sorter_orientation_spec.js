@@ -7,7 +7,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Slide sorter orientation', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/slide_operations.odp');
+		helper.setupAndLoadDocument('impress/slide_operations.odp', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

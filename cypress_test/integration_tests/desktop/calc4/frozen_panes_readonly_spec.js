@@ -14,13 +14,13 @@ describe(['tagdesktop'], 'Calc: frozen panes of a saved document', function() {
 	}
 
 	it('are applied in an editable view', function() {
-		helper.setupAndLoadDocument('calc/frozen_panes.ods');
+		helper.setupAndLoadDocument('calc/frozen_panes.ods', false, false, undefined, 'vector=false');
 		checkFrozenPanes();
 	});
 
 	it('are applied in a read-only view', function() {
 		var filePath = helper.setupDocument('calc/frozen_panes.ods');
-		helper.loadDocument(filePath, true, undefined, undefined, 'permission=readonly');
+		helper.loadDocument(filePath, true, undefined, undefined, 'permission=readonly&vector=false');
 		checkFrozenPanes();
 	});
 });

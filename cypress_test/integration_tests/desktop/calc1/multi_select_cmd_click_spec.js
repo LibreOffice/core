@@ -5,7 +5,7 @@ var calcHelper = require('../../common/calc_helper');
 
 describe(['tagdesktop'], 'Calc non-adjacent cell selection with a modifier click', function () {
 	beforeEach(function () {
-		helper.setupAndLoadDocument('calc/focus.ods');
+		helper.setupAndLoadDocument('calc/focus.ods', false, false, undefined, 'vector=false');
 
 		helper.typeIntoInputField(helper.addressInputSelector, 'A1');
 		helper.typeIntoDocument('10{enter}');

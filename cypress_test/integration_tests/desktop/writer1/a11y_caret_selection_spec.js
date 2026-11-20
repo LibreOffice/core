@@ -32,7 +32,7 @@ describe(['tagdesktop'], 'Writer caret and selection', { testIsolation: false },
 	}
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		helper.setupAndLoadDocument('writer/copy_paste.odt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe.skip(['tagmultiuser'], 'Change paragraph properties', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/paragraph_prop.odt',true);
+		helper.setupAndLoadDocument('writer/paragraph_prop.odt',true, false, undefined, 'vector=false');
 	});
 
 	it('Change paragraph alignment.', function() {

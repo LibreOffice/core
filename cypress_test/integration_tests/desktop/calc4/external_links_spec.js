@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop'], 'External link agree snackbar', function () {
 	beforeEach(function () {
 		// the document holds back its external references until the user agrees
-		helper.setupAndLoadDocument('calc/external-links.fods');
+		helper.setupAndLoadDocument('calc/external-links.fods', false, false, undefined, 'vector=false');
 	});
 
 	it('offers to agree and asks core to release the links on Allow', function () {

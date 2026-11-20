@@ -9,7 +9,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop'], 'Dialog vertical tabs', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/help_dialog.ods');
+		helper.setupAndLoadDocument('calc/help_dialog.ods', false, false, undefined, 'vector=false');
 		cy.viewport(1920, 1080);
 	});
 

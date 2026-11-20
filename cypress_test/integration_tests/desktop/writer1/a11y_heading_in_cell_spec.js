@@ -43,7 +43,7 @@ describe(['tagdesktop'], 'Writer heading in a table cell', { testIsolation: fals
 	}
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/heading_in_cell.fodt');
+		helper.setupAndLoadDocument('writer/heading_in_cell.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

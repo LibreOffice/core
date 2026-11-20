@@ -7,7 +7,7 @@ describe(['tagdesktop'], 'Spinfield unit and button tests', function () {
 	var win;
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('writer/help_dialog.odt');
+		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function (w) {
 			win = w;
 		});
@@ -97,7 +97,7 @@ describe(['tagdesktop'], 'Spinfield unit and button tests', function () {
 	});
 
 	it('Space before unit in displayed value', function () {
-		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, 'de-DE');
+		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, 'de-DE', 'vector=false');
 		cy.getFrameWindow().then(function (w) {
 			win = w;
 		});
@@ -117,7 +117,7 @@ describe(['tagdesktop'], 'Spinfield unit and button tests', function () {
 	});
 
 	it('Unit persists with German locale', function () {
-		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, 'de-DE');
+		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, 'de-DE', 'vector=false');
 		cy.getFrameWindow().then(function (w) {
 			win = w;
 		});
@@ -190,7 +190,7 @@ describe(['tagdesktop'], 'Spinfield unit and button tests', function () {
 	});
 
 	it('Buttons and arrow keys work with German locale', function () {
-		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, 'de-DE');
+		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, 'de-DE', 'vector=false');
 		cy.getFrameWindow().then(function (w) {
 			win = w;
 		});

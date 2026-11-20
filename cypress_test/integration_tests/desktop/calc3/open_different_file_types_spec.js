@@ -17,7 +17,7 @@ describe.skip(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Open different file t
 	}
 
 	it('Open xls file', function () {
-		helper.setupAndLoadDocument('calc/testfile.xls');
+		helper.setupAndLoadDocument('calc/testfile.xls', false, false, undefined, 'vector=false');
 
 		assertData();
 
@@ -25,7 +25,7 @@ describe.skip(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Open different file t
 	});
 
 	it('Open xlsx file', function () {
-		helper.setupAndLoadDocument('calc/testfile.xlsx');
+		helper.setupAndLoadDocument('calc/testfile.xlsx', false, false, undefined, 'vector=false');
 
 		assertData();
 	});
@@ -36,7 +36,7 @@ describe.skip(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Open different file t
 
 		var newFilePath = helper.setupDocument('calc/testfile.csv');
 		// Skip document check to click through import csv dialog first
-		helper.loadDocument(newFilePath,true);
+		helper.loadDocument(newFilePath,true, false, undefined, 'vector=false');
 
 		cy.cGet('form.jsdialog-container.lokdialog_container').should('exist');
 		cy.cGet('.ui-pushbutton.jsdialog.button-primary').click();
@@ -66,7 +66,7 @@ describe.skip(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Open different file t
 	});
 
 	it('Open xlsm file', function() {
-		helper.setupAndLoadDocument('calc/testfile.xlsm');
+		helper.setupAndLoadDocument('calc/testfile.xlsm', false, false, undefined, 'vector=false');
 
 		assertData();
 
@@ -86,7 +86,7 @@ describe.skip(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Open different file t
 	});
 
 	it('Open fods file', function() {
-		helper.setupAndLoadDocument('calc/testfile.fods');
+		helper.setupAndLoadDocument('calc/testfile.fods', false, false, undefined, 'vector=false');
 
 		//select all the content of doc
 		assertData();

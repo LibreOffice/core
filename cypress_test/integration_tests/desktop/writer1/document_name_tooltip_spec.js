@@ -4,7 +4,7 @@ var helper = require('../../common/helper');
 
 describe(['tagdesktop'], 'Document name input tooltip', function () {
 	it('shows only the filename, not the technical WOPISrc path', function () {
-		helper.setupAndLoadDocument('writer/testfile.fodt');
+		helper.setupAndLoadDocument('writer/testfile.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (win) {
 			var title = win.document.getElementById('document-name-input').title;

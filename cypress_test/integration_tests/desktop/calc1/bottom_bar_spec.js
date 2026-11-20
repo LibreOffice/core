@@ -10,7 +10,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Calc bottom bar tests.', f
 		// In Calc #StateTableCellMenu has a high data-priority
 		// and will be hidden if the bottom bar doesn't have enough space
 		cy.viewport(1280, 720);
-		helper.setupAndLoadDocument('calc/BottomBar.ods');
+		helper.setupAndLoadDocument('calc/BottomBar.ods', false, false, undefined, 'vector=false');
 	});
 
 	it('Bottom tool bar.', function() {

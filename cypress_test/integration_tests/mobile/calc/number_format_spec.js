@@ -7,7 +7,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe.skip(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply number formatting.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/number_format.ods');
+		helper.setupAndLoadDocument('calc/number_format.ods', false, false, undefined, 'vector=false');
 
 		// Click on edit button
 		mobileHelper.enableEditingMobile();

@@ -12,7 +12,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Check mouse cursor type in
 			- column/row headers
 	*/
 	it('Cell cursor over the sheet', function() {
-		helper.setupAndLoadDocument('calc/mouse_cursor.ods');
+		helper.setupAndLoadDocument('calc/mouse_cursor.ods', false, false, undefined, 'vector=false');
 
 		cy.cGet('#document-canvas').trigger('mouseover').then(() => {
 			cy.cGet('#document-canvas').should('have.class', 'spreadsheet-cursor');
@@ -23,7 +23,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Check mouse cursor type in
 		// A document with no drawing object over the sheet, so core reports a
 		// text pointer over the edited cell rather than a hand pointer for an
 		// overlapping shape.
-		helper.setupAndLoadDocument('calc/mouse_cursor_editing.fods');
+		helper.setupAndLoadDocument('calc/mouse_cursor_editing.fods', false, false, undefined, 'vector=false');
 
 		// Enter edit mode; the blinking text cursor appears inside the cell.
 		helper.typeIntoDocument('abc');
@@ -54,7 +54,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Check mouse cursor type in
 	});
 
 	it('Mouse over the clipboard-container does not trigger onMouseLeave on the canvas', function() {
-		helper.setupAndLoadDocument('calc/mouse_cursor.ods');
+		helper.setupAndLoadDocument('calc/mouse_cursor.ods', false, false, undefined, 'vector=false');
 
 		// Start with the canvas in the "spreadsheet-cursor" state.
 		cy.cGet('#document-canvas').trigger('mouseover');

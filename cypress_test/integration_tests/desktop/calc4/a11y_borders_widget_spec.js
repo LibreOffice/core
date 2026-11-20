@@ -10,7 +10,7 @@ describe(['tagdesktop'], 'Borders widget', { testIsolation: false }, function ()
 	let win;
 
 	before(function () {
-		helper.setupAndLoadDocument('calc/switch.ods');
+		helper.setupAndLoadDocument('calc/switch.ods', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) { win = frameWindow; });
 

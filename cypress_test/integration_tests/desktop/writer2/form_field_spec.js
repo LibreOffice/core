@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Form field button tests.', function() {
 
 	function before(filePath) {
-		helper.setupAndLoadDocument(filePath);
+		helper.setupAndLoadDocument(filePath, false, false, undefined, 'vector=false');
 
 		if (Cypress.env('INTEGRATION') === 'nextcloud') {
 			desktopHelper.showStatusBarIfHidden();

@@ -6,7 +6,7 @@ describe(['tagmultiuser'], 'Multiuser slide sorter avatars', function() {
 	var win1, win2;
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/slide-move.fodp', true);
+		helper.setupAndLoadDocument('impress/slide-move.fodp', true, false, undefined, 'vector=false');
 		cy.getFrameWindow('#iframe1').then(function(win) { win1 = win; });
 		cy.getFrameWindow('#iframe2').then(function(win) { win2 = win; });
 	});

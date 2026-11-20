@@ -7,7 +7,7 @@ describe(['tagdesktop'], 'Writer shapes and objects for the reader', { testIsola
 	let win;
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/a11y_object_kinds.fodt');
+		helper.setupAndLoadDocument('writer/a11y_object_kinds.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

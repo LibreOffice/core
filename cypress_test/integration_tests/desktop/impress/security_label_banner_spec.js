@@ -11,7 +11,7 @@ var helper = require('../../common/helper');
 
 describe(['tagdesktop'], 'Impress security-label banner', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/testfile.pptx');
+		helper.setupAndLoadDocument('impress/testfile.pptx', false, false, undefined, 'vector=false');
 	});
 
 	function pushLabelChange(win, state) {

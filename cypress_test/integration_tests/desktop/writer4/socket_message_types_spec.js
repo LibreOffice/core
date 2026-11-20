@@ -5,7 +5,7 @@ const helper = require('../../common/helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Socket message types', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/undo_redo.odt');
+		helper.setupAndLoadDocument('writer/undo_redo.odt', false, false, undefined, 'vector=false');
 		helper.setDummyClipboardForCopy();
 	});
 

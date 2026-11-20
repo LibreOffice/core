@@ -6,7 +6,7 @@ const desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'Notebookbar tests', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('draw/insert_position.fodg');
+		helper.setupAndLoadDocument('draw/insert_position.fodg', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		// Wide enough that the View tab does not push the zoom group into
 		// its overflow menu.

@@ -17,7 +17,7 @@ function otherViewCursorPosition(win) {
 describe(['tagmultiuser'], 'Idle view in a shared document', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/simultaneous_typing.odt', true);
+		helper.setupAndLoadDocument('writer/simultaneous_typing.odt', true, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow('#iframe1').then(function(win) {
 			this.win1 = win;

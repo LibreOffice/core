@@ -32,7 +32,7 @@ describe(['tagdesktop'], 'Integrator theme overrides a contradicting saved setti
 		// Saved user theme is light, while the integrator will force dark.
 		cy.task('writeUserSetting', { userId: USER, settings: { darkTheme: 'false' } });
 		filePath = helper.setupAndLoadDocument('calc/cell_cursor.ods', false, false, undefined,
-			integratorOverride);
+			integratorOverride + '&vector=false');
 	});
 
 	it('A user choosing light is forced back to the integrator dark on reload', function() {
@@ -51,7 +51,7 @@ describe(['tagdesktop'], 'Integrator theme overrides a contradicting saved setti
 			expect(win.prefs._pendingSettingUpdate, 'debounced setting update flushed').to.be.undefined;
 		});
 
-		helper.reloadDocument(filePath, integratorOverride);
+		helper.reloadDocument(filePath, integratorOverride + '&vector=false');
 
 		// The page opens dark again.
 		assertThemeIs('dark');

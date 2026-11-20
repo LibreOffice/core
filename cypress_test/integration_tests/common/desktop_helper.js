@@ -554,7 +554,7 @@ function openReadOnlyFile(filePath) {
 
 	var newFilePath = helper.setupDocument(filePath);
 	// Skip document checks because sidebar does not appear
-	helper.loadDocument(filePath, true);
+	helper.loadDocument(filePath, true, false, undefined, 'vector=false');
 
 	//check doc is loaded
 	cy.cGet('.leaflet-canvas-container canvas');
@@ -972,7 +972,7 @@ function shareDocumentAcrossTests(filePath, options) {
 
 	function loadDocument() {
 		setViewport();
-		helper.setupAndLoadDocument(filePath);
+		helper.setupAndLoadDocument(filePath, false, false, undefined, 'vector=false');
 
 		if (settings.notebookbar) {
 			switchUIToNotebookbar();

@@ -7,7 +7,7 @@ var impressHelper = require('../../common/impress_helper');
 describe(['tagmobile', 'tagproxy'], 'Impress focus tests', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/focus.odp');
+		helper.setupAndLoadDocument('impress/focus.odp', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

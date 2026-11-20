@@ -7,7 +7,7 @@ describe(['tagdesktop'], 'Context toolbar tests.', function() {
 
 	beforeEach(function() {
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('writer/top_toolbar.odt');
+		helper.setupAndLoadDocument('writer/top_toolbar.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 	});
 
@@ -99,7 +99,7 @@ describe(['tagdesktop'], 'Context toolbar tooltip tests.', function() {
 	beforeEach(function() {
 		cy.viewport(1920, 1080);
 		helper.setupAndLoadDocument('writer/top_toolbar.odt', false, false, undefined,
-			'tooltips=true');
+			'tooltips=true&vector=false');
 		desktopHelper.switchUIToNotebookbar();
 	});
 

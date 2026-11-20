@@ -23,7 +23,7 @@ describe(['tagdesktop'], 'Calc selection drawing with frozen panes', function() 
 		// A plain sheet: cell_cursor.ods has a huge merged cell at A1 that makes
 		// the view jump on selection, pushing the whole selection out of the
 		// visible moving pane.
-		helper.setupAndLoadDocument('calc/empty-selections.ods');
+		helper.setupAndLoadDocument('calc/empty-selections.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

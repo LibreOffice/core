@@ -5,7 +5,7 @@ const desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Delete Objects', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/delete_objects.ods');
+		helper.setupAndLoadDocument('calc/delete_objects.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToCompact();
 	});
 

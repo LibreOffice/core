@@ -11,7 +11,7 @@ describe(['tagdesktop'], 'Comment on a cell in the frozen area', function() {
 		// frozen column) and a comment on A1, which sits inside the frozen
 		// top-left pane. It is saved scrolled down/right so the main pane
 		// shows a far-away area while A1 stays pinned in the frozen pane.
-		helper.setupAndLoadDocument('calc/jumpA1comment.ods');
+		helper.setupAndLoadDocument('calc/jumpA1comment.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
@@ -102,7 +102,7 @@ describe(['tagdesktop'], 'Comment on a cell outside the frozen area', function()
 		// comment_frozen_panes.fods holds a comment on E10, the one every test
 		// here jumps to, and a second one far away on K60. Each test freezes the
 		// rows and columns it needs, so E10 scrolls with both axes.
-		helper.setupAndLoadDocument('calc/comment_frozen_panes.fods');
+		helper.setupAndLoadDocument('calc/comment_frozen_panes.fods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

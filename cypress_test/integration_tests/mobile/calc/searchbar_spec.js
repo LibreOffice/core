@@ -7,7 +7,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Searching via search bar.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/search_bar.ods');
+		helper.setupAndLoadDocument('calc/search_bar.ods', false, false, undefined, 'vector=false');
 
 		mobileHelper.enableEditingMobile();
 

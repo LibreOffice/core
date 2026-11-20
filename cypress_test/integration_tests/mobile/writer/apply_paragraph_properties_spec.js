@@ -7,7 +7,7 @@ var writerHelper = require('../../common/writer_helper');
 describe.skip('Apply paragraph properties.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/apply_paragraph_properties.odt');
+		helper.setupAndLoadDocument('writer/apply_paragraph_properties.odt', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 		writerHelper.selectAllTextOfDoc();
 		mobileHelper.openMobileWizard();

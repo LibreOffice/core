@@ -7,7 +7,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sheet switching tests', function() {
 	beforeEach(function() {
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('calc/calc-zoomed.fods');
+		helper.setupAndLoadDocument('calc/calc-zoomed.fods', false, false, undefined, 'vector=false');
 		cy.viewport(1920,1080);
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
@@ -68,7 +68,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sheet switching tests', fu
 
 	beforeEach(function() {
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('calc/switch.ods');
+		helper.setupAndLoadDocument('calc/switch.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;
 		}.bind(this));
@@ -209,7 +209,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test sheet switching with 
 
 	it('Check view position on sheet switch', function() {
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('calc/switch-split.ods');
+		helper.setupAndLoadDocument('calc/switch-split.ods', false, false, undefined, 'vector=false');
 		// Sheet 1 has split panes
 		desktopHelper.assertScrollbarPosition('horizontal', 300, 340);
 		// Switch to another sheet with differently sized columns

@@ -6,7 +6,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe.skip(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Row Column Operation', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/row_column_operation.ods');
+		helper.setupAndLoadDocument('calc/row_column_operation.ods', false, false, undefined, 'vector=false');
 
 		mobileHelper.enableEditingMobile();
 

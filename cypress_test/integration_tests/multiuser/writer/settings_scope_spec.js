@@ -52,7 +52,7 @@ describe(['tagmultiuser'], 'A joining user is told the document uses other setti
 
 		helper.setupAndLoadDocument('writer/annotation.odt', true, false, undefined,
 			'userid1=' + FIRST + '&userid2=' + SECOND
-				+ '&wopi_setting_base_url=' + settingsBase);
+				+ '&wopi_setting_base_url=' + settingsBase + '&vector=false');
 	});
 
 	it('The one who opened the document is running with their own settings', function() {

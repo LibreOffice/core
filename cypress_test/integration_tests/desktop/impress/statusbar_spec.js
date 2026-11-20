@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Statusbar tests.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/statusbar.odp');
+		helper.setupAndLoadDocument('impress/statusbar.odp', false, false, undefined, 'vector=false');
 		if (Cypress.env('INTEGRATION') === 'nextcloud') {
 			desktopHelper.showStatusBarIfHidden ();
 		}

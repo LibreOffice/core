@@ -8,7 +8,7 @@ describe(['tagdesktop'], 'Sidebar style combo box', function() {
 
 	beforeEach(function() {
 		cy.viewport(1280, 1024);
-		helper.setupAndLoadDocument('writer/top_toolbar.odt');
+		helper.setupAndLoadDocument('writer/top_toolbar.odt', false, false, undefined, 'vector=false');
 		// The sidebar is already open by default, except under the nextcloud
 		// integration, which starts with it closed.
 		if (Cypress.env('INTEGRATION') === 'nextcloud') {

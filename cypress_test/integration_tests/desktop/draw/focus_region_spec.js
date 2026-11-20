@@ -16,7 +16,7 @@ describe(['tagdesktop'], 'Draw F6 region navigation', { testIsolation: false }, 
 
 	before(function () {
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('draw/to_curve.fodg');
+		helper.setupAndLoadDocument('draw/to_curve.fodg', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

@@ -16,7 +16,7 @@ var helper = require('../../common/helper');
 
 describe(['tagdesktop'], 'Writer security-label banner', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/testfile.docx');
+		helper.setupAndLoadDocument('writer/testfile.docx', false, false, undefined, 'vector=false');
 	});
 
 	// The message wsd broadcasts to every client when a label is applied/changed/removed.

@@ -9,7 +9,7 @@ describe(['tagdesktop'], 'Writer header and footnote told to the reader', { test
 	let observer;
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/a11y_paragraph_area.fodt');
+		helper.setupAndLoadDocument('writer/a11y_paragraph_area.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

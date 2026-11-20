@@ -7,7 +7,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'Threaded Comment', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/focus.ods');
+		helper.setupAndLoadDocument('calc/focus.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
@@ -341,7 +341,7 @@ describe(['tagdesktop'], 'Comment-only Threaded Comment', function() {
 		// read-only session does not initialize - and wait on the canvas/map
 		// instead.
 		const file = helper.setupDocument('calc/focus.ods', true);
-		helper.loadDocument(file, true);
+		helper.loadDocument(file, true, false, undefined, 'vector=false');
 		cy.cGet('#document-canvas').should('be.visible');
 		cy.cGet('#map').should('have.class', 'initialized');
 		cy.getFrameWindow().then((win) => {

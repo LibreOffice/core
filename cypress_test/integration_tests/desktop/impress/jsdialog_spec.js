@@ -6,7 +6,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'JSDialog Tests', function(
 
 	beforeEach(function() {
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('impress/jsdialog.odp');
+		helper.setupAndLoadDocument('impress/jsdialog.odp', false, false, undefined, 'vector=false');
 	});
 
 	// fails on Panel6
@@ -55,7 +55,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'JSDialog Tests', function(
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Master Page Preview', function() {
 	beforeEach(function() {
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('impress/masterpagepreview.odp');
+		helper.setupAndLoadDocument('impress/masterpagepreview.odp', false, false, undefined, 'vector=false');
 	});
 
 	it('To - from master page switch should update previews.', function() {

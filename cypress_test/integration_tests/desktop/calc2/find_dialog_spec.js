@@ -8,7 +8,7 @@ var findHelper = require('../../common/find_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching via find dialog.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/search_bar.ods');
+		helper.setupAndLoadDocument('calc/search_bar.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 			calcHelper.assertAddressAfterIdle(this.win, 'A2');
@@ -131,7 +131,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching via find dialog.
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Jump to result.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/search_jump.ods');
+		helper.setupAndLoadDocument('calc/search_jump.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 			calcHelper.assertAddressAfterIdle(this.win, 'C2707');

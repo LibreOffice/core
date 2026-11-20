@@ -9,7 +9,7 @@ describe(['tagdesktop'], 'Accessibility Calc notebookbar shortcut tests', { test
 	let targets;
 
 	before(function () {
-		helper.setupAndLoadDocument('calc/help_dialog.ods');
+		helper.setupAndLoadDocument('calc/help_dialog.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 
 		cy.cGet('.notebookbar-tabs-container').should('be.visible');

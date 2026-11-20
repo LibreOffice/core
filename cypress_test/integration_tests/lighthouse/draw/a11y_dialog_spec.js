@@ -32,7 +32,7 @@ describe(['taglighthouse'], 'Accessibility Draw Dialog Tests', { testIsolation: 
 
 	before(function () {
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('draw/to_curve.fodg', /*isMultiUser=*/false, /*copyCertificates=*/true);
+		helper.setupAndLoadDocument('draw/to_curve.fodg', /*isMultiUser=*/false, /*copyCertificates=*/true, undefined, 'vector=false');
 
 		desktopHelper.switchUIToNotebookbar();
 

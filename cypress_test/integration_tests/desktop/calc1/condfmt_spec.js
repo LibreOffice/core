@@ -17,7 +17,7 @@ function openDateCondition() {
 describe(['tagdesktop'], 'Conditional Format Dialog Tests', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/condfmt.ods');
+		helper.setupAndLoadDocument('calc/condfmt.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.viewport(1920,1080);
 		cy.getFrameWindow().then((win) => {
@@ -104,7 +104,7 @@ describe(['tagdesktop'], 'Conditional Format Dialog Tests', function() {
 describe(['tagdesktop'], 'Conditional Format Date Conditions In An Excel Format', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/testfile.xlsx');
+		helper.setupAndLoadDocument('calc/testfile.xlsx', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.viewport(1920,1080);
 		cy.getFrameWindow().then((win) => {

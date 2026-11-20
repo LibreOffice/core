@@ -487,7 +487,7 @@ describe(['tagdesktop'], 'Top toolbar save.', function() {
 
 	beforeEach(function() {
 		cy.viewport(1920,1080);
-		newFilePath = helper.setupAndLoadDocument('writer/top_toolbar.odt');
+		newFilePath = helper.setupAndLoadDocument('writer/top_toolbar.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		writerHelper.selectAllTextOfDoc();
 	});
@@ -496,7 +496,7 @@ describe(['tagdesktop'], 'Top toolbar save.', function() {
 		desktopHelper.getNbIcon('Bold').click();
 		cy.cGet('.notebookbar-shortcuts-bar .unoSave').click();
 		helper.waitUntilDocumentSaved();
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		helper.setDummyClipboardForCopy();
 		writerHelper.selectAllTextOfDoc();
 		// document was reloaded, fetch the frame window again
@@ -514,7 +514,7 @@ describe(['tagdesktop'], 'Top toolbar screen reading.', function() {
 
 	beforeEach(function() {
 		cy.viewport(1920,1080);
-		helper.setupAndLoadDocument('writer/top_toolbar.odt');
+		helper.setupAndLoadDocument('writer/top_toolbar.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 	});
 
@@ -549,7 +549,7 @@ describe(['tagdesktop'], 'Top toolbar screen reading.', function() {
 describe(['tagdesktop'], 'Top toolbar styles combobox.', function() {
 	beforeEach(function() {
 		cy.viewport(1920,1080);
-		helper.setupAndLoadDocument('writer/top_toolbar.odt');
+		helper.setupAndLoadDocument('writer/top_toolbar.odt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

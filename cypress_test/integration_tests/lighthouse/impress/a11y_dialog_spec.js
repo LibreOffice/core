@@ -27,7 +27,7 @@ describe(['taglighthouse'], 'Accessibility Impress Dialog Tests', { testIsolatio
     let hasLinguisticData = false;
 
     before(function () {
-        helper.setupAndLoadDocument('impress/help_dialog.odp', /*isMultiUser=*/false, /*copyCertificates=*/true);
+        helper.setupAndLoadDocument('impress/help_dialog.odp', /*isMultiUser=*/false, /*copyCertificates=*/true, undefined, 'vector=false');
 
         // to make insertImage use the correct buttons
         desktopHelper.switchUIToNotebookbar();

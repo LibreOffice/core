@@ -7,7 +7,7 @@ var impressHelper = require('../../common/impress_helper');
 describe(['tagdesktop'], 'Searching via find dialog' ,function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/search_bar.odp');
+		helper.setupAndLoadDocument('impress/search_bar.odp', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

@@ -16,7 +16,7 @@ describe(['tagdesktop'], 'A user alone gets no settings warning', function() {
 	}
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/presets.odt');
+		helper.setupAndLoadDocument('writer/presets.odt', false, false, undefined, 'vector=false');
 	});
 
 	it('The note is there but says nothing to the only user', function() {

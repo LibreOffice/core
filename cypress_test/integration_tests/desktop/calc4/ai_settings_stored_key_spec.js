@@ -24,7 +24,7 @@ describe(['tagdesktop'], 'AI settings reuse the saved provider key to list model
 			},
 		});
 
-		helper.setupAndLoadDocument('calc/cell_cursor.ods');
+		helper.setupAndLoadDocument('calc/cell_cursor.ods', false, false, undefined, 'vector=false');
 	});
 
 	afterEach(function() {

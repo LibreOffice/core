@@ -7,7 +7,7 @@ var writerHelper = require('../../common/writer_helper');
 describe.skip('Spell checking menu.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/spellchecking.odt');
+		helper.setupAndLoadDocument('writer/spellchecking.odt', false, false, undefined, 'vector=false');
 
 		// Click on edit button
 		mobileHelper.enableEditingMobile();

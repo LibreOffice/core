@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'File menu offers Rename Document in Draw', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('draw/insert_position.fodg');
+		helper.setupAndLoadDocument('draw/insert_position.fodg', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToCompact();
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;

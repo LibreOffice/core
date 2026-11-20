@@ -8,7 +8,7 @@ const onboardingHelper = require('../../common/onboarding_helper');
 describe(['tagdesktop'], 'Notebookbar contextual tabs (Calc).', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/top_toolbar.ods');
+		helper.setupAndLoadDocument('calc/top_toolbar.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 	});
 
@@ -68,7 +68,7 @@ describe(['tagdesktop'], 'Onboarding tour (Calc).', function() {
 		// own and the test starts it where it wants to.
 		localStorage.setItem(onboardingHelper.tourSeenKey('spreadsheet'), 'true');
 
-		helper.setupAndLoadDocument('calc/top_toolbar.ods');
+		helper.setupAndLoadDocument('calc/top_toolbar.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.viewport(1920,1080);
 		cy.getFrameWindow().then((win) => {

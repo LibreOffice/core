@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'Writer multi-page view leaves room for the comments.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/scrolling.odt');
+		helper.setupAndLoadDocument('writer/scrolling.odt', false, false, undefined, 'vector=false');
 		cy.viewport(1920, 1080);
 		// The document opens with the notebookbar, but the comment helper picks
 		// its menu path from this switch rather than from the document.

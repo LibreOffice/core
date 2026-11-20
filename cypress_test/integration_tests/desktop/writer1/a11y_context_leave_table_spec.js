@@ -19,7 +19,7 @@ describe(['tagdesktop'], 'Writer context around a table', { testIsolation: false
 	}
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/context_leave_table.fodt');
+		helper.setupAndLoadDocument('writer/context_leave_table.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

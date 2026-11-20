@@ -11,7 +11,7 @@ var impressHelper = require('../../common/impress_helper');
 describe(['tagdesktop'], 'Distribute objects', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/object_distribute.fodp');
+		helper.setupAndLoadDocument('impress/object_distribute.fodp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		// A wide viewport leaves the Shape tab room for every group, so the
 		// Distribute buttons stay on the toolbar instead of collapsing into

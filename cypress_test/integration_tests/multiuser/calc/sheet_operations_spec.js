@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe.skip(['tagmultiuser'], 'Multiuser sheet operations', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/sheet_operations.ods',true);
+		helper.setupAndLoadDocument('calc/sheet_operations.ods',true, false, undefined, 'vector=false');
 	});
 
 	function testInsertDelete(frameId1, frameId2) {
@@ -61,7 +61,7 @@ describe.skip(['tagmultiuser'], 'Multiuser sheet operations', function() {
 describe(['tagmultiuser'], 'Check overlays after tab switching/operations', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/cell_cursor_overlay.ods',true);
+		helper.setupAndLoadDocument('calc/cell_cursor_overlay.ods',true, false, undefined, 'vector=false');
 	});
 
 	it('Check cell cursor overlay bounds after switching tab', function () {

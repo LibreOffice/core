@@ -11,7 +11,7 @@ describe(['tagdesktop'], 'Sheet tablist', { testIsolation: false }, function () 
 		// switch.ods carries two sheets, so one tab is selected and one is not.
 		const brand = Cypress.env('brandTheme');
 		helper.setupAndLoadDocument('calc/switch.ods', false, false, undefined,
-			brand ? 'theme=' + brand : undefined);
+			(brand ? 'theme=' + brand + '&' : '') + 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

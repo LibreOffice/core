@@ -7,7 +7,7 @@ var calcHelper = require('../../common/calc_helper');
 describe(['tagdesktop'], 'Notebookbar tooltip tests (ODS).', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/top_toolbar.ods');
+		helper.setupAndLoadDocument('calc/top_toolbar.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 	});
 
@@ -24,7 +24,7 @@ describe(['tagdesktop'], 'Notebookbar tooltip tests (ODS).', function() {
 describe(['tagdesktop'], 'Notebookbar tooltip tests (XLSX).', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/testfile.xlsx');
+		helper.setupAndLoadDocument('calc/testfile.xlsx', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 	});
 

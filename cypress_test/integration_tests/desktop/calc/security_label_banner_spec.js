@@ -11,7 +11,7 @@ var helper = require('../../common/helper');
 
 describe(['tagdesktop'], 'Calc security-label banner', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/testfile.xlsx');
+		helper.setupAndLoadDocument('calc/testfile.xlsx', false, false, undefined, 'vector=false');
 	});
 
 	function pushLabelChange(win, state) {

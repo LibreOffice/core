@@ -11,7 +11,7 @@ var helper = require('../../common/helper');
 describe(['tagscreenshot'], 'Help dialog screenshot updation', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/help_dialog.odt');
+		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, undefined, 'vector=false');
 	});
 
 	function copyScreenshot(fileName) {

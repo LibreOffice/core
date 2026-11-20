@@ -5,7 +5,7 @@ let helper = require('../../common/helper');
 
 describe(['tagdesktop', 'tagpreview'], 'Writer preview', function() {
 	beforeEach(function() {
-		helper.setupAndPreviewDocument('writer/annotation.odt');
+		helper.setupAndPreviewDocument('writer/annotation.odt', 'vector=false');
 	});
 
 	it('shows the preview of the document', function() {

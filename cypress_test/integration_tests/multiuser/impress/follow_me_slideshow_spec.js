@@ -9,7 +9,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
 
     beforeEach(function() {
             helper.withoutBrandTheme();
-            helper.setupAndLoadDocument('impress/follow.odp',true);
+            helper.setupAndLoadDocument('impress/follow.odp',true, false, undefined, 'vector=false');
 
             cy.getFrameWindow('#iframe1').then((win) => { win1 = win; });
             cy.getFrameWindow('#iframe2').then((win) => { win2 = win; });

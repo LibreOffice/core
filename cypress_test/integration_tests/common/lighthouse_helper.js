@@ -8,7 +8,7 @@ function runLighthouseAccessibilityTest(docType, filePath) {
 
         beforeEach(function() {
             var newFilePath = helper.setupDocument(filePath);
-            helper.loadDocument(newFilePath, /*skipDocumentChecks*/ true);
+            helper.loadDocument(newFilePath, /*skipDocumentChecks*/ true, false, undefined, 'vector=false');
             helper.documentChecks(/*skipInitializedCheck*/ true);
         });
 

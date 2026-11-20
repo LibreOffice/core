@@ -7,7 +7,7 @@ describe(['tagdesktop'], 'Writer link popup while the mouse selects text', funct
 	beforeEach(function () {
 		// The first paragraph is "Visit the Collabora website for details.", with a link on
 		// "the Collabora website".
-		helper.setupAndLoadDocument('writer/a11y_hyperlink.fodt');
+		helper.setupAndLoadDocument('writer/a11y_hyperlink.fodt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

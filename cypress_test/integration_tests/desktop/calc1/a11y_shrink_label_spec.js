@@ -8,7 +8,7 @@ describe(['tagdesktop'], 'Shrunken reference dialog', { testIsolation: false }, 
 	let caption = '';
 
 	before(function () {
-		helper.setupAndLoadDocument('calc/help_dialog.ods');
+		helper.setupAndLoadDocument('calc/help_dialog.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function (frameWindow) { win = frameWindow; });
 		cy.then(function () { return helper.processToIdle(win); });
 	});

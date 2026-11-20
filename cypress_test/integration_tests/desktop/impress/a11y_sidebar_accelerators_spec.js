@@ -9,7 +9,7 @@ describe(['tagdesktop'], 'Sidebar accelerator info boxes', function () {
 
 	before(function () {
 		cy.viewport(1920, 1024);
-		helper.setupAndLoadDocument('impress/sidebar.odp');
+		helper.setupAndLoadDocument('impress/sidebar.odp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 
 		cy.getFrameWindow().then(function (frameWindow) {

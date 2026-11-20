@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop'], 'Manage Changes list', function () {
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('calc/empty-selections.ods');
+		helper.setupAndLoadDocument('calc/empty-selections.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function (win) {
 			this.win = win;
 		}.bind(this));

@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Chart wizard', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/chart_wizard.odt');
+		helper.setupAndLoadDocument('writer/chart_wizard.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		desktopHelper.selectZoomLevel('70', false);
 		cy.getFrameWindow().then((win) => {

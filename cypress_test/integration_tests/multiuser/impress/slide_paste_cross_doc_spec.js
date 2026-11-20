@@ -7,7 +7,7 @@ describe(['tagmultiuser'], 'Multiuser Slide Cross-Document Paste', function() {
 	beforeEach(function() {
 		helper.setupAndLoadTwoDocuments(
 			'impress/slide_operations.odp',
-			'impress/slide_operations.odp');
+			'impress/slide_operations.odp', undefined, 'vector=false');
 	});
 
 	it('Right-click copy in file A and Ctrl+V paste in file B inserts the slide', function() {

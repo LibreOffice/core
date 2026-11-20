@@ -7,7 +7,7 @@ var calcHelper = require('../../common/calc_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Sheet Operation', function () {
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('calc/sheet_operation.ods');
+		helper.setupAndLoadDocument('calc/sheet_operation.ods', false, false, undefined, 'vector=false');
 
 		mobileHelper.enableEditingMobile();
 	});

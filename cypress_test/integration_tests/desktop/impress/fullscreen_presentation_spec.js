@@ -12,7 +12,7 @@ describe.skip(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Fullscreen Presentati
 	}
 
 	function before(filePath) {
-		helper.setupAndLoadDocument(filePath);
+		helper.setupAndLoadDocument(filePath, false, false, undefined, 'vector=false');
 
 		desktopHelper.hideSidebar();
 

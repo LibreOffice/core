@@ -7,7 +7,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile', 'tagproxy'], 'Focus tests', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/focus.odt');
+		helper.setupAndLoadDocument('writer/focus.odt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

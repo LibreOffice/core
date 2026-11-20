@@ -11,7 +11,7 @@ describe(['taglighthouse'], 'Accessibility Calc Notebookbar Tests', { testIsolat
 	var win;
 
 	before(function () {
-		helper.setupAndLoadDocument('calc/help_dialog.ods');
+		helper.setupAndLoadDocument('calc/help_dialog.ods', false, false, undefined, 'vector=false');
 
 		desktopHelper.switchUIToNotebookbar();
 

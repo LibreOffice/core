@@ -7,7 +7,7 @@ describe(['tagmobile'], 'Annotation tests.', function() {
 	var newFilePath;
 
 	beforeEach(function() {
-		newFilePath = helper.setupAndLoadDocument('impress/annotation.odp');
+		newFilePath = helper.setupAndLoadDocument('impress/annotation.odp', false, false, undefined, 'vector=false');
 
 		mobileHelper.enableEditingMobile();
 
@@ -22,7 +22,7 @@ describe(['tagmobile'], 'Annotation tests.', function() {
 		mobileHelper.selectHamburgerMenuItem(['File', 'Save']);
 		helper.waitUntilDocumentSaved();
 
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 
 		mobileHelper.enableEditingMobile();
 

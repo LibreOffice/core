@@ -6,7 +6,7 @@ describe(['tagdesktop'], 'Writer character formatting for the reader', { testIso
 	let win;
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/a11y_formatting.fodt');
+		helper.setupAndLoadDocument('writer/a11y_formatting.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

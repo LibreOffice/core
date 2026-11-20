@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop'], 'Handles of a shape in point edit mode.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/multi_selection_point_edit.fodp');
+		helper.setupAndLoadDocument('impress/multi_selection_point_edit.fodp', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;
 		});

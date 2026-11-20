@@ -7,7 +7,7 @@ describe(['tagmultiuser'], 'Preview selection versus other views', function() {
 	var win1, win2;
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/preview_edit.odp', true);
+		helper.setupAndLoadDocument('impress/preview_edit.odp', true, false, undefined, 'vector=false');
 		cy.getFrameWindow('#iframe1').then(function(win) { win1 = win; });
 		cy.getFrameWindow('#iframe2').then(function(win) { win2 = win; });
 	});

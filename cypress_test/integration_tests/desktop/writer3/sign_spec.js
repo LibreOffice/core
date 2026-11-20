@@ -7,7 +7,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sign operations.', functio
 
 	it('Create a signature.', function() {
 		// Given a document that can be signed:
-		helper.setupAndLoadDocument('writer/sign.odt', /*isMultiUser=*/false, /*copyCertificates=*/true);
+		helper.setupAndLoadDocument('writer/sign.odt', /*isMultiUser=*/false, /*copyCertificates=*/true, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 
 		// When signing that document:

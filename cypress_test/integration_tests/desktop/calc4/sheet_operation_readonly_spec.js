@@ -15,7 +15,7 @@ describe(['tagdesktop'], 'Sheet operations in a read-only view.', function () {
 
 	function loadReadOnly() {
 		var filePath = helper.setupDocument('calc/sheet_operation.ods');
-		helper.loadDocument(filePath, true, undefined, undefined, 'permission=readonly');
+		helper.loadDocument(filePath, true, undefined, undefined, 'permission=readonly&vector=false');
 		cy.cGet('#document-canvas').should('be.visible');
 		cy.cGet('#spreadsheet-tab0').should('have.text', 'Sheet1');
 		cy.getFrameWindow().then(function (win) {
@@ -59,7 +59,7 @@ describe(['tagdesktop'], 'Sheet operations in a read-only view.', function () {
 	});
 
 	it('An editable view still renames a sheet', function () {
-		helper.setupAndLoadDocument('calc/sheet_operation.ods');
+		helper.setupAndLoadDocument('calc/sheet_operation.ods', false, false, undefined, 'vector=false');
 		cy.cGet('#spreadsheet-tab0').should('have.text', 'Sheet1');
 
 		sendRename('Renamed');

@@ -7,7 +7,7 @@ var writerHelper = require('../../common/writer_helper');
 describe.skip('Pushing bottom toolbar items.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/bottom_toolbar.odt');
+		helper.setupAndLoadDocument('writer/bottom_toolbar.odt', false, false, undefined, 'vector=false');
 
 		mobileHelper.enableEditingMobile();
 

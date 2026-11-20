@@ -29,7 +29,7 @@ describe(['tagdesktop'], 'Wordbook upload.', function() {
 		cy.writeFile(uploadedWordbook, emptyWordbook);
 
 		documentFilePath = helper.setupAndLoadDocument('writer/presets.odt', false, false,
-			undefined, userQuery);
+			undefined, userQuery + '&vector=false');
 		cy.cGet('div.clipboard').as('clipboard');
 	});
 

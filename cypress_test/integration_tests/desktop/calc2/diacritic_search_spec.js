@@ -7,7 +7,7 @@ var findHelper = require('../../common/find_helper');
 describe(['tagdesktop'], 'Calc: searching without diacritics', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/diacritic_search.fods');
+		helper.setupAndLoadDocument('calc/diacritic_search.fods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

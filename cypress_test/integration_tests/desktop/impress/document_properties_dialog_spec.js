@@ -4,7 +4,7 @@ var helper = require('../../common/helper');
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Document Properties dialog tests', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/help_dialog.odp');
+		helper.setupAndLoadDocument('impress/help_dialog.odp', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

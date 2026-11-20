@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop'], 'Navigator outline focus', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/navigator.odp');
+		helper.setupAndLoadDocument('impress/navigator.odp', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;
 		}.bind(this));

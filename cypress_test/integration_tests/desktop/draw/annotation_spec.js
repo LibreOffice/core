@@ -21,7 +21,7 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 		// viewport. Without this, a larger default could make the anchors
 		// visible without any scroll, hiding regressions in the scroll logic.
 		cy.viewport(1000, 600);
-		helper.setupAndLoadDocument('draw/threaded_comments.pdf');
+		helper.setupAndLoadDocument('draw/threaded_comments.pdf', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function(win) {
 			helper.processToIdle(win);
 		});

@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'Table Design tab', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/table_operation.odt');
+		helper.setupAndLoadDocument('writer/table_operation.odt', false, false, undefined, 'vector=false');
 		cy.viewport(1920, 1080);
 
 		desktopHelper.switchUIToNotebookbar();

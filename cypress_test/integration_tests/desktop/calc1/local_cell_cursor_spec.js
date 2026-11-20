@@ -73,7 +73,7 @@ describe(['tagdesktop'], 'Local cell cursor and selection', function() {
 
 	beforeEach(function() {
 		// Turn on the local cell cursor, which is off by default.
-		helper.setupAndLoadDocument('calc/empty-selections.ods', false, false, undefined, 'localcellcursor=true');
+		helper.setupAndLoadDocument('calc/empty-selections.ods', false, false, undefined, 'localcellcursor=true&vector=false');
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;
 			Cypress.sinon.spy(win.app.socket, 'sendMessage');

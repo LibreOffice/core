@@ -6,7 +6,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Mobile wizard state tests', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/mobile_wizard_state.odt');
+		helper.setupAndLoadDocument('writer/mobile_wizard_state.odt', false, false, undefined, 'vector=false');
 	});
 
 	it('Open and close mobile wizard by toolbar item.', function() {

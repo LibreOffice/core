@@ -4,7 +4,7 @@ var helper = require('../../common/helper');
 describe.skip('Repair Document', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/repair_doc.odp',true);
+		helper.setupAndLoadDocument('impress/repair_doc.odp',true, false, undefined, 'vector=false');
 	});
 
 	function repairDoc(frameId1, frameId2) {

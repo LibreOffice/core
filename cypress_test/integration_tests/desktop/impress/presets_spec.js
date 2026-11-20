@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Preset tests.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/testfile.fodp');
+		helper.setupAndLoadDocument('impress/testfile.fodp', false, false, undefined, 'vector=false');
 	});
 
 	// Ensure that the shared template was installed.

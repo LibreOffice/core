@@ -8,7 +8,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Cell handles on a formula reference.', 
 	var formulaText = '#sc_input_window.formulabar .ui-custom-textarea-text-layer';
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/formulabar.ods');
+		helper.setupAndLoadDocument('calc/formulabar.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

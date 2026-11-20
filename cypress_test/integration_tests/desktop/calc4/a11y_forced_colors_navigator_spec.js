@@ -12,7 +12,7 @@ describe(['tagdesktop'], 'Navigator under forced colours', { testIsolation: fals
 
 	before(function () {
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('calc/navigator.ods');
+		helper.setupAndLoadDocument('calc/navigator.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function (frameWindow) { win = frameWindow; });
 		cy.then(function () { win.app.map.sendUnoCommand('.uno:Navigator'); });
 		cy.cGet('#contentbox').should('be.visible');

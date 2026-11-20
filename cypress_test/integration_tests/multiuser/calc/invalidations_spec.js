@@ -11,7 +11,7 @@ describe(['tagmultiuser'], 'Joining a document should not trigger an invalidatio
 		// when available, currently adds an extra empty update when
 		// grammar checking kicks in at server-side idle after a change.
 		localStorage.setItem('spreadsheet.spellOnline', false);
-		helper.setupAndLoadDocument('calc/invalidations.ods',true);
+		helper.setupAndLoadDocument('calc/invalidations.ods',true, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 	});
 

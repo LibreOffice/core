@@ -14,7 +14,7 @@ describe(['tagdesktop'], 'Text Import (CSV) dialog', function () {
 		cy.viewport(1280, 960);
 
 		var filePath = helper.setupDocument('calc/text_import.csv');
-		helper.loadDocument(filePath, true);
+		helper.loadDocument(filePath, true, false, undefined, 'vector=false');
 
 		cy.cGet('form.jsdialog-container.lokdialog_container').should('exist');
 		cy.cGet('.ui-csv-grid-container').should('exist');

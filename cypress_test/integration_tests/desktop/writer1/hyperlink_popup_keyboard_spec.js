@@ -8,7 +8,7 @@ describe(['tagdesktop'], 'Writer link popup from the keyboard', options, functio
 	const LINK_URL = 'https://www.collaboraonline.com/';
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/a11y_hyperlink.fodt');
+		helper.setupAndLoadDocument('writer/a11y_hyperlink.fodt', false, false, undefined, 'vector=false');
 	});
 
 	beforeEach(function () {

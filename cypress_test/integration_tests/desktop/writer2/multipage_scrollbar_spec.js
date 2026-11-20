@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Multipage View scrollbar pressing.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/scrolling.odt');
+		helper.setupAndLoadDocument('writer/scrolling.odt', false, false, undefined, 'vector=false');
 		cy.viewport(1920, 1080);
 	});
 

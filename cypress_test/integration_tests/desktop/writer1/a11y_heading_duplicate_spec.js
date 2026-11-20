@@ -7,7 +7,7 @@ describe(['tagdesktop'], 'Writer headings that share their text', { testIsolatio
 	let win;
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/duplicate_headings.fodt');
+		helper.setupAndLoadDocument('writer/duplicate_headings.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

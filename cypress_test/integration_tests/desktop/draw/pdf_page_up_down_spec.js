@@ -7,7 +7,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'PDF View Tests', function(
 	var newFilePath;
 
 	beforeEach(function() {
-		newFilePath = helper.setupAndLoadDocument('draw/pdf_page_up_down.pdf');
+		newFilePath = helper.setupAndLoadDocument('draw/pdf_page_up_down.pdf', false, false, undefined, 'vector=false');
 	});
 
 	it('PDF page down', { env: { 'pdf-view': true } }, function() {

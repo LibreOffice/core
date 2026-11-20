@@ -7,7 +7,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Overlay bounds.', function () {
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('calc/overlays.ods');
+		helper.setupAndLoadDocument('calc/overlays.ods', false, false, undefined, 'vector=false');
 
 		mobileHelper.enableEditingMobile();
 	});

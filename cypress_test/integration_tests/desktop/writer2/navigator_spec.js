@@ -19,7 +19,7 @@ describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 
 	beforeEach(function() {
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('writer/navigator.odt');
+		helper.setupAndLoadDocument('writer/navigator.odt', false, false, undefined, 'vector=false');
 		cy.cGet('#navigator-floating-icon').click(); // Ensure it's open
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
@@ -270,7 +270,7 @@ describe(['tagdesktop'], 'Navigator comments', function() {
 
 	beforeEach(function() {
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('writer/a11y_comment.fodt');
+		helper.setupAndLoadDocument('writer/a11y_comment.fodt', false, false, undefined, 'vector=false');
 		cy.cGet('#navigator-floating-icon').click(); // Ensure it's open
 	});
 

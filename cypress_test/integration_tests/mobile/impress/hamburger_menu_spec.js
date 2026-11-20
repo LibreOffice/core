@@ -9,7 +9,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 	var newFilePath;
 
 	beforeEach(function() {
-		newFilePath = helper.setupAndLoadDocument('impress/hamburger_menu.odp');
+		newFilePath = helper.setupAndLoadDocument('impress/hamburger_menu.odp', false, false, undefined, 'vector=false');
 
 		// Click on edit button
 		mobileHelper.enableEditingMobile();
@@ -38,7 +38,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 		mobileHelper.selectHamburgerMenuItem(['File', 'Save']);
 
 		// Reopen the document and check content.
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 
 		mobileHelper.enableEditingMobile();
 

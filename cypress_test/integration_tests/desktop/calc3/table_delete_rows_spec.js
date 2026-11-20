@@ -6,7 +6,7 @@ var calcHelper = require('../../common/calc_helper');
 describe(['tagdesktop'], 'Calc styled table row delete.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/table_resize_handles.xlsx');
+		helper.setupAndLoadDocument('calc/table_resize_handles.xlsx', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

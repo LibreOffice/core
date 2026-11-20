@@ -7,7 +7,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop'], 'Presenter Console.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/slide-bitmap-background.odp');
+		helper.setupAndLoadDocument('impress/slide-bitmap-background.odp', false, false, undefined, 'vector=false');
 	});
 
 	class FakeWindowProxy {

@@ -11,7 +11,7 @@ describe(['tagdesktop'], 'Save status accessibility', { testIsolation: false }, 
 
 	before(function () {
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		helper.setupAndLoadDocument('writer/copy_paste.odt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

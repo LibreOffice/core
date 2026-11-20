@@ -7,7 +7,7 @@ describe(['tagdesktop'], 'Writer content controls for the reader', { testIsolati
 	let win;
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/a11y_content_controls.fodt');
+		helper.setupAndLoadDocument('writer/a11y_content_controls.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

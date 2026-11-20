@@ -36,7 +36,7 @@ function checkBulletPopupOpensUnderButton(overflowButton) {
 describe(['tagdesktop'], 'Bullet dropdown in the compact toolbar', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/apply_paragraph_props_text.odp');
+		helper.setupAndLoadDocument('impress/apply_paragraph_props_text.odp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToCompact();
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;
@@ -52,7 +52,7 @@ describe(['tagdesktop'], 'Bullet dropdown in the compact toolbar', function() {
 describe(['tagdesktop'], 'Bullet dropdown in the notebookbar', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/apply_paragraph_props_text.odp');
+		helper.setupAndLoadDocument('impress/apply_paragraph_props_text.odp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;

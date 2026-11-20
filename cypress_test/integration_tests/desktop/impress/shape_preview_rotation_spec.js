@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Picture of a shape that is turned.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/shape_preview_rotation.fodp');
+		helper.setupAndLoadDocument('impress/shape_preview_rotation.fodp', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;
 		}.bind(this));

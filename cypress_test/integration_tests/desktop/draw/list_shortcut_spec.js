@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop'], 'Draw list keyboard shortcuts', function() {
 
 	it('Ctrl Shift 7 and Ctrl Shift 8 apply the two kinds of list', function() {
-		helper.setupAndLoadDocument('draw/list_shortcut.fodg');
+		helper.setupAndLoadDocument('draw/list_shortcut.fodg', false, false, undefined, 'vector=false');
 
 		// Tab selects the shape that holds the text.
 		cy.realPress('Tab');

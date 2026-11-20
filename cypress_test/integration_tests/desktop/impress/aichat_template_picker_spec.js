@@ -8,7 +8,7 @@ describe(['tagdesktop'], 'AI design picker on the deck decision cards', function
 	// A single-slide presentation: a fresh deck, the case where a deck is
 	// about to be built and a design can still be chosen for it.
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/testfile.fodp');
+		helper.setupAndLoadDocument('impress/testfile.fodp', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

@@ -29,7 +29,7 @@ function sendUno(win, command) {
 // instead of the previous hardcoded 1048576 / 'XFD' literals.
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Whole column/row selection detection', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/top_toolbar.ods');
+		helper.setupAndLoadDocument('calc/top_toolbar.ods', false, false, undefined, 'vector=false');
 		cy.viewport(1920, 1080);
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
@@ -67,7 +67,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Whole column/row selection
 // spans every cell, including the hidden ones.
 describe(['tagdesktop'], 'Whole selection detection when maxVisible index is below the sheet limit', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/empty-selections.ods');
+		helper.setupAndLoadDocument('calc/empty-selections.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

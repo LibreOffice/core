@@ -17,7 +17,7 @@ describe(['tagdesktop'], 'Navigator focus when launched', function () {
 	var win;
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('calc/navigator.ods');
+		helper.setupAndLoadDocument('calc/navigator.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function (w) {
 			win = w;
 		});
@@ -49,7 +49,7 @@ describe(['tagdesktop'], 'Navigator focus when launched', function () {
 describe.skip(['tagdesktop'], 'Navigator tests.', function () {
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('calc/navigator.ods');
+		helper.setupAndLoadDocument('calc/navigator.ods', false, false, undefined, 'vector=false');
 
 		cy.cGet('#menu-view').click();
 		cy.cGet('#menu-navigator').click();

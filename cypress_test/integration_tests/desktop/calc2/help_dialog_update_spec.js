@@ -12,7 +12,7 @@ var calcHelper = require('../../common/calc_helper');
 describe(['tagscreenshot'], 'Help dialog update', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/help_dialog.ods');
+		helper.setupAndLoadDocument('calc/help_dialog.ods', false, false, undefined, 'vector=false');
 	});
 
 	it('Chart selected sidebar open', function() {

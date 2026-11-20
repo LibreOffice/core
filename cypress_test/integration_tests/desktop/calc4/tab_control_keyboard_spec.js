@@ -5,7 +5,7 @@ const calcHelper = require('../../common/calc_helper');
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Tab control keyboard navigation', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/top_toolbar.ods');
+		helper.setupAndLoadDocument('calc/top_toolbar.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

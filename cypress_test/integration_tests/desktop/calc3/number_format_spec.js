@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'Number format Tests', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/number_format.ods');
+		helper.setupAndLoadDocument('calc/number_format.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.viewport(1920,1080);
 		helper.setDummyClipboardForCopy();

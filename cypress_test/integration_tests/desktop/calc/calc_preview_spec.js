@@ -5,7 +5,7 @@ let helper = require('../../common/helper');
 
 describe(['tagdesktop', 'tagpreview'], 'Calc preview', function() {
 	beforeEach(function() {
-		helper.setupAndPreviewDocument('calc/testfile.xlsx');
+		helper.setupAndPreviewDocument('calc/testfile.xlsx', 'vector=false');
 	});
 
 	it('shows the preview of the spreadsheet', function() {

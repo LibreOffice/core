@@ -30,4 +30,4 @@ sweep.sweepDecorativeGlyphs('Calc', 'calc/switch.ods', function (app) {
 					'controls named only with symbols in the dialog').to.be.empty;
 			});
 	});
-});
+}, 'vector=false');

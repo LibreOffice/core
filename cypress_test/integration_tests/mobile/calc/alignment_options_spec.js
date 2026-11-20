@@ -7,7 +7,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe.skip(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Change alignment settings.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/alignment_options.ods');
+		helper.setupAndLoadDocument('calc/alignment_options.ods', false, false, undefined, 'vector=false');
 
 		// Click on edit button
 		mobileHelper.enableEditingMobile();

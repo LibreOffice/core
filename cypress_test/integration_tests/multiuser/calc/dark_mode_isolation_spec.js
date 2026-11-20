@@ -28,7 +28,7 @@ describe(['tagmultiuser'], 'Dark mode is isolated per user', function() {
 		cy.task('writeUserSetting', { userId: LIGHT_USER, settings: { darkTheme: 'false' } });
 
 		helper.setupAndLoadDocument('calc/invalidations.ods', true, false, undefined,
-			'userid1=' + DARK_USER + '&userid2=' + LIGHT_USER);
+			'userid1=' + DARK_USER + '&userid2=' + LIGHT_USER + '&vector=false');
 		desktopHelper.switchUIToNotebookbar();
 	});
 

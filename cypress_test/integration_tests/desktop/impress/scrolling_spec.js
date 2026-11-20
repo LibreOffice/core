@@ -7,7 +7,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 
 	beforeEach(function() {
 		cy.viewport(1500, 600);
-		helper.setupAndLoadDocument('impress/scrolling.odp');
+		helper.setupAndLoadDocument('impress/scrolling.odp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToCompact();
 		// close the default slide-sorter navigation sidebar
 		desktopHelper.closeNavigatorSidebar();

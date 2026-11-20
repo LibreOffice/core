@@ -15,7 +15,7 @@ describe(['tagdesktop'], 'Impress shapes deck keyboard navigation',
 
 	before(function () {
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('impress/help_dialog.odp');
+		helper.setupAndLoadDocument('impress/help_dialog.odp', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

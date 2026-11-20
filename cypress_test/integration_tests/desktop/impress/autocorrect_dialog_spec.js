@@ -6,7 +6,7 @@ const desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'AutoCorrect Options in Impress.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/apply_paragraph_props_text.odp');
+		helper.setupAndLoadDocument('impress/apply_paragraph_props_text.odp', false, false, undefined, 'vector=false');
 		// Wide enough for the Review tab not to fold the button into a menu.
 		cy.viewport(1920, 1080);
 	});

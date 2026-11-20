@@ -7,7 +7,7 @@ var impressHelper = require('../../common/impress_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties on selected text.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/apply_paragraph_props_text.odp');
+		helper.setupAndLoadDocument('impress/apply_paragraph_props_text.odp', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

@@ -17,7 +17,7 @@ describe(['tagdesktop'], 'Navigator option in Impress', function() {
 	var filePath;
 
 	beforeEach(function() {
-		filePath = helper.setupAndLoadDocument('impress/navigator.odp');
+		filePath = helper.setupAndLoadDocument('impress/navigator.odp', false, false, undefined, 'vector=false');
 	});
 
 	it('the Navigator option hides and shows the slide panel, also after a reload', function() {
@@ -26,7 +26,7 @@ describe(['tagdesktop'], 'Navigator option in Impress', function() {
 		desktopHelper.toggleInterfaceSetting('presentation', 'ShowNavigator', true);
 		assertPanelShown(false);
 
-		helper.reloadDocument(filePath);
+		helper.reloadDocument(filePath, 'vector=false');
 		assertPanelShown(false);
 
 		// The test WOPI server does not hand the saved settings back to the reloaded document, so
@@ -37,7 +37,7 @@ describe(['tagdesktop'], 'Navigator option in Impress', function() {
 		assertPanelShown(true);
 		cy.cGet('#tab-slide-sorter').should('have.class', 'selected');
 
-		helper.reloadDocument(filePath);
+		helper.reloadDocument(filePath, 'vector=false');
 		assertPanelShown(true);
 	});
 
@@ -47,13 +47,13 @@ describe(['tagdesktop'], 'Navigator option in Impress', function() {
 		desktopHelper.closeNavigatorSidebar();
 		assertPanelShown(false);
 
-		helper.reloadDocument(filePath);
+		helper.reloadDocument(filePath, 'vector=false');
 		assertPanelShown(false);
 
 		cy.cGet('#floating-navigator').click();
 		assertPanelShown(true);
 
-		helper.reloadDocument(filePath);
+		helper.reloadDocument(filePath, 'vector=false');
 		assertPanelShown(true);
 	});
 });

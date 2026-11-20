@@ -9,7 +9,7 @@ describe(['tagdesktop'], 'Writer comments can be scrolled into view.', function(
 
 	beforeEach(function() {
 		// The document holds one comment.
-		helper.setupAndLoadDocument('writer/annotation-large.odt');
+		helper.setupAndLoadDocument('writer/annotation-large.odt', false, false, undefined, 'vector=false');
 		cy.viewport(1400, 900);
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
@@ -195,7 +195,7 @@ describe(['tagdesktop'], 'Writer wheel scrolling in a read-only document.', func
 	beforeEach(function() {
 		// A read-only view has no notebookbar, which the usual load checks wait for.
 		var filePath = helper.setupDocument('writer/scrolling.odt');
-		helper.loadDocument(filePath, true, undefined, undefined, 'permission=readonly');
+		helper.loadDocument(filePath, true, undefined, undefined, 'permission=readonly&vector=false');
 		cy.getFrameWindow().should((win) => {
 			expect(win.app.map._docLoaded, 'document loaded').to.equal(true);
 			this.win = win;

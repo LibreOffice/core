@@ -7,7 +7,7 @@ describe(['tagmultiuser'], 'Multiuser Annotation Tests', function() {
 
 	beforeEach(function() {
 
-		helper.setupAndLoadDocument('impress/comment_switching.odp',true);
+		helper.setupAndLoadDocument('impress/comment_switching.odp',true, false, undefined, 'vector=false');
 		cy.viewport(2600, 800);
 		desktopHelper.switchUIToNotebookbar();
 
@@ -84,7 +84,7 @@ describe(['tagmultiuser'], 'Multiuser Annotation Tests', function() {
 describe(['tagmultiuser'], 'Multiuser Collapsed Annotation Tests', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/comment_switching.odp',true);
+		helper.setupAndLoadDocument('impress/comment_switching.odp',true, false, undefined, 'vector=false');
 		cy.viewport(2400, 800);
 		desktopHelper.switchUIToNotebookbar();
 
@@ -164,7 +164,7 @@ describe(['tagmultiuser'], 'Multiuser Collapsed Annotation Tests', function() {
 describe(['tagmultiuser'], 'Multiuser Annotation Autosave Tests', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/comment_switching.odp',true);
+		helper.setupAndLoadDocument('impress/comment_switching.odp',true, false, undefined, 'vector=false');
 		cy.viewport(2600, 800);
 		desktopHelper.switchUIToNotebookbar();
 
@@ -373,7 +373,7 @@ describe(['tagmultiuser'], 'Multiuser Annotation Autosave Tests', function() {
 describe(['tagmultiuser'], 'Comment inserted on another slide', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/annotation_on_other_slide.odp', true);
+		helper.setupAndLoadDocument('impress/annotation_on_other_slide.odp', true, false, undefined, 'vector=false');
 		cy.viewport(2600, 800);
 		desktopHelper.switchUIToNotebookbar();
 

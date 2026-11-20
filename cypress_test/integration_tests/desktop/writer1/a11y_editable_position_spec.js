@@ -6,7 +6,7 @@ describe(['tagdesktop'], 'Writer editable for the reader', { testIsolation: fals
 	let win;
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/a11y_editable_position.fodt');
+		helper.setupAndLoadDocument('writer/a11y_editable_position.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

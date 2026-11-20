@@ -7,7 +7,7 @@ var calcHelper = require('../../common/calc_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Chart tests.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/chart.ods');
+		helper.setupAndLoadDocument('calc/chart.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 		calcHelper.selectFirstColumn();
 		insertChart();

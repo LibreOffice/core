@@ -78,7 +78,7 @@ describe(['taglighthouse'], 'Accessibility Calc Dialog Tests', { testIsolation: 
     let hasLinguisticData = false;
 
     before(function () {
-        helper.setupAndLoadDocument('calc/help_dialog.ods', /*isMultiUser=*/false, /*copyCertificates=*/true);
+        helper.setupAndLoadDocument('calc/help_dialog.ods', /*isMultiUser=*/false, /*copyCertificates=*/true, undefined, 'vector=false');
 
         // to make insertImage use the correct buttons
         desktopHelper.switchUIToNotebookbar();

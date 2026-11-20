@@ -7,7 +7,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Compare Changes view.', fu
 
 	function loadDocument(fileName) {
 		cy.viewport(1400, 600);
-		helper.setupAndLoadDocument('writer/' + fileName);
+		helper.setupAndLoadDocument('writer/' + fileName, false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.cGet('#Review-tab-label').click();
 	}

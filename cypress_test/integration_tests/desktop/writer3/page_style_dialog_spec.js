@@ -5,7 +5,7 @@ var desktopHelper = require('../../common/desktop_helper')
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog tests', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/styles.odt');
+		helper.setupAndLoadDocument('writer/styles.odt', false, false, undefined, 'vector=false');
 		cy.viewport(1920, 720);
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
@@ -480,7 +480,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog tests', 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog of a page without a fill', function() {
 	beforeEach(function() {
 		cy.viewport(1920, 720);
-		helper.setupAndLoadDocument('writer/focus.odt');
+		helper.setupAndLoadDocument('writer/focus.odt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});
@@ -511,7 +511,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog of a pag
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog of a spreadsheet', function() {
 	beforeEach(function() {
 		cy.viewport(1920, 720);
-		helper.setupAndLoadDocument('calc/autofilter.ods');
+		helper.setupAndLoadDocument('calc/autofilter.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

@@ -5,7 +5,7 @@ var mobileHelper = require('../../common/mobile_helper');
 
 describe(['tagmobile'],'Image Operation Tests', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/image_operation.odt');
+		helper.setupAndLoadDocument('writer/image_operation.odt', false, false, undefined, 'vector=false');
 
 		// Click on edit button
 		mobileHelper.enableEditingMobile();

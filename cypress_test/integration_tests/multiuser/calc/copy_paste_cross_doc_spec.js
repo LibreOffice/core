@@ -8,7 +8,7 @@ describe(['tagmultiuser'], 'Multiuser Calc Cross-Document Copy Paste', function(
 	beforeEach(function() {
 		helper.setupAndLoadTwoDocuments(
 			'calc/cell_cursor_jump.ods',
-			'calc/cell_cursor_jump.ods');
+			'calc/cell_cursor_jump.ods', undefined, 'vector=false');
 	});
 
 	it('Cross-doc paste special shows the paste-special dialog', function() {

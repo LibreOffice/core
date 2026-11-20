@@ -7,7 +7,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply font changes.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/apply_font.ods');
+		helper.setupAndLoadDocument('calc/apply_font.ods', false, false, undefined, 'vector=false');
 
 		// Click on edit button
 		mobileHelper.enableEditingMobile();

@@ -6,7 +6,7 @@ var helper = require('../../common/helper');
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Chart dialog tests', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/chart_dialog.ods');
+		helper.setupAndLoadDocument('calc/chart_dialog.ods', false, false, undefined, 'vector=false');
 		cy.viewport(1920, 720);
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;

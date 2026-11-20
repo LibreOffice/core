@@ -30,7 +30,7 @@ describe(['tagdesktop'], 'Writer paragraph split across pages', { testIsolation:
 	}
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/split_paragraph_context.fodt');
+		helper.setupAndLoadDocument('writer/split_paragraph_context.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

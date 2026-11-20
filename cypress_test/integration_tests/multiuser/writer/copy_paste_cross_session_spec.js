@@ -6,7 +6,7 @@ describe(['tagmultiuser'], 'Multiuser Writer Cross-Session Paste', function() {
 
 	beforeEach(function() {
 		// Same document opened by two users (two sessions on one docbroker).
-		helper.setupAndLoadDocument('writer/copy_paste.odt', true);
+		helper.setupAndLoadDocument('writer/copy_paste.odt', true, false, undefined, 'vector=false');
 	});
 
 	// Regression test for the copy/paste flow where the copying tab is closed

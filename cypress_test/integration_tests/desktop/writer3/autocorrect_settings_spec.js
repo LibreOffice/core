@@ -49,7 +49,7 @@ describe(['tagdesktop'], 'AutoCorrect settings.', function() {
 		cy.task('removeUserPresets', { userId: userId });
 
 		documentFilePath = helper.setupAndLoadDocument('writer/presets.odt', false, false,
-			undefined, userQuery);
+			undefined, userQuery + '&vector=false');
 		cy.cGet('div.clipboard').as('clipboard');
 	});
 
@@ -78,7 +78,7 @@ describe(['tagdesktop'], 'AutoCorrect settings.', function() {
 			.should('contain', '/org.openoffice.Office.Writer/AutoFunction');
 		cy.readFile(userStore + '/acor_en-US.dat', 'binary').should('not.be.empty');
 
-		helper.reloadDocument(documentFilePath, userQuery);
+		helper.reloadDocument(documentFilePath, userQuery + '&vector=false');
 		cy.cGet('div.clipboard').as('clipboard');
 
 		// The replacement is made and the sentence is not capitalized.

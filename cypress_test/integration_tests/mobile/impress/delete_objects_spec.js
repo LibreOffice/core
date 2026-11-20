@@ -6,7 +6,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Delete Objects', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/delete_objects.odp');
+		helper.setupAndLoadDocument('impress/delete_objects.odp', false, false, undefined, 'vector=false');
 
 		mobileHelper.enableEditingMobile();
 

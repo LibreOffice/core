@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'File menu offers Rename Document in Impress', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/top_toolbar.odp');
+		helper.setupAndLoadDocument('impress/top_toolbar.odp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToCompact();
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;

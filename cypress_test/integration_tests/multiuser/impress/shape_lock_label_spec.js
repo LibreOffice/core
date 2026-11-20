@@ -59,7 +59,7 @@ describe(['tagmultiuser'], 'Impress label of the user who edits a shape', functi
 	var win1, win2;
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('impress/empty-placeholder.fodp', true);
+		helper.setupAndLoadDocument('impress/empty-placeholder.fodp', true, false, undefined, 'vector=false');
 		cy.getFrameWindow('#iframe1').then(function (win) { win1 = win; });
 		cy.getFrameWindow('#iframe2').then(function (win) { win2 = win; });
 	});
@@ -214,7 +214,7 @@ describe(['tagmultiuser'], 'Impress label of the user who edits a shape, with th
 		// A third user opens the document in iframe3. The frames share the width, so a wider window
 		// gives each frame the width it has with two users.
 		helper.setupAndLoadDocument('impress/empty-placeholder.fodp', true, false, undefined,
-			'userid3=test3');
+			'userid3=test3&vector=false');
 		cy.viewport(3000, 660);
 		cy.cSetActiveFrame('#iframe3');
 		helper.documentChecks(true);

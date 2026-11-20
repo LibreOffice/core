@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagmobile'], 'Accessibility statement notice', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/focus.odt');
+		helper.setupAndLoadDocument('writer/focus.odt', false, false, undefined, 'vector=false');
 	});
 
 	it('Says nothing when the deployment has no accessibility statement.', function() {

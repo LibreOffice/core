@@ -14,7 +14,7 @@ describe(['tagdesktop'], 'Tooltip', { testIsolation: false }, function () {
 	before(function () {
 		cy.viewport(1920, 1080);
 		helper.setupAndLoadDocument('calc/switch.ods', false, false, undefined,
-			'tooltips=true');
+			'tooltips=true&vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

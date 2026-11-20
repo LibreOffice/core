@@ -6,7 +6,7 @@ var calcHelper = require('../../common/calc_helper');
 describe(['tagdesktop'], 'Calc autofill marker drag.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/autofill.fods');
+		helper.setupAndLoadDocument('calc/autofill.fods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

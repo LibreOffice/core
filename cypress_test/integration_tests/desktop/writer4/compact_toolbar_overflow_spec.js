@@ -13,7 +13,7 @@ describe(['tagdesktop'], 'Compact toolbar overflow groups', function() {
 
 	beforeEach(function() {
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('writer/top_toolbar.odt');
+		helper.setupAndLoadDocument('writer/top_toolbar.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToCompact();
 		cy.cGet('#toolbar-up').should('be.visible');
 		cy.getFrameWindow().then(function(win) {

@@ -9,7 +9,7 @@ describe(['tagdesktop'], 'Accessibility Impress notebookbar shortcut tests', { t
 	let targets;
 
 	before(function () {
-		helper.setupAndLoadDocument('impress/help_dialog.odp');
+		helper.setupAndLoadDocument('impress/help_dialog.odp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 
 		cy.cGet('.notebookbar-tabs-container').should('be.visible');

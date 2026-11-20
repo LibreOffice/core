@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Check the correctness of context menu', function () {
 
     beforeEach(function () {
-        helper.setupAndLoadDocument('calc/context_menu.ods');
+        helper.setupAndLoadDocument('calc/context_menu.ods', false, false, undefined, 'vector=false');
     });
 
     it('Right click next to misspelled invalid word', function () {

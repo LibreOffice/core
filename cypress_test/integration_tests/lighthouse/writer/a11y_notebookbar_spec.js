@@ -11,7 +11,7 @@ describe(['taglighthouse'], 'Accessibility Writer Notebookbar Tests', { testIsol
 	var win;
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/help_dialog.odt');
+		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, undefined, 'vector=false');
 
 		desktopHelper.switchUIToNotebookbar();
 

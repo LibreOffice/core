@@ -9,7 +9,7 @@ describe(['taglighthouse'], 'Accessibility Impress Sidebar Tests', { testIsolati
 	let win;
 
 	before(function () {
-		helper.setupAndLoadDocument('impress/help_dialog.odp');
+		helper.setupAndLoadDocument('impress/help_dialog.odp', false, false, undefined, 'vector=false');
 
 		// to make insertImage use the correct buttons
 		desktopHelper.switchUIToNotebookbar();

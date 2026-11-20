@@ -7,7 +7,7 @@ var calcHelper = require('../../common/calc_helper');
 describe(['tagmobile'], 'Paste special.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/hamburger_menu.ods');
+		helper.setupAndLoadDocument('calc/hamburger_menu.ods', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 	});
 

@@ -19,7 +19,7 @@ describe(['tagdesktop'], 'Writer hyperlinks for the reader', { testIsolation: fa
 	}
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/a11y_hyperlink.fodt');
+		helper.setupAndLoadDocument('writer/a11y_hyperlink.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

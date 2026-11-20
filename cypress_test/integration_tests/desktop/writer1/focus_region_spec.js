@@ -8,7 +8,7 @@ var a11yHelper = require('../../common/a11y_helper');
 // document -> sidebar -> status bar, wrapping around.
 describe(['tagdesktop'], 'Writer F6 region navigation', function () {
 	beforeEach(function () {
-		helper.setupAndLoadDocument('writer/focus.odt');
+		helper.setupAndLoadDocument('writer/focus.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 
 		cy.cGet('#sidebar-dock-wrapper').then(function ($dock) {

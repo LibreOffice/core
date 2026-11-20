@@ -34,7 +34,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test jumping on large cell
 
 	beforeEach(function() {
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('calc/cell_cursor.ods');
+		helper.setupAndLoadDocument('calc/cell_cursor.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});
@@ -181,7 +181,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test jumping on large cell
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test Cell Selections', function() {
 	beforeEach(function() {
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('calc/empty-selections.ods');
+		helper.setupAndLoadDocument('calc/empty-selections.ods', false, false, undefined, 'vector=false');
 		desktopHelper.sidebarToggle();
 		cy.cGet('#sidebar-dock-wrapper').should('not.be.visible');
 		cy.viewport(1000, helper.maxScreenshotableViewportHeight);
@@ -254,7 +254,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test Cell Selections', fun
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test keyboard cell navigation and selection', function() {
 	beforeEach(function() {
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('calc/empty-selections.ods');
+		helper.setupAndLoadDocument('calc/empty-selections.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 			helper.processToIdle(win);
@@ -315,7 +315,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test jumping on large cell
 
 	beforeEach(function() {
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('calc/cell_cursor_split.ods');
+		helper.setupAndLoadDocument('calc/cell_cursor_split.ods', false, false, undefined, 'vector=false');
 	});
 
 	it('No jump on long merged cell with split panes', function() {
@@ -343,7 +343,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test triple click content 
 
 	beforeEach(function() {
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('calc/cell-content-selection.ods');
+		helper.setupAndLoadDocument('calc/cell-content-selection.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});
@@ -378,7 +378,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test triple click content 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test decimal separator of cells with different languages.', function() {
 	beforeEach(function() {
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('calc/decimal_separator.ods');
+		helper.setupAndLoadDocument('calc/decimal_separator.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

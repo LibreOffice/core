@@ -6,7 +6,7 @@ const desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'Insert position', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('draw/insert_position.fodg');
+		helper.setupAndLoadDocument('draw/insert_position.fodg', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		// A viewport shorter than the A4 page, so the page does not fit and an
 		// object placed by the page geometry alone lands outside the view.

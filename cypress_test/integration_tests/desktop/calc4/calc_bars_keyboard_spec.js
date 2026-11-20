@@ -8,7 +8,7 @@ describe(['tagdesktop'], 'Calc keyboard access for the bars', function () {
 		'input:not([disabled]):not([tabindex="-1"]), [tabindex="0"]';
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('calc/focus.ods');
+		helper.setupAndLoadDocument('calc/focus.ods', false, false, undefined, 'vector=false');
 	});
 
 	// Wait one Chrome repaint cycle (two requestAnimationFrame) so a focus

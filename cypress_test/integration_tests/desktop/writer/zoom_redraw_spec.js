@@ -14,7 +14,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'Zoom animation redraw', function() {
 	beforeEach(function() {
 		cy.viewport(1400, 1000);
-		helper.setupAndLoadDocument('writer/help_dialog.odt');
+		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, undefined, 'vector=false');
 	});
 
 	it('redraws each frame while zooming and restores the scale', function() {

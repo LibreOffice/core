@@ -48,7 +48,7 @@ describe(['tagdesktop'], 'Writer list given to the reader', { testIsolation: fal
 	}
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/list_context.fodt');
+		helper.setupAndLoadDocument('writer/list_context.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

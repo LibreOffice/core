@@ -153,7 +153,7 @@ describe(['tagdesktop'], 'Collapsed Annotation Tests', function() {
 	var newFilePath;
 
 	beforeEach(function() {
-		newFilePath = helper.setupAndLoadDocument('impress/comment_switching.odp');
+		newFilePath = helper.setupAndLoadDocument('impress/comment_switching.odp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 
 		if (Cypress.env('INTEGRATION') === 'nextcloud') {
@@ -246,7 +246,7 @@ describe(['tagdesktop'], 'Collapsed Annotation Tests', function() {
 		cy.cGet('.cool-annotation-info-collapsed').should('be.not.visible');
 
 		helper.processToIdle(this.win);
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		// The navigation panel closed before the reload stays closed.
 		cy.cGet('#navigation-sidebar').should('not.have.class', 'visible');
 		desktopHelper.getNbIcon('ModifyPage.selected').click();
@@ -278,7 +278,7 @@ describe(['tagdesktop'], 'Comment Scrolling',function() {
 
 	beforeEach(function() {
 		cy.viewport(1500, 600);
-		helper.setupAndLoadDocument('impress/comment_switching.odp');
+		helper.setupAndLoadDocument('impress/comment_switching.odp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		desktopHelper.getNbIcon('ModifyPage').click();
 		desktopHelper.selectZoomLevel('50', false);
@@ -371,7 +371,7 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 
 	beforeEach(function() {
 		cy.viewport(2400, 600);
-		newFilePath = helper.setupAndLoadDocument('impress/comment_switching.odp');
+		newFilePath = helper.setupAndLoadDocument('impress/comment_switching.odp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 
 		// TODO: skip sidebar detection on reload
@@ -395,7 +395,7 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		cy.cGet('.cool-annotation-edit.modify-annotation').should('be.visible');
 
 		helper.processToIdle(this.win);
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		cy.cGet('.annotation-marker').should('be.visible');
 		cy.cGet('.cool-annotation-content > div').should('have.text','some text0');
 	});
@@ -414,7 +414,7 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		cy.cGet('.cool-annotation-content > div').should('have.text','some text0');
 
 		helper.processToIdle(this.win);
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		cy.cGet('.annotation-marker').should('be.visible');
 		cy.cGet('.cool-annotation-content > div').should('have.text','some text0');
 	});
@@ -433,7 +433,7 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		cy.cGet('.cool-annotation-content > div').should('not.exist');
 
 		helper.processToIdle(this.win);
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		cy.cGet('.annotation-marker').should('not.exist');
 		cy.cGet('.cool-annotation-content > div').should('not.exist');
 	});
@@ -451,7 +451,7 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		cy.cGet('.cool-annotation-edit.modify-annotation').should('be.visible');
 
 		helper.processToIdle(this.win);
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		cy.cGet('.annotation-marker').should('be.visible');
 		cy.cGet('.cool-annotation-content > div').should('have.text','some text0, some other text');
 	});
@@ -472,7 +472,7 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		cy.cGet('.annotation-marker').should('be.visible');
 
 		helper.processToIdle(this.win);
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		cy.cGet('.annotation-marker').should('be.visible');
 		cy.cGet('.cool-annotation-content > div').should('have.text','some text0, some other text');
 	});
@@ -493,7 +493,7 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		cy.cGet('.annotation-marker').should('be.visible');
 
 		helper.processToIdle(this.win);
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		cy.cGet('.annotation-marker').should('be.visible');
 		cy.cGet('.cool-annotation-content > div').should('have.text','some text0');
 	});
@@ -527,7 +527,7 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		cy.cGet('[id^=annotation-modify-textarea-]').should('include.text', 'some text0');
 		cy.cGet('[id^=annotation-modify-textarea-]').should('include.text', 'some reply text');
 
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		cy.cGet('.cool-annotation-edit.reply-annotation').should('be.not.visible');
 		cy.cGet('.cool-annotation-content > div').should('include.text','some reply text');
 	});
@@ -552,7 +552,7 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		cy.cGet('.cool-annotation-content > div').should('include.text','some text0');
 		cy.cGet('.cool-annotation-content > div').should('include.text','some reply text');
 
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		cy.cGet('.cool-annotation-edit.reply-annotation').should('be.not.visible');
 		cy.cGet('.cool-annotation-content > div').should('include.text','some reply text');
 	});
@@ -576,7 +576,7 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		cy.cGet('.cool-annotation-edit.reply-annotation').should('be.not.visible');
 		cy.cGet('.cool-annotation-content > div').should('have.text','some text0');
 
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		cy.cGet('.cool-annotation-edit.reply-annotation').should('be.not.visible');
 		cy.cGet('.cool-annotation-content > div').should('have.text','some text0');
 	});

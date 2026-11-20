@@ -6,7 +6,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop'], 'JSDialog Help button test', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/help_dialog.ods');
+		helper.setupAndLoadDocument('calc/help_dialog.ods', false, false, undefined, 'vector=false');
 		cy.viewport(1920,1080);
 	});
 

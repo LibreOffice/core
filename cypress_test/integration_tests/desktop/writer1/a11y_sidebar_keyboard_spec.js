@@ -21,7 +21,7 @@ describe(['tagdesktop'], 'Writer sidebar keyboard navigation', { testIsolation: 
 
 	before(function () {
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('writer/table_accessibility.odt');
+		helper.setupAndLoadDocument('writer/table_accessibility.odt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

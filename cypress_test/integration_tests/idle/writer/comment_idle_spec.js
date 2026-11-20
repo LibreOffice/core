@@ -9,7 +9,7 @@ var dimDialogSelector = '#modal-dialog-inactive_user_message-overlay';
 // the idle handler makes of the time an author spends in there.
 describe(['tagdesktop'], 'Idle while a comment is open', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/annotation.odt');
+		helper.setupAndLoadDocument('writer/annotation.odt', false, false, undefined, 'vector=false');
 		// The document already comes up in the notebookbar. This tells the helpers which
 		// path to take when they insert the comment.
 		desktopHelper.switchUIToNotebookbar();

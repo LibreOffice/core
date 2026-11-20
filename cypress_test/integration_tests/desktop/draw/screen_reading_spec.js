@@ -7,7 +7,7 @@ describe(['taga11yenabled'], 'Screen reading in a drawing document', { testIsola
 	var win;
 
 	before(function () {
-		helper.setupAndLoadDocument('draw/to_curve.fodg');
+		helper.setupAndLoadDocument('draw/to_curve.fodg', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function (w) {
 			win = w;
 		});

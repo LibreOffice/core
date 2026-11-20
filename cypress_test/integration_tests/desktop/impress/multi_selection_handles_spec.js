@@ -6,7 +6,7 @@ var impressHelper = require('../../common/impress_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Handles of several selected shapes.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/shape_alignment_guides.fodp');
+		helper.setupAndLoadDocument('impress/shape_alignment_guides.fodp', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;
 		});

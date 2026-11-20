@@ -6,7 +6,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile'], 'Paste special.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/hamburger_menu.odp');
+		helper.setupAndLoadDocument('impress/hamburger_menu.odp', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 	});
 

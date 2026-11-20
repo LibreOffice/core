@@ -7,7 +7,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Impress clipboard tests.',
 
 	it('Notebookbar Paste routes to the notes pane', function() {
 		// Given an open notes panel with its editengine widget focused:
-		helper.setupAndLoadDocument('impress/empty-placeholder.fodp');
+		helper.setupAndLoadDocument('impress/empty-placeholder.fodp', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function(win) {
 			win.app.dispatcher.dispatch('notespanelbottom');
 		});
@@ -63,7 +63,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Impress clipboard tests.',
 
 	it('Notebookbar Copy routes to the notes pane', function() {
 		// Given an open notes panel with 'hello' and selected:
-		helper.setupAndLoadDocument('impress/empty-placeholder.fodp');
+		helper.setupAndLoadDocument('impress/empty-placeholder.fodp', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function(win) {
 			win.app.dispatcher.dispatch('notespanelbottom');
 		});
@@ -100,7 +100,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Impress clipboard tests.',
 
 	it('Paste Special offers Markdown.', function() {
 		// Given an Impress document with a text shape in the center:
-		helper.setupAndLoadDocument('impress/top_toolbar.odp');
+		helper.setupAndLoadDocument('impress/top_toolbar.odp', false, false, undefined, 'vector=false');
 		impressHelper.removeShapeSelection();
 		impressHelper.selectTextShapeInTheCenter();
 

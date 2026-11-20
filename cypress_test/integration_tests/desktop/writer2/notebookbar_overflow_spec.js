@@ -11,7 +11,7 @@ var desktopHelper = require('../../common/desktop_helper');
 // to drag.
 describe(['tagdesktop'], 'Notebookbar at 400% zoom', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/notebookbar.odt');
+		helper.setupAndLoadDocument('writer/notebookbar.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.viewport(480, 660);
 		cy.getFrameWindow().then(function(win) {

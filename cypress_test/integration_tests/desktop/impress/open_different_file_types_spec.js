@@ -7,7 +7,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe.skip(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Open different file types', function() {
 
 	function before(filePath) {
-		helper.setupAndLoadDocument(filePath);
+		helper.setupAndLoadDocument(filePath, false, false, undefined, 'vector=false');
 
 		selectZoomLevel('50');
 

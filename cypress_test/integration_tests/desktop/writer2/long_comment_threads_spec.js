@@ -8,7 +8,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'Long Writer comment threads', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/long_comment_threads.odt');
+		helper.setupAndLoadDocument('writer/long_comment_threads.odt', false, false, undefined, 'vector=false');
 		// At 100% zoom, with the sidebar closed, the box is tall enough for the
 		// longest reply, but page 1 is taller than the view.
 		cy.viewport(1400, 900);

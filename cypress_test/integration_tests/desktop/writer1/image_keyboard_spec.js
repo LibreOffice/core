@@ -6,7 +6,7 @@ describe(['tagdesktop'], 'Writer image from the keyboard', { testIsolation: fals
 	let win;
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/a11y_image.fodt');
+		helper.setupAndLoadDocument('writer/a11y_image.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

@@ -9,7 +9,7 @@ var writerHelper = require('../../common/writer_helper');
 describe.skip(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching via search bar' ,function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/search_bar.odt');
+		helper.setupAndLoadDocument('writer/search_bar.odt', false, false, undefined, 'vector=false');
 	});
 
 	it('Search existing word.', function() {

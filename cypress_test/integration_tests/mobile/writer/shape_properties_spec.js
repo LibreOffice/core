@@ -61,7 +61,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Change shape properties via
 	}
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/shape_properties.odt');
+		helper.setupAndLoadDocument('writer/shape_properties.odt', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 		helper.moveCursor('end');
 		helper.moveCursor('home');

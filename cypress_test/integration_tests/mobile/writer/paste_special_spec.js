@@ -7,7 +7,7 @@ var writerHelper = require('../../common/writer_helper');
 describe(['tagmobile'], 'Paste special.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/hamburger_menu.odt');
+		helper.setupAndLoadDocument('writer/hamburger_menu.odt', false, false, undefined, 'vector=false');
 		mobileHelper.enableEditingMobile();
 	});
 

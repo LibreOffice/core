@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagmultiuser'], 'Sheet geometry after the watched sheet is deleted', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/sheet_delete_geometry.fods', true);
+		helper.setupAndLoadDocument('calc/sheet_delete_geometry.fods', true, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 	});
 

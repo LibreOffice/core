@@ -15,7 +15,7 @@ describe(['tagdesktop'], 'Linked presentation in the slide sorter', function() {
 	var openingId = '{20000000-0000-4000-8000-000000000002}';
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/slide-link-presentation.odp');
+		helper.setupAndLoadDocument('impress/slide-link-presentation.odp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;

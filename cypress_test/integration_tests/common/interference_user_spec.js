@@ -31,7 +31,7 @@ describe('Interfering second user.', function() {
 				.then(function(text) {
 
 					// We open the same document
-					helper.loadDocument(getComponent(text) + '/' + text);
+					helper.loadDocument(getComponent(text) + '/' + text, false, false, undefined, 'vector=false');
 				});
 
 			cy.get('#toolbar-up #userlist').should('be.visible');

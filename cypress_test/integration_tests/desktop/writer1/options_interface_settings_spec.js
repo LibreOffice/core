@@ -16,7 +16,7 @@ describe(['tagdesktop'], 'Options view toggles persist across reload', function 
 	var win;
 
 	beforeEach(function () {
-		newFilePath = helper.setupAndLoadDocument('writer/annotation.odt');
+		newFilePath = helper.setupAndLoadDocument('writer/annotation.odt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function (w) {
 			win = w;
 		});
@@ -48,7 +48,7 @@ describe(['tagdesktop'], 'Options view toggles persist across reload', function 
 			.invoke('getBoolean', 'text.ShowFormattingMarks', false)
 			.should('eq', true);
 
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		cy.cGet('div.leaflet-layer').should('exist');
 
 		// The marks are actually shown again, not just the stored flag. This
@@ -74,7 +74,7 @@ describe(['tagdesktop'], 'Options view toggles persist across reload', function 
 			.invoke('getBoolean', 'text.ShowAnnotations', true)
 			.should('eq', false);
 
-		helper.reloadDocument(newFilePath);
+		helper.reloadDocument(newFilePath, 'vector=false');
 		cy.cGet('div.leaflet-layer').should('exist');
 
 		// Comments stay hidden, and the in-document state reflects it.
@@ -345,7 +345,7 @@ describe(['taga11yenabled'], 'Options dialog and screen reading', function () {
 	var win;
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('writer/annotation.odt');
+		helper.setupAndLoadDocument('writer/annotation.odt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function (w) {
 			win = w;
 		});
@@ -437,7 +437,7 @@ describe(['taga11yenabled'], 'Options dialog and the screen reading lock', funct
 			settings: { accessibilityState: true, lockAccessibilityOn: true },
 		});
 		helper.setupAndLoadDocument('writer/annotation.odt', false, false, undefined,
-			'userid=' + USER);
+			'userid=' + USER + '&vector=false');
 		cy.getFrameWindow().then(function (w) {
 			win = w;
 		});

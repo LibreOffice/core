@@ -7,7 +7,7 @@ describe(['tagdesktop'], 'Formula dialog tests', function() {
 
 	beforeEach(function() {
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('calc/formula_dialog.ods');
+		helper.setupAndLoadDocument('calc/formula_dialog.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

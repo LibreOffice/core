@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe.skip(['tagmultiuser'], 'Sidebar visibility', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/sidebar_visibility.odt',true);
+		helper.setupAndLoadDocument('writer/sidebar_visibility.odt',true, false, undefined, 'vector=false');
 	});
 
 	function testSidebarVisiblity(frameId1 ,frameId2) {

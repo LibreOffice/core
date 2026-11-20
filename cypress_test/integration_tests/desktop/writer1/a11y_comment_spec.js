@@ -37,7 +37,7 @@ describe(['tagdesktop'], 'Writer comments for the reader', { testIsolation: fals
 	}
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/a11y_comment.fodt');
+		helper.setupAndLoadDocument('writer/a11y_comment.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

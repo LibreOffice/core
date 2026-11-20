@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop'], 'Manage Names dialog focus', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/manage_names.fods');
+		helper.setupAndLoadDocument('calc/manage_names.fods', false, false, undefined, 'vector=false');
 		cy.viewport(1920, 1080);
 	});
 

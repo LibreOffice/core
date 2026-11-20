@@ -6,7 +6,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Complex image operation te
 
 	beforeEach(function() {
 		localStorage.setItem('image_validation_test', true);
-		helper.setupAndLoadDocument('writer/complex_image_operation.odt');
+		helper.setupAndLoadDocument('writer/complex_image_operation.odt', false, false, undefined, 'vector=false');
 	});
 
 	it('tile image validation test',function() {

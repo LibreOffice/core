@@ -9,7 +9,7 @@ var a11yHelper = require('../../common/a11y_helper');
 // around. Shift+F6 goes the other way.
 describe(['tagdesktop'], 'Impress F6 region navigation', function () {
 	beforeEach(function () {
-		helper.setupAndLoadDocument('impress/empty-placeholder.fodp');
+		helper.setupAndLoadDocument('impress/empty-placeholder.fodp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 
 		// the slide panel is shown by default

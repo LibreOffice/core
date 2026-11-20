@@ -7,7 +7,7 @@ var impressHelper = require('../../common/impress_helper');
 describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/insertion_wizard.odp');
+		helper.setupAndLoadDocument('impress/insertion_wizard.odp', false, false, undefined, 'vector=false');
 
 		mobileHelper.enableEditingMobile();
 		cy.getFrameWindow().then((win) => {

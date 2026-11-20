@@ -11,7 +11,7 @@ describe(['tagdesktop'], 'Notebookbar under forced colours', { testIsolation: fa
 
 	before(function () {
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('calc/navigator.ods');
+		helper.setupAndLoadDocument('calc/navigator.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function (frameWindow) { win = frameWindow; });
 		cy.then(function () { return helper.processToIdle(win); });
 

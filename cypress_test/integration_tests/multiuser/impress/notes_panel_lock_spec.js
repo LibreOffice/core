@@ -11,7 +11,7 @@ describe(['tagmultiuser'], 'Impress speaker notes pane with two users', function
 	var paragraph = editEngine + ' .ui-editengine-paragraph';
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('impress/empty-placeholder.fodp', true);
+		helper.setupAndLoadDocument('impress/empty-placeholder.fodp', true, false, undefined, 'vector=false');
 		cy.getFrameWindow('#iframe1').then(function (win) { win1 = win; });
 		cy.getFrameWindow('#iframe2').then(function (win) { win2 = win; });
 	});

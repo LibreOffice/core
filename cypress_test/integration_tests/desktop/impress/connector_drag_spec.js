@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Connector endpoint drag preview.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/connector_drag.fodp');
+		helper.setupAndLoadDocument('impress/connector_drag.fodp', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;
 		});

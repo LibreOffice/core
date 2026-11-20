@@ -6,7 +6,7 @@ var impressHelper = require('../../common/impress_helper');
 // Both slides of the document have one on-click effect that plays for 10 seconds.
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slideshow navigation keys', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/slideshow-effects.fodp');
+		helper.setupAndLoadDocument('impress/slideshow-effects.fodp', false, false, undefined, 'vector=false');
 		cy.cGet('.notebookbar #Slideshow-tab-label').click();
 		cy.cGet('.notebookbar #slide-fullscreen-presentation-button').click();
 		cy.getFrameWindow().then((win) => {

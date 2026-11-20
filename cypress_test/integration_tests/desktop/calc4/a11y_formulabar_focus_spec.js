@@ -11,7 +11,7 @@ describe(['tagdesktop'], 'Formula bar focus', { testIsolation: false }, function
 		cy.viewport(1920, 1080);
 		const brand = Cypress.env('brandTheme');
 		helper.setupAndLoadDocument('calc/top_toolbar.ods', false, false, undefined,
-			brand ? 'theme=' + brand : undefined);
+			(brand ? 'theme=' + brand + '&' : '') + 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

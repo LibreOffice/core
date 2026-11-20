@@ -12,7 +12,7 @@ describe(['tagdesktop'], 'Submenu arrow', { testIsolation: false }, function () 
 
 	before(function () {
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('calc/switch.ods');
+		helper.setupAndLoadDocument('calc/switch.ods', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

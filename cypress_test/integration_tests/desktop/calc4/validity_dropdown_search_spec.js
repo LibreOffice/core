@@ -12,7 +12,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Validity dropdown search',
 	var win;
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/validity_list_dropdown.fods');
+		helper.setupAndLoadDocument('calc/validity_list_dropdown.fods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function(w) {
 			win = w;
 		});

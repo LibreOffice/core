@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'Impress Transition Tab Tests', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/slideshow.odp');
+		helper.setupAndLoadDocument('impress/slideshow.odp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 	});
 

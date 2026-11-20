@@ -53,7 +53,7 @@ describe(['tagdesktop'], 'Calc drag and drop of a selected column.', function() 
 
 	beforeEach(function() {
 		// Row 1 holds A to F, one letter per column, the letter naming its column.
-		helper.setupAndLoadDocument('calc/cell_drag_drop.fods');
+		helper.setupAndLoadDocument('calc/cell_drag_drop.fods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});
@@ -87,7 +87,7 @@ describe(['tagdesktop'], 'Calc drag and drop of a selected column.', function() 
 describe(['tagdesktop'], 'Calc Alt-drag and the accelerator info boxes.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/cell_drag_drop.fods');
+		helper.setupAndLoadDocument('calc/cell_drag_drop.fods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

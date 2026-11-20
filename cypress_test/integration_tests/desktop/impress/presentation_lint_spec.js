@@ -328,7 +328,7 @@ function loadPresentationAndOpenDeck(test) {
 	// the sidebar counts as off screen.
 	cy.viewport(1920, 1080);
 
-	helper.setupAndLoadDocument('impress/presentation_lint.fodp');
+	helper.setupAndLoadDocument('impress/presentation_lint.fodp', false, false, undefined, 'vector=false');
 
 	cy.getFrameWindow().then(function(win) {
 		test.win = win;
@@ -1268,7 +1268,7 @@ describe(['tagdesktop'], 'Presentation cleanup in the tabbed view', function() {
 	beforeEach(function() {
 		cy.viewport(1920, 1080);
 
-		helper.setupAndLoadDocument('impress/presentation_lint.fodp');
+		helper.setupAndLoadDocument('impress/presentation_lint.fodp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 
 		cy.getFrameWindow().then((win) => {

@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop'], 'Calc drag-selection autoscroll', function () {
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('calc/autofill.fods');
+		helper.setupAndLoadDocument('calc/autofill.fods', false, false, undefined, 'vector=false');
 	});
 
 	// While a cell selection is dragged with the mouse button held, the document

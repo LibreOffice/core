@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe.skip(['tagmultiuser'], 'Navigator follow the change of document', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/paragraph_prop.odt',true);
+		helper.setupAndLoadDocument('writer/paragraph_prop.odt',true, false, undefined, 'vector=false');
 	});
 
 	it('Create Heading, Table, then modify, and delete', function() {

@@ -11,7 +11,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Insert a slide from the sl
 	}
 
 	it('the new slide becomes the current one and the arrow keys move on from it', function() {
-		helper.setupAndLoadDocument('impress/colors.odp');
+		helper.setupAndLoadDocument('impress/colors.odp', false, false, undefined, 'vector=false');
 
 		var win;
 		// The part numbers of the slides the insertion moves, read before it

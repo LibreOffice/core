@@ -8,7 +8,7 @@ describe(['tagdesktop'], 'Formulabar in readonly mode', function() {
 
 	beforeEach(function() {
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('calc/formulabar.ods');
+		helper.setupAndLoadDocument('calc/formulabar.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});
@@ -48,7 +48,7 @@ describe(['tagdesktop'], 'Formulabar tests', function() {
 
 	beforeEach(function() {
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('calc/formulabar.ods');
+		helper.setupAndLoadDocument('calc/formulabar.ods', false, false, undefined, 'vector=false');
 		cy.cGet('#pos_window-input-address').should('have.value', 'AB106');
 	});
 

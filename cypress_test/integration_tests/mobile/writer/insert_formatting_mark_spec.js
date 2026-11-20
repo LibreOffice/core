@@ -7,7 +7,7 @@ var writerHelper = require('../../common/writer_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Insert formatting mark via insertion wizard.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/insert_formatting_mark.odt');
+		helper.setupAndLoadDocument('writer/insert_formatting_mark.odt', false, false, undefined, 'vector=false');
 		// Click on edit button
 		mobileHelper.enableEditingMobile();
 		mobileHelper.openInsertionWizard();

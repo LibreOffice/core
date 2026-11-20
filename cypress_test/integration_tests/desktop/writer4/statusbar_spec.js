@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Statusbar tests.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/statusbar.odt');
+		helper.setupAndLoadDocument('writer/statusbar.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToCompact();
 
 		if (Cypress.env('INTEGRATION') === 'nextcloud') {

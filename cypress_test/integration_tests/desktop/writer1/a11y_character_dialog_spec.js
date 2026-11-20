@@ -9,7 +9,7 @@ describe(['tagdesktop'], 'Accessibility of the character dialog', { testIsolatio
 	let comboboxes;
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/help_dialog.odt');
+		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 
 		cy.getFrameWindow().then(function (frameWindow) {

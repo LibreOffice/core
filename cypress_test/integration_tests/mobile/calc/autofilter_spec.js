@@ -7,7 +7,7 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'AutoFilter', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/autofilter.ods');
+		helper.setupAndLoadDocument('calc/autofilter.ods', false, false, undefined, 'vector=false');
 		// Click on edit button
 		mobileHelper.enableEditingMobile();
 		helper.setDummyClipboardForCopy();

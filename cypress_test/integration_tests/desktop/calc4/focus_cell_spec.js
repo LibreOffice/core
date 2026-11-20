@@ -6,7 +6,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop'], 'Calc Focus Cell overlay', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/cell_cursor.ods');
+		helper.setupAndLoadDocument('calc/cell_cursor.ods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then(function(win) {
 			helper.processToIdle(win);
 		});

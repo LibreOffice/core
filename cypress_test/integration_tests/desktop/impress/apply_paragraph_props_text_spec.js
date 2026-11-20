@@ -7,7 +7,7 @@ const desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties on selected shape.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/apply_paragraph_props_text.odp');
+		helper.setupAndLoadDocument('impress/apply_paragraph_props_text.odp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToCompact();
 
 		cy.cGet('.close-navigation-button').click();

@@ -7,7 +7,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagscreenshot'], 'Manage Changes Dialog
 
 	beforeEach(function () {
 		helper.withoutBrandTheme();
-		helper.setupAndLoadDocument('writer/manage_tracking_changes.odt');
+		helper.setupAndLoadDocument('writer/manage_tracking_changes.odt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});
@@ -38,7 +38,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagscreenshot'], 'Manage Changes Dialog
 describe(['tagdesktop'], 'Manage Changes Dialog comments', function () {
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('writer/writer-edit.fodt');
+		helper.setupAndLoadDocument('writer/writer-edit.fodt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow().then(function (win) {
 			this.win = win;

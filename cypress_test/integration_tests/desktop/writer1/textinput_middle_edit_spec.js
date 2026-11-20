@@ -16,7 +16,7 @@ var ceHelper = require('../../common/contenteditable_helper');
 describe(['taga11yenabled'], 'TextInput - middle edit with caret at the end', function() {
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('writer/undo_redo.odt');
+		helper.setupAndLoadDocument('writer/undo_redo.odt', false, false, undefined, 'vector=false');
 		cy.cGet('div.clipboard').as('clipboard');
 	});
 

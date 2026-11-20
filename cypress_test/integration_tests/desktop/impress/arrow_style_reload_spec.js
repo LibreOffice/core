@@ -6,7 +6,7 @@ var impressHelper = require('../../common/impress_helper');
 describe(['tagdesktop'], 'Arrow styles of a reloaded shape', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/arrow_style_reload.fodp');
+		helper.setupAndLoadDocument('impress/arrow_style_reload.fodp', false, false, undefined, 'vector=false');
 	});
 
 	it('Line dialog lists the arrow styles of the reloaded shape', function() {

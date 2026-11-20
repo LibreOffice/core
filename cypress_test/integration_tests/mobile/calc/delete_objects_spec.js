@@ -7,7 +7,7 @@ var calcHelper = require('../../common/calc_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Delete Objects',function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/delete_objects.ods');
+		helper.setupAndLoadDocument('calc/delete_objects.ods', false, false, undefined, 'vector=false');
 
 		// Click on edit button
 		mobileHelper.enableEditingMobile();

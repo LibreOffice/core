@@ -7,7 +7,7 @@ describe(['tagdesktop'], 'Tracked changes for the reader', { testIsolation: fals
 	let win;
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/a11y_tracked_changes.fodt');
+		helper.setupAndLoadDocument('writer/a11y_tracked_changes.fodt', false, false, undefined, 'vector=false');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;

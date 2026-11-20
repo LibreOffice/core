@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Writer multi-page view layout reset.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		helper.setupAndLoadDocument('writer/copy_paste.odt', false, false, undefined, 'vector=false');
 		cy.viewport(1920, 1080);
 	});
 
@@ -57,7 +57,7 @@ describe(['tagdesktop'], 'Writer remembers the last used view mode.', function()
 	var viewModeUser = 'userid=writer-multipage';
 
 	beforeEach(function() {
-		documentFilePath = helper.setupAndLoadDocument('writer/copy_paste.odt', false, false, undefined, viewModeUser);
+		documentFilePath = helper.setupAndLoadDocument('writer/copy_paste.odt', false, false, undefined, viewModeUser + '&vector=false');
 		cy.viewport(1920, 1080);
 	});
 
@@ -83,7 +83,7 @@ describe(['tagdesktop'], 'Writer remembers the last used view mode.', function()
 
 		// Reopen: the multi-page choice must be restored (first change - this
 		// passed even with the bug).
-		helper.reloadDocument(documentFilePath, viewModeUser);
+		helper.reloadDocument(documentFilePath, viewModeUser + '&vector=false');
 		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
 		cy.getFrameWindow().its('app.activeDocument.activeLayout.type')
 			.should('equal', 'ViewLayoutMultiPage');
@@ -98,7 +98,7 @@ describe(['tagdesktop'], 'Writer remembers the last used view mode.', function()
 
 		// Reopen: normal must be restored. This is the regression - before the
 		// fix the document reopened in multi-page view here.
-		helper.reloadDocument(documentFilePath, viewModeUser);
+		helper.reloadDocument(documentFilePath, viewModeUser + '&vector=false');
 		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
 		cy.getFrameWindow().its('app.activeDocument.activeLayout.type')
 			.should('equal', 'ViewLayoutWriter');
@@ -108,7 +108,7 @@ describe(['tagdesktop'], 'Writer remembers the last used view mode.', function()
 describe(['tagdesktop'], 'Writer multi-page to normal view keeps the page centered.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		helper.setupAndLoadDocument('writer/copy_paste.odt', false, false, undefined, 'vector=false');
 		cy.viewport(1920, 1080);
 	});
 

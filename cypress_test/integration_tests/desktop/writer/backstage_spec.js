@@ -21,7 +21,7 @@ describe(['tagdesktop'], 'Backstage View Tests', { testIsolation: false }, funct
 	var originalMessage = null;
 
 	before(function() {
-		helper.setupAndLoadDocument('writer/help_dialog.odt');
+		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((frameWindow) => {
 			win = frameWindow;
 			win.prefs.remove('templateFavorites');
@@ -420,7 +420,7 @@ describe(['tagdesktop'], 'Backstage View close button', function() {
 
 	beforeEach(function() {
 		cy.viewport(1400, 1000);
-		helper.setupAndLoadDocument('writer/help_dialog.odt');
+		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

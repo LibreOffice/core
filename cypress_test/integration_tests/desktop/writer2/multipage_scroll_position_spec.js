@@ -8,7 +8,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Writer view switch keeps t
 		// The window has its final size at load, so the fit-width zoom is applied then, before
 		// the test scrolls.
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('writer/six_pages.fodt');
+		helper.setupAndLoadDocument('writer/six_pages.fodt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 			return helper.processToIdle(win);

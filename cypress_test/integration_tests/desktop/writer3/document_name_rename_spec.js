@@ -9,7 +9,7 @@ describe(['tagdesktop'], 'Document rename', function() {
 
 	beforeEach(function() {
 		helper.setupAndLoadDocument('writer/document_name_rename.odt',
-			/* isMultiUser */ false, /* copy the .wopi.json next to it */ true);
+			/* isMultiUser */ false, /* copy the .wopi.json next to it */ true, undefined, 'vector=false');
 
 		// Record what the name field puts on the wire.
 		cy.getFrameWindow().then(function(win) {

@@ -87,7 +87,7 @@ describe(['tagdesktop'], 'Writer drag and drop of a text selection.', function()
 
 	beforeEach(function() {
 		// Three paragraphs: Test1, Test3, Test2.
-		helper.setupAndLoadDocument('writer/drag_drop_text.fodt');
+		helper.setupAndLoadDocument('writer/drag_drop_text.fodt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});
@@ -211,7 +211,7 @@ describe(['tagdesktop'], 'Writer drag and drop of a text selection past the visi
 
 	beforeEach(function() {
 		// Test1, Test2, 120 filler lines and End: about three pages.
-		helper.setupAndLoadDocument('writer/drag_drop_text_long.fodt');
+		helper.setupAndLoadDocument('writer/drag_drop_text_long.fodt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});
@@ -299,7 +299,7 @@ describe(['tagdesktop'], 'Writer drag and drop of a text selection in the multi-
 	beforeEach(function() {
 		cy.viewport(1920, 1080);
 		// Six pages, one paragraph each: Page one to Page six.
-		helper.setupAndLoadDocument('writer/six_pages.fodt');
+		helper.setupAndLoadDocument('writer/six_pages.fodt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 			win.app.dispatcher.dispatch('multipageview');
@@ -370,7 +370,7 @@ describe(['tagdesktop'], 'Writer drag and drop of a text selection over a shape.
 
 	beforeEach(function() {
 		// Three paragraphs: Test1 followed by a rectangle in the same line, Test3, Test2.
-		helper.setupAndLoadDocument('writer/drag_drop_text_shape.fodt');
+		helper.setupAndLoadDocument('writer/drag_drop_text_shape.fodt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});
@@ -457,7 +457,7 @@ describe(['tagdesktop'], 'Writer drag and drop of a text selection in the compar
 	beforeEach(function() {
 		cy.viewport(1400, 600);
 		// Three paragraphs: Test1, Test3, Test2.
-		helper.setupAndLoadDocument('writer/drag_drop_text.fodt');
+		helper.setupAndLoadDocument('writer/drag_drop_text.fodt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.cGet('#Review-tab-label').click();
 		cy.getFrameWindow().then((win) => {

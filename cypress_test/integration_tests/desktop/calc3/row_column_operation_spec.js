@@ -5,7 +5,7 @@ var desktopHelper = require('../../common/desktop_helper');
 
 describe(['tagdesktop'], 'Row Column Operation', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/row_column_operation.ods');
+		helper.setupAndLoadDocument('calc/row_column_operation.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.viewport(1920,1080);
 		cy.getFrameWindow().then(function(frameWindow) {

@@ -8,7 +8,7 @@ var helper = require('../../common/helper');
 // focus state.
 describe(['tagdesktop'], 'Writer dialog frame grouping', function () {
 	beforeEach(function () {
-		helper.setupAndLoadDocument('writer/help_dialog.odt');
+		helper.setupAndLoadDocument('writer/help_dialog.odt', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});

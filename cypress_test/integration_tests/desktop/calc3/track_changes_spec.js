@@ -9,7 +9,7 @@ describe(['tagdesktop'], 'Accept and reject tracked changes from the Calc Review
 	beforeEach(function() {
 		// Wide enough that the Tracking group shows its buttons instead of folding them away.
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('calc/empty-selections.ods');
+		helper.setupAndLoadDocument('calc/empty-selections.ods', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;

@@ -8,7 +8,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'RTL sheet tests', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/rtl-load.ods');
+		helper.setupAndLoadDocument('calc/rtl-load.ods', false, false, undefined, 'vector=false');
 		// The doc loads in notebookbar mode but desktopHelper.insertComment
 		// branches on Cypress.env('USER_INTERFACE'), which is only set by
 		// switchUIToNotebookbar. Call it here so the env var matches the

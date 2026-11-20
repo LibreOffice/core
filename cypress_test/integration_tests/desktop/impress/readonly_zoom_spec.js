@@ -11,7 +11,7 @@ describe(['tagdesktop'], 'Impress: zoom of a read-only presentation', function()
 	beforeEach(function() {
 		cy.viewport(1280, 800);
 		var filePath = helper.setupDocument('impress/slide_navigation.odp');
-		helper.loadDocument(filePath, true, undefined, undefined, 'permission=readonly');
+		helper.loadDocument(filePath, true, undefined, undefined, 'permission=readonly&vector=false');
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;
 		}.bind(this));

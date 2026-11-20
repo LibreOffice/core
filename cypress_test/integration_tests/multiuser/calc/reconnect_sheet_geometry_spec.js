@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagmultiuser'], 'Sheet geometry after a reconnection', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/invalidations.ods', true);
+		helper.setupAndLoadDocument('calc/invalidations.ods', true, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 	});
 

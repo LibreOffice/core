@@ -4,7 +4,7 @@ var helper = require('../../common/helper');
 
 describe(['tagdesktop'], 'macOS Option/Command + Shift + Arrow text selection', function () {
 	beforeEach(function () {
-		helper.setupAndLoadDocument('writer/testfile.fodt');
+		helper.setupAndLoadDocument('writer/testfile.fodt', false, false, undefined, 'vector=false');
 
 		cy.cGet('#document-container').click();
 		helper.clearAllText();

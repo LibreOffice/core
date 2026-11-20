@@ -8,7 +8,7 @@ describe(['taglighthouse'], 'Accessibility Calc Sidebar Tests', { testIsolation:
 	let win;
 
 	before(function () {
-		helper.setupAndLoadDocument('calc/help_dialog.ods');
+		helper.setupAndLoadDocument('calc/help_dialog.ods', false, false, undefined, 'vector=false');
 
 		// to make insertImage use the correct buttons
 		desktopHelper.switchUIToNotebookbar();

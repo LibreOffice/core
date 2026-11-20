@@ -5,7 +5,7 @@ let helper = require('../../common/helper');
 
 describe(['tagdesktop', 'tagpreview'], 'Drawing preview', function() {
 	beforeEach(function() {
-		helper.setupAndPreviewDocument('draw/navigator.odg');
+		helper.setupAndPreviewDocument('draw/navigator.odg', 'vector=false');
 	});
 
 	it('shows the preview of the drawing', function() {

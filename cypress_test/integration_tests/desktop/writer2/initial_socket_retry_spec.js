@@ -13,7 +13,8 @@ describe(['tagdesktop'], 'Initial WebSocket connection retry', function() {
 		var URI = '/browser/' + Cypress.env('WSD_VERSION_HASH') + '/debug.html'
 			+ '?lang=en-US'
 			+ '&file_path=' + Cypress.env('DATA_WORKDIR') + newFilePath
-			+ '&simulateError=socket:initialClose';
+			+ '&simulateError=socket:initialClose'
+			+ '&vector=false';
 
 		cy.cSetActiveFrame('#coolframe');
 

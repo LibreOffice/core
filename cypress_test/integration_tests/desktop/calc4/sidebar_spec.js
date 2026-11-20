@@ -5,7 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop'], 'Sidebar tests', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/cell_cursor.ods');
+		helper.setupAndLoadDocument('calc/cell_cursor.ods', false, false, undefined, 'vector=false');
 		cy.viewport(1920,1080);
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;

@@ -29,7 +29,7 @@ function cellValue(win, address, expected) {
 describe(['tagdesktop'], 'Assistant formulas in a comma-decimal language', function() {
 	beforeEach(function() {
 		// A1 holds 2 and A2 holds 3.
-		helper.setupAndLoadDocument('calc/aichat_formula.fods', false, false, 'de-DE');
+		helper.setupAndLoadDocument('calc/aichat_formula.fods', false, false, 'de-DE', 'vector=false');
 		helper.setDummyClipboardForCopy();
 		cy.getFrameWindow().then((win) => { this.win = win; });
 	});
@@ -59,7 +59,7 @@ describe(['tagdesktop'], 'Assistant formulas in a comma-decimal language', funct
 
 describe(['tagdesktop'], 'Assistant formulas in a dot-decimal language', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/aichat_formula.fods', false, false, 'en-US');
+		helper.setupAndLoadDocument('calc/aichat_formula.fods', false, false, 'en-US', 'vector=false');
 		helper.setDummyClipboardForCopy();
 		cy.getFrameWindow().then((win) => { this.win = win; });
 	});
@@ -72,7 +72,7 @@ describe(['tagdesktop'], 'Assistant formulas in a dot-decimal language', functio
 
 describe(['tagdesktop'], 'Cell references in an assistant reply', function() {
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/aichat_formula.fods');
+		helper.setupAndLoadDocument('calc/aichat_formula.fods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 			aichatHelper.enableAIAndStubSocket(win, {
@@ -118,7 +118,7 @@ describe(['tagdesktop'], 'Cell references in an assistant reply', function() {
 describe(['tagdesktop'], 'The cell under the cursor as context', function() {
 	beforeEach(function() {
 		// A1 holds 2 and A2 holds 3.
-		helper.setupAndLoadDocument('calc/aichat_formula.fods');
+		helper.setupAndLoadDocument('calc/aichat_formula.fods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 			setCellFormula(win, 'A3', '=SUM(A1,A2)');
@@ -185,7 +185,7 @@ describe(['tagdesktop'], 'The cell under the cursor as context', function() {
 describe(['tagdesktop'], 'Formula error diagnosis', function() {
 	beforeEach(function() {
 		// A1 holds 2 and A2 holds 3, so B1 divides by zero.
-		helper.setupAndLoadDocument('calc/aichat_formula.fods');
+		helper.setupAndLoadDocument('calc/aichat_formula.fods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 			setCellFormula(win, 'B1', '=A1/(A2-3)');
@@ -257,7 +257,7 @@ describe(['tagdesktop'], 'Formula error diagnosis', function() {
 describe(['tagdesktop'], 'A waiting diagnosis and another request', function() {
 	beforeEach(function() {
 		// A1 holds 2 and A2 holds 3, so B1 divides by zero.
-		helper.setupAndLoadDocument('calc/aichat_formula.fods');
+		helper.setupAndLoadDocument('calc/aichat_formula.fods', false, false, undefined, 'vector=false');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 			setCellFormula(win, 'B1', '=A1/(A2-3)');

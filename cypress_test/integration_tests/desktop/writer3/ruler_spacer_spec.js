@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'Ruler spacer section tests.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/notebookbar.odt');
+		helper.setupAndLoadDocument('writer/notebookbar.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 		cy.cGet('#View-tab-label').click();
 	});
@@ -63,7 +63,7 @@ describe(['tagdesktop'], 'Ruler position tests.', function() {
 	// Three pages, one short paragraph on each, no page header and no paragraph
 	// indent, so the caret on a first line sits exactly on the page's text margin.
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/ruler_pages.fodt');
+		helper.setupAndLoadDocument('writer/ruler_pages.fodt', false, false, undefined, 'vector=false');
 		cy.viewport(1920, 1080);
 		desktopHelper.switchUIToNotebookbar();
 		cy.cGet('#View-tab-label').click();

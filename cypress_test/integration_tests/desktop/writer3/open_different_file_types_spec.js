@@ -37,22 +37,22 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Open different file types'
 	}
 
 	it.skip('Open doc file', function() {
-		helper.setupAndLoadDocument('writer/testfile.doc');
+		helper.setupAndLoadDocument('writer/testfile.doc', false, false, undefined, 'vector=false');
 		assertData();
 	});
 
 	it.skip('Open docx file', function() {
-		helper.setupAndLoadDocument('writer/testfile.docx');
+		helper.setupAndLoadDocument('writer/testfile.docx', false, false, undefined, 'vector=false');
 		assertData();
 	});
 
 	it.skip('Open docm file', function() {
-		helper.setupAndLoadDocument('writer/testfile.docm');
+		helper.setupAndLoadDocument('writer/testfile.docm', false, false, undefined, 'vector=false');
 		assertData();
 	});
 
 	it.skip('Open fodt file', function() {
-		helper.setupAndLoadDocument('writer/testfile.fodt');
+		helper.setupAndLoadDocument('writer/testfile.fodt', false, false, undefined, 'vector=false');
 		assertData();
 	});
 
@@ -65,7 +65,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Open different file types'
 	});
 
 	it('Open dotx file', function() {
-		helper.setupAndLoadDocument('writer/testfile.dotx');
+		helper.setupAndLoadDocument('writer/testfile.dotx', false, false, undefined, 'vector=false');
 		// Template files should open in edit mode, not read-only.
 		// Without the accompanying fix in place, this test would have failed,
 		// the server sent filemode with readOnly: true for dotx files.

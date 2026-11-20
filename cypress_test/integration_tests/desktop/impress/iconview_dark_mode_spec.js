@@ -6,7 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'Iconview Dark Mode Inversion Tests', function() {
 
 	it('Transition options panel should invert in dark mode', function() {
-		helper.setupAndLoadDocument('impress/slideshow.odp');
+		helper.setupAndLoadDocument('impress/slideshow.odp', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 
 		// Open transition tab
@@ -35,7 +35,7 @@ describe(['tagdesktop'], 'Iconview Dark Mode Inversion Tests', function() {
 	it('Paragraph Styles panel should NOT invert in dark mode', function() {
 		// wide enough for the styles view to stay in the notebookbar, unfolded
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('writer/styles.odt');
+		helper.setupAndLoadDocument('writer/styles.odt', false, false, undefined, 'vector=false');
 		desktopHelper.switchUIToNotebookbar();
 
 		// Enable dark mode
