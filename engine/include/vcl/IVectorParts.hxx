@@ -71,6 +71,14 @@ public:
      */
     virtual void forgetVectorPart(std::string_view rPartId) = 0;
 
+    /**
+     * Sends the objects of those unique ids again with the next delta of the part they lie on,
+     * as they stand, whether they changed since the part was last pushed or not, together with
+     * the groups they lie in. An id that names no object is passed over. A document whose parts
+     * keep no objects of their own sends nothing.
+     */
+    virtual void resendVectorObjects(const std::vector<sal_uInt64>& /*rObjectIds*/) {}
+
 protected:
     ~IVectorParts();
 };

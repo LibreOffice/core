@@ -3552,6 +3552,40 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testEmbeddedSpreadsheetVectorContentF
     CPPUNIT_ASSERT(aDelta.indexOf("\"text\": \"Revenue\"") >= 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testObjectSentAgainGoesOutUnchanged)
+{
+    // A client that laid a change on an object which the engine refused gets the object as it
+    // stands with the next delta, though the object did not change.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    pViewShell->GetViewShell()->setDrawsFromObjects(true);
+    SdPage* pPage = pViewShell->getCurrentPage();
+    CPPUNIT_ASSERT(pPage->GetObjCount() > 0);
+    const sal_uInt64 nObjectId = pPage->GetObj(0)->GetUniqueID();
+    const OString aPartId = pPage->GetGuid().getString();
+    const auto pushedDelta = [pXImpressDocument, &aPartId]() {
+        tools::JsonWriter aWriter;
+        pXImpressDocument->pushVectorPrimitivesDelta(aWriter, std::string_view(aPartId), 0);
+        return aWriter.finishAndGetAsOString();
+    };
+    {
+        // the client holds the slide
+        tools::JsonWriter aWriter;
+        const OString aCommand = ".uno:VectorPrimitives?partid=" + aPartId + "&mode=0";
+        pXImpressDocument->getCommandValues(aWriter,
+                                            KitParsedCommand::parse(std::string_view(aCommand)));
+        aWriter.finishAndGetAsOString();
+    }
+    const OString aEntry = "\"id\": " + OString::number(sal_Int64(nObjectId));
+    CPPUNIT_ASSERT(pushedDelta().indexOf(aEntry) < 0);
+
+    pXImpressDocument->resendVectorObjects({ nObjectId });
+    CPPUNIT_ASSERT(pushedDelta().indexOf(aEntry) >= 0);
+
+    // once sent, the object goes out only when it changes again
+    CPPUNIT_ASSERT(pushedDelta().indexOf(aEntry) < 0);
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testEmbeddedSpreadsheetSecondView)
 {
     // Given a slide shown in two views, with the spreadsheet active in place in the first one:

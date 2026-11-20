@@ -577,6 +577,9 @@ public:
     /// @see vcl::IVectorParts::forgetVectorPart().
     SD_DLLPUBLIC void forgetVectorPart(std::string_view rPartId) override;
 
+    /// @see vcl::IVectorParts::resendVectorObjects().
+    SD_DLLPUBLIC void resendVectorObjects(const std::vector<sal_uInt64>& rObjectIds) override;
+
     /// @see vcl::ITiledRenderable::getPresentationInfo().
     SD_DLLPUBLIC std::string getPresentationInfo(bool bAllyState = false) const override;
     /// @see vcl::ITiledRenderable::createSlideRenderer().

@@ -5638,6 +5638,47 @@ void COKitDocumentImpl::selectObjects(const char* pObjectIds)
     object is one the view can mark, so one on a locked or a hidden layer, or held against being
     marked, is left as it is. Sets the message for a command that does not reach it.
 */
+/*
+    Has the document send the objects of the ids it collects again when it goes out of scope, as
+    they stand then. A client that laid a change on them before the document answered sees how
+    they really stand that way, also where a command left them as they were, which brings no
+    change of its own to send. It is made after the solar mutex is taken, so it is done while the
+    mutex is still held.
+*/
+namespace
+{
+class AnswerForTheObjects
+{
+public:
+    explicit AnswerForTheObjects(COKitDocument* pDocument)
+        : mpDocument(pDocument)
+    {
+    }
+
+    AnswerForTheObjects(COKitDocument* pDocument, sal_uInt64 nObjectId)
+        : mpDocument(pDocument)
+        , maObjectIds{ nObjectId }
+    {
+    }
+
+    void add(sal_uInt64 nObjectId) { maObjectIds.push_back(nObjectId); }
+
+    ~AnswerForTheObjects()
+    {
+        if (maObjectIds.empty())
+            return;
+        ITiledRenderable* pRenderable = getTiledRenderable(mpDocument);
+        if (vcl::IVectorParts* pParts
+            = pRenderable ? pRenderable->getVectorPartsInterface() : nullptr)
+            pParts->resendVectorObjects(maObjectIds);
+    }
+
+private:
+    COKitDocument* mpDocument;
+    std::vector<sal_uInt64> maObjectIds;
+};
+}
+
 static bool lcl_viewReaches(const SdrPageView& rPageView, const SdrObject& rObject)
 {
     if (rPageView.IsObjMarkable(&rObject))
@@ -6105,6 +6146,7 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char
     comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectPoints");
 
     SolarMutexGuard aGuard;
+    AnswerForTheObjects aAnswer(this, nObjectId);
     SetLastExceptionMsg();
 
     const std::string_view aStep(pStep ? pStep : "");
@@ -6271,6 +6313,7 @@ void COKitDocumentImpl::splitObjectPath(unsigned long long nObjectId, int nPolyg
     comphelper::ProfileZone aZone("COKitDocumentImpl::splitObjectPath");
 
     SolarMutexGuard aGuard;
+    AnswerForTheObjects aAnswer(this, nObjectId);
     SetLastExceptionMsg();
 
     SdrPathObj* pPathObject = lcl_pathToChange(nObjectId);
@@ -6330,6 +6373,7 @@ void COKitDocumentImpl::setObjectPathClosed(unsigned long long nObjectId, bool b
     comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectPathClosed");
 
     SolarMutexGuard aGuard;
+    AnswerForTheObjects aAnswer(this, nObjectId);
     SetLastExceptionMsg();
 
     SdrPathObj* pPathObject = lcl_pathToChange(nObjectId);
@@ -6596,6 +6640,7 @@ void COKitDocumentImpl::setObjectGluePoint(unsigned long long nObjectId, int nGl
     comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectGluePoint");
 
     SolarMutexGuard aGuard;
+    AnswerForTheObjects aAnswer(this, nObjectId);
     SetLastExceptionMsg();
 
     lcl_changeAddedGluePoint(nObjectId, nGlueId, STR_DragMethMove,
@@ -6619,6 +6664,7 @@ void COKitDocumentImpl::insertObjectGluePoint(unsigned long long nObjectId, int 
     comphelper::ProfileZone aZone("COKitDocumentImpl::insertObjectGluePoint");
 
     SolarMutexGuard aGuard;
+    AnswerForTheObjects aAnswer(this, nObjectId);
     SetLastExceptionMsg();
 
     SdrObject* pObject = nullptr;
@@ -6653,6 +6699,7 @@ void COKitDocumentImpl::deleteObjectGluePoint(unsigned long long nObjectId, int 
     comphelper::ProfileZone aZone("COKitDocumentImpl::deleteObjectGluePoint");
 
     SolarMutexGuard aGuard;
+    AnswerForTheObjects aAnswer(this, nObjectId);
     SetLastExceptionMsg();
 
     SdrObject* pObject = nullptr;
@@ -6683,6 +6730,7 @@ void COKitDocumentImpl::setObjectGluePointWayOut(unsigned long long nObjectId, i
     comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectGluePointWayOut");
 
     SolarMutexGuard aGuard;
+    AnswerForTheObjects aAnswer(this, nObjectId);
     SetLastExceptionMsg();
 
     static const std::map<std::string_view, SdrEscapeDirection> aWaysOut{
@@ -6722,6 +6770,7 @@ void COKitDocumentImpl::setObjectGluePointAnchor(unsigned long long nObjectId, i
     comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectGluePointAnchor");
 
     SolarMutexGuard aGuard;
+    AnswerForTheObjects aAnswer(this, nObjectId);
     SetLastExceptionMsg();
 
     struct Anchor
@@ -6794,6 +6843,7 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
     comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectTransform");
 
     SolarMutexGuard aGuard;
+    AnswerForTheObjects aAnswer(this);
     SetLastExceptionMsg();
 
     if (SfxViewShell::IsCurrentKitViewReadOnly())
@@ -6951,6 +7001,7 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
         }
         if (!pObject)
             continue;
+        aAnswer.add(pObject->GetUniqueID());
 
         const basegfx::B2DHomMatrix aWanted(
             aOntoTheChart
@@ -7284,6 +7335,7 @@ void COKitDocumentImpl::setObjectControlPoint(unsigned long long nObjectId,
     comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectControlPoint");
 
     SolarMutexGuard aGuard;
+    AnswerForTheObjects aAnswer(this, nObjectId);
     SetLastExceptionMsg();
 
     if (SfxViewShell::IsCurrentKitViewReadOnly())
@@ -7350,6 +7402,7 @@ void COKitDocumentImpl::cropObject(unsigned long long nObjectId, int nUpperLeftX
     comphelper::ProfileZone aZone("COKitDocumentImpl::cropObject");
 
     SolarMutexGuard aGuard;
+    AnswerForTheObjects aAnswer(this, nObjectId);
     SetLastExceptionMsg();
 
     if (SfxViewShell::IsCurrentKitViewReadOnly())
@@ -7769,6 +7822,7 @@ void COKitDocumentImpl::setObjectHandle(unsigned long long nObjectId, int nKind,
     comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectHandle");
 
     SolarMutexGuard aGuard;
+    AnswerForTheObjects aAnswer(this, nObjectId);
     SetLastExceptionMsg();
 
     if (SfxViewShell::IsCurrentKitViewReadOnly())
@@ -7941,6 +7995,7 @@ void COKitDocumentImpl::setConnectorEnd(unsigned long long nConnectorId, bool bS
     comphelper::ProfileZone aZone("COKitDocumentImpl::setConnectorEnd");
 
     SolarMutexGuard aGuard;
+    AnswerForTheObjects aAnswer(this, nConnectorId);
     SetLastExceptionMsg();
 
     if (SfxViewShell::IsCurrentKitViewReadOnly())

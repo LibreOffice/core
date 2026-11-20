@@ -4418,6 +4418,41 @@ void SdXImpressDocument::forgetVectorPart(std::string_view rPartId)
     maVectorParts.forget(aGuid);
 }
 
+void SdXImpressDocument::resendVectorObjects(const std::vector<sal_uInt64>& rObjectIds)
+{
+    if (!mpDoc)
+        return;
+
+    for (const sal_uInt64 nObjectId : rObjectIds)
+    {
+        // the object is looked for on the slides, the notes pages and the master pages
+        const SdrObject* pObject = nullptr;
+        for (sal_uInt16 nPage = 0; !pObject && nPage < mpDoc->GetPageCount(); ++nPage)
+            pObject = mpDoc->GetPage(nPage)->FindObjectByUniqueID(nObjectId);
+        for (sal_uInt16 nPage = 0; !pObject && nPage < mpDoc->GetMasterPageCount(); ++nPage)
+            pObject = mpDoc->GetMasterPage(nPage)->FindObjectByUniqueID(nObjectId);
+        if (!pObject)
+            continue;
+
+        const SdrPage* pPage = pObject->getSdrPageFromSdrObject();
+        VectorPartState* pState = pPage ? servedPartOf(maVectorParts, *pPage) : nullptr;
+        const std::optional<VectorPartAddress> oPart(
+            partAndModeOfPage(static_cast<const SdPage*>(pPage)));
+        if (!pState || !oPart)
+            continue;
+
+        // what was written last of the object and of the groups it lies in is forgotten, so the
+        // next write takes them as new and counts the version of the part up for them
+        for (const SdrObject* pOne = pObject; pOne; pOne = pOne->getParentSdrObjectFromSdrObject())
+        {
+            const sal_uInt64 nId(svx::vector::idOf(*pOne));
+            pState->maObjectContent.erase(nId);
+            pState->maDirtyObjects.insert(nId);
+        }
+        notifyViewsVectorPartChanged(mpDocShell, *pPage, oPart->mnMode);
+    }
+}
+
 std::string SdXImpressDocument::getVectorResource(std::string_view rCommand)
 {
     return svx::vector::answerResourceCommand(rCommand, maVectorResources);

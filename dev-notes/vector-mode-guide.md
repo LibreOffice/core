@@ -721,6 +721,10 @@ engine answers, its version takes the place of the client's. Where the two agree
 normal case, nothing visible happens. Where they do not, the engine's version is taken, since
 the engine says what the document is.
 
+The engine answers for the objects a change names also where it leaves them as they were, as for
+a move of an object whose position is protected, or a turn the object does not allow. The change
+laid on then goes, and the objects show as they stand again, handles and all.
+
 Text is the one thing the client does not lay out itself. Until the engine answers, a run of
 text keeps its glyphs and only moves and turns with the object; then the engine's new layout
 replaces it.
