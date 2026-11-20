@@ -36,6 +36,8 @@
 #include <bookctrl.hxx>
 #include <map>
 
+#include <strings.hrc>
+
 SFX_IMPL_STATUSBAR_CONTROL(SwBookmarkControl, SfxStringListItem);
 
 SwBookmarkControl::SwBookmarkControl( sal_uInt16 _nSlotId,
@@ -101,7 +103,12 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
     {
         if(IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
         {
-            xPopup->append(OUString::number(nPopupId), pParent->escape_ui_str((*ppBookmark)->GetName().toString()));
+            OUString aPageNum = OUString::number(SwPaM((*ppBookmark)->GetMarkStart()).GetPageNum());
+            OUString aPageStr = SwResId(STR_BOOKMARK_PAGE);
+            aPageStr = aPageStr.replaceFirst("%1", aPageNum);
+            xPopup->append(OUString::number(nPopupId),
+                           pParent->escape_ui_str((*ppBookmark)->GetName().toString()) + " "
+                               + aPageStr);
             aBookmarkIdx[nPopupId] = o3tl::narrowing<sal_uInt16>(ppBookmark - ppBookmarkStart);
             nPopupId++;
         }

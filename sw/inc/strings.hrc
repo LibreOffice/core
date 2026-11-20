@@ -1612,6 +1612,9 @@
 
 #define STR_UNDO_UNFLOAT_FRAME_CONTENT NC_("STR_UNDO_UNFLOAT_FRAME_CONTENT", "Unfloat frame content")
 
+// To translators: %1 is replaced by the page number
+#define STR_BOOKMARK_PAGE NC_("STR_BOOKMARK_PAGE", "(p. %1)")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
