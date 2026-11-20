@@ -18,18 +18,19 @@
 
 #include <config.h>
 
+#include <common/Common.hpp>
+#include <common/FileUtil.hpp>
 #include <HttpRequest.hpp>
 #include <Unit.hpp>
 #include <helpers.hpp>
 #include <lokassert.hpp>
+#include <wsd/COOLWSD.hpp>
 #include <wsd/ClientSession.hpp>
 #include <wsd/DocumentBroker.hpp>
 
 #include <Poco/JSON/Array.h>
 #include <Poco/JSON/Object.h>
 #include <Poco/JSON/Parser.h>
-#include <Poco/File.h>
-#include <Poco/Path.h>
 #include <Poco/URI.h>
 
 #include <algorithm>
@@ -101,18 +102,21 @@ class UnitSlideLink : public UnitWSD
         docBroker->addCallback(
             [docBroker, stagedName, content, staged]()
             {
-                const std::string stagedPath = docBroker->jailStagingPath(stagedName);
-                if (stagedPath.empty())
-                {
-                    staged->set_value(false);
-                    return;
-                }
+                // A name staged again replaces the file staged under it before.
+                const std::string previous = FileUtil::findFileInJail(
+                    COOLWSD::EnableMountNamespaces, docBroker->getJailRoot(),
+                    JAILED_DOCUMENT_ROOT + std::string("insertfile/") + stagedName);
+                if (!previous.empty())
+                    FileUtil::removeFile(previous);
 
-                Poco::File(Poco::Path(stagedPath).parent()).createDirectories();
-                std::ofstream file(stagedPath, std::ios::binary);
+                const std::string stagingPath = docBroker->newStagingPath();
+                std::ofstream file(stagingPath, std::ios::binary);
                 file << content;
                 file.close();
-                staged->set_value(static_cast<bool>(file));
+                const bool moved = file && docBroker->moveToInsertFile(stagingPath, stagedName);
+                if (!moved)
+                    FileUtil::removeFile(stagingPath);
+                staged->set_value(moved);
             });
 
         std::future<bool> result = staged->get_future();

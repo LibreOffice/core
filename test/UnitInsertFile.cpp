@@ -17,10 +17,13 @@
 
 #include <config.h>
 
+#include <common/Common.hpp>
+#include <common/FileUtil.hpp>
 #include <HttpRequest.hpp>
 #include <Unit.hpp>
 #include <helpers.hpp>
 #include <lokassert.hpp>
+#include <wsd/COOLWSD.hpp>
 #include <wsd/ClientSession.hpp>
 #include <wsd/DocumentBroker.hpp>
 
@@ -55,7 +58,11 @@ class UnitInsertFile : public UnitWSD
         docBroker->addCallback(
             [docBroker, stagedName, staged]()
             {
-                std::ifstream file(docBroker->jailStagingPath(stagedName), std::ios::binary);
+                const std::string kitPath =
+                    JAILED_DOCUMENT_ROOT + std::string("insertfile/") + stagedName;
+                std::ifstream file(FileUtil::findFileInJail(COOLWSD::EnableMountNamespaces,
+                                                            docBroker->getJailRoot(), kitPath),
+                                   std::ios::binary);
                 std::ostringstream content;
                 content << file.rdbuf();
                 staged->set_value(content.str());

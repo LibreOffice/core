@@ -7244,27 +7244,6 @@ void DocumentBroker::unregisterDownloadId(const std::string& downloadId)
 
 /// Handles input from the prisoner / child kit process
 #if !MOBILEAPP
-std::string DocumentBroker::jailStagingPath(const std::string& name) const
-{
-    const std::string jailRoot = getJailRoot();
-    if (jailRoot.empty() || name.empty())
-        return std::string();
-
-    try
-    {
-        return FileUtil::buildLocalPathToJail(COOLWSD::EnableMountNamespaces, jailRoot,
-                                              JAILED_DOCUMENT_ROOT + std::string("insertfile")) +
-               '/' + name;
-    }
-    catch (const std::exception& exc)
-    {
-        LOG_ERR("Failed to reach the staging area of the jail of [" << _docKey
-                                                                    << "]: " << exc.what());
-    }
-
-    return std::string();
-}
-
 std::string DocumentBroker::stageExportedSlides(const std::string_view answer)
 {
     ASSERT_CORRECT_THREAD();
