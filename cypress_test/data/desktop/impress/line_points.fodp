@@ -17,6 +17,8 @@
       <draw:page draw:name="slide1" draw:style-name="dp1" draw:master-page-name="Default">
         <draw:line draw:style-name="gr1" draw:layer="layout" svg:x1="2cm" svg:y1="4cm" svg:x2="11cm" svg:y2="8cm"/>
         <draw:polyline draw:style-name="gr1" draw:layer="layout" svg:x="16cm" svg:y="4cm" svg:width="9cm" svg:height="6cm" svg:viewBox="0 0 9000 6000" draw:points="0,6000 4500,0 9000,6000"/>
+        <draw:line draw:style-name="gr1" draw:layer="layout" svg:x1="2cm" svg:y1="12cm" svg:x2="11cm" svg:y2="12cm"/>
+        <draw:line draw:style-name="gr1" draw:layer="layout" svg:x1="20cm" svg:y1="11cm" svg:x2="20cm" svg:y2="15cm"/>
       </draw:page>
     </office:presentation>
   </office:body>

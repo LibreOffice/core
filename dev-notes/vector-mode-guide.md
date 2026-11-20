@@ -259,7 +259,7 @@ A freeform line is drawn by hand, a stroke for every part:
 
 | Handle | Where | What a drag does |
 |---|---|---|
-| Eight framing handles | Corners and side middles, a little outside the frame | Scale. A side handle dragged past the opposite side mirrors the object. |
+| Eight framing handles | Corners and side middles, a little outside the frame | Scale. A side handle dragged past the opposite side mirrors the object. An object without height, as a level curve, shows only the middles of its left and right sides, its two ends, and its turn handle beside its middle; one without width the middles of its upper and lower sides; a point only the upper left handle. A side shorter than a pixel on the screen counts as none. |
 | Turn handle | Above the middle of the upper side | Turns the selection about its middle; in its shearing mode it shears it instead, see "Turning and shearing" below. Shown only where the selection can be turned, not for a table, for example. |
 | Yellow handles | On custom shapes | Change the shape (an arrow's head, a corner's size); each runs only where the shape lets it. |
 | Corner radius | On a rectangle | Rounds the corners. |

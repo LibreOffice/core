@@ -1222,8 +1222,31 @@ class TurningHandle extends HandleGroup {
 		it stays where the drag takes it.
 	*/
 	public place(shown: SelectionHandle[]): SelectionHandle[] | null {
-		if (!shown.some((one: SelectionHandle) => one.kind === '2')) return null;
+		if (
+			!shown.some((one: SelectionHandle) => one.kind === '2') &&
+			!TurningHandle.endsOf(shown)
+		)
+			return null;
 		return this.placedAbove(shown);
+	}
+
+	/*
+		The two handles of a selection without height or without width, which are all of the eight
+		it shows: the middles of its left and right sides, or of its upper and lower ones. Nothing
+		where the corners are shown.
+	*/
+	private static endsOf(
+		shown: SelectionHandle[],
+	): [cool.Point, cool.Point] | null {
+		const of = (kind: string) =>
+			shown.find((one: SelectionHandle) => one.kind === kind)?.point;
+		if (of('1')) return null;
+		const left = of('4');
+		const right = of('5');
+		if (left && right) return [left, right];
+		const upper = of('2');
+		const lower = of('7');
+		return upper && lower ? [upper, lower] : null;
 	}
 
 	/*
@@ -1233,6 +1256,20 @@ class TurningHandle extends HandleGroup {
 		turned it is there but dead, so the selection looks the same whatever may be done to it.
 	*/
 	private placedAbove(shown: SelectionHandle[]): SelectionHandle[] {
+		// a selection without height or width is a line to it: the handle goes out from the
+		// middle at a right angle, on the left of the way from one end to the other
+		const ends = TurningHandle.endsOf(shown);
+		if (ends) {
+			const way = ends[1].subtract(ends[0]);
+			const length = way.length();
+			if (!length) return [];
+			return this.placedOut(
+				ends[0].add(way.divideBy(2)),
+				new cool.Point(way.y / length, -way.x / length),
+				TurningHandle.distance,
+			);
+		}
+
 		const middle = SelectionSection.middleOf(shown);
 		const above = shown.find((one: SelectionHandle) => one.kind === '2');
 		if (!middle || !above) return [];

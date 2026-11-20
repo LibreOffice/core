@@ -6,7 +6,8 @@ var desktopHelper = require('../../common/desktop_helper');
 
 // The points of a line and of a polyline on a vector slide. A line is a path of two points, which
 // takes a point as a path does and so becomes a polyline; a polyline left with two points becomes
-// a line. The slide has a line and an open polyline of three points.
+// a line. The slide has a slanted line, an open polyline of three points, a level line and an
+// upright one.
 describe(['tagdesktop'], 'Points of a line on a vector slide', function() {
 
 	beforeEach(function() {
@@ -189,6 +190,71 @@ describe(['tagdesktop'], 'Points of a line on a vector slide', function() {
 				return handle.group === 'shaping';
 			});
 			expect(ends, 'the two ends of the line').to.have.length(2);
+		});
+	});
+
+	// The handles of the selection shown now, by their group, as kinds.
+	function shownKinds(win, group) {
+		return selectionSection(win).handles().filter(function(handle) {
+			return handle.group === group;
+		}).map(function(handle) {
+			return handle.kind;
+		}).sort();
+	}
+
+	function convertToACurve(win) {
+		cy.then(function() {
+			win.app.socket.sendMessage('convertobjects ids=' + selectedObject(win) + ' to=curve');
+		});
+		cy.wrap(null).should(function() {
+			expect(kindOfTheSelection(win), 'a curve').to.equal(10);
+		});
+	}
+
+	it('A slanted line made a curve stands upright, with the eight around it.', function() {
+		var win = this.win;
+		selectByTab(win, 1);
+		convertToACurve(win);
+		cy.wrap(null).should(function() {
+			expect(shownKinds(win, 'framing'), 'the eight').to.have.length(8);
+			var upperLeft = selectionSection(win).handles().find(function(handle) {
+				return handle.group === 'framing' && handle.kind === '1';
+			});
+			var upperRight = selectionSection(win).handles().find(function(handle) {
+				return handle.group === 'framing' && handle.kind === '3';
+			});
+			expect(Math.abs(upperRight.point.y - upperLeft.point.y), 'the upper side level')
+				.to.be.below(1);
+		});
+	});
+
+	it('A level line made a curve shows its two ends and the turn handle, as it has no height.', function() {
+		var win = this.win;
+		selectByTab(win, 3);
+		convertToACurve(win);
+		cy.wrap(null).should(function() {
+			expect(shownKinds(win, 'framing'), 'the two ends').to.deep.equal(['4', '5']);
+			expect(shownKinds(win, 'turning'), 'the turn handle').to.have.length(1);
+		});
+	});
+
+	it('An upright line made a curve shows its two ends and the turn handle, as it has no width.', function() {
+		var win = this.win;
+		selectByTab(win, 4);
+		convertToACurve(win);
+		cy.wrap(null).should(function() {
+			expect(shownKinds(win, 'framing'), 'the two ends').to.deep.equal(['2', '7']);
+			expect(shownKinds(win, 'turning'), 'the turn handle').to.have.length(1);
+		});
+		// the turn handle stands beside the middle of the line, not above its upper end
+		cy.wrap(null).should(function() {
+			var handles = selectionSection(win).handles();
+			var upper = handles.find(function(handle) { return handle.kind === '2'; });
+			var lower = handles.find(function(handle) { return handle.kind === '7'; });
+			var turn = handles.find(function(handle) { return handle.group === 'turning'; });
+			var middle = (upper.point.y + lower.point.y) / 2;
+			expect(Math.abs(turn.point.y - middle), 'at the height of the middle').to.be.below(10);
+			expect(Math.abs(turn.point.x - upper.point.x), 'beside the line').to.be.above(10);
 		});
 	});
 });

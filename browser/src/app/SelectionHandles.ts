@@ -594,37 +594,33 @@ class ObjectHandles implements HandleSource {
 
 		/*
 			An object without width or height would have handles on top of each other, so only the
-			ones that stand apart are made: the corners go where there is both width and height,
-			the handle in the middle of a side where the side has a length, and an object that is
-			a point keeps the upper left one alone. The engine draws them by the same rule.
+			ones that stand apart are made, as the office makes them: an object without height
+			keeps the middles of its left and right sides, which are its two ends, one without
+			width the middles of its upper and lower sides, and an object that is a point the upper
+			left one alone. A side counts as without length when it is shorter than a pixel on the
+			screen, as a path may keep a remainder of rounding as its height.
 		*/
 		const [upperLeft, upperRight, lowerLeft] = [
 			corners[0],
 			corners[2],
 			corners[5],
 		];
-		const hasWidth = !upperLeft.equals(upperRight);
-		const hasHeight = !upperLeft.equals(lowerLeft);
+		const pixel = app.dpiScale * app.pixelsToTwips;
+		const hasWidth = upperLeft.distanceTo(upperRight) >= pixel;
+		const hasHeight = upperLeft.distanceTo(lowerLeft) >= pixel;
 
 		const wanted = (kind: number): boolean => {
 			if (!hasWidth && !hasHeight) return kind === 1;
-			// The corners, and the middle of a side across the direction that has a length.
-			if (kind === 2 || kind === 7) return hasWidth;
-			if (kind === 4 || kind === 5) return hasHeight;
-			return hasWidth && hasHeight;
+			if (!hasHeight) return kind === 4 || kind === 5;
+			if (!hasWidth) return kind === 2 || kind === 7;
+			return true;
 		};
-
-		/*
-			What draws the handles expects the whole set of eight and reads them by kind, so an
-			object that would have fewer of them is left to the engine, which sends the handles
-			that object really has.
-		*/
-		if (![1, 2, 3, 4, 5, 6, 7, 8].every(wanted)) return undefined;
 
 		// The eight are what a scale takes hold of, so where the objects may not be made larger
 		// or smaller they are shown and do nothing.
 		const dead = !ObjectHandles.canBeResized(this.objectIds);
 
+		// the way each one faces is worked out from all eight, then the wanted ones are kept
 		return ObjectHandles.facedAwayFromTheirPlaces(
 			corners.map((corner: cool.Point, index: number) => ({
 				name: String(index + 1) + '.0.0',
@@ -634,7 +630,7 @@ class ObjectHandles implements HandleSource {
 				deactivated: dead,
 				awayFromItsPlace: new cool.Point(0, 0),
 			})),
-		);
+		).filter((_handle: SelectionHandle, index: number) => wanted(index + 1));
 	}
 
 	/*
