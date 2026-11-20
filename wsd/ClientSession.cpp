@@ -1231,16 +1231,8 @@ void ClientSession::downloadLinkedFile(const std::string& relativePath, const Po
     // The engine detects the type of the file from its extension as well as its content.
     const std::string stagedName =
         "linkedfile-" + Util::rng::getHexString(16) + fileExtension(relativePath);
-    const std::string stagedPath = docBroker->jailStagingPath(stagedName);
-    if (stagedPath.empty())
-    {
-        onStaged(relativePath, std::string());
-        return;
-    }
-
-    const std::string stagedDirectory = Poco::Path(stagedPath).parent().toString();
-    Poco::File(stagedDirectory).createDirectories();
-    if (!FileUtil::checkDiskSpace(stagedDirectory))
+    const std::string stagedPath = docBroker->newStagingPath();
+    if (!FileUtil::checkDiskSpace(Poco::Path(stagedPath).parent().toString()))
     {
         LOG_ERR("Low disk space to download a file linked from [" << docBroker->getDocKey() << ']');
         onStaged(relativePath, std::string());
@@ -1296,6 +1288,13 @@ void ClientSession::downloadLinkedFile(const std::string& relativePath, const Po
         {
             LOG_ERR("Failed to download a linked file from ["
                     << uriAnonym << "]: " << httpResponse->statusLine().reasonPhrase());
+            FileUtil::removeFile(stagedPath);
+            onStaged(relativePath, std::string());
+            return;
+        }
+
+        if (!broker->moveToInsertFile(stagedPath, stagedName))
+        {
             FileUtil::removeFile(stagedPath);
             onStaged(relativePath, std::string());
             return;
