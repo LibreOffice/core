@@ -65,9 +65,7 @@ class VideoBackgroundDialog {
 			{
 				id: id + '-info',
 				type: 'fixedtext',
-				text: _(
-					'The video plays behind every slide that uses the master slide of this slide.',
-				),
+				text: _('All slides that use this master slide get this video.'),
 			},
 			{
 				id: samplesId,
