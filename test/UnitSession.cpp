@@ -374,6 +374,9 @@ UnitBase::TestResult UnitSession::testSlideShow()
         LOK_ASSERT(0 < responseSVG->header().getContentLength());
         TST_LOG("SVG file size: " << responseSVG->header().getContentLength());
 
+        LOK_ASSERT_EQUAL_STR("nosniff", responseSVG->get("X-Content-Type-Options"));
+        LOK_ASSERT_EQUAL_STR("sandbox", responseSVG->get("Content-Security-Policy"));
+
         //        std::ofstream ofs("/tmp/slide.svg");
         //        Poco::StreamCopier::copyStream(rs, ofs);
         //        ofs.close();

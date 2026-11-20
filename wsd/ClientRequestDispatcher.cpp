@@ -3276,13 +3276,16 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
             http::Response response(http::StatusCode::OK);
             FileServerRequestHandler::hstsHeaders(response);
 
-            // Instruct browsers to download the file, not display it
-            // with the exception of SVG where we need the browser to
-            // actually show it.
-            response.setContentType(std::string(ContentType::fromFileName(fileName)));
+            const std::string_view contentType = ContentType::fromFileName(fileName);
+            response.setContentType(std::string(contentType));
+            response.set("X-Content-Type-Options", "nosniff");
             if (serveAsAttachment)
                 response.set("Content-Disposition",
                              FileServerRequestHandler::attachmentDisposition(fileName));
+
+            // The slideshow is shown as an inline SVG with its own script.
+            if (serveAsAttachment || contentType != "image/svg+xml")
+                response.set("Content-Security-Policy", "sandbox");
 
             if (COOLWSD::WASMEnabled)
             {
