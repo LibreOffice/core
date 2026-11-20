@@ -439,6 +439,7 @@ shared_headers = \
                  common/JsonUtil.hpp \
                  common/Landlock.hpp \
                  common/LangUtil.hpp \
+                 common/LoadCommand.hpp \
                  common/Log.hpp \
                  common/Message.hpp \
                  common/MobileApp.hpp \

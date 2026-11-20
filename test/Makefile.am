@@ -207,6 +207,7 @@ test_base_sources = \
 	HttpWhiteBoxTests.cpp \
 	JailUtilWhiteBoxTests.cpp \
 	KitQueueTests.cpp \
+	LoadCommandTests.cpp \
 	LoggingWhiteBoxTests.cpp \
 	NetUtilWhiteBoxTests.cpp \
 	NumUtilWhiteBoxTests.cpp \
