@@ -83,6 +83,21 @@ class HandleTravel {
 
 	private timer: ReturnType<typeof setInterval> | null = null;
 
+	/*
+		Where the handle the keyboard is on stood when a change went out that can take it away or
+		give it another name, in twips, and which handles may stand in for it where none is there
+		any more. Null while no such change waits. Until the keyboard goes elsewhere, it is put
+		on the handle at that place again whenever the handles come anew.
+	*/
+	private kept: { at: cool.Point; standsIn: (name: string) => boolean } | null =
+		null;
+
+	/// The travel whose place is kept, of which there is one, since there is one selection.
+	private static keeping: HandleTravel | null = null;
+
+	/// Whether the answers of the engine are followed, which they are once.
+	private static followingTheAnswers: boolean = false;
+
 	constructor(
 		handlesOf: () => any[],
 		moveHandle: (
@@ -149,8 +164,72 @@ class HandleTravel {
 		}, HandleTravel.blinkTime);
 	}
 
+	/*
+		Keeps the place of the handle the keyboard is on over a change of the handles: the
+		keyboard goes then to the handle at that place, or where none is there any more, to the
+		nearest of those standsIn names. The place is the keyboard's, given by the user, so it
+		stays wherever it can.
+	*/
+	public keepThePlace(standsIn: (name: string) => boolean): void {
+		const handle = this.activeHandle();
+		if (!handle) return;
+
+		this.kept = {
+			at: new cool.Point(handle.point.x, handle.point.y),
+			standsIn: standsIn,
+		};
+		HandleTravel.keeping = this;
+		if (!HandleTravel.followingTheAnswers) {
+			HandleTravel.followingTheAnswers = true;
+			// the handles are worked out from the answer after it is taken in
+			RenderManager.onVectorChanged(() =>
+				setTimeout(() => HandleTravel.keeping?.findThePlace(), 0),
+			);
+		}
+		// a change shown here at once gives the handles new names at once
+		setTimeout(() => this.findThePlace(), 0);
+	}
+
+	/// Puts the keyboard on the handle at the place kept, or on the nearest one that stands in
+	/// for it. Where there is no handle, it stays as it is.
+	private findThePlace(): void {
+		const kept = this.kept;
+		if (!kept) return;
+
+		const handles = this.handles();
+		const distance = (handle: any): number =>
+			new cool.Point(handle.point.x, handle.point.y).subtract(kept.at).length();
+		// a handle less than a pixel of the screen away stands at the same place; of those, one
+		// that stands in comes first, as a corner of the frame can stand on a point
+		const there = handles.filter(
+			(handle: any) => distance(handle) < app.pixelsToTwips,
+		);
+		let found =
+			there.find((handle: any) => kept.standsIn(handle.name)) ?? there[0];
+		if (!found)
+			for (const handle of handles)
+				if (
+					kept.standsIn(handle.name) &&
+					(!found || distance(handle) < distance(found))
+				)
+					found = handle;
+		if (!found || found.name === this.activeName) return;
+
+		this.activeName = found.name;
+		this.blink(false);
+		this.blink(this.blinks(found.name));
+		app.sectionContainer?.requestReDraw();
+	}
+
+	/// Forgets the place kept, as the keyboard goes elsewhere.
+	private forgetThePlace(): void {
+		this.kept = null;
+		if (HandleTravel.keeping === this) HandleTravel.keeping = null;
+	}
+
 	/// The handle the keyboard works on, by name, with the blinking that shows which one it is.
 	private setActive(name: string | null): void {
+		this.forgetThePlace();
 		this.activeName = name;
 		this.blink(name !== null && this.blinks(name));
 		app.sectionContainer?.requestReDraw();
@@ -229,6 +308,7 @@ class HandleTravel {
 		const handle = this.activeHandle();
 		if (!handle) return false;
 
+		this.forgetThePlace();
 		const landed = this.moveHandle(handle, towards, event);
 
 		// The handle goes where it was asked to go, and the view follows it there. Where it lands

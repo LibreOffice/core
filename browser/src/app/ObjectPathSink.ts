@@ -52,7 +52,9 @@ class ObjectPathSink implements PathSink {
 
 	/// The object is the one selected, so it goes the way the selected objects are deleted.
 	public deleteObject(): void {
-		if (this.readyToSend()) GraphicSelection.deleteTheObjectsHere();
+		if (!this.readyToSend()) return;
+		this.selection.travel.leave();
+		GraphicSelection.deleteTheObjectsHere();
 	}
 
 	/*
@@ -207,7 +209,9 @@ class ObjectPathSink implements PathSink {
 		and the hold back is shown then. Otherwise the keyboard leaves the handles, and with
 		sendAhead the changes waiting in the outbox go first. A change that names a state goes
 		into the outbox behind them, which keeps the order and lets a later state of the same
-		thing take its place.
+		thing take its place. The change can add or remove points and weights, so the keyboard
+		keeps its place rather than its handle: it stays on the handle at that place, or goes to
+		the nearest point where the handle went.
 	*/
 	private readyToSend(sendAhead: boolean = true): boolean {
 		if (ChangeOutbox.undoOnItsWay()) {
@@ -215,7 +219,7 @@ class ObjectPathSink implements PathSink {
 			return false;
 		}
 
-		this.selection.travel.leave();
+		this.selection.travel.keepThePlace(PathEditing.namesAPoint);
 		if (sendAhead) ChangeOutbox.sendEverythingAhead();
 		return true;
 	}

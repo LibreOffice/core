@@ -252,6 +252,11 @@ class PathEditing implements HandleSource {
 		return '9.' + String(polygon) + '.' + String(point);
 	}
 
+	/// Whether that is the name of the handle of a point, not of a weight.
+	public static namesAPoint(name: string): boolean {
+		return name.startsWith('9.');
+	}
+
 	private static weightName(
 		polygon: number,
 		point: number,

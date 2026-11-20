@@ -3200,7 +3200,13 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 			path,
 			(placed: cool.ObjectPathPolygon[]) => {
 				const moved = MotionPathHandles.withPathPlaced(object, path, placed);
-				if (moved) this.setPath(object, path, moved);
+				if (!moved) return;
+				// the change can add or remove points, so the keyboard keeps its place
+				this.selection.travel.keepThePlace((name: string) => {
+					const place = MotionPathHandles.placeOf(name);
+					return !!place && PathEditing.namesAPoint(place.inPath);
+				});
+				this.setPath(object, path, moved);
 			},
 		);
 	}
