@@ -489,6 +489,8 @@ void ClientSession::handleClipboardRequest(DocumentBroker::ClipboardRequest     
                     JsonUtil::findJSONValue(json, "url", url);
                     std::string commandName;
                     JsonUtil::findJSONValue(json, "commandName", commandName);
+                    if (commandName != ".uno:PasteSpecial")
+                        commandName = ".uno:Paste";
                     http::Session::FinishedCallback finishedCallback =
                         [selfWeak = weak_from_this(), this, commandName=std::move(commandName),
                          docBroker, clipFile, tag, stagedClipFile](const std::shared_ptr<http::Session>& session)
