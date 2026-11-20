@@ -33,6 +33,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdorect.hxx>
+#include <svx/svdopath.hxx>
 #include <svx/sdangitm.hxx>
 #include <svx/unopage.hxx>
 #include <svx/svdview.hxx>
@@ -419,6 +420,48 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTextEditEmptyGrabBag)
     SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(xShape));
     CPPUNIT_ASSERT(nullptr != pGroup);
     CPPUNIT_ASSERT(pGroup->isDiagram());
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testLineGivesUpItsTurnWhenItIsNoLineAnyMore)
+{
+    std::unique_ptr<SdrModel> pModel(new SdrModel(nullptr, nullptr, true));
+    rtl::Reference<SdrPage> pPage(new SdrPage(*pModel, false));
+    pPage->SetSize(Size(10000, 10000));
+    pModel->InsertPage(pPage.get(), 0);
+
+    // a line down to the right is turned along its direction, as a line is
+    basegfx::B2DPolygon aLine;
+    aLine.append(basegfx::B2DPoint(1000, 1000));
+    aLine.append(basegfx::B2DPoint(5000, 3000));
+    rtl::Reference<SdrPathObj> pLine
+        = new SdrPathObj(*pModel, SdrObjKind::Line, basegfx::B2DPolyPolygon(aLine));
+    pPage->NbcInsertObject(pLine.get());
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::Line, pLine->GetObjIdentifier());
+    CPPUNIT_ASSERT(pLine->GetRotateAngle() != 0_deg100);
+
+    // a point added makes it a polyline, which stands upright around its points
+    basegfx::B2DPolygon aThree(aLine);
+    aThree.insert(1, basegfx::B2DPoint(3000, 1000));
+    pLine->SetPathPoly(basegfx::B2DPolyPolygon(aThree));
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::PolyLine, pLine->GetObjIdentifier());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pLine->GetRotateAngle().get());
+
+    // a line made a curve stands upright as well, its frame as high as the line goes down
+    rtl::Reference<SdrPathObj> pOther
+        = new SdrPathObj(*pModel, SdrObjKind::Line, basegfx::B2DPolyPolygon(aLine));
+    rtl::Reference<SdrObject> pCurve = pOther->ConvertToPolyObj(true, false);
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::PathLine, pCurve->GetObjIdentifier());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pCurve->GetRotateAngle().get());
+    basegfx::B2DHomMatrix aMatrix;
+    basegfx::B2DPolyPolygon aPath;
+    pCurve->TRGetBaseGeometry(aMatrix, aPath);
+    basegfx::B2DTuple aScale;
+    basegfx::B2DTuple aTranslate;
+    double fRotate(0.0);
+    double fShearX(0.0);
+    aMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4000.0, aScale.getX(), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2000.0, aScale.getY(), 1.0);
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)

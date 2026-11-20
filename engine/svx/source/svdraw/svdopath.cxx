@@ -1688,6 +1688,8 @@ void SdrPathObj::ImpForceLineAngle()
 
 void SdrPathObj::ImpForceKind()
 {
+    const bool bWasALine(SdrObjKind::Line == meKind);
+
     if (meKind==SdrObjKind::PathPolyLine) meKind=SdrObjKind::PolyLine;
     if (meKind==SdrObjKind::PathPoly) meKind=SdrObjKind::Polygon;
 
@@ -1715,6 +1717,17 @@ void SdrPathObj::ImpForceKind()
 
     if (meKind==SdrObjKind::Line && !lcl_ImpIsLine(GetPathPoly())) meKind=SdrObjKind::PolyLine;
     if (meKind==SdrObjKind::PolyLine && lcl_ImpIsLine(GetPathPoly())) meKind=SdrObjKind::Line;
+
+    // the turn of a line is just its direction (see ImpForceLineAngle). When it is no line any
+    // more, drop it - else the new object keeps a frame along the old line with no height, and
+    // its points are absolute anyway
+    if (bWasALine && SdrObjKind::Line != meKind)
+    {
+        maGeo.m_nRotationAngle = 0_deg100;
+        maGeo.m_nShearAngle = 0_deg100;
+        maGeo.RecalcSinCos();
+        maGeo.RecalcTan();
+    }
 
     m_bClosedObj=IsClosed();
 
