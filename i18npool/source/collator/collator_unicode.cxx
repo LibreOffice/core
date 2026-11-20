@@ -88,7 +88,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
 
 #if WITH_LOCALE_ALL || WITH_LOCALE_kmr_Latn
         // tdf#173547: specific case for Kurdish Latin (it could be "kmr-Latn-TR" but also "kmr-Latn-SY")
-        bKmrLatn = rLocale.Language == "qlt" && rLocale.Variant.startsWith("kmr-Latn") && rAlgorithm == "alphanumeric";
+        bKmrLatn = rLocale.Language == I18NLANGTAG_QLT && rLocale.Variant.startsWith("kmr-Latn") && rAlgorithm == "alphanumeric";
         if (bKmrLatn) {
             func = get_collator_data_kmr_Latn_alphanumeric;
             funclen = get_collator_data_kmr_Latn_alphanumeric_length;
