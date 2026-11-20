@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-19 16:23+0100\n"
-"PO-Revision-Date: 2026-11-03 09:29+0000\n"
+"PO-Revision-Date: 2026-11-20 09:27+0000\n"
 "Last-Translator: tigran54 <tigran54@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Armenian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/hy/>\n"
-"Language: \n"
+"Language: hy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.11.1.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -454,9 +454,8 @@ msgstr ""
 
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:107
-#, fuzzy
 msgid "No WOPI host configured: trusting the first host that connects"
-msgstr "WOPI հոսթինգը կարգավորված չէ. վստահելի է առաջին միացված հոսթինգը"
+msgstr "WOPI հոսթինգը կարգավորված չէ. վստահելով առաջին միացող հոսթին"
 
 #: admin/src/AdminSocketServerAudit.js:53
 #: src/control/Control.ServerAuditDialog.ts:113
@@ -1711,9 +1710,8 @@ msgstr "EPUB (.epub)"
 
 #: src/app/ExportFormats.ts:65 src/control/Control.Menubar.ts:144
 #: src/control/Control.NotebookbarBuilder.js:453
-#, fuzzy
 msgid "ODF master document (.odm)"
-msgstr "ODF տեքստային փաստաթուղթ (.odt)"
+msgstr "ODF վարպետ փաստաթուղթ (.odm)"
 
 #: src/app/ExportFormats.ts:66 src/app/ExportFormats.ts:78
 #: src/control/Control.Menubar.ts:145
@@ -1835,9 +1833,8 @@ msgid "Center"
 msgstr ""
 
 #: src/app/HandleGroups.ts:1824 src/app/HandleGroups.ts:1958
-#, fuzzy
 msgid "Right"
-msgstr "Լույս"
+msgstr "Աջ"
 
 #: src/app/HandleGroups.ts:1825
 msgid "Bottom Left"
@@ -1872,9 +1869,8 @@ msgid "Default gluepoints cannot be edited."
 msgstr ""
 
 #: src/app/HandleGroups.ts:2728
-#, fuzzy
 msgid "Point"
-msgstr "Տպել"
+msgstr "Կետ"
 
 #: src/app/HandleGroups.ts:2734
 msgid "To Line"
@@ -2404,34 +2400,28 @@ msgid "What would you like to do with this document?"
 msgstr "Ի՞նչ կցանկանայիք անել այս փաստաթղթով։"
 
 #: src/control/Control.AIChatSidebar.ts:838
-#, fuzzy
 msgid "Good morning, {0}"
-msgstr "Բարի լույս, {0}!"
+msgstr "Բարի լույս, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:839
-#, fuzzy
 msgid "Good morning"
-msgstr "Բարի լույս!"
+msgstr "Բարի լույս"
 
 #: src/control/Control.AIChatSidebar.ts:841
-#, fuzzy
 msgid "Good afternoon, {0}"
-msgstr "Բարի օր, {0}!"
+msgstr "Բարի օր, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:842
-#, fuzzy
 msgid "Good afternoon"
-msgstr "Բարի օր!"
+msgstr "Բարի օր"
 
 #: src/control/Control.AIChatSidebar.ts:844
-#, fuzzy
 msgid "Good evening, {0}"
-msgstr "Բարի երեկո, {0}!"
+msgstr "Բարի երեկո, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:845
-#, fuzzy
 msgid "Good evening"
-msgstr "Բարի երեկո!"
+msgstr "Բարի երեկո"
 
 #: src/control/Control.AIChatSidebar.ts:896
 #: src/control/Control.AIChatSidebar.ts:2962
@@ -2497,9 +2487,8 @@ msgstr "Ուղարկել հաղորդագրություն"
 
 #: src/control/Control.AIChatSidebar.ts:1130
 #: src/control/Control.AIChatSidebar.ts:1143
-#, fuzzy
 msgid "Set Tone"
-msgstr "Սահմանել տոնը"
+msgstr "Սահմանել Տոնը"
 
 #: src/control/Control.AIChatSidebar.ts:1154
 msgid "Set tone of voice"
@@ -2655,9 +2644,8 @@ msgid "Prompt instruction"
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:1514
-#, fuzzy
 msgid "Delete prompt confirmation"
-msgstr "Ջնջել տոնայնության հաստատումը"
+msgstr "Ջնջել հուշելու հաստատումը"
 
 #: src/control/Control.AIChatSidebar.ts:1525
 msgid "The prompt \"{0}\" will be deleted."
@@ -2669,9 +2657,8 @@ msgid "Cancel delete"
 msgstr "Չեղարկել ջնջումը"
 
 #: src/control/Control.AIChatSidebar.ts:1635
-#, fuzzy
 msgid "You have reached the maximum of {0} saved prompts."
-msgstr "Դուք հասել եք անհատականացված տոների {0} առավելագույնին։"
+msgstr "Դուք հասել եք պահպանված հարցումների առավելագույն {0} սահմանին։"
 
 #: src/control/Control.AIChatSidebar.ts:1753
 msgid "No saved prompt matches this name."
@@ -3996,7 +3983,6 @@ msgid "Back to document"
 msgstr "Վերադառնալ փաստաթղթին"
 
 #: src/control/backstage/HomeView.tsx:57 src/control/backstage/HomeView.tsx:60
-#, fuzzy
 msgid "More templates"
 msgstr "Ավելի շատ ձևանմուշներ"
 
@@ -4049,9 +4035,8 @@ msgid "Spreadsheet template"
 msgstr ""
 
 #: src/control/backstage/MyTemplatesView.tsx:77
-#, fuzzy
 msgid "Presentation template"
-msgstr "Ներկայացման ձևանմուշներ"
+msgstr "Ներկայացման ձևանմուշ"
 
 #: src/control/backstage/MyTemplatesView.tsx:78
 msgid "Drawing template"
@@ -4092,9 +4077,8 @@ msgid "Templates you add will appear here and in New."
 msgstr ""
 
 #: src/control/backstage/MyTemplatesView.tsx:183
-#, fuzzy
 msgid "Search my templates"
-msgstr "Որոնել ձևանմուշներ"
+msgstr "Որոնել իմ ձևանմուշները"
 
 #: src/control/backstage/MyTemplatesView.tsx:193
 msgid "No templates yet"
@@ -4279,9 +4263,8 @@ msgid "Dismiss"
 msgstr "Վանել"
 
 #: src/control/onboarding/OnboardingSteps.ts:26
-#, fuzzy
 msgid "Welcome to Collabora Office"
-msgstr "Բարի գալուստ Collabora Online"
+msgstr "Բարի գալուստ Collabora Office"
 
 #: src/control/onboarding/OnboardingSteps.ts:27
 msgid "Welcome to Collabora Online"
@@ -4997,9 +4980,8 @@ msgid "Language"
 msgstr "Լեզու"
 
 #: src/control/Control.Mention.ts:193
-#, fuzzy
 msgid "No search results found"
-msgstr "Որոնման արդյունքներ չեն գտնվել։"
+msgstr "Որոնման արդյունքներ չեն գտնվել"
 
 #: src/control/Control.Menubar.ts:57
 msgid "PDF Document (.pdf) as..."
@@ -6450,9 +6432,8 @@ msgstr "Պարբերություն"
 #: src/control/Control.NotebookbarDraw.js:1675
 #: src/control/Control.NotebookbarImpress.js:1740
 #: src/control/Control.TopToolbar.js:284
-#, fuzzy
 msgid "Lines"
-msgstr "Գիծ"
+msgstr "Գծեր"
 
 #: src/control/Control.NotebookbarDraw.js:1695
 #: src/control/Control.NotebookbarImpress.js:1760
@@ -6896,14 +6877,12 @@ msgid "Close Panel"
 msgstr ""
 
 #: src/control/Control.PartsPreview.js:2294
-#, fuzzy
 msgid "Collapse Presentation"
-msgstr "Փակել շնորհանդեսը"
+msgstr "Փլուզել շնորհանդեսը"
 
 #: src/control/Control.PartsPreview.js:2294
-#, fuzzy
 msgid "Expand Presentation"
-msgstr "Ավարտել Շնորհանդեսը"
+msgstr "Ընդլայնել Շնորհանդեսը"
 
 #: src/control/Control.PartsPreview.js:2301
 msgid "Open in Panel"
@@ -6914,9 +6893,8 @@ msgid "Update Presentation"
 msgstr ""
 
 #: src/control/Control.PartsPreview.js:2317
-#, fuzzy
 msgid "Unlink Presentation"
-msgstr "Դատարկ Շնորհանդես"
+msgstr "Ապահղել Շնորհանդես"
 
 #: src/control/Control.PartsPreview.js:2324
 msgid "Unlink Presentation & Contents"
@@ -7230,9 +7208,8 @@ msgid "In a section linked to {0}"
 msgstr "{0}-ին կապված բաժնում"
 
 #: src/control/Control.SlideLinkToolbar.tsx:131
-#, fuzzy
 msgid "In a presentation linked to {0}"
-msgstr "{0}-ին կապված բաժնում"
+msgstr "{0}-ին կապված ներկայացման մեջ"
 
 #: src/control/Control.SlideLinkToolbar.tsx:154
 msgid "Hide the actions for this linked slide"
@@ -7277,9 +7254,8 @@ msgid "Slides of %1"
 msgstr ""
 
 #: src/control/SlidePresentationsRow.tsx:34 src/control/LinkedViewRow.tsx:52
-#, fuzzy
 msgid "Linked presentations"
-msgstr "Զտեք ներկայացումները"
+msgstr "Կապված շնորհանդեսներ"
 
 #: src/control/SlidePresentationsRow.tsx:44
 msgid "Expand all linked presentations"
@@ -7317,34 +7293,29 @@ msgstr ""
 "բաժինը։"
 
 #: src/slideimport/SlideLinks.ts:384
-#, fuzzy
 msgid "Cannot update the slide: {0} no longer holds its source slide."
 msgstr ""
-"Հնարավոր չէ թարմացնել բաժինը: {0}-ը այլևս չի պարունակում իր սկզբնաղբյուր "
-"բաժինը։"
+"Հնարավոր չէ թարմացնել սահիկը. {0}-ը այլևս չի պահում իր սկզբնաղբյուր սահիկը։"
 
 #: src/slideimport/SlideLinks.ts:489
-#, fuzzy
 msgid "Update links"
-msgstr "Թարմացրեք հղման կապերը"
+msgstr "Թարմացրեք հղումները"
 
 #: src/slideimport/SlideLinks.ts:493
-#, fuzzy
 msgid "Update presentations"
-msgstr "Զտեք ներկայացումները"
+msgstr "Թարմացրեք ներկայացումները"
 
 #: src/slideimport/SlideLinks.ts:494
 msgid "Update sections"
 msgstr "Թարմացնել բաժինները"
 
 #: src/slideimport/SlideLinks.ts:504
-#, fuzzy
 msgid ""
 "The linked presentation will hold the slides and sections that {0} holds "
 "now. Changes made to these slides in this presentation will be lost."
 msgstr ""
-"Բաժինը կպահի այն սահիկները, որոնք այժմ պահում է {0}-ում գտնվող իր բաժինը։ "
-"Այս ներկայացման այս սահիկներում կատարված փոփոխությունները կկորչեն։"
+"Կապակցված ներկայացումը կպահի {0}-ի այժմ պահվող սահիկներն ու բաժինները: Այս "
+"ներկայացման մեջ այս սահիկներում կատարված փոփոխությունները կկորչեն:"
 
 #: src/slideimport/SlideLinks.ts:508
 #, fuzzy
