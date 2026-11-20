@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-19 16:23+0200\n"
-"PO-Revision-Date: 2026-10-15 13:24+0000\n"
+"PO-Revision-Date: 2026-11-19 23:06+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin "
 "<aindriu80@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/collabora-online/"
@@ -14,19 +14,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
 "6 && n<11) ? 3 : 4;\n"
-"X-Generator: Translate Toolkit 3.18.1\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
 msgstr "Aicearraí Méarchláir"
 
 #: html/cool-help.html%2Bdiv.p:11-5
+#, fuzzy
 msgid ""
 "On some keyboards, the keys <kbd>F1</kbd> to <kbd>F12</kbd> need the "
 "<kbd>Fn</kbd> key held down as well, for example <kbd>Shift</kbd><span "
 "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Fn</kbd><span "
 "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>F10</kbd>."
 msgstr ""
+"Ar roinnt méarchlár, ní mór an eochair <kbd>Fn</kbd> a choinneáil síos chomh "
+"maith chun na heochracha <kbd>F1</kbd> go <kbd>F12</kbd> a úsáid; mar "
+"shampla, <kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Fn</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
+"<kbd>F10</kbd>."
 
 #: html/cool-help.html%2Bdiv.div.h2:13-9
 msgid "General Keyboard Shortcuts"
@@ -1267,10 +1273,12 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-38
 msgid "Renames the focused sheet tab, the same as double-clicking it."
 msgstr ""
+"Athainmníonn sé an cluaisín bileoige atá dírithe; tá an éifeacht chéanna "
+"aige agus a bheadh ag cliceáil faoi dhó air."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-127
 msgid "F2"
-msgstr ""
+msgstr "F2"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:169-38
 msgid ""
@@ -1691,6 +1699,8 @@ msgid ""
 "Status bar showing the page number, the word count, the language, the view "
 "buttons and the zoom"
 msgstr ""
+"Barra stádais a thaispeánann uimhir an leathanaigh, líon na bhfocal, an "
+"teanga, na cnaipí amhairc agus an súmáil"
 
 #: html/cool-help.html%2Bdiv.div.div.p:417-5
 msgid ""
@@ -1703,10 +1713,20 @@ msgid ""
 "go to it. In spreadsheets, presentations and drawings the <span "
 "class=\"ui\">Find and Replace</span> dialog opens."
 msgstr ""
+"<span class=\"def\">Cuardach:</span> Roghnaigh <span class=\"ui\">Cuardaigh</"
+"span> ar an gcluaisín <span class=\"ui\">Baile</span>, nó brúigh <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>F</kbd>. I "
+"ndoiciméid téacs, dírítear an aird ar bhosca cuardaigh an phána <span "
+"class=\"ui\">Nascleanúna</span>: clóscríobh an téacs agus brúigh <kbd>Enter</"
+"kbd> chun na torthaí meaitseála a liostú ar an gcluaisín <span class=\"ui\">"
+"Torthaí</span>; ansin, cliceáil ar thoradh chun dul chuige. I scarbhileoga, "
+"i láithreoireachtaí agus i líníochtaí, osclaítear an bosca dialóige <span "
+"class=\"ui\">Aimsigh agus Ionadaigh</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:418-5
 msgid "On a phone, the search bar has buttons next to the search box:"
 msgstr ""
+"Ar ghuthán, tá cnaipí in aice leis an mbosca cuardaigh sa bharra cuardaigh:"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:420-7
 msgid "Search backwards"
@@ -1825,6 +1845,14 @@ msgid ""
 "(the pencil) in the bottom right corner instead. New documents and "
 "documents created from a template open ready to edit."
 msgstr ""
+"Osclaítear doiciméad atá ann cheana i mód amhairc, ionas gur féidir leat é a "
+"léamh gan é a athrú de thaisme. Chun tús a chur leis an eagarthóireacht, "
+"cliceáil <span class=\"ui\">Amharc</span> sa chúinne uachtarach ar dheis "
+"agus roghnaigh <span class=\"ui\">Mód Eagarthóireachta</span>. Ar ghuthán nó "
+"ar tháibléad, tapáil an cnaipe eagarthóireachta (an peann luaidhe) sa "
+"chúinne íochtarach ar dheis ina áit sin. Osclaítear doiciméid nua, chomh "
+"maith le doiciméid a cruthaíodh ó theimpléad, agus iad réidh le haghaidh "
+"eagarthóireachta."
 
 #: html/cool-help.html%2Bdiv.div.div.p:456-7
 msgid ""
@@ -2282,6 +2310,15 @@ msgid ""
 "kbd> will move the cursor to the next cell to the right, and with an "
 "<kbd>Enter</kbd> to the cell below for easy further data entry."
 msgstr ""
+"Oibríonn iontráil sonraí agus roghnú raonta, colúin, sraitheanna nó bileoga "
+"mar atá i bhfeidhmchláir scarbhileog eile. Bain úsáid as an méarchlár, na "
+"cluaisíní nó na roghchláir chomhthéacs chun gníomhartha a ordú sa "
+"scarbhileog. Tacaítear freisin le hábhar na gcealla a tharraingt chun cealla "
+"a líonadh le sonraí. Tá orduithe cóipeála, gearrtha agus greamaigh ar fáil "
+"ón roghchlár comhthéacs. Má leanann tú sonraí a iontráladh le <kbd>Tab</kbd>"
+", bogfar an cúrsóir go dtí an chéad chill eile ar dheis, agus le <kbd>"
+"Iontráil</kbd> go dtí an chill thíos le haghaidh iontráil sonraí breise "
+"éasca."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:563-5
 msgid ""
@@ -2567,6 +2604,15 @@ msgid ""
 "work as in other word processors. Use the keyboard, the tabs and the "
 "context menus to interact with your document."
 msgstr ""
+"Cuireann <span class=\"productname\">{productname}</span> leagan amach ar "
+"fáil a oibríonn ar phrionsabal an \"mé a fheiceann tú, sin a gheobhaidh tú\" "
+"(WYSIWYG) — taispeántar an doiciméad díreach mar a bheidh sé nuair a "
+"phriontálfar é. Tá feidhmeanna ar nós téacs a chlóscríobh, gearradh, "
+"cóipeáil agus greamú, téacs a roghnú, íomhánna a chur isteach, a n-athmhéid "
+"a shocrú agus a n-ionad a dhaingniú, chomh maith le táblaí agus cairteacha a "
+"chur leis agus a bhainistiú, ag obair ar an gcaoi chéanna is a dhéanann siad "
+"i bpróiseálaithe focal eile. Bain úsáid as an méarchlár, na cluaisíní agus "
+"na roghchláir chomhthéacs chun idirghníomhú le do dhoiciméad."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:629-30
 msgid ""
@@ -2701,6 +2747,8 @@ msgid ""
 "Tooltip over an inserted text showing the kind of change, the author and "
 "the date"
 msgstr ""
+"Leide uirlise os cionn téacs a cuireadh isteach, a thaispeánann an cineál "
+"athraithe, an t-údar agus an dáta"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:657-5
 msgid ""
@@ -2709,6 +2757,11 @@ msgid ""
 "click it and choose <span class=\"ui\">Accept Change</span> or <span "
 "class=\"ui\">Reject Change</span>."
 msgstr ""
+"Taispeántar athruithe a rinne daoine éagsúla i ndathanna éagsúla. Dírigh ar "
+"athrú chun a fheiceáil cé a rinne é agus cathain a rinneadh é. Chun glacadh "
+"le hathrú nó é a dhiúltú, cliceáil ar dheis air agus roghnaigh <span "
+"class=\"ui\">Glac leis an Athrú</span> nó <span class=\"ui\">Diúltaigh don "
+"Athrú</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:658-5
 msgid ""
@@ -2716,6 +2769,9 @@ msgid ""
 "the right of the document, like comments, with icons to accept or reject "
 "them. You can also add a comment there."
 msgstr ""
+"Má chuir an riarthóir ar siúl é, taispeántar na hathruithe i mboscaí ar "
+"dheis an doiciméid freisin, cosúil le tuairimí, le deilbhíní chun glacadh "
+"leo nó iad a dhiúltú. Is féidir leat nóta tráchta a chur leis ansin freisin."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:659-78
 msgid ""
@@ -2805,6 +2861,11 @@ msgid ""
 "presentation applications. Use the keyboard, the tabs and the context menus "
 "to perform actions in your presentation."
 msgstr ""
+"Oibríonn clóscríobh téacs, gearradh, cóipeáil agus greamaigh, roghnú téacs, "
+"íomhánna a chur isteach, a athrú méide agus a ancaire, agus táblaí a chur "
+"leis agus a láimhseáil mar atá i bhfeidhmchláir cur i láthair eile. Bain "
+"úsáid as an méarchlár, na cluaisíní agus na roghchláir chomhthéacs chun "
+"gníomhartha a dhéanamh i do chur i láthair."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:684-5
 msgid ""
@@ -3223,15 +3284,16 @@ msgid "Additions are marked with colored underlined characters."
 msgstr "Tá breiseanna marcáilte le carachtair béilte daite."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ul.li:786-7
-#, fuzzy
 msgid "All changed lines are marked with a vertical bar in the left margin."
-msgstr "Tá na hathruithe go léir marcáilte le barra ingearach san imeall ceart."
+msgstr "Tá gach líne a athraíodh marcáilte le barra ingearach sa imeall clé."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ul.li:787-7
 msgid ""
 "If the administrator turned it on, changes are also shown as boxes on the "
 "right of the document area."
 msgstr ""
+"Má chuir an riarthóir an ghné seo ar siúl, taispeántar athruithe freisin mar "
+"bhoscaí ar dheis limistéar na doiciméade."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:790-5
 msgid ""
@@ -3269,6 +3331,16 @@ msgid ""
 "A dialog shows a list of all tracked changes. Use the dialog buttons "
 "accordingly."
 msgstr ""
+"Is féidir athruithe a ghlacadh nó a dhiúltú. Chun athrú a ghlacadh nó a "
+"dhiúltú, cliceáil ar dheis air agus roghnaigh <span class=\"ui\">Glac le "
+"hAthrú</span> nó <span class=\"ui\">Diúltaigh d'Athrú</span>. Nó, cuir an "
+"cúrsóir san athrú agus roghnaigh <span class=\"ui\">Athbhreithniú</span> → "
+"<span class=\"ui\">Glac</span> nó <span class=\"ui\">Diúltaigh</span>. Ina "
+"theannta sin, más gá duit athruithe a scagadh sula nglacann tú leo nó sula "
+"ndiúltaíonn tú dóibh, roghnaigh <span class=\"ui\">Athbhreithniú</span> → "
+"<span class=\"ui\">Bainistigh</span>. Taispeánann bosca dialóige liosta de "
+"na hathruithe go léir atá á rianú. Úsáid na cnaipí sa bhosca dialóige dá "
+"réir."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:793-54
 msgid ""
@@ -3314,6 +3386,8 @@ msgid ""
 "Page Style dialog on the Page tab with the paper format, orientation, "
 "margins and layout settings"
 msgstr ""
+"Dialóg Stíl Leathanaigh ar an gcluaisín Leathanach, ina bhfuil socruithe do "
+"fhormáid an pháipéir, an treoshuíomh, na himill agus an leagan amach"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:806-5
 msgid "How do I change the page orientation to landscape inside my document?"
