@@ -209,7 +209,7 @@ public:
     ~CloudAccountPage() override;
 
     const QUrl& integratorOrigin() const { return _integratorOrigin; }
-    bool opensInServerEditor(QUrl const & origin);
+    bool opensInServerEditor(QUrl const & origin) const;
     void keepForm(const QUrl& url, const QByteArray& form);
     std::optional<QByteArray> receiveMessage(const QUrl& origin, const QString& kind,
                                              const QByteArray& message);
@@ -349,7 +349,8 @@ void EditorFormInterceptor::interceptRequest(QWebEngineUrlRequestInfo& info)
         return;
     }
 
-    // A server without client document loading gets the form into its own editor:
+    // A server without client document loading gets the form into its own editor (with the notice
+    // shown only for its first document in the window):
     if (_page.opensInServerEditor(originOf(info.requestUrl()))) {
         LOG_INF(
             "account window: the server allows no client document loading, so the form goes to the "
@@ -560,14 +561,8 @@ void CloudAccountPage::openNewWindow(QWebEngineNewWindowRequest& request)
     openInSystemBrowser(request.requestedUrl());
 }
 
-// Whether a document from the origin opens in the server's own editor (whose notice then shows):
-bool CloudAccountPage::opensInServerEditor(QUrl const & origin) {
-    auto const reason = _serverEditorReasons.find(origin.toString());
-    if (reason == _serverEditorReasons.end()) {
-        return false;
-    }
-    showServerEditorNotice(origin, reason->second);
-    return true;
+bool CloudAccountPage::opensInServerEditor(QUrl const & origin) const {
+    return _serverEditorReasons.find(origin.toString()) != _serverEditorReasons.end();
 }
 
 void CloudAccountPage::keepForm(const QUrl& url, const QByteArray& form)
