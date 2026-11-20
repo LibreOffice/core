@@ -53,6 +53,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/kit.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <COKit/COKit.hxx>
 #include <sfx2/viewsh.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -1691,6 +1692,24 @@ bool SdrView::MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint
     SdrHdl * pHdl = GetHdlList().GetHdl(handleNum);
     if (pHdl == nullptr)
         return false;
+
+    // The caller gives the exact point the handle moves to, so the drag has to end on that
+    // point. The view still holds the modifier keys of the last mouse event. The shift key
+    // snaps the angle and keeps the width to height ratio, and the alt key resizes around the
+    // middle. The drag reads the middle one when it starts, so all three go off before it
+    // starts, and the guard puts them back on every way out of here.
+    const bool bWasAngleSnapEnabled = IsAngleSnapEnabled();
+    const bool bWasOrtho = IsOrtho();
+    const bool bWasResizeAtCenter = IsResizeAtCenter();
+    comphelper::ScopeGuard aModifierKeyGuard(
+        [this, bWasAngleSnapEnabled, bWasOrtho, bWasResizeAtCenter] {
+            SetAngleSnapEnabled(bWasAngleSnapEnabled);
+            SetOrtho(bWasOrtho);
+            SetResizeAtCenter(bWasResizeAtCenter);
+        });
+    SetAngleSnapEnabled(false);
+    SetOrtho(false);
+    SetResizeAtCenter(false);
 
     SdrDragStat& rDragStat = const_cast<SdrDragStat&>(GetDragStat());
     // start dragging

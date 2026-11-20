@@ -42,6 +42,8 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdocirc.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <svx/svdhdl.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/sdgcpitm.hxx>
 #include <vcl/svapp.hxx>
@@ -1018,6 +1020,136 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRotateAboutPointInDocumentCoordinates)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aCenter.X()), double(aNewCenter.X()), 2.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aCenter.Y()), double(aNewCenter.Y()), 2.0);
 
+    pPage->RemoveObject(0);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandleDragTurnsByTheAngleItIsAskedFor)
+{
+    // A handle drag is given the point the handle should move to, and the shape turns so that
+    // the handle lands on that point. When several shapes are selected, each one turns about
+    // its own middle. A drag to a point twenty degrees round turns the shape by twenty
+    // degrees, so the shapes follow the pointer all the way round.
+    std::unique_ptr<SdrModel> pModel(new SdrModel(nullptr, nullptr, true));
+    rtl::Reference<SdrPage> pPage(new SdrPage(*pModel, false));
+    pPage->SetSize(Size(50000, 50000));
+    pModel->InsertPage(pPage.get(), 0);
+
+    rtl::Reference<SdrRectObj> pFirstObject(
+        new SdrRectObj(*pModel, tools::Rectangle(Point(10000, 10000), Size(2000, 2000))));
+    pPage->NbcInsertObject(pFirstObject.get());
+    rtl::Reference<SdrRectObj> pSecondObject(
+        new SdrRectObj(*pModel, tools::Rectangle(Point(20000, 10000), Size(2000, 2000))));
+    pPage->NbcInsertObject(pSecondObject.get());
+
+    ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
+    SdrView aView(*pModel, aVirtualDevice);
+    aView.ShowSdrPage(pPage.get());
+    aView.MarkObj(pFirstObject.get(), aView.GetSdrPageView());
+    aView.MarkObj(pSecondObject.get(), aView.GetSdrPageView());
+
+    // Every object of the selection carries a rotate handle above its middle.
+    const SdrHdlList& rHandleList = aView.GetHdlList();
+    sal_uInt32 nRotateHandle = 0;
+    const SdrHdl* pRotateHandle = nullptr;
+    for (size_t nHandle = 0; nHandle < rHandleList.GetHdlCount(); ++nHandle)
+    {
+        if (rHandleList.GetHdl(nHandle)->GetKind() == SdrHdlKind::Rotate)
+        {
+            nRotateHandle = nHandle;
+            pRotateHandle = rHandleList.GetHdl(nHandle);
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pRotateHandle);
+
+    const SdrObject* pTurnedObject = pRotateHandle->GetObj();
+    CPPUNIT_ASSERT(pTurnedObject);
+    const Point aCentre(pTurnedObject->GetSnapRect().Center());
+    const double fRadius = aCentre.Y() - pRotateHandle->GetPos().Y();
+    const double fTurn = basegfx::deg2rad(20.0);
+    const Point aTarget(aCentre.X() - basegfx::fround(fRadius * sin(fTurn)),
+                        aCentre.Y() - basegfx::fround(fRadius * cos(fTurn)));
+
+    // A mouse event that carries the shift key switches angle snapping on, and the view keeps
+    // it on until another mouse event arrives.
+    aView.SetAngleSnapEnabled(true);
+    CPPUNIT_ASSERT(aView.MoveShapeHandle(nRotateHandle, aTarget, /*aObjectOrdNum=*/-1,
+                                         /*bPreview=*/false));
+
+    // Without the fix the snap rounded the turn to the nearest fifteen degrees, so the shapes
+    // stood still until the pointer had passed the next multiple of fifteen.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2000.0, double(pTurnedObject->GetRotateAngle().get()), 20.0);
+
+    // The view keeps the snapping it had before the drag.
+    CPPUNIT_ASSERT(aView.IsAngleSnapEnabled());
+
+    pPage->RemoveObject(1);
+    pPage->RemoveObject(0);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandleDragResizesTowardsThePointAlone)
+{
+    // A drag of the handle in the middle of the right edge takes that edge to the point it is
+    // given. The object grows as wide as the point stands and keeps the height it had.
+    std::unique_ptr<SdrModel> pModel(new SdrModel(nullptr, nullptr, true));
+    rtl::Reference<SdrPage> pPage(new SdrPage(*pModel, false));
+    pPage->SetSize(Size(50000, 50000));
+    pModel->InsertPage(pPage.get(), 0);
+
+    rtl::Reference<SdrRectObj> pFirstObject(
+        new SdrRectObj(*pModel, tools::Rectangle(Point(10000, 10000), Size(2000, 2000))));
+    pPage->NbcInsertObject(pFirstObject.get());
+    rtl::Reference<SdrRectObj> pSecondObject(
+        new SdrRectObj(*pModel, tools::Rectangle(Point(20000, 10000), Size(2000, 2000))));
+    pPage->NbcInsertObject(pSecondObject.get());
+
+    ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
+    SdrView aView(*pModel, aVirtualDevice);
+    aView.ShowSdrPage(pPage.get());
+    aView.MarkObj(pFirstObject.get(), aView.GetSdrPageView());
+    aView.MarkObj(pSecondObject.get(), aView.GetSdrPageView());
+
+    const SdrHdlList& rHandleList = aView.GetHdlList();
+    sal_uInt32 nRightHandle = 0;
+    const SdrHdl* pRightHandle = nullptr;
+    for (size_t nHandle = 0; nHandle < rHandleList.GetHdlCount(); ++nHandle)
+    {
+        const SdrHdl* pCandidate = rHandleList.GetHdl(nHandle);
+        if (pCandidate->GetKind() == SdrHdlKind::Right
+            && pCandidate->GetObj() == pFirstObject.get())
+        {
+            nRightHandle = nHandle;
+            pRightHandle = pCandidate;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pRightHandle);
+
+    const tools::Rectangle aBefore(pFirstObject->GetSnapRect());
+    const Point aTarget(pRightHandle->GetPos().X() + 1000, pRightHandle->GetPos().Y());
+
+    // A mouse event that carries the shift key leaves the view keeping the ratio of whatever is
+    // resized next, and the view keeps that until another mouse event arrives.
+    aView.SetOrtho(true);
+    aView.SetResizeAtCenter(true);
+    CPPUNIT_ASSERT(aView.MoveShapeHandle(nRightHandle, aTarget, /*aObjectOrdNum=*/-1,
+                                         /*bPreview=*/false));
+
+    // Without the fix the ratio was kept, so a drag to the right made the object taller as well
+    // as wider.
+    const tools::Rectangle aAfter(pFirstObject->GetSnapRect());
+    CPPUNIT_ASSERT_EQUAL(aBefore.GetHeight(), aAfter.GetHeight());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aBefore.GetWidth() + 1000), double(aAfter.GetWidth()), 2.0);
+
+    // The left edge stands where it stood, because the drag takes the right edge alone to the
+    // point it is given.
+    CPPUNIT_ASSERT_EQUAL(aBefore.Left(), aAfter.Left());
+
+    // The view keeps the settings it had before the drag.
+    CPPUNIT_ASSERT(aView.IsOrtho());
+    CPPUNIT_ASSERT(aView.IsResizeAtCenter());
+
+    pPage->RemoveObject(1);
     pPage->RemoveObject(0);
 }
 
