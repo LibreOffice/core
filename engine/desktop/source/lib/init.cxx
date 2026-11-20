@@ -6981,8 +6981,22 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
             meant.
         */
         {
+            /*
+                A member of a diagram is held fast by the diagram, as bookkeeping of its own, so
+                that its layout alone places the member. A change of the diagram names all its
+                members, so what the diagram allows is what counts for each of them, as the
+                office's own view asks the diagram it marks.
+            */
+            const SdrObject* pAsked(pObject);
+            for (const SdrObject* pAbove = pObject->getParentSdrObjectFromSdrObject(); pAbove;
+                 pAbove = pAbove->getParentSdrObjectFromSdrObject())
+            {
+                if (pAbove->isDiagram())
+                    pAsked = pAbove;
+            }
+
             SdrObjTransformInfoRec aAllows;
-            pObject->TakeObjInfo(aAllows);
+            pAsked->TakeObjInfo(aAllows);
 
             basegfx::B2DTuple aScaleWas;
             basegfx::B2DTuple aScaleBecomes;
@@ -7007,8 +7021,8 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
                             != (determinantOf(aReached) < 0.0));
             bool bShears(!basegfx::fTools::equal(fShearWas, fShearBecomes, 0.0001));
 
-            const bool bPlaceHeldFast(pObject->IsMoveProtect());
-            const bool bSizeHeldFast(pObject->IsResizeProtect());
+            const bool bPlaceHeldFast(pAsked->IsMoveProtect());
+            const bool bSizeHeldFast(pAsked->IsResizeProtect());
 
             // a scale may take an object past its other side, as the office's resize does. an
             // upright one that cannot be mirrored is laid out upright over the same place then

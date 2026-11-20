@@ -87,6 +87,7 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <osl/process.h>
 #include <comphelper/configuration.hxx>
 #include <officecfg/Office/Linguistic.hxx>
 #include <editeng/acorrcfg.hxx>
@@ -106,6 +107,7 @@
 #include <svx/svxids.hrc>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdsob.hxx>
 #include <svx/svdview.hxx>
@@ -366,6 +368,7 @@ public:
     void testInsertFiles();
     void testObjectCommandsLeaveAReadOnlyViewAlone();
     void testObjectCommandsKeepTheObjectsProtection();
+    void testTurningADiagramCanBeUndone();
     void testObjectPathCommands();
     void testLocalCellCursorViewOption();
     void testConvertObjects();
@@ -512,6 +515,7 @@ public:
     CPPUNIT_TEST(testInsertFiles);
     CPPUNIT_TEST(testObjectCommandsLeaveAReadOnlyViewAlone);
     CPPUNIT_TEST(testObjectCommandsKeepTheObjectsProtection);
+    CPPUNIT_TEST(testTurningADiagramCanBeUndone);
     CPPUNIT_TEST(testObjectPathCommands);
     CPPUNIT_TEST(testLocalCellCursorViewOption);
     CPPUNIT_TEST(testConvertObjects);
@@ -6733,6 +6737,62 @@ void DesktopKitTest::testObjectCommandsKeepTheObjectsProtection()
     // With nothing holding it, the same mapping makes the object wider.
     pDocument->setObjectTransform(mappingOf(*pObject, 0.0, 2.0).getStr(), "scale");
     CPPUNIT_ASSERT(pObject->GetSnapRect().GetWidth() > aWas.GetWidth());
+}
+
+// A turn of a diagram, which the client names as a turn of every object of it, is one step to
+// undo, and undoing it stands the objects upright again. The diagram holds its objects fast, and
+// the turn is still done, as the diagram is what is asked.
+void DesktopKitTest::testTurningADiagramCanBeUndone()
+{
+    osl_setEnvironment(u"ACTIVATE_ADVANCED_DIAGRAM_FEATURES"_ustr.pData, u"1"_ustr.pData);
+    comphelper::ScopeGuard aClear(
+        [] { osl_clearEnvironment(u"ACTIVATE_ADVANCED_DIAGRAM_FEATURES"_ustr.pData); });
+    COKitDocumentImpl* pDocument = loadDoc("diagram-four-nodes.pptx");
+    pDocument->initializeForRendering("{}");
+    SdrPageView* pPageView = nullptr;
+    SdrObject* pDiagram = firstObjectOfThePage(pPageView);
+    CPPUNIT_ASSERT(pDiagram->isDiagram());
+    SdrObjList* pMembers = pDiagram->GetSubList();
+    CPPUNIT_ASSERT(pMembers);
+    CPPUNIT_ASSERT(pMembers->GetObjCount() > 1);
+
+    // every object turned by 30 degrees about the middle of the diagram, in twips
+    const Point aMiddle(pDiagram->GetSnapRect().Center());
+    const basegfx::B2DHomMatrix aTurn(
+        basegfx::utils::createRotateAroundPoint(aMiddle.X(), aMiddle.Y(), M_PI / 6.0));
+    const double fToTwips(o3tl::convert(1.0, o3tl::Length::mm100, o3tl::Length::twip));
+    OStringBuffer aMappings;
+    for (const rtl::Reference<SdrObject>& pMember : *pMembers)
+    {
+        CPPUNIT_ASSERT(pMember->IsMoveProtect());
+        basegfx::B2DHomMatrix aMapping;
+        basegfx::B2DPolyPolygon aOutline;
+        pMember->TRGetBaseGeometry(aMapping, aOutline);
+        aMapping = aTurn * aMapping;
+        if (!aMappings.isEmpty())
+            aMappings.append(";");
+        aMappings.append(OString::number(pMember->GetUniqueID()));
+        for (const auto& [nRow, nColumn] : { std::pair(0, 0), std::pair(1, 0), std::pair(0, 1),
+                                             std::pair(1, 1), std::pair(0, 2), std::pair(1, 2) })
+            aMappings.append("," + OString::number(aMapping.get(nRow, nColumn) * fToTwips));
+    }
+
+    SfxUndoManager* pUndoManager = SfxObjectShell::Current()->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+    const size_t nStepsBefore(pUndoManager->GetUndoActionCount());
+    // the last object of the diagram turns with it; the diagram may build its objects anew, so
+    // it is looked up each time
+    const auto lastMember = [pPageView]() {
+        SdrObjList* pNow = pPageView->GetPage()->GetObj(0)->GetSubList();
+        return pNow->GetObj(pNow->GetObjCount() - 1);
+    };
+    pDocument->setObjectTransform(aMappings.getStr(), "turn");
+    CPPUNIT_ASSERT(lastMember()->GetRotateAngle() != 0_deg100);
+
+    // the turn can be undone
+    CPPUNIT_ASSERT_EQUAL(nStepsBefore + 1, pUndoManager->GetUndoActionCount());
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), lastMember()->GetRotateAngle().get());
 }
 
 namespace
