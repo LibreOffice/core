@@ -22,7 +22,6 @@
 #include <cstdlib>
 
 #include <tools/debug.hxx>
-#include <tools/hostfilter.hxx>
 #include <tools/inetmsg.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -203,12 +202,7 @@ void SfxObjectShell::FlushDocInfo()
         return;
 
     SetModified();
-    uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
     DoFlushDocInfo(); // call template method
-    const OUString url(xDocProps->getAutoloadURL());
-    sal_Int32 delay(xDocProps->getAutoloadSecs());
-    SetAutoLoad( INetURLObject(url), delay * 1000,
-                 (delay > 0) || !url.isEmpty() );
 }
 
 void SfxObjectShell::AppendInfoBarWhenReady(const OUString& sId, const OUString& sPrimaryMessage,
@@ -1011,17 +1005,6 @@ void SfxObjectShell::SetActivateEvent_Impl(SfxEventHintId nId )
     pImpl->nEventId = nId;
 }
 
-bool SfxObjectShell::IsAutoLoadLocked() const
-
-/* Returns whether an Autoload is allowed to be executed. Before the
-   surrounding FrameSet of the AutoLoad is also taken into account as well.
-*/
-
-{
-    return !IsReadOnly();
-}
-
-
 void SfxObjectShell::BreakMacroSign_Impl( bool bBreakMacroSign )
 {
     pImpl->m_bMacroSignBroken = bBreakMacroSign;
@@ -1183,21 +1166,6 @@ void SfxObjectShell::CheckForBrokenDocSignatures_Impl()
 }
 
 
-void SfxObjectShell::SetAutoLoad(
-    const INetURLObject& rUrl, sal_uInt32 nTime, bool bReload )
-{
-    pImpl->pReloadTimer.reset();
-    // In a kit the client decides when a document reloads, so the document's own reload time and
-    // URL stay in its properties only.
-    if ( bReload && !comphelper::COKit::isActive() )
-    {
-        pImpl->pReloadTimer.reset(new AutoReloadTimer_Impl(
-                                rUrl.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ),
-                                nTime, this ));
-        pImpl->pReloadTimer->Start();
-    }
-}
-
 void SfxObjectShell::SetLoading(SfxLoadedFlags nFlags)
 {
     pImpl->nLoadedFlags = nFlags;
@@ -1327,12 +1295,6 @@ void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
         && !(pImpl->nFlagsInProgress & SfxLoadedFlags::IMAGES ))
     {
         pImpl->nFlagsInProgress |= SfxLoadedFlags::IMAGES;
-        uno::Reference<document::XDocumentProperties> xDocProps(
-            getDocProperties());
-        const OUString url(xDocProps->getAutoloadURL());
-        sal_Int32 delay(xDocProps->getAutoloadSecs());
-        SetAutoLoad( INetURLObject(url), delay * 1000,
-                     (delay > 0) || !url.isEmpty() );
         if( !bSetModifiedTRUE && IsEnableSetModified() )
             SetModified( false );
         Invalidate( SID_SAVEASDOC );
@@ -1502,76 +1464,6 @@ void SfxObjectShell::CancelTransfers()
     }
 }
 
-
-AutoReloadTimer_Impl::AutoReloadTimer_Impl(
-    OUString _aURL, sal_uInt32 nTime, SfxObjectShell* pSh, bool _bLinkUpdateAllowed )
-    : Timer("sfx2 AutoReloadTimer_Impl"), aUrl(std::move( _aURL )), pObjSh( pSh )
-    , bLinkUpdateAllowed( _bLinkUpdateAllowed )
-{
-    SetTimeout( nTime );
-}
-
-
-static void lcl_allowAutoReload(const Reference<XInterface>& rxModel, const OUString& rURL)
-{
-    SfxObjectShell* pObjSh = SfxObjectShell::GetShellFromComponent(rxModel);
-    if (!pObjSh)
-        return;
-    pObjSh->Get_Impl()->pReloadTimer.reset(
-        new AutoReloadTimer_Impl(rURL, 0, pObjSh, /*bLinkUpdateAllowed=*/true));
-    pObjSh->Get_Impl()->pReloadTimer->Start();
-}
-
-void AutoReloadTimer_Impl::Invoke()
-{
-    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pObjSh );
-
-    if ( pFrame )
-    {
-        // Not possible/meaningful at the moment?
-        if ( !pObjSh->CanReload_Impl() || pObjSh->IsAutoLoadLocked() || Application::IsUICaptured() )
-        {
-            // Allow a retry
-            Start();
-            return;
-        }
-
-        SfxObjectShell* pSh = pObjSh;
-        const OUString sURL = aUrl;
-        const bool bAllowed = bLinkUpdateAllowed;
-        // Resetting pReloadTimer deletes this timer, so only the copies above are used after it.
-        pSh->Get_Impl()->pReloadTimer.reset();
-
-        if (HostFilter::isFileUrlForbidden(sURL))
-        {
-            SAL_WARN("sfx.doc",
-                     "AutoReloadTimer_Impl::Invoke: blocked file path: \"" << sURL << "\"");
-            return;
-        }
-        if (!sURL.isEmpty() && !bAllowed)
-        {
-            pSh->AddDeferredLinkLoad(pSh->GetModel(),
-                                     [sURL](const Reference<XInterface>& rxModel)
-                                     { lcl_allowAutoReload(rxModel, sURL); });
-            return;
-        }
-
-        SfxAllItemSet aSet( SfxGetpApp()->GetPool() );
-        aSet.Put( SfxBoolItem( SID_AUTOLOAD, true ) );
-        if ( !sURL.isEmpty() )
-            aSet.Put(  SfxStringItem( SID_FILE_NAME, sURL ) );
-        if (pSh->HasName()) {
-            aSet.Put(
-                SfxStringItem(SID_REFERER, pSh->GetMedium()->GetName()));
-        }
-        SfxRequest aReq( SID_RELOAD, SfxCallMode::SLOT, aSet );
-        pFrame->ExecReload_Impl( aReq );
-        return;
-    }
-
-    // this will delete this
-    pObjSh->Get_Impl()->pReloadTimer.reset();
-}
 
 SfxModule* SfxObjectShell::GetModule() const
 {

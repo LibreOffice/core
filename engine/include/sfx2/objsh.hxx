@@ -546,8 +546,6 @@ public:
     void                        SetLoading(SfxLoadedFlags nFlags);
     bool                        IsLoading() const;
     bool                        IsLoadingFinished() const;
-    void                        SetAutoLoad( const INetURLObject&, sal_uInt32 nTime, bool bReload );
-    bool                        IsAutoLoadLocked() const;
 
     // Misc
     bool                        IsPreview() const;

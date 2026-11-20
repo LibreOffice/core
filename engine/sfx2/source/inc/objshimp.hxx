@@ -29,21 +29,8 @@
 #include <sfx2/docmacromode.hxx>
 #include <sfx2/namedcolor.hxx>
 #include <bitset.hxx>
-#include <vcl/timer.hxx>
 
 #include "appbaslib.hxx"
-
-class AutoReloadTimer_Impl final : public Timer
-{
-    OUString          aUrl;
-    SfxObjectShell*   pObjSh;
-    bool              bLinkUpdateAllowed;
-
-public:
-    AutoReloadTimer_Impl( OUString aURL, sal_uInt32 nTime,
-                          SfxObjectShell* pSh, bool bLinkUpdateAllowed = false );
-    virtual void Invoke() override;
-};
 
 struct SfxObjectShell_Impl final : public ::sfx2::IMacroDocumentAccess
 {
@@ -98,7 +85,6 @@ struct SfxObjectShell_Impl final : public ::sfx2::IMacroDocumentAccess
     OUString            maLastStoreErrorMessage;
     SfxEventHintId      nEventId;           // If Open/Create as to be sent
                                             // before Activate
-    std::unique_ptr<AutoReloadTimer_Impl> pReloadTimer;
     SfxLoadedFlags      nLoadedFlags;
     SfxLoadedFlags      nFlagsInProgress;
     bool                bModalMode;

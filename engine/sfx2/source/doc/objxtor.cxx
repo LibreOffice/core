@@ -303,7 +303,6 @@ SfxObjectShell::~SfxObjectShell()
     SfxObjectShell::CloseInternal();
     pImpl->pBaseModel.clear();
 
-    pImpl->pReloadTimer.reset();
 
     SfxApplication *pSfxApp = SfxGetpApp();
     if ( USHRT_MAX != pImpl->nVisualDocumentNumber && pSfxApp )

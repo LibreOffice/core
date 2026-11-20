@@ -646,12 +646,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if( m_pImpl->bReloading || pSh->IsInModalMode() )
                 return;
 
-            // AutoLoad is prohibited if possible
-            const SfxBoolItem* pAutoLoadItem = rReq.GetArg(SID_AUTOLOAD);
-            if ( pAutoLoadItem && pAutoLoadItem->GetValue() &&
-                 GetFrame().IsAutoLoadLocked_Impl() )
-                return;
-
             SfxObjectShellLock xOldObj( pSh );
             m_pImpl->bReloading = true;
             const SfxStringItem* pURLItem = rReq.GetArg(SID_FILE_NAME);
@@ -704,8 +698,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                     pView = GetNext( *pView, xOldObj );
                 }
-
-                xOldObj->Get_Impl()->pReloadTimer.reset();
 
                 std::optional<SfxAllItemSet> pNewSet;
                 std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();

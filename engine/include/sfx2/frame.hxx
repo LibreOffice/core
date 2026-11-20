@@ -120,7 +120,6 @@ public:
     // Methods for accessing the current set
     SAL_DLLPRIVATE SfxFrameDescriptor* GetDescriptor() const;
 
-    SAL_DLLPRIVATE bool IsAutoLoadLocked_Impl() const;
 
     SAL_DLLPRIVATE static void InsertTopFrame_Impl( SfxFrame* pFrame );
     SAL_DLLPRIVATE static void RemoveTopFrame_Impl( SfxFrame* pFrame );

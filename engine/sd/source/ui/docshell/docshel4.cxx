@@ -315,9 +315,6 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
 
         FinishedLoading();
 
-        const INetURLObject aUrl;
-        SfxObjectShell::SetAutoLoad( aUrl, 0, false );
-
         const sal_uInt16 nMasterPages = pDoc->GetMasterSdPageCount(PageKind::Standard);
         if (nMasterPages > 100)
         {

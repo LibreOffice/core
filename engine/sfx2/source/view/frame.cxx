@@ -238,17 +238,6 @@ SfxViewFrame* SfxFrame::GetCurrentViewFrame() const
     return m_pImpl->pCurrentViewFrame;
 }
 
-bool SfxFrame::IsAutoLoadLocked_Impl() const
-{
-    // Its own Document is locked?
-    const SfxObjectShell* pObjSh = GetCurrentDocument();
-    if ( !pObjSh || !pObjSh->IsAutoLoadLocked() )
-        return false;
-
-    // otherwise allow AutoLoad
-    return true;
-}
-
 SfxObjectShell* SfxFrame::GetCurrentDocument() const
 {
     return m_pImpl->pCurrentViewFrame ?

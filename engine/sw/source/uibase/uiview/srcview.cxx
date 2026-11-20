@@ -22,7 +22,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <unotools/tempfile.hxx>
-#include <tools/urlobj.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/textview.hxx>
@@ -67,8 +66,6 @@
 #define ShellClass_SwSrcView
 #include <swslots.hxx>
 
-#include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -205,14 +202,6 @@ SwSrcView::~SwSrcView()
     const TextSelection&  rSel = m_aEditWin->GetTextView()->GetSelection();
     static_cast<SwWebDocShell*>(pDocShell)->SetSourcePara( static_cast< sal_uInt16 >( rSel.GetStart().GetPara() ) );
 
-    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-        pDocShell->GetModel(), uno::UNO_QUERY_THROW);
-    uno::Reference<document::XDocumentProperties> xDocProps
-        = xDPS->getDocumentProperties();
-    OUString url = xDocProps->getAutoloadURL();
-    sal_Int32 delay = xDocProps->getAutoloadSecs();
-    pDocShell->SetAutoLoad(INetURLObject(url), delay,
-                            (delay != 0) || !url.isEmpty());
     EndListening(*pDocShell);
     m_pSearchItem.reset();
 
@@ -831,8 +820,6 @@ void SwSrcView::Load(SwDocShell* pDocShell)
 
     if(bDocModified)
         pDocShell->SetModified();// The flag will be reset in between times.
-    // Disable AutoLoad
-    pDocShell->SetAutoLoad(INetURLObject(), 0, false);
     assert(dynamic_cast<SwWebDocShell*>( pDocShell) && "Why no WebDocShell?" );
     sal_uInt16 nLine = static_cast<SwWebDocShell*>(pDocShell)->GetSourcePara();
     m_aEditWin->SetStartLine(nLine);
