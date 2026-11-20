@@ -1006,7 +1006,14 @@ void WebView::restoreDiscardedView()
     channel->registerObject("bridge", _bridge);
     _webView->page()->setWebChannel(channel);
 
-    _webView->load(pageUrl());
+    QUrl url(pageUrl());
+    if (_readOnlyNoticeDismissed)
+    {
+        QUrlQuery query(url);
+        query.addQueryItem(QStringLiteral("readonlynoticedismissed"), QStringLiteral("true"));
+        url.setQuery(query);
+    }
+    _webView->load(url);
 }
 
 QUrl WebView::pageUrl() const

@@ -449,6 +449,10 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             // engine as a client message.
             return (nil, nil)
         }
+        else if body == "READONLYNOTICEDISMISSED" {
+            document.readOnlyNoticeDismissed = true
+            return (nil, nil)
+        }
         else if body == "PRINT" {
             guard COWrapper.isKitDocumentLoaded(document) else {
                 COWrapper.LOG_ERR("PRINT was ignored: the document is not loaded yet")

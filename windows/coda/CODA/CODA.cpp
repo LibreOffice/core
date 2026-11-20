@@ -180,6 +180,8 @@ struct DocumentTab
     bool saveInFlight = false;
     // The user closed the document during that save, and the close goes once the save completes.
     bool closeWaitsForSave = false;
+    // The user dismissed the notice that the file cannot be written, on a page of this tab.
+    bool readOnlyNoticeDismissed = false;
     wil::com_ptr<ICoreWebView2Controller> webViewController;
     wil::com_ptr<ICoreWebView2> webView;
     std::thread app2js;
@@ -5363,6 +5365,9 @@ static void createDocumentView(int tabId)
                         if (data->firstViewTabId)
                             coolURL += "&secondaryview=true";
 
+                        if (data->readOnlyNoticeDismissed)
+                            coolURL += "&readonlynoticedismissed=true";
+
                         webView->Navigate(Util::string_to_wide_string(coolURL).c_str());
 
                         return S_OK;
@@ -7327,6 +7332,11 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             // The page now edits on the COOL server, so the local document is closed.
             if (data.mode == DocumentMode::CLOUD_ACCOUNT && data.app2js.joinable())
                 endLocalSession(data);
+        }
+        else if (s == L"READONLYNOTICEDISMISSED")
+        {
+            // The tab passes this on to each page it loads for the document from now on.
+            data.readOnlyNoticeDismissed = true;
         }
         else if (s == L"SAVESTARTED" || s == L"SAVECOMPLETED" || s == L"SAVEFAILED")
         {

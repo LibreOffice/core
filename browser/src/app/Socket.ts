@@ -2332,11 +2332,14 @@ class Socket {
 		app.setRedlineManagementAllowed(json.manageRedlines); // May be allowed even in readonly mode.
 
 		// The welcome slideshow loads from the app's own read-only files, and a
-		// document the user asked to open read-only needs no reason for it.
+		// document the user asked to open read-only needs no reason for it. An app
+		// that loads the page again for a document that stays open says whether the
+		// user dismissed the notice on the earlier page.
 		if (
 			json.readOnlyFile &&
 			!window.coolParams.get('welcome') &&
-			window.coolParams.get('permission') !== 'readonly'
+			window.coolParams.get('permission') !== 'readonly' &&
+			window.coolParams.get('readonlynoticedismissed') !== 'true'
 		) {
 			this._map.once('docloaded', (e: { status: boolean }) => {
 				if (!e.status) return;
@@ -2349,6 +2352,15 @@ class Socket {
 					-1,
 					false,
 					true,
+					true,
+					() => {
+						if (
+							window.ThisIsTheWindowsApp ||
+							window.ThisIsTheQtApp ||
+							window.ThisIsTheMacOSApp
+						)
+							window.postMobileMessage('READONLYNOTICEDISMISSED');
+					},
 				);
 			});
 		}

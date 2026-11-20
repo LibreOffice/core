@@ -56,6 +56,9 @@ class Document: NSDocument {
     @objc
     var isSecondaryView = false
 
+    /// The user dismissed the notice that the file cannot be written, on a page of this view.
+    var readOnlyNoticeDismissed = false
+
     /// The secondary views of this document that are open.
     private var secondaryViews: [Document] = []
 
@@ -796,6 +799,10 @@ class Document: NSDocument {
 
         if isSecondaryView {
             components.queryItems?.append(URLQueryItem(name: "secondaryview", value: "true"))
+        }
+
+        if readOnlyNoticeDismissed {
+            components.queryItems?.append(URLQueryItem(name: "readonlynoticedismissed", value: "true"))
         }
 
         let finalURL = components.url!

@@ -2811,6 +2811,7 @@ class UIManager extends window.L.Control {
 	 * @param withDismiss - Whether a dismiss button is included.
 	 * @param infinite - If true, shows an indeterminate progress bar.
 	 * @param focusAction - Whether the action button takes the keyboard focus when it appears.
+	 * @param onDismiss - Callback to execute when the user closes it with the dismiss button.
 	 */
 	showSnackbar(
 		label: string,
@@ -2820,9 +2821,10 @@ class UIManager extends window.L.Control {
 		hasProgress?: boolean,
 		withDismiss?: boolean,
 		focusAction: boolean = true,
+		onDismiss?: () => void,
 	): void {
 		JSDialog.SnackbarController.showSnackbar(label, action, callback, timeout, hasProgress, withDismiss,
-			undefined, focusAction);
+			undefined, focusAction, onDismiss);
 	}
 
 	/**

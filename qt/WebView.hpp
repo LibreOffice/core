@@ -264,6 +264,9 @@ public:
 
     bool isViewDiscarded() const { return _viewDiscarded; }
 
+    // The user dismissed the notice that the file cannot be written, on a page of this view.
+    void setReadOnlyNoticeDismissed() { _readOnlyNoticeDismissed = true; }
+
     /// True when this view shows a local document that has a file on disk. This does not
     /// change while the document is open.
     bool mayDiscardView() const;
@@ -320,6 +323,8 @@ private:
     // The cool.html URL, with its query, that this document was loaded from.
     QString _loadedUrl;
     bool _viewDiscarded;
+    // The user dismissed the notice that the file cannot be written, on a page of this view.
+    bool _readOnlyNoticeDismissed = false;
     // Runs from the moment this view's webview was built.
     QElapsedTimer _viewLiveSince;
     QString _docTitle;

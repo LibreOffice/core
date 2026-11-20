@@ -1863,6 +1863,11 @@ QVariant Bridge::cool(const QString& messageStr)
         if (WebView* owner = _owner.data())
             owner->activateWindow();
     }
+    else if (tokens.equals(0, "READONLYNOTICEDISMISSED"))
+    {
+        if (WebView* owner = _owner.data())
+            owner->setReadOnlyNoticeDismissed();
+    }
     else if (tokens.equals(0, "CLOSE_CANCELLED"))
     {
         if (WebView* owner = _owner.data())

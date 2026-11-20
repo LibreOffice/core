@@ -26,6 +26,8 @@ type SnackbarData = {
 	infinite: boolean | undefined;
 	// True when the action button takes the keyboard focus as the snackbar appears.
 	focusAction: boolean;
+	// Called when the user closes the snackbar with its Dismiss button.
+	onDismiss: (() => void) | undefined;
 };
 
 class SnackbarController {
@@ -137,6 +139,7 @@ class SnackbarController {
 		withDismiss: boolean | undefined,
 		infinite: boolean | undefined,
 		focusAction: boolean = true,
+		onDismiss?: () => void,
 	) {
 		if (!app.socket) return;
 
@@ -149,6 +152,7 @@ class SnackbarController {
 			withDismiss: withDismiss,
 			infinite: infinite,
 			focusAction: focusAction,
+			onDismiss: onDismiss,
 		});
 
 		this.scheduleSnackbar();
@@ -279,6 +283,9 @@ class SnackbarController {
 				objectType === 'pushbutton' &&
 				eventType === 'click'
 			) {
+				if (typeof snackbarData.onDismiss === 'function')
+					snackbarData.onDismiss();
+
 				this.closeSnackbar(true);
 			}
 		};
