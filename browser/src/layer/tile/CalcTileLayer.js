@@ -140,6 +140,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		} else if (textMsg.startsWith('cellviewselection:')) {
 			this._onCellViewSelectionMsg(textMsg);
 		} else if (textMsg.startsWith('cellcursorstate:')) {
+			this._saveMessageForReplay(textMsg);
 			this._onCellCursorStateMsg(textMsg);
 		} else if (textMsg.startsWith('printranges:')) {
 			this._onPrintRangesMsg(textMsg);

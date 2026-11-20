@@ -328,4 +328,42 @@ describe(['tagdesktop'], 'Local cell cursor and selection', function() {
 			expect(section.getDrawnRectangle().x1).to.equal(target.x1);
 		}.bind(this));
 	});
+
+	it('keeps the cell cursor on its cell when a column is resized', function() {
+		// Type into A1.  The engine should send a cell cursor message for
+		// the edited cell, which the client keeps for a later replay.
+		calcHelper.enterCellAddressAndConfirm(this.win, 'A1');
+		helper.typeIntoDocument('abc{enter}');
+		helper.processToIdle(this.win);
+
+		// Go to C200 - far enough away from A1.
+		calcHelper.enterCellAddressAndConfirm(this.win, 'C200');
+		// Move to D200 locally, to have the engine send back cellcursorstate
+		// for a local move.
+		helper.typeIntoDocument('{rightArrow}');
+		waitForReport(this.win);
+		calcHelper.assertAddressAfterIdle(this.win, 'D200');
+
+		var viewTop;
+		var cursorWidth;
+		cy.then(function() {
+			viewTop = this.win.app.activeDocument.activeLayout.viewedRectangle.y1;
+			cursorWidth = this.win.app.calc.cellCursor.rectangle.width;
+
+			// Widen column D.  The client should replay its stored cursor
+			// messages once the new sheet geometry arrives.
+			var args = { ColumnWidth: { type: 'unsigned short', value: 6000 } };
+			this.win.app.map.sendUnoCommand('.uno:ColumnWidth', args);
+		}.bind(this));
+		helper.processToIdle(this.win);
+
+		// The cursor should stay on D200 and take the new column width, and
+		// the view should not scroll.
+		cy.wrap(null).should(function() {
+			var cellCursor = this.win.app.calc.cellCursor;
+			expect(cellCursor.address.toArray()).to.deep.equal([3, 199]);
+			expect(cellCursor.rectangle.width).to.be.greaterThan(cursorWidth);
+			expect(this.win.app.activeDocument.activeLayout.viewedRectangle.y1).to.equal(viewTop);
+		}.bind(this));
+	});
 });
