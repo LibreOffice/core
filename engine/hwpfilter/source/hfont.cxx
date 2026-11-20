@@ -58,7 +58,7 @@ const char* HWPFont::GetFontName(int lang, int id)
     return fontnames[lang].get() + id * FONTNAMELEN;
 }
 
-static char buffer[FONTNAMELEN];
+static char fontNameBuffer[FONTNAMELEN];
 
 void HWPFont::Read(HWPFile& hwpf)
 {
@@ -79,8 +79,8 @@ void HWPFont::Read(HWPFile& hwpf)
         memset(fontnames[lang].get(), 0, nfonts * FONTNAMELEN);
         for (int jj = 0; jj < nfonts; jj++)
         {
-            hwpf.ReadBlock(buffer, FONTNAMELEN);
-            AddFont(lang, buffer);
+            hwpf.ReadBlock(fontNameBuffer, FONTNAMELEN);
+            AddFont(lang, fontNameBuffer);
         }
     }
 }

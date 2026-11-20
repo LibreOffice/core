@@ -38,7 +38,7 @@ struct StyleData
 };
 }
 
-static char buffer[MAXSTYLENAME + 1];
+static char styleNameBuffer[MAXSTYLENAME + 1];
 
 HWPStyle::HWPStyle()
 {
@@ -129,11 +129,11 @@ void HWPStyle::Read(HWPFile& hwpf)
 
     for (int ii = 0; ii < nstyles; ii++)
     {
-        hwpf.ReadBlock(buffer, MAXSTYLENAME);
+        hwpf.ReadBlock(styleNameBuffer, MAXSTYLENAME);
         cshape.Read(hwpf);
         pshape.Read(hwpf);
 
-        SetName(ii, buffer);
+        SetName(ii, styleNameBuffer);
         SetCharShape(ii, &cshape);
         SetParaShape(ii, &pshape);
         if (hwpf.State())
