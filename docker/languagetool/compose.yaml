@@ -1,4 +1,4 @@
-# Collabora Online with a LanguageTool server beside it. Collabora reaches
+# Collabora Office with a LanguageTool server beside it. Collabora reaches
 # the checker over HTTPS, at https://languagetool/v2, on a network of its
 # own: the checker answers anyone who can reach it, with no password.
 #
@@ -10,7 +10,7 @@
 #
 # The LanguageTool server speaks plain HTTP only, so an nginx front serves
 # it over HTTPS, with a certificate that ../tls/make-certs.sh makes on the
-# first start, in ./certs. Collabora Online is given the certificate
+# first start, in ./certs. Collabora Office is given the certificate
 # authority that signed it, and verifies the front as it would any other
 # server (see ../tls/README).
 
@@ -20,12 +20,12 @@ services:
     ports:
       - "9980:9980"
     environment:
-      # Your hosts, as for any Collabora Online container.
+      # Your hosts, as for any Collabora Office container.
       - aliasgroup1=https://my-wopi-host.example.com:443
       - extra_params=--o:ssl.enable=false --o:ssl.termination=true --o:languagetool.enabled=true --o:languagetool.base_url=https://languagetool/v2
     volumes:
       # The usual certificate authorities and the one of ./certs, for
-      # Collabora Online and for the document processes in their jails.
+      # Collabora Office and for the document processes in their jails.
       - ./certs/ca-bundle.crt:/etc/ssl/certs/ca-certificates.crt:ro
       - ./certs/ca-bundle.crt:/opt/cool/systemplate/etc/ssl/certs/ca-certificates.crt:ro
     networks:
@@ -36,13 +36,13 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
-  # The HTTPS front, the only part of the service Collabora Online can reach.
+  # The HTTPS front, the only part of the service Collabora Office can reach.
   languagetool:
     image: nginx:stable-alpine
     environment:
       - TLS_HOST=languagetool
       - TLS_UPSTREAM=languagetool-server:8010
-      # What Collabora Online asks for; the front refuses any other path.
+      # What Collabora Office asks for; the front refuses any other path.
       - TLS_PATHS=/v2/check|/v2/languages
     volumes:
       - ../tls/front.conf.template:/etc/nginx/templates/default.conf.template:ro

@@ -1,9 +1,9 @@
 #!/bin/sh
-# Makes the certificates that let Collabora Online reach a writing aid
+# Makes the certificates that let Collabora Office reach a writing aid
 # service over HTTPS: a private certificate authority, and a certificate it
 # signs for the service's host name, the one argument. It also writes
 # ca-bundle.crt, the usual certificate authorities with the private one
-# added, which Collabora Online is given as its own bundle so it can verify
+# added, which Collabora Office is given as its own bundle so it can verify
 # the service.
 #
 #   make-certs.sh languagetool
@@ -30,7 +30,7 @@ cd /service/certs
 
 if [ ! -f "$host.crt" ] || [ ! -f "$host.key" ] || [ ! -f ca.crt ]; then
     openssl req -x509 -newkey rsa:3072 -nodes -days 3650 -sha256 \
-        -subj "/CN=Collabora Online $host CA" \
+        -subj "/CN=Collabora Office $host CA" \
         -addext "basicConstraints=critical,CA:TRUE" \
         -addext "keyUsage=critical,keyCertSign,cRLSign" \
         -keyout ca.key -out ca.crt

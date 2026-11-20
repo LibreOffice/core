@@ -1,5 +1,5 @@
 # A LibreTranslate server, the open source machine translation API, for
-# Collabora Online's Translate command. LibreTranslate itself is not in this
+# Collabora Office's Translate command. LibreTranslate itself is not in this
 # repository: its release is installed from PyPI while the image builds,
 # pinned by hash in requirements.txt, and the translation models of the
 # chosen languages are fetched from the Argos Translate package index into
@@ -14,7 +14,7 @@
 #
 # The server has no authentication by default and no TLS: keep it on an
 # internal network, behind an HTTPS front, as compose.yaml here does;
-# Collabora Online reaches it over HTTPS only.
+# Collabora Office reaches it over HTTPS only.
 
 # The languages to translate between, two at least. Every model goes to or
 # from English, so a translation between two other languages goes through
@@ -38,7 +38,7 @@ RUN /srv/libretranslate/bin/python3 -c "import libretranslate.init as lt; \
 
 FROM python:3.12-slim
 LABEL org.opencontainers.image.title="LibreTranslate server" \
-      org.opencontainers.image.description="LibreTranslate, the open source machine translation API, as a service for Collabora Online" \
+      org.opencontainers.image.description="LibreTranslate, the open source machine translation API, as a service for Collabora Office" \
       org.opencontainers.image.licenses="AGPL-3.0-only"
 ARG LIBRETRANSLATE_LANGUAGES
 # Every setting of the server is a command line argument or the LT_

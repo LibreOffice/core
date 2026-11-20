@@ -1,10 +1,10 @@
-LanguageTool for Collabora Online
+LanguageTool for Collabora Office
 
 LanguageTool is a grammar, style and spelling checker for English, French,
-German, Spanish and some thirty other languages. Collabora Online talks to
+German, Spanish and some thirty other languages. Collabora Office talks to
 it over HTTPS, the way it talks to the Duden Korrekturserver and
 Grammalecte, and underlines what it finds as you type. This directory shows
-how to run it next to Collabora Online.
+how to run it next to Collabora Office.
 
 The service is the collabora/languagetool image on Docker Hub, built from
 https://github.com/CollaboraOnline/docker-languagetool from the release
@@ -21,21 +21,21 @@ Try it:
 
 The answer lists a spelling mistake in "catt". The server itself speaks
 plain HTTP only, which is fine for trying it on your own machine, but
-Collabora Online reaches the checkers over HTTPS only: an http:// base URL
+Collabora Office reaches the checkers over HTTPS only: an http:// base URL
 is never asked, and the log shows "Remote checker languagetool has not
 answered; keeping the local spell checker".
 
-Running it next to Collabora Online:
+Running it next to Collabora Office:
 
     cd docker/languagetool
     docker compose up
 
 compose.yaml starts the collabora/code image with the checker enabled and
 pointed at https://languagetool/v2, and puts the LanguageTool server behind
-an nginx front that serves it over HTTPS. Collabora Online can reach the
+an nginx front that serves it over HTTPS. Collabora Office can reach the
 front only, on a network it shares with nothing else, and the front alone
 reaches the server. The front's certificate is made on the first start, in
-./certs, and Collabora Online is given the certificate authority that
+./certs, and Collabora Office is given the certificate authority that
 signed it; ../tls/README tells how, and how to use certificates of your
 own. In coolwsd.xml the two settings are
 
@@ -58,7 +58,7 @@ account's name in user_name and its key in api_key.
 The service has no authentication, and it answers any origin. Anyone who
 can reach it can send it text, so keep it on an internal network, as
 compose.yaml does, and never on a public address. The front passes on
-/v2/check and /v2/languages only, what Collabora Online asks for, and
+/v2/check and /v2/languages only, what Collabora Office asks for, and
 answers any other path with 404 itself: the rest of the server's API, such
 as the user and word list requests, stays out of reach.
 
@@ -82,5 +82,5 @@ The server settings show in the Options dialog only where the
 administrator allows it, with allow_user_settings in coolwsd.xml, and only
 while the checker is enabled there.
 
-Collabora Office, the desktop application, has the same checker and is
-configured in its own Options dialog.
+The desktop application of Collabora Office has the same checker, and it
+is configured in its own Options dialog.

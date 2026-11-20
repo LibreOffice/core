@@ -139,11 +139,11 @@ The base image's own SBOM and VEX are published by ZenDiS, see
 https://gitlab.opencode.de/oci-community/images/zendis/base
 
 
-Writing aids next to Collabora Online
+Writing aids next to Collabora Office
 
 Three subdirectories run a remote sentence checker or a translation service
-beside a Collabora Online container, with a compose.yaml and a README on
-how to configure it. Collabora Online reaches them over HTTPS only, through
+beside a Collabora Office container, with a compose.yaml and a README on
+how to configure it. Collabora Office reaches them over HTTPS only, through
 an nginx front with a certificate of its own, set up by what tls/ holds:
 
 - grammalecte/: Grammalecte, the French grammar checker, built from its

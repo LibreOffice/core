@@ -1,8 +1,8 @@
 # The HTTPS front of a writing aid service, for the nginx image, which fills
 # in TLS_HOST, TLS_UPSTREAM and TLS_PATHS from its environment when it
-# starts. Collabora Online talks to https://${TLS_HOST}, and the requests go
+# starts. Collabora Office talks to https://${TLS_HOST}, and the requests go
 # on to the service at http://${TLS_UPSTREAM}, which nothing but this front
-# can reach. Only the paths Collabora Online asks for, the alternatives of
+# can reach. Only the paths Collabora Office asks for, the alternatives of
 # the regular expression TLS_PATHS, are passed on; any other path is
 # answered with 404 here, so the rest of the service's API stays out of
 # reach.

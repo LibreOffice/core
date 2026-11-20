@@ -1,11 +1,11 @@
-LibreTranslate for Collabora Online
+LibreTranslate for Collabora Office
 
 LibreTranslate is a machine translation service that runs on your own
-hardware, with models from the Argos Translate project. Collabora Online
+hardware, with models from the Argos Translate project. Collabora Office
 talks to it over HTTPS for the Translate command of Writer, the way it talks
 to DeepL, and replaces the document text, or the selection, with the
 translation. This directory builds the service and shows how to run it next
-to Collabora Online.
+to Collabora Office.
 
 Nothing of LibreTranslate is in this repository. The Dockerfile installs
 the release from PyPI while the image builds, checking every package
@@ -30,17 +30,17 @@ HTTP here, which is fine for trying it on your own machine, but Collabora
 Online reaches the translation providers over HTTPS only: an http:// base
 URL is never asked.
 
-Running it next to Collabora Online:
+Running it next to Collabora Office:
 
     cd docker/libretranslate
     docker compose up
 
 compose.yaml starts the collabora/code image with the provider enabled and
 pointed at https://libretranslate, and puts the LibreTranslate server
-behind an nginx front that serves it over HTTPS. Collabora Online can reach
+behind an nginx front that serves it over HTTPS. Collabora Office can reach
 the front only, on a network it shares with nothing else, and the front
 alone reaches the server. The front's certificate is made on the first
-start, in ./certs, and Collabora Online is given the certificate authority
+start, in ./certs, and Collabora Office is given the certificate authority
 that signed it; ../tls/README tells how, and how to use certificates of
 your own. In coolwsd.xml the two settings are
 
@@ -64,7 +64,7 @@ some 100 MB, and each loaded model takes a few hundred MB of memory. The
 image holds the models and everything else the server needs, so it runs
 with no network at all, as in compose.yaml. A paragraph takes a CPU core
 for a few seconds; the LT_THREADS environment variable says how many are
-translated at once, four by default. Collabora Online waits 30 seconds
+translated at once, four by default. Collabora Office waits 30 seconds
 for each one.
 
 The server has no authentication by default. Anyone who can reach it can
@@ -84,5 +84,5 @@ administrator allows it, with allow_user_settings in coolwsd.xml, and only
 while the provider is enabled there. With it, a user may point Collabora
 Online at a server and key of their own.
 
-Collabora Office, the desktop application, has the same provider and is
-configured in its own Options dialog.
+The desktop application of Collabora Office has the same provider, and it
+is configured in its own Options dialog.

@@ -1,4 +1,4 @@
-# Collabora Online with a LibreTranslate server beside it. Collabora reaches
+# Collabora Office with a LibreTranslate server beside it. Collabora reaches
 # the translator over HTTPS, at https://libretranslate, on a network of its
 # own: the translator answers anyone who can reach it, with no password.
 #
@@ -10,7 +10,7 @@
 #
 # The LibreTranslate server speaks plain HTTP here, so an nginx front serves
 # it over HTTPS, with a certificate that ../tls/make-certs.sh makes on the
-# first start, in ./certs. Collabora Online is given the certificate
+# first start, in ./certs. Collabora Office is given the certificate
 # authority that signed it, and verifies the front as it would any other
 # server (see ../tls/README).
 
@@ -20,12 +20,12 @@ services:
     ports:
       - "9980:9980"
     environment:
-      # Your hosts, as for any Collabora Online container.
+      # Your hosts, as for any Collabora Office container.
       - aliasgroup1=https://my-wopi-host.example.com:443
       - extra_params=--o:ssl.enable=false --o:ssl.termination=true --o:libretranslate.enabled=true --o:libretranslate.base_url=https://libretranslate
     volumes:
       # The usual certificate authorities and the one of ./certs, for
-      # Collabora Online and for the document processes in their jails.
+      # Collabora Office and for the document processes in their jails.
       - ./certs/ca-bundle.crt:/etc/ssl/certs/ca-certificates.crt:ro
       - ./certs/ca-bundle.crt:/opt/cool/systemplate/etc/ssl/certs/ca-certificates.crt:ro
     networks:
@@ -36,13 +36,13 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
-  # The HTTPS front, the only part of the service Collabora Online can reach.
+  # The HTTPS front, the only part of the service Collabora Office can reach.
   libretranslate:
     image: nginx:stable-alpine
     environment:
       - TLS_HOST=libretranslate
       - TLS_UPSTREAM=libretranslate-server:5000
-      # What Collabora Online asks for; the front refuses any other path.
+      # What Collabora Office asks for; the front refuses any other path.
       - TLS_PATHS=/translate|/languages
     volumes:
       - ../tls/front.conf.template:/etc/nginx/templates/default.conf.template:ro

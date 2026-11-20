@@ -1,6 +1,6 @@
 HTTPS for the writing aids
 
-Collabora Online reaches the writing aid services, the remote sentence
+Collabora Office reaches the writing aid services, the remote sentence
 checkers and the translation providers, over HTTPS only: a base URL that
 starts with http:// is never asked. The services run beside it in
 grammalecte/, languagetool/ and libretranslate/ speak plain HTTP, so their
@@ -16,16 +16,16 @@ what the fronts share:
 - front.conf.template is the nginx configuration of a front: it serves
   https://<host> with that certificate and passes the requests on to the
   service, on a network that only the front and the service share. It
-  passes on only the paths Collabora Online asks for, which the TLS_PATHS
+  passes on only the paths Collabora Office asks for, which the TLS_PATHS
   environment variable of the front lists as a regular expression, as in
   TLS_PATHS=/v2/check|/v2/languages, and answers any other path with 404.
 
-Collabora Online is given ca-bundle.crt as its certificate bundle, twice:
+Collabora Office is given ca-bundle.crt as its certificate bundle, twice:
 at /etc/ssl/certs/ca-certificates.crt for the server, and at the same path
 under /opt/cool/systemplate for the document processes, which run in jails
 made from that template and do the checking and the translating. Without
 the second, the server finds the service but the documents cannot reach it.
-Collabora Online verifies the certificate, so leave ssl_verification on.
+Collabora Office verifies the certificate, so leave ssl_verification on.
 
 To use certificates of your own, put <host>.crt, <host>.key and the ca.crt
 that signed them in ./certs before the first start; delete ./certs to have

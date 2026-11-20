@@ -1,4 +1,4 @@
-# A Grammalecte server, the French grammar checker, for Collabora Online's
+# A Grammalecte server, the French grammar checker, for Collabora Office's
 # remote sentence checker. Grammalecte itself is not in this repository: its
 # release archive is fetched while the image builds, and its licence (GPL 3)
 # is in the archive.
@@ -8,7 +8,7 @@
 #   curl -d 'text=Il%20sont%20parti.' http://127.0.0.1:8080/gc_text/fr
 #
 # The server has no authentication and no TLS: keep it on an internal
-# network, behind an HTTPS front, as compose.yaml here does; Collabora Online
+# network, behind an HTTPS front, as compose.yaml here does; Collabora Office
 # reaches it over HTTPS only.
 
 ARG GRAMMALECTE_VERSION=2.3.0
@@ -25,7 +25,7 @@ RUN set -e; \
 
 FROM python:3-slim
 LABEL org.opencontainers.image.title="Grammalecte server" \
-      org.opencontainers.image.description="Grammalecte, the French grammar checker, as an HTTP service for Collabora Online" \
+      org.opencontainers.image.description="Grammalecte, the French grammar checker, as an HTTP service for Collabora Office" \
       org.opencontainers.image.licenses="GPL-3.0-only"
 ARG GRAMMALECTE_VERSION
 ENV GRAMMALECTE_VERSION=${GRAMMALECTE_VERSION} \
