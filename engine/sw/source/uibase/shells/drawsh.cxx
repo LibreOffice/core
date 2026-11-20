@@ -199,24 +199,31 @@ void SwDrawShell::Execute(SfxRequest &rReq)
                 const SfxInt32Item* newPosXTwips = rReq.GetArg<SfxInt32Item>(FN_PARAM_2);
                 const SfxInt32Item* newPosYTwips = rReq.GetArg<SfxInt32Item>(FN_PARAM_3);
                 const SfxInt32Item* OrdNum = rReq.GetArg<SfxInt32Item>(FN_PARAM_4);
+                // A preview asks what the drag would reach. The document stays as it is and
+                // the outline of every selected object is reported back.
+                const SfxBoolItem* pPreview = rReq.GetArg<SfxBoolItem>(FN_PARAM_5);
 
                 const sal_uLong handleNum = handleNumItem->GetValue();
                 const tools::Long newPosX = newPosXTwips->GetValue();
                 const tools::Long newPosY = newPosYTwips->GetValue();
                 const Point mPoint(newPosX, newPosY);
+                const bool bPreview = pPreview && pPreview->GetValue();
                 const SdrHdl* handle = pSdrView->GetHdlList().GetHdl(handleNum);
                 if (!handle)
                 {
                     break;
                 }
 
-                if (handle->GetKind() == SdrHdlKind::Anchor || handle->GetKind() == SdrHdlKind::Anchor_TR)
+                if (!bPreview
+                    && (handle->GetKind() == SdrHdlKind::Anchor
+                        || handle->GetKind() == SdrHdlKind::Anchor_TR))
                 {
                     rSh.FindAnchorPos(mPoint, /*bMoveIt=*/true);
                     pSdrView->ModelHasChanged();
                 }
                 else
-                    rSh.MoveShapeHandle(handleNum, mPoint, OrdNum ? OrdNum->GetValue() : -1);
+                    rSh.MoveShapeHandle(handleNum, mPoint, OrdNum ? OrdNum->GetValue() : -1,
+                                        bPreview);
             }
         }
         break;

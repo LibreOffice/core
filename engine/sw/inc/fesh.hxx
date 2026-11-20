@@ -285,7 +285,9 @@ public:
     SW_DLLPUBLIC bool SelectObj( const Point& rSelPt, sal_uInt8 nFlag = 0, SdrObject *pObj = nullptr );
     /// Drags the handle with the given index to the point, as one undo step for the whole
     /// selection. The order number selects the object in a group when it is not negative.
-    SW_DLLPUBLIC bool MoveShapeHandle( sal_uInt32 nHandleIndex, const Point& rPoint, sal_Int32 nOrdNum );
+    /// A preview reports the outline the drag would reach and leaves the document as it is.
+    SW_DLLPUBLIC bool MoveShapeHandle( sal_uInt32 nHandleIndex, const Point& rPoint,
+                                       sal_Int32 nOrdNum, bool bPreview = false );
     SW_DLLPUBLIC void DelSelectedObj();
 
     /** Move selection upwards or downwards (Z-Order).

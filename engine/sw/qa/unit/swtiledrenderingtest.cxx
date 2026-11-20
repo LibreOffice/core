@@ -210,6 +210,11 @@ void SwTiledRenderingTest::callbackImpl(COKitCallbackType eType, const char* pPa
             m_ShapeSelection = OString(pPayload);
         }
         break;
+        case COKitCallbackType::SHAPE_DRAG_PREVIEW:
+        {
+            m_ShapeDragPreview = OString(pPayload);
+        }
+        break;
         case COKitCallbackType::TOOLTIP:
         {
             std::stringstream aStream(pPayload);

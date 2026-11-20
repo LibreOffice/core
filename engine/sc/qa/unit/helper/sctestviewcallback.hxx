@@ -95,6 +95,8 @@ public:
     /// Every mouse pointer name the view sent, oldest first.
     std::vector<OString> m_aMousePointers;
     OString m_ShapeSelection;
+    /// The last drag preview the view received. It stays empty until the first one arrives.
+    OString m_ShapeDragPreview;
     std::map<std::string, boost::property_tree::ptree> m_aStateChanges;
     /// Every CellRangeMarker state change the view received, oldest first.
     std::vector<boost::property_tree::ptree> m_aCellRangeMarkers;

@@ -52,6 +52,8 @@ protected:
     OString m_aContentControl;
     std::vector<OString> m_aContentControls; // every payload, m_aContentControl is the last
     OString m_ShapeSelection;
+    /// The last drag preview the view received. It stays empty until the first one arrives.
+    OString m_ShapeDragPreview;
     struct
     {
         std::string text;

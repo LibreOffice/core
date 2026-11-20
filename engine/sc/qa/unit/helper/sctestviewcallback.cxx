@@ -223,6 +223,11 @@ void ScTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             m_ShapeSelection = OString(pPayload);
         }
         break;
+        case COKitCallbackType::SHAPE_DRAG_PREVIEW:
+        {
+            m_ShapeDragPreview = OString(pPayload);
+        }
+        break;
         case COKitCallbackType::GRAPHIC_VIEW_SELECTION:
         {
             m_bGraphicViewSelection = true;

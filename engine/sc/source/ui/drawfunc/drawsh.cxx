@@ -160,13 +160,18 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                 const SfxInt32Item* newPosXTwips = rReq.GetArg<SfxInt32Item>(FN_PARAM_2);
                 const SfxInt32Item* newPosYTwips = rReq.GetArg<SfxInt32Item>(FN_PARAM_3);
                 const SfxInt32Item* OrdNum = rReq.GetArg<SfxInt32Item>(FN_PARAM_4);
+                // A preview asks what the drag would reach. The document stays as it is and
+                // the outline of every selected object is reported back.
+                const SfxBoolItem* pPreview = rReq.GetArg<SfxBoolItem>(FN_PARAM_5);
 
                 const sal_uLong handleNum = handleNumItem->GetValue();
                 const tools::Long newPosX = convertTwipToMm100(newPosXTwips->GetValue());
                 const tools::Long newPosY = convertTwipToMm100(newPosYTwips->GetValue());
 
                 bool bNegateX = comphelper::COKit::isActive() && rViewData.GetDocument().IsLayoutRTL(rViewData.CurrentTabForData());
-                pView->MoveShapeHandle(handleNum, Point(bNegateX ? -newPosX : newPosX, newPosY), OrdNum ? OrdNum->GetValue() : -1);
+                pView->MoveShapeHandle(handleNum, Point(bNegateX ? -newPosX : newPosX, newPosY),
+                                       OrdNum ? OrdNum->GetValue() : -1,
+                                       pPreview && pPreview->GetValue());
             }
         }
         break;

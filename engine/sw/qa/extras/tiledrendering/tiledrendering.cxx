@@ -35,6 +35,7 @@
 #include <svx/svdomedia.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
+#include <svx/svdhdl.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -4703,6 +4704,51 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testResizeSeveralImagesIsOneUndoStep)
     CPPUNIT_ASSERT_EQUAL(aOldFirst.Width(), aFlyFrames[0]->getFrameArea().Width());
     CPPUNIT_ASSERT_EQUAL(aOldSecond.Width(), aFlyFrames[1]->getFrameArea().Width());
     CPPUNIT_ASSERT_EQUAL(aOldFirst.Left(), aFlyFrames[0]->getFrameArea().Left());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rUndoManager.GetUndoActionCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShapeHandlePreviewKeepsTheImagesWhereTheyAre)
+{
+    // A preview request sends back an outline for each selected image and does not move the
+    // images. The user can then see the drag while the mouse button is still down.
+    createDoc("two-images.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    pWrtShell->SelectObj(Point(), 0, pPage->GetObj(0));
+    pWrtShell->SelectObj(Point(), SW_ADD_SELECT, pPage->GetObj(1));
+    Scheduler::ProcessEventsToIdle();
+    std::vector<SwFlyFrame*> aFlyFrames = pWrtShell->GetSelectedFlyFrames();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aFlyFrames.size());
+    const SwRect aOldFirst(aFlyFrames[0]->getFrameArea());
+    const SwRect aOldSecond(aFlyFrames[1]->getFrameArea());
+    sw::UndoManager& rUndoManager = pWrtShell->GetDoc()->GetUndoManager();
+
+    CPPUNIT_ASSERT(!m_ShapeSelection.isEmpty());
+    sal_Int32 nHandle, nX, nY;
+    lcl_extractHandleParameters(m_ShapeSelection, nHandle, nX, nY);
+    comphelper::dispatchCommand(u".uno:MoveShapeHandle"_ustr,
+                                comphelper::InitPropertySequence(
+                                    { { u"HandleNum"_ustr, cpo::uno::Any(nHandle) },
+                                      { u"NewPosX"_ustr, cpo::uno::Any(nX - 500) },
+                                      { u"NewPosY"_ustr, cpo::uno::Any(nY - 500) },
+                                      { u"Preview"_ustr, cpo::uno::Any(true) } }));
+    Scheduler::ProcessEventsToIdle();
+
+    // One outline for each selected image.
+    CPPUNIT_ASSERT(!m_ShapeDragPreview.isEmpty());
+    std::stringstream aStream{ std::string(m_ShapeDragPreview) };
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aTree.get_child("polygons").size());
+
+    // Both images keep the size they had and there is nothing to undo.
+    aFlyFrames = pWrtShell->GetSelectedFlyFrames();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aFlyFrames.size());
+    CPPUNIT_ASSERT_EQUAL(aOldFirst.Width(), aFlyFrames[0]->getFrameArea().Width());
+    CPPUNIT_ASSERT_EQUAL(aOldFirst.Height(), aFlyFrames[0]->getFrameArea().Height());
+    CPPUNIT_ASSERT_EQUAL(aOldSecond.Width(), aFlyFrames[1]->getFrameArea().Width());
+    CPPUNIT_ASSERT_EQUAL(aOldSecond.Height(), aFlyFrames[1]->getFrameArea().Height());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rUndoManager.GetUndoActionCount());
 }
 

@@ -410,6 +410,63 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMoveShapeHandleTextBox)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testShapeHandlePreviewKeepsTheShapesWhereTheyAre)
+{
+    // A preview request sends back an outline for each selected shape and does not move the
+    // shapes. The user can then see the drag while the mouse button is still down.
+    createDoc("two-shapes.fods");
+    ScTestViewCallback aView;
+
+    const ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    SdrPage* pDrawPage = pViewData->GetDocument().GetDrawLayer()->GetPage(0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pDrawPage->GetObjCount());
+    SdrView* pView = pViewShell->GetScDrawView();
+    pView->MarkObj(pDrawPage->GetObj(0), pView->GetSdrPageView());
+    pView->MarkObj(pDrawPage->GetObj(1), pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+    const tools::Rectangle aOldFirst(pDrawPage->GetObj(0)->GetSnapRect());
+    const tools::Rectangle aOldSecond(pDrawPage->GetObj(1)->GetSnapRect());
+
+    // The upper left handle of the first shape. A selection of several shapes names a handle by
+    // the place it has in the list of the whole selection.
+    CPPUNIT_ASSERT(!aView.m_ShapeSelection.isEmpty());
+    std::string aExtraInfo(aView.m_ShapeSelection);
+    std::stringstream aSelectionStream{ aExtraInfo.substr(aExtraInfo.find("{")) };
+    boost::property_tree::ptree aSelectionTree;
+    boost::property_tree::read_json(aSelectionStream, aSelectionTree);
+    const boost::property_tree::ptree& rHandle = aSelectionTree.get_child("handles")
+                                                     .get_child("kinds")
+                                                     .get_child("rectangle")
+                                                     .get_child("1")
+                                                     .begin()
+                                                     ->second;
+    const sal_Int32 nHandle = rHandle.get_child("index").get_value<sal_Int32>();
+    const sal_Int32 nX = rHandle.get_child("point").get_child("x").get_value<sal_Int32>();
+    const sal_Int32 nY = rHandle.get_child("point").get_child("y").get_value<sal_Int32>();
+
+    dispatchCommand(mxComponent, u".uno:MoveShapeHandle"_ustr,
+                    comphelper::InitPropertySequence(
+                        { { u"HandleNum"_ustr, cpo::uno::Any(nHandle) },
+                          { u"NewPosX"_ustr, cpo::uno::Any(nX - 500) },
+                          { u"NewPosY"_ustr, cpo::uno::Any(nY - 500) },
+                          { u"Preview"_ustr, cpo::uno::Any(true) } }));
+    Scheduler::ProcessEventsToIdle();
+
+    // One outline for each selected shape.
+    CPPUNIT_ASSERT(!aView.m_ShapeDragPreview.isEmpty());
+    std::stringstream aPreviewStream{ std::string(aView.m_ShapeDragPreview) };
+    boost::property_tree::ptree aPreviewTree;
+    boost::property_tree::read_json(aPreviewStream, aPreviewTree);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPreviewTree.get_child("polygons").size());
+
+    // Both shapes are still where they were.
+    CPPUNIT_ASSERT_EQUAL(aOldFirst, pDrawPage->GetObj(0)->GetSnapRect());
+    CPPUNIT_ASSERT_EQUAL(aOldSecond, pDrawPage->GetObj(1)->GetSnapRect());
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testColRowResize)
 {
     ScModelObj* pModelObj = createDoc("sort-range.ods");
