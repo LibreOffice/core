@@ -83,6 +83,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/outliner.hxx>
 #include <sfx2/ipclient.hxx>
+#include <sfx2/kit/ParsedCommand.hxx>
 #include <sfx2/viewsh.hxx>
 
 #include <DrawDocShell.hxx>
@@ -446,8 +447,8 @@ protected:
         SdXImpressDocument* pDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
         CPPUNIT_ASSERT(pDocument);
         tools::JsonWriter aJsonWriter;
-        pDocument->getCommandValues(aJsonWriter,
-                                    std::string_view(rCommand.getStr(), rCommand.getLength()));
+        pDocument->getCommandValues(aJsonWriter, KitParsedCommand::parse(std::string_view(
+                                                     rCommand.getStr(), rCommand.getLength())));
         return aJsonWriter.finishAndGetAsOString();
     }
 
@@ -506,8 +507,8 @@ protected:
         if (nSince >= 0)
             aCommand = aCommand + "&since=" + OString::number(nSince)
                        + "&epoch=" + OString::number(pDoc->getVectorEpoch());
-        pDoc->getCommandValues(aJsonWriter,
-                               std::string_view(aCommand.getStr(), aCommand.getLength()));
+        pDoc->getCommandValues(aJsonWriter, KitParsedCommand::parse(std::string_view(
+                                                aCommand.getStr(), aCommand.getLength())));
         OString aResult = aJsonWriter.finishAndGetAsOString();
         CPPUNIT_ASSERT(!aResult.isEmpty());
         m_aLastVectorJson = aResult;
@@ -2280,7 +2281,8 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEditedTextAppearsInPrimitives)
     CPPUNIT_ASSERT(pDoc);
     tools::JsonWriter aJsonWriter;
     const OString aCommand = ".uno:VectorPrimitives?partid=" + firstPartId();
-    pDoc->getCommandValues(aJsonWriter, std::string_view(aCommand.getStr(), aCommand.getLength()));
+    pDoc->getCommandValues(aJsonWriter, KitParsedCommand::parse(std::string_view(
+                                            aCommand.getStr(), aCommand.getLength())));
     const OString aResult = aJsonWriter.finishAndGetAsOString();
 
     pView->SdrEndTextEdit();
@@ -2453,8 +2455,8 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testRealBoldFaceNeedsNoThickening)
     CPPUNIT_ASSERT(pDocument);
     tools::JsonWriter aJsonWriter;
     const OString aCommand = ".uno:VectorPrimitives?partid=" + firstPartId();
-    pDocument->getCommandValues(aJsonWriter,
-                                std::string_view(aCommand.getStr(), aCommand.getLength()));
+    pDocument->getCommandValues(aJsonWriter, KitParsedCommand::parse(std::string_view(
+                                                 aCommand.getStr(), aCommand.getLength())));
     const OString aResult = aJsonWriter.finishAndGetAsOString();
 
     pView->SdrEndTextEdit();

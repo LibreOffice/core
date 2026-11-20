@@ -32,6 +32,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/dispatchcommand.hxx>
+#include <sfx2/kit/ParsedCommand.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -6179,7 +6180,7 @@ void requestFirstVectorPage(SwXTextDocument& rDocument, SwWrtShell& rShell)
     CPPUNIT_ASSERT(pPage);
     const OString aCommand = ".uno:VectorPrimitives?partid=" + sw::vector::partIdOf(*pPage);
     tools::JsonWriter aWriter;
-    rDocument.getCommandValues(aWriter, aCommand);
+    rDocument.getCommandValues(aWriter, KitParsedCommand::parse(aCommand));
     aWriter.finishAndGetAsOString();
 }
 }

@@ -1599,9 +1599,9 @@ CalcCommand findCalcCommand(std::string_view aName)
 }
 }
 
-bool ScModelObj::supportsCommand(std::string_view rCommand)
+bool ScModelObj::supportsCommand(const KitParsedCommand& rCommand)
 {
-    return findCalcCommand(rCommand) != CalcCommand::Unknown;
+    return findCalcCommand(rCommand.aName) != CalcCommand::Unknown;
 }
 
 vcl::IVectorParts* ScModelObj::getVectorPartsInterface() { return this; }
@@ -1655,14 +1655,12 @@ std::string ScModelObj::getVectorResource(std::string_view rCommand)
     return mpVectorContent ? mpVectorContent->getVectorResource(rCommand) : std::string();
 }
 
-void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
+void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, const KitParsedCommand& rCommand)
 {
-    if (answerVectorCommand(rJsonWriter, rCommand))
+    if (answerVectorCommand(rJsonWriter, rCommand.aRawCommand))
         return;
 
-    const KitParsedCommand aCommand = KitParsedCommand::parse(rCommand);
-
-    switch (findCalcCommand(aCommand.aName))
+    switch (findCalcCommand(rCommand.aName))
     {
         case CalcCommand::Unknown:
             return;
@@ -1688,7 +1686,7 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
             if (!pDocShell)
                 return;
 
-            const std::optional<std::string_view> oPart = aCommand.get("part");
+            const std::optional<std::string_view> oPart = rCommand.get("part");
             const sal_Int32 nPart = oPart ? o3tl::toInt32(*oPart) : -1;
 
             ScDocument& rDoc = pDocShell->GetDocument();
@@ -1757,7 +1755,7 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
 
             // ?english=true asks for the names of the English A1 grammar. Without it the
             // names come in the language of the view, which is what a function picker wants.
-            const bool bEnglish = aCommand.get("english") == "true";
+            const bool bEnglish = rCommand.get("english") == "true";
 
             ScCompiler::OpCodeMapPtr xEnglishMap;
             if (bEnglish && pDocShell)
@@ -1842,8 +1840,8 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
             ScDocument& rDoc = pDocShell->GetDocument();
 
             // Cell and formula from the query: ?cell=G1&formula==SUM(A1:A5)
-            const OUString cellStr = OUString::fromUtf8(aCommand.get("cell").value_or(""));
-            const OUString formulaStr = aCommand.getDecoded("formula");
+            const OUString cellStr = OUString::fromUtf8(rCommand.get("cell").value_or(""));
+            const OUString formulaStr = rCommand.getDecoded("formula");
 
             auto aValues = rJsonWriter.startNode("commandValues");
 
@@ -1905,7 +1903,7 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
                 return;
 
             // The filter argument, e.g. ?filter=text[,range:A1:D100]
-            const OUString filterStr = aCommand.getDecoded("filter");
+            const OUString filterStr = rCommand.getDecoded("filter");
 
             // Only the text filter is implemented for Calc; the other structure
             // types are Writer/Impress-only.

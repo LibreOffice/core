@@ -45,6 +45,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <sfx2/msgpool.hxx>
+#include <sfx2/kit/ParsedCommand.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/kit/componenthelpers.hxx>
 #include <sfx2/ipclient.hxx>
@@ -4415,7 +4416,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testExtractTextListsSheetsAndReadsANa
 
     {
         tools::JsonWriter aJsonWriter;
-        pModelObj->getCommandValues(aJsonWriter, ".uno:ExtractDocumentStructure?filter=text");
+        pModelObj->getCommandValues(
+            aJsonWriter, KitParsedCommand::parse(".uno:ExtractDocumentStructure?filter=text"));
         const OString aText = aJsonWriter.finishAndGetAsOString();
         CPPUNIT_ASSERT(aText.indexOf("\"Figures, 2026\"") >= 0);
         CPPUNIT_ASSERT(aText.indexOf("on the first sheet") >= 0);
@@ -4424,15 +4426,17 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testExtractTextListsSheetsAndReadsANa
     {
         tools::JsonWriter aJsonWriter;
         pModelObj->getCommandValues(
-            aJsonWriter, ".uno:ExtractDocumentStructure?filter=text,sheet:Figures%2C%202026");
+            aJsonWriter, KitParsedCommand::parse(
+                             ".uno:ExtractDocumentStructure?filter=text,sheet:Figures%2C%202026"));
         const OString aText = aJsonWriter.finishAndGetAsOString();
         CPPUNIT_ASSERT(aText.indexOf("\"Sheet\": \"Figures, 2026\"") >= 0);
         CPPUNIT_ASSERT(aText.indexOf("on the second sheet") >= 0);
     }
     {
         tools::JsonWriter aJsonWriter;
-        pModelObj->getCommandValues(aJsonWriter,
-                                    ".uno:ExtractDocumentStructure?filter=text,sheet:Nothing");
+        pModelObj->getCommandValues(
+            aJsonWriter,
+            KitParsedCommand::parse(".uno:ExtractDocumentStructure?filter=text,sheet:Nothing"));
         const OString aText = aJsonWriter.finishAndGetAsOString();
         CPPUNIT_ASSERT(aText.indexOf("There is no sheet named 'Nothing'") >= 0);
     }
@@ -4441,8 +4445,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testExtractTextListsSheetsAndReadsANa
         pDoc->InsertTab(2, u"Plain"_ustr);
         pDoc->SetString(ScAddress(0, 0, 2), u"on the third sheet"_ustr);
         tools::JsonWriter aJsonWriter;
-        pModelObj->getCommandValues(aJsonWriter,
-                                    ".uno:ExtractDocumentStructure?filter=text,range:Plain.A1:A1");
+        pModelObj->getCommandValues(
+            aJsonWriter,
+            KitParsedCommand::parse(".uno:ExtractDocumentStructure?filter=text,range:Plain.A1:A1"));
         const OString aText = aJsonWriter.finishAndGetAsOString();
         CPPUNIT_ASSERT(aText.indexOf("\"Sheet\": \"Plain\"") >= 0);
         CPPUNIT_ASSERT(aText.indexOf("on the third sheet") >= 0);
@@ -4457,7 +4462,7 @@ namespace
 boost::property_tree::ptree getCommandResponse(ScModelObj& rModelObj, std::string_view aCommand)
 {
     tools::JsonWriter aWriter;
-    rModelObj.getCommandValues(aWriter, aCommand);
+    rModelObj.getCommandValues(aWriter, KitParsedCommand::parse(aCommand));
     std::stringstream aStream(std::string(aWriter.finishAndGetAsOString()));
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
@@ -4519,14 +4524,16 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommandValues)
     pView->SetCursor(1, 0); // B1
     Scheduler::ProcessEventsToIdle();
 
-    for (std::string_view aName :
-         { "SecurityLabel", "CellRangeInventory", "CellCursorState", "FormulaDepChain",
-           "CalcFunctionList", "EvaluateFormula", "ExtractDocumentStructure" })
-        CPPUNIT_ASSERT(pModelObj->supportsCommand(aName));
+    for (std::string_view aCommand :
+         { ".uno:SecurityLabel", ".uno:CellRangeInventory", ".uno:CellCursorState",
+           ".uno:FormulaDepChain", ".uno:CalcFunctionList", ".uno:EvaluateFormula",
+           ".uno:ExtractDocumentStructure" })
+        CPPUNIT_ASSERT(pModelObj->supportsCommand(KitParsedCommand::parse(aCommand)));
 
-    // The name must match as a whole, and has no ".uno:" prefix here.
-    CPPUNIT_ASSERT(!pModelObj->supportsCommand("CellRangeInventoryX"));
-    CPPUNIT_ASSERT(!pModelObj->supportsCommand(".uno:CellRangeInventory"));
+    // The name must match as a whole, and the command needs the ".uno:" prefix.
+    CPPUNIT_ASSERT(
+        !pModelObj->supportsCommand(KitParsedCommand::parse(".uno:CellRangeInventoryX")));
+    CPPUNIT_ASSERT(!pModelObj->supportsCommand(KitParsedCommand::parse("CellRangeInventory")));
     boost::property_tree::ptree aTree
         = getCommandResponse(*pModelObj, ".uno:CellRangeInventoryX?part=0");
     // {}

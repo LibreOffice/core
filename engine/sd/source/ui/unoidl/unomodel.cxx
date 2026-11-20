@@ -104,6 +104,7 @@
 #include <unomodel.hxx>
 #include <sdhtmlfilter.hxx>
 #include "unopool.hxx"
+#include <sfx2/kit/ParsedCommand.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -4186,8 +4187,9 @@ private:
 
 } // anonymous namespace
 
-bool SdXImpressDocument::supportsCommand(std::string_view rCommand)
+bool SdXImpressDocument::supportsCommand(const KitParsedCommand& rParsed)
 {
+    const std::string_view& rCommand = rParsed.aName;
     if (rCommand == "VectorThumbnail" || rCommand == "ExtractDocumentStructure"
         || rCommand == "GetDesignTemplates" || rCommand == "GetDesignTemplateDesigns"
         || rCommand == "SecurityLabel" || rCommand == "ShapeGhost"
@@ -4422,8 +4424,9 @@ std::string SdXImpressDocument::getVectorResource(std::string_view rCommand)
 }
 
 void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
-                                          std::string_view rCommand)
+                                          const KitParsedCommand& rParsed)
 {
+    const std::string_view& rCommand = rParsed.aRawCommand;
     if (answerVectorCommand(rJsonWriter, rCommand))
         return;
 

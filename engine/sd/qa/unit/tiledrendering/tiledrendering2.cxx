@@ -12,6 +12,7 @@
 #include <sdtiledrenderingtest.hxx>
 
 #include <sfx2/kit/componenthelpers.hxx>
+#include <sfx2/kit/ParsedCommand.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <svx/svxids.hrc>
@@ -3233,7 +3234,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testEmbeddedSpreadsheetVectorContentF
         // the client holds the slide
         tools::JsonWriter aWriter;
         const OString aCommand = ".uno:VectorPrimitives?partid=" + aPartId + "&mode=0";
-        pXImpressDocument->getCommandValues(aWriter, std::string_view(aCommand));
+        pXImpressDocument->getCommandValues(aWriter,
+                                            KitParsedCommand::parse(std::string_view(aCommand)));
         aWriter.finishAndGetAsOString();
     }
     SdrOle2Obj* pSheet = activateRevenueSheet(*pViewShell);

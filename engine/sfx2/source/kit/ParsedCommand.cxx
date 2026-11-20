@@ -14,6 +14,7 @@
 KitParsedCommand KitParsedCommand::parse(std::string_view aCommand)
 {
     KitParsedCommand aParsed;
+    aParsed.aRawCommand = aCommand;
 
     static constexpr std::string_view aPrefix = ".uno:";
     if (!aCommand.starts_with(aPrefix))

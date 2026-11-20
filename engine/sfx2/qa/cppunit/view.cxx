@@ -111,11 +111,11 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testKitHelperCommandValuesSignature)
 
     // When extracting hashes:
     tools::JsonWriter aWriter;
-    KitHelper::getCommandValues(aWriter, ".uno:Signature");
+    KitHelper::getCommandValues(aWriter, KitParsedCommand::parse(".uno:Signature"));
     OString aJson = aWriter.finishAndGetAsOString();
 
     // Then make sure that we get a signature time and a hash:
-    CPPUNIT_ASSERT(KitHelper::supportsCommand("Signature"));
+    CPPUNIT_ASSERT(KitHelper::supportsCommand(KitParsedCommand::parse(".uno:Signature")));
     std::stringstream aStream{ std::string(aJson) };
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
@@ -147,7 +147,8 @@ OUString GetSignatureHash()
 {
     tools::JsonWriter aWriter;
     // Provide the current time, so the system timer is not contacted:
-    KitHelper::getCommandValues(aWriter, ".uno:Signature?signatureTime=1731329053152");
+    KitHelper::getCommandValues(
+        aWriter, KitParsedCommand::parse(".uno:Signature?signatureTime=1731329053152"));
     OString aJson = aWriter.finishAndGetAsOString();
     std::stringstream aStream{ std::string(aJson) };
     boost::property_tree::ptree aTree;
@@ -234,6 +235,8 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testKitParsedCommand)
     // Parse a command with two parameters.
     KitParsedCommand aCommand
         = KitParsedCommand::parse(".uno:CellRangeInventory?part=2&english=true");
+    CPPUNIT_ASSERT_EQUAL(std::string_view(".uno:CellRangeInventory?part=2&english=true"),
+                         aCommand.aRawCommand);
     CPPUNIT_ASSERT_EQUAL(std::string_view("CellRangeInventory"), aCommand.aName);
     CPPUNIT_ASSERT_EQUAL(std::size_t(2), aCommand.aParams.size());
     CPPUNIT_ASSERT_EQUAL(std::string_view("2"), aCommand.get("part").value());

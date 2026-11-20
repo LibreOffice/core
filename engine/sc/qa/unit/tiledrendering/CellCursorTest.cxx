@@ -16,6 +16,7 @@
 
 #include <COKit/COKit.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <sfx2/kit/ParsedCommand.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/viewsh.hxx>
 #include <tools/json_writer.hxx>
@@ -125,7 +126,7 @@ void assertSparklineGroupsEqual(const std::vector<std::vector<ScRange>>& rExpect
 boost::property_tree::ptree getCommandResponse(ScModelObj& rModelObj, std::string_view aCommand)
 {
     tools::JsonWriter aWriter;
-    rModelObj.getCommandValues(aWriter, aCommand);
+    rModelObj.getCommandValues(aWriter, KitParsedCommand::parse(aCommand));
     std::stringstream aStream(std::string(aWriter.finishAndGetAsOString()));
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);

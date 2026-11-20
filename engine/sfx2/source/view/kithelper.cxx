@@ -16,6 +16,7 @@
 
 #include <sfx2/dispatch.hxx>
 #include <sfx2/kit/componenthelpers.hxx>
+#include <sfx2/kit/ParsedCommand.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/kit/unocommandlist.hxx>
 
@@ -1304,12 +1305,12 @@ void KitHelper::ensureCommandAuthor(const SfxViewShell* pViewShell, std::u16stri
     }
 }
 
-bool KitHelper::supportsCommand(std::string_view rCommand)
+bool KitHelper::supportsCommand(const KitParsedCommand& rCommand)
 {
     static const std::initializer_list<std::string_view> vSupport
         = { "Signature", "VectorPrimitiveSample" };
 
-    return std::find(vSupport.begin(), vSupport.end(), rCommand) != vSupport.end();
+    return std::find(vSupport.begin(), vSupport.end(), rCommand.aName) != vSupport.end();
 }
 
 std::map<OUString, OUString> KitHelper::parseCommandParameters(std::u16string_view rCommand)
@@ -1359,8 +1360,9 @@ void writeVectorPrimitiveSampleValues(tools::JsonWriter& rJsonWriter, std::strin
 }
 }
 
-void KitHelper::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
+void KitHelper::getCommandValues(tools::JsonWriter& rJsonWriter, const KitParsedCommand& rParsed)
 {
+    const std::string_view& rCommand = rParsed.aRawCommand;
     static constexpr OString aVectorPrimitiveSample(".uno:VectorPrimitiveSample"_ostr);
     if (o3tl::starts_with(rCommand, aVectorPrimitiveSample))
     {

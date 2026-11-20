@@ -36,6 +36,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
+#include <sfx2/kit/ParsedCommand.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::cpo::uno;
@@ -1448,8 +1449,9 @@ void ScCopyPasteTest::testExtractDocumentStructureProtectedFormula()
 
     // When reading the sheet as text:
     tools::JsonWriter aJsonWriter;
-    pModelObj->getCommandValues(aJsonWriter,
-                                ".uno:ExtractDocumentStructure?filter=text,range:A1:A3"_ostr);
+    pModelObj->getCommandValues(
+        aJsonWriter,
+        KitParsedCommand::parse(".uno:ExtractDocumentStructure?filter=text,range:A1:A3"_ostr));
     OString aJson = aJsonWriter.finishAndGetAsOString();
 
     // Then the table has every value, and only the formula that the user can see is listed:
@@ -1476,7 +1478,8 @@ void ScCopyPasteTest::testExtractDocumentStructureTruncatedKeepsFormulas()
 
     // When reading the whole sheet as text:
     tools::JsonWriter aJsonWriter;
-    pModelObj->getCommandValues(aJsonWriter, ".uno:ExtractDocumentStructure?filter=text"_ostr);
+    pModelObj->getCommandValues(
+        aJsonWriter, KitParsedCommand::parse(".uno:ExtractDocumentStructure?filter=text"_ostr));
     OString aJson = aJsonWriter.finishAndGetAsOString();
 
     // Then the table is cut, and the formula list after it is still there:

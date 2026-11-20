@@ -503,7 +503,8 @@ public:
     void executeContentControlEvent(const StringMap& aArguments) override;
 
     /// @see vcl::ITiledRenderable::getCommandValues().
-    void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand) override;
+    void getCommandValues(tools::JsonWriter& rJsonWriter,
+                          const KitParsedCommand& rCommand) override;
 
     /// @see vcl::ITiledRenderable::getVectorPartsInterface(). The parts are the pages.
     vcl::IVectorParts* getVectorPartsInterface() override;
@@ -521,7 +522,7 @@ public:
     OString getViewRenderState(const SfxViewShell* pViewShell = nullptr) override;
 
     /// @see vcl::ITiledRenderable::supportsCommand().
-    bool supportsCommand(std::string_view rCommand) override;
+    bool supportsCommand(const KitParsedCommand& rCommand) override;
 
     /// @see vcl::ITiledRenderable::setKitTextCursor(). nObject is the frame id of a text frame,
     /// which holds one paragraph, the first.

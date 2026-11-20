@@ -27,6 +27,7 @@
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/kit/ParsedCommand.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/intitem.hxx>
 #include <svx/hlnkitem.hxx>
@@ -860,7 +861,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractChart)
     //extract
     tools::JsonWriter aJsonWriter;
     std::string_view aCommand(".uno:ExtractDocumentStructure?filter=charts");
-    getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
+    getSwTextDoc()->getCommandValues(aJsonWriter, KitParsedCommand::parse(aCommand));
 
     std::stringstream aStream(std::string(aJsonWriter.finishAndGetAsOString()));
     boost::property_tree::ptree aTree;
@@ -1072,7 +1073,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureDocProperties)
     tools::JsonWriter aJsonWriter;
     std::string_view aCommand(".uno:ExtractDocumentStructure?filter=docprops");
     auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    pXTextDocument->getCommandValues(aJsonWriter, aCommand);
+    pXTextDocument->getCommandValues(aJsonWriter, KitParsedCommand::parse(aCommand));
 
     std::stringstream aStream(std::string(aJsonWriter.finishAndGetAsOString()));
     boost::property_tree::ptree aTree;
@@ -1167,7 +1168,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
         // extract
         tools::JsonWriter aJsonWriter;
         std::string_view aCommand(".uno:ExtractDocumentStructure?filter=trackchanges");
-        getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
+        getSwTextDoc()->getCommandValues(aJsonWriter, KitParsedCommand::parse(aCommand));
 
         std::stringstream aStream(std::string(aJsonWriter.finishAndGetAsOString()));
         boost::property_tree::read_json(aStream, tree);
@@ -1251,7 +1252,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
         tools::JsonWriter aJsonWriter;
         std::string_view aCommand(".uno:ExtractDocumentStructure?filter=trackchanges,foo:bar, "
                                   "contextLen: 15, startPageNumber :true ,,");
-        getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
+        getSwTextDoc()->getCommandValues(aJsonWriter, KitParsedCommand::parse(aCommand));
 
         std::stringstream aStream(std::string(aJsonWriter.finishAndGetAsOString()));
         boost::property_tree::read_json(aStream, tree);
@@ -1322,8 +1323,8 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines_Un
 
     tools::JsonWriter aJsonWriter;
     // Before the fix, this crashed:
-    getSwTextDoc()->getCommandValues(aJsonWriter,
-                                     ".uno:ExtractDocumentStructure?filter=trackchanges");
+    getSwTextDoc()->getCommandValues(
+        aJsonWriter, KitParsedCommand::parse(".uno:ExtractDocumentStructure?filter=trackchanges"));
     aJsonWriter.finishAndGetAsOString(); // writer must be finished
 }
 
@@ -1340,7 +1341,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines_te
     // extract using the context length enough to cover the whole document text
     tools::JsonWriter aJsonWriter;
     std::string_view aCommand(".uno:ExtractDocumentStructure?filter=trackchanges,contextLen:100");
-    getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
+    getSwTextDoc()->getCommandValues(aJsonWriter, KitParsedCommand::parse(aCommand));
 
     std::stringstream aStream(std::string(aJsonWriter.finishAndGetAsOString()));
     boost::property_tree::read_json(aStream, tree);

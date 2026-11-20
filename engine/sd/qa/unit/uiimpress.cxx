@@ -59,6 +59,7 @@
 #include <sfx2/cokitfilepicker.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/kit/ParsedCommand.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/intitem.hxx>
@@ -343,7 +344,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformExtractSlide
     tools::JsonWriter aJsonWriter;
     std::string_view aCommand(".uno:ExtractDocumentStructure?filter=slides");
     auto pXPresDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    pXPresDocument->getCommandValues(aJsonWriter, aCommand);
+    pXPresDocument->getCommandValues(aJsonWriter, KitParsedCommand::parse(aCommand));
 
     OString aExpectedStr
         = "{ \"DocStructure\": { \"SlideCount\": 7, \"MasterSlideCount\": 8, \"MasterSlides\": { "
@@ -422,8 +423,8 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureExtractSlideText)
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     {
         tools::JsonWriter aJsonWriter;
-        pImpressDocument->getCommandValues(aJsonWriter,
-                                           ".uno:ExtractDocumentStructure?filter=text");
+        pImpressDocument->getCommandValues(
+            aJsonWriter, KitParsedCommand::parse(".uno:ExtractDocumentStructure?filter=text"));
         const OString aJson = aJsonWriter.finishAndGetAsOString();
 
         CPPUNIT_ASSERT(aJson.indexOf("\"BodyText\"") >= 0);
@@ -442,8 +443,8 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureExtractSlideText)
     typeKey(pImpressDocument, KEY_ESCAPE);
     {
         tools::JsonWriter aJsonWriter;
-        pImpressDocument->getCommandValues(aJsonWriter,
-                                           ".uno:ExtractDocumentStructure?filter=text");
+        pImpressDocument->getCommandValues(
+            aJsonWriter, KitParsedCommand::parse(".uno:ExtractDocumentStructure?filter=text"));
         const OString aJson = aJsonWriter.finishAndGetAsOString();
 
         CPPUNIT_ASSERT(aJson.indexOf("Typed while editing") >= 0);
@@ -852,16 +853,16 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureSetNotes)
     // The text view and the slides view both show the notes.
     {
         tools::JsonWriter aJsonWriter;
-        pImpressDocument->getCommandValues(aJsonWriter,
-                                           ".uno:ExtractDocumentStructure?filter=text");
+        pImpressDocument->getCommandValues(
+            aJsonWriter, KitParsedCommand::parse(".uno:ExtractDocumentStructure?filter=text"));
         const OString aText = aJsonWriter.finishAndGetAsOString();
         CPPUNIT_ASSERT(aText.indexOf("Speaker notes:") >= 0);
         CPPUNIT_ASSERT(aText.indexOf("Speak to the roadmap here.") >= 0);
     }
     {
         tools::JsonWriter aJsonWriter;
-        pImpressDocument->getCommandValues(aJsonWriter,
-                                           ".uno:ExtractDocumentStructure?filter=slides");
+        pImpressDocument->getCommandValues(
+            aJsonWriter, KitParsedCommand::parse(".uno:ExtractDocumentStructure?filter=slides"));
         const OString aSlides = aJsonWriter.finishAndGetAsOString();
         CPPUNIT_ASSERT(aSlides.indexOf("\"Notes\": \"Speak to the roadmap here.\"") >= 0);
     }
@@ -895,8 +896,8 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureNotesBeingTyped)
     pView->GetTextEditOutlinerView()->GetEditView().InsertText(u"Typed into the notes"_ustr);
 
     tools::JsonWriter aJsonWriter;
-    pImpressDocument->getCommandValues(aJsonWriter,
-                                       ".uno:ExtractDocumentStructure?filter=slides");
+    pImpressDocument->getCommandValues(
+        aJsonWriter, KitParsedCommand::parse(".uno:ExtractDocumentStructure?filter=slides"));
     const OString aSlides = aJsonWriter.finishAndGetAsOString();
     CPPUNIT_ASSERT(aSlides.indexOf("\"Notes\": \"Typed into the notes\"") >= 0);
 
@@ -1067,7 +1068,8 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDesignTemplateCatalog)
     CPPUNIT_ASSERT(pImpressDocument);
 
     tools::JsonWriter aJsonWriter;
-    pImpressDocument->getCommandValues(aJsonWriter, ".uno:GetDesignTemplates");
+    pImpressDocument->getCommandValues(aJsonWriter,
+                                       KitParsedCommand::parse(".uno:GetDesignTemplates"));
     const OString aJson = aJsonWriter.finishAndGetAsOString();
 
     // The client's commandvalues handler reads commandName and commandValues, so
@@ -1102,7 +1104,8 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDesignTemplateCatalogSkipsInvalidNames
     comphelper::ScopeGuard aCleanup([&aBadUrl] { osl::File::remove(aBadUrl); });
 
     tools::JsonWriter aJsonWriter;
-    pImpressDocument->getCommandValues(aJsonWriter, ".uno:GetDesignTemplates");
+    pImpressDocument->getCommandValues(aJsonWriter,
+                                       KitParsedCommand::parse(".uno:GetDesignTemplates"));
     const OString aJson = aJsonWriter.finishAndGetAsOString();
 
     CPPUNIT_ASSERT(aJson.indexOf("Cobalt") >= 0);
@@ -1122,7 +1125,8 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDesignTemplateLayouts)
 
     tools::JsonWriter aJsonWriter;
     // The lowercase name must match too - names resolve ignoring letter case.
-    pImpressDocument->getCommandValues(aJsonWriter, ".uno:GetDesignTemplateDesigns?name=cobalt");
+    pImpressDocument->getCommandValues(
+        aJsonWriter, KitParsedCommand::parse(".uno:GetDesignTemplateDesigns?name=cobalt"));
     const OString aJson = aJsonWriter.finishAndGetAsOString();
 
     CPPUNIT_ASSERT(aJson.indexOf("name=cobalt") >= 0);
@@ -1315,8 +1319,8 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDesignTemplateDesignsDeclared)
     CPPUNIT_ASSERT(pImpressDocument);
 
     tools::JsonWriter aJsonWriter;
-    pImpressDocument->getCommandValues(aJsonWriter,
-                                       ".uno:GetDesignTemplateDesigns?name=DesignedDeck");
+    pImpressDocument->getCommandValues(
+        aJsonWriter, KitParsedCommand::parse(".uno:GetDesignTemplateDesigns?name=DesignedDeck"));
     const OString aJson = aJsonWriter.finishAndGetAsOString();
 
     // The declared master reports its part as declared rather than inferred.

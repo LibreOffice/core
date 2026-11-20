@@ -552,9 +552,10 @@ public:
     SD_DLLPUBLIC OString getViewRenderState(const SfxViewShell* pViewShell = nullptr) override;
 
     /// @see vcl::ITiledRenderable::supportsCommand().
-    SD_DLLPUBLIC virtual bool supportsCommand(std::string_view rCommand) override;
+    SD_DLLPUBLIC virtual bool supportsCommand(const KitParsedCommand& rCommand) override;
 
-    SD_DLLPUBLIC virtual void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand) override;
+    SD_DLLPUBLIC virtual void getCommandValues(tools::JsonWriter& rJsonWriter,
+                                               const KitParsedCommand& rCommand) override;
 
     /// @see vcl::ITiledRenderable::getVectorPartsInterface(). The parts are the pages.
     SD_DLLPUBLIC vcl::IVectorParts* getVectorPartsInterface() override;

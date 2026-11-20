@@ -354,9 +354,9 @@ public:
     static void ensureCommandAuthor(const SfxViewShell* pViewShell, std::u16string_view rCommand,
                                     std::vector<css::beans::PropertyValue>& rArguments);
     /// Decides if it's OK to call getCommandValues(rCommand).
-    static bool supportsCommand(std::string_view rCommand);
+    static bool supportsCommand(const KitParsedCommand& rCommand);
     /// Returns information about a given command in JSON format.
-    static void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand);
+    static void getCommandValues(tools::JsonWriter& rJsonWriter, const KitParsedCommand& rCommand);
     /// Parses key-value parameters of rCommand.
     static std::map<OUString, OUString> parseCommandParameters(std::u16string_view rCommand);
     /// Registers function pointers in comphelper/ to set/get of the current COKit view.

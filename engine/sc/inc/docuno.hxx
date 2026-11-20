@@ -453,10 +453,11 @@ public:
     OString getViewRenderState(const SfxViewShell* pViewShell = nullptr) override;
 
     /// @see vcl::ITiledRenderable::supportsCommand().
-    bool supportsCommand(std::string_view rCommand) override;
+    bool supportsCommand(const KitParsedCommand& rCommand) override;
 
     /// @see vcl::ITiledRenderable::getCommandValues().
-    void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand) override;
+    void getCommandValues(tools::JsonWriter& rJsonWriter,
+                          const KitParsedCommand& rCommand) override;
 
     /// The content served to clients that draw vector primitives, once one asked for it.
     sc::VectorContent* getVectorContent() { return mpVectorContent.get(); }

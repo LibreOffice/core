@@ -2120,7 +2120,7 @@ std::string COKitImpl::extractDocumentStructureRequest(const char* pFilePath, co
                                 = OString::Concat(aCommand) + "?filter="_ostr + pFilter;
                         }
 
-                        pDoc->getCommandValues(aJson, aCommand);
+                        pDoc->getCommandValues(aJson, KitParsedCommand::parse(aCommand));
                     }
                     return aJson.finishAndGetAsStdString();
                 }
@@ -10084,17 +10084,17 @@ std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
     }
     else
     {
-        const std::string_view aCommandName = KitParsedCommand::parse(aCommand).aName;
-        if (pDoc->supportsCommand(aCommandName))
+        const KitParsedCommand aParsed = KitParsedCommand::parse(aCommand);
+        if (pDoc->supportsCommand(aParsed))
         {
             tools::JsonWriter aJsonWriter;
-            pDoc->getCommandValues(aJsonWriter, aCommand);
+            pDoc->getCommandValues(aJsonWriter, aParsed);
             return aJsonWriter.finishAndGetAsStdString();
         }
-        if (KitHelper::supportsCommand(aCommandName))
+        if (KitHelper::supportsCommand(aParsed))
         {
             tools::JsonWriter aJsonWriter;
-            KitHelper::getCommandValues(aJsonWriter, aCommand);
+            KitHelper::getCommandValues(aJsonWriter, aParsed);
             return aJsonWriter.finishAndGetAsStdString();
         }
 

@@ -32,6 +32,7 @@ namespace vcl { class Window; }
 namespace tools { class JsonWriter; }
 
 class VirtualDevice;
+struct KitParsedCommand;
 
 namespace vcl
 {
@@ -497,7 +498,7 @@ public:
     virtual void setPaintTextEdit(bool) {}
 
     /// Decides if it's OK to call getCommandValues(rCommand).
-    virtual bool supportsCommand(std::string_view /*rCommand*/) { return false; }
+    virtual bool supportsCommand(const KitParsedCommand& /*rCommand*/) { return false; }
 
     /**
      * Puts the caret of rViewShell at the offset nIndex in paragraph nParagraph of the
@@ -513,7 +514,8 @@ public:
     }
 
     /// Returns a json mapping of the possible values for the given command.
-    virtual void getCommandValues(tools::JsonWriter& /*rJsonWriter*/, std::string_view /*rCommand*/)
+    virtual void getCommandValues(tools::JsonWriter& /*rJsonWriter*/,
+                                  const KitParsedCommand& /*rCommand*/)
     {
     }
 

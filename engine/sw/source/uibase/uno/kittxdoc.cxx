@@ -36,6 +36,7 @@
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <xmloff/odffields.hxx>
+#include <sfx2/kit/ParsedCommand.hxx>
 #include <sfx2/kit/helper.hxx>
 
 #include <IDocumentDrawModelAccess.hxx>
@@ -1681,7 +1682,7 @@ bool SwXTextDocument::setKitTextCursor(SfxViewShell& rViewShell, sal_uInt64 nObj
     return *rShell.GetCursor_()->GetPoint() == *aSelection.GetPoint();
 }
 
-bool SwXTextDocument::supportsCommand(std::string_view rCommand)
+bool SwXTextDocument::supportsCommand(const KitParsedCommand& rCommand)
 {
     static const std::initializer_list<std::string_view> vForward
         = { "TextFormFields",
@@ -1698,7 +1699,7 @@ bool SwXTextDocument::supportsCommand(std::string_view rCommand)
             "SecurityLabel",
             "Headings" };
 
-    return std::find(vForward.begin(), vForward.end(), rCommand) != vForward.end();
+    return std::find(vForward.begin(), vForward.end(), rCommand.aName) != vForward.end();
 }
 
 int SwXTextDocument::getEditMode()
@@ -1748,9 +1749,11 @@ std::string SwXTextDocument::getPartInfo(int /*nPart*/)
     return jsonWriter.finishAndGetAsStdString();
 }
 
-void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
+void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter,
+                                       const KitParsedCommand& rParsed)
 {
     using namespace std::string_view_literals;
+    const std::string_view& rCommand = rParsed.aRawCommand;
     if (answerVectorCommand(rJsonWriter, rCommand))
         return;
 

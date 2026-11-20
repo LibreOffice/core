@@ -25,6 +25,8 @@
  */
 struct SFX2_DLLPUBLIC KitParsedCommand
 {
+    /** The whole command, as passed to parse(). */
+    std::string_view aRawCommand;
     /** The name, without the ".uno:" prefix and the query. */
     std::string_view aName;
     /** The query parameters, still URL-encoded. */

@@ -33,6 +33,7 @@
 #include <frameformats.hxx>
 #include <fmtanchr.hxx>
 #include <unotxdoc.hxx>
+#include <sfx2/kit/ParsedCommand.hxx>
 
 using namespace css;
 using namespace ::cpo;
@@ -234,7 +235,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormFields)
     tools::JsonWriter aJsonWriter;
     std::string_view aCommand(".uno:TextFormFields?type=vnd.oasis.opendocument.field.UNHANDLED&"
                               "commandPrefix=ADDIN%20ZOTERO_ITEM");
-    getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
+    getSwTextDoc()->getCommandValues(aJsonWriter, KitParsedCommand::parse(aCommand));
 
     // Then make sure we find the 2 items and ignore the bibliography:
     OString pJSON(aJsonWriter.finishAndGetAsOString());
@@ -266,7 +267,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetDocumentProperties)
     // When getting the zotero properties:
     tools::JsonWriter aJsonWriter;
     std::string_view aCommand(".uno:SetDocumentProperties?namePrefix=ZOTERO_PREF_");
-    getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
+    getSwTextDoc()->getCommandValues(aJsonWriter, KitParsedCommand::parse(aCommand));
 
     // Then make sure we find the 2 properties and ignore the other one:
     OString pJSON(aJsonWriter.finishAndGetAsOString());
@@ -306,7 +307,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetBookmarks)
     // When getting the reference bookmarks:
     tools::JsonWriter aJsonWriter;
     std::string_view aCommand(".uno:Bookmarks?namePrefix=ZOTERO_BREF_");
-    getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
+    getSwTextDoc()->getCommandValues(aJsonWriter, KitParsedCommand::parse(aCommand));
 
     // Then make sure we get the 2 references but not the bibliography:
     OString pJSON(aJsonWriter.finishAndGetAsOString());
@@ -342,7 +343,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetFields)
     // When getting the refmarks:
     tools::JsonWriter aJsonWriter;
     std::string_view aCommand(".uno:Fields?typeName=SetRef&namePrefix=ZOTERO_ITEM%20CSL_CITATION");
-    getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
+    getSwTextDoc()->getCommandValues(aJsonWriter, KitParsedCommand::parse(aCommand));
 
     // Then make sure we get the 1 refmark:
     OString pJSON(aJsonWriter.finishAndGetAsOString());
@@ -387,7 +388,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetLayout)
     tools::JsonWriter aJsonWriter;
     std::string_view aCommand(".uno:Layout");
     auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    pXTextDocument->getCommandValues(aJsonWriter, aCommand);
+    pXTextDocument->getCommandValues(aJsonWriter, KitParsedCommand::parse(aCommand));
 
     // Then make sure we get the 2 pages:
     OString pJSON(aJsonWriter.finishAndGetAsOString());
@@ -422,7 +423,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormField)
     tools::JsonWriter aJsonWriter;
     std::string_view aCommand(".uno:TextFormField?type=vnd.oasis.opendocument.field.UNHANDLED&"
                               "commandPrefix=ADDIN%20ZOTERO_ITEM");
-    getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
+    getSwTextDoc()->getCommandValues(aJsonWriter, KitParsedCommand::parse(aCommand));
 
     // Then make sure we find the inserted fieldmark:
     OString pJSON(aJsonWriter.finishAndGetAsOString());
@@ -454,7 +455,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetSections)
     // When asking for a list of section names:
     tools::JsonWriter aJsonWriter;
     std::string_view aCommand(".uno:Sections?namePrefix=ZOTERO_BIBL");
-    getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
+    getSwTextDoc()->getCommandValues(aJsonWriter, KitParsedCommand::parse(aCommand));
 
     // Make sure we find our just inserted section:
     OString pJSON(aJsonWriter.finishAndGetAsOString());
@@ -485,7 +486,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetBookmark)
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     tools::JsonWriter aJsonWriter;
     std::string_view aCommand(".uno:Bookmark?namePrefix=ZOTERO_BREF_");
-    getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
+    getSwTextDoc()->getCommandValues(aJsonWriter, KitParsedCommand::parse(aCommand));
 
     // Then make sure we find the inserted bookmark:
     OString pJSON(aJsonWriter.finishAndGetAsOString());
@@ -517,7 +518,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetField)
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     tools::JsonWriter aJsonWriter;
     std::string_view aCommand(".uno:Field?typeName=SetRef&namePrefix=ZOTERO_ITEM%20CSL_CITATION");
-    getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
+    getSwTextDoc()->getCommandValues(aJsonWriter, KitParsedCommand::parse(aCommand));
 
     // Then make sure we find the inserted refmark:
     OString pJSON(aJsonWriter.finishAndGetAsOString());

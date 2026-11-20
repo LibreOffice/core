@@ -72,6 +72,7 @@
 #include <cmath>
 #include <optional>
 #include <sstream>
+#include <sfx2/kit/ParsedCommand.hxx>
 
 using namespace com::sun::star;
 using namespace ::cpo;
@@ -110,7 +111,7 @@ protected:
             aCommand += "&since=" + OString::number(*oSince) + "&epoch="
                         + OString::number(getSwTextDoc()->getVectorParts()->getEpoch());
         tools::JsonWriter aWriter;
-        getSwTextDoc()->getCommandValues(aWriter, aCommand);
+        getSwTextDoc()->getCommandValues(aWriter, KitParsedCommand::parse(aCommand));
         return parse(aWriter.finishAndGetAsOString());
     }
 
@@ -1697,8 +1698,8 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorPushForAGonePageWritesTheHeaderAlone)
         = sw::vector::partIdOf(static_cast<const SwPageFrame&>(*pSecondPage));
     {
         tools::JsonWriter aWriter;
-        getSwTextDoc()->getCommandValues(aWriter,
-                                         Concat2View(".uno:VectorPrimitives?partid=" + aPartId));
+        getSwTextDoc()->getCommandValues(aWriter, KitParsedCommand::parse(Concat2View(
+                                                      ".uno:VectorPrimitives?partid=" + aPartId)));
         aWriter.finishAndGetAsOString();
     }
 
@@ -1731,8 +1732,8 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorForgottenPageGetsNoDeltas)
     const OString aPartId = sw::vector::partIdOf(firstPage());
 
     tools::JsonWriter aWriter;
-    getSwTextDoc()->getCommandValues(aWriter,
-                                     Concat2View(".uno:VectorForgetPart?partid=" + aPartId));
+    getSwTextDoc()->getCommandValues(
+        aWriter, KitParsedCommand::parse(Concat2View(".uno:VectorForgetPart?partid=" + aPartId)));
     CPPUNIT_ASSERT_EQUAL(tools::JsonWriter::EMPTY_DOCUMENT, aWriter.finishAndGetAsOString());
     CPPUNIT_ASSERT(!getSwTextDoc()->getVectorParts()->isServed(aPartId));
 
@@ -1758,16 +1759,17 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorPageIsServedWholeAfterEveryPageWasForgotten
 
     {
         tools::JsonWriter aWriter;
-        getSwTextDoc()->getCommandValues(
-            aWriter, Concat2View(".uno:VectorForgetPart?partid=" + aPartId));
+        getSwTextDoc()->getCommandValues(aWriter, KitParsedCommand::parse(Concat2View(
+                                                      ".uno:VectorForgetPart?partid=" + aPartId)));
         aWriter.finishAndGetAsOString();
     }
     CPPUNIT_ASSERT(nEpoch != getSwTextDoc()->getVectorParts()->getEpoch());
 
     tools::JsonWriter aWriter;
     getSwTextDoc()->getCommandValues(
-        aWriter, Concat2View(".uno:VectorPrimitives?partid=" + aPartId + "&since="
-                             + OString::number(nServed) + "&epoch=" + OString::number(nEpoch)));
+        aWriter, KitParsedCommand::parse(Concat2View(".uno:VectorPrimitives?partid=" + aPartId
+                                                     + "&since=" + OString::number(nServed)
+                                                     + "&epoch=" + OString::number(nEpoch))));
     const boost::property_tree::ptree aPayload = parse(aWriter.finishAndGetAsOString());
 
     CPPUNIT_ASSERT_EQUAL(std::string("vectorprimitives"), aPayload.get<std::string>("type"));

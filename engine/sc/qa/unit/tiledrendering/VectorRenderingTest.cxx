@@ -10,6 +10,7 @@
  */
 
 #include <sctiledrenderingtest.hxx>
+#include <sfx2/kit/ParsedCommand.hxx>
 #include <sfx2/kit/helper.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
@@ -110,7 +111,8 @@ boost::property_tree::ptree requestVectorPrimitives(ScModelObj* pModelObj, std::
 {
     tools::JsonWriter aWriter;
     const OString aCommand = OString::Concat(".uno:VectorPrimitives?") + aQuery;
-    static_cast<vcl::ITiledRenderable*>(pModelObj)->getCommandValues(aWriter, aCommand);
+    static_cast<vcl::ITiledRenderable*>(pModelObj)->getCommandValues(
+        aWriter, KitParsedCommand::parse(aCommand));
     return parseJson(aWriter.finishAndGetAsOString());
 }
 
@@ -2151,7 +2153,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorHeldBlockContentIsCompresse
     tools::JsonWriter aWriter;
     const std::string aCommand
         = ".uno:VectorPrimitives?" + sheetPart(pModelObj, 0) + "&mode=-1&blocks=0:0";
-    static_cast<vcl::ITiledRenderable*>(pModelObj)->getCommandValues(aWriter, aCommand);
+    static_cast<vcl::ITiledRenderable*>(pModelObj)->getCommandValues(
+        aWriter, KitParsedCommand::parse(aCommand));
     const sal_Int32 nAnswerBytes = aWriter.finishAndGetAsOString().getLength();
 
     sc::VectorContent* pContent = pModelObj->getVectorContent();

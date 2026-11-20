@@ -123,6 +123,7 @@
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <rtl/strbuf.hxx>
 #include <sfx2/kit/callback.hxx>
+#include <sfx2/kit/ParsedCommand.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -3422,8 +3423,8 @@ static OString vectorPrimitivesOf(SdXImpressDocument* pXImpressDocument, const S
 {
     const OString aCommand = ".uno:VectorPrimitives?partid=" + pPage->GetGuid().getString();
     tools::JsonWriter aJsonWriter;
-    pXImpressDocument->getCommandValues(aJsonWriter,
-                                        std::string_view(aCommand.getStr(), aCommand.getLength()));
+    pXImpressDocument->getCommandValues(aJsonWriter, KitParsedCommand::parse(std::string_view(
+                                                         aCommand.getStr(), aCommand.getLength())));
     return aJsonWriter.finishAndGetAsOString();
 }
 
@@ -7482,8 +7483,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorPrimitives)
     const SdPage* pSlide = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
     const OString aCommand = ".uno:VectorPrimitives?partid=" + pSlide->GetGuid().getString();
     tools::JsonWriter aJsonWriter;
-    pXImpressDocument->getCommandValues(aJsonWriter,
-                                        std::string_view(aCommand.getStr(), aCommand.getLength()));
+    pXImpressDocument->getCommandValues(aJsonWriter, KitParsedCommand::parse(std::string_view(
+                                                         aCommand.getStr(), aCommand.getLength())));
     OString aResult = aJsonWriter.finishAndGetAsOString();
 
     // Is JSON empty
@@ -7594,8 +7595,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorPrimitivesMasterPagePl
     const SdPage* pSlide = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
     const OString aCommand = ".uno:VectorPrimitives?partid=" + pSlide->GetGuid().getString();
     tools::JsonWriter aJsonWriter;
-    pXImpressDocument->getCommandValues(aJsonWriter,
-                                        std::string_view(aCommand.getStr(), aCommand.getLength()));
+    pXImpressDocument->getCommandValues(aJsonWriter, KitParsedCommand::parse(std::string_view(
+                                                         aCommand.getStr(), aCommand.getLength())));
     OString aResult = aJsonWriter.finishAndGetAsOString();
     CPPUNIT_ASSERT(!aResult.isEmpty());
 
@@ -7701,7 +7702,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testOpenEditRaisesTheVectorVersion)
         const SdPage* pSlide = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
         const OString aCommand = ".uno:VectorPrimitives?partid=" + pSlide->GetGuid().getString();
         pXImpressDocument->getCommandValues(
-            aJsonWriter, std::string_view(aCommand.getStr(), aCommand.getLength()));
+            aJsonWriter,
+            KitParsedCommand::parse(std::string_view(aCommand.getStr(), aCommand.getLength())));
         const OString aResult = aJsonWriter.finishAndGetAsOString();
         auto oJson
             = tools::JsonPath::parse(std::string_view(aResult.getStr(), aResult.getLength()));
@@ -9250,7 +9252,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateFormControlInRectangle)
 
     // the client gives the control an id reserved for its view
     tools::JsonWriter aWriter;
-    pXImpressDocument->getCommandValues(aWriter, ".uno:ReserveObjectIds?Count=16");
+    pXImpressDocument->getCommandValues(aWriter,
+                                        KitParsedCommand::parse(".uno:ReserveObjectIds?Count=16"));
     std::stringstream aStream((std::string(aWriter.finishAndGetAsOString())));
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
@@ -9345,7 +9348,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeGhost)
     const size_t nUndoCount = pDocument->GetUndoManager()->GetUndoActionCount();
 
     tools::JsonWriter aWriter;
-    pXImpressDocument->getCommandValues(aWriter, ".uno:ShapeGhost?Shape=BasicShapes.rectangle");
+    pXImpressDocument->getCommandValues(
+        aWriter, KitParsedCommand::parse(".uno:ShapeGhost?Shape=BasicShapes.rectangle"));
     std::stringstream aStream((std::string(aWriter.finishAndGetAsOString())));
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
@@ -9361,7 +9365,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeGhost)
 
     // a dimension line is described too, with the measurement its look is laid out from
     tools::JsonWriter aMeasureWriter;
-    pXImpressDocument->getCommandValues(aMeasureWriter, ".uno:ShapeGhost?Shape=MeasureLine");
+    pXImpressDocument->getCommandValues(
+        aMeasureWriter, KitParsedCommand::parse(".uno:ShapeGhost?Shape=MeasureLine"));
     std::stringstream aMeasureStream((std::string(aMeasureWriter.finishAndGetAsOString())));
     boost::property_tree::ptree aMeasureTree;
     boost::property_tree::read_json(aMeasureStream, aMeasureTree);
@@ -9372,8 +9377,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeGhost)
 
     // a connector too, with the numbers its run is worked out from
     tools::JsonWriter aConnectorWriter;
-    pXImpressDocument->getCommandValues(aConnectorWriter,
-                                        ".uno:ShapeGhost?Shape=ConnectorLinesArrowEnd");
+    pXImpressDocument->getCommandValues(
+        aConnectorWriter, KitParsedCommand::parse(".uno:ShapeGhost?Shape=ConnectorLinesArrowEnd"));
     std::stringstream aConnectorStream((std::string(aConnectorWriter.finishAndGetAsOString())));
     boost::property_tree::ptree aConnectorTree;
     boost::property_tree::read_json(aConnectorStream, aConnectorTree);
@@ -9398,8 +9403,8 @@ boost::property_tree::ptree vectorReplyOf(SdXImpressDocument* pXImpressDocument,
         aCommand += "&since=" + OString::number(nSince)
                     + "&epoch=" + OString::number(pXImpressDocument->getVectorEpoch());
     tools::JsonWriter aJsonWriter;
-    pXImpressDocument->getCommandValues(aJsonWriter,
-                                        std::string_view(aCommand.getStr(), aCommand.getLength()));
+    pXImpressDocument->getCommandValues(aJsonWriter, KitParsedCommand::parse(std::string_view(
+                                                         aCommand.getStr(), aCommand.getLength())));
     std::stringstream aStream(std::string(aJsonWriter.finishAndGetAsOString()));
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
@@ -9770,7 +9775,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testReservedObjectIds)
     SdPage* pSlide = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
 
     tools::JsonWriter aWriter;
-    pXImpressDocument->getCommandValues(aWriter, ".uno:ReserveObjectIds?Count=16");
+    pXImpressDocument->getCommandValues(aWriter,
+                                        KitParsedCommand::parse(".uno:ReserveObjectIds?Count=16"));
     std::stringstream aStream((std::string(aWriter.finishAndGetAsOString())));
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
@@ -9800,7 +9806,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testReservedObjectIds)
 
     // a client may hold a second, larger set as its reserve, which lies after the first
     tools::JsonWriter aSecondWriter;
-    pXImpressDocument->getCommandValues(aSecondWriter, ".uno:ReserveObjectIds?Count=500");
+    pXImpressDocument->getCommandValues(aSecondWriter,
+                                        KitParsedCommand::parse(".uno:ReserveObjectIds?Count=500"));
     std::stringstream aSecondStream((std::string(aSecondWriter.finishAndGetAsOString())));
     boost::property_tree::ptree aSecondTree;
     boost::property_tree::read_json(aSecondStream, aSecondTree);
@@ -9817,7 +9824,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeStyleKey)
     SdTestViewCallback aView;
     const auto styleKey = [&]() {
         tools::JsonWriter aWriter;
-        pXImpressDocument->getCommandValues(aWriter, ".uno:ShapeStyleKey");
+        pXImpressDocument->getCommandValues(aWriter, KitParsedCommand::parse(".uno:ShapeStyleKey"));
         std::stringstream aStream((std::string(aWriter.finishAndGetAsOString())));
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
