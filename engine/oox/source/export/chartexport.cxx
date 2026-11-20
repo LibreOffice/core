@@ -1198,46 +1198,39 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
     pFS->startElement(FSNS(XML_a, XML_graphic));
     pFS->startElement( FSNS( XML_a, XML_graphicData ), XML_uri, sSchemaURL );
     OUString sId;
-    const char* sFullPath = nullptr;
-    const char* sRelativePath = nullptr;
-    const char *sChartFnamePrefix = bIsChartex? "chartEx" : "chart";
+    std::u16string_view sFullPath;
+    std::u16string_view sRelativePath;
+    std::u16string_view sChartFnamePrefix = bIsChartex ? u"chartEx" : u"chart";
     switch( GetDocumentType() )
     {
         case DOCUMENT_DOCX:
         {
-            sFullPath = "word/charts/";
-            sRelativePath = "charts/";
+            sFullPath = u"word/charts/";
+            sRelativePath = u"charts/";
             break;
         }
         case DOCUMENT_PPTX:
         {
-            sFullPath = "ppt/charts/";
-            sRelativePath = "../charts/";
+            sFullPath = u"ppt/charts/";
+            sRelativePath = u"../charts/";
             break;
         }
         case DOCUMENT_XLSX:
         {
-            sFullPath = "xl/charts/";
-            sRelativePath = "../charts/";
+            sFullPath = u"xl/charts/";
+            sRelativePath = u"../charts/";
             break;
         }
         default:
         {
-            sFullPath = "charts/";
-            sRelativePath = "charts/";
+            sFullPath = u"charts/";
+            sRelativePath = u"charts/";
             break;
         }
     }
-    OUString sFullStream = OUStringBuffer()
-                            .appendAscii(sFullPath)
-                            .appendAscii(sChartFnamePrefix)
-                            .append(OUString::number(nChartCount) + ".xml")
-                            .makeStringAndClear();
-    OUString sRelativeStream = OUStringBuffer()
-                            .appendAscii(sRelativePath)
-                            .appendAscii(sChartFnamePrefix)
-                            .append(OUString::number(nChartCount) + ".xml" )
-                            .makeStringAndClear();
+    auto aNum = OUString::number(nChartCount);
+    OUString sFullStream = OUString::Concat(sFullPath) + sChartFnamePrefix + aNum + ".xml";
+    OUString sRelativeStream = OUString::Concat(sRelativePath) + sChartFnamePrefix + aNum + ".xml";
 
     const OUString sAppURL = bIsChartex?
         u"application/vnd.ms-office.chartex+xml"_ustr :
@@ -1290,20 +1283,13 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
     // output style and colorstyle files
 
     SetFS( pChart );
-    sRelativePath ="";
 
     FSHelperPtr pChartFS = GetFS();
 
     // first style
     static constexpr char sStyleFnamePrefix[] = "style";
-    OUStringBuffer sFullStreamBuf;
-    sFullStreamBuf.appendAscii(sFullPath);
-    sFullStreamBuf = sFullStreamBuf + sStyleFnamePrefix + OUString::number(nChartCount) + ".xml";
-    sFullStream = sFullStreamBuf.makeStringAndClear();
-    OUStringBuffer sRelativeStreamBuf;
-    sRelativeStreamBuf.appendAscii(sRelativePath);
-    sRelativeStreamBuf = sRelativeStreamBuf + sStyleFnamePrefix + OUString::number(nChartCount) + ".xml";
-    sRelativeStream = sRelativeStreamBuf.makeStringAndClear();
+    sFullStream = OUString::Concat(sFullPath) + sStyleFnamePrefix + aNum + ".xml";
+    sRelativeStream = sStyleFnamePrefix + aNum + ".xml";
 
     FSHelperPtr pStyle = CreateOutputStream(
             sFullStream,
@@ -1362,14 +1348,8 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
 
     // now colorstyle
     static constexpr char sColorFnamePrefix[] = "colors";
-    sFullStreamBuf = OUStringBuffer();
-    sFullStreamBuf.appendAscii(sFullPath);
-    sFullStreamBuf = sFullStreamBuf + sColorFnamePrefix + OUString::number(nChartCount) + ".xml";
-    sFullStream = sFullStreamBuf.makeStringAndClear();
-    sRelativeStreamBuf = OUStringBuffer();
-    sRelativeStreamBuf.appendAscii(sRelativePath);
-    sRelativeStreamBuf = sRelativeStreamBuf + sColorFnamePrefix + OUString::number(nChartCount) + ".xml";
-    sRelativeStream = sRelativeStreamBuf.makeStringAndClear();
+    sFullStream = OUString::Concat(sFullPath) + sColorFnamePrefix + aNum + ".xml";
+    sRelativeStream = sColorFnamePrefix + aNum + ".xml";
 
     FSHelperPtr pColorStyle = CreateOutputStream(
             sFullStream,
@@ -1478,7 +1458,7 @@ void ChartExport::writeColorMapOverride()
     GetFS()->singleElementNS(XML_c, XML_clrMapOvr, pAttrList);
 }
 
-void ChartExport::writeThemeOverride(const FSHelperPtr& pChartFS, const char* pChartFolder,
+void ChartExport::writeThemeOverride(const FSHelperPtr& pChartFS, std::u16string_view aChartFolder,
                                      sal_Int32 nChartCount)
 {
     auto* pUnoTheme = dynamic_cast<UnoTheme*>(mxThemeOverride.get());
@@ -1488,9 +1468,8 @@ void ChartExport::writeThemeOverride(const FSHelperPtr& pChartFS, const char* pC
     // The part sits beside the theme of the document, and the chart points at it by a
     // relationship of its own.
     const OUString aNumber = OUString::number(nChartCount);
-    const OUString aFullStream
-        = OUString::createFromAscii(pChartFolder).replaceAll(u"charts/", u"theme/")
-          + "themeOverride" + aNumber + ".xml";
+    const OUString aFullStream = OUString(aChartFolder).replaceAll(u"charts/", u"theme/")
+                                 + "themeOverride" + aNumber + ".xml";
     const OUString aRelativeStream = "../theme/themeOverride" + aNumber + ".xml";
 
     OUString aId;

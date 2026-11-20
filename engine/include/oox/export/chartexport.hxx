@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_EXPORT_CHARTEXPORT_HXX
 
 #include <set>
+#include <string_view>
 #include <vector>
 
 #include <cpo/uno/Reference.hxx>
@@ -347,7 +348,7 @@ private:
     void readChartExtras(const cpo::uno::Reference<css::beans::XPropertySet>& xShapeProps);
     void writeColorMapOverride();
     void writeThemeOverride(const ::sax_fastparser::FSHelperPtr& pChartFS,
-            const char* pChartFolder, sal_Int32 nChartCount);
+            std::u16string_view aChartFolder, sal_Int32 nChartCount);
 public:
 
     OOX_DLLPUBLIC ChartExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, cpo::uno::Reference< css::frame::XModel > const & xModel,
