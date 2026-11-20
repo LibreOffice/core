@@ -220,10 +220,11 @@ void ConvertToBroker::setLoaded()
     if (it != getAdditionalFileUrisJailed().end())
     {
         // We have a baseline to compare against, do that before saving.
-        std::string unoCmd =
-            "uno .uno:CompareDocuments { \"URL\": { \"type\": \"string\", \"value\": \"" +
-            it->second +
-            "\" }, \"NoAcceptDialog\": { \"type\": \"boolean\", \"value\": \"true\" } }";
+        Poco::JSON::Object::Ptr arguments = new Poco::JSON::Object();
+        arguments->set("URL", JsonUtil::makePropertyValue("string", it->second));
+        arguments->set("NoAcceptDialog",
+                       JsonUtil::makePropertyValue("boolean", std::string("true")));
+        const std::string unoCmd = "uno .uno:CompareDocuments " + JsonUtil::jsonToString(arguments);
         std::vector<char> unoRequest(unoCmd.begin(), unoCmd.end());
         _clientSession->handleMessage(unoRequest);
     }

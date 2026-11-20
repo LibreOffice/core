@@ -3306,8 +3306,9 @@ void ClientSession::restoreLastViewSelection(const std::shared_ptr<DocumentBroke
     if (position.hasCellAddress())
     {
         // Naming the cell lands on it whatever the view is showing.
-        const std::string command = "uno .uno:GoToCell {\"ToPoint\":{\"type\":\"string\","
-                                    "\"value\":\"" + position.cellAddress + "\"}}";
+        Poco::JSON::Object::Ptr arguments = new Poco::JSON::Object();
+        arguments->set("ToPoint", JsonUtil::makePropertyValue("string", position.cellAddress));
+        const std::string command = "uno .uno:GoToCell " + JsonUtil::jsonToString(arguments);
         docBroker->forwardToChild(client_from_this(), command);
         LOG_DBG("Put the cursor back on cell [" << position.cellAddress
                                                 << "] the last view of this document was on");
@@ -3693,9 +3694,9 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
         }
         else if (auto it = docBroker->getAdditionalFileUrisJailed().find("template"); it != docBroker->getAdditionalFileUrisJailed().end())
         {
-            std::string options = R"({"TemplateURL":{"type":"string","value":")" +
-                                  it->second + "\"}}";
-            appendEncodedLoadToken(oss, "infilterOptions", options);
+            Poco::JSON::Object::Ptr options = new Poco::JSON::Object();
+            options->set("TemplateURL", JsonUtil::makePropertyValue("string", it->second));
+            appendEncodedLoadToken(oss, "infilterOptions", JsonUtil::jsonToString(options));
         }
 
 #if ENABLE_FEATURE_LOCK
@@ -4997,21 +4998,13 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
         if (_thumbnailSession)
         {
             //check whether we have a target!
-            std::ostringstream cmd;
-            cmd << "{";
-            cmd << "\"Name\":"
-                   "{"
-                   "\"type\":\"string\","
-                   "\"value\":\"URL\""
-                   "},"
-                   "\"URL\":"
-                   "{"
-                   "\"type\":\"string\","
-                   "\"value\":\"#";
-            cmd << getThumbnailTarget();
-            cmd << "\"}}";
+            Poco::JSON::Object::Ptr arguments = new Poco::JSON::Object();
+            arguments->set("Name", JsonUtil::makePropertyValue("string", std::string("URL")));
+            arguments->set("URL",
+                           JsonUtil::makePropertyValue("string", '#' + getThumbnailTarget()));
 
-            const std::string renderThumbnailCmd = "uno .uno:OpenHyperLink " + cmd.str();
+            const std::string renderThumbnailCmd =
+                "uno .uno:OpenHyperLink " + JsonUtil::jsonToString(arguments);
             docBroker->forwardToChild(client_from_this(), renderThumbnailCmd);
         }
 
