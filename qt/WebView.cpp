@@ -1406,6 +1406,17 @@ WebView* WebView::findOpenDocument(const Poco::URI& documentURI)
     return nullptr;
 }
 
+std::set<std::string> WebView::openDocumentURIs()
+{
+    std::set<std::string> result;
+    for (const WebView* instance : s_instances)
+    {
+        if (!instance->_document._fileURL.empty())
+            result.insert(instance->_document._fileURL.toString());
+    }
+    return result;
+}
+
 void WebView::activateWindow()
 {
     if (auto* tw = qobject_cast<TabbedWindow*>(_mainWindow))

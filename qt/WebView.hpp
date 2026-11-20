@@ -15,6 +15,9 @@
 
 #include <Poco/URI.h>
 
+#include <set>
+#include <string>
+
 #include <QElapsedTimer>
 #include <QImage>
 #include <QJsonObject>
@@ -211,6 +214,8 @@ public:
                                               const Poco::URI& templateURL);
 
     static WebView* findOpenDocument(const Poco::URI& documentURI);
+    // The URIs of the files of the documents that are open, as strings.
+    static std::set<std::string> openDocumentURIs();
     static const std::vector<WebView*>& getAllInstances() { return s_instances; }
     void activateWindow();
     /// True while a user-initiated save is in flight - see

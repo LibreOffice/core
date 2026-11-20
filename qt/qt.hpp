@@ -68,6 +68,11 @@ inline std::string getDataDir()
 }
 
 inline std::string getBrowserDistDir() { return getDataDir() + "/browser/dist"; }
+
+inline std::string getWelcomeSlideshowPath()
+{
+    return getBrowserDistDir() + "/welcome/welcome-slideshow.odp";
+}
 } // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1123,7 +1123,7 @@ QVariant Bridge::cool(const QString& messageStr)
 #else
         const bool welcomeEnabled = true;
 #endif
-        const std::string welcomePath = getBrowserDistDir() + "/welcome/welcome-slideshow.odp";
+        const std::string welcomePath = getWelcomeSlideshowPath();
         struct stat st;
         if (!welcomeEnabled)
         {
@@ -1361,7 +1361,11 @@ QVariant Bridge::cool(const QString& messageStr)
     }
     else if (tokens.equals(0, "GETRECENTDOCS"))
     {
-        QString result = QString::fromStdString(Application::getRecentFiles().serialise());
+        // The list leaves out the documents that are open, and the welcome slideshow.
+        std::set<std::string> leaveOut = WebView::openDocumentURIs();
+        leaveOut.insert(Poco::URI(Poco::Path(getWelcomeSlideshowPath())).toString());
+        QString result =
+            QString::fromStdString(Application::getRecentFiles().serialiseFiltered(leaveOut));
         LOG_TRC_NOFILE("GETRECENTDOCS: returning recent documents");
         return result;
     }
