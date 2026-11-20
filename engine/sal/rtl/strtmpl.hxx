@@ -1014,10 +1014,14 @@ void newReplaceStrAt(rtl_tString** ppThis, rtl_tString* pStr, sal_Int32 nIndex, 
     if ( !nCount && !nNewSubStrLen )
         return assign(ppThis, pStr);
 
+    sal_Int32 nNewLength;
+    if (o3tl::checked_add(pStr->length - nCount, nNewSubStrLen, nNewLength))
+        std::abort();
+
     rtl_tString*    pOrg = *ppThis;
 
     /* Alloc New Buffer */
-    *ppThis = Alloc<rtl_tString>(pStr->length - nCount + nNewSubStrLen);
+    *ppThis = Alloc<rtl_tString>(nNewLength);
     assert(*ppThis != nullptr);
     auto* pBuffer = (*ppThis)->buffer;
     if ( nIndex )
@@ -1213,8 +1217,8 @@ void stringbuffer_ensureCapacity(rtl_tString** ppThis, sal_Int32* capacity,
     if (minimumCapacity <= *capacity)
         return;
 
-    const auto nLength = (*ppThis)->length;
-    *capacity = (nLength + 1) * 2;
+    const sal_Int64 nLength = (*ppThis)->length;
+    *capacity = std::min<sal_Int64>((nLength + 1) * 2, SAL_MAX_INT32);
     if (minimumCapacity > *capacity)
         *capacity = minimumCapacity;
 
