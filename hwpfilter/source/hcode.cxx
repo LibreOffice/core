@@ -888,6 +888,161 @@ const JamoComp jamocomp1_to_unicode[] =
     {2, 0x1109, 0x1192, 0x0000}, {3, 0x1109, 0x1192, 0x11bc}
 };
 
+/* Convert HWP3 graphic characters to Unicode.
+ *
+ * HWP3 graphic characters stored outside the standard
+ * KSSM Hangul syllable range
+ *
+ * Mappings are based on the independent rhwp HWP3 decoder.
+ * Its mapping table was established by comparing original
+ * HWP3 documents with Hancom HWP5/HWPX conversions.
+ *
+ * Only BMP Unicode mappings are included here.
+ * Hancom supplementary PUA characters require a separate
+ * rendering strategy and cannot be represented by hchar.
+ *
+ * Existing LibreOffice conversion paths for Hangul, Hanja,
+ * KSC5601 and line drawing characters are preserved
+ *
+ * Information retrieved from:
+ * - https://github.com/edwardkim/rhwp (MIT license)
+ * - https://github.com/chrisryugj/kordoc (MIT license)
+
+ */
+static bool hwp3_extra_to_unicode(hchar ch, hchar* dest)
+{
+    /*
+     * Latin-1 Supplement.
+     *
+     * HWP3 stores these characters using their Unicode values.
+     * The range is documented by eight independently verified
+     * characters: ü, ö, ä, ß, Ö, Ü, Ä and é.
+     */
+    if (ch >= 0x00A0 && ch <= 0x00FF)
+    {
+        dest[0] = ch;
+        return true;
+    }
+
+    /*
+     * Circled Roman numerals: Ⅰ through Ⅹ.
+     */
+    if (ch >= 0x3590 && ch <= 0x3599)
+    {
+        dest[0] = 0x2160 + (ch - 0x3590);
+        return true;
+    }
+
+    /*
+     * Circled numbers: ① through ⑩.
+     */
+    if (ch >= 0x36E7 && ch <= 0x36F0)
+    {
+        dest[0] = 0x2460 + (ch - 0x36E7);
+        return true;
+    }
+
+    switch (ch)
+    {
+        /* Special quotation marks. */
+        case 0x0081: dest[0] = 0x201C; return true; // “
+        case 0x0082: dest[0] = 0x201D; return true; // ”
+        case 0x0083: dest[0] = 0x2018; return true; // ‘
+        case 0x0084: dest[0] = 0x2019; return true; // ’
+
+        /* Special symbols. */
+        case 0x0480: dest[0] = 0x02D0; return true; // ː
+        case 0x048A: dest[0] = 0x02DA; return true; // ˚
+        case 0x1F2E: dest[0] = 0x306E; return true; // の
+        case 0x2010: dest[0] = 0x2010; return true; // ‐
+        case 0x2013: dest[0] = 0x2013; return true; // –
+        case 0x2014: dest[0] = 0x2014; return true; // —
+        case 0x2015: dest[0] = 0x2015; return true; // ―
+        case 0x2022: dest[0] = 0x2022; return true; // •
+        case 0x203B: dest[0] = 0x203B; return true; // ※
+        case 0x2051: dest[0] = 0x00B1; return true; // ±
+        case 0x2053: dest[0] = 0x00D7; return true; // ×
+        case 0x2103: dest[0] = 0x2103; return true; // ℃
+        case 0x2113: dest[0] = 0x2113; return true; // ℓ
+        case 0x2190: dest[0] = 0x2190; return true; // ←
+        case 0x2191: dest[0] = 0x2191; return true; // ↑
+        case 0x2192: dest[0] = 0x2192; return true; // →
+        case 0x2193: dest[0] = 0x2193; return true; // ↓
+        case 0x2219: dest[0] = 0x2219; return true; // ∙
+        case 0x2223: dest[0] = 0x2223; return true; // ∣
+        case 0x223C: dest[0] = 0x223C; return true; // ∼
+        case 0x22C5: dest[0] = 0x22C5; return true; // ⋅
+
+        /* HWP3 special punctuation. */
+        case 0x2024: dest[0] = 0x30FB; return true; // ・
+        case 0x2058: dest[0] = 0x25B3; return true; // △
+        case 0x205A: dest[0] = 0x25CB; return true; // ○
+        case 0x3151: dest[0] = 0x2027; return true; // ‧
+        case 0x3157: dest[0] = 0x2027; return true; // ‧
+        case 0x32B0: dest[0] = 0xFF70; return true; // ｰ
+
+        /*
+         * Special KSC-related graphics
+         * These codes must be intercepted before s_hh2ks()
+         */
+        case 0x3404: dest[0] = 0x2024; return true; // ․
+        case 0x3441: dest[0] = 0x25A0; return true; // ■
+        case 0x3446: dest[0] = 0x2192; return true; // →
+        case 0x3479: dest[0] = 0x25B7; return true; // ▷
+        case 0x347A: dest[0] = 0x25B6; return true; // ▶
+        case 0x35E1: dest[0] = 0x2500; return true; // ─
+        case 0x37ED: dest[0] = 0x2550; return true; // ═
+
+        /*
+         * HWP3 bullet characters.
+         * These must be intercepted before the generic bullet
+         * conversion in hcharconv()
+         */
+        case 0x2F00: dest[0] = 0x25A1; return true; // □
+        case 0x2F06: dest[0] = 0x25A0; return true; // ■
+        case 0x2F08: dest[0] = 0x25AA; return true; // ▪
+        case 0x2F11: dest[0] = 0x25E6; return true; // ◦
+        case 0x2F14: dest[0] = 0x25E6; return true; // ◦
+        case 0x2F17: dest[0] = 0x2022; return true; // •
+        case 0x2F66: dest[0] = 0x25B6; return true; // ▶
+        case 0x2F67: dest[0] = 0x25B8; return true; // ▸
+
+        /* Special quotation marks and punctuation */
+        case 0x3062: dest[0] = 0x201C; return true; // “
+        case 0x3063: dest[0] = 0x201D; return true; // ”
+        case 0x3066: dest[0] = 0x2027; return true; // ‧
+        case 0x3067: dest[0] = 0x2018; return true; // ‘
+        case 0x3068: dest[0] = 0x2019; return true; // ’
+        case 0x309B: dest[0] = 0xFF62; return true; // ｢
+        case 0x309D: dest[0] = 0xFF63; return true; // ｣
+
+        /* Circled numbers: ① through ⑦ */
+        case 0x2E01: dest[0] = 0x2460; return true;
+        case 0x2E02: dest[0] = 0x2461; return true;
+        case 0x2E03: dest[0] = 0x2462; return true;
+        case 0x2E04: dest[0] = 0x2463; return true;
+        case 0x2E05: dest[0] = 0x2464; return true;
+        case 0x2E06: dest[0] = 0x2465; return true;
+        case 0x2E07: dest[0] = 0x2466; return true;
+
+        /* Circled Latin lowercase letters: ⓐ through ⓕ. */
+        case 0x2C21: dest[0] = 0x24D0; return true;
+        case 0x2C22: dest[0] = 0x24D1; return true;
+        case 0x2C23: dest[0] = 0x24D2; return true;
+        case 0x2C24: dest[0] = 0x24D3; return true;
+        case 0x2C25: dest[0] = 0x24D4; return true;
+        case 0x2C26: dest[0] = 0x24D5; return true;
+
+        /* Circled Hangul consonants. */
+        case 0x2C40: dest[0] = 0x3260; return true; // ㉠
+        case 0x2C41: dest[0] = 0x3261; return true; // ㉡
+        case 0x2C42: dest[0] = 0x3262; return true; // ㉢
+
+        default:
+            return false;
+    }
+}
+
 //#define IS_OLD_HAN(x) (((x) >= 0x8020 && (x) <= 0x83ff ) || ( (x) >= 0x8420 && (x) <= 0x843f )) // beside these, there are very much characters in the hangul.
 int hcharconv(hchar ch, hchar *dest, int codeType)
 {
@@ -897,6 +1052,14 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
         dest[0] = ch;
         return 1;
     }
+
+    /*
+     * HWP3 graphic characters must be decoded before the
+     * generic Hangul, Hanja and KSC5601 conversion paths.
+     */
+    if (codeType == UNICODE && hwp3_extra_to_unicode(ch, dest))
+        return 1;
+
     if (IsHangul(ch))
     {
         hchar ch2 = ch;
