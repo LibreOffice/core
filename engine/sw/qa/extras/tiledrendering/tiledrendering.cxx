@@ -4752,6 +4752,59 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShapeHandlePreviewKeepsTheImagesW
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rUndoManager.GetUndoActionCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoOfATurnKeepsEveryShapeSelected)
+{
+    // Turning several shapes at once is one undo step, and undoing it leaves every one of them
+    // selected, so the handles stay where the user reaches for them.
+    createDoc("two-shapes.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    pWrtShell->SelectObj(Point(), 0, pPage->GetObj(0));
+    pWrtShell->SelectObj(Point(), SW_ADD_SELECT, pPage->GetObj(1));
+    Scheduler::ProcessEventsToIdle();
+
+    SdrView* pView = pWrtShell->GetDrawView();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pView->GetMarkedObjectList().GetMarkCount());
+
+    // Every object of the selection carries a rotate handle above its middle.
+    const SdrHdlList& rHandleList = pView->GetHdlList();
+    sal_Int32 nRotateHandle = -1;
+    const SdrHdl* pRotateHandle = nullptr;
+    for (size_t nHandle = 0; nHandle < rHandleList.GetHdlCount(); ++nHandle)
+    {
+        if (rHandleList.GetHdl(nHandle)->GetKind() == SdrHdlKind::Rotate)
+        {
+            nRotateHandle = static_cast<sal_Int32>(nHandle);
+            pRotateHandle = rHandleList.GetHdl(nHandle);
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pRotateHandle);
+
+    // Take the handle to the right of the middle of its own object, which is a quarter turn.
+    const SdrObject* pTurnedObject = pRotateHandle->GetObj();
+    const Point aCentre(pTurnedObject->GetSnapRect().Center());
+    const tools::Long nRadius = aCentre.Y() - pRotateHandle->GetPos().Y();
+    comphelper::dispatchCommand(
+        u".uno:MoveShapeHandle"_ustr,
+        comphelper::InitPropertySequence(
+            { { u"HandleNum"_ustr, cpo::uno::Any(nRotateHandle) },
+              { u"NewPosX"_ustr, cpo::uno::Any(static_cast<sal_Int32>(aCentre.X() + nRadius)) },
+              { u"NewPosY"_ustr, cpo::uno::Any(static_cast<sal_Int32>(aCentre.Y())) } }));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pTurnedObject->GetRotateAngle() != 0_deg100);
+
+    comphelper::dispatchCommand(u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix the undo left one shape selected and dropped the other, so this failed
+    // with:
+    // - Expected: 2
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pView->GetMarkedObjectList().GetMarkCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pTurnedObject->GetRotateAngle().get());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

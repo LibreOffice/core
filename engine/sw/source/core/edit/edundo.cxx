@@ -73,8 +73,14 @@ void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
                 SwTextBoxHelper::synchronizeGroupTextBoxProperty(SwTextBoxHelper::changeAnchor,
                                                                  pSelFormat, pSObj);
 
-            static_cast<SwFEShell*>(this)->SelectObj(
-                    pSObj->GetCurrentBoundRect().Center() );
+            // A step that changed several objects at once names every one of them in its
+            // mark list, while the format above is one object out of that same step. The
+            // whole list comes back selected, so each object keeps its handles.
+            if (pMarkList && pMarkList->GetMarkCount() > 1)
+                lcl_SelectSdrMarkList( this, pMarkList );
+            else
+                static_cast<SwFEShell*>(this)->SelectObj(
+                        pSObj->GetCurrentBoundRect().Center() );
         }
         else
         {

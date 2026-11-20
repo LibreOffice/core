@@ -100,10 +100,15 @@ public:
 
     IShellCursorSupplier & GetCursorSupplier() { return m_rCursorSupplier; }
 
+    /** What one action of the step selects. Several actions of one step each report their
+        own, and a report of one kind leaves a report of the other kind as it is, so a step
+        that names a mark list and a frame format keeps both of them. */
     void SetSelections(SwFrameFormat *const pSelFormat, SdrMarkList *const pMarkList)
     {
-        m_pSelFormat = pSelFormat;
-        m_pMarkList = pMarkList;
+        if (pSelFormat)
+            m_pSelFormat = pSelFormat;
+        if (pMarkList)
+            m_pMarkList = pMarkList;
     }
     void GetSelections(SwFrameFormat *& o_rpSelFormat, SdrMarkList *& o_rpMarkList)
     {
