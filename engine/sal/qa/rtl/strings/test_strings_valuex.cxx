@@ -82,6 +82,14 @@ static void testInt() {
     CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T( T::number( static_cast< sal_Int64 >( 30039062 ))));
     CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T( T::number( static_cast< sal_uInt64 >( 30039062 ))));
 
+    // The longest results, plus NUL, fill the buffer sizes exactly
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(RTL_STR_MAX_VALUEOFINT32 - 1),
+                         T(T::number(SAL_MIN_INT32, 2)).getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(RTL_STR_MAX_VALUEOFINT64 - 1),
+                         T(T::number(SAL_MIN_INT64, 2)).getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(RTL_STR_MAX_VALUEOFUINT64 - 1),
+                         T(T::number(SAL_MAX_UINT64, 2)).getLength());
+
     // The implementation internally uses sal_Int64 etc. types, so check ranges.
     assert( sizeof( int ) <= sizeof( sal_Int32 ));
     assert( sizeof( long ) <= sizeof( sal_Int64 ));

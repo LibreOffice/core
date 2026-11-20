@@ -622,7 +622,7 @@ SAL_DLLPUBLIC sal_Int32 rtl_str_valueOfInt32(
         char * str, sal_Int32 i, sal_Int16 radix ) SAL_THROW_EXTERN_C();
 #define RTL_STR_MIN_RADIX           2
 #define RTL_STR_MAX_RADIX           36
-#define RTL_STR_MAX_VALUEOFINT32    33
+#define RTL_STR_MAX_VALUEOFINT32    34
 
 /** Create the string representation of a long integer.
 
@@ -645,7 +645,7 @@ SAL_DLLPUBLIC sal_Int32 rtl_str_valueOfInt32(
  */
 SAL_DLLPUBLIC sal_Int32 rtl_str_valueOfInt64(
         char * str, sal_Int64 l, sal_Int16 radix ) SAL_THROW_EXTERN_C();
-#define RTL_STR_MAX_VALUEOFINT64 65
+#define RTL_STR_MAX_VALUEOFINT64 66
 
 /** Create the string representation of an unsigned long integer.
 
