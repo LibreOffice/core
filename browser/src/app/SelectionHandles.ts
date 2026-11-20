@@ -669,6 +669,12 @@ class ObjectHandles implements HandleSource {
 			!!object?.measurement &&
 			ObjectHandles.spotWithoutLength(this.objectIds[0]) !== null;
 
+		// an object held against sizing keeps its shape too, as the office's drag of such a
+		// handle reshapes nothing then. the eight around it show the selection, so it has none
+		// of these handles; a line has only its own, they stay, pale
+		const heldFast = object?.cannotBeResized === true;
+		if (heldFast && object?.handlesOfItsOwnOnly !== true) return [];
+
 		// The number the object gives a handle ends the name where there is one, since the
 		// handles of a measurement are alike in kind, polygon and point.
 		return (object?.handles ?? []).map((handle: cool.ObjectHandle) => ({
@@ -685,7 +691,8 @@ class ObjectHandles implements HandleSource {
 			at: handle.at,
 			rails: handle.rails,
 			larger: handle.larger,
-			deactivated: withoutLength && handle.at !== 2 && handle.at !== 3,
+			deactivated:
+				heldFast || (withoutLength && handle.at !== 2 && handle.at !== 3),
 		}));
 	}
 }
