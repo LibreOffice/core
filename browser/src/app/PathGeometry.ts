@@ -810,4 +810,80 @@ class PathGeometry {
 			.filter((written: string) => written.length)
 			.join(' ');
 	}
+
+	/// The weights of the point that are not where they were, at whole twips.
+	public static roundWhatMoved(
+		was: cool.ObjectPathPoint | undefined,
+		point: cool.ObjectPathPoint | undefined,
+	): void {
+		if (!was || !point) return;
+		if (point.behindX !== was.behindX || point.behindY !== was.behindY) {
+			if (point.behindX !== undefined)
+				point.behindX = Math.round(point.behindX);
+			if (point.behindY !== undefined)
+				point.behindY = Math.round(point.behindY);
+		}
+		if (point.aheadX !== was.aheadX || point.aheadY !== was.aheadY) {
+			if (point.aheadX !== undefined) point.aheadX = Math.round(point.aheadX);
+			if (point.aheadY !== undefined) point.aheadY = Math.round(point.aheadY);
+		}
+	}
+
+	/*
+		The weights of the touched points of one polygon that differ between before and after,
+		which hold the same points: a weight that is in after at another place is a move, with
+		that continuity, and one that is only in before is a removal.
+	*/
+	public static weightsChanged(
+		polygon: number,
+		touched: number[],
+		before: cool.ObjectPathPoint[],
+		after: cool.ObjectPathPoint[],
+		step: PathWeightsChange['step'],
+		continuity: number,
+	): PathWeightsChange {
+		const change: PathWeightsChange = { moves: [], removals: [], step: step };
+		for (const at of touched) {
+			const was = before[at];
+			const point = after[at];
+			if (!was || !point) continue;
+
+			const weights = [
+				{
+					part: 1,
+					x: point.behindX,
+					y: point.behindY,
+					wasX: was.behindX,
+					wasY: was.behindY,
+				},
+				{
+					part: 2,
+					x: point.aheadX,
+					y: point.aheadY,
+					wasX: was.aheadX,
+					wasY: was.aheadY,
+				},
+			];
+			for (const weight of weights) {
+				if (weight.x === undefined || weight.y === undefined) {
+					if (weight.wasX !== undefined)
+						change.removals.push({
+							polygon: polygon,
+							point: at,
+							part: weight.part,
+						});
+				} else if (weight.x !== weight.wasX || weight.y !== weight.wasY) {
+					change.moves.push({
+						polygon: polygon,
+						point: at,
+						part: weight.part,
+						x: weight.x,
+						y: weight.y,
+						continuity: continuity,
+					});
+				}
+			}
+		}
+		return change;
+	}
 }

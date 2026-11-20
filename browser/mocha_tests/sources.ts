@@ -39,6 +39,7 @@
 /// <reference path="../src/app/SelectionHandles.ts" />
 /// <reference path="../src/app/PathGeometry.ts" />
 /// <reference path="../src/app/PathEditing.ts" />
+/// <reference path="../src/app/ObjectPathSink.ts" />
 /// <reference path="../src/app/PathFit.ts" />
 /// <reference path="../src/app/PathDrawing.ts" />
 /// <reference path="../src/app/VectorSettings.ts" />

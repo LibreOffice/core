@@ -443,6 +443,7 @@ COOL_JS_LST =\
 	src/app/SelectionHandles.ts \
 	src/app/PathGeometry.ts \
 	src/app/PathEditing.ts \
+	src/app/ObjectPathSink.ts \
 	src/app/PathFit.ts \
 	src/app/PathDrawing.ts \
 	src/app/HandleGroups.ts \
