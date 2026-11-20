@@ -37,6 +37,7 @@
 /// <reference path="../src/app/SelectionSnap.ts" />
 /// <reference path="../src/app/HandleScaling.ts" />
 /// <reference path="../src/app/SelectionHandles.ts" />
+/// <reference path="../src/app/PathGeometry.ts" />
 /// <reference path="../src/app/PathEditing.ts" />
 /// <reference path="../src/app/PathFit.ts" />
 /// <reference path="../src/app/PathDrawing.ts" />

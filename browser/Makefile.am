@@ -441,6 +441,7 @@ COOL_JS_LST =\
 	src/app/HandleLook.ts \
 	src/app/HandleScaling.ts \
 	src/app/SelectionHandles.ts \
+	src/app/PathGeometry.ts \
 	src/app/PathEditing.ts \
 	src/app/PathFit.ts \
 	src/app/PathDrawing.ts \

@@ -3462,7 +3462,7 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 
 		const editing = this.editorThatSets(object, line.path);
 		const place = new cool.Point(at.x, at.y);
-		const closed = PathEditing.isClosed(editing.path());
+		const closed = PathGeometry.isClosed(editing.path());
 		const entries: MenuDefinition[] = [
 			{ id: 'path', type: 'header', text: _('Motion Path') },
 			{ id: 'add', type: 'action', text: _('Add Point'), img: 'bezierinsert' },

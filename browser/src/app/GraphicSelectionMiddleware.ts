@@ -291,7 +291,7 @@ class GraphicSelection {
 			);
 		}
 
-		const closed = PathEditing.isClosed(path);
+		const closed = PathGeometry.isClosed(path);
 		if (closed !== this.closedToldAs) {
 			this.closedToldAs = closed;
 			app.map.fire('commandstatechanged', {
