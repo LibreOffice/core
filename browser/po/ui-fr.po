@@ -8,11 +8,12 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-19 16:23+0100\n"
-"PO-Revision-Date: 2026-11-18 23:25+0000\n"
-"Last-Translator: Méven Car <meven@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-19 23:06+0000\n"
+"Last-Translator: Reefsoft <reefsofts-rhosds@users.noreply.hosted.weblate.org>"
+"\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/fr/>\n"
-"Language: \n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -467,6 +468,8 @@ msgid ""
 "No WOPI host is allowed: alias_groups mode is \"groups\" but no group is "
 "defined"
 msgstr ""
+"Aucun hôte WOPI autorisé: le mode d'alias_groups est \"groups\" mais aucun "
+"groupe n'est défini"
 
 #: admin/src/AdminSocketServerAudit.js:58
 #: src/control/Control.ServerAuditDialog.ts:129
@@ -1838,23 +1841,23 @@ msgstr "Image (.png)"
 
 #: src/app/HandleGroups.ts:1819
 msgid "Top Left"
-msgstr ""
+msgstr "Haut gauche"
 
 #: src/app/HandleGroups.ts:1820
 msgid "Top"
-msgstr ""
+msgstr "Haut"
 
 #: src/app/HandleGroups.ts:1821
 msgid "Top Right"
-msgstr ""
+msgstr "Haut droite"
 
 #: src/app/HandleGroups.ts:1822 src/app/HandleGroups.ts:1957
 msgid "Left"
-msgstr ""
+msgstr "Gauche"
 
 #: src/app/HandleGroups.ts:1823
 msgid "Center"
-msgstr ""
+msgstr "Centre"
 
 #: src/app/HandleGroups.ts:1824 src/app/HandleGroups.ts:1958
 #, fuzzy
@@ -1863,15 +1866,15 @@ msgstr "Clair"
 
 #: src/app/HandleGroups.ts:1825
 msgid "Bottom Left"
-msgstr ""
+msgstr "Bas gauche"
 
 #: src/app/HandleGroups.ts:1826
 msgid "Bottom"
-msgstr ""
+msgstr "Bas"
 
 #: src/app/HandleGroups.ts:1827
 msgid "Bottom Right"
-msgstr ""
+msgstr "Bas droite"
 
 #: src/app/HandleGroups.ts:1912
 msgid "Gluepoint"
@@ -1879,15 +1882,15 @@ msgstr ""
 
 #: src/app/HandleGroups.ts:1959
 msgid "Up"
-msgstr ""
+msgstr "Haut"
 
 #: src/app/HandleGroups.ts:1960
 msgid "Down"
-msgstr ""
+msgstr "Bas"
 
 #: src/app/HandleGroups.ts:1965
 msgid "Anchor"
-msgstr ""
+msgstr "Ancre"
 
 #: src/app/HandleGroups.ts:2007
 msgid "Default gluepoints cannot be edited."
@@ -1900,11 +1903,11 @@ msgstr "Imprimer"
 
 #: src/app/HandleGroups.ts:2734
 msgid "To Line"
-msgstr ""
+msgstr "A la ligne"
 
 #: src/app/HandleGroups.ts:2734
 msgid "To Curve"
-msgstr ""
+msgstr "A la courbe"
 
 #: src/app/HandleGroups.ts:2741
 msgid "Corner Point"
