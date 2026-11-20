@@ -6502,6 +6502,72 @@ CPPUNIT_TEST_FIXTURE(Test, testCellTextWidth)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCellTextWidthStartRowInFragmentedColumn)
+{
+    // The text width iterator visits exactly the cells between its start and end rows, whether the
+    // start row holds a cell, falls inside a run of cells, or falls in a gap between cells.
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    // A cell on every third row splits the column into many short blocks, as a repeated paste does.
+    std::vector<SCROW> aCellRows;
+    for (SCROW nRow = 1; nRow < 300; nRow += 3)
+        aCellRows.push_back(nRow);
+    for (SCROW nRow = 400; nRow < 410; ++nRow)
+        aCellRows.push_back(nRow);
+    aCellRows.push_back(m_pDoc->MaxRow());
+    for (SCROW nRow : aCellRows)
+        m_pDoc->SetString(0, nRow, 0, u"foo"_ustr);
+
+    auto rowsToString = [](const std::vector<SCROW>& rRows) {
+        OStringBuffer aBuffer;
+        for (SCROW nRow : rRows)
+            aBuffer.append(OString::number(nRow) + " ");
+        return aBuffer.makeStringAndClear();
+    };
+
+    std::vector<SCROW> aStartRows;
+    for (SCROW nRow = 0; nRow <= 420; ++nRow)
+        aStartRows.push_back(nRow);
+    for (SCROW nRow = m_pDoc->MaxRow() - 3; nRow <= m_pDoc->MaxRow(); ++nRow)
+        aStartRows.push_back(nRow);
+
+    for (SCROW nStartRow : aStartRows)
+    {
+        // The range of 8 rows is longer than one gap, so most ranges cross several blocks.
+        SCROW nEndRow = std::min<SCROW>(nStartRow + 7, m_pDoc->MaxRow());
+        std::vector<SCROW> aExpected;
+        for (SCROW nRow : aCellRows)
+            if (nStartRow <= nRow && nRow <= nEndRow)
+                aExpected.push_back(nRow);
+
+        std::vector<SCROW> aVisited;
+        ScColumnTextWidthIterator aIter(*m_pDoc, ScAddress(0, nStartRow, 0), nEndRow);
+        for (; aIter.hasCell(); aIter.next())
+            aVisited.push_back(aIter.getPos());
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("start row " + OString::number(nStartRow)).getStr(),
+                                     rowsToString(aExpected), rowsToString(aVisited));
+    }
+
+    // A width written at the first visited position lands on that cell and on no other.
+    auto setWidthFromStartRow = [this](SCROW nStartRow, sal_uInt16 nWidth) {
+        ScColumnTextWidthIterator aIter(*m_pDoc, ScAddress(0, nStartRow, 0), m_pDoc->MaxRow());
+        CPPUNIT_ASSERT(aIter.hasCell());
+        aIter.setValue(nWidth);
+    };
+    setWidthFromStartRow(405, 321);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(321), m_pDoc->GetTextWidth(ScAddress(0, 405, 0)));
+    CPPUNIT_ASSERT(m_pDoc->GetTextWidth(ScAddress(0, 404, 0)) != 321);
+    CPPUNIT_ASSERT(m_pDoc->GetTextWidth(ScAddress(0, 406, 0)) != 321);
+
+    // Row 200 is in a gap, so the first cell below it, at row 202, takes the width.
+    setWidthFromStartRow(200, 654);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(654), m_pDoc->GetTextWidth(ScAddress(0, 202, 0)));
+    CPPUNIT_ASSERT(m_pDoc->GetTextWidth(ScAddress(0, 199, 0)) != 654);
+
+    m_pDoc->DeleteTab(0);
+}
+
 static bool checkEditTextIterator(sc::EditTextIterator& rIter, const char** pChecks)
 {
     const EditTextObject* pText = rIter.first();
