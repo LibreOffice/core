@@ -164,7 +164,7 @@ describe(['tagdesktop'], 'RTL sheet tests', function() {
 		// In RTL Calc, the most common bug class is sections landing in
 		// the wrong place. Check the arrow lands near C1's cell cursor:
 		// - Horizontally: it is anchored at the cell's doc-right edge
-		//   (cellCursorRectangle.x2 in CanvasTileLayer.js:3218), and in
+		//   (cellCursor.rectangle.x2 in CanvasTileLayer.js:3218), and in
 		//   RTL the doc-right edge mirrors to the visual-left of the
 		//   cell on screen. So the arrow's center should sit to the
 		//   left of cellRect.left in viewport coords.

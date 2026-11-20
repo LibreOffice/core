@@ -328,7 +328,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		cy.then(() => {
 			scrolledTop = this.win.app.activeDocument.activeLayout.viewedRectangle.pY1;
 			expect(scrolledTop, 'the view scrolled').to.be.greaterThan(0);
-			expect(this.win.app.calc.cellCursorRectangle.pY2,
+			expect(this.win.app.calc.cellCursor.rectangle.pY2,
 				'the edited cell is off screen').to.be.lessThan(scrolledTop);
 		});
 
@@ -383,7 +383,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 
 		cy.then(() => {
 			const app = this.win.app;
-			expect(app.calc.cellCursorRectangle.pY2, 'the cell cursor is above the view')
+			expect(app.calc.cellCursor.rectangle.pY2, 'the cell cursor is above the view')
 				.to.be.lessThan(app.activeDocument.activeLayout.viewedRectangle.pY1);
 			// Without the fix in place, this test would have failed with following turned off.
 			expect(app.isFollowingOff(), 'following after the selection').to.be.false;

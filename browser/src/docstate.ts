@@ -48,10 +48,12 @@
 	calc: {
 		maxColumnCount: 16384, // Calc MAXCOLCOUNT (sc/inc/address.hxx).
 		maxRowCount: 1048576, // Calc MAXROWCOUNT (sc/inc/address.hxx).
-		cellAddress: null, // To be assigned SimplePoint.
-		cellCursorVisible: false,
-		cellCursorRectangle: null, // To be assigned SimpleRectangle.
-		cellCursorSheet: -1, // The sheet that the cell cursor was last set on.
+		cellCursor: {
+			address: null, // To be assigned SimplePoint.
+			visible: false,
+			rectangle: null, // To be assigned SimpleRectangle.
+			sheet: -1, // The sheet that the cell cursor was last set on.
+		},
 		decimalSeparator: null, // Current cell's decimal separator.
 		otherCellCursors: {},
 		splitCoordinate: null, // SimplePoint.

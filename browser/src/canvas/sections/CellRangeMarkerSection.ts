@@ -162,9 +162,9 @@ class CellRangeMarkerSection extends CanvasSectionObject {
 	private getSparklineGroupAtCursor(part: number): cool.Bounds[] | undefined {
 		const ranges: SheetCellRanges | undefined =
 			this.sectionProperties.sheetCellRanges.get(part);
-		if (!ranges || !app.calc.cellCursorVisible) return undefined;
+		if (!ranges || !app.calc.cellCursor.visible) return undefined;
 
-		const cursor = app.calc.cellAddress.toArray();
+		const cursor = app.calc.cellCursor.address.toArray();
 		return ranges.sparklineGroups.find((group) =>
 			group.some((range) => range.contains(cursor)),
 		);

@@ -196,10 +196,12 @@ interface AppInterface {
 	calc: {
 		maxColumnCount: number;
 		maxRowCount: number;
-		cellAddress: null | cool.SimplePoint;
-		cellCursorVisible: boolean;
-		cellCursorRectangle: null | cool.SimpleRectangle;
-		cellCursorSheet: number;
+		cellCursor: {
+			address: null | cool.SimplePoint;
+			visible: boolean;
+			rectangle: null | cool.SimpleRectangle;
+			sheet: number;
+		};
 		decimalSeparator: null | string; // Current cell's decimal separator.
 		otherCellCursors: any;
 		splitCoordinate: null | cool.SimplePoint;

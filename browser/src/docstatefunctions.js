@@ -18,8 +18,8 @@
 /* global app _ cool RenderManager */
 
 window.addEventListener('load', function () {
-	app.calc.cellCursorRectangle = new cool.SimpleRectangle(0, 0, 0, 0);
-	app.calc.cellAddress = new cool.SimplePoint(0, 0);
+	app.calc.cellCursor.rectangle = new cool.SimpleRectangle(0, 0, 0, 0);
+	app.calc.cellCursor.address = new cool.SimplePoint(0, 0);
 	app.calc.splitCoordinate = new cool.SimplePoint(0, 0);
 	app.file.textCursor.rectangle = new cool.SimpleRectangle(0, 0, 0, 0);
 	app.tile.size = new cool.SimplePoint(0, 0);
@@ -206,10 +206,10 @@ app.isFollowingEditor = function () {
 // The cell cursor while it is visible, the text cursor otherwise.
 app.isOwnCursorInView = function () {
 	let twipsArray;
-	if (app.calc.cellCursorVisible)
+	if (app.calc.cellCursor.visible)
 		twipsArray = [
-			app.calc.cellCursorRectangle.x2,
-			app.calc.cellCursorRectangle.y2,
+			app.calc.cellCursor.rectangle.x2,
+			app.calc.cellCursor.rectangle.y2,
 		];
 	else if (app.file.textCursor.visible)
 		twipsArray = [
@@ -223,7 +223,7 @@ app.isOwnCursorInView = function () {
 
 app.updateFollowingUsers = function () {
 	app.console.debug('user following: update');
-	var isCellCursorVisible = app.calc.cellCursorVisible;
+	var isCellCursorVisible = app.calc.cellCursor.visible;
 	var isTextCursorVisible = app.file.textCursor.visible;
 
 	if (isCellCursorVisible || isTextCursorVisible) {

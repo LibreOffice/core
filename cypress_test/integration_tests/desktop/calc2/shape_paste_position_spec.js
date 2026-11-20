@@ -54,7 +54,7 @@ describe(['tagdesktop'], 'Pasting a copied shape in Calc', function() {
 			calcHelper.enterCellAddressAndConfirm(win, 'A2000');
 
 			cy.then(function() {
-				const cellCursor = win.app.calc.cellCursorRectangle;
+				const cellCursor = win.app.calc.cellCursor.rectangle;
 				target.top = cellCursor.y1;
 				target.rowHeight = cellCursor.height;
 

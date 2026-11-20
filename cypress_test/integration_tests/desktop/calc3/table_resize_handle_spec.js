@@ -46,7 +46,7 @@ describe(['tagdesktop'], 'Calc styled table resize handle.', function() {
 			var rectangle = $handle[0].getBoundingClientRect();
 			var dragX = rectangle.left + rectangle.width / 2;
 			var dragStartY = rectangle.top + rectangle.height / 2;
-			var cellHeight = win.app.calc.cellCursorRectangle.pHeight / win.app.dpiScale;
+			var cellHeight = win.app.calc.cellCursor.rectangle.pHeight / win.app.dpiScale;
 			var dragEndY = dragStartY + Math.round(cellHeight * 3);
 
 			cy.cGet('body').realMouseDown({ x: dragX, y: dragStartY });

@@ -1036,7 +1036,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		}
 		else {
 			// This is a Cell DropDown. We will use current cell's rectangle.
-			cellRectangle = app.calc.cellCursorRectangle.clone();
+			cellRectangle = app.calc.cellCursor.rectangle.clone();
 		}
 
 		const documentAnchor = app.sectionContainer.getDocumentAnchor();

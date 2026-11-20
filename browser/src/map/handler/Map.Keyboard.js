@@ -1183,7 +1183,7 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 	// the format paintbrush in calc when pressing enter on a cell
 	// with the paintbrush active.
 	_clickCellCursor: function () {
-		var center = app.calc.cellCursorRectangle.center;
+		var center = app.calc.cellCursor.rectangle.center;
 		var x = Math.round(center[0]);
 		var y = Math.round(center[1]);
 		this._map._docLayer._postMouseEvent('buttondown', x, y, 1, 1, 0);

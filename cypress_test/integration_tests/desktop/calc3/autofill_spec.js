@@ -30,7 +30,7 @@ describe(['tagdesktop'], 'Calc autofill marker drag.', function() {
 			var rectangle = $handle[0].getBoundingClientRect();
 			var startX = rectangle.left + rectangle.width / 2;
 			var startY = rectangle.top + rectangle.height / 2;
-			var cellHeight = win.app.calc.cellCursorRectangle.pHeight / win.app.dpiScale;
+			var cellHeight = win.app.calc.cellCursor.rectangle.pHeight / win.app.dpiScale;
 			var endY = startY + Math.round(cellHeight * 2);
 
 			cy.cGet('body').realMouseDown(Object.assign({ x: startX, y: startY }, modifierOptions));

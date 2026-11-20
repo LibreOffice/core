@@ -35,7 +35,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 
 		for (var i = 0; i < commentList.length; i++) {
 			if (commentList[i].sectionProperties.data.tab == this._selectedPart) {
-				if (commentList[i].sectionProperties.data.cellRange.contains(app.calc.cellAddress.toArray())) {
+				if (commentList[i].sectionProperties.data.cellRange.contains(app.calc.cellCursor.address.toArray())) {
 					comment = commentList[i];
 					break;
 				}
@@ -43,14 +43,14 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		}
 
 		if (!comment) {
-			var pixelStart = new cool.Point(app.calc.cellCursorRectangle.pX1, app.calc.cellCursorRectangle.pY1);
+			var pixelStart = new cool.Point(app.calc.cellCursor.rectangle.pX1, app.calc.cellCursor.rectangle.pY1);
 			var rangeStart = this.sheetGeometry.getCellFromPos(pixelStart, 'corepixels');
-			var pixelEnd = new cool.Point(app.calc.cellCursorRectangle.pX2 - 1, app.calc.cellCursorRectangle.pY2 - 1);
+			var pixelEnd = new cool.Point(app.calc.cellCursor.rectangle.pX2 - 1, app.calc.cellCursor.rectangle.pY2 - 1);
 			var rangeEnd = this.sheetGeometry.getCellFromPos(pixelEnd, 'corepixels');
 
 			var newComment = {
 				cellRange: new cool.Bounds(rangeStart, rangeEnd),
-				anchorPos: app.calc.cellCursorRectangle.toArray(),
+				anchorPos: app.calc.cellCursor.rectangle.toArray(),
 				id: 'new',
 				tab: this._selectedPart,
 				dateTime: new Date().toISOString(),
@@ -101,7 +101,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 
 	_resetInternalState: function() {
 		this._cellSelections = Array(0);
-		app.calc.cellCursorVisible = false;
+		app.calc.cellCursor.visible = false;
 		this._gotFirstCellCursor = false;
 		this._lastColumn = 0; // with data
 		this._lastRow = 0; // with data
@@ -198,7 +198,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 
 		// The selection while a cell is edited is a text selection.
 		const editing = this.insertMode && app.file.textCursor.visible;
-		if (editing || !app.calc.cellCursorVisible)
+		if (editing || !app.calc.cellCursor.visible)
 			return;
 
 		this.setCellSelection(selection.ranges);
@@ -345,7 +345,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		if (app.file.textCursor.visible)
 			return false;
 
-		if (!app.calc.cellCursorVisible)
+		if (!app.calc.cellCursor.visible)
 			return false;
 
 		if (app.calc.isPartProtected(this._selectedPart))
@@ -388,7 +388,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 	 * stopping at the sheet edge.
 	 */
 	moveCellCursorHere(colSteps, rowSteps) {
-		const address = app.calc.cellAddress;
+		const address = app.calc.cellCursor.address;
 		const cell = this._stepFromCell([address.x, address.y], colSteps, rowSteps);
 		this._moveCellCursorTo(cell[0], cell[1]);
 	},
@@ -471,7 +471,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 	 * @param direction {cool.IndexDirection} Backward for up, Forward for down
 	 */
 	pageCellCursorHere(direction) {
-		const address = app.calc.cellAddress;
+		const address = app.calc.cellCursor.address;
 		const fromRow = this._pageStartRow([address.x, address.y], direction);
 		const row = this._pageRowHere(fromRow, direction);
 		if (row === fromRow)
@@ -522,7 +522,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		if (row === fromRow)
 			return row;
 
-		const col = app.calc.cellAddress.x;
+		const col = app.calc.cellCursor.address.x;
 		const from = this.sheetGeometry.getCellSimpleRectangle(col, fromRow);
 		const to = this.sheetGeometry.getCellSimpleRectangle(col, row);
 		const layout = app.activeDocument.activeLayout;
@@ -570,7 +570,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		col = target[0];
 		row = target[1];
 
-		const address = app.calc.cellAddress;
+		const address = app.calc.cellCursor.address;
 		const selected = this.hasCellSelection();
 		if (col === address.x && row === address.y && !selected)
 			return;
@@ -591,7 +591,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		if (!end || (col === end[0] && row === end[1]))
 			return;
 
-		const cursor = app.calc.cellAddress;
+		const cursor = app.calc.cellCursor.address;
 		const anchor = [cursor.x, cursor.y];
 		const cell = [col, row];
 		const part = this._selectedPart;
@@ -611,7 +611,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 	 *     or the cursor is not at a corner.
 	 */
 	_cellSelectionEnd() {
-		const cursor = app.calc.cellAddress;
+		const cursor = app.calc.cellCursor.address;
 		const anchor = [cursor.x, cursor.y];
 		const selections = this._cellSelections;
 		if (!selections.length)
@@ -881,11 +881,11 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		var x = -1, y = -1;
 		var size = new cool.Point(0, 0);
 
-		if (app.calc.cellCursorVisible) {
-			x = app.calc.cellAddress.x + 1;
-			y = app.calc.cellAddress.y + 1;
+		if (app.calc.cellCursor.visible) {
+			x = app.calc.cellCursor.address.x + 1;
+			y = app.calc.cellCursor.address.y + 1;
 
-			size = { x: app.calc.cellCursorRectangle.width, y: app.calc.cellCursorRectangle.height };
+			size = { x: app.calc.cellCursor.rectangle.width, y: app.calc.cellCursor.rectangle.height };
 		}
 
 		return { curX: x, curY: y, width: size.x, height: size.y };
@@ -1814,7 +1814,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 	_onTextSelectionMsg: function (textMsg) {
 		window.L.CanvasTileLayer.prototype._onTextSelectionMsg.call(this, textMsg);
 		// If this is a cellSelection message, user shouldn't be editing a cell. Below check is for ensuring that.
-		if ((this.insertMode === false || app.file.textCursor.visible === false) && app.calc.cellCursorVisible) {
+		if ((this.insertMode === false || app.file.textCursor.visible === false) && app.calc.cellCursor.visible) {
 			// When insertMode is false, this is a cell selection message.
 			textMsg = textMsg.replace('textselection:', '').trim();
 			if (textMsg !== 'EMPTY' && textMsg !== '') {
@@ -1955,7 +1955,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 	_calculateScrollForNewCellCursor: function () {
 		var scroll = new cool.SimplePoint(0, 0);
 
-		if (!app.calc.cellCursorVisible) {
+		if (!app.calc.cellCursor.visible) {
 			return scroll;
 		}
 
@@ -1970,7 +1970,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		const resetFreePaneToTop = this._scrollFreePaneToTopOnA1;
 		this._scrollFreePaneToTopOnA1 = false;
 		if (resetFreePaneToTop && paneRectangles.length > 1 &&
-		    app.calc.cellAddress.x === 0 && app.calc.cellAddress.y === 0) {
+		    app.calc.cellCursor.address.x === 0 && app.calc.cellCursor.address.y === 0) {
 			let freePane = paneRectangles[paneRectangles.length - 1];
 			scroll.x = app.calc.splitCoordinate.x - freePane.x1;
 			scroll.y = app.calc.splitCoordinate.y - freePane.y1;
@@ -1979,7 +1979,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 
 		let contained = false;
 		for (let i = 0; i < paneRectangles.length; i++) {
-			if (paneRectangles[i].containsRectangle(app.calc.cellCursorRectangle.toArray()))
+			if (paneRectangles[i].containsRectangle(app.calc.cellCursor.rectangle.toArray()))
 				contained = true;
 		}
 
@@ -1989,24 +1989,24 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		var noSplit = !this._splitPanesContext || this._splitPanesContext.getSplitPos().equals(new cool.Point(0, 0));
 
 		// No split panes. Check if target cell is bigger than screen but partially visible.
-		if (noSplit && app.calc.cellCursorRectangle.intersectsRectangle(paneRectangles[0].toArray())) {
-			if (app.calc.cellCursorRectangle.width > paneRectangles[0].width || app.calc.cellCursorRectangle.height > paneRectangles[0].height)
+		if (noSplit && app.calc.cellCursor.rectangle.intersectsRectangle(paneRectangles[0].toArray())) {
+			if (app.calc.cellCursor.rectangle.width > paneRectangles[0].width || app.calc.cellCursor.rectangle.height > paneRectangles[0].height)
 				return scroll; // no scroll needed.
 		}
 
 		let freePane = paneRectangles[paneRectangles.length - 1]; // Last pane, this should be the scrollable - not frozen one.
 
 		// Horizontal split.
-		if (app.calc.cellCursorRectangle.x2 > app.calc.splitCoordinate.x) {
+		if (app.calc.cellCursor.rectangle.x2 > app.calc.splitCoordinate.x) {
 			scroll.x = this._freePaneScrollForAxis(
-				app.calc.cellCursorRectangle.x1, app.calc.cellCursorRectangle.x2,
+				app.calc.cellCursor.rectangle.x1, app.calc.cellCursor.rectangle.x2,
 				freePane.x1, freePane.x2);
 		}
 
 		// Vertical split.
-		if (app.calc.cellCursorRectangle.y2 > app.calc.splitCoordinate.y) {
+		if (app.calc.cellCursor.rectangle.y2 > app.calc.splitCoordinate.y) {
 			scroll.y = this._freePaneScrollForAxis(
-				app.calc.cellCursorRectangle.y1, app.calc.cellCursorRectangle.y2,
+				app.calc.cellCursor.rectangle.y1, app.calc.cellCursor.rectangle.y2,
 				freePane.y1, freePane.y2);
 		}
 

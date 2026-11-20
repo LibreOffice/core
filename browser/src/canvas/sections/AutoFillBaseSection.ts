@@ -67,8 +67,8 @@ class AutoFillBaseSection extends CanvasSectionObject {
 	protected setMarkerPosition() {
 		var center: number = 0;
 		if (!(<any>window).mode.isDesktop()) {
-			Util.ensureValue(app.calc.cellCursorRectangle);
-			center = app.calc.cellCursorRectangle.pWidth * 0.5;
+			Util.ensureValue(app.calc.cellCursor.rectangle);
+			center = app.calc.cellCursor.rectangle.pWidth * 0.5;
 		}
 
 		var position: Array<number> = [0, 0];
@@ -172,8 +172,8 @@ class AutoFillBaseSection extends CanvasSectionObject {
 	// the cell's bottom-right corner, so undo that shift before posting events.
 	private adjustForMobileCenterOffset(p: cool.SimplePoint): void {
 		if (!(<any>window).mode.isDesktop()) {
-			Util.ensureValue(app.calc.cellCursorRectangle);
-			p.pX += app.calc.cellCursorRectangle.pWidth * 0.5;
+			Util.ensureValue(app.calc.cellCursor.rectangle);
+			p.pX += app.calc.cellCursor.rectangle.pWidth * 0.5;
 		}
 	}
 
@@ -231,8 +231,8 @@ class AutoFillBaseSection extends CanvasSectionObject {
 		// On mobile the marker is drawn half a cell to the left of the handle, so
 		// shift the point back to the cell corner the engine hit-tests for.
 		if (!(<any>window).mode.isDesktop()) {
-			Util.ensureValue(app.calc.cellCursorRectangle);
-			canvasX += app.calc.cellCursorRectangle.pWidth * 0.5;
+			Util.ensureValue(app.calc.cellCursor.rectangle);
+			canvasX += app.calc.cellCursor.rectangle.pWidth * 0.5;
 		}
 
 		return cool.SimplePoint.fromCorePixels([

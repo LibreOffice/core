@@ -264,7 +264,7 @@ class MouseControl extends CanvasSectionObject {
 	// the canvas in css pixels, or null when there is no visible cursor.
 	public getCursorCanvasPosition(): cool.PointLike | null {
 		let rectangle: cool.SimpleRectangle | null = null;
-		if (app.calc.cellCursorVisible) rectangle = app.calc.cellCursorRectangle;
+		if (app.calc.cellCursor.visible) rectangle = app.calc.cellCursor.rectangle;
 		else if (app.file.textCursor.visible)
 			rectangle = app.file.textCursor.rectangle;
 
@@ -372,8 +372,8 @@ class MouseControl extends CanvasSectionObject {
 
 			const textCursor =
 				app.file.textCursor.visible &&
-				app.calc.cellCursorRectangle &&
-				app.calc.cellCursorRectangle.pContainsPoint(
+				app.calc.cellCursor.rectangle &&
+				app.calc.cellCursor.rectangle.pContainsPoint(
 					this.currentPosition.pToArray(),
 				);
 
@@ -956,9 +956,9 @@ class MouseControl extends CanvasSectionObject {
 		else if (app.map._docLayer._docType === 'text') return true;
 		else if (app.map._docLayer._docType === 'spreadsheet') {
 			const acceptInput =
-				app.calc.cellCursorVisible &&
-				app.calc.cellCursorRectangle &&
-				app.calc.cellCursorRectangle.containsPoint(
+				app.calc.cellCursor.visible &&
+				app.calc.cellCursor.rectangle &&
+				app.calc.cellCursor.rectangle.containsPoint(
 					this.currentPosition.toArray(),
 				);
 			return acceptInput as boolean;

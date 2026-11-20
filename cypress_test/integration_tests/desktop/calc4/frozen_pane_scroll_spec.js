@@ -88,7 +88,7 @@ describe(['tagdesktop'], 'Calc scrolling with a frozen row', function() {
 		// scroll, well past the edge of the narrowed free pane.
 		helper.typeIntoDocument('{rightarrow}'.repeat(15));
 		cy.getFrameWindow().should(function(w) {
-			expect(w.app.calc.cellAddress.x, 'reached column P').to.equal(15);
+			expect(w.app.calc.cellCursor.address.x, 'reached column P').to.equal(15);
 		});
 
 		// The free pane must still scroll toward the cursor instead of

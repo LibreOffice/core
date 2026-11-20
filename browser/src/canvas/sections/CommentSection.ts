@@ -2098,7 +2098,7 @@ export class Comment extends CanvasSectionObject {
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public onCellAddressChanged(): void {
 		if (this.sectionProperties.data.rectangles) {
-			if (this.sectionProperties.data.rectangles[0].containsPoint(app.calc.cellCursorRectangle.center))
+			if (this.sectionProperties.data.rectangles[0].containsPoint(app.calc.cellCursor.rectangle.center))
 				this.sectionProperties.commentListSection.sectionProperties.calcCurrentComment = this;
 			else if (this.isSelected()) {
 				if (!this.sectionProperties.commentListSection.sectionProperties.doNotHideCommentTimer) {

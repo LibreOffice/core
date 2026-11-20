@@ -166,10 +166,10 @@ export class Header extends CanvasSectionObject {
 		if (!this._map.isEditMode())
 			return;
 
-		if (!app.calc.cellCursorVisible || !app.calc.cellAddress)
+		if (!app.calc.cellCursor.visible || !app.calc.cellCursor.address)
 			return;
 
-		const index = this._isColumn ? app.calc.cellAddress.x : app.calc.cellAddress.y;
+		const index = this._isColumn ? app.calc.cellCursor.address.x : app.calc.cellCursor.address.y;
 		this._lastMouseOverIndex = index;
 
 		const anchor = this._keyboardMenuAnchor(index);
@@ -877,8 +877,8 @@ export class HeaderInfo {
 		const cellSelections: cool.SimpleRectangle[] = this._map._docLayer._cellSelections;
 
 		let currentIndex: number;
-		if (app.calc.cellCursorVisible) {
-			currentIndex = this._isColumn ? app.calc.cellAddress.x: app.calc.cellAddress.y;
+		if (app.calc.cellCursor.visible) {
+			currentIndex = this._isColumn ? app.calc.cellCursor.address.x: app.calc.cellCursor.address.y;
 		} else {
 			currentIndex = -1;
 		}

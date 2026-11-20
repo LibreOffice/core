@@ -272,7 +272,7 @@ describe(['tagdesktop'], 'Local cell cursor and selection', function() {
 			var handleRect = handles[0].getBoundingClientRect();
 			var x = handleRect.left + handleRect.width / 2;
 			var startY = handleRect.top + handleRect.height / 2;
-			var cellHeight = this.win.app.calc.cellCursorRectangle.pHeight / this.win.app.dpiScale;
+			var cellHeight = this.win.app.calc.cellCursor.rectangle.pHeight / this.win.app.dpiScale;
 			var endY = startY + Math.round(cellHeight * 2);
 
 			cy.cGet('body').realMouseDown({ x: x, y: startY });
@@ -312,7 +312,7 @@ describe(['tagdesktop'], 'Local cell cursor and selection', function() {
 
 			// Move to C3; the cursor should be drawn on its way there.
 			docLayer.setCellCursor({ col: 2, row: 2 });
-			var target = this.win.app.calc.cellCursorRectangle;
+			var target = this.win.app.calc.cellCursor.rectangle;
 			expect(section.getDrawnRectangle().x1).to.be.lessThan(target.x1);
 
 			// Set the cursor on C3 again, as a second report of the same

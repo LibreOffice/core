@@ -172,8 +172,8 @@ describe(['tagdesktop'], 'Spreadsheet drawn from vector primitives', function() 
 	function cursorCellBox(callback) {
 		cy.cGet('[id="test-div-auto fill marker"]').then(function($handle) {
 			var handle = $handle[0].getBoundingClientRect();
-			var width = win.app.calc.cellCursorRectangle.pWidth / win.app.dpiScale;
-			var height = win.app.calc.cellCursorRectangle.pHeight / win.app.dpiScale;
+			var width = win.app.calc.cellCursor.rectangle.pWidth / win.app.dpiScale;
+			var height = win.app.calc.cellCursor.rectangle.pHeight / win.app.dpiScale;
 			callback({
 				handleX: handle.left + handle.width / 2,
 				handleY: handle.top + handle.height / 2,

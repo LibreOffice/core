@@ -115,10 +115,10 @@ class CellCursorSection extends CanvasSectionObject {
 	 * it slides, otherwise its own. Null when the cursor is not visible.
 	 */
 	public getDrawnRectangle(): cool.SimpleRectangle | null {
-		if (!app.calc.cellCursorVisible) return null;
+		if (!app.calc.cellCursor.visible) return null;
 
 		const target =
-			app.calc.cellCursorRectangle ?? new cool.SimpleRectangle(0, 0, 0, 0);
+			app.calc.cellCursor.rectangle ?? new cool.SimpleRectangle(0, 0, 0, 0);
 
 		const slideTime = CellCursorSection.slideTime;
 		if (!this.slideFrom || slideTime <= 0)
@@ -135,7 +135,7 @@ class CellCursorSection extends CanvasSectionObject {
 
 	/**
 	 * Start a slide from the given rectangle to the rectangle that the cursor
-	 * has now, app.calc.cellCursorRectangle. The cursor jumps when the move
+	 * has now, app.calc.cellCursor.rectangle. The cursor jumps when the move
 	 * does not allow a slide.
 	 */
 	public startSlideFrom(from: cool.SimpleRectangle): void {
@@ -162,8 +162,8 @@ class CellCursorSection extends CanvasSectionObject {
 	 * to the current cursor position.
 	 */
 	private canSlideFrom(from: cool.SimpleRectangle): boolean {
-		const target = app.calc.cellCursorRectangle;
-		if (!target || !app.calc.cellCursorVisible)
+		const target = app.calc.cellCursor.rectangle;
+		if (!target || !app.calc.cellCursor.visible)
 			// There is no cursor to slide.
 			return false;
 

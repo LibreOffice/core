@@ -106,7 +106,7 @@ describe(['tagmultiuser'], 'A user with two connections', function() {
 			calcHelper.assertAddressAfterIdle(win, address);
 		});
 		cy.getFrameWindow().then(function(win) {
-			cell.y = win.app.calc.cellCursorRectangle.y1;
+			cell.y = win.app.calc.cellCursor.rectangle.y1;
 		});
 	}
 

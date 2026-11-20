@@ -36,9 +36,9 @@ class CellSelectionMarkers {
 
 		if (docLayer._cellSelectionArea) return docLayer._cellSelectionArea.clone();
 
-		if (app.calc.cellCursorVisible) {
-			Util.ensureValue(app.calc.cellCursorRectangle);
-			return app.calc.cellCursorRectangle.clone();
+		if (app.calc.cellCursor.visible) {
+			Util.ensureValue(app.calc.cellCursor.rectangle);
+			return app.calc.cellCursor.rectangle.clone();
 		}
 
 		return null;

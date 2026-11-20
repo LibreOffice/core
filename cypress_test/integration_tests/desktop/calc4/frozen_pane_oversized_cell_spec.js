@@ -14,7 +14,7 @@ const helper = require('../../common/helper');
 function cursorAndFreePane(win) {
 	const panes = win.app.getViewRectangles();
 	return {
-		cursor: win.app.calc.cellCursorRectangle,
+		cursor: win.app.calc.cellCursor.rectangle,
 		pane: panes[panes.length - 1],
 		scrollX: win.app.activeDocument.activeLayout.viewedRectangle.pX1,
 		scrollY: win.app.activeDocument.activeLayout.viewedRectangle.pY1,
@@ -26,8 +26,8 @@ function cursorAndFreePane(win) {
 // asserting the view did not move cannot pass by running too early.
 function afterCursorReaches(column, row) {
 	cy.getFrameWindow().should(function(win) {
-		expect(win.app.calc.cellAddress.x, 'cursor column').to.equal(column);
-		expect(win.app.calc.cellAddress.y, 'cursor row').to.equal(row);
+		expect(win.app.calc.cellCursor.address.x, 'cursor column').to.equal(column);
+		expect(win.app.calc.cellCursor.address.y, 'cursor row').to.equal(row);
 	});
 	cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
 }

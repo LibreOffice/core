@@ -34,7 +34,7 @@ class CalcValidityDropDown extends HTMLObjectSection {
 		this.stopPropagating();
 
 		const _validatedCellAddress = (app.map._docLayer as { _validatedCellAddress?: null | cool.SimplePoint })._validatedCellAddress;
-		if (_validatedCellAddress && app.calc.cellCursorVisible && _validatedCellAddress.equals(app.calc.cellAddress?.toArray() ?? [])) {
+		if (_validatedCellAddress && app.calc.cellCursor.visible && _validatedCellAddress.equals(app.calc.cellCursor.address?.toArray() ?? [])) {
 			app.map.sendUnoCommand('.uno:DataSelect');
 		}
 	}

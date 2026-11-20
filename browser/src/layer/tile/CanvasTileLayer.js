@@ -283,7 +283,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// handlers, after a zoom or a sheet geometry change.
 		this._isReplayingMessages = false;
 
-		app.calc.cellCursorVisible = false;
+		app.calc.cellCursor.visible = false;
 		this._prevCellCursorAddress = null;
 		this._mousePressedDuringCellEdit = false;
 		this._scrollFreePaneToTopOnA1 = false;
@@ -1577,9 +1577,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	},
 
 	_showPendingCellError: function () {
-		if (!this._pendingCellError || !app.calc.cellCursorVisible)
+		if (!this._pendingCellError || !app.calc.cellCursor.visible)
 			return;
-		var rect = app.calc.cellCursorRectangle;
+		var rect = app.calc.cellCursor.rectangle;
 		var pos = new cool.SimplePoint(rect.x1, rect.y2);
 		app.definitions.formulaErrorHelpSection.show(pos, this._pendingCellError);
 	},
@@ -1813,7 +1813,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	},
 
 	hideCellCursor: function () {
-		app.calc.cellCursorVisible = false;
+		app.calc.cellCursor.visible = false;
 		var cellfillMarkerSection = app.sectionContainer.getSectionWithName(app.CSections.CellFillMarker.name);
 		if (cellfillMarkerSection)
 			cellfillMarkerSection.calculatePositionViaCellCursor(null);
@@ -1883,7 +1883,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	setCellCursor(cell) {
 		var cellfillMarkerSection = app.sectionContainer.getSectionWithName(app.CSections.CellFillMarker.name);
 
-		var oldCursorAddress = app.calc.cellAddress.clone();
+		var oldCursorAddress = app.calc.cellCursor.address.clone();
 		const drawnBefore = this._cellCursorSection.getDrawnRectangle();
 
 		if (!cell) {
@@ -1892,26 +1892,26 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				this._map._clip.clearSelection();
 		}
 		else {
-			app.calc.cellAddress = new cool.SimplePoint(cell.col, cell.row);
+			app.calc.cellCursor.address = new cool.SimplePoint(cell.col, cell.row);
 			if (cell.area)
-				app.calc.cellCursorRectangle = cell.area;
+				app.calc.cellCursor.rectangle = cell.area;
 			else
-				app.calc.cellCursorRectangle = this.sheetGeometry.getCellSimpleRectangle(cell.col, cell.row);
-			this._cellCursorSection.size[0] = app.calc.cellCursorRectangle.pWidth;
-			this._cellCursorSection.size[1] = app.calc.cellCursorRectangle.pHeight;
-			this._cellCursorSection.setPosition(app.calc.cellCursorRectangle.pX1, app.calc.cellCursorRectangle.pY1);
-			app.calc.cellCursorVisible = true;
+				app.calc.cellCursor.rectangle = this.sheetGeometry.getCellSimpleRectangle(cell.col, cell.row);
+			this._cellCursorSection.size[0] = app.calc.cellCursor.rectangle.pWidth;
+			this._cellCursorSection.size[1] = app.calc.cellCursor.rectangle.pHeight;
+			this._cellCursorSection.setPosition(app.calc.cellCursor.rectangle.pX1, app.calc.cellCursor.rectangle.pY1);
+			app.calc.cellCursor.visible = true;
 
 			app.sectionContainer.onCellAddressChanged();
 			if (cellfillMarkerSection)
-				cellfillMarkerSection.calculatePositionViaCellCursor([app.calc.cellCursorRectangle.pX2, app.calc.cellCursorRectangle.pY2]);
+				cellfillMarkerSection.calculatePositionViaCellCursor([app.calc.cellCursor.rectangle.pX2, app.calc.cellCursor.rectangle.pY2]);
 		}
 
-		var sameAddress = oldCursorAddress.equals(app.calc.cellAddress.toArray());
+		var sameAddress = oldCursorAddress.equals(app.calc.cellCursor.address.toArray());
 
 		const sheet = this._selectedPart;
-		const sameSheet = sheet === app.calc.cellCursorSheet;
-		app.calc.cellCursorSheet = sheet;
+		const sameSheet = sheet === app.calc.cellCursor.sheet;
+		app.calc.cellCursor.sheet = sheet;
 
 		// Slide the cursor to another cell.  Keep the slide running if an
 		// updated cell cursor position is the same as the current cell
@@ -2521,7 +2521,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// to force it in case we had following OFF
 		if (app.file.textCursor.visible)
 			this._onUpdateCursor(/* scroll */ true);
-		else if (app.calc.cellCursorVisible)
+		else if (app.calc.cellCursor.visible)
 			this._onUpdateCellCursor(/* scroll */ true);
 	},
 
@@ -3026,8 +3026,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 
 		if (needsScroll) {
-			const spacingX = Math.abs(app.calc.cellCursorRectangle.pWidth) / 4.0;
-			const spacingY = Math.abs(app.calc.cellCursorRectangle.pHeight) / 2.0;
+			const spacingX = Math.abs(app.calc.cellCursor.rectangle.pWidth) / 4.0;
+			const spacingY = Math.abs(app.calc.cellCursor.rectangle.pHeight) / 2.0;
 			let scrollX = 0, scrollY = 0;
 
 			if (directionDownOrRight) {
@@ -3568,10 +3568,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		// If y coordinate is already within visible area, we won't scroll to that direction.
 		const controlYDown = center.y + (app.file.textCursor.visible ? app.file.textCursor.rectangle.cHeight :
-			(app.calc.cellCursorVisible ? app.calc.cellCursorRectangle.cHeight : 0));
+			(app.calc.cellCursor.visible ? app.calc.cellCursor.rectangle.cHeight : 0));
 
 		const controlYUp = center.y - (app.file.textCursor.visible ? app.file.textCursor.rectangle.cHeight :
-			(app.calc.cellCursorVisible ? app.calc.cellCursorRectangle.cHeight : 0));
+			(app.calc.cellCursor.visible ? app.calc.cellCursor.rectangle.cHeight : 0));
 
 		if (app.isYVisibleInTheDisplayedArea(Math.round(controlYDown * CSSPixelsToTwips)) && app.isYVisibleInTheDisplayedArea(Math.round(controlYUp * CSSPixelsToTwips)))
 			center.y = app.activeDocument.activeLayout.viewedRectangle.cY1;
@@ -3768,12 +3768,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	_onUpdateCellCursor: function (scrollToCursor, sameAddress) {
 		CellSelectionMarkers.update();
 
-		if (app.calc.cellCursorVisible) {
+		if (app.calc.cellCursor.visible) {
 			if (scrollToCursor &&
 			    !this._map.calcInputBarHasFocus()) {
 				this._scrollCellCursorIntoView();
 
-				this._prevCellCursorAddress = app.calc.cellAddress.clone();
+				this._prevCellCursorAddress = app.calc.cellCursor.address.clone();
 			}
 
 			this._addCellDropDownArrow();
@@ -3814,18 +3814,18 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 	_onValidityInputHelpMsg: function(textMsg) {
 		app.definitions.validityInputHelpSection.removeValidityInputHelp();
-		app.definitions.validityInputHelpSection.showValidityInputHelp(textMsg, new cool.SimplePoint(app.calc.cellCursorRectangle.x2, app.calc.cellCursorRectangle.y1));
+		app.definitions.validityInputHelpSection.showValidityInputHelp(textMsg, new cool.SimplePoint(app.calc.cellCursor.rectangle.x2, app.calc.cellCursor.rectangle.y1));
 	},
 
 	_addCellDropDownArrow: function () {
-		if (this._validatedCellAddress && app.calc.cellCursorVisible && this._validatedCellAddress.equals(app.calc.cellAddress.toArray())) {
+		if (this._validatedCellAddress && app.calc.cellCursor.visible && this._validatedCellAddress.equals(app.calc.cellCursor.address.toArray())) {
 			let position;
 			if (this.sheetGeometry) {
 				position = this.sheetGeometry.getCellRect(this._validatedCellAddress.x, this._validatedCellAddress.y);
-				position = new cool.SimplePoint(app.calc.cellCursorRectangle.x2, (position.max.y - CalcValidityDropDown.dropDownArrowSize * app.dpiScale) * app.pixelsToTwips);
+				position = new cool.SimplePoint(app.calc.cellCursor.rectangle.x2, (position.max.y - CalcValidityDropDown.dropDownArrowSize * app.dpiScale) * app.pixelsToTwips);
 			}
 			else
-				position = new cool.SimplePoint(app.calc.cellCursorRectangle.x2, app.calc.cellCursorRectangle.y2 - CalcValidityDropDown.dropDownArrowSize * app.dpiScale * app.pixelsToTwips);
+				position = new cool.SimplePoint(app.calc.cellCursor.rectangle.x2, app.calc.cellCursor.rectangle.y2 - CalcValidityDropDown.dropDownArrowSize * app.dpiScale * app.pixelsToTwips);
 
 			if (!app.sectionContainer.getSectionWithName(app.CSections.CalcValidityDropDown.name)) {
 				let dropDownSection = new CalcValidityDropDown(position);
@@ -4464,7 +4464,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// keyboard is up, so scroll the sheet to keep the selected cell visible.
 		else if (
 			this.isCalc() &&
-			app.calc.cellCursorVisible &&
+			app.calc.cellCursor.visible &&
 			!this._map.calcInputBarHasFocus()
 		)
 			this._scrollCellCursorIntoView();

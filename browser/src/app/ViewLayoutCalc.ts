@@ -89,7 +89,7 @@ class ViewLayoutCalc extends ViewLayoutBase {
 	// there is no cell cursor in view. With neither on screen the middle of the
 	// view (the base class anchor) is kept.
 	public override zoomAnchorPoint(): cool.SimplePoint {
-		const cursor = app.calc.cellCursorRectangle;
+		const cursor = app.calc.cellCursor.rectangle;
 		if (cursor && this._viewedRectangle.containsPoint([cursor.x1, cursor.y1]))
 			return new cool.SimplePoint(cursor.x1, cursor.y1);
 
