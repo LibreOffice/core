@@ -743,6 +743,16 @@ abstract class SelectionSection extends CanvasSectionObject {
 		return this.groupOf(handle)?.keepsItsPlace(handle) ?? false;
 	}
 
+	/// All the handles while that handle is dragged to that place, as its group places them;
+	/// nothing where only the handle dragged moves.
+	public handlesOfItsGroupDuring(
+		handle: SelectionHandle,
+		at: cool.Point,
+		known: SelectionHandle[],
+	): SelectionHandle[] | null {
+		return this.groupOf(handle)?.handlesDuring(handle.name, at, known) ?? null;
+	}
+
 	private groupOf(handle: SelectionHandle): HandleGroup | undefined {
 		return this.groups().find(
 			(group: HandleGroup) => group.name === handle.group,

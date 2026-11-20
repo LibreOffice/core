@@ -219,6 +219,19 @@ abstract class HandleGroup {
 		return null;
 	}
 
+	/*
+		All the handles while one of its handles is dragged to that place, in twips, from the
+		handles as they stand when nothing runs. Nothing where only the handle dragged moves,
+		which is so for most groups.
+	*/
+	public handlesDuring(
+		_handleName: string,
+		_at: cool.Point,
+		_known: SelectionHandle[],
+	): SelectionHandle[] | null {
+		return null;
+	}
+
 	/// Anything it draws besides the handles themselves, drawn under them.
 	public paint(_section: SelectionSection, _shown: SelectionHandle[]): void {
 		// Most groups draw their handles and nothing else.
@@ -3045,6 +3058,18 @@ class PathHandles extends HandlesMovedOneByOne {
 		return editor?.changedOutline() ?? null;
 	}
 
+	/// A point carries its weights, and one weight can swing the other, so the editor of the
+	/// path says where all three of them stand.
+	public handlesDuring(
+		handleName: string,
+		at: cool.Point,
+		known: SelectionHandle[],
+	): SelectionHandle[] | null {
+		return (
+			this.selection.pathEditor()?.handlesDuring(handleName, at, known) ?? null
+		);
+	}
+
 	public paint(section: SelectionSection, shown: SelectionHandle[]): void {
 		this.selection.pathEditor()?.paint(section, shown);
 	}
@@ -3236,6 +3261,44 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 							: MotionPathHandles.weightKind,
 				})),
 		);
+	}
+
+	/// A point carries its weights, and one weight can swing the other, so the editor of the
+	/// path says where all three of them stand.
+	public handlesDuring(
+		handleName: string,
+		at: cool.Point,
+		known: SelectionHandle[],
+	): SelectionHandle[] | null {
+		const object = this.object();
+		const place = MotionPathHandles.placeOf(handleName);
+		if (!object || !place) return null;
+
+		// the editor names the handles of its path without the place of the path
+		const prefix = ['motion', place.path, ''].join(' ');
+		const own = known
+			.filter((handle: SelectionHandle) => handle.name.startsWith(prefix))
+			.map((handle: SelectionHandle) => ({
+				...handle,
+				name: handle.name.substring(prefix.length),
+			}));
+		const moved = MotionPathHandles.editorOf(object, place.path).handlesDuring(
+			place.inPath,
+			at,
+			own,
+		);
+		if (!moved) return null;
+
+		const where = new Map(
+			moved.map((handle: SelectionHandle) => [
+				prefix + handle.name,
+				handle.point,
+			]),
+		);
+		return known.map((handle: SelectionHandle) => {
+			const placed = where.get(handle.name);
+			return placed ? { ...handle, point: placed } : handle;
+		});
 	}
 
 	/// The lines from the points to their weights, as the editor of each path draws them.

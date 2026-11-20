@@ -95,11 +95,13 @@ class ShapingInteraction extends SelectionInteraction {
 		);
 		if (measured) return measured;
 
-		// A point of a path carries its weights, and one weight can swing the other, so the
-		// editor says where all three of them stand.
-		const path = this.selection
-			.pathEditor()
-			?.handlesDuring(this.handle.name, shown, known);
+		// A point of a path, of the object or of a motion path, carries its weights, and its
+		// group says where they stand.
+		const path = this.selection.handlesOfItsGroupDuring(
+			this.handle,
+			shown,
+			known,
+		);
 		if (path) return path;
 
 		return known.map((one: SelectionHandle) =>
