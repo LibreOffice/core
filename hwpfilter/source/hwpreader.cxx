@@ -1565,15 +1565,22 @@ void HwpReader::makePageStyle()
                 }
                 break;
             case 5: // B5
+                // use dimensions provided by the file since it must rather be B5 JIS instead of B5 ISO
                 if (hwpinfo.paper.paper_direction)
                 {
-                    mxList->addAttribute(u"fo:page-height"_ustr, sXML_CDATA, u"176mm"_ustr);
-                    mxList->addAttribute(u"fo:page-width"_ustr, sXML_CDATA, u"250mm"_ustr);
+                    mxList->addAttribute(u"fo:page-width"_ustr, sXML_CDATA,
+                                         OUString::number(WTI(hwpinfo.paper.paper_height))
+                                             + "inch");
+                    mxList->addAttribute(u"fo:page-height"_ustr, sXML_CDATA,
+                                         OUString::number(WTI(hwpinfo.paper.paper_width)) + "inch");
                 }
                 else
                 {
-                    mxList->addAttribute(u"fo:page-width"_ustr, sXML_CDATA, u"176mm"_ustr);
-                    mxList->addAttribute(u"fo:page-height"_ustr, sXML_CDATA, u"250mm"_ustr);
+                    mxList->addAttribute(u"fo:page-width"_ustr, sXML_CDATA,
+                                         OUString::number(WTI(hwpinfo.paper.paper_width)) + "inch");
+                    mxList->addAttribute(u"fo:page-height"_ustr, sXML_CDATA,
+                                         OUString::number(WTI(hwpinfo.paper.paper_height))
+                                             + "inch");
                 }
                 break;
             case 6: // B4
