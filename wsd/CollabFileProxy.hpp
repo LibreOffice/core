@@ -20,7 +20,7 @@
 #include <memory>
 #include <string>
 
-/// Proxies file download/upload through the /co/collab endpoint
+/// Proxies file download/upload through the /cool/collab endpoint
 /// using token-based authentication.
 class CollabFileProxy: public std::enable_shared_from_this<CollabFileProxy>
 {

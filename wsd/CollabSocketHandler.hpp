@@ -30,7 +30,7 @@ namespace Poco::Net
 class HTTPRequest;
 }
 
-/// WebSocket handler for /co/collab endpoint.
+/// WebSocket handler for /cool/collab/ws endpoint.
 /// Accepts WOPISrc from URL, access_token from first message,
 /// then validates via CheckFileInfo before allowing authentication.
 class CollabSocketHandler : public WebSocketHandler
@@ -70,7 +70,7 @@ class CollabSocketHandler : public WebSocketHandler
     bool _byeReceived = false;
 
 public:
-    // The /co/collab protocol number that this server speaks (see wsd/protocol.txt):
+    // The /cool/collab protocol number that this server speaks (see wsd/protocol.txt):
     static constexpr int Protocol = 1;
 
     CollabSocketHandler(const std::shared_ptr<StreamSocket>& socket,

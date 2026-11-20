@@ -111,7 +111,7 @@ class CollabBroker : public std::enable_shared_from_this<CollabBroker>
 
     /// Per-user avatar info registered by handlers when they
     /// authenticate.  The broker rewrites `avatar` URLs in
-    /// outgoing user messages to a /co/collab/avatar proxy URL,
+    /// outgoing user messages to a /cool/collab/avatar proxy URL,
     /// which proxies the fetch on-demand using the stored
     /// upstream URL and access_token.
     struct UserAvatar
@@ -122,7 +122,7 @@ class CollabBroker : public std::enable_shared_from_this<CollabBroker>
     std::map<std::string, UserAvatar> _avatars;
 
     /// Plain-COOL (/cool/ws) sessions for the same docKey, pushed
-    /// in by DocumentBroker.  Surfaced into the /co/collab
+    /// in by DocumentBroker.  Surfaced into the /cool/collab
     /// user_list so CODA/COWASM peers see live editors and run
     /// the edit-choice dialog rather than silently editing
     /// locally in parallel.
@@ -207,7 +207,7 @@ public:
     bool matchesAccessToken(const std::string& tag) const;
 
     /// Register a user's avatar URL + access_token for later
-    /// proxying via /co/collab/avatar.
+    /// proxying via /cool/collab/avatar.
     void registerAvatar(const std::string& userId,
                         const std::string& url,
                         const std::string& accessToken);
@@ -254,7 +254,7 @@ extern std::map<std::string, CollabFetchRequest> CollabFetchRequests;
 extern std::mutex CollabFetchRequestsMutex;
 
 /// Create a fetch request and return the token.
-/// The token can be used with /co/collab/fetch?token=... endpoint.
+/// The token can be used with /cool/collab/fetch?token=... endpoint.
 /// The brokerTag is the broker's current access token for validation.
 std::string createCollabFetchRequest(const std::string& streamUrl,
                                       const std::string& accessToken,
@@ -284,7 +284,7 @@ extern std::map<std::string, CollabUploadRequest> CollabUploadRequests;
 extern std::mutex CollabUploadRequestsMutex;
 
 /// Create an upload request and return the token.
-/// The token can be used with /co/collab/put?token=... endpoint.
+/// The token can be used with /cool/collab/put?token=... endpoint.
 std::string createCollabUploadRequest(const std::string& targetUrl,
                                        const std::string& accessToken,
                                        const std::string& wopiSrc,

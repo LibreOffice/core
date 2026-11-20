@@ -27,7 +27,7 @@
 #include <net/HttpRequest.hpp>
 
 // Without client document loading enabled in the configuration, the server says so in its
-// capabilities and refuses every /co/collab request:
+// capabilities and refuses every /cool/collab request:
 class UnitCollabDisabled: public WopiTestServer {
 public:
     UnitCollabDisabled(): WopiTestServer("UnitCollabDisabled") {}
@@ -53,7 +53,7 @@ public:
         // A fetch is refused before its token is looked at (an unknown token would get
         // Unauthorized):
         {
-            http::Request request("/co/collab/fetch?token=anything");
+            http::Request request("/cool/collab/fetch?token=anything");
             std::shared_ptr<http::Response const> const response
                 = http::Session::create(helpers::getTestServerURI())->syncRequest(request);
             LOK_ASSERT_EQUAL(http::StatusCode::BadRequest, response->statusLine().statusCode());
@@ -66,7 +66,7 @@ public:
                 + "/wopi/files/0?access_token=anything&testname=UnitCollabDisabled");
             std::shared_ptr<http::WebSocketSession> const ws
                 = http::WebSocketSession::create(helpers::getTestServerURI());
-            http::Request request("/co/collab?WOPISrc=" + Uri::encode(wopiURL.toString()));
+            http::Request request("/cool/collab/ws?WOPISrc=" + Uri::encode(wopiURL.toString()));
             LOK_ASSERT(ws->asyncRequest(request, socketPoll()));
             ws->sendMessage("access_token anything");
             LOK_ASSERT(ws->waitForDisconnection(std::chrono::seconds(10)));

@@ -509,8 +509,8 @@
         <enable desc="Enable WASM support" type="bool" default="false">@WASM_SUPPORT_ENABLE@</enable>
     </wasm>
 
-    <client_document_loading desc="Loading a document on the client, in Collabora Office or in WASM, through the /co/collab endpoint">
-        <enable desc="Enable the /co/collab endpoint" type="bool" default="false">false</enable>
+    <client_document_loading desc="Loading a document on the client, in Collabora Office or in WASM, through the /cool/collab endpoint">
+        <enable desc="Enable the /cool/collab endpoint" type="bool" default="false">false</enable>
     </client_document_loading>
 
     <document_signing desc="Document signing settings">

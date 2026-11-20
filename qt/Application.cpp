@@ -148,7 +148,7 @@ void Application::initialize()
 
         // The remote-doc flow loads cool.html via file://
         // so its page-side JS can fetch() the cool server's
-        // /co/collab/fetch and POST to /co/collab/put.  Chromium
+        // /cool/collab/fetch and POST to /cool/collab/put.  Chromium
         // blocks file://-origin pages from accessing remote URLs by
         // default; flipping LocalContentCanAccessRemoteUrls lets the
         // cross-origin fetches through (CORS on the server side is

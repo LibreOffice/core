@@ -697,7 +697,7 @@ void CloudAccountPage::putCodaPageIn(QWebEngineFrame& frame)
         window->hideNotice();
     }
 
-    // The page keeps the access token, because it opens /co/collab itself.
+    // The page keeps the access token, because it opens /cool/collab itself.
     auto remoteInfo = std::make_shared<coda::RemoteDocInfo>();
     remoteInfo->wopiSrc = QUrlQuery(_formUrl).queryItemValue("WOPISrc", QUrl::FullyDecoded);
     remoteInfo->coolServer = _frameOrigin.toString();

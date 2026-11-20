@@ -9,7 +9,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-describe('The /co/collab protocol number of a page', function () {
+describe('The /cool/collab protocol number of a page', function () {
 	let page: DocumentPage;
 
 	before(async function () {

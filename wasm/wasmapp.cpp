@@ -229,7 +229,7 @@ int main(int argc, char* argv_main[])
             if (docKind == "server" || docKind == "collab")
             {
                 // 'server' mode: URL is encoded WOPI source, prepend /wasm/ to fetch
-                // 'collab' mode: URL is already a full path (e.g., /co/collab/fetch?token=...)
+                // 'collab' mode: URL is already a full path (e.g., /cool/collab/fetch?token=...)
                 if (docKind == "server")
                     remoteUrl = "/wasm/" + docDesc;
                 else

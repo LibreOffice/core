@@ -571,7 +571,7 @@ interface Window {
 	ThisIsTheQtApp: boolean;
 	ThisIsTheWindowsApp: boolean;
 	codaRemotePage?: object;
-	// The file properties of a remote document, from /co/collab.
+	// The file properties of a remote document, from /cool/collab.
 	codaRemoteFileInfo?: object;
 	wopiSrc: string;
 	zoteroEnabled: boolean;

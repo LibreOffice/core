@@ -1548,13 +1548,13 @@ bool DocumentBroker::download(
             }
 #if !MOBILEAPP
             else if (findCollabBroker(_docKey)) {
-                // A /co/collab CollabBroker is live for this docKey, meaning a peer is mid-edit and
-                // may have uploaded via /co/collab/put between the firstInstance CheckFileInfo and
-                // this one; treating that as "modified behind our back" would close the
-                // freshly-joining peer with documentconflict and tear down the kit, so accept the
-                // new value as authoritative instead:
+                // A /cool/collab CollabBroker is live for this docKey, meaning a peer is mid-edit
+                // and may have uploaded via /cool/collab/put between the firstInstance
+                // CheckFileInfo and this one; treating that as "modified behind our back" would
+                // close the freshly-joining peer with documentconflict and tear down the kit, so
+                // accept the new value as authoritative instead:
                 LOG_INF(
-                    "Document [" << _docKey << "] timestamp moved during live /co/collab editing;"
+                    "Document [" << _docKey << "] timestamp moved during live /cool/collab editing;"
                     " accepting Actual: " << fileInfo.getLastModifiedServerTimeString()
                     << " over stored " << _storageManager.getLastModifiedServerTimeString());
                 _storageManager.setLastModifiedServerTimeString(
@@ -3463,7 +3463,7 @@ DocumentBroker::NeedToUpload DocumentBroker::needToUploadToStorage() const
         if (_documentChangedInStorage
             && (!_storageManager.lastUploadSuccessful() || _documentChangedInStorageByCollab))
         {
-            // Our last upload was refused (or a /co/collab client uploaded its
+            // Our last upload was refused (or a /cool/collab client uploaded its
             // own version) and storage has moved on, so the two versions have
             // genuinely diverged and the user has been asked which one to keep.
             // Sending ours again before they answer would decide it for them.
@@ -3476,7 +3476,7 @@ DocumentBroker::NeedToUpload DocumentBroker::needToUploadToStorage() const
             LOG_TRC(
                 "Not uploading: "
                 << (_documentChangedInStorageByCollab
-                    ? "a /co/collab client uploaded its own version"
+                    ? "a /cool/collab client uploaded its own version"
                     : "our last upload was refused")
                 << " and the conflict is unresolved");
             return NeedToUpload::No;
@@ -4696,7 +4696,7 @@ void DocumentBroker::handleDocumentConflict(std::string details)
 
     const std::size_t activeClients = broadcastMessage(message);
     LOG_TRC("There are " << activeClients << " active clients after broadcasting documentconflict");
-    // A document that its clients reload after a /co/collab upload unloads at once (so that they
+    // A document that its clients reload after a /cool/collab upload unloads at once (so that they
     // get the uploaded version, not this one):
     if (_documentChangedInStorageByCollab && message.starts_with("close:")) {
         stop("documentconflict");
@@ -5578,7 +5578,7 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
         sendDocumentSettingsLive();
 
 #if !MOBILEAPP
-        // Surface this session into any /co/collab CollabBroker for the
+        // Surface this session into any /cool/collab CollabBroker for the
         // same docKey so CODA/COWASM peers see plain-COOL editors and
         // can prompt the user with the edit-choice dialog rather than
         // silently editing locally in parallel.
@@ -6111,7 +6111,7 @@ std::shared_ptr<ClientSession> DocumentBroker::createNewClientSession(
         }
 
 #if !MOBILEAPP
-        // A session of a document that is in conflict with a /co/collab upload waits like one of
+        // A session of a document that is in conflict with a /cool/collab upload waits like one of
         // an unloading document while a user here decides (as the version here is the one that
         // the upload replaced):
         if (_documentChangedInStorage && _documentChangedInStorageByCollab

@@ -20,7 +20,7 @@ namespace coda
 {
 
 /// WOPI connection params for a remote document opened via a COOL
-/// server's /co/collab endpoint.  Empty for local-only documents.
+/// server's /cool/collab endpoint.  Empty for local-only documents.
 /// The collab WebSocket itself is owned by the page-JS, not the
 /// native side; this struct only carries what the page-JS needs to
 /// reconstruct the URL at bootstrap (and what

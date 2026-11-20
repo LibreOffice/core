@@ -2870,7 +2870,7 @@ function showWelcomeSVG() {
 			// on as necessary to the Online code.
 			// docURL gate: for CODA remote docs we don't yet have a local file
 			// path here - the bootstrap in main.js fetches the doc via
-			// /co/collab, asks the bridge's writeRemoteDocFile slot to
+			// /cool/collab, asks the bridge's writeRemoteDocFile slot to
 			// materialise it, and only then fires HULLO + this.socket.onopen()
 			// itself.
 			global.postMobileMessage('HULLO');
@@ -2879,20 +2879,20 @@ function showWelcomeSVG() {
 		}
 	}
 
-	// The state and functions of the /co/collab WebSocket.
+	// The state and functions of the /cool/collab/ws WebSocket.
 	global.collab = {};
 
-	// Fetch file using the /co/collab WebSocket endpoint.
+	// Fetch file using the /cool/collab/ws WebSocket endpoint.
 	// Returns a Promise that resolves to the download URL.
 	// Used by WASM and CODA builds to download documents via the
 	// collab endpoint.  @coolServer is the http(s):// origin of the
 	// cool server when the page itself lives elsewhere (CODA loads
 	// cool.html from a local origin or file://); pass empty/null for
 	// COWASM (where the page is hosted on the cool server, so the
-	// /co/collab WS resolves correctly against the page origin).
+	// /cool/collab/ws WS resolves correctly against the page origin).
 	// When set, the resolved fetch_url and upload_url responses are
 	// also rebased onto this origin if the server returns them as
-	// site-absolute paths (e.g. "/co/collab/fetch?token=...").
+	// site-absolute paths (e.g. "/cool/collab/fetch?token=...").
 	global.collab.fetchFile = function(wopiSrc, accessToken, coolServer) {
 		return global.collab.connect(wopiSrc, accessToken, coolServer).then(function(fileInfo) {
 			return new Promise(function(resolve, reject) {
@@ -2904,7 +2904,7 @@ function showWelcomeSVG() {
 						if (msg.url) {
 							var url = msg.url;
 							// CollabSocketHandler returns site-absolute
-							// URLs (e.g. /co/collab/fetch?token=...).
+							// URLs (e.g. /cool/collab/fetch?token=...).
 							// When cool.html is hosted on a different
 							// origin than the cool server, rebase onto
 							// collab.coolServer so fetch() hits the
@@ -2949,10 +2949,10 @@ function showWelcomeSVG() {
 		});
 	};
 
-	// The /co/collab protocol number that this client speaks (see wsd/protocol.txt):
+	// The /cool/collab protocol number that this client speaks (see wsd/protocol.txt):
 	global.collab.protocol = 1;
 
-	// Open the /co/collab WebSocket and sign in with accessToken.
+	// Open the /cool/collab/ws WebSocket and sign in with accessToken.
 	// The arguments are as for collab.fetchFile above.
 	// It resolves with the file properties that coolwsd sends with authenticated.
 	global.collab.connect = function(wopiSrc, accessToken, coolServer) {
@@ -2965,12 +2965,12 @@ function showWelcomeSVG() {
 			if (coolServer) {
 				wsUrl = coolServer.replace(/^https?:/, function(s) {
 					return s === 'https:' ? 'wss:' : 'ws:';
-				}) + '/co/collab?WOPISrc=' + encodeURIComponent(wopiSrc)
+				}) + '/cool/collab/ws?WOPISrc=' + encodeURIComponent(wopiSrc)
 					+ protocol;
 			} else {
 				var wsProtocol = global.location.protocol === 'https:' ? 'wss:' : 'ws:';
 				wsUrl = wsProtocol + '//' + global.location.host +
-					global.serviceRoot + '/co/collab?WOPISrc='
+					global.serviceRoot + '/cool/collab/ws?WOPISrc='
 					+ encodeURIComponent(wopiSrc) + protocol;
 			}
 
@@ -3071,7 +3071,7 @@ function showWelcomeSVG() {
 		});
 	};
 
-	// Upload a file using the /co/collab WebSocket endpoint (token-based).
+	// Upload a file using the /cool/collab/ws WebSocket endpoint (token-based).
 	// Used by WASM builds for saving documents back to the WOPI host.
 	//
 	// Reuses the existing main collab socket (global.collab.ws) rather than
@@ -3172,7 +3172,7 @@ function showWelcomeSVG() {
 
 		// Rebase the avatar URL the cool server's CollabBroker
 		// emits (CollabBroker.cpp's appendUserJson rewrites WOPI
-		// avatar URLs to a server-hosted /co/collab/avatar?...
+		// avatar URLs to a server-hosted /cool/collab/avatar?...
 		// proxy, but as a site-absolute path).  Works as-is when
 		// cool.html is hosted on the cool server itself (COWASM),
 		// but for CODA (page on file://) the relative URL would

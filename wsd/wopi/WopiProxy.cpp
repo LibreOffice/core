@@ -172,7 +172,7 @@ void WopiProxy::checkFileInfo(const std::shared_ptr<TerminatingPoll>& poll, cons
             auto wopiInfo = std::make_unique<WopiStorage::WOPIFileInfo>(fileInfo, object, uri);
 
             // The document's bytes go only to a user whose host allows a clean export, and new
-            // ones come only from a user who can write (the same rules as for /co/collab):
+            // ones come only from a user who can write (the same rules as for /cool/collab):
             if (postBody) {
                 if (!wopiInfo->getUserCanWrite() || wopiInfo->getUserCanOnlyComment()
                     || wopiInfo->getUserCanOnlyManageRedlines())

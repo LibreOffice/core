@@ -552,7 +552,7 @@ QString Bridge::writeRemoteDocFile(const QString& filename,
                                    const QString& base64Bytes)
 {
     // Extension drives core's filter detection; keep whatever the
-    // integrator gave us via /co/collab/fetch's filename field.
+    // integrator gave us via /cool/collab/fetch's filename field.
     const std::string extension = FileUtil::extractFileExtension(filename.toStdString());
     if (!FileUtil::isPlainExtension(extension))
     {

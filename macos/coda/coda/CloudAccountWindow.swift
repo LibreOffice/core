@@ -980,7 +980,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     // CODA puts its own editor into the iframe, so coolwsd's scripts, style sheets, images and
     // fonts must not load there. WebKit checks these rules before it looks in its caches, so
     // cached copies are refused too. A worker's script counts as "other", not "script".
-    // Fetches and WebSockets stay open, for /co/collab.
+    // Fetches and WebSockets stay open, for /cool/collab.
     private func blockCoolServerFiles(of url: URL, then proceed: @escaping () -> Void) {
         guard let origin = Self.coolServerOrigin(of: url) else {
             COWrapper.LOG_ERR("coolwsd's files were not blocked: the editor's address has no host")

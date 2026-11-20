@@ -226,7 +226,7 @@ namespace
 /// name, avatar if present, and optionally canWrite).
 ///
 /// The avatar URL is rewritten to a server-hosted proxy
-/// (/co/collab/avatar?...) which returns the cached image bytes.
+/// (/cool/collab/avatar?...) which returns the cached image bytes.
 /// This avoids two problems with forwarding the raw WOPI avatar
 /// URL: cross-origin fetches from cool.html don't carry the
 /// integrator's session cookies, and CSP may block them.
@@ -240,7 +240,7 @@ void appendUserJson(std::ostringstream& oss,
            ",\"name\":\"" << JsonUtil::escapeJSONValue(h->getUsername()) << "\"";
     if (!h->getAvatar().empty())
     {
-        std::string proxy = "/co/collab/avatar?WOPISrc="
+        std::string proxy = "/cool/collab/avatar?WOPISrc="
             + Uri::encode(wopiSrc)
             + "&userId=" + Uri::encode(h->getUserId())
             + "&token=" + brokerTag;

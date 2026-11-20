@@ -900,7 +900,7 @@ void WebView::createWebEngineView()
     page->settings()->setAttribute(QWebEngineSettings::JavascriptCanPaste, true);
     // cool.html is loaded over file://; without this, JS fetch() to https:// is
     // blocked (Zotero queries api.zotero.org directly from the page; the
-    // COOL server's /co/collab/avatar endpoint is fetched for user avatars).
+    // COOL server's /cool/collab/avatar endpoint is fetched for user avatars).
     page->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, true);
     // Our own browser, so let slide-show video start with sound on slide
     // entry, without a click.

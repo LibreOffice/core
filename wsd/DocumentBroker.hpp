@@ -870,8 +870,8 @@ public:
     /// For testing only [!]
     std::vector<std::shared_ptr<ClientSession>> getSessionsTestOnlyUnsafe();
 
-    /// Push the current ClientSessions into the matching /co/collab
-    /// CollabBroker (if any) as external sessions, so a /co/collab
+    /// Push the current ClientSessions into the matching /cool/collab
+    /// CollabBroker (if any) as external sessions, so a /cool/collab
     /// handler that joined after a plain-COOL editor was already
     /// active sees them in its user_list.  Runs on the DocBroker's
     /// own poll thread; marshals the per-CollabBroker work onto the
@@ -2430,7 +2430,7 @@ private:
     /// for user's command to act.
     bool _documentChangedInStorage;
 
-    /// Whether a /co/collab client uploaded the document changed in storage (only meaningful
+    /// Whether a /cool/collab client uploaded the document changed in storage (only meaningful
     /// while _documentChangedInStorage is set).
     bool _documentChangedInStorageByCollab;
 

@@ -201,7 +201,7 @@ void CollabFileProxy::doDownload(const std::shared_ptr<TerminatingPoll>& poll,
         if (contentType.empty())
             contentType = "application/octet-stream";
         response.setBody(httpResponse->getBody(), std::move(contentType));
-        // The /co/collab/fetch endpoint is the byte-stream side of
+        // The /cool/collab/fetch endpoint is the byte-stream side of
         // the token-gated download protocol.  CODA's page JS calls
         // it from cool.html's origin (file:// or https://localhost),
         // which is cross-origin to the cool server, so the response
@@ -269,7 +269,7 @@ void CollabFileProxy::doUpload(const std::shared_ptr<TerminatingPoll>& poll,
                 << "] in " << duration);
 
         // CORS allow-origin for cross-origin JS callers of
-        // /co/collab/put (CODA's page JS lives on cool.html's origin,
+        // /cool/collab/put (CODA's page JS lives on cool.html's origin,
         // which is cross-origin to the cool server).  Same rationale
         // as the GET side in doDownload.
         const std::string corsHeader = "Access-Control-Allow-Origin: *\r\n";

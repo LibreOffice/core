@@ -54,7 +54,7 @@ startCollabConnection(const std::shared_ptr<SocketPoll>& socketPoll,
                       const std::string& wopiSrc,
                       const std::string& accessToken)
 {
-    const std::string path = "/co/collab?WOPISrc=" + wopiSrc + "&protocol=1";
+    const std::string path = "/cool/collab/ws?WOPISrc=" + wopiSrc + "&protocol=1";
     auto ws = http::WebSocketSession::create(helpers::getTestServerURI());
     http::Request req(path);
     ws->asyncRequest(req, socketPoll);
@@ -71,7 +71,7 @@ startCollabConnection(const std::shared_ptr<SocketPoll>& socketPoll,
         SocketPoll::wakeupWorld();                             \
     } while (false)
 
-/// Tests the /co/collab WebSocket protocol:
+/// Tests the /cool/collab/ws WebSocket protocol:
 /// 1. editing_started is broadcast to other connected users
 /// 2. editingActive flag is set in user_list for late joiners
 /// 3. switch_to_collab reaches the users who edit a local copy, and not a user who only views
@@ -992,7 +992,7 @@ public:
                   "&testname=UnitCollabProtocolNumber");
             ws_ = http::WebSocketSession::create(helpers::getTestServerURI());
             http::Request request(
-                "/co/collab?WOPISrc=" + Uri::encode(wopiURL.toString()) + "&protocol="
+                "/cool/collab/ws?WOPISrc=" + Uri::encode(wopiURL.toString()) + "&protocol="
                 + std::to_string(CollabSocketHandler::Protocol + 1) + "&unknown=x");
             LOK_ASSERT(ws_->asyncRequest(request, socketPoll()));
             ws_->sendMessage("access_token anything");

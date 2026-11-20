@@ -249,7 +249,7 @@ void CollabSocketHandler::onCheckFileInfoFinished(CheckFileInfo& cfi)
                     broker->notifyUserJoined(self);
 
                     // Register the user's avatar URL + token on
-                    // the broker, so /co/collab/avatar can proxy
+                    // the broker, so /cool/collab/avatar can proxy
                     // it for peers.
                     if (!_avatar.empty())
                         broker->registerAvatar(
@@ -565,7 +565,7 @@ void CollabSocketHandler::handleFetch(const std::string& stream, const std::stri
 
     // Build the download URL
     std::ostringstream downloadUrl;
-    downloadUrl << "/co/collab/fetch?token=" << token;
+    downloadUrl << "/cool/collab/fetch?token=" << token;
 
     // Send the download URL to the client
     std::ostringstream oss;
@@ -661,7 +661,7 @@ void CollabSocketHandler::handleUpload(const std::string& stream, const std::str
     oss << ",\"stream\":\"" << JsonUtil::escapeJSONValue(stream) << "\"";
     if (!requestId.empty())
         oss << ",\"requestId\":\"" << JsonUtil::escapeJSONValue(requestId) << "\"";
-    oss << ",\"url\":\"/co/collab/put?token=" << token << "\"";
+    oss << ",\"url\":\"/cool/collab/put?token=" << token << "\"";
     oss << "}";
 
     sendTextMessage(oss.str());

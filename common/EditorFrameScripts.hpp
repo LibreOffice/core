@@ -46,12 +46,12 @@ if (window !== window.top && location.pathname.endsWith('/cool.html')
 
 // A JS function of the address of coolwsd's editor page, whose promise gives the reason why the
 // server does not allow client document loading, or else null (also when the server cannot be
-// asked, which leaves the outcome to the connection to its /co/collab):
+// asked, which leaves the outcome to the connection to its /cool/collab):
 inline std::string const clientDocumentLoadingRefusalScript = R"JS(
 (editorUrl) => {
     // A coolwsd that does not say whether it allows client document loading is older than that
     // setting (so its administrator cannot switch client document loading off, even where it has
-    // /co/collab):
+    // /cool/collab):
     const editorPath = new URL(editorUrl).pathname;
     const root = editorPath.slice(0, Math.max(editorPath.indexOf('/browser/'), 0));
     return fetch(root + '/hosting/capabilities', { signal: AbortSignal.timeout(10000) })

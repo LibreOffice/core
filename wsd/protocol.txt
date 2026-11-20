@@ -2886,10 +2886,10 @@ lokitversion <JSON string>
          "ProductExtension": ".0.0.alpha0",
          "BuildId": "<full 40 char git hash>"}
 
-/co/collab WebSocket endpoint
-=============================
+/cool/collab/ws WebSocket endpoint
+==================================
 
-The /co/collab WebSocket is separate from the per-document /cool/ws session.  A CODA or COWASM
+The /cool/collab/ws WebSocket is separate from the per-document /cool/ws session.  A CODA or COWASM
 client opens it to coordinate with any other clients editing the same document: it surfaces a
 per-doc user list, lets peers signal that local editing has started, and exchanges document bytes
 through one-shot HTTP byte-stream URLs.  One CollabBroker per docKey lives on the server side and
@@ -2897,7 +2897,7 @@ brokers all messages for that document.
 
 Connection:
 
-    wss://<host><service-root>/co/collab?WOPISrc=<wopi-url>&protocol=<number>
+    wss://<host><service-root>/cool/collab/ws?WOPISrc=<wopi-url>&protocol=<number>
 
     "protocol" is the number of the protocol that the client speaks (see "Protocol numbers"
     below).  The server refuses the upgrade with 400 when WOPISrc is missing, or when
@@ -2949,7 +2949,7 @@ The editor frame:
     /hosting/capabilities says "hasClientDocumentLoadingSupport": true keeps
 
     - the editor page at <service-root>/browser/<hash>/cool.html, and /hosting/capabilities,
-      /co/collab and /cool/ws under the same <service-root>;
+      /cool/collab and /cool/ws under the same <service-root>;
     - 'self' in connect-src, script-src, style-src, font-src and img-src of the
       Content-Security-Policy of the editor page, and data: in its img-src;
     - no form-action there, or one that allows 'self' (the client posts the integrator's form into
@@ -2957,11 +2957,11 @@ The editor frame:
 
     A server that has to change one of these gets a new protocol number, so that older clients
     fall back to the server's own editor.  (That needs the pages of older clients to still reach
-    /co/collab.  Where they cannot, the server also stops saying "hasClientDocumentLoadingSupport",
-    so that older clients fall back before they load their page.)
+    /cool/collab.  Where they cannot, the server also stops saying
+    "hasClientDocumentLoadingSupport", so that older clients fall back before they load their page.)
 
-server -> client messages on /co/collab
----------------------------------------
+server -> client messages on /cool/collab/ws
+--------------------------------------------
 
 {"type":"authenticated","protocol":<number>,"fileInfo":{...}}
 
@@ -2974,14 +2974,14 @@ server -> client messages on /co/collab
 {"type":"user_list","users":[<user>,...],"editingActive":<bool>}
 
     Initial snapshot of the connected user set, sent right before {"type":"authenticated"} (and
-    left out when the server is shutting down).  It covers the users of the other /co/collab
+    left out when the server is shutting down).  It covers the users of the other /cool/collab
     connections and of the /cool/ws sessions on the same document.  The broker only tracks the
-    /cool/ws sessions while a /co/collab connection is open, so for the first connection they
+    /cool/ws sessions while a /cool/collab connection is open, so for the first connection they
     arrive after {"type":"authenticated"}, as {"type":"user_joined"} (followed by
     {"type":"editing_started"} for one that can write).  Each <user> object carries "id" (the
     integrator user id) and "name" (display name), and here also "canWrite" (true if this view
-    holds write access).  When a user of a /co/collab connection has an avatar registered with the
-    broker, the object also carries "avatar":"<path>" pointing at the /co/collab/avatar endpoint
+    holds write access).  When a user of a /cool/collab connection has an avatar registered with the
+    broker, the object also carries "avatar":"<path>" pointing at the /cool/collab/avatar endpoint
     described below.  "editingActive" is true once any peer has sent {"type":"editing_started"}, or
     a /cool/ws session that can write has joined.
 
@@ -3009,7 +3009,7 @@ server -> client messages on /co/collab
 {"type":"fetch_url","stream":"<name>","requestId":"<id>","url":"<url>",...}
 
     Reply to a client-sent {"type":"fetch"}: the one-shot URL that the client can GET to download
-    the bytes of the stream, as a path (/co/collab/fetch?token=<one-shot-token>, without host and
+    the bytes of the stream, as a path (/cool/collab/fetch?token=<one-shot-token>, without host and
     without service root).  For the "contents" stream, the reply also carries "filename":"<name>"
     with the document filename and "lastModifiedTime":"<time>" with the version in storage, when
     known, both as of the CheckFileInfo when the connection signed in.
@@ -3025,7 +3025,7 @@ server -> client messages on /co/collab
 {"type":"upload_url","stream":"contents","requestId":"<id>","url":"<url>"}
 
     Reply to a client-sent {"type":"upload"}: the one-shot URL that the client can POST the
-    modified document bytes to, as a path (/co/collab/put?token=<one-shot-token>, without host and
+    modified document bytes to, as a path (/cool/collab/put?token=<one-shot-token>, without host and
     without service root).
 
 {"type":"upload_error","stream":"<name>","requestId":"<id>","error":"<text>"}
@@ -3039,8 +3039,8 @@ server -> client messages on /co/collab
     The client sent a malformed frame ("Invalid JSON", "Invalid JSON object", or "Unknown message
     type", the latter with the "requestId" of the message).
 
-client -> server messages on /co/collab
----------------------------------------
+client -> server messages on /cool/collab/ws
+--------------------------------------------
 
 {"type":"fetch","stream":"<name>","requestId":"<id>"}
 
@@ -3057,7 +3057,7 @@ client -> server messages on /co/collab
     "fetch".  With "lastModifiedTime",
     the upload is refused with 409 if storage no longer has the version of that time.  The client
     gets that time as "lastModifiedTime" in the {"type":"fetch_url"} for the "contents" stream, and
-    then as "LastModifiedTime" in the JSON that each successful /co/collab/put returns.
+    then as "LastModifiedTime" in the JSON that each successful /cool/collab/put returns.
 
 {"type":"editing_started"}
 
@@ -3082,35 +3082,35 @@ client -> server messages on /co/collab
     "editingActive") for an idle grace period of 30 seconds in case the client reconnects; "bye"
     lets the broker reclaim itself immediately.
 
-HTTP byte-stream endpoints under /co/collab/
---------------------------------------------
+HTTP byte-stream endpoints under /cool/collab/
+----------------------------------------------
 
-These endpoints are reached over the same origin that serves the WebSocket.  /co/collab/fetch and
-/co/collab/put allow cross-origin reads (Access-Control-Allow-Origin: *, and /co/collab/put also
+These endpoints are reached over the same origin that serves the WebSocket.  /cool/collab/fetch and
+/cool/collab/put allow cross-origin reads (Access-Control-Allow-Origin: *, and /cool/collab/put also
 answers the OPTIONS preflight), so a CODA page on a different origin can drive them.  Their
 one-shot token is what authenticates a request.
 
-/co/collab/fetch?token=<one-shot-token>
+/cool/collab/fetch?token=<one-shot-token>
 
     GET.  Returns the bytes of the stream that the matching {"type":"fetch"} WS request resolved
     to.  The token is one-shot: it is consumed by the first request, also one that then fails, and
     it expires after 5 minutes.  The reply is 400 without a token, 401 for an unknown or expired
-    token, 410 when no /co/collab connection to the document is open (also during the grace period
+    token, 410 when no /cool/collab connection to the document is open (also during the grace period
     described for {"type":"bye"}), and 403 or 502 when the integrator refused or failed.
 
-/co/collab/put?token=<one-shot-token>
+/cool/collab/put?token=<one-shot-token>
 
     POST.  Accepts modified document body bytes from a peer that requested an upload URL via
     {"type":"upload"}.  Same one-shot token semantics and replies, plus 409 as described for
     {"type":"upload"}.  On success, the reply is 200 with the integrator's PutFile answer.
 
-/co/collab/avatar?WOPISrc=<wopi-url>&userId=<user-id>&token=<access-token>
+/cool/collab/avatar?WOPISrc=<wopi-url>&userId=<user-id>&token=<access-token>
 
     GET.  Returns the avatar bytes for the user, fetched by the server from the URL the integrator
     supplied in WOPI's UserExtraInfo.avatar so the client never sees integrator-internal URLs.
-    <access-token> is the access token of the document's /co/collab connections, which changes
+    <access-token> is the access token of the document's /cool/collab connections, which changes
     every 5 minutes (the previous one stays valid until the next change), and the client gets the
     whole URL as "avatar" in a <user> object.  No message renews that URL, so it stops working
-    after the second change.  The reply is 400 when a parameter is missing, 410 when no /co/collab
+    after the second change.  The reply is 400 when a parameter is missing, 410 when no /cool/collab
     connection to the document is open, 401 for an access token that is no longer valid, and 404
     when the user has no avatar.

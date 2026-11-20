@@ -160,7 +160,7 @@ const _codaUpload = function(fileBytes, force) {
 
 // Local save callback shared by COWASM and CODA remote-doc paths.
 // Both flavours have already saved the document bytes locally; this
-// pushes them up to the integrator via /co/collab/put, then runs any
+// pushes them up to the integrator via /cool/collab/put, then runs any
 // queued "save-and-switch-to-server-mode" hand-off.
 var _codaUploadOnSave = function(fileBytes, tag, force) {
 	window.app.console.log(tag + ': uploading ' + fileBytes.length + ' bytes');
@@ -186,7 +186,7 @@ var _codaUploadOnSave = function(fileBytes, tag, force) {
 
 // Common per-doc collab-notification wiring (peer joins, peer-driven
 // switch requests, etc.).  Used by both COWASM and CODA after the
-// /co/collab fetch resolves.
+// /cool/collab fetch resolves.
 var _codaWireCollabNotifications = function() {
 	// If a collaborative editing session is already active, ask the
 	// new user whether they want to join.  Defer to the next tick
@@ -320,9 +320,9 @@ if (window.ThisIsTheEmscriptenApp) {
 } else if (opensThroughBridge) {
 	// The page opens its document through window.bridge. For a remote document, getRemoteInfo
 	// returns the WOPI values (wopiSrc, accessToken, coolServer, coolPath). The page fetches the
-	// file through /co/collab and hands the bytes to native code with writeRemoteDocFile, so the
-	// engine loads them through the standard fake socket. A local document takes the default
-	// path: initUI and map.loadDocument.
+	// file through /cool/collab and hands the bytes to native code with writeRemoteDocFile, so
+	// the engine loads them through the standard fake socket. A local document takes the
+	// default path: initUI and map.loadDocument.
 	var _codaBridgeBootstrap = function() {
 		const remoteInfo = new Promise(function(resolve) {
 			window.bridge.getRemoteInfo(resolve);

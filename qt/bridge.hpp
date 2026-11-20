@@ -253,7 +253,7 @@ public slots: // called from JavaScript
     /// Read _document._fileURL bytes (the file LOKit just wrote on
     /// a successful .uno:Save) and return them base64-encoded so
     /// the page-JS upload path can POST them through the collab
-    /// /co/collab/put endpoint.  Returns the empty string when
+    /// /cool/collab/put endpoint.  Returns the empty string when
     /// there is no remote document or the file cannot be read.
     QString readLocalDocBytes();
 
