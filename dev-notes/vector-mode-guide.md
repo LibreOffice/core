@@ -671,7 +671,9 @@ color of their own, since they are the object's defaults and not points someone 
   one has a colour of its own, with the dot in the same colour; paths that start at the same
   place show their dots as rings round each other, the first one in the middle. They move
   with the object while it is dragged, and they are not turned or sized with it, as the
-  slide show does. With more than one object selected none are shown.
+  slide show does. With more than one object selected none are shown. An open path ends in an
+  arrow of its colour, two thirds of the size the desktop draws it, just beyond the handle of
+  its last point, pointing the way the path runs there.
 - Every point of those paths, the one it starts at too, and every weight of a curve has a handle
   in the colour of its path, with the dashed lines from the points to their weights as in point
   editing; a press on the start of a path takes that handle, also at the middle of the object,

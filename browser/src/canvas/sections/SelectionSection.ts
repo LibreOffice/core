@@ -1899,6 +1899,13 @@ abstract class SelectionSection extends CanvasSectionObject {
 				RenderGeometrySection.hoverDashes,
 			);
 			this.context.restore();
+			// the end has the handle of its point on it, so the arrow begins at its edge
+			const arrow = SelectionSection.arrowAtTheEnd(
+				path.polygons,
+				(ShapeHandlesSection.handleSize() * app.pixelsToTwips) / 2,
+			);
+			if (arrow)
+				SelectionSection.fillOutline(this.context, [arrow], path.colour);
 		}
 
 		// the marks of the paths that start where an earlier one does lie round it as rings
@@ -1936,6 +1943,55 @@ abstract class SelectionSection extends CanvasSectionObject {
 				mark.colour,
 			);
 		}
+	}
+
+	/// The arrow at the end of a motion path, in twips: two thirds of the size the office draws
+	/// it, 2.7 mm wide and 4 mm long.
+	private static readonly arrowWidth: number = (2.7 / 25.4) * 1440;
+	private static readonly arrowLength: number = (4 / 25.4) * 1440;
+
+	/*
+		The arrow at the end of the last polygon of a path, in twips, pointing the way the path
+		runs into its end. It begins that far beyond the end, on the line the path runs in on, and
+		points on from there. Nothing for a closed path, which has no end, or where the end has no
+		way in.
+	*/
+	private static arrowAtTheEnd(
+		polygons: cool.ObjectPathPolygon[],
+		away: number,
+	): cool.ObjectPathPolygon | null {
+		const last = polygons[polygons.length - 1];
+		const points = last?.points ?? [];
+		if (last?.closed || points.length < 2) return null;
+
+		// the way in is the weight before the end where it has one, else the point before
+		const end = points[points.length - 1];
+		const before = points[points.length - 2];
+		const from =
+			end.behindX !== undefined && end.behindY !== undefined
+				? new cool.Point(end.behindX, end.behindY)
+				: before.aheadX !== undefined && before.aheadY !== undefined
+					? new cool.Point(before.aheadX, before.aheadY)
+					: new cool.Point(before.x, before.y);
+		const way = new cool.Point(end.x - from.x, end.y - from.y);
+		const length = way.length();
+		if (length === 0) return null;
+
+		const along = new cool.Point(way.x / length, way.y / length);
+		const across = new cool.Point(-along.y, along.x);
+		const side = SelectionSection.arrowWidth / 2;
+		const at = (forward: number, aside: number): cool.ObjectPathPoint => ({
+			x: end.x + along.x * forward + across.x * aside,
+			y: end.y + along.y * forward + across.y * aside,
+		});
+		return {
+			closed: true,
+			points: [
+				at(away + SelectionSection.arrowLength, 0),
+				at(away, side),
+				at(away, -side),
+			],
+		};
 	}
 
 	/// A circle of that radius round the point, all in twips, as one closed polygon of curves.
