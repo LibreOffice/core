@@ -28,6 +28,8 @@
 #include <docstat.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
+#include <IDocumentState.hxx>
+#include <IDocumentStatistics.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <redline.hxx>
 #include <docary.hxx>
@@ -664,6 +666,37 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTdf171068CopyPageDescWithStashedHeaderA
 
     xSrcComponent->dispose();
     xDstComponent->dispose();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTdf108258UndoToSaveMarkUpdatesDocStats)
+{
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    IDocumentStatistics& rDocStat = pDoc->getIDocumentStatistics();
+    rDocStat.GetUpdatedDocStat(/*bCompleteAsync=*/false, /*bFields=*/false);
+    // Simulate a save to set the undo save mark
+    pDoc->getIDocumentState().ResetModified();
+
+    // Type a word and undo to the save mark
+    pWrtShell->Insert(u"abc"_ustr);
+    CPPUNIT_ASSERT_EQUAL(
+        sal_uInt32(1),
+        rDocStat.GetUpdatedDocStat(/*bCompleteAsync=*/false, /*bFields=*/false).nWord);
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT(!pDoc->getIDocumentState().IsModified());
+
+    // Update word and character count
+    const SwDocStat& rStat
+        = rDocStat.GetUpdatedDocStat(/*bCompleteAsync=*/false, /*bFields=*/false);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. the word and character count was not updated after undoing to the save mark
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), rStat.nWord);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), rStat.nChar);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

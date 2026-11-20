@@ -32,6 +32,7 @@
 #include <wrtsh.hxx>
 #include <editsh.hxx>
 #include <unobaseclass.hxx>
+#include <DocumentStatisticsManager.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentState.hxx>
@@ -734,6 +735,8 @@ bool UndoManager::impl_DoUndoRedo(UndoOrRedoType undoOrRedo, size_t nUndoOffset)
         if (SdrUndoManager::HasTopUndoActionMark(m_UndoSaveMark))
         {
             m_rState.ResetModified();
+            // tdf#108258 - mark statistics as modified to recalculate word and character count
+            rDoc.GetDocumentStatisticsManager().SetDocStatModified(true);
         }
         else
         {
