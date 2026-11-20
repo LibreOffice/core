@@ -825,7 +825,8 @@ QString TabManager::currentTabsJson() const
 
 void TabManager::emitTabsChangedNow()
 {
-    _shellView->setVisible(_tabs.size() > 1);
+    // The strip shows with a single tab too, so that its + button is always there.
+    _shellView->setVisible(!_tabs.empty());
     if (_tabs.size() < 2)
         hideHoverCard();
     emit _shellBridge->tabsChanged(currentTabsJson());
@@ -869,11 +870,14 @@ void TabManager::showTabContextMenu(int tabId, int x, int y)
             closeTab(id);
         }
     });
+    closeOthersAction->setEnabled(_tabs.size() > 1);
 
     QAction* moveToNewWindowAction = menu.addAction(tr("Move Tab to New Window"));
     connect(moveToNewWindowAction, &QAction::triggered, this, [this, tabId]() {
         onSourceDragEnded(tabId, false);
     });
+    // The only tab of a window is already alone in it.
+    moveToNewWindowAction->setEnabled(_tabs.size() > 1);
 
     QPoint globalPos = _shellView->mapToGlobal(QPoint(x, y));
     menu.exec(globalPos);
