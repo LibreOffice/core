@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-19 16:23+0100\n"
-"PO-Revision-Date: 2026-11-03 01:46+0000\n"
+"PO-Revision-Date: 2026-11-19 23:06+0000\n"
 "Last-Translator: Alexander Gabilondo "
 "<alexgab@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Basque <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/eu/>\n"
-"Language: \n"
+"Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.11.1.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -456,6 +456,8 @@ msgstr ""
 #: src/control/Control.ServerAuditDialog.ts:107
 msgid "No WOPI host configured: trusting the first host that connects"
 msgstr ""
+"WOPI ostalaririk ez dago konfiguratuta: konektatzen den lehen ostalariarekin "
+"fidatzen da"
 
 #: admin/src/AdminSocketServerAudit.js:53
 #: src/control/Control.ServerAuditDialog.ts:113
@@ -896,7 +898,7 @@ msgstr "Portugesa (Brasil)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:893
 msgid "Russian"
-msgstr ""
+msgstr "Errusiera"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1627
 msgid "Invalid JSON file"
@@ -978,17 +980,20 @@ msgstr "Igo Luzapena"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1700
 msgid "Security policies"
-msgstr ""
+msgstr "Segurtasun politikak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1702
 msgid ""
 "Upload SPIF security policies (.xml). These define the classifications and "
 "categories available when applying a security label to a document."
 msgstr ""
+"Kargatu SPIF segurtasun-politikak (.xml). Hauek dokumentu bati segurtasun-"
+"etiketa bat aplikatzean eskuragarri dauden sailkapenak eta kategoriak "
+"definitzen dituzte."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1708
 msgid "Upload Security Policy"
-msgstr ""
+msgstr "Kargatu segurtasun politikak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1797
 msgid "Settings are only available to signed-in users."
@@ -1019,13 +1024,15 @@ msgstr "Ezarri interfazearen hobespen lehenetsiak."
 #: admin/src/integrator/AdminIntegratorSettings.ts:2087
 #: admin/src/integrator/AdminIntegratorSettings.ts:5518
 msgid "Zoom Behaviour"
-msgstr ""
+msgstr "Zoomaren portaera"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2256
 msgid ""
 "When on, text documents open at the zoom this server chooses. Turn it off "
 "to choose the zoom yourself."
 msgstr ""
+"Aktibatuta dagoenean, testu-dokumentuak zerbitzari honek aukeratzen duen "
+"zoomarekin irekitzen dira. Desaktibatu zuk zeuk aukeratzeko zoom maila."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2262
 msgid ""
@@ -1112,19 +1119,19 @@ msgstr "Editatu"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3151
 #: admin/src/integrator/AdminIntegratorSettings.ts:5498
 msgid "Accessibility"
-msgstr ""
+msgstr "Irisgarritasuna"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3158
 msgid "User interface zoom"
-msgstr ""
+msgstr "Erabiltzaile-interfazearen zooma"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3163
 msgid "Magnify the whole window, including the document and the menus."
-msgstr ""
+msgstr "Handitu leiho osoa, dokumentua eta menuak barne."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3169
 msgid "As per system"
-msgstr ""
+msgstr "Sistemaren arabera"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3204
 msgid ""
@@ -1145,13 +1152,15 @@ msgstr "Zotero ezarpenak"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3307
 #: admin/src/integrator/AdminIntegratorSettings.ts:3335
 msgid "Electronic Signature"
-msgstr ""
+msgstr "Sinadura elektronikoa"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3310
 msgid ""
 "Credentials for the electronic signature service. They are shared by "
 "everyone on this server."
 msgstr ""
+"Sinadura elektronikoaren zerbitzurako kredentzialak. Zerbitzari honetako "
+"guztiek partekatzen dituzte."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3362
 #: admin/src/integrator/AdminIntegratorSettings.ts:5760
@@ -1190,7 +1199,7 @@ msgstr "Berrezarri"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3442
 msgid "Use the AI provider set on the server"
-msgstr ""
+msgstr "Erabili zerbitzarian ezarritako AA hornitzailea"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3492
 #, fuzzy
@@ -1199,35 +1208,39 @@ msgstr "Hornitzailea:"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3495
 msgid "Managed by your admin"
-msgstr ""
+msgstr "Zure administratzaileak kudeatzen du"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3501
 msgid "No providers added yet"
-msgstr ""
+msgstr "Ez da hornitzailerik gehitu oraindik"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3507
 msgid ""
 "Add a provider to start using AI for text generation, image generation, or "
 "both. Your administrator's provider is filled in for you."
 msgstr ""
+"Gehitu hornitzaile bat AA erabiltzen hasteko testuak sortzen, irudiak "
+"sortzen edo bietan. Zure administratzailearen hornitzailea beteta dago."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3515
 msgid "Add provider..."
-msgstr ""
+msgstr "Gehitu hornitzailea..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3535
 msgid "Choose the AI provider to use for text and image generation."
-msgstr ""
+msgstr "Aukeratu AA hornitzailea testua eta irudiak sortzen erabiltzeko."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3537
 msgid ""
 "Use your own AI provider instead of the one set up by your administrator. "
 "This applies only to you."
 msgstr ""
+"Erabili zure AA hornitzailea zure administratzaileak ezarritakoaren ordez. "
+"Hau zuri bakarrik aplikatzen zaizu."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3692
 msgid "seconds"
-msgstr ""
+msgstr "segundo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3701
 #, fuzzy
@@ -1257,6 +1270,10 @@ msgid ""
 "Models without it (e.g. base llama3, gemma) can still chat but cannot use "
 "document tools."
 msgstr ""
+"Dokumentuak editatzeko, aukeratu tresna aktibatzen duen modelo bat, "
+"adibidez. gpt-4o edo llama3.1. Hori ez duten modeloek (adibidez, base "
+"llama3, gemma) txateatu dezakete, baina ezin dituzte dokumentu-tresnak "
+"erabili."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3793
 #, fuzzy
@@ -1265,7 +1282,7 @@ msgstr "Irudi sorkuntza"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3801
 msgid "Same as text provider"
-msgstr ""
+msgstr "Testu hornitzailearen berdina"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4156
 msgid "Required for this provider"
