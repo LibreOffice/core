@@ -12,6 +12,7 @@
 // Five seconds after the last test, lists what still keeps node running. A run that exits in time
 // prints nothing, because the timer does not hold node open itself. Node leaves timers out of
 // process._getActiveHandles(), so each timer is recorded from its creation until it is destroyed.
+// The animation frames still waiting on the shared window are listed too.
 
 const liveTimers = new Map<number, any>();
 
@@ -25,6 +26,38 @@ require('async_hooks')
 		},
 	})
 	.enable();
+
+// The shared window runs its animation frames on one interval, which stays while any callback
+// waits. Each waiting callback is recorded with the test that asked for it and where.
+const pendingFrames = new Map<number, string>();
+let currentTest = '(outside a test)';
+
+beforeEach(function () {
+	currentTest = this.currentTest.fullTitle();
+});
+
+(function () {
+	const sharedWindow: any = globalThis.window;
+	const request = sharedWindow.requestAnimationFrame;
+	const cancel = sharedWindow.cancelAnimationFrame;
+	sharedWindow.requestAnimationFrame = function (callback: any): number {
+		const where =
+			'animation frame asked for in "' +
+			currentTest +
+			'"\n' +
+			new Error().stack.split('\n').slice(2, 8).join('\n');
+		const handle = request.call(sharedWindow, function (time: number) {
+			pendingFrames.delete(handle);
+			callback(time);
+		});
+		pendingFrames.set(handle, where);
+		return handle;
+	};
+	sharedWindow.cancelAnimationFrame = function (handle: number): void {
+		pendingFrames.delete(handle);
+		cancel.call(sharedWindow, handle);
+	};
+})();
 
 function liveTimerDetail(timer: any): string {
 	return (
@@ -59,6 +92,7 @@ after(function () {
 				' requests',
 		);
 		for (const line of handles.concat(timers)) console.error('  ' + line);
+		for (const where of pendingFrames.values()) console.error('  ' + where);
 	}, 5000);
 	dump.unref();
 });
