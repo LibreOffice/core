@@ -133,15 +133,15 @@
     </message>
     <message>
         <source>Add Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Sablon hozzáadása</translation>
     </message>
     <message>
         <source>Templates and documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Sablonok és dokumentumok</translation>
     </message>
     <message>
         <source>All Files (*);;Text Documents (*.odt *.ott *.doc *.docx *.rtf *.txt);;Spreadsheets (*.ods *.ots *.xls *.xlsx *.csv);;Presentations (*.odp *.otp *.ppt *.pptx);;PDF Documents (*.pdf)</source>
-        <translation type="unfinished"></translation>
+        <translation>Minden fájl (*);;Szöveges dokumentumok (*.odt *.ott *.doc *.docx *.rtf *.txt);;Munkafüzetek (*.ods *.ots *.xls *.xlsx *.csv);;Bemutatók (*.odp *.otp *.ppt *.pptx);;PDF-dokumentumok (*.pdf)</translation>
     </message>
     <message>
         <source>Save File</source>
@@ -149,7 +149,7 @@
     </message>
     <message>
         <source>Choose the folder that holds the files this document links to</source>
-        <translation type="unfinished"></translation>
+        <translation>Válassza ki azt a mappát, amelyben a dokumentum által hivatkozott fájlok vannak</translation>
     </message>
     <message>
         <source>Presentation</source>
@@ -189,11 +189,11 @@
     </message>
     <message>
         <source>Account not opened</source>
-        <translation type="unfinished"></translation>
+        <translation>A fiók nem nyílt meg</translation>
     </message>
     <message>
         <source>%1 redirected to %2, so the account was not opened. Only a redirect within the same site is followed.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 átirányított ide: %2, ezért a fiók nem nyílt meg. A program csak az ugyanazon a webhelyen belüli átirányítást követi.</translation>
     </message>
 </context>
 <context>
@@ -201,17 +201,17 @@
     <message>
         <source>Close tab</source>
         <extracomment>Tooltip of the button that closes a tab</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Lap bezárása</translation>
     </message>
     <message>
         <source>New</source>
         <extracomment>Tooltip of the + button at the end of the tab strip</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Új</translation>
     </message>
     <message>
         <source>(untitled)</source>
         <extracomment>The name in a tab whose document has no name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>(névtelen)</translation>
     </message>
     <message>
         <source>Close</source>
