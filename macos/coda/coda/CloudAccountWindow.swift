@@ -59,6 +59,8 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
     private var hasShownPage = false
 
+    private var webDriverHandle: String?
+
     static func open(accountId: String, url: URL) {
         if let controller = openWindows[accountId] {
             controller.showWindow(nil)
@@ -112,6 +114,9 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         contentController.add(self, contentWorld: Self.world, name: "frameLoaded")
         contentController.addScriptMessageHandler(self, contentWorld: Self.world, name: "lok")
         ViewController.addDiagnosticMessageHandlers(to: contentController, handler: self, world: Self.world)
+        webDriverHandle = WebDriverManager.shared.register(webView: webView) { [weak self] in
+            self?.editorFrameInfo
+        }
         webView.load(URLRequest(url: url))
     }
 
@@ -219,6 +224,10 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         contentController.removeScriptMessageHandler(forName: "lok", contentWorld: Self.world)
         ViewController.removeDiagnosticMessageHandlers(from: contentController, world: Self.world)
         closeRemoteDocument()
+        if let handle = webDriverHandle {
+            WebDriverManager.shared.unregister(handle: handle)
+            webDriverHandle = nil
+        }
         Self.openWindows[accountId] = nil
 
         if Self.openWindows.isEmpty {

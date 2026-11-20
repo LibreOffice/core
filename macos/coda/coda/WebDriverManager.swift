@@ -28,10 +28,16 @@ final class WebDriverManager {
     private var server: WebDriverServer?
 
     /// Insertion-ordered handles -> weak references to webviews.
-    private var entries: [(handle: String, webView: Weak<WKWebView>)] = []
+    private var entries:
+        [(handle: String, webView: Weak<WKWebView>, frame: (() -> WKFrameInfo?)?)] = []
 
     /// Currently active handle for execute/sync.
     private var activeHandle: String?
+
+    // Whether execute/sync runs in the active webview's child frame rather than its main frame:
+    private var inChildFrame = false
+
+    private var childFrameWorld = WKContentWorld.page
 
     private struct Weak<T: AnyObject> {
         weak var value: T?
@@ -60,6 +66,9 @@ final class WebDriverManager {
                 },
                 switchHandler: { [weak self] handle in
                     self?.switchTo(handle: handle) ?? false
+                },
+                frameHandler: { [weak self] child, world in
+                    self?.switchToFrame(child: child, world: world) ?? false
                 }
             )
             s.start()
@@ -82,12 +91,13 @@ final class WebDriverManager {
      * when the view is going away (or just let it be cleaned up next
      * time `liveHandles()` runs).
      */
-    func register(webView: WKWebView) -> String {
+    func register(webView: WKWebView, frame: (() -> WKFrameInfo?)? = nil) -> String {
         let handle = UUID().uuidString
-        entries.append((handle: handle, webView: Weak(value: webView)))
+        entries.append((handle: handle, webView: Weak(value: webView), frame: frame))
         // A new webview replaces the active one (the typical pattern
         // is backstage -> document).
         activeHandle = handle
+        inChildFrame = false
         return handle
     }
 
@@ -130,7 +140,25 @@ final class WebDriverManager {
             return false
         }
         activeHandle = handle
+        inChildFrame = false
         return true
+    }
+
+    // The child frame is the one that the webview's registration names (a webview has at most
+    // one), and it can be switched to while that names one (with scripts running in the content
+    // world of the given name, or in the page's own world):
+    func switchToFrame(child: Bool, world: String?) -> Bool {
+        if child && activeFrame() == nil {
+            return false
+        }
+        inChildFrame = child
+        childFrameWorld = world.map { WKContentWorld.world(name: $0) } ?? .page
+        return true
+    }
+
+    private func activeFrame() -> WKFrameInfo? {
+        compact()
+        return entries.first(where: { $0.handle == activeHandle })?.frame?()
     }
 
     private func activeWebView() -> WKWebView? {
@@ -148,7 +176,19 @@ final class WebDriverManager {
                                         userInfo: [NSLocalizedDescriptionKey: "no active webview"]))
                 return
             }
-            webView.evaluateJavaScript(js, completionHandler: completion)
+            if self?.inChildFrame != true {
+                webView.evaluateJavaScript(js, completionHandler: completion)
+            } else if let frame = self?.activeFrame(), let world = self?.childFrameWorld {
+                webView.evaluateJavaScript(js, in: frame, in: world) { result in
+                    switch result {
+                    case .success(let value): completion(value, nil)
+                    case .failure(let error): completion(nil, error)
+                    }
+                }
+            } else {
+                completion(nil, NSError(domain: "WebDriverManager", code: 2,
+                                        userInfo: [NSLocalizedDescriptionKey: "no child frame"]))
+            }
         }
     }
 

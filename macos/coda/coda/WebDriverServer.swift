@@ -28,6 +28,7 @@ final class WebDriverServer: WebDriverHTTPServerBase {
     private let focusHandler: (@escaping () -> Void) -> Void
     private let handlesProvider: () -> [String]
     private let switchHandler: (String) -> Bool
+    private let frameHandler: (Bool, String?) -> Bool
 
     /**
      * Create a WebDriver server.
@@ -38,16 +39,21 @@ final class WebDriverServer: WebDriverHTTPServerBase {
      *   - focusHandler: Closure that makes the active webview the first responder.
      *   - handlesProvider: Returns the current list of window handles.
      *   - switchHandler: Set the active webview by handle; returns true on success.
+     *   - frameHandler: Run scripts in the active webview's child frame (true) or main frame
+     *     (false), in the content world of the given name or the page's own; returns true on
+     *     success.
      */
     init(port: UInt16,
          jsExecutor: @escaping (String, @escaping (Any?, Error?) -> Void) -> Void,
          focusHandler: @escaping (@escaping () -> Void) -> Void,
          handlesProvider: @escaping () -> [String],
-         switchHandler: @escaping (String) -> Bool) throws {
+         switchHandler: @escaping (String) -> Bool,
+         frameHandler: @escaping (Bool, String?) -> Bool) throws {
         self.jsExecutor = jsExecutor
         self.focusHandler = focusHandler
         self.handlesProvider = handlesProvider
         self.switchHandler = switchHandler
+        self.frameHandler = frameHandler
         try super.init(port: port, label: "WebDriverServer")
     }
 
@@ -152,6 +158,24 @@ final class WebDriverServer: WebDriverHTTPServerBase {
                 } else {
                     sendW3CError(connection: connection, error: "no such window",
                                  message: "Window handle '\(handle)' not found")
+                }
+                return
+            }
+
+            // POST /session/{id}/frame (with any non-null "id" for the webview's one child frame,
+            // and a "world" that names a content world as a custom extension) and POST
+            // /session/{id}/frame/parent:
+            if request.method == "POST"
+                && (subpath == ["frame"] || subpath == ["frame", "parent"])
+            {
+                let json = (try? JSONSerialization.jsonObject(with: request.body) as? [String: Any])
+                    ?? [:]
+                let child = subpath == ["frame"] && json["id"] != nil && !(json["id"] is NSNull)
+                if frameHandler(child, json["world"] as? String) {
+                    sendW3C(connection: connection, value: NSNull())
+                } else {
+                    sendW3CError(connection: connection, error: "no such frame",
+                                 message: "The window has no child frame")
                 }
                 return
             }

@@ -634,7 +634,8 @@ class Document: NSDocument {
         // The webview goes with the document, so stop offering it to the
         // WebDriver clients now. Waiting for it to be deallocated would keep it
         // on offer for as long as anything still holds the document.
-        if let webView {
+        // (A remote document's webview stays with its account window.)
+        if let webView, editorFrame == nil {
             WebDriverManager.shared.unregister(webView: webView)
         }
 
