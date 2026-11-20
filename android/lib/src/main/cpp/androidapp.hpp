@@ -17,6 +17,14 @@ extern int coolwsd_server_socket_fd;
 
 extern const char* user_name;
 
+/// The java.lang.String class, a global reference from JNI_OnLoad: FindClass on the kit thread
+/// sees only the system classes.
+extern jclass g_stringClass;
+
+/** Report and clear a pending Java exception, logged with what raised it. True when there was
+    one. */
+bool clearJavaException(JNIEnv* env, const char* what);
+
 /** Deliver a message from the native code to the activity of the document with this number. */
 void postDirectMessage(unsigned documentId, const std::string& message);
 

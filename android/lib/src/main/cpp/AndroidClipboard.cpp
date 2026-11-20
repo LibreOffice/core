@@ -33,7 +33,6 @@ bool sAdvertising = false;
 // Global references, resolved in JNI_OnLoad: FindClass from the kit thread, which the JVM did not
 // create, only sees the system classes.
 jclass sSystemClipboardClass = nullptr;
-jclass sStringClass = nullptr;
 jclass sByteArrayClass = nullptr;
 jmethodID sAdvertiseMethod = nullptr;
 jmethodID sOwnsClipboardMethod = nullptr;
@@ -45,18 +44,6 @@ jmethodID sGetDataMethod = nullptr;
 JNIEnv* envFor(const JNIThreadContext& rContext)
 {
     return sSystemClipboardClass != nullptr ? rContext.getEnv() : nullptr;
-}
-
-/// report and clear a pending Java exception, true when there was one
-bool clearException(JNIEnv* env, const char* what)
-{
-    if (!env->ExceptionCheck())
-        return false;
-
-    env->ExceptionDescribe();
-    env->ExceptionClear();
-    LOG_ERR("clipboard provider: " << what << " threw a Java exception");
-    return true;
 }
 
 // Copy. ClipData has no lazy owner like the macOS pasteboard, so every format is pulled from
@@ -96,9 +83,10 @@ void clipboardProviderAdvertise(const char** pMimeTypes)
         return;
 
     const jsize count = static_cast<jsize>(mimeTypes.size());
-    jobjectArray jMimeTypes = env->NewObjectArray(count, sStringClass, nullptr);
+    jobjectArray jMimeTypes = env->NewObjectArray(count, g_stringClass, nullptr);
     jobjectArray jPayloads = env->NewObjectArray(count, sByteArrayClass, nullptr);
-    if (clearException(env, "advertise array allocation") || !jMimeTypes || !jPayloads)
+    if (clearJavaException(env, "clipboard provider: advertise array allocation") || !jMimeTypes
+        || !jPayloads)
         return;
 
     for (jsize i = 0; i < count; ++i)
@@ -109,7 +97,7 @@ void clipboardProviderAdvertise(const char** pMimeTypes)
 
         const jsize size = static_cast<jsize>(payloads[i].size());
         jbyteArray jData = env->NewByteArray(size);
-        if (clearException(env, "advertise payload allocation") || !jData)
+        if (clearJavaException(env, "clipboard provider: advertise payload allocation") || !jData)
             return;
         env->SetByteArrayRegion(jData, 0, size, reinterpret_cast<const jbyte*>(payloads[i].data()));
         env->SetObjectArrayElement(jPayloads, i, jData);
@@ -117,7 +105,7 @@ void clipboardProviderAdvertise(const char** pMimeTypes)
     }
 
     env->CallStaticVoidMethod(sSystemClipboardClass, sAdvertiseMethod, jMimeTypes, jPayloads);
-    clearException(env, "advertise");
+    clearJavaException(env, "clipboard provider: advertise");
 }
 
 bool clipboardProviderOwns()
@@ -131,7 +119,7 @@ bool clipboardProviderOwns()
         return false;
 
     const jboolean owns = env->CallStaticBooleanMethod(sSystemClipboardClass, sOwnsClipboardMethod);
-    if (clearException(env, "ownsClipboard"))
+    if (clearJavaException(env, "clipboard provider: ownsClipboard"))
         return false;
     return owns == JNI_TRUE;
 }
@@ -147,7 +135,7 @@ std::vector<std::string> clipboardProviderGetMimeTypes()
 
     auto jMimeTypes = static_cast<jobjectArray>(
         env->CallStaticObjectMethod(sSystemClipboardClass, sGetMimeTypesMethod));
-    if (clearException(env, "getMimeTypes") || !jMimeTypes)
+    if (clearJavaException(env, "clipboard provider: getMimeTypes") || !jMimeTypes)
         return result;
 
     const jsize count = env->GetArrayLength(jMimeTypes);
@@ -178,7 +166,7 @@ bool clipboardProviderGetData(const char* pMimeType, std::vector<char>* pOutData
     jstring jMime = env->NewStringUTF(pMimeType);
     auto jData = static_cast<jbyteArray>(
         env->CallStaticObjectMethod(sSystemClipboardClass, sGetDataMethod, jMime));
-    if (clearException(env, "getData") || !jData)
+    if (clearJavaException(env, "clipboard provider: getData") || !jData)
         return false;
 
     const jsize size = env->GetArrayLength(jData);
@@ -187,7 +175,7 @@ bool clipboardProviderGetData(const char* pMimeType, std::vector<char>* pOutData
 
     pOutData->resize(size);
     env->GetByteArrayRegion(jData, 0, size, reinterpret_cast<jbyte*>(pOutData->data()));
-    return !clearException(env, "getData copy");
+    return !clearJavaException(env, "clipboard provider: getData copy");
 }
 
 jclass globalClassRef(JNIEnv* env, const char* name)
@@ -219,9 +207,8 @@ jmethodID staticMethod(JNIEnv* env, const char* name, const char* signature)
 void resolveSystemClipboardClass(JNIEnv* env)
 {
     sSystemClipboardClass = globalClassRef(env, "org/libreoffice/androidlib/SystemClipboard");
-    sStringClass = globalClassRef(env, "java/lang/String");
     sByteArrayClass = globalClassRef(env, "[B");
-    if (!sSystemClipboardClass || !sStringClass || !sByteArrayClass)
+    if (!sSystemClipboardClass || !g_stringClass || !sByteArrayClass)
     {
         sSystemClipboardClass = nullptr;
         return;

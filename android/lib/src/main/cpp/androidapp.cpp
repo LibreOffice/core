@@ -80,6 +80,8 @@ constexpr std::chrono::seconds ClosedDocumentGracePeriod(5);
 static std::mutex documentsMutex;
 static std::map<unsigned, AndroidDocument> documents;
 
+jclass g_stringClass = nullptr;
+
 extern "C" JNIEXPORT jint JNICALL
 JNI_OnLoad(JavaVM* vm, void*) {
     javaVM = vm;
@@ -99,9 +101,29 @@ JNI_OnLoad(JavaVM* vm, void*) {
     Log::initialize("Mobile", "information");
 #endif
 
+    jclass stringClass = env->FindClass("java/lang/String");
+    g_stringClass = stringClass ? static_cast<jclass>(env->NewGlobalRef(stringClass)) : nullptr;
+    if (!g_stringClass)
+    {
+        env->ExceptionClear();
+        LOG_ERR("class java/lang/String not found");
+    }
+
     resolveSystemClipboardClass(env);
 
     return JNI_VERSION_1_6;
+}
+
+// declared in androidapp.hpp
+bool clearJavaException(JNIEnv* env, const char* what)
+{
+    if (!env->ExceptionCheck())
+        return false;
+
+    env->ExceptionDescribe();
+    env->ExceptionClear();
+    LOG_ERR(what << " threw a Java exception");
+    return true;
 }
 
 // declared in androidapp.hpp
