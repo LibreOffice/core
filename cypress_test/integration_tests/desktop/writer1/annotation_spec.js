@@ -1446,6 +1446,9 @@ describe(['tagdesktop'], 'Annotation with @mention', function() {
 	beforeEach(function() {
 		cy.viewport(1400, 600);
 		helper.setupAndLoadDocument('writer/annotation.odt');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
 		desktopHelper.switchUIToNotebookbar();
 		desktopHelper.sidebarToggle();
 		desktopHelper.selectZoomLevel('50', false);
@@ -1605,6 +1608,35 @@ describe(['tagdesktop'], 'Annotation with @mention', function() {
 		cy.cGet('#comment-container-1').should('exist').should('have.class', 'annotation-active');
 		cy.getFrameWindow().then(function(win) { win.app.sectionContainer.getSectionWithName('scroll').scrollVerticalWithOffset(10); });
 		cy.cGet('#comment-container-1').should('exist').should('not.have.class', 'annotation-active');
+	})
+
+	it('Keep the edited comment selected on scroll', function() {
+		// Given a comment that is being modified:
+		desktopHelper.insertComment('test comment');
+		cy.cGet('#comment-annotation-menu-1').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Modify').click();
+		cy.cGet('#annotation-modify-textarea-1').should('have.focus');
+		cy.cGet('#comment-container-1').should('have.class', 'annotation-active');
+
+		// When the document scrolls under the mouse:
+		cy.getFrameWindow().then(function(win) { win.app.sectionContainer.getSectionWithName('scroll').scrollVerticalWithOffset(10); });
+		helper.processToIdle(this.win);
+
+		// Then the comment stays selected, and a mention opens its popup at the caret in the comment:
+		// Without the accompanying fix in place, this test would have failed with:
+		// AssertionError: Timed out retrying after 60000ms: expected '<div#comment-container-1.cool-annotation.cool-annotation-collapsed-show.modify-annotation-container>' to have class 'annotation-active'
+		// i.e. the scroll unselected the comment while it was being edited.
+		cy.cGet('#comment-container-1').should('have.class', 'annotation-active');
+		cy.cGet('#annotation-modify-textarea-1').type('{end} @Ale');
+		cy.cGet('#mentionPopup').should('be.visible');
+		cy.cGet('#annotation-modify-textarea-1').then(function(textArea) {
+			const box = textArea[0].getBoundingClientRect();
+			cy.cGet('#mentionPopup').should(function(popup) {
+				const rect = popup[0].getBoundingClientRect();
+				expect(rect.left, 'popup left within the comment text').to.be.within(box.left - 5, box.right);
+				expect(rect.top, 'popup top within the comment text').to.be.within(box.top, box.bottom + 50);
+			});
+		});
 	})
 
 	it('Keep full view comment on scroll', function() {

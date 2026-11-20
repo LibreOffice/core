@@ -990,6 +990,9 @@ class ViewLayoutBase {
 			)
 				// Deselecting the comment would also close its full-view.
 				return;
+			// A comment that is being edited keeps its anchor line, and a mention
+			// typed in it opens at its caret, not at the caret in the document.
+			if (commentSection.getActiveEdit()) return;
 			commentSection.unselect();
 		}
 	}
