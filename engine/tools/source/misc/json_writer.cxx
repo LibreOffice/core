@@ -207,11 +207,9 @@ void JsonWriter::writeEscapedOUString(std::u16string_view rPropVal)
 
 void JsonWriter::put(std::u16string_view pPropName, std::u16string_view rPropVal)
 {
-    auto nPropNameLength = pPropName.length();
-    // But values can be any UTF-8,
+    // The name and the value can be any text,
     // if the string only contains of 0x2028, it will be expanded 6 times (see writeEscapedSequence)
-    auto nWorstCasePropValLength = rPropVal.size() * 6;
-    ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
+    ensureSpace((pPropName.size() + rPropVal.size()) * 6 + 8);
 
     addCommaBeforeField();
 

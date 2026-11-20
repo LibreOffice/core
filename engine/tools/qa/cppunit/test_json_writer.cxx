@@ -13,6 +13,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <o3tl/deleter.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/json_writer.hxx>
 
@@ -25,6 +26,7 @@ public:
     void test2();
     void testArray();
     void testArrayNameEscaped();
+    void testNameEscapedLonger();
     void testEmptyDocument();
     void testBase64();
 
@@ -33,6 +35,7 @@ public:
     CPPUNIT_TEST(test2);
     CPPUNIT_TEST(testArray);
     CPPUNIT_TEST(testArrayNameEscaped);
+    CPPUNIT_TEST(testNameEscapedLonger);
     CPPUNIT_TEST(testEmptyDocument);
     CPPUNIT_TEST(testBase64);
     CPPUNIT_TEST_SUITE_END();
@@ -110,6 +113,23 @@ void JsonWriterTest::testArrayNameEscaped()
     OString aResult(aJson.finishAndGetAsOString());
 
     CPPUNIT_ASSERT_EQUAL("{ \"Font \\\"A\\\"\\/\xc3\xa9\": [ \"10\"]}"_ostr, aResult);
+}
+
+void JsonWriterTest::testNameEscapedLonger()
+{
+    // Each U+2028 of a name is written as the 6 bytes of \u2028, so the name takes 6 times
+    // its length, here more than the initial buffer.
+    tools::JsonWriter aJson;
+    const std::u16string aName(400, u'\u2028');
+    aJson.put(aName, u"x");
+
+    OString aResult(aJson.finishAndGetAsOString());
+
+    OStringBuffer aExpected("{ \"");
+    for (size_t i = 0; i < aName.size(); ++i)
+        aExpected.append("\\u2028");
+    aExpected.append("\": \"x\"}");
+    CPPUNIT_ASSERT_EQUAL(aExpected.makeStringAndClear(), aResult);
 }
 
 void JsonWriterTest::testEmptyDocument()
