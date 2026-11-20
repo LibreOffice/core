@@ -35,10 +35,10 @@ class VCL_DLLPUBLIC IVectorParts
 public:
     /**
      * Answers rCommand, a command with its parameters like
-     * ".uno:VectorPrimitives?partid=...&mode=0", when its name is VectorPrimitives or
-     * VectorForgetPart, and writes the answer to rJsonWriter. Returns false, with nothing
-     * written, for a command of any other name, VectorRenderingGraphics and VectorRenderingFont
-     * included, which getVectorResource() answers.
+     * ".uno:VectorPrimitives?partid=...&mode=0", when its name is VectorPrimitives, and writes
+     * the answer to rJsonWriter. Returns false, with nothing written, for a command of any other
+     * name, VectorRenderingGraphics and VectorRenderingFont included, which getVectorResource()
+     * answers.
      */
     virtual bool answerVectorCommand(tools::JsonWriter& rJsonWriter, std::string_view rCommand) = 0;
 

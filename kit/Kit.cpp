@@ -3314,7 +3314,8 @@ void Document::releaseVectorParts(ChildSession& session, const std::set<std::str
             _loKitDocument->setView(session.getViewId());
             isViewSet = true;
         }
-        _loKitDocument->getCommandValues((".uno:VectorForgetPart?partid=" + partId).c_str());
+        _loKitDocument->postUnoCommand((".uno:VectorForgetPart?partid=" + partId).c_str(), "",
+                                       false);
     }
 }
 

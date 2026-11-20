@@ -1731,10 +1731,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorForgottenPageGetsNoDeltas)
     requestFirstPage();
     const OString aPartId = sw::vector::partIdOf(firstPage());
 
-    tools::JsonWriter aWriter;
-    getSwTextDoc()->getCommandValues(
-        aWriter, KitParsedCommand::parse(Concat2View(".uno:VectorForgetPart?partid=" + aPartId)));
-    CPPUNIT_ASSERT_EQUAL(tools::JsonWriter::EMPTY_DOCUMENT, aWriter.finishAndGetAsOString());
+    getSwTextDoc()->forgetVectorPart(aPartId);
     CPPUNIT_ASSERT(!getSwTextDoc()->getVectorParts()->isServed(aPartId));
 
     // An edit on the page no longer makes a delta for it.
@@ -1757,12 +1754,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorPageIsServedWholeAfterEveryPageWasForgotten
     const sal_Int32 nEpoch = getSwTextDoc()->getVectorParts()->getEpoch();
     const OString aPartId = sw::vector::partIdOf(firstPage());
 
-    {
-        tools::JsonWriter aWriter;
-        getSwTextDoc()->getCommandValues(aWriter, KitParsedCommand::parse(Concat2View(
-                                                      ".uno:VectorForgetPart?partid=" + aPartId)));
-        aWriter.finishAndGetAsOString();
-    }
+    getSwTextDoc()->forgetVectorPart(aPartId);
     CPPUNIT_ASSERT(nEpoch != getSwTextDoc()->getVectorParts()->getEpoch());
 
     tools::JsonWriter aWriter;

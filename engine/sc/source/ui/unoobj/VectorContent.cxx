@@ -664,8 +664,7 @@ void VectorContent::getCommandValues(tools::JsonWriter& rWriter, std::string_vie
     svx::vector::answerPartCommand(
         rCommand, maResources,
         [this, &rWriter](const svx::vector::PartRequest& rRequest)
-        { writeRequestedSheet(rWriter, rRequest); },
-        [this](std::string_view rPartId) { forgetSheet(rPartId); });
+        { writeRequestedSheet(rWriter, rRequest); });
 }
 
 std::string VectorContent::getVectorResource(std::string_view rCommand) const

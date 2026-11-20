@@ -4400,8 +4400,7 @@ bool SdXImpressDocument::answerVectorCommand(::tools::JsonWriter& rJsonWriter,
             writeVectorPrimitives(rJsonWriter, rRequest.maPartId,
                                   rRequest.moMode.value_or(constVectorModeSlides),
                                   rRequest.mnSinceVersion, /*bPush*/ false);
-        },
-        [this](std::string_view rPartId) { forgetVectorPart(rPartId); });
+        });
 }
 
 std::vector<OString> SdXImpressDocument::getVectorPartIds() { return {}; }

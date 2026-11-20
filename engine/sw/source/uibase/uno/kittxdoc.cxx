@@ -1516,8 +1516,7 @@ vcl::IVectorParts* SwXTextDocument::getVectorPartsInterface() { return this; }
 bool SwXTextDocument::answerVectorCommand(tools::JsonWriter& rJsonWriter,
                                           std::string_view rCommand)
 {
-    const svx::vector::PartCommand eCommand = svx::vector::partCommandOf(rCommand);
-    if (eCommand == svx::vector::PartCommand::None)
+    if (svx::vector::partCommandOf(rCommand) != svx::vector::PartCommand::Primitives)
         return false;
 
     SwWrtShell* pShell = m_pDocShell ? m_pDocShell->GetWrtShell() : nullptr;
@@ -1527,21 +1526,17 @@ bool SwXTextDocument::answerVectorCommand(tools::JsonWriter& rJsonWriter,
 
     // The store holds the graphics and fonts of the pages it served, so it is made by the first
     // request for a page.
-    const bool bPrimitives = eCommand == svx::vector::PartCommand::Primitives;
     SwDoc* pDoc = m_pDocShell->GetDoc();
     sw::vector::PartStore* pParts = pDoc->GetVectorParts();
-    if (bPrimitives && !pParts)
+    if (!pParts)
     {
         pParts = &pDoc->EnsureVectorParts();
         pParts->recordPageIds(*pLayout);
     }
-    if (!pParts)
-        return true;
 
     // A text edit in a drawing object reports each change of its text only while the drawing
     // model says that a client draws from it.
-    if (bPrimitives)
-        setDrawnFromModel(true);
+    setDrawnFromModel(true);
 
     // The answer is for every view, so the text of a drawing object and of a chart keeps its
     // automatic colors, which each client resolves for its own view.
@@ -1554,8 +1549,7 @@ bool SwXTextDocument::answerVectorCommand(tools::JsonWriter& rJsonWriter,
         [pParts, &rJsonWriter, pLayout](const svx::vector::PartRequest& rRequest) {
             pParts->write(rJsonWriter, *pLayout, rRequest.maPartId, rRequest.mnSinceVersion,
                           /*bPush=*/false);
-        },
-        [this](std::string_view rPartId) { forgetVectorPart(rPartId); });
+        });
     return true;
 }
 

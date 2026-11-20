@@ -4858,6 +4858,18 @@ void COKitDocumentImpl::postUnoCommand(const char* pCommand, const char* pArgume
     if (gImpl && aCommand == ".uno:None")
         return;
 
+    // Forgetting a part drops the state the document keeps of it and changes no view, so the
+    // command is not dispatched, and nothing is answered.
+    if (svx::vector::partCommandOf(pCommand) == svx::vector::PartCommand::ForgetPart)
+    {
+        ITiledRenderable* pDoc = getTiledRenderable(this);
+        vcl::IVectorParts* pVectorParts = pDoc ? pDoc->getVectorPartsInterface() : nullptr;
+        const std::map<OUString, OUString> aParameters = KitHelper::parseCommandParameters(aCommand);
+        const auto itPartId = aParameters.find(u"partid"_ustr);
+        if (pVectorParts && itPartId != aParameters.end() && !itPartId->second.isEmpty())
+            pVectorParts->forgetVectorPart(itPartId->second.toUtf8());
+        return;
+    }
 
     std::vector<beans::PropertyValue> aPropertyValuesVector(jsonToPropertyValuesVector(pArguments));
 
@@ -9800,12 +9812,13 @@ std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
         return {};
     }
 
-    // The whole name of the command decides whether it is one of the vector commands. Such a
-    // command is answered by the vector parts of the document.
+    // The whole name of the command decides whether it is one of the vector commands that ask for
+    // a part, a graphic or a font. Such a command is answered by the vector parts of the
+    // document.
     const svx::vector::PartCommand eVectorCommand = svx::vector::partCommandOf(aCommand);
-    vcl::IVectorParts* pVectorParts
-        = eVectorCommand != svx::vector::PartCommand::None ? pDoc->getVectorPartsInterface()
-                                                           : nullptr;
+    const bool bVectorRequest = eVectorCommand != svx::vector::PartCommand::None
+                                && eVectorCommand != svx::vector::PartCommand::ForgetPart;
+    vcl::IVectorParts* pVectorParts = bVectorRequest ? pDoc->getVectorPartsInterface() : nullptr;
 
     if (pVectorParts && eVectorCommand == svx::vector::PartCommand::Primitives)
     {

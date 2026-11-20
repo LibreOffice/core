@@ -452,6 +452,14 @@ protected:
         return aJsonWriter.finishAndGetAsOString();
     }
 
+    /// Drops the state the document keeps of the first slide.
+    void forgetFirstPart()
+    {
+        SdXImpressDocument* pDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT(pDocument);
+        pDocument->forgetVectorPart(firstPartId());
+    }
+
     /// The answer of the document to a .uno:VectorPrimitives command, parsed. Nothing when the
     /// answer is no JSON document.
     std::optional<tools::JsonPath> requestVectorPrimitives(const OString& rCommand)
@@ -2179,7 +2187,7 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPushWritesNothingForAForgottenPart
     const sal_Int64 nHeld = aFull.getInt("/version").value_or(-1);
     CPPUNIT_ASSERT(nHeld >= 0);
 
-    requestVectorPrimitivesRaw(".uno:VectorForgetPart?partid=" + firstPartId());
+    forgetFirstPart();
 
     moveObject(pObject, Size(500, 500));
     auto oUnheld = pushVectorPrimitivesDelta();
@@ -2230,7 +2238,7 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartStartsAboveTheVersionsOfAForgo
     const sal_Int64 nHeld = oDelta->getInt("/version").value_or(-1);
     CPPUNIT_ASSERT_GREATER(sal_Int64(0), nHeld);
 
-    requestVectorPrimitivesRaw(".uno:VectorForgetPart?partid=" + firstPartId());
+    forgetFirstPart();
 
     // The master was never served before.
     auto aMaster = getVectorPrimitives(u"testFloorMaster", -1, 1);

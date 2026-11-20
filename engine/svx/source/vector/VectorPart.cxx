@@ -159,18 +159,12 @@ std::string answerResourceCommand(std::string_view rCommand,
 
 bool answerPartCommand(std::string_view rCommand,
                        const drawinglayer::VectorResourceCache& rResources,
-                       const std::function<void(const PartRequest&)>& rWritePart,
-                       const std::function<void(std::string_view)>& rForgetPart)
+                       const std::function<void(const PartRequest&)>& rWritePart)
 {
-    const PartCommand eCommand = partCommandOf(rCommand);
-    if (eCommand != PartCommand::Primitives && eCommand != PartCommand::ForgetPart)
+    if (partCommandOf(rCommand) != PartCommand::Primitives)
         return false;
 
-    const PartRequest aRequest = readPartRequest(rCommand, rResources.getEpoch());
-    if (eCommand == PartCommand::Primitives)
-        rWritePart(aRequest);
-    else if (rForgetPart && !aRequest.maPartId.isEmpty())
-        rForgetPart(aRequest.maPartId);
+    rWritePart(readPartRequest(rCommand, rResources.getEpoch()));
     return true;
 }
 }

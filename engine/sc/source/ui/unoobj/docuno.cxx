@@ -1608,7 +1608,7 @@ vcl::IVectorParts* ScModelObj::getVectorPartsInterface() { return this; }
 
 bool ScModelObj::answerVectorCommand(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
 {
-    if (svx::vector::partCommandOf(rCommand) == svx::vector::PartCommand::None)
+    if (svx::vector::partCommandOf(rCommand) != svx::vector::PartCommand::Primitives)
         return false;
     if (!pDocShell)
         return true;

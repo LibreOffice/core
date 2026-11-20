@@ -333,16 +333,13 @@ SVXCORE_DLLPUBLIC PartCommand partCommandOf(std::string_view rCommand);
 /// the document counts in.
 SVXCORE_DLLPUBLIC PartRequest readPartRequest(std::string_view rCommand, sal_Int32 nEpoch);
 
-/** Answers rCommand, a command with its parameters, when it is "VectorPrimitives" or
-    "VectorForgetPart", and returns false for any other command.
-    rWritePart writes the primitives of the part a request names. rForgetPart drops the state of
-    a part, and the answer to it is empty. Without rForgetPart a part is kept.
+/** Answers rCommand, a command with its parameters, when it is "VectorPrimitives", and returns
+    false for any other command. rWritePart writes the primitives of the part a request names.
  */
 SVXCORE_DLLPUBLIC bool
 answerPartCommand(std::string_view rCommand,
                   const drawinglayer::VectorResourceCache& rResources,
-                  const std::function<void(const PartRequest&)>& rWritePart,
-                  const std::function<void(std::string_view)>& rForgetPart = {});
+                  const std::function<void(const PartRequest&)>& rWritePart);
 
 /// The answer to rCommand from rResources, when rCommand is a "VectorRenderingGraphics" command
 /// with its checksum parameter or a "VectorRenderingFont" command with its id parameter: a line of
