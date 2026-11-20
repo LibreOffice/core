@@ -318,6 +318,10 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             showServerEditorNotice(reason: reason, editorUrl: editorUrl)
         }
         unblockCoolServerFiles(of: editorUrl)
+        postServerEditorForm(editorUrl: editorUrl, form: form, in: frameInfo)
+    }
+
+    private func postServerEditorForm(editorUrl: URL, form: Data, in frameInfo: WKFrameInfo) {
         webView.callAsyncJavaScript(
             "(" + COWrapper.serverEditorFormScript() + ")(editorUrl, formBody)",
             arguments: ["editorUrl": editorUrl.absoluteString, "formBody": String(decoding: form, as: UTF8.self)],
@@ -328,6 +332,35 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
                 COWrapper.LOG_ERR("The form was not posted again for the server's own editor")
             }
         }
+    }
+
+    // Whether the frame shows the server's own editor for the kept form (with the fragment after a
+    // fallback or a switch, or without it for a server that is known to refuse):
+    private func showsServerEditor(_ frameInfo: WKFrameInfo) -> Bool {
+        guard !frameInfo.isMainFrame, isKeptFormAddress(frameInfo.request.url), let editorFormUrl
+        else {
+            return false
+        }
+
+        if frameInfo.request.url?.fragment == COWrapper.serverEditorFragment() {
+            return true
+        }
+        return Self.origin(of: editorFormUrl).map { serverEditorReasons[$0] != nil } == true
+    }
+
+    // Whether the address is that of the kept form, with or without a fragment (compared as text,
+    // as the kept address can have a fragment of its own, and characters that URLComponents
+    // changes):
+    private func isKeptFormAddress(_ url: URL?) -> Bool {
+        guard let url, let editorFormUrl else {
+            return false
+        }
+
+        return Self.beforeFragment(url) == Self.beforeFragment(editorFormUrl)
+    }
+
+    private static func beforeFragment(_ url: URL) -> Substring {
+        return url.absoluteString.prefix { $0 != "#" }
     }
 
     private func showServerEditorNotice(reason: String, editorUrl: URL) {
@@ -892,13 +925,29 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
         let isPost = request.httpMethod == "POST"
         let isEditorPage = url.path.hasSuffix("/cool.html")
+
+        // A reload of the server's own editor gets the kept form posted again (as WebKit reloads
+        // the frame with a GET, which carries no access token):
+        if navigationAction.navigationType == .reload && !isPost && isEditorPage,
+           let frame = navigationAction.targetFrame, showsServerEditor(frame), let editorFormUrl,
+           let editorForm
+        {
+            COWrapper.LOG_DBG("The server's own editor reloads, so its form is posted again")
+            decisionHandler(.cancel)
+            postServerEditorForm(editorUrl: editorFormUrl, form: editorForm, in: frame)
+            return
+        }
+
         if !isPost || !isEditorPage {
             decisionHandler(.allow)
             return
         }
 
         // The editor frame gets the integrator's form posted again for the server's own editor:
-        if url.fragment == COWrapper.serverEditorFragment() && isEditorFrame(navigationAction.sourceFrame) {
+        let source = navigationAction.sourceFrame
+        if url.fragment == COWrapper.serverEditorFragment() && isKeptFormAddress(url)
+            && !source.isMainFrame && isKeptFormAddress(source.request.url)
+        {
             decisionHandler(.allow)
             return
         }
