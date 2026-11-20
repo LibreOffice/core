@@ -219,6 +219,7 @@ private:
     typedef ::std::vector< MergedRange > MergedRangeVector;
 
     ColStyles           maStylesPerColumn;      /// Stores cell styles by column ( in row ranges )
+    RowStyles           maRowOnlyStyles;        /// Row styles of the columns without cell styles
     std::vector< InCellImage >
                         maInCellImages;         /// All cells of the sheet that hold a picture.
     ArrayFormulaVector  maArrayFormulas;        /// All array formulas in the sheet.

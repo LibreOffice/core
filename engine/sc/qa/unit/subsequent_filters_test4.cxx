@@ -1716,6 +1716,17 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRowImportCellStyleIssue)
         auto const& rComplexColor = rBackground.getComplexColor();
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Light2, rComplexColor.getThemeColorType());
     }
+
+    // The sheet has no cells, so every column takes the same row styles, up to the last one
+    for (const SCCOL nCol : { SCCOL(25), pDoc->MaxCol() })
+    {
+        const ScPatternAttr* pAttr = pDoc->GetPattern(nCol, 5, 0);
+        CPPUNIT_ASSERT_EQUAL(false, pAttr->GetItem(ATTR_BACKGROUND).isUsed());
+        pAttr = pDoc->GetPattern(nCol, 6, 0);
+        const SvxBrushItem& rBackground = pAttr->GetItem(ATTR_BACKGROUND);
+        CPPUNIT_ASSERT_EQUAL(true, rBackground.isUsed());
+        CPPUNIT_ASSERT_EQUAL(Color(0xe7e6e6), rBackground.GetColor());
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testCellTextRotation)

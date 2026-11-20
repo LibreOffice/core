@@ -383,7 +383,6 @@ void SheetDataBuffer::addColXfStyles()
 void SheetDataBuffer::addColXfStyleProcessRowRanges()
 {
     // count the number of row-range-styles we have
-    AddressConverter& rAddrConv = getAddressConverter();
     int cnt = 0;
     for ( const auto& rRange : maXfIdRowRangeList )
     {
@@ -398,10 +397,8 @@ void SheetDataBuffer::addColXfStyleProcessRowRanges()
         {
             return lhs.maRowRange.mnFirst < rhs.maRowRange.mnFirst;
         });
-    const auto nMaxCol = rAddrConv.getMaxApiAddress().Col();
-    for ( sal_Int32 nCol = 0; nCol <= nMaxCol; ++nCol )
+    const auto mergeRowRanges = [this, cnt](RowStyles& rRowStyles)
     {
-        RowStyles& rRowStyles = maStylesPerColumn[ nCol ];
         TmpRowStyles aTempRowStyles;
         aTempRowStyles.reserve(rRowStyles.size() + cnt);
         RowStyles::const_iterator rows_it = rRowStyles.begin();
@@ -462,7 +459,13 @@ void SheetDataBuffer::addColXfStyleProcessRowRanges()
         }
         rRowStyles.clear();
         rRowStyles.insert_sorted_unique_vector(std::move(aTempRowStyles));
-    }
+    };
+    for ( auto& rEntry : maStylesPerColumn )
+        mergeRowRanges( rEntry.second );
+    // The columns without cell styles all take the same row styles, so they share one list
+    // instead of one map entry per column of the sheet.
+    maRowOnlyStyles.clear();
+    mergeRowRanges( maRowOnlyStyles );
 }
 
 void SheetDataBuffer::finalizeImport()
@@ -502,9 +505,17 @@ void SheetDataBuffer::finalizeImport()
     SCCOL pendingColEnd = -1;
     ScPatternCache aPatternCache;
 
-    for ( const auto& [rCol, rRowStyles] : maStylesPerColumn )
+    sal_Int32 nLastCol = getAddressConverter().getMaxApiAddress().Col();
+    if ( !maStylesPerColumn.empty() )
+        nLastCol = std::max( nLastCol, maStylesPerColumn.rbegin()->first );
+    auto aColIt = maStylesPerColumn.cbegin();
+    for ( sal_Int32 nCol = 0; nCol <= nLastCol; ++nCol )
     {
-        SCCOL nScCol = static_cast< SCCOL >( rCol );
+        while ( aColIt != maStylesPerColumn.cend() && aColIt->first < nCol )
+            ++aColIt;
+        const bool bHasCellStyles = aColIt != maStylesPerColumn.cend() && aColIt->first == nCol;
+        const RowStyles& rRowStyles = bHasCellStyles ? aColIt->second : maRowOnlyStyles;
+        SCCOL nScCol = static_cast< SCCOL >( nCol );
 
         // tdf#91567 Get pattern from the first row without AutoFilter
         const ScPatternAttr* pDefPattern = nullptr;
