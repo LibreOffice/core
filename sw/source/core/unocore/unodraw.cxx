@@ -2030,7 +2030,7 @@ uno::Any SwXShape::getPropertyDefault( const OUString& rPropertyName )
             aPState);
         if(!xShapePrState)
             throw uno::RuntimeException();
-        (*xShapePrState)->getPropertyDefault( rPropertyName );
+        aRet = (*xShapePrState)->getPropertyDefault( rPropertyName );
     }
 
     return aRet;
