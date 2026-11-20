@@ -295,6 +295,8 @@ with it off, Ctrl does not copy. A turn and a shear keep Ctrl for their snap and
 | Ctrl + Home / Ctrl + End | With the keyboard on a handle: the first / the last handle. |
 | Arrow keys, keyboard on a handle | Move that handle as a drag would: scale, turn, shape. |
 | Escape | Takes the keyboard off the handle. |
+| Delete, Backspace, keyboard on a point | Take the point away: a point of the path, a glue point, a point of a motion path (where its part keeps two points). On a weight or a crop mark they do nothing. The object stays. |
+| Return, Space, keyboard on a point | Open the menu of the point, as a click on it does. On a weight or a crop mark they do nothing, and no text edit begins. |
 | 0 | Takes every slant away, where some object is slanted; once none is, every turn, so each object stands upright again, where some object is turned or some line is not level; otherwise it is an ordinary key. So a turned and slanted object loses its slant with the first 0 and its turn with the second. A line is laid level the shorter way. |
 
 The 0 key works on each object by its own angle, around its own middle, also on objects

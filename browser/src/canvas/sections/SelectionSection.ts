@@ -51,16 +51,21 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	/*
-		Takes away the point to tie a connector to, or the point of the path, that the keyboard is
-		on. Answers whether the keyboard was on such a point. A point to tie a connector to that
-		the shape makes from its own geometry stays.
+		Takes away the point to tie a connector to, the point of the path or the point of a motion
+		path that the keyboard is on. Answers whether the keyboard was on such a point, or on a
+		crop mark, which takes the key and stays: either way the key goes no further to the
+		object. A point to tie a connector to that the shape makes from its own geometry stays,
+		and so does a point a part of a motion path needs to keep two.
 	*/
 	public deleteThePointByKey(): boolean {
 		const handle = this.travel.activeHandle();
 		const group = handle ? this.groupOf(handle) : undefined;
+		if (handle === undefined) return false;
+		if (group instanceof CropHandles) return true;
 		return (
-			handle !== undefined &&
-			(group instanceof TiePointHandles || group instanceof PathHandles) &&
+			(group instanceof TiePointHandles ||
+				group instanceof PathHandles ||
+				group instanceof MotionPathHandles) &&
 			group.deleteThePoint(handle)
 		);
 	}

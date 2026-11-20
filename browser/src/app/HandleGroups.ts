@@ -294,6 +294,20 @@ abstract class HandleGroup {
 		return false;
 	}
 
+	/*
+		Return and Space on one of its handles do what a click on it does, which opens the menu of
+		a point and does nothing on a weight. Answers whether the key was one of the two, so it
+		goes no further, to the object or its text.
+	*/
+	protected pressLikeAClick(
+		handle: SelectionHandle,
+		event: KeyboardEvent,
+	): boolean {
+		if (event.key !== 'Enter' && event.key !== ' ') return false;
+		this.letGoWhereItWasPressed(handle);
+		return true;
+	}
+
 	/// The drag a press on one of its handles begins, or nothing where it begins none.
 	public interactionFor(
 		_handle: SelectionHandle,
@@ -628,8 +642,12 @@ class CropHandles extends HandleGroup {
 		return true;
 	}
 
-	/// The 0 key on a crop mark takes the crop away, as it does with no handle in use.
+	/*
+		The 0 key on a crop mark takes the crop away, as it does with no handle in use. Return and
+		Space on a mark do nothing, and go no further to the picture.
+	*/
 	public pressByKey(_handle: SelectionHandle, event: KeyboardEvent): boolean {
+		if (event.key === 'Enter' || event.key === ' ') return true;
 		return event.key === '0' && CropHandles.takeTheCropAway(this.selection);
 	}
 
@@ -1842,6 +1860,10 @@ class TiePointHandles extends HandleGroup {
 		this.openTheMenuOf(handle);
 	}
 
+	public pressByKey(handle: SelectionHandle, event: KeyboardEvent): boolean {
+		return this.pressLikeAClick(handle, event);
+	}
+
 	/// The id of the menu a click on a point opens.
 	private static readonly menuId: string = 'tie-point-menu';
 
@@ -2819,6 +2841,10 @@ class PathHandles extends HandlesMovedOneByOne {
 			);
 	}
 
+	public pressByKey(handle: SelectionHandle, event: KeyboardEvent): boolean {
+		return this.pressLikeAClick(handle, event);
+	}
+
 	/// The id of the menu a click on a point opens.
 	private static readonly menuId: string = 'path-point-menu';
 
@@ -3402,6 +3428,27 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 				menu.entries,
 				menu.chosen,
 			);
+	}
+
+	public pressByKey(handle: SelectionHandle, event: KeyboardEvent): boolean {
+		return this.pressLikeAClick(handle, event);
+	}
+
+	/*
+		Takes away the point of a path that handle stands for, as Delete in its menu does, where
+		its part keeps two points at least. Answers true for every handle of the group, a weight
+		among them, so the key goes no further and the object stays.
+	*/
+	public deleteThePoint(handle: SelectionHandle): boolean {
+		const object = this.object();
+		const place = MotionPathHandles.placeOf(handle.name);
+		if (!object || !place || handle.kind !== MotionPathHandles.kind)
+			return true;
+
+		const editing = this.editorThatSets(object, place.path);
+		if ((editing.pointOf(place.inPath)?.of.points.length ?? 0) > 2)
+			editing.deletePoint(place.inPath);
+		return true;
 	}
 
 	/*
