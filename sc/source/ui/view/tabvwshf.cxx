@@ -516,6 +516,12 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
                         rSet.DisableItem( nWhich );
                     else
                     {
+                        OUString aTabSelCount
+                        = Application::GetSettings().GetUILocaleDataWrapper().getNum(nTabSelCount,
+                                                                                     0);
+                        OUString sLabel = ScResId(STR_RCLICK_DELETE_SHEET, nTabSelCount)
+                                          .replaceAll("%d", aTabSelCount);
+                        rSet.Put(SfxStringItem(nWhich, sLabel));
                         sal_uInt16 nVis = 0;
                         for ( SCTAB i=0; i < nTabCount && nVis<2; i++ )
                             if (rDoc.IsVisible(i))

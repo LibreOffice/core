@@ -617,7 +617,7 @@
 #define STR_WARN_ONLYACTIVESHEET_TEXT           NC_("STR_WARN_ONLYACTIVESHEET_TEXT", "Only the active sheet was saved.")
 #define STR_WARN_ONLYACTIVESHEET_QUEST          NC_("STR_WARN_ONLYACTIVESHEET_QUEST", "You are saving in the CSV text format, which means multiple sheets cannot be handled.")
 #define STR_WARN_ONLYACTIVESHEET_BUTTON         NC_("STR_WARN_ONLYACTIVESHEET_BUTTON", "Okay")
-
+#define STR_RCLICK_DELETE_SHEET                 NNC_("STR_RCLICK_DELETE_SHEET", "Delete Sheet", "Delete %d Sheets")
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
