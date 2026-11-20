@@ -6305,6 +6305,15 @@ void SfxViewShell::TakeKitViewSettings(const SfxViewShell& rViewShell)
     mvLOKBlockedCommandList = rViewShell.mvLOKBlockedCommandList;
 }
 
+// The dispatcher finds a command by its name in any letter case.
+static bool containsIgnoreAsciiCase(const std::unordered_set<OUString>& rList,
+                                    std::u16string_view aCommand)
+{
+    return std::any_of(rList.begin(), rList.end(),
+                       [aCommand](const OUString& rEntry)
+                       { return rEntry.equalsIgnoreAsciiCase(aCommand); });
+}
+
 bool SfxViewShell::isBlockedCommand(const OUString & command) const
 {
     return !getBlockedCommand(command).isEmpty();
@@ -6319,10 +6328,10 @@ OUString SfxViewShell::getBlockedCommand(const OUString& rCommand) const
     if (nArguments >= 0)
     {
         const OUString aName = rCommand.copy(0, nArguments);
-        if (mvLOKBlockedCommandList.find(aName) != mvLOKBlockedCommandList.end())
+        if (containsIgnoreAsciiCase(mvLOKBlockedCommandList, aName))
             return aName;
     }
-    if (mvLOKBlockedCommandList.find(rCommand) != mvLOKBlockedCommandList.end())
+    if (containsIgnoreAsciiCase(mvLOKBlockedCommandList, rCommand))
         return rCommand;
     return OUString();
 }
