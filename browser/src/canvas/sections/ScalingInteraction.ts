@@ -122,21 +122,15 @@ class ScalingInteraction extends SelectionInteraction {
 		if (!this.shapeAtStart) return;
 
 		/*
-			Whether the drag keeps the ratio. A group or a selection of several with a turned
-			object in it keeps the ratio by default and Shift lets it go, the other way round from
-			a plain shape, where Shift asks for it. One with an object in it that cannot shear
-			keeps it whatever the keys say. A single object is never sheared by a scale on its own
-			square and goes by the keys alone. A key step has no Shift for this, so it goes by the
-			default.
+			Whether the drag keeps the ratio. A selection with an object in it that allows no free
+			resize, or that cannot shear and stands turned in the box, keeps it whatever the keys
+			say. Any other goes by the keys. A key step has no Shift for this, so it keeps the
+			ratio only where it must.
 		*/
-		const selected = this.selection.selectedObjects();
-		const byDefault = ObjectHandles.keepsTheRatioByDefault(selected);
-		const always = ObjectHandles.keepsTheRatioAlways(selected);
-		const asked =
-			this.exact ? byDefault
-			: byDefault ? event?.shiftKey !== true
-			: this.ratioKept(event);
-		this.keepsRatio = always || asked;
+		const always = ObjectHandles.keepsTheRatioAlways(
+			this.selection.selectedObjects(),
+		);
+		this.keepsRatio = always || (!this.exact && this.ratioKept(event));
 
 		// The drag leads the handle, so it goes to where the handle stands for this mouse point
 		// and not to the mouse point itself.

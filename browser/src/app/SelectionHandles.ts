@@ -349,35 +349,26 @@ class ObjectHandles implements HandleSource {
 	}
 
 	/*
-		Whether a resize of these objects keeps the ratio unless the user asks otherwise: the
-		office holds a resize in ratio as soon as one object says it allows no free resize, which
-		a shape says once it is turned at all. That matters only where the resize goes through a
-		box and the object stands turned in it; a single object, or a member at a right angle, is
-		not sheared by a free resize and does not ask for the ratio.
-	*/
-	public static keepsTheRatioByDefault(objectIds: number[]): boolean {
-		if (!ObjectHandles.resizesThroughABox(objectIds)) return false;
-
-		return ObjectHandles.allOfThem(objectIds).some(
-			(objectId: number) =>
-				RenderGeometrySection.objectOf(objectId)?.cannotBeResizedFreely ===
-					true && !ObjectHandles.standsAtARightAngle(objectId),
-		);
-	}
-
-	/*
 		Whether a resize of these objects keeps the ratio whatever the user asks: one of them
-		cannot hold a shear at all and stands turned in the box the resize goes through, so two
-		different factors would bring in a shear it has nowhere to put.
+		allows no free resize, as a shape turned off the right angles says, or a group or a
+		diagram holding one, and the office's drag keeps the ratio for it then, from a side
+		handle too. Or one of them cannot hold a shear at all and stands turned in the box the
+		resize goes through, so two different factors would bring in a shear it has nowhere to
+		put.
 	*/
 	public static keepsTheRatioAlways(objectIds: number[]): boolean {
-		if (!ObjectHandles.resizesThroughABox(objectIds)) return false;
+		const throughABox = ObjectHandles.resizesThroughABox(objectIds);
 
-		return ObjectHandles.allOfThem(objectIds).some(
-			(objectId: number) =>
-				RenderGeometrySection.objectOf(objectId)?.cannotBeSheared === true &&
-				!ObjectHandles.standsAtARightAngle(objectId),
-		);
+		return ObjectHandles.allOfThem(objectIds).some((objectId: number) => {
+			const object = RenderGeometrySection.objectOf(objectId);
+			if (object?.cannotBeResizedFreely === true) return true;
+
+			return (
+				throughABox &&
+				object?.cannotBeSheared === true &&
+				!ObjectHandles.standsAtARightAngle(objectId)
+			);
+		});
 	}
 
 	/*

@@ -279,7 +279,7 @@ a node of a diagram).
 | Action | How | Modifiers |
 |---|---|---|
 | Move | Drag the object; it stops at the edge of the lawn, and a move back towards the slide is never stopped | Alt turns the snap over: with the grid on it is off while Alt is held, with the grid off Alt snaps to it. Without the grid the drag lines up with the edges and middles of other objects. Ctrl held when you let go: a copy goes to the new place and the object stays. |
-| Scale | Drag a framing handle | A shape: Shift keeps the ratio. A picture or media: keeps the ratio, Shift lets it go. A group or several objects with a turned object among them: keeps the ratio, Shift lets it go. An object that cannot be sheared always keeps it. Ctrl held when you let go: a scaled copy, the object stays. |
+| Scale | Drag a framing handle | A shape: Shift keeps the ratio. A picture or media: keeps the ratio, Shift lets it go. A shape turned off the right angles, or a group, a diagram or several objects with one among them: always keeps the ratio, from a side handle too, as the office does. An object that cannot be sheared, turned in a group or among several, always keeps it too. Ctrl held when you let go: a scaled copy, the object stays. |
 | Turn | Drag the turn handle | Snaps to angles counted from the page: Ctrl 45 degrees, Shift 15, Alt 5, no modifier free. The "0" mark beyond the handle stands it upright. |
 | Shear | Drag the turn handle in its shearing mode | The same snaps, counted from no slant. The "0" mark takes the slant away. |
 | Mirror | Drag a side handle past the opposite side | - |
