@@ -47,6 +47,7 @@ class HttpWhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testHeaderFieldWithControlCharacter);
     CPPUNIT_TEST(testRequestLineWithControlCharacter);
     CPPUNIT_TEST(testCookies);
+    CPPUNIT_TEST(testResponseBodyKeepsContentType);
 
     CPPUNIT_TEST(testRequestParserValidComplete);
     CPPUNIT_TEST(testRequestParserValidIncomplete);
@@ -72,6 +73,7 @@ class HttpWhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testHeaderFieldWithControlCharacter();
     void testRequestLineWithControlCharacter();
     void testCookies();
+    void testResponseBodyKeepsContentType();
     void testRequestParserValidComplete();
     void testRequestParserValidIncomplete();
     void testRequestParserValidPostComplete();
@@ -1125,6 +1127,23 @@ void HttpWhiteBoxTests::testServedRangeClosesConnection()
     LOK_ASSERT(output.ends_with("\r\n\r\n2345"));
 
     LOK_ASSERT(socket->isShutdownSignalled());
+}
+
+void HttpWhiteBoxTests::testResponseBodyKeepsContentType()
+{
+    constexpr std::string_view testname = __func__;
+
+    http::Response typed(http::StatusCode::OK);
+    typed.set("Content-Type", "application/json; charset=utf-8");
+    typed.setBody("{}");
+    LOK_ASSERT_EQUAL_STR("application/json; charset=utf-8", typed.header().getContentType());
+
+    typed.setBody("x", "text/plain");
+    LOK_ASSERT_EQUAL_STR("text/plain", typed.header().getContentType());
+
+    http::Response untyped(http::StatusCode::OK);
+    untyped.setBody("<p/>");
+    LOK_ASSERT_EQUAL_STR("text/html;charset=utf-8", untyped.header().getContentType());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(HttpWhiteBoxTests);

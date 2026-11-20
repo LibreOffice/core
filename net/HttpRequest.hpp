@@ -597,6 +597,14 @@ public:
     [[nodiscard]] std::string getContentType() const { return get(CONTENT_TYPE); }
     /// Returns true iff a Content-Type header exists.
     [[nodiscard]] bool hasContentType() const { return has(CONTENT_TYPE); }
+    /// Use contentType if given, else keep the Content-Type already set, else text/html.
+    void setBodyContentType(std::string contentType)
+    {
+        if (!contentType.empty())
+            setContentType(std::move(contentType));
+        else if (!hasContentType())
+            setContentType("text/html;charset=utf-8");
+    }
 
     /// Set the Content-Length header. Returns false when the field could not be set.
     bool setContentLength(int64_t length) { return set(CONTENT_LENGTH, std::to_string(length)); }
@@ -1406,12 +1414,12 @@ public:
 
     /// Set the body to be sent to the client.
     /// Also sets Content-Length and Content-Type.
-    void setBody(std::string body, std::string contentType = "text/html;charset=utf-8")
+    void setBody(std::string body, std::string contentType = std::string())
     {
         _body = std::move(body);
         _header.setContentLength(_body.size()); // Always set it, even if 0.
         if (!_body.empty()) // Type is only meaningful if there is a body.
-            _header.setContentType(std::move(contentType));
+            _header.setBodyContentType(std::move(contentType));
     }
 
     /// Append a chunk to the body. Must have Transfer-Encoding: chunked.
