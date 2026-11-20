@@ -41,9 +41,21 @@ DOCUMENTS_DIR = $(WORKDIR)/documents
 # Exits with 0 when a server listens on COOLWSD_PORT, and with 1 otherwise.
 PORT_IN_USE = $(NODE) -e "require('net').connect($(COOLWSD_PORT), 'localhost') \
 	.on('connect', () => process.exit(0)).on('error', () => process.exit(1))"
-# Prints a port that no server listens on.
-FREE_PORT = $(NODE) -e "const server = require('net').createServer(); \
-	server.listen(0, () => { console.log(server.address().port); server.close(); })"
+# Prints a port that no server listens on. It comes from below the range the kernel picks from
+# for port 0, where the servers of unit tests running in parallel get theirs, so none of them can
+# take it before coolwsd starts.
+FREE_PORT = $(NODE) -e "const fs = require('fs'), net = require('net'); \
+	let low = 32768; \
+	try { low = parseInt(fs.readFileSync('/proc/sys/net/ipv4/ip_local_port_range', 'utf8')); } \
+	catch (e) {} \
+	const first = 10000, count = low - first; \
+	const tryPort = (attempt) => { \
+		const port = count > 0 && attempt < 100 ? first + Math.floor(Math.random() * count) : 0; \
+		const server = net.createServer(); \
+		server.on('error', () => tryPort(attempt + 1)); \
+		server.listen(port, () => { console.log(server.address().port); server.close(); }); \
+	}; \
+	tryPort(0);"
 
 build-integration: $(BUILD_MARKER) $(RENDERER_BUNDLE)
 
