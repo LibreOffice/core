@@ -118,6 +118,13 @@ constexpr std::string_view MetaViewPort =
 namespace
 {
 
+void setRelayedBodyHeaders(http::Response& response)
+{
+    response.set("Cache-Control", "no-cache");
+    response.set("X-Content-Type-Options", "nosniff");
+    response.set("Content-Security-Policy", "sandbox");
+}
+
 #if HAVE_SECURITY_PAM_APPL_H
 
 int functionConversation(int /*num_msg*/, const struct pam_message** /*msg*/,
@@ -2211,7 +2218,7 @@ void FileServerRequestHandler::fetchWopiSettingConfigs(const Poco::Net::HTTPRequ
         }
         http::Response clientResponse(http::StatusCode::OK);
         clientResponse.set("Content-Type", "application/json; charset=utf-8");
-        clientResponse.set("Cache-Control", "no-cache");
+        setRelayedBodyHeaders(clientResponse);
 
         clientResponse.setBody(httpResponse->getBody());
 
@@ -2401,7 +2408,7 @@ void FileServerRequestHandler::fetchSettingFile(const Poco::Net::HTTPRequest& re
 
         http::Response clientResponse(http::StatusCode::OK);
         clientResponse.set("Content-Type", "text/plain; charset=utf-8");
-        clientResponse.set("Cache-Control", "no-cache");
+        setRelayedBodyHeaders(clientResponse);
         clientResponse.set("Content-Disposition", "attachment");
         clientResponse.setBody(secretFields.empty()
                                    ? httpResponse->getBody()
@@ -2566,7 +2573,7 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
 
             http::Response clientResponse(http::StatusCode::OK);
             clientResponse.set("Content-Type", "application/json; charset=utf-8");
-            clientResponse.set("Cache-Control", "no-cache");
+            setRelayedBodyHeaders(clientResponse);
             clientResponse.setBody(httpResponse->getBody());
             destSocket->sendAndShutdown(clientResponse);
             LOG_DBG("Successfully fetched models from [" << uriAnonym << ']');
@@ -2758,7 +2765,7 @@ void FileServerRequestHandler::deleteWopiSettingConfigs(const Poco::Net::HTTPReq
         }
         http::Response clientResponse(http::StatusCode::OK);
         clientResponse.set("Content-Type", "application/json; charset=utf-8");
-        clientResponse.set("Cache-Control", "no-cache");
+        setRelayedBodyHeaders(clientResponse);
 
         clientResponse.setBody(httpResponse->getBody());
 
