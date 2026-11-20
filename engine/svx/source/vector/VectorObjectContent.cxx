@@ -411,7 +411,8 @@ std::vector<ObjectContent::Handle> shapingHandlesOf(const SdrObject& rObject)
         */
         const SdrHdlKind eKind = pHandle->GetKind();
         const bool bMeasurement(SdrObjKind::Measure == rObject.GetObjIdentifier());
-        // a line sends its two ends as handles and no path, as a measurement does
+        // a line sends its two ends as handles, as a measurement does, for the moves of a line;
+        // its path travels as well, for the editing of its points
         const bool bLine(SdrObjKind::Line == rObject.GetObjIdentifier());
         const bool bWanted(eKind == SdrHdlKind::Circle || eKind == SdrHdlKind::CustomShape1
                            || (eKind == SdrHdlKind::Poly
@@ -458,13 +459,14 @@ std::vector<ObjectContent::Handle> shapingHandlesOf(const SdrObject& rObject)
     outline of a fat line, a dash becomes many polygons, a shadow is another copy of it all,
     and a curve may have been cut into straight pieces. An editor needs the points the model
     holds, in the order it holds them, because that order is what names a point when it is
-    moved. An object that has no path of its own answers with an empty one.
+    moved. An object that has no path of its own answers with an empty one. A line answers
+    with its path of two points as well: it is the same object as a path, and a point added to
+    it makes it one.
  */
 basegfx::B2DPolyPolygon pathOf(const SdrObject& rObject)
 {
     const auto* pPathObject = dynamic_cast<const SdrPathObj*>(&rObject);
-    // a line has its two ends in the handles instead
-    if (!pPathObject || SdrObjKind::Line == pPathObject->GetObjIdentifier())
+    if (!pPathObject)
         return basegfx::B2DPolyPolygon();
 
     basegfx::B2DPolyPolygon aPath(pPathObject->GetPathPoly());

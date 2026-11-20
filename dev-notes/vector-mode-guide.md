@@ -413,7 +413,7 @@ a curve can move a little when the answer comes.
 
 | Button | What it does |
 |---|---|
-| Edit Points | Shown in place of Convert to Polygon when one path is selected. Shows the points and weights of the path, and hides them again. Its arrow opens: Add Point, Close Path (closes an open path or opens a closed one), Simplify Curves, Simplify All, and the conversions To Curve, To Contour and To Polygon. |
+| Edit Points | Shown in place of Convert to Polygon when one path is selected, a straight line among them, which is a path of two points. Shows the points and weights of the path, and hides them again. Its arrow opens: Add Point, Close Path (closes an open path or opens a closed one), Simplify Curves, Simplify All, and the conversions To Curve, To Contour and To Polygon. |
 | Convert to Polygon | Shown for a shape that is not a path. Turns it into a path whose points can be edited: curved edges stay curves, straight ones become lines. Its arrow opens To Curve, To Contour and To Polygon. |
 | Glue Points | Shows the glue points of the selected object in place of its own handles - the eight, the turn handle, the yellow ones and those of its motion paths - and hides them again. The four at the middles of the sides show grey: they cannot be moved, and Ctrl+Tab passes them by. Its arrow opens Show and Add New. |
 
@@ -423,7 +423,7 @@ turn handle, the yellow ones and those of its motion paths; every other mode hid
 
 | Object | The modes a click goes through | Where the click must land |
 |---|---|---|
-| Curve, polygon | points, glue points, the object | On its line; a click in its fill stays a click on the object |
+| Curve, polygon, line | points, glue points, the object | On its line; a click in its fill stays a click on the object |
 | Picture | crop marks, glue points, the object | Anywhere on it |
 | Any other object | glue points, the object | Anywhere on it but on its text, where the pointer shows the text pointer; a click on the text still edits it |
 
@@ -763,7 +763,7 @@ in the sections above.
 |------|----------|-----------------|---------------------------|
 | Rectangle, ellipse | As in the office | Eight handles, turn, shear, text; a rectangle's corner radius handle | - |
 | Circle section, arc, segment | As in the office | As a rectangle, plus the start and end angle handles | - |
-| Line | As in the office | Its two ends, the turn handle beside its middle; 0 lays it level (see Lines) | - |
+| Line | As in the office | Its two ends, the turn handle beside its middle; 0 lays it level (see Lines). Its two points with Edit Points, where a point added makes it a polyline, and a polyline left with two points becomes a line again | - |
 | Polyline, polygon, curve | As in the office | Points and weights with Edit Points, moved by drag and key, and edited by their menu (see Editing points) | - |
 | Freehand line | Drawn by hand and fitted with curves (see Creating a polygon or a curve) | As a curve | - |
 | Text box, title, outline | As in the office | As a rectangle; double click, typing, F2 or Return edits the text | - |
