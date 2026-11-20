@@ -2886,7 +2886,8 @@ function showWelcomeSVG() {
 	// Returns a Promise that resolves to the download URL.
 	// Used by WASM and CODA builds to download documents via the
 	// collab endpoint.  @coolServer is the http(s):// origin of the
-	// cool server when the page itself lives elsewhere (CODA loads
+	// cool server, followed by its service root, when the page itself
+	// lives elsewhere (CODA loads
 	// cool.html from a local origin or file://); pass empty/null for
 	// COWASM (where the page is hosted on the cool server, so the
 	// /cool/collab/ws WS resolves correctly against the page origin).
@@ -2957,8 +2958,10 @@ function showWelcomeSVG() {
 	// It resolves with the file properties that coolwsd sends with authenticated.
 	global.collab.connect = function(wopiSrc, accessToken, coolServer) {
 		// Stash for collab.uploadFile so it can rebase upload_url
-		// against the same cool server.  Cleared on socket close.
-		global.collab.coolServer = coolServer || '';
+		// against the same cool server (whose paths start below its service root, which
+		// COWASM's page, served by that server, has in global.serviceRoot).  Cleared on
+		// socket close.
+		global.collab.coolServer = coolServer || global.serviceRoot || '';
 		const protocol = '&protocol=' + global.collab.protocol;
 		return new Promise(function(resolve, reject) {
 			var wsUrl;

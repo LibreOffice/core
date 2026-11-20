@@ -341,7 +341,13 @@ if (window.ThisIsTheEmscriptenApp) {
 			// values (in an app that cannot show the server's own editor instead).
 			window._codaRemoteInfo = info;
 			window.app.console.log('CODA: remote doc, wopiSrc=' + info.wopiSrc);
-			global.collab.fetchFile(info.wopiSrc, info.accessToken, info.coolServer).then(function(result) {
+			// The server's service root is what comes before /browser/ in the path of
+			// its editor page:
+			const coolPath = info.coolPath || '';
+			const browserAt = coolPath.indexOf('/browser/');
+			const serviceRoot = browserAt > 0 ? coolPath.slice(0, browserAt) : '';
+			const coolServer = info.coolServer + serviceRoot;
+			global.collab.fetchFile(info.wopiSrc, info.accessToken, coolServer).then(function(result) {
 				if (!result.filename)
 					throw new Error('CheckFileInfo returned an empty BaseFileName');
 
