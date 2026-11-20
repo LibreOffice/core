@@ -2046,7 +2046,7 @@ cpo::uno::Any SwXShape::getPropertyDefault( const OUString& rPropertyName )
             aPState);
         if(!xShapePrState)
             throw cpo::uno::RuntimeException();
-        (*xShapePrState)->getPropertyDefault( rPropertyName );
+        aRet = (*xShapePrState)->getPropertyDefault( rPropertyName );
     }
 
     return aRet;
