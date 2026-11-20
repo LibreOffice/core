@@ -111,18 +111,18 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	private _answersToLeaveOut: Set<cool.VectorPartGuid> = new Set();
 
 	/// A decoded bitmap, or the one drawn in its place until it is decoded.
-	protected _imageFor(checksum: number): HTMLImageElement | undefined {
+	protected override _imageFor(checksum: number): HTMLImageElement | undefined {
 		return super._imageFor(checksum) ?? this._standInFor(checksum);
 	}
 
 	/// The parts that use a loaded image or font draw again.
-	protected _resourcesLoaded(partIds: Set<string> | undefined): void {
+	protected override _resourcesLoaded(partIds: Set<string> | undefined): void {
 		this._redrawPartsUsing(partIds);
 		super._resourcesLoaded(partIds);
 	}
 
 	/// A bitmap that decoded, or turned out unavailable, needs its stand-in no more.
-	protected _imageSettled(checksum: number): void {
+	protected override _imageSettled(checksum: number): void {
 		this._standIns.delete(checksum);
 	}
 
@@ -155,13 +155,13 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		return docLayer?._viewId;
 	}
 
-	drawsFromPrimitives(): boolean {
+	override drawsFromPrimitives(): boolean {
 		return true;
 	}
 
 	/// The view draws the part that is now selected, from the cache when it holds it, at once
 	/// and without an answer from the engine.
-	updateOnChangePart(): void {
+	override updateOnChangePart(): void {
 		this._fireChanged();
 	}
 
@@ -170,7 +170,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		is what a drag does when it lays what it did on them. Whoever keeps a picture of a part
 		draws it again, as it does when an update arrives.
 	*/
-	changedHere(): void {
+	override changedHere(): void {
 		// The objects changed in place, so text measured from them is out of date.
 		this._objectText = null;
 		super.changedHere();
@@ -178,7 +178,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 
 	/// Return the cached primitive tree for the page with the given id, or
 	/// undefined while a request is sent.
-	requestPartById(
+	override requestPartById(
 		partId: cool.VectorPartGuid,
 		mode: number,
 	): cool.VectorPrimitivesData | undefined {
@@ -317,7 +317,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		Draw primitives the client built itself, in document twips, the way the objects of the
 		part are drawn. The caller sets up the context the same way as for a whole part.
 	*/
-	renderPrimitives(
+	override renderPrimitives(
 		context: CanvasRenderingContext2D,
 		data: cool.VectorPrimitivesData,
 		primitives: cool.Primitive[],
@@ -331,7 +331,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	/// Redraw what is on screen in the view's current theme. The cached
 	/// trees hold the automatic colors unresolved, so a theme change
 	/// costs a repaint and nothing else.
-	refreshTheme(): void {
+	override refreshTheme(): void {
 		this._fireChanged();
 	}
 
@@ -381,14 +381,16 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	/// The page list on screen has been replaced, so an index may name
 	/// another page than it did. The cache and the requests in flight are
 	/// keyed by page id and stay. The change listeners are notified.
-	partListChanged(): void {
+	override partListChanged(): void {
 		this._missingParts.clear();
 		// The list brings no object from the engine, so no object is answered.
 		this._fireChanged([]);
 	}
 
 	/// Handle a vector primitives response.
-	handleVectorPrimitivesResponse(values: cool.VectorPrimitivesResponse): void {
+	override handleVectorPrimitivesResponse(
+		values: cool.VectorPrimitivesResponse,
+	): void {
 		const mode =
 			values.mode !== undefined ? values.mode : cool.VectorMode.Slides;
 		// Every request names its page by id, and the answer names it back.
@@ -478,7 +480,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		}
 	>();
 
-	addProvisionalObject(
+	override addProvisionalObject(
 		partId: cool.VectorPartGuid,
 		object: cool.SlideObject,
 		wait: number,
@@ -541,7 +543,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	/// their ids, and the time after which the part is asked for again.
 	private _deletedHere: DeletedHere[] = [];
 
-	deleteLocally(
+	override deleteLocally(
 		partId: cool.VectorPartGuid,
 		objectIds: number[],
 		wait: number,
@@ -594,7 +596,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		asked for again as the engine has it. The delete is the oldest one that took all of those
 		objects out, where they are named, and the oldest one otherwise.
 	*/
-	deleteRefused(objectIds?: number[]): void {
+	override deleteRefused(objectIds?: number[]): void {
 		const refused = objectIds
 			? this._deletedHere.find((note) =>
 					objectIds.every((id: number) => note.objectIds.has(id)),
@@ -637,7 +639,9 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 
 	/// Apply a pushed delta and replay the pending edits on the objects it
 	/// replaced.
-	handleVectorPrimitivesDelta(values: cool.VectorPrimitivesResponse): void {
+	override handleVectorPrimitivesDelta(
+		values: cool.VectorPrimitivesResponse,
+	): void {
 		const partId = values.partId;
 		if (partId === undefined) return;
 		const replaced = this._applyDelta(values);
@@ -1013,7 +1017,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 
 	/// True when a keystroke at the caret can be predicted. The tree stays
 	/// unchanged.
-	canPredictAtCaret(): boolean {
+	override canPredictAtCaret(): boolean {
 		return this._typedEdits.canTypeAt(
 			VectorPartManagerBase._typingCaret(),
 			() => this._typingPlace(),
@@ -1023,14 +1027,14 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	/// Insert typed text into the cached tree so it shows before the server re-renders. It
 	/// replaces a selection in the caret's paragraph, as in the engine. True when the tree
 	/// changed.
-	predictTextInsert(text: string): boolean {
+	override predictTextInsert(text: string): boolean {
 		return this._predictEdit((selected) => cool.typedChange(text, selected));
 	}
 
 	/// Delete before characters left of the caret and after characters right of it in the
 	/// cached tree. A selection in the caret's paragraph is the first one deleted, as in the
 	/// engine. True when the tree changed.
-	predictTextDelete(before: number, after: number): boolean {
+	override predictTextDelete(before: number, after: number): boolean {
 		if (before <= 0 && after <= 0) return false;
 		return this._predictEdit((selected) =>
 			cool.deletedChange(before, after, selected),
@@ -1055,7 +1059,10 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 
 	/// Move the caret one character left (step -1) or right (step 1). With extend, the
 	/// selection follows the caret. True when it moved.
-	moveCaretByCharacter(step: -1 | 1, extend: boolean = false): boolean {
+	override moveCaretByCharacter(
+		step: -1 | 1,
+		extend: boolean = false,
+	): boolean {
 		return this._stepCaret(extend, (position, logical) =>
 			cool.stepByCharacter(position, logical, step),
 		);
@@ -1063,7 +1070,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 
 	/// Move the caret one word left (step -1) or right (step 1). With extend, the selection
 	/// follows the caret. True when it moved.
-	moveCaretByWord(step: -1 | 1, extend: boolean = false): boolean {
+	override moveCaretByWord(step: -1 | 1, extend: boolean = false): boolean {
 		return this._stepCaret(extend, (position, logical) =>
 			cool.stepByWord(position, logical, step),
 		);
@@ -1108,7 +1115,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 
 	/// Move the caret one line up (step -1) or down (step 1), keeping its starting x over
 	/// several moves. With extend, the selection follows the caret. True when it moved.
-	moveCaretByLine(step: -1 | 1, extend: boolean = false): boolean {
+	override moveCaretByLine(step: -1 | 1, extend: boolean = false): boolean {
 		const start = this._moveStart(extend);
 		if (!start) return false;
 		const { target, entryId, position } = start;
@@ -1180,7 +1187,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		paragraph, 'text' where it puts the caret at the start of the text. Undefined elsewhere.
 		hitId is the object at the point, if any.
 	*/
-	labelPointerAt(
+	override labelPointerAt(
 		x: number,
 		y: number,
 		hitId: number | undefined,
@@ -1195,7 +1202,11 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 
 	/// Put the caret where a click at (x, y), in document twips, lands in the edited text, and
 	/// drop any selection. hitId is the object at the point, if any. True when the caret moved.
-	placeCaretAt(x: number, y: number, hitId: number | undefined): boolean {
+	override placeCaretAt(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+	): boolean {
 		const press = this._pressAt(x, y, hitId);
 		return (
 			press !== null &&
@@ -1205,13 +1216,21 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 
 	/// Select the word under a double click at (x, y), in document twips, as the engine does.
 	/// hitId is the object at the point, if any. True when the word is selected.
-	selectWordAt(x: number, y: number, hitId: number | undefined): boolean {
+	override selectWordAt(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+	): boolean {
 		return this._selectAt(x, y, hitId, cool.wordAt);
 	}
 
 	/// Select the paragraph under a triple click at (x, y), in document twips. hitId is the
 	/// object at the point, if any. True when the paragraph is selected.
-	selectParagraphAt(x: number, y: number, hitId: number | undefined): boolean {
+	override selectParagraphAt(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+	): boolean {
 		return this._selectAt(x, y, hitId, cool.paragraphAt);
 	}
 
@@ -1241,7 +1260,11 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 
 	/// Start a drag that selects text from a press at (x, y), in document twips. hitId is the
 	/// object at the point, if any. True when the caret moved to the press.
-	startTextDrag(x: number, y: number, hitId: number | undefined): boolean {
+	override startTextDrag(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+	): boolean {
 		this._dragStart = null;
 		const press = this._pressAt(x, y, hitId);
 		if (
@@ -1254,7 +1277,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	}
 
 	/// Select the text from where the drag started to the mouse at (x, y), in document twips.
-	dragTextTo(x: number, y: number): void {
+	override dragTextTo(x: number, y: number): void {
 		const start = this._dragStart;
 		const target = this._caretTarget();
 		const origin = target
@@ -1268,7 +1291,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		if (logical) this._moveCaret(target, start.entryId, logical, start.anchor);
 	}
 
-	endTextDrag(): void {
+	override endTextDrag(): void {
 		this._dragStart = null;
 	}
 
@@ -1531,7 +1554,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	/// True when the update is older than the newest edit, so the local caret
 	/// stays. A current update that puts the caret elsewhere, as after
 	/// autocorrect, drops the edits and re-fetches the part.
-	keepPredictedCaret(update: cool.CaretUpdate): boolean {
+	override keepPredictedCaret(update: cool.CaretUpdate): boolean {
 		// The caret moved here, read before isAhead clears it once the engine has caught
 		// up.
 		const moved = LocalCaret.ahead();
@@ -1567,7 +1590,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	/// nothing else that tells it so. The views and the previews in view draw again, and each
 	/// stale part they draw asks for the delta since the version held, or a header alone
 	/// when nothing changed. A part that is not drawn is not asked for until it is.
-	revalidateCachedParts(): void {
+	override revalidateCachedParts(): void {
 		for (const partId of this._cache.keys()) this._staleParts.add(partId);
 		this._fireChanged([]);
 		app.map.fire('vectorcontentstale');
@@ -1575,7 +1598,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 
 	/// Drop cached data for a page and any in-flight state, and the bitmaps
 	/// no other cached page uses. The predicted edits stay pending.
-	clearCachedPart(partId: cool.VectorPartGuid): void {
+	override clearCachedPart(partId: cool.VectorPartGuid): void {
 		this._dropCachedPart(partId);
 		this._fireChanged();
 	}
@@ -1620,7 +1643,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	/// re-fetch them. Decoded bitmaps stay cached, since an image that
 	/// actually changed comes back under a new checksum anyway. The
 	/// predicted edits stay pending.
-	clearAllParts(): void {
+	override clearAllParts(): void {
 		this._dropAllCachedParts();
 		this._resources.forgetOwners();
 		this._fireChanged();
@@ -1630,7 +1653,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	/// them, so the next paint re-fetches what it draws. The loaded
 	/// fonts stay registered, since they are few and small. The predicted
 	/// edits stay pending.
-	reclaimGraphicsMemory(): void {
+	override reclaimGraphicsMemory(): void {
 		super.reclaimGraphicsMemory();
 		this._resources.forgetOwners();
 		this._dropAllCachedParts();
@@ -1638,7 +1661,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	}
 
 	/// Drop all cached data for all parts.
-	discardAllCache(): void {
+	override discardAllCache(): void {
 		LocalCaret.forget();
 		this._dropAllCachedParts();
 		this._typedEdits.forget();

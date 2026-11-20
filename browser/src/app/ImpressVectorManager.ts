@@ -22,17 +22,17 @@
  */
 
 class ImpressVectorManager extends VectorPartManagerBase {
-	kind(): RenderManagerKind {
+	override kind(): RenderManagerKind {
 		return 'slides';
 	}
 
-	isVectorRendering(): boolean {
+	override isVectorRendering(): boolean {
 		return true;
 	}
 
 	/// The deltas of a slide answer every change made here, so each change waits until the
 	/// changes before it are answered.
-	heldBackChanges(): HeldBackChanges {
+	override heldBackChanges(): HeldBackChanges {
 		return 'all';
 	}
 
@@ -43,17 +43,17 @@ class ImpressVectorManager extends VectorPartManagerBase {
 	}
 
 	/// The predicted edits lie on the slide in the edit view.
-	protected _editedPartId(): cool.VectorPartGuid | undefined {
+	protected override _editedPartId(): cool.VectorPartGuid | undefined {
 		return this._selectedPartId();
 	}
 
 	/// The text of a slide grows inside its object.
-	protected _paragraphsKeepTheirLines(): boolean {
+	protected override _paragraphsKeepTheirLines(): boolean {
 		return false;
 	}
 
 	/// A delta that answers an edit of a slide can leave the edited entry out.
-	protected _answerCarriesEditedEntries(): boolean {
+	protected override _answerCarriesEditedEntries(): boolean {
 		return false;
 	}
 
@@ -73,7 +73,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 
 	/// The cached tree of the slide in the edit view and the caret, or null when no caret is
 	/// visible or the slide is not cached.
-	protected _caretTarget(): EditTarget | null {
+	protected override _caretTarget(): EditTarget | null {
 		const cursor = app.file.textCursor;
 		if (!cursor || !cursor.visible || !cursor.rectangle) return null;
 		const partId = this._selectedPartId();
@@ -88,7 +88,9 @@ class ImpressVectorManager extends VectorPartManagerBase {
 
 	/// The rectangle of the caret finds the object the caret is in, and the logical caret the
 	/// place in its text.
-	protected _caretPositionIn(target: EditTarget): cool.CaretPosition | null {
+	protected override _caretPositionIn(
+		target: EditTarget,
+	): cool.CaretPosition | null {
 		return cool.TextPrediction.caretAt(
 			target.tree,
 			target.caret,
@@ -98,7 +100,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 
 	/// A press takes the caret only inside the object that is edited. A press off that object
 	/// ends the edit, so it is for the engine.
-	protected _pressedEntry(
+	protected override _pressedEntry(
 		x: number,
 		y: number,
 		hitId: number | undefined,
@@ -125,7 +127,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 
 	/// In the outline placeholder of a slide, a press on the bullet or the number of a paragraph
 	/// selects the paragraph.
-	protected _labelSelectsItsParagraph(pressed: PressedText): boolean {
+	protected override _labelSelectsItsParagraph(pressed: PressedText): boolean {
 		const partId = pressed.target.tree.data.partId;
 		const objectId = this._editedObjectOf(partId, pressed.entryId);
 		const objectKind = this._cache
@@ -169,7 +171,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 	}
 
 	/// The edited object: the parent of the entry of a running edit, or the entry itself.
-	protected _editedObjectOf(
+	protected override _editedObjectOf(
 		partId: cool.VectorPartGuid,
 		objectId: number,
 	): number {
@@ -196,7 +198,10 @@ class ImpressVectorManager extends VectorPartManagerBase {
 	/// The id of the page at the given index of the page list on screen, or
 	/// undefined when the list on screen is of another mode or holds no page
 	/// at the index. The status message names every page of that list by id.
-	partIdAt(part: number, mode: number): cool.VectorPartGuid | undefined {
+	override partIdAt(
+		part: number,
+		mode: number,
+	): cool.VectorPartGuid | undefined {
 		const entry = app.impress?.partList?.[part];
 		if (entry && entry.mode === mode && typeof entry.part === 'string')
 			return entry.part;
@@ -218,7 +223,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 	/// the list does not name the page. Subscribers registered with
 	/// onVectorChanged are notified once the data arrives, and again when the
 	/// page list is replaced.
-	requestPart(
+	override requestPart(
 		part: number,
 		mode: number,
 	): cool.VectorPrimitivesData | undefined {
@@ -229,7 +234,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 
 	/// Listen for the layers this view hides. The engine reports them as a
 	/// state change whenever the view's layer state is rebuilt.
-	initialize(): void {
+	override initialize(): void {
 		app.map.on('commandstatechanged', (event: any) => {
 			if (event.commandName === '.uno:LayerVisibility')
 				this.setHiddenLayers(event.state);
@@ -239,7 +244,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 	/// The layers this view hides, given as their ids. Objects on them stay
 	/// cached and are skipped when drawing. Anything that is not a list
 	/// hides nothing.
-	setHiddenLayers(layers: unknown): void {
+	override setHiddenLayers(layers: unknown): void {
 		const ids = Array.isArray(layers)
 			? layers.filter((id): id is number => typeof id === 'number')
 			: [];
@@ -253,12 +258,12 @@ class ImpressVectorManager extends VectorPartManagerBase {
 		this._fireChanged([]);
 	}
 
-	isLayerVisible(layer: number): boolean {
+	override isLayerVisible(layer: number): boolean {
 		return !this._hiddenLayers.has(layer);
 	}
 
 	/// The color the text run is drawn in, with no animation color in its place.
-	textColorOf(
+	override textColorOf(
 		data: cool.VectorPrimitivesData,
 		primitive:
 			cool.TextSimplePortionPrimitive | cool.TextDecoratedPortionPrimitive,
@@ -283,7 +288,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 
 	/// True when the part and the master it names are both cached. Fetches
 	/// whatever is missing.
-	isPartDrawable(part: number, mode: number): boolean {
+	override isPartDrawable(part: number, mode: number): boolean {
 		const data = this.requestPart(part, mode);
 		if (!data) return false;
 		return this._isDrawable(data);
@@ -291,7 +296,10 @@ class ImpressVectorManager extends VectorPartManagerBase {
 
 	/// True when the page with the given id and the master it names are both
 	/// cached. Fetches whatever is missing.
-	isPartDrawableById(partId: cool.VectorPartGuid, mode: number): boolean {
+	override isPartDrawableById(
+		partId: cool.VectorPartGuid,
+		mode: number,
+	): boolean {
 		const data = this.requestPartById(partId, mode);
 		if (!data) return false;
 		return this._isDrawable(data);
@@ -308,7 +316,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 	/// Render a part's objects in paint order, the page entry first. The
 	/// caller sets up the context transform that maps the part's twips to
 	/// the target pixels. Objects on a hidden layer are skipped.
-	renderInto(
+	override renderInto(
 		context: CanvasRenderingContext2D,
 		data: cool.VectorPrimitivesData,
 		options?: cool.VectorRenderOptions,
@@ -386,7 +394,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 
 	/// Draw one paragraph of an object's text alone, in the colors and text look given. The
 	/// context transform maps the part's twips to the target pixels.
-	renderObjectParagraph(
+	override renderObjectParagraph(
 		context: CanvasRenderingContext2D,
 		data: cool.VectorPrimitivesData,
 		objectId: number,
@@ -667,7 +675,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 		a drag shows of itself: the objects as they would look where the drag has taken them. The
 		caller sets up the context the same way as for a whole part.
 	*/
-	renderObjectsWith(
+	override renderObjectsWith(
 		context: CanvasRenderingContext2D,
 		data: cool.VectorPrimitivesData,
 		objectIds: number[],
@@ -750,7 +758,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 	/// boundary of each and, on a master page, the name of the area. They
 	/// are drawn over the page content, so a later object does not cover
 	/// them, and objects on a hidden layer are skipped as ever.
-	renderPlaceholderAids(
+	override renderPlaceholderAids(
 		context: CanvasRenderingContext2D,
 		data: cool.VectorPrimitivesData,
 	): void {
@@ -771,7 +779,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 	/// Request a thumbnail for a preview of the page at the given index of
 	/// the page list on screen. Nothing is drawn while the list does not name
 	/// the page.
-	requestThumbnail(
+	override requestThumbnail(
 		id: cool.PreviewId,
 		part: number,
 		mode: number,
@@ -913,7 +921,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 	}
 
 	/// Redraw what is on screen in the view's current theme, the previews too.
-	refreshTheme(): void {
+	override refreshTheme(): void {
 		for (const [id, info] of this._renderedPreviews) {
 			const data = this._cache.get(info.partId);
 			if (data) this._renderAndFire(id, info.maxWidth, info.maxHeight, data);
@@ -922,14 +930,14 @@ class ImpressVectorManager extends VectorPartManagerBase {
 	}
 
 	/// Drop all cached data for all parts, and the previews drawn from them.
-	discardAllCache(): void {
+	override discardAllCache(): void {
 		this._pendingPreviews.clear();
 		this._renderedPreviews.clear();
 		super.discardAllCache();
 	}
 
 	/// The master page of a slide is named by its page entry.
-	protected _takePageEntry(
+	protected override _takePageEntry(
 		data: cool.VectorPrimitivesData,
 		objects: cool.SlideObject[],
 	): void {
@@ -942,7 +950,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 		client that asked for its cached pages again after being away gets fresh thumbnails. A
 		preview that was waiting for a whole part is drawn by the drain alone.
 	*/
-	protected _partArrived(
+	protected override _partArrived(
 		data: cool.VectorPrimitivesData,
 		whole: boolean,
 	): void {
@@ -956,12 +964,12 @@ class ImpressVectorManager extends VectorPartManagerBase {
 	}
 
 	/// The previews waiting for the part are drawn from what the cache holds.
-	protected _partKept(partId: cool.VectorPartGuid): void {
+	protected override _partKept(partId: cool.VectorPartGuid): void {
 		this._drainDrawable(partId);
 	}
 
 	/// The previews queued for a part that is not there are dropped.
-	protected _partMissing(partId: cool.VectorPartGuid): void {
+	protected override _partMissing(partId: cool.VectorPartGuid): void {
 		this._pendingPreviews.delete(partId);
 	}
 
@@ -969,7 +977,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 		Every preview is drawn again once for all the pictures that load at the same moment, as
 		the pictures of many controls come in together.
 	*/
-	protected _onPictureReady(): void {
+	protected override _onPictureReady(): void {
 		super._onPictureReady();
 		const parts = new Set<cool.VectorPartGuid>();
 		for (const info of this._renderedPreviews.values()) parts.add(info.partId);
@@ -981,7 +989,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 		draws the objects of its master too. They draw once in a layouting task, however many
 		bitmaps and fonts come in at the same moment, as the ones of a master do.
 	*/
-	protected _redrawPartsUsing(
+	protected override _redrawPartsUsing(
 		parts: Set<cool.VectorPartGuid> | undefined,
 	): void {
 		if (!parts) return;

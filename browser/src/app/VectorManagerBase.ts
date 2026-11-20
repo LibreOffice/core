@@ -44,7 +44,7 @@ abstract class VectorManagerBase extends RenderManagerBase {
 	 * Send the client zoom to the engine, which needs it to find the cell
 	 * under a click. No tiles are asked for here.
 	 */
-	update(): void {
+	override update(): void {
 		app.map._docLayer._sendClientZoom();
 	}
 
@@ -54,12 +54,12 @@ abstract class VectorManagerBase extends RenderManagerBase {
 		and the engine answered nothing, and nothing at all where everything may have changed.
 		inputSequence is the newest input of this view that an answer reflects.
 	*/
-	onVectorChanged(callback: VectorChangeListener): void {
+	override onVectorChanged(callback: VectorChangeListener): void {
 		this._changeListeners.add(callback);
 	}
 
 	/// Forget a callback registered with onVectorChanged.
-	offVectorChanged(callback: VectorChangeListener): void {
+	override offVectorChanged(callback: VectorChangeListener): void {
 		this._changeListeners.remove(callback);
 	}
 
@@ -68,29 +68,29 @@ abstract class VectorManagerBase extends RenderManagerBase {
 	}
 
 	/// Draw again what the client changed in place, such as the objects after a drag.
-	changedHere(): void {
+	override changedHere(): void {
 		this._fireChanged([]);
 	}
 
 	/// The objects to leave out of the drawing from now on, since they are drawn elsewhere. An
 	/// empty list leaves nothing out.
-	drawnElsewhere(objectIds: number[]): void {
+	override drawnElsewhere(objectIds: number[]): void {
 		this._drawnElsewhere.set(objectIds);
 	}
 
-	drawnElsewhereVersion(): number {
+	override drawnElsewhereVersion(): number {
 		return this._drawnElsewhere.version();
 	}
 
 	/// Cache a fetched image, or mark it unavailable when it is missing or fails to decode.
-	handleVectorRenderingGraphicsResponse(
+	override handleVectorRenderingGraphicsResponse(
 		values: cool.VectorRenderingGraphicsResponse,
 	): void {
 		this._resources.handleImage(values);
 	}
 
 	/// Register a fetched font as a FontFace, which is drawn with once it loads.
-	handleVectorRenderingFontResponse(
+	override handleVectorRenderingFontResponse(
 		values: cool.VectorRenderingFontResponse,
 	): void {
 		this._resources.handleFont(values);
@@ -99,13 +99,13 @@ abstract class VectorManagerBase extends RenderManagerBase {
 	/// Forget the requests that wait for an answer, whichever tracker holds them. An answer to
 	/// a request sent before the connection dropped never comes, and every request went over
 	/// that connection.
-	forgetRequestsInFlight(): void {
+	override forgetRequestsInFlight(): void {
 		cool.RequestTracker.forgetEverywhere();
 	}
 
 	/// Release the decoded images and what the renderer keeps between draws. What is still
 	/// needed is asked for again. The fonts stay registered, since they are few and small.
-	reclaimGraphicsMemory(): void {
+	override reclaimGraphicsMemory(): void {
 		this._resources.dropImages();
 		this._renderer.releaseScratchCanvases();
 		this._renderer.releaseColorChangedImages();
@@ -122,7 +122,7 @@ abstract class VectorManagerBase extends RenderManagerBase {
 		return this.imageFor(checksum);
 	}
 
-	imageFor(checksum: number): HTMLImageElement | undefined {
+	override imageFor(checksum: number): HTMLImageElement | undefined {
 		return this._resources.image(checksum);
 	}
 

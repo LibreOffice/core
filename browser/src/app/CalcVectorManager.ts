@@ -59,7 +59,7 @@ class CalcVectorManager extends VectorManagerBase {
 		app.calc.vectorManager = this;
 	}
 
-	kind(): RenderManagerKind {
+	override kind(): RenderManagerKind {
 		return 'sheet';
 	}
 
@@ -165,18 +165,21 @@ class CalcVectorManager extends VectorManagerBase {
 	/// Release graphics memory: what the sections keep for drawing, the decoded images and what
 	/// the renderer keeps between draws. What is still needed is asked for and drawn again when
 	/// shown.
-	reclaimGraphicsMemory(): void {
+	override reclaimGraphicsMemory(): void {
 		for (const listener of this._reclaimListeners) listener();
 		super.reclaimGraphicsMemory();
 	}
 
-	protected _fireChanged(answered?: number[], inputSequence?: number): void {
+	protected override _fireChanged(
+		answered?: number[],
+		inputSequence?: number,
+	): void {
 		this._changeCount++;
 		super._fireChanged(answered, inputSequence);
 	}
 
 	/// Draw again the objects the client changed, such as after a drag.
-	changedHere(): void {
+	override changedHere(): void {
 		this._fireChanged([]);
 	}
 
@@ -186,7 +189,7 @@ class CalcVectorManager extends VectorManagerBase {
 	}
 
 	/// A loaded image or font counts the resource version up, so the drawings made before it go.
-	protected _resourcesLoaded(owners: Set<string> | undefined): void {
+	protected override _resourcesLoaded(owners: Set<string> | undefined): void {
 		this._resourceVersion++;
 		super._resourcesLoaded(owners);
 	}
@@ -206,7 +209,7 @@ class CalcVectorManager extends VectorManagerBase {
 	}
 
 	/// True when a keystroke at the caret can show before the engine answers.
-	canPredictAtCaret(): boolean {
+	override canPredictAtCaret(): boolean {
 		const context = this._typingContext();
 		if (!context) return false;
 		return this._typing.canTypeAt(
@@ -219,13 +222,13 @@ class CalcVectorManager extends VectorManagerBase {
 
 	/// Show typed text in the cell edit before the engine answers, replacing a selection in the
 	/// paragraph of the caret. True when it shows.
-	predictTextInsert(text: string): boolean {
+	override predictTextInsert(text: string): boolean {
 		return this._type((selected) => cool.typedChange(text, selected));
 	}
 
 	/// Delete before characters left of the caret and after characters right of it in the cell edit
 	/// of this view. True when it shows.
-	predictTextDelete(before: number, after: number): boolean {
+	override predictTextDelete(before: number, after: number): boolean {
 		if (before <= 0 && after <= 0) return false;
 		return this._type((selected) =>
 			cool.deletedChange(before, after, selected),
@@ -243,7 +246,7 @@ class CalcVectorManager extends VectorManagerBase {
 
 	/// True when the caret update is older than the newest typing. A caret replayed for a geometry
 	/// change predates the typing, so the typed caret is placed again with the current geometry.
-	keepPredictedCaret(update: cool.CaretUpdate): boolean {
+	override keepPredictedCaret(update: cool.CaretUpdate): boolean {
 		const docLayer = app.map && app.map._docLayer;
 		if (docLayer?._isReplayingMessages && this._typing.isTyping()) {
 			const context = this._typingContext();
@@ -334,7 +337,7 @@ class CalcVectorManager extends VectorManagerBase {
 	}
 
 	/// Draw the given objects of a view of objects through the matrix.
-	renderObjectsWith(
+	override renderObjectsWith(
 		context: CanvasRenderingContext2D,
 		data: cool.VectorPrimitivesData,
 		objectIds: number[],
@@ -344,7 +347,7 @@ class CalcVectorManager extends VectorManagerBase {
 		this.renderer.renderObjectsMoved(context, data.objects, objectIds, matrix);
 	}
 
-	renderPrimitives(
+	override renderPrimitives(
 		context: CanvasRenderingContext2D,
 		_data: cool.VectorPrimitivesData,
 		primitives: cool.Primitive[],
@@ -935,7 +938,7 @@ class CalcVectorManager extends VectorManagerBase {
 
 	/// Forget all content and the fonts and images it named, and take the fonts off the
 	/// document.
-	discardAllCache(): void {
+	override discardAllCache(): void {
 		this.clearAll();
 		this._resources.discard();
 	}
@@ -1226,19 +1229,19 @@ class CalcVectorManager extends VectorManagerBase {
 	}
 
 	// The client selects and moves the drawing objects of the sheet itself.
-	drawsFromObjects(): boolean {
+	override drawsFromObjects(): boolean {
 		return true;
 	}
 
 	// The engine places the objects of a sheet in print twips. An input that ends the cell edit
 	// or moves its caret drops the typing shown.
-	toEngine(message: string): string {
+	override toEngine(message: string): string {
 		this.noteInput(message);
 		return this.messageInPrintTwips(message);
 	}
 
 	// The drawing objects of a sheet are the same in every mode.
-	requestPart(
+	override requestPart(
 		part: number,
 		_mode: number,
 	): cool.VectorPrimitivesData | undefined {
@@ -1248,14 +1251,14 @@ class CalcVectorManager extends VectorManagerBase {
 	// Only objects on the front layer take the pointer and keys. Back layer objects need the
 	// selection mode of the drawing toolbar, and the internal layer holds comment captions,
 	// which the comments handle.
-	isLayerVisible(layer: number): boolean {
+	override isLayerVisible(layer: number): boolean {
 		return layer === cool.calcLayerId('front');
 	}
 
 	/// Changes may have been missed while away, so every sheet held is asked for again with the
 	/// versions held, its drawing objects and settings too. It is still drawn meanwhile, and the
 	/// answers on their way are kept.
-	revalidateCachedParts(): void {
+	override revalidateCachedParts(): void {
 		for (const [sheetKey, sheet] of this._sheets) {
 			this._markSheetStale(sheetKey, sheet);
 			this._sheetsBehind.add(sheetKey);
@@ -1265,14 +1268,14 @@ class CalcVectorManager extends VectorManagerBase {
 
 	/// Answers to requests sent before a reconnect never come, so their blocks are asked for
 	/// again when they are drawn.
-	forgetRequestsInFlight(): void {
+	override forgetRequestsInFlight(): void {
 		super.forgetRequestsInFlight();
 		this._queue = null;
 		this._sheetRequested.clear();
 	}
 
 	/// A tile still on its way from before the view drew from vectors is acknowledged and dropped.
-	onTileMsg(textMsg: string, _img: any): void {
+	override onTileMsg(textMsg: string, _img: any): void {
 		const tileMessage = app.socket.parseServerCmd(textMsg);
 		if (tileMessage.wireId !== undefined)
 			app.socket.sendMessage('tileprocessed wids=' + tileMessage.wireId);

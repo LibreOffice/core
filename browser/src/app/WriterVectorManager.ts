@@ -36,13 +36,13 @@ class WriterVectorManager extends VectorPartManagerBase {
 	private _pageIndexes = new Map<string, number>();
 	private _indexedPageIds: string[] | null = null;
 
-	kind(): RenderManagerKind {
+	override kind(): RenderManagerKind {
 		return 'text';
 	}
 
 	/// The deltas of a page answer the text edits that show here. The server handles the
 	/// objects, the undos and the redos.
-	heldBackChanges(): HeldBackChanges {
+	override heldBackChanges(): HeldBackChanges {
 		return 'shownText';
 	}
 
@@ -58,7 +58,7 @@ class WriterVectorManager extends VectorPartManagerBase {
 
 	/// The id of the page at the index of the page list, or undefined when the list holds no
 	/// page there.
-	partIdAt(page: number): cool.VectorPartGuid | undefined {
+	override partIdAt(page: number): cool.VectorPartGuid | undefined {
 		return app.file.writer.pageIds[page];
 	}
 
@@ -170,13 +170,13 @@ class WriterVectorManager extends VectorPartManagerBase {
 	}
 
 	/// The wanted count of a dropped page goes with the page.
-	protected _dropCachedPart(partId: cool.VectorPartGuid): void {
+	protected override _dropCachedPart(partId: cool.VectorPartGuid): void {
 		super._dropCachedPart(partId);
 		this._textPageLastWanted.delete(partId);
 	}
 
 	/// The wanted counts go with the pages.
-	protected _dropAllCachedParts(): void {
+	protected override _dropAllCachedParts(): void {
 		super._dropAllCachedParts();
 		this._textPageLastWanted.clear();
 	}
@@ -184,7 +184,7 @@ class WriterVectorManager extends VectorPartManagerBase {
 	/// The page list was replaced. A cached page that is not in it is gone from the document, and
 	/// its frames can be on other pages now, so it is dropped. The wanted counts are kept only for
 	/// the pages in the list.
-	partListChanged(): void {
+	override partListChanged(): void {
 		for (const partId of Array.from(this._cache.keys()))
 			if (this._pageIndexOf(partId) === -1) this._forgetTextPage(partId);
 		for (const partId of Array.from(this._textPageLastWanted.keys()))
@@ -196,7 +196,7 @@ class WriterVectorManager extends VectorPartManagerBase {
 	/// The caret of a text document lies in the text frame that the caret message names, on the
 	/// cached page that holds the frame. The text of a drawing object, which the caret message
 	/// names by the id of its entry, waits for the engine.
-	protected _caretTarget(): EditTarget | null {
+	protected override _caretTarget(): EditTarget | null {
 		const cursor = app.file.textCursor;
 		if (!cursor || !cursor.visible || !cursor.rectangle) return null;
 		const entryId = cursor.object;
@@ -213,7 +213,9 @@ class WriterVectorManager extends VectorPartManagerBase {
 	}
 
 	/// The logical caret finds its place in the text frame that the target names.
-	protected _caretPositionIn(target: EditTarget): cool.CaretPosition | null {
+	protected override _caretPositionIn(
+		target: EditTarget,
+	): cool.CaretPosition | null {
 		return target.entryId !== undefined && target.logical
 			? target.tree.caretIn(target.entryId, target.logical)
 			: null;
@@ -221,7 +223,7 @@ class WriterVectorManager extends VectorPartManagerBase {
 
 	/// Each paragraph is a text frame, and the frames after it stay where the server placed
 	/// them.
-	protected _paragraphsKeepTheirLines(): boolean {
+	protected override _paragraphsKeepTheirLines(): boolean {
 		return true;
 	}
 
@@ -236,13 +238,15 @@ class WriterVectorManager extends VectorPartManagerBase {
 
 	/// An edit the engine applied changes the text frame it went into, and the delta that
 	/// answers it carries that frame with its content.
-	protected _answerCarriesEditedEntries(): boolean {
+	protected override _answerCarriesEditedEntries(): boolean {
 		return true;
 	}
 
 	/// Apply a pushed delta. A caret placed here, while the engine has not answered it, stays on
 	/// its text frame when the delta moves the frame.
-	handleVectorPrimitivesDelta(values: cool.VectorPrimitivesResponse): void {
+	override handleVectorPrimitivesDelta(
+		values: cool.VectorPrimitivesResponse,
+	): void {
 		super.handleVectorPrimitivesDelta(values);
 		const entryId = app.file.textCursor.object;
 		if (entryId == null) return;
@@ -253,14 +257,14 @@ class WriterVectorManager extends VectorPartManagerBase {
 	}
 
 	/// Show the caret placed here, and announce the new cursor position of the text document.
-	protected _setCaretRectangle(geometry: cool.CaretGeometry): void {
+	protected override _setCaretRectangle(geometry: cool.CaretGeometry): void {
 		super._setCaretRectangle(geometry);
 		app.sectionContainer?.onCursorPositionChanged();
 	}
 
 	/// A page lies at its rectangle in the document. Null when the page list does not hold the
 	/// page.
-	protected _partOrigin(
+	protected override _partOrigin(
 		partId: cool.VectorPartGuid,
 	): { x: number; y: number } | null {
 		return this._pageOriginOf(partId);
@@ -268,7 +272,7 @@ class WriterVectorManager extends VectorPartManagerBase {
 
 	/// The text frame on top at (x, y), in document twips, on a cached page. Undefined off the
 	/// pages, and where a picture, a fly or a shape covers the text.
-	textFrameAt(x: number, y: number): number | undefined {
+	override textFrameAt(x: number, y: number): number | undefined {
 		const top = this._textFrameBoxAt(x, y);
 		if (!top) return undefined;
 		// A field, a content control, a form field and a numbering label take a click of their
@@ -314,13 +318,13 @@ class WriterVectorManager extends VectorPartManagerBase {
 	]);
 
 	/// The edits of a text document lie on the page of the newest one.
-	protected _editedPartId(): cool.VectorPartGuid | undefined {
+	protected override _editedPartId(): cool.VectorPartGuid | undefined {
 		return this._typedEdits.newest()?.partId;
 	}
 
 	/// Any text frame on a cached page takes the caret where it is pressed, as the edit goes on
 	/// there.
-	protected _pressedEntry(
+	protected override _pressedEntry(
 		_x: number,
 		_y: number,
 		hitId: number | undefined,
@@ -344,13 +348,13 @@ class WriterVectorManager extends VectorPartManagerBase {
 	/// Each paragraph of a text document is a text frame of its own, so a drag that selects
 	/// text leaves its text where it leaves the box of the text frame it started in. A field
 	/// in the frame is text of the frame, which the drag selects over.
-	textDragLeavesItsText(x: number, y: number): boolean {
+	override textDragLeavesItsText(x: number, y: number): boolean {
 		const start = this._dragStart;
 		return start !== null && this._textFrameBoxAt(x, y)?.id !== start.entryId;
 	}
 
 	/// A triple click in a text document selects a sentence, which the engine finds.
-	selectParagraphAt(
+	override selectParagraphAt(
 		_x: number,
 		_y: number,
 		_hitId: number | undefined,
@@ -359,7 +363,7 @@ class WriterVectorManager extends VectorPartManagerBase {
 	}
 
 	/// The caret can go to another text frame, which the cursor names as its object.
-	protected _caretMovedTo(entryId: number): void {
+	protected override _caretMovedTo(entryId: number): void {
 		app.file.textCursor.object = entryId;
 	}
 }
