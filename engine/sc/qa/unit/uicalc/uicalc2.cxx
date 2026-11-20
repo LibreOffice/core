@@ -15,6 +15,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/outliner.hxx>
 #include <COKit/COKit.hxx>
@@ -61,6 +62,7 @@
 #include <formulacell.hxx>
 #include <drwlayer.hxx>
 #include <inputopt.hxx>
+#include <patattr.hxx>
 #include <postit.hxx>
 #include <rangeutl.hxx>
 #include <scitems.hxx>
@@ -2970,6 +2972,43 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testPasteIntoEmptyCellIsTrackedChange)
     const ScChangeAction* pAction = pChangeTrack->GetLast();
     CPPUNIT_ASSERT_EQUAL(SC_CAT_CONTENT, pAction->GetType());
     CPPUNIT_ASSERT_EQUAL(ScAddress(2, 2, 0), pAction->GetBigRange().aStart.MakeAddress(*pDoc));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testPasteRepeatedBlockKeepsFontHeight)
+{
+    // A block pasted into a taller range gives every repeat of its 14pt row the height of that
+    // font, also on the rows where cells outside the block differ from the rows one block above.
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    pDoc->SetString(ScAddress(0, 0, 0), u"14pt"_ustr);
+    pDoc->SetString(ScAddress(0, 1, 0), u"default"_ustr);
+    pDoc->SetString(ScAddress(0, 2, 0), u"default"_ustr);
+    ScPatternAttr aMidFont(pDoc->getCellAttributeHelper());
+    aMidFont.ItemSetPut(SvxFontHeightItem(280, 100, ATTR_FONT_HEIGHT));
+    pDoc->ApplyPatternAreaTab(0, 0, 0, 0, 0, aMidFont);
+
+    // Column D is the last column of the sheet, and the 40pt row 151 sits right below a row that
+    // repeats the 14pt row of the block.
+    pDoc->SetString(ScAddress(3, 150, 0), u"default"_ustr);
+    pDoc->SetValue(ScAddress(3, 151, 0), 42.0);
+    ScPatternAttr aBigFont(pDoc->getCellAttributeHelper());
+    aBigFont.ItemSetPut(SvxFontHeightItem(800, 100, ATTR_FONT_HEIGHT));
+    pDoc->ApplyPatternAreaTab(3, 151, 3, 151, 0, aBigFont);
+
+    goToCell(u"A1:A3"_ustr);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+    goToCell(u"A4:A300"_ustr);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    const sal_uInt16 nMidFontHeight = pDoc->GetRowHeight(3, 0);
+    CPPUNIT_ASSERT_GREATER(pDoc->GetRowHeight(4, 0), nMidFontHeight);
+    for (SCROW nRow = 6; nRow < 300; nRow += 3)
+    {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("row " + OString::number(nRow)).getStr(),
+                                     nMidFontHeight, pDoc->GetRowHeight(nRow, 0));
+    }
+    CPPUNIT_ASSERT_GREATER(nMidFontHeight, pDoc->GetRowHeight(151, 0));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
