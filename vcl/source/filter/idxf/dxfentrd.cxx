@@ -785,7 +785,7 @@ void DXFHatchEntity::Read(DXFGroupReader & rDGR)
                 const size_t nDashes = aReader.getCount(79);
                 for (size_t j = 0; j < nDashes && aReader.at(49); ++j)
                     aLine.aDashes.push_back(aReader.getF(49));
-                aPatternLines.push_back(aLine);
+                aPatternLines.push_back(std::move(aLine));
             }
         }
         else if (nCode == 450)
