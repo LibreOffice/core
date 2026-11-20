@@ -42,6 +42,7 @@ class BackstageView extends window.L.Class {
 	private saveTabElement: HTMLElement | null = null;
 	private readonly isStarterMode: boolean;
 	private boundOnKeyDown: (e: KeyboardEvent) => void;
+	private boundOnCloseKeyDown: (e: KeyboardEvent) => void;
 	private snackbarElement: HTMLElement | null = null;
 	private snackbarTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -81,6 +82,9 @@ class BackstageView extends window.L.Class {
 		);
 		this.boundOnKeyDown = (e: KeyboardEvent) => this.onKeyDown(e);
 		document.addEventListener('keydown', this.boundOnKeyDown);
+		// In the capture phase, so the key reaches this listener before any element of the page.
+		this.boundOnCloseKeyDown = (e: KeyboardEvent) => this.onCloseKeyDown(e);
+		document.addEventListener('keydown', this.boundOnCloseKeyDown, true);
 	}
 
 	private createContainer(): HTMLElement {
@@ -1721,6 +1725,34 @@ class BackstageView extends window.L.Class {
 			),
 		);
 		return items.filter((el) => el.offsetParent !== null);
+	}
+
+	// In the apps, the key that closes a window, Ctrl+W, or Cmd+W on macOS, closes the backstage of
+	// a document and goes back to the document, as the back button does. The document and its
+	// window stay. The starter screen has no document, so there the key closes the starter screen.
+	// The page of the starter screen has no connection to the server, so the message goes straight
+	// to the app. In CODA-M the Close menu item takes Cmd+W in the starter screen.
+	private onCloseKeyDown(e: KeyboardEvent): void {
+		if (!window.ThisIsAnApp || !this.isVisible) return;
+
+		const isApple = window.detect(window.features.apple);
+		const closeModifier = isApple ? e.metaKey : e.ctrlKey;
+		const otherModifier =
+			e.shiftKey || e.altKey || (isApple ? e.ctrlKey : e.metaKey);
+		if (!closeModifier || otherModifier || e.key.toLowerCase() !== 'w') return;
+
+		if (this.isStarterMode) {
+			if (isApple) return;
+
+			e.preventDefault();
+			e.stopPropagation();
+			window.postMobileMessage('uno .uno:CloseWin');
+			return;
+		}
+
+		e.preventDefault();
+		e.stopPropagation();
+		this.hide();
 	}
 
 	private onKeyDown(e: KeyboardEvent): void {
