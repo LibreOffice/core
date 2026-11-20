@@ -225,7 +225,7 @@ class Document: NSDocument {
                 }
             }
         }
-        else if case .saved(let wasModified) = outcome, wasModified {
+        else if case .saved(let wasModified) = outcome, wasModified, editorFrame == nil {
             // No pending AppKit request → internal/webview save: ask AppKit to Save (or show Save As… if untitled)
             DispatchQueue.main.async {
                 self.performImplicitSave()
