@@ -328,6 +328,11 @@ UnitBase::TestResult UnitSession::testSlideShow()
         std::shared_ptr<http::WebSocketSession> wsdSession = helpers::loadDocAndGetSession(
             socketPoll(), Poco::URI(helpers::getTestServerURI()), documentURL, testname);
 
+        // A download whose name does not match its format is refused, so the first reply is
+        // the slide show's.
+        helpers::sendTextFrame(
+            wsdSession, "downloadas name=export.odp id=export format=pdf options=", testname);
+
         // request slide show
         helpers::sendTextFrame(
             wsdSession, "downloadas name=slideshow.svg id=slideshow format=svg options=", testname);

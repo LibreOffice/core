@@ -4048,6 +4048,22 @@ bool ClientSession::runExtensionCall(
         docBroker);
 }
 
+namespace
+{
+/// The extension of a URI-encoded download name, or empty when the name does not decode.
+std::string downloadExtension(const std::string& encodedName)
+{
+    try
+    {
+        return FileUtil::extractFileExtension(Uri::decode(encodedName));
+    }
+    catch (const Poco::Exception&)
+    {
+        return std::string();
+    }
+}
+}
+
 bool ClientSession::filterMessage(const std::string& message) const
 {
     bool allowed = true;
@@ -4059,16 +4075,26 @@ bool ClientSession::filterMessage(const std::string& message) const
         std::string id;
         allowed = tokens.size() >= 3 && getTokenString(tokens[2], "id", id) && filterDownloadAs(id);
 
+        std::string format;
+        if (tokens.size() >= 4)
+            getTokenString(tokens[3], "format", format);
+
         // Printing produces a PDF, so a print in any other format is an export.
-        if (allowed && id == "print")
+        if (allowed && id == "print" && format != "pdf")
         {
-            std::string format;
-            if (tokens.size() < 4 || !getTokenString(tokens[3], "format", format) ||
-                format != "pdf")
-            {
-                allowed = false;
-                LOG_WRN("Refusing a print to format [" << format << ']');
-            }
+            allowed = false;
+            LOG_WRN("Refusing a print to format [" << format << ']');
+        }
+
+        // The download is served with the content type of its name, so the name says what
+        // the format is. With no format the engine takes it from the name.
+        std::string name;
+        if (allowed && !format.empty() &&
+            (!getTokenString(tokens[1], "name", name) || downloadExtension(name) != format))
+        {
+            allowed = false;
+            LOG_WRN("Refusing a download named [" << Anonymizer::anonymizeUrl(name)
+                                                  << "] in format [" << format << ']');
         }
     }
     else if (tokens.equals(0, "gettextselection"))
