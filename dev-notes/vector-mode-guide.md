@@ -87,6 +87,7 @@ slide can still be scrolled to.
 | Mouse | What it does |
 |---|---|
 | Click an object | Selects it alone. Inside a group you have not entered, the click selects the group. |
+| Click the selected object | Switches it to its next mode, and back round to the object: points and glue points for a curve or a polygon, crop marks and glue points for a picture, glue points for other objects. See "Editing points" for where the click must land. |
 | Click empty space | Selects nothing. Inside a group it leaves the group (see section 3). |
 | Shift + click or Ctrl + click | Adds the object to the selection, or takes it out when it is selected. Only objects of the same level go together; an object of another level replaces the selection. |
 | Alt + click | Goes through all objects under the mouse, one per click, from the front to the back. A group comes before the objects it holds, so the clicks go into groups. |
@@ -396,7 +397,8 @@ Select one picture and press Crop in the toolbar. Crop marks appear on the pictu
 - The 0 key takes the crop away: the whole graphic shows again in the size it has now, and the
   picture grows round it.
 - Press Crop again to end.
-- While cropping, the eight handles and the turn handle are hidden, so only the crop marks act.
+- While cropping, the handles of the object itself are hidden - the eight, the turn handle, the
+  yellow ones and those of its motion paths - so only the crop marks act.
 
 ### Editing points
 
@@ -413,10 +415,11 @@ a curve can move a little when the answer comes.
 |---|---|
 | Edit Points | Shown in place of Convert to Polygon when one path is selected. Shows the points and weights of the path, and hides them again. Its arrow opens: Add Point, Close Path (closes an open path or opens a closed one), Simplify Curves, Simplify All, and the conversions To Curve, To Contour and To Polygon. |
 | Convert to Polygon | Shown for a shape that is not a path. Turns it into a path whose points can be edited: curved edges stay curves, straight ones become lines. Its arrow opens To Curve, To Contour and To Polygon. |
-| Glue Points | Shows the glue points of the selected object in place of the eight handles and the turn handle, and hides them again. The four at the middles of the sides show grey: they cannot be moved, and Ctrl+Tab passes them by. Its arrow opens Show and Add New. |
+| Glue Points | Shows the glue points of the selected object in place of its own handles - the eight, the turn handle, the yellow ones and those of its motion paths - and hides them again. The four at the middles of the sides show grey: they cannot be moved, and Ctrl+Tab passes them by. Its arrow opens Show and Add New. |
 
 A click on the selected object, where the click is no drag, switches the same modes in turn and
-comes back round to the object itself:
+comes back round to the object itself. The object itself shows its own handles: the eight, the
+turn handle, the yellow ones and those of its motion paths; every other mode hides all of them.
 
 | Object | The modes a click goes through | Where the click must land |
 |---|---|---|
