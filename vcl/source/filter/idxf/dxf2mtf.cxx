@@ -1270,7 +1270,7 @@ void DXF2GDIMetaFile::DrawHatchPattern(const DXFHatchEntity & rE, const basegfx:
         if (!aFamily.maDashes.empty())
             bDashed = true;
         if (!aFamily.maDirection.equalZero())
-            aFamilies.push_back(aFamily);
+            aFamilies.push_back(std::move(aFamily));
     }
     if (aFamilies.empty())
         return;
