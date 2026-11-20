@@ -3163,7 +3163,7 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 		const relative = placed.map((polygon: cool.ObjectPathPolygon) => ({
 			...polygon,
 			points: polygon.points.map((point: cool.ObjectPathPoint) =>
-				cool.MotionPaths.shifted(point, back),
+				PathGeometry.shifted(point, back),
 			),
 		}));
 		return {
@@ -3362,7 +3362,7 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 										: {
 												...one,
 												points: one.points.map((point: cool.ObjectPathPoint) =>
-													cool.MotionPaths.shifted(point, by),
+													PathGeometry.shifted(point, by),
 												),
 											},
 							),

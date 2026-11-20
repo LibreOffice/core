@@ -228,7 +228,7 @@ abstract class ClassicCreateContext implements InteractionMode {
 					{
 						type: cool.PolyPolygonColorPrimitive.type,
 						color: fill,
-						path: PathDrawing.asSvg(polygons),
+						path: PathGeometry.asSvg(polygons),
 					} as cool.PolyPolygonColorPrimitive,
 				]
 			: [];
@@ -244,7 +244,7 @@ abstract class ClassicCreateContext implements InteractionMode {
 						({
 							type: cool.PolygonHairlinePrimitive.type,
 							color: HandleLook.outlineColour,
-							path: PathDrawing.asSvg([polygon]),
+							path: PathGeometry.asSvg([polygon]),
 						}) as cool.PolygonHairlinePrimitive,
 				),
 			),
@@ -1969,7 +1969,7 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 	private went(outcome: PathDrawingOutcome): void {
 		if (outcome === 'finished') {
 			this.sentPath = this.drawing.path();
-			this.send(PathDrawing.rangeOf(this.sentPath));
+			this.send(PathGeometry.rangeOf(this.sentPath));
 		} else if (outcome === 'nothingLeft') Interaction.leaveMode();
 		app.sectionContainer?.requestReDraw();
 	}
@@ -1979,7 +1979,7 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 		[name: string]: { type: string; value: any };
 	} {
 		return {
-			Path: { type: 'string', value: PathDrawing.asJson(this.sentPath) },
+			Path: { type: 'string', value: PathGeometry.asJson(this.sentPath) },
 		};
 	}
 

@@ -87,21 +87,6 @@ namespace cool {
 			);
 		}
 
-		/// That point moved by that offset, its weights too where it has them, and everything
-		/// else it says, how the curve runs through it among it, as it was.
-		public static shifted(point: ObjectPathPoint, by: Point): ObjectPathPoint {
-			const moved: ObjectPathPoint = {
-				...point,
-				x: point.x + by.x,
-				y: point.y + by.y,
-			};
-			if (point.behindX !== undefined) moved.behindX = point.behindX + by.x;
-			if (point.behindY !== undefined) moved.behindY = point.behindY + by.y;
-			if (point.aheadX !== undefined) moved.aheadX = point.aheadX + by.x;
-			if (point.aheadY !== undefined) moved.aheadY = point.aheadY + by.y;
-			return moved;
-		}
-
 		private static moved(
 			polygon: ObjectPathPolygon,
 			by: Point,
@@ -109,7 +94,7 @@ namespace cool {
 			return {
 				closed: polygon.closed,
 				points: polygon.points.map((point: ObjectPathPoint) =>
-					MotionPaths.shifted(point, by),
+					PathGeometry.shifted(point, by),
 				),
 			};
 		}

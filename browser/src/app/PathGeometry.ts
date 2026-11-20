@@ -722,4 +722,92 @@ class PathGeometry {
 			? { ...moved, aheadX: back.x, aheadY: back.y }
 			: { ...moved, behindX: back.x, behindY: back.y };
 	}
+
+	/// That point moved by that offset, its weights too where it has them, and everything
+	/// else it says, how the curve runs through it among it, as it was.
+	public static shifted(
+		point: cool.ObjectPathPoint,
+		by: cool.Point,
+	): cool.ObjectPathPoint {
+		const moved: cool.ObjectPathPoint = {
+			...point,
+			x: point.x + by.x,
+			y: point.y + by.y,
+		};
+		if (point.behindX !== undefined) moved.behindX = point.behindX + by.x;
+		if (point.behindY !== undefined) moved.behindY = point.behindY + by.y;
+		if (point.aheadX !== undefined) moved.aheadX = point.aheadX + by.x;
+		if (point.aheadY !== undefined) moved.aheadY = point.aheadY + by.y;
+		return moved;
+	}
+
+	/// The rectangle around every point of the path, weights included, in twips.
+	public static rangeOf(path: cool.ObjectPathPolygon[]): cool.Range2D {
+		const points: cool.Point[] = [];
+		for (const polygon of path)
+			for (const point of polygon.points ?? []) {
+				points.push(new cool.Point(point.x, point.y));
+				if (point.behindX !== undefined && point.behindY !== undefined)
+					points.push(new cool.Point(point.behindX, point.behindY));
+				if (point.aheadX !== undefined && point.aheadY !== undefined)
+					points.push(new cool.Point(point.aheadX, point.aheadY));
+			}
+		return cool.Range2D.fromPoints(points);
+	}
+
+	/*
+		The path in whole twips in the form the path of an object comes from the engine, point by
+		point with its weights, which is how the engine takes it back as well.
+	*/
+	public static asJson(path: cool.ObjectPathPolygon[]): string {
+		const round = (value: number | undefined) =>
+			value === undefined ? undefined : Math.round(value);
+		return JSON.stringify({
+			path: path.map((polygon: cool.ObjectPathPolygon) => ({
+				closed: polygon.closed ? true : undefined,
+				points: (polygon.points ?? []).map((point: cool.ObjectPathPoint) => ({
+					x: Math.round(point.x),
+					y: Math.round(point.y),
+					behindX: round(point.behindX),
+					behindY: round(point.behindY),
+					aheadX: round(point.aheadX),
+					aheadY: round(point.aheadY),
+				})),
+			})),
+		});
+	}
+
+	/*
+		The path as an SVG path in whole twips, one M for every polygon, a C for a curved edge and
+		an L for a straight one, and a Z for a closed polygon, which is its straight closing edge
+		where that is straight. Nothing where the path is empty.
+	*/
+	public static asSvg(path: cool.ObjectPathPolygon[]): string {
+		const at = (x: number, y: number) =>
+			String(Math.round(x)) + ' ' + String(Math.round(y));
+
+		return path
+			.map((polygon: cool.ObjectPathPolygon) => {
+				const points = polygon.points ?? [];
+				if (!points.length) return '';
+				const edges = polygon.closed ? points.length : points.length - 1;
+				let written = 'M ' + at(points[0].x, points[0].y);
+				for (let edge = 0; edge < edges; ++edge) {
+					const from = points[edge];
+					const to = points[(edge + 1) % points.length];
+					if (from.aheadX !== undefined || to.behindX !== undefined)
+						written +=
+							' C ' +
+							at(from.aheadX ?? from.x, from.aheadY ?? from.y) +
+							' ' +
+							at(to.behindX ?? to.x, to.behindY ?? to.y) +
+							' ' +
+							at(to.x, to.y);
+					else if (edge < points.length - 1) written += ' L ' + at(to.x, to.y);
+				}
+				return polygon.closed ? written + ' Z' : written;
+			})
+			.filter((written: string) => written.length)
+			.join(' ');
+	}
 }

@@ -977,7 +977,7 @@ class PathEditing implements HandleSource {
 				: {
 						...one,
 						points: (one.points ?? []).map((point: cool.ObjectPathPoint) =>
-							cool.MotionPaths.shifted(point, by),
+							PathGeometry.shifted(point, by),
 						),
 					},
 		);
@@ -1143,7 +1143,7 @@ class ObjectPathSink implements PathSink {
 		const first = RenderGeometrySection.objectOf(this.objectId);
 		if (!part) return;
 
-		const box = PathDrawing.rangeOf(path);
+		const box = PathGeometry.rangeOf(path);
 		const created: cool.SlideObject = {
 			id: newId,
 			parent: first?.parent,
@@ -1158,7 +1158,7 @@ class ObjectPathSink implements PathSink {
 				{
 					type: cool.PolygonHairlinePrimitive.type,
 					color: HandleLook.outlineColour,
-					path: PathDrawing.asSvg(path),
+					path: PathGeometry.asSvg(path),
 				} as cool.PolygonHairlinePrimitive,
 			],
 		};

@@ -38,7 +38,7 @@ describe('PathDrawing', function () {
 		nodeassert.strictEqual(drawing.setThePoint(true), 'partEnded');
 		nodeassert.ok(drawing.beforeThePart());
 		nodeassert.strictEqual(
-			PathDrawing.asSvg(drawing.path()),
+			PathGeometry.asSvg(drawing.path()),
 			'M 0 0 L 100 0 L 100 100 Z',
 		);
 	});
@@ -62,7 +62,7 @@ describe('PathDrawing', function () {
 		drawing.moveTo(new cool.Point(400, 100), false);
 		drawing.setThePoint(true);
 		nodeassert.strictEqual(
-			PathDrawing.asSvg(drawing.path()),
+			PathGeometry.asSvg(drawing.path()),
 			'M 0 0 L 100 0 L 100 100 Z M 300 0 L 400 0 L 400 100 Z',
 		);
 	});
@@ -95,7 +95,7 @@ describe('PathDrawing', function () {
 		drawing.moveTo(new cool.Point(3, 2), false);
 		nodeassert.strictEqual(drawing.setThePoint(false), 'finished');
 		nodeassert.strictEqual(
-			PathDrawing.asSvg(drawing.path()),
+			PathGeometry.asSvg(drawing.path()),
 			'M 0 0 L 100 0 L 100 100 Z',
 		);
 	});
@@ -110,14 +110,14 @@ describe('PathDrawing', function () {
 		]);
 		nodeassert.ok(drawing.beforeThePart());
 		nodeassert.strictEqual(
-			PathDrawing.asSvg(drawing.path()),
+			PathGeometry.asSvg(drawing.path()),
 			'M 0 0 L 100 0 L 100 100 Z',
 		);
 	});
 
 	it('the path goes back point by point, with the weights in use only', function () {
 		nodeassert.strictEqual(
-			PathDrawing.asJson([
+			PathGeometry.asJson([
 				{
 					closed: true,
 					points: [
@@ -237,7 +237,7 @@ describe('PathDrawing', function () {
 		for (let x = 10; x <= 300; x += 10) drawing.strokeTo(new cool.Point(x, 0));
 		nodeassert.strictEqual(drawing.strokeEnd(), 'partEnded');
 		nodeassert.strictEqual(
-			PathDrawing.asSvg(drawing.path()),
+			PathGeometry.asSvg(drawing.path()),
 			'M 0 0 C 100 0 200 0 300 0',
 		);
 
@@ -286,7 +286,7 @@ describe('PathDrawing', function () {
 		click(drawing, [[300, 0]]);
 		nodeassert.strictEqual(drawing.stopHere(), 'finished');
 		nodeassert.strictEqual(
-			PathDrawing.asSvg(drawing.path()),
+			PathGeometry.asSvg(drawing.path()),
 			'M 0 0 L 100 0 L 100 100',
 		);
 		nodeassert.strictEqual(new PathDrawing(open, 10).stopHere(), 'nothingLeft');
@@ -329,7 +329,7 @@ describe('PathDrawing', function () {
 		]);
 		nodeassert.strictEqual(drawing.finish(), 'finished');
 		nodeassert.strictEqual(
-			PathDrawing.asSvg(drawing.path()),
+			PathGeometry.asSvg(drawing.path()),
 			'M 0 0 L 100 0 L 100 100 M 300 300 L 400 300',
 		);
 	});
@@ -361,7 +361,7 @@ describe('PathDrawing', function () {
 		nodeassert.strictEqual(drawing.back(), 'goesOn');
 		nodeassert.strictEqual(drawing.path().length, 0);
 		nodeassert.strictEqual(
-			PathDrawing.asSvg(drawing.shown()),
+			PathGeometry.asSvg(drawing.shown()),
 			'M 0 0 L 100 0 L 100 100',
 		);
 		nodeassert.strictEqual(drawing.back(), 'goesOn');
