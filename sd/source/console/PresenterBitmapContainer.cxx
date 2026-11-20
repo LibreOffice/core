@@ -169,27 +169,24 @@ std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapConta
     if (PresenterConfigurationAccess::GetProperty(rxProperties, u"NormalFileName"_ustr) >>= sFileName)
         try
         {
-            pBitmap->SetBitmap(
-                BitmapDescriptor::Normal,
-                sd::presenter::PresenterHelper::loadBitmap(sFileName, rxCanvas));
+            pBitmap->SetBitmap(BitmapDescriptor::Mode::Normal,
+                               sd::presenter::PresenterHelper::loadBitmap(sFileName, rxCanvas));
         }
         catch (Exception&)
         {}
     if (PresenterConfigurationAccess::GetProperty(rxProperties, u"MouseOverFileName"_ustr) >>= sFileName)
         try
         {
-            pBitmap->SetBitmap(
-                BitmapDescriptor::MouseOver,
-                sd::presenter::PresenterHelper::loadBitmap(sFileName, rxCanvas));
+            pBitmap->SetBitmap(BitmapDescriptor::Mode::MouseOver,
+                               sd::presenter::PresenterHelper::loadBitmap(sFileName, rxCanvas));
         }
         catch (Exception&)
         {}
     if (PresenterConfigurationAccess::GetProperty(rxProperties, u"DisabledFileName"_ustr) >>= sFileName)
         try
         {
-            pBitmap->SetBitmap(
-                BitmapDescriptor::Disabled,
-                sd::presenter::PresenterHelper::loadBitmap(sFileName, rxCanvas));
+            pBitmap->SetBitmap(BitmapDescriptor::Mode::Disabled,
+                               sd::presenter::PresenterHelper::loadBitmap(sFileName, rxCanvas));
         }
         catch (Exception&)
         {}
@@ -270,17 +267,17 @@ css::uno::Reference<css::rendering::XBitmap> const &
 {
     switch (eMode)
     {
-        case Normal:
+        case Mode::Normal:
         default:
             return mxNormalBitmap;
 
-        case MouseOver:
+        case Mode::MouseOver:
             if (mxMouseOverBitmap.is())
                 return mxMouseOverBitmap;
             else
                 return mxNormalBitmap;
 
-        case Disabled:
+        case Mode::Disabled:
             if (mxDisabledBitmap.is())
                 return mxDisabledBitmap;
             else
@@ -294,7 +291,7 @@ void PresenterBitmapContainer::BitmapDescriptor::SetBitmap (
 {
     switch (eMode)
     {
-        case Normal:
+        case Mode::Normal:
         default:
             mxNormalBitmap = rxBitmap;
             if (mxNormalBitmap.is())
@@ -305,11 +302,11 @@ void PresenterBitmapContainer::BitmapDescriptor::SetBitmap (
             }
             break;
 
-        case MouseOver:
+        case Mode::MouseOver:
             mxMouseOverBitmap = rxBitmap;
             break;
 
-        case Disabled:
+        case Mode::Disabled:
             mxDisabledBitmap = rxBitmap;
             break;
     }

@@ -98,7 +98,7 @@ PresenterButton::PresenterButton(
       mpMouseOverFont(std::move(xMouseOverFont)),
       msAction(std::move(sAction)),
       maButtonSize(-1,-1),
-      meState(PresenterBitmapDescriptor::Normal)
+      meState(PresenterBitmapDescriptor::Mode::Normal)
 {
     try
     {
@@ -210,7 +210,7 @@ void SAL_CALL PresenterButton::windowPaint (const css::awt::PaintEvent& rEvent)
         return;
 
     Reference<rendering::XBitmap> xBitmap;
-    if (meState == PresenterBitmapDescriptor::MouseOver)
+    if (meState == PresenterBitmapDescriptor::Mode::MouseOver)
         xBitmap = mxMouseOverBitmap;
     else
         xBitmap = mxNormalBitmap;
@@ -238,19 +238,19 @@ void SAL_CALL PresenterButton::windowPaint (const css::awt::PaintEvent& rEvent)
 void SAL_CALL PresenterButton::mousePressed (const css::awt::MouseEvent&)
 {
     ThrowIfDisposed();
-    meState = PresenterBitmapDescriptor::Normal;
+    meState = PresenterBitmapDescriptor::Mode::Normal;
 }
 
 void SAL_CALL PresenterButton::mouseReleased (const css::awt::MouseEvent&)
 {
     ThrowIfDisposed();
 
-    if (meState == PresenterBitmapDescriptor::Normal)
+    if (meState == PresenterBitmapDescriptor::Mode::Normal)
     {
         OSL_ASSERT(mpPresenterController);
         mpPresenterController->DispatchUnoCommand(msAction);
 
-        meState = PresenterBitmapDescriptor::Normal;
+        meState = PresenterBitmapDescriptor::Mode::Normal;
         Invalidate();
     }
 }
@@ -258,14 +258,14 @@ void SAL_CALL PresenterButton::mouseReleased (const css::awt::MouseEvent&)
 void SAL_CALL PresenterButton::mouseEntered (const css::awt::MouseEvent&)
 {
     ThrowIfDisposed();
-    meState = PresenterBitmapDescriptor::MouseOver;
+    meState = PresenterBitmapDescriptor::Mode::MouseOver;
     Invalidate();
 }
 
 void SAL_CALL PresenterButton::mouseExited (const css::awt::MouseEvent&)
 {
     ThrowIfDisposed();
-    meState = PresenterBitmapDescriptor::Normal;
+    meState = PresenterBitmapDescriptor::Mode::Normal;
     Invalidate();
 }
 
@@ -378,7 +378,7 @@ void PresenterButton::SetupButtonBitmaps()
             xCanvas,
             maButtonSize,
             mpFont,
-            PresenterBitmapDescriptor::Normal,
+            PresenterBitmapDescriptor::Mode::Normal,
             pLeftBitmap,
             pCenterBitmap,
             pRightBitmap);
@@ -392,7 +392,7 @@ void PresenterButton::SetupButtonBitmaps()
             xCanvas,
             maButtonSize,
             mpMouseOverFont,
-            PresenterBitmapDescriptor::MouseOver,
+            PresenterBitmapDescriptor::Mode::MouseOver,
             pLeftBitmap,
             pCenterBitmap,
             pRightBitmap);

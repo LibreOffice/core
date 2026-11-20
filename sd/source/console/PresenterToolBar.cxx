@@ -1414,13 +1414,13 @@ void Button::PaintIcon (
 PresenterBitmapDescriptor::Mode Button::GetMode() const
 {
     if ( ! IsEnabled())
-        return PresenterBitmapDescriptor::Disabled;
+        return PresenterBitmapDescriptor::Mode::Disabled;
     else if (mbIsPressed)
-        return PresenterBitmapDescriptor::Normal;
+        return PresenterBitmapDescriptor::Mode::Normal;
     else if (mbIsOver)
-        return PresenterBitmapDescriptor::MouseOver;
+        return PresenterBitmapDescriptor::Mode::MouseOver;
     else
-        return PresenterBitmapDescriptor::Normal;
+        return PresenterBitmapDescriptor::Mode::Normal;
 }
 
 //----- lang::XEventListener --------------------------------------------------

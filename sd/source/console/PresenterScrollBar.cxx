@@ -523,11 +523,11 @@ PresenterBitmapContainer::BitmapDescriptor::Mode PresenterScrollBar::GetBitmapMo
     const Area eArea) const
 {
     if (IsDisabled(eArea))
-        return PresenterBitmapContainer::BitmapDescriptor::Disabled;
+        return PresenterBitmapContainer::BitmapDescriptor::Mode::Disabled;
     else if (eArea == meMouseMoveArea)
-        return PresenterBitmapContainer::BitmapDescriptor::MouseOver;
+        return PresenterBitmapContainer::BitmapDescriptor::Mode::MouseOver;
     else
-        return PresenterBitmapContainer::BitmapDescriptor::Normal;
+        return PresenterBitmapContainer::BitmapDescriptor::Mode::Normal;
 }
 
 bool PresenterScrollBar::IsDisabled (const Area eArea) const
