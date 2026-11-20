@@ -565,6 +565,17 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testCycle)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(32400),
                          xPropSetConn->getPropertyValue(u"RotateAngle"_ustr).get<sal_Int32>());
 
+    // The five connectors stand evenly around the ring, so every connector
+    // is turned a fifth of a full turn further than the one before it
+    const sal_Int32 aConnectorAngles[] = { 32400, 25200, 18000, 10800, 3600 };
+    for (sal_Int32 i = 0; i < 5; ++i)
+    {
+        uno::Reference<beans::XPropertySet> xConnector(xGroup->getShapeByIndex(2 + 2 * i),
+                                                       uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(aConnectorAngles[i],
+                             xConnector->getPropertyValue(u"RotateAngle"_ustr).get<sal_Int32>());
+    }
+
     // Make sure that we have an arrow shape between the two shapes
     comphelper::SequenceAsHashMap aCustomShapeGeometry(
         xPropSetConn->getPropertyValue(u"CustomShapeGeometry"_ustr));
@@ -799,7 +810,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAccentProcess)
     CPPUNIT_ASSERT(xFirstChildText.is());
     CPPUNIT_ASSERT_EQUAL(u"b"_ustr, xFirstChildText->getString());
     uno::Reference<drawing::XShape> xFirstChild(xFirstChildText, uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xFirstChildText.is());
+    CPPUNIT_ASSERT(xFirstChild.is());
 
     {
         uno::Reference<container::XEnumerationAccess> xParasAccess(xFirstChildText, uno::UNO_QUERY);
@@ -847,7 +858,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAccentProcess)
     CPPUNIT_ASSERT(xSecondPair.is());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xSecondPair->getCount());
     uno::Reference<text::XText> xSecondParentText(xSecondPair->getShapeByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xFirstParentText.is());
+    CPPUNIT_ASSERT(xSecondParentText.is());
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: cc; Actual  : c', i.e. non-first runs on data points were ignored.
     CPPUNIT_ASSERT_EQUAL(u"cc"_ustr, xSecondParentText->getString());
@@ -1562,6 +1573,20 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFillColorList)
     // i.e. the background of the "A" shape was orange-ish, rather than red-ish.
     CPPUNIT_ASSERT_EQUAL(Color(0xC0504D), nFillColor);
 
+    // The color list of the style label gives every column the next color of the list,
+    // so the "B" and "C" shapes are filled with its second and third color
+    uno::Reference<drawing::XShape> xShapeB = findChildShapeByText(xGroup, u"B"_ustr);
+    CPPUNIT_ASSERT(xShapeB.is());
+    uno::Reference<beans::XPropertySet> xPropertySetB(xShapeB, uno::UNO_QUERY_THROW);
+    xPropertySetB->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
+    CPPUNIT_ASSERT_EQUAL(Color(0x9BBB59), nFillColor);
+
+    uno::Reference<drawing::XShape> xShapeC = findChildShapeByText(xGroup, u"C"_ustr);
+    CPPUNIT_ASSERT(xShapeC.is());
+    uno::Reference<beans::XPropertySet> xPropertySetC(xShapeC, uno::UNO_QUERY_THROW);
+    xPropertySetC->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
+    CPPUNIT_ASSERT_EQUAL(Color(0x8064A2), nFillColor);
+
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2239
     // - Actual  : 5199
@@ -1578,6 +1603,14 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFillColorList)
     sal_Int32 nGroupTop = xGroup->getPosition().Y;
     sal_Int32 nShapeTop = xShape->getPosition().Y;
     CPPUNIT_ASSERT_GREATER(nGroupTop, nShapeTop);
+
+    // The "A" box and the empty description area under it are centered vertically
+    // in the diagram, so the space above them is as large as the space below them
+    uno::Reference<drawing::XShape> xColumn = getChildShape(xGroup, 1);
+    sal_Int32 nColumnTop = xColumn->getPosition().Y;
+    sal_Int32 nColumnBottom = nColumnTop + xColumn->getSize().Height;
+    sal_Int32 nGroupBottom = nGroupTop + xGroup->getSize().Height;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nColumnTop - nGroupTop, nGroupBottom - nColumnBottom, 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf134221)
