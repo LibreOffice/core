@@ -252,6 +252,12 @@ public:
     */
     OStringBuffer & operator =(std::string_view string) {
         sal_Int32 n = string.length();
+        // shortcutting code may hand back the own text unchanged
+        if (string.data() == pData->buffer && n == pData->length)
+            return *this;
+        // own text is overwritten or freed; capacity 0 shares the static empty string
+        assert(nCapacity == 0
+               || !concatPartRefersTo(string, pData->buffer, pData->buffer + pData->length));
         if (n >= nCapacity) {
             ensureCapacity(n + 16); //TODO: check for overflow
         }
@@ -285,6 +291,8 @@ public:
     /** @overload */
     template<typename T1, typename T2>
     OStringBuffer & operator =(OStringConcat<T1, T2> && concat) {
+        // own text is overwritten or freed; capacity 0 shares the static empty string
+        assert(nCapacity == 0 || !concat.refersTo(pData->buffer, pData->buffer + pData->length));
         sal_Int32 const n = concat.length();
         if (n >= nCapacity) {
             ensureCapacity(n + 16); //TODO: check for overflow
@@ -498,6 +506,8 @@ public:
     template< typename T1, typename T2 >
     OStringBuffer& append( OStringConcat< T1, T2 >&& c )
     {
+        // own text is moved or freed; capacity 0 shares the static empty string
+        assert(nCapacity == 0 || !c.refersTo(pData->buffer, pData->buffer + pData->length));
         sal_Int32 l = c.length();
         if (l != 0)
             c.addData(appendUninitialized(l));

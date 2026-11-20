@@ -26,6 +26,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <cwchar>
+#include <functional>
 #include <limits>
 #include <new>
 #include <string_view>
@@ -1232,6 +1233,13 @@ void stringbuffer_insert(rtl_tString** ppThis, sal_Int32* capacity, sal_Int32 of
         return;
     if (len > std::numeric_limits<sal_Int32>::max() - (*ppThis)->length) {
         throw std::bad_alloc();
+    }
+    if constexpr (std::is_same_v<C, Char_T<rtl_tString>>)
+    {
+        // own text is moved or freed; capacity 0 shares the static empty string
+        assert(*capacity == 0
+               || !(std::less_equal<>()((*ppThis)->buffer, pStr)
+                    && std::less_equal<>()(pStr, (*ppThis)->buffer + (*ppThis)->length)));
     }
 
     stringbuffer_ensureCapacity(ppThis, capacity, (*ppThis)->length + len);

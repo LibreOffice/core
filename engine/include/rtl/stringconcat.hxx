@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <functional>
 #include <memory>
 #include <string>
 #include <string_view>
@@ -181,6 +182,29 @@ template <typename C> struct ToStringHelper<RepeatedChar_t<C>>
     { return std::fill_n(buffer, str.n, str.c); }
 };
 
+// Whether the part points into [pBegin, pEnd], a text and its terminator. Must not happen for a
+// string buffer's own text: it may be overwritten, moved or freed before the part is copied
+template <typename C, typename T>
+bool concatPartRefersTo(const T& part, const C* pBegin, const C* pEnd)
+{
+    if constexpr (requires { part.refersTo(pBegin, pEnd); }) // a nested concatenation
+        return part.refersTo(pBegin, pEnd);
+    else if constexpr (std::is_convertible_v<const T&, const C*>) // before string_view: may be null
+    {
+        const C* const p = part;
+        // at pEnd too: an empty string, but copying it reads the terminator
+        return std::less_equal<>()(pBegin, p) && std::less_equal<>()(p, pEnd);
+    }
+    else if constexpr (std::is_convertible_v<const T&, std::basic_string_view<C>>)
+    {
+        const std::basic_string_view<C> s = part;
+        return !s.empty() && std::less_equal<>()(pBegin, s.data())
+               && std::less_equal<>()(s.data(), pEnd);
+    }
+    else
+        return false;
+}
+
 /**
 @internal
 
@@ -197,6 +221,11 @@ public:
     StringConcat( const T1& left_, const T2& right_ ) : left( left_ ), right( right_ ) {}
     std::size_t length() const { return ToStringHelper< T1 >::length( left ) + ToStringHelper< T2 >::length( right ); }
     C* addData( C* buffer ) const SAL_RETURNS_NONNULL { return ToStringHelper< T2 >()( ToStringHelper< T1 >()( buffer, left ), right ); }
+    // Whether any part points into [pBegin, pEnd], a text and its terminator
+    bool refersTo(const C* pBegin, const C* pEnd) const
+    {
+        return concatPartRefersTo(left, pBegin, pEnd) || concatPartRefersTo(right, pBegin, pEnd);
+    }
     // NOTE here could be functions that would forward to the "real" temporary O(U)String. Note however that e.g. getStr()
     // is not so simple, as the O(U)String temporary must live long enough (i.e. can't be created here in a function, a wrapper
     // temporary object containing it must be returned instead).
@@ -389,6 +418,10 @@ public:
     StringConcat( const T2& right_ ) : right( right_ ) {}
     std::size_t length() const { return ToStringHelper< T2 >::length( right ); }
     C* addData( C* buffer ) const SAL_RETURNS_NONNULL { return ToStringHelper< T2 >()( buffer, right ); }
+    bool refersTo(const C* pBegin, const C* pEnd) const
+    {
+        return concatPartRefersTo(right, pBegin, pEnd);
+    }
 private:
     const T2& right;
 };
