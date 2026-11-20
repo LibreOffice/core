@@ -523,18 +523,7 @@ public:
     template<std::size_t N> void operator +=(OStringLiteral<N> const &) && = delete;
 
     OString & operator +=(std::string_view sv) & {
-        if (sv.empty()) {
-            return *this;
-        }
-        if (sv.size() > o3tl::make_unsigned(std::numeric_limits<sal_Int32>::max() - pData->length))
-        {
-            throw std::bad_alloc();
-        }
-        auto const l = pData->length + sv.size();
-        rtl_string_ensureCapacity(&pData, l);
-        *addDataHelper(pData->buffer + pData->length, sv.data(), sv.size()) = '\0';
-        pData->length = l;
-        return *this;
+        return operator +=(Concat(sv));
     }
     void operator +=(std::string_view) && = delete;
 
@@ -543,14 +532,16 @@ public:
     */
     template< typename T1, typename T2 >
     OString& operator+=( OStringConcat< T1, T2 >&& c ) & {
-        sal_Int32 l = c.length();
-        if( l == 0 )
+        const std::size_t n = c.length();
+        if (n == 0)
             return *this;
-        l += pData->length;
-        rtl_string_ensureCapacity( &pData, l );
-        char* end = c.addData( pData->buffer + pData->length );
-        *end = '\0';
-        pData->length = l;
+        if (n > o3tl::make_unsigned(std::numeric_limits<sal_Int32>::max() - pData->length))
+            throw std::bad_alloc();
+        // own text may be appended: release it last
+        rtl_String* const pNew = rtl_string_alloc(pData->length + n);
+        *c.addData(addDataHelper(pNew->buffer, pData->buffer, pData->length)) = '\0';
+        rtl_string_release(pData);
+        pData = pNew;
         return *this;
     }
     template<typename T1, typename T2> void operator +=(

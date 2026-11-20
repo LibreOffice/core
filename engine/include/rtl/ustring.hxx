@@ -646,14 +646,16 @@ public:
     */
     template< typename T1, typename T2 >
     OUString& operator+=( OUStringConcat< T1, T2 >&& c ) & {
-        sal_Int32 l = c.length();
-        if( l == 0 )
+        const std::size_t n = c.length();
+        if (n == 0)
             return *this;
-        l += pData->length;
-        rtl_uString_ensureCapacity( &pData, l );
-        sal_Unicode* end = c.addData( pData->buffer + pData->length );
-        *end = '\0';
-        pData->length = l;
+        if (n > o3tl::make_unsigned(std::numeric_limits<sal_Int32>::max() - pData->length))
+            throw std::bad_alloc();
+        // own text may be appended: release it last
+        rtl_uString* const pNew = rtl_uString_alloc(pData->length + n);
+        *c.addData(addDataHelper(pNew->buffer, pData->buffer, pData->length)) = '\0';
+        rtl_uString_release(pData);
+        pData = pNew;
         return *this;
     }
     template<typename T1, typename T2> void operator +=(

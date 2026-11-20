@@ -41,6 +41,7 @@ private:
     void checkConcatAsciiL();
     void checkEnsureCapacity();
     void checkAppend();
+    void checkAppendOwnText();
     void checkInvalid();
 
 CPPUNIT_TEST_SUITE(StringConcat);
@@ -48,6 +49,7 @@ CPPUNIT_TEST(checkConcat);
 CPPUNIT_TEST(checkConcatAsciiL);
 CPPUNIT_TEST(checkEnsureCapacity);
 CPPUNIT_TEST(checkAppend);
+CPPUNIT_TEST(checkAppendOwnText);
 CPPUNIT_TEST(checkInvalid);
 CPPUNIT_TEST_SUITE_END();
 };
@@ -163,6 +165,27 @@ void test::oustring::StringConcat::checkAppend()
     OUStringBuffer buf( "foo" );
     buf.append( OUStringLiteral( u"bar" ) + "baz" );
     CPPUNIT_ASSERT_EQUAL( u"foobarbaz"_ustr, buf.makeStringAndClear());
+}
+
+void test::oustring::StringConcat::checkAppendOwnText()
+{
+    // Heap strings, not _ostr/_ustr literals: growing one frees its old text
+    OString s(std::string_view("abc"));
+    s += std::string_view(s);
+    CPPUNIT_ASSERT_EQUAL("abcabc"_ostr, s);
+    OString t(std::string_view("abc"));
+    t += OString::Concat("x") + std::string_view(t);
+    CPPUNIT_ASSERT_EQUAL("abcxabc"_ostr, t);
+    OUString u(std::u16string_view(u"abc"));
+    u += OUString::Concat("x") + std::u16string_view(u);
+    CPPUNIT_ASSERT_EQUAL(u"abcxabc"_ustr, u);
+    // A part that is the string itself is read through it
+    OString v(std::string_view("abc"));
+    v += "x" + v;
+    CPPUNIT_ASSERT_EQUAL("abcxabc"_ostr, v);
+    OUString w(std::u16string_view(u"abc"));
+    w += "x" + w;
+    CPPUNIT_ASSERT_EQUAL(u"abcxabc"_ustr, w);
 }
 
 #define INVALID_CONCAT( expression ) \
