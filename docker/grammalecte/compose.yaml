@@ -41,6 +41,8 @@ services:
     environment:
       - TLS_HOST=grammalecte
       - TLS_UPSTREAM=grammalecte-server:8080
+      # What Collabora Online asks for; the front refuses any other path.
+      - TLS_PATHS=/gc_text/fr|/get_options/fr
     volumes:
       - ../tls/front.conf.template:/etc/nginx/templates/default.conf.template:ro
       - ./certs:/certs:ro

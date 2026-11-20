@@ -14,7 +14,7 @@ archive and in the image.
 Build and try it:
 
     docker build -t grammalecte docker/grammalecte
-    docker run --rm -p 8080:8080 grammalecte
+    docker run --rm -p 127.0.0.1:8080:8080 grammalecte
     curl -d 'text=Il%20sont%20parti.' http://127.0.0.1:8080/gc_text/fr
 
 The answer lists an agreement error on "sont parti". The server itself

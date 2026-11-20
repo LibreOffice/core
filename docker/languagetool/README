@@ -16,7 +16,7 @@ under the LGPL 2.1; the licence text is in the image.
 
 Try it:
 
-    docker run --rm -p 8010:8010 collabora/languagetool
+    docker run --rm -p 127.0.0.1:8010:8010 collabora/languagetool
     curl -d 'text=The%20catt%20sat%20down.&language=en-US' http://127.0.0.1:8010/v2/check
 
 The answer lists a spelling mistake in "catt". The server itself speaks
@@ -57,7 +57,15 @@ account's name in user_name and its key in api_key.
 
 The service has no authentication, and it answers any origin. Anyone who
 can reach it can send it text, so keep it on an internal network, as
-compose.yaml does, and never on a public address.
+compose.yaml does, and never on a public address. The front passes on
+/v2/check and /v2/languages only, what Collabora Online asks for, and
+answers any other path with 404 itself: the rest of the server's API, such
+as the user and word list requests, stays out of reach.
+
+To fetch the latest image and restart the server with it:
+
+    docker compose pull
+    docker compose up -d
 
 The server runs on Java, as the user nobody, and wants half a gigabyte of
 memory or so. The JAVAOPTIONS environment variable goes to the Java

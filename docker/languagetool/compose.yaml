@@ -42,6 +42,8 @@ services:
     environment:
       - TLS_HOST=languagetool
       - TLS_UPSTREAM=languagetool-server:8010
+      # What Collabora Online asks for; the front refuses any other path.
+      - TLS_PATHS=/v2/check|/v2/languages
     volumes:
       - ../tls/front.conf.template:/etc/nginx/templates/default.conf.template:ro
       - ./certs:/certs:ro

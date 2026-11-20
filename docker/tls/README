@@ -15,7 +15,10 @@ what the fronts share:
 
 - front.conf.template is the nginx configuration of a front: it serves
   https://<host> with that certificate and passes the requests on to the
-  service, on a network that only the front and the service share.
+  service, on a network that only the front and the service share. It
+  passes on only the paths Collabora Online asks for, which the TLS_PATHS
+  environment variable of the front lists as a regular expression, as in
+  TLS_PATHS=/v2/check|/v2/languages, and answers any other path with 404.
 
 Collabora Online is given ca-bundle.crt as its certificate bundle, twice:
 at /etc/ssl/certs/ca-certificates.crt for the server, and at the same path
