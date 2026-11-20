@@ -1637,7 +1637,7 @@ void DXF2GDIMetaFile::DrawMTextEntity(const DXFMTextEntity & rE, const DXFTransf
                 aLine.mfWidth += fWidth;
             }
         }
-        aLines.push_back(aLine);
+        aLines.push_back(std::move(aLine));
     }
     if (aLines.empty())
         return;
