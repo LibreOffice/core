@@ -88,7 +88,6 @@ abstract class ClassicCreateContext implements InteractionMode {
 
 	/// Enters the mode for that command, with the class of its kind.
 	public static start(shape: string): void {
-		ClassicCreateContext.listen();
 		const mode = ClassicTextCreateContext.makes(shape)
 			? new ClassicTextCreateContext(shape)
 			: ClassicLineCreateContext.makes(shape)
@@ -100,6 +99,12 @@ abstract class ClassicCreateContext implements InteractionMode {
 						: ClassicFormControlCreateContext.makes(shape)
 							? new ClassicFormControlCreateContext(shape)
 							: new ClassicShapeCreateContext(shape);
+		ClassicCreateContext.startWith(mode);
+	}
+
+	/// Enters that mode.
+	protected static startWith(mode: ClassicCreateContext): void {
+		ClassicCreateContext.listen();
 		Interaction.enterMode(mode);
 		mode.started();
 	}
@@ -1723,14 +1728,18 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 	private lastUpTime: number = 0;
 	private lastUpAt: cool.Point | null = null;
 
-	constructor(shape: string) {
+	/// The path is drawn the way of that command, or the way given.
+	constructor(
+		shape: string,
+		kind: PathDrawingKind = ClassicPathCreateContext.kinds[shape],
+	) {
 		super(shape);
 		this.drawing = new PathDrawing(
-			ClassicPathCreateContext.kinds[shape],
+			kind,
 			ClassicCreateContext.twips(ClassicPathCreateContext.reach),
 		);
-		this.curves = !!ClassicPathCreateContext.kinds[shape].curves;
-		this.freehand = !!ClassicPathCreateContext.kinds[shape].freehand;
+		this.curves = !!kind.curves;
+		this.freehand = !!kind.freehand;
 		this.drawing.strokesTaken(
 			ClassicCreateContext.twips(ClassicPathCreateContext.strokeStep),
 			ClassicCreateContext.twips(ClassicPathCreateContext.strokeTolerance),
@@ -2027,6 +2036,129 @@ class ClassicPathCreateContext extends ClassicCreateContext {
 			this.sentPath,
 			this.fills() ? this.fillColour() : undefined,
 		);
+	}
+}
+
+/// What a motion path is drawn for, as the animation pane names it: an object by its id, or a
+/// paragraph of its text by its number.
+interface MotionPathTarget {
+	id: string;
+	paragraph?: number;
+}
+
+/*
+	Drawing a motion path, as the animation pane asks for one: a curve, a polygon or a line drawn
+	by hand, drawn as the open kind of it is drawn, but of one part. The path drawn makes no
+	object; it goes to the engine as an effect along it for each target, and the targets are
+	selected again.
+*/
+class ClassicMotionPathCreateContext extends ClassicPathCreateContext {
+	/// The kind as the animation pane names it, and the command whose way of drawing it takes.
+	private static readonly drawnAs: { [kind: string]: string } = {
+		curve: 'Bezier_Unfilled',
+		polygon: 'Polygon_Unfilled',
+		freeform: 'Freeline_Unfilled',
+	};
+
+	/// A motion path is one polygon, as the office draws it: the path is finished once its
+	/// part ends, a line drawn by hand when the button comes up after the stroke.
+	private static readonly ways: { [kind: string]: PathDrawingKind } = {
+		curve: { multi: false, closes: false, inSteps: false, curves: true },
+		polygon: { multi: false, closes: false, inSteps: false },
+		freeform: { multi: false, closes: false, inSteps: false, freehand: true },
+	};
+
+	private kind: string;
+	private targets: MotionPathTarget[];
+	/// How long the effect plays, in seconds, as the pane has it.
+	private duration: number;
+
+	constructor(kind: string, targets: MotionPathTarget[], duration: number) {
+		super(
+			ClassicMotionPathCreateContext.drawnAs[kind],
+			ClassicMotionPathCreateContext.ways[kind],
+		);
+		this.kind = kind;
+		this.targets = targets;
+		this.duration = duration;
+	}
+
+	/// Enters the mode for the pane's ask; a kind it does not know, or no target, asks nothing.
+	public static startFor(state: {
+		kind: string;
+		duration?: number;
+		targets?: MotionPathTarget[];
+	}): void {
+		if (
+			!ClassicMotionPathCreateContext.drawnAs[state.kind] ||
+			!state.targets?.length
+		)
+			return;
+		ClassicCreateContext.startWith(
+			new ClassicMotionPathCreateContext(
+				state.kind,
+				state.targets,
+				state.duration ?? 0,
+			),
+		);
+	}
+
+	protected command(): string {
+		return '.uno:AddMotionPath';
+	}
+
+	protected moreArguments(): { [name: string]: { type: string; value: any } } {
+		return {
+			Kind: { type: 'string', value: this.kind },
+			Targets: {
+				type: 'string',
+				value: JSON.stringify({ targets: this.targets }),
+			},
+			Duration: { type: 'string', value: String(this.duration) },
+		};
+	}
+
+	/*
+		The path stays drawn until the engine's answer brings it; no object stands in for it. The
+		targets are selected again once the answer shows the new path, so their paths show, and
+		the animation pane selects their effects, the new one among them, and another one can
+		be added at once.
+	*/
+	protected wasSent(_box: cool.Range2D): void {
+		ClassicMotionPathCreateContext.selectAgain = {
+			ids: this.targets.map((target: MotionPathTarget) => Number(target.id)),
+			paths: ClassicMotionPathCreateContext.pathCount(this.targets[0]),
+		};
+		if (ClassicMotionPathCreateContext.followingTheAnswers) return;
+		ClassicMotionPathCreateContext.followingTheAnswers = true;
+		RenderManager.onVectorChanged(() =>
+			ClassicMotionPathCreateContext.selectWhenAdded(),
+		);
+	}
+
+	/// The targets to select again, and how many paths the first one had before the add.
+	private static selectAgain: { ids: number[]; paths: number } | null = null;
+
+	/// Whether the answers of the engine are followed, which they are once.
+	private static followingTheAnswers: boolean = false;
+
+	/// How many motion paths the object of that target has.
+	private static pathCount(target: MotionPathTarget): number {
+		return (
+			RenderGeometrySection.objectOf(Number(target.id))?.motionPaths?.length ??
+			0
+		);
+	}
+
+	/// Selects the targets again once the first one has a path more than before the add.
+	private static selectWhenAdded(): void {
+		const again = ClassicMotionPathCreateContext.selectAgain;
+		if (!again) return;
+		const object = RenderGeometrySection.objectOf(again.ids[0]);
+		if ((object?.motionPaths?.length ?? 0) <= again.paths) return;
+
+		ClassicMotionPathCreateContext.selectAgain = null;
+		GraphicSelection.selectObjects(again.ids);
 	}
 }
 

@@ -690,6 +690,16 @@ color of their own, since they are the object's defaults and not points someone 
   point it starts at. Ctrl+Tab reaches these handles after the object's own, and the arrow keys
   move them as a drag does. Where the effects changed meanwhile, in another view for one, the
   change sets nothing and the paths show as they are now.
+- A motion path is drawn from the Animation sidebar as on the desktop: with the object selected,
+  Add, then Motion Paths and one of the user paths Curve, Polygon or Freeform Line. The object
+  is let go and the path is drawn on the slide as that kind of line is drawn, but of one part:
+  a curve or a polygon ends with a double click, a right click or Return, a line drawn by hand
+  when the button comes up. A click without a drag on a line drawn by hand, or Escape, makes
+  nothing. A choice of a user path replaces the effects selected in the sidebar, as on the
+  desktop. The path makes one effect for every object the sidebar named, as one step to undo,
+  and the object is selected again once its new path shows; while the effects of the object
+  are all of that kind, Add then draws another path of it at once. Where they are mixed, Add
+  puts in the first effect of the category, as on the desktop.
 - The toolbar and the menus change their states at once with the selection, since the client
   works them out itself.
 - Changes made by other people editing the same document arrive as they happen. When they

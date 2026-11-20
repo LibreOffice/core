@@ -1793,6 +1793,19 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
     return pEffect;
 }
 
+void EffectSequenceHelper::appendMotionPaths( const SdrPathObj& rPathObj, const std::vector< Any >& rTargets, double fDuration, const OUString& rPresetId )
+{
+    bool bFirst = true;
+    for( const Any& rTarget : rTargets )
+    {
+        CustomAnimationEffectPtr pCreated( append( rPathObj, rTarget, fDuration, rPresetId ) );
+        if( bFirst )
+            bFirst = false;
+        else if( pCreated )
+            pCreated->setNodeType( css::presentation::EffectNodeType::WITH_PREVIOUS );
+    }
+}
+
 CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathObj, const Any& rTarget, double fDuration /* = -1.0 */, const OUString& rPresetId )
 {
     CustomAnimationEffectPtr pEffect;

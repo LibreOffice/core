@@ -3338,6 +3338,22 @@ SfxVoidItem SetMotionPath SID_SET_MOTION_PATH
     GroupId = SfxGroupId::Drawing;
 ]
 
+SfxVoidItem AddMotionPath SID_ADD_DRAWN_MOTION_PATH
+(SfxStringItem Kind FN_PARAM_1, SfxStringItem Targets FN_PARAM_2, SfxStringItem Duration FN_PARAM_3,
+ SfxStringItem Path FN_PARAM_4)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Drawing;
+]
+
 SfxVoidItem SaveBackground SID_SAVE_BACKGROUND
 ()
 [

@@ -55,6 +55,11 @@
 #include <comphelper/diagnose_ex.hxx>
 
 #include <svx/svxids.hrc>
+#include <svx/VectorObjectContent.hxx>
+#include <svx/svdobj.hxx>
+#include <sfx2/viewsh.hxx>
+#include <tools/json_writer.hxx>
+#include <COKit/COKitTypes.hxx>
 #include <DrawDocShell.hxx>
 #include <ViewShellBase.hxx>
 #include <DrawViewShell.hxx>
@@ -2015,6 +2020,46 @@ void CustomAnimationPane::createPath( PathKind eKind, std::vector< Any >& rTarge
         DrawView* pView = pViewShell->GetDrawView();
         if( pView )
             pView->UnmarkAllObj();
+
+        // a view that draws from the objects draws the path itself, so it is told to draw one for
+        // these targets, and tells back the path drawn
+        SfxViewShell* pSfxViewShell = pViewShell->GetViewShell();
+        if (pSfxViewShell && pSfxViewShell->drawsFromObjects())
+        {
+            tools::JsonWriter aWriter;
+            aWriter.put("commandName", ".uno:DrawMotionPath");
+            {
+                auto aState = aWriter.startNode("state");
+                aWriter.put("kind", eKind == PathKind::CURVE     ? "curve"
+                                    : eKind == PathKind::POLYGON ? "polygon"
+                                                                 : "freeform");
+                aWriter.put("duration", fDuration);
+                auto aTargetsNode = aWriter.startArray("targets");
+                for (const Any& rTarget : rTargets)
+                {
+                    Reference<XShape> xShape;
+                    sal_Int32 nParagraph = -1;
+                    ParagraphTarget aParagraph;
+                    if (rTarget >>= aParagraph)
+                    {
+                        xShape = aParagraph.Shape;
+                        nParagraph = aParagraph.Paragraph;
+                    }
+                    else
+                        rTarget >>= xShape;
+                    const SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShape);
+                    if (!pObject)
+                        continue;
+                    auto aTargetNode = aWriter.startStruct();
+                    aWriter.put("id", OString::number(svx::vector::idOf(*pObject)));
+                    if (nParagraph >= 0)
+                        aWriter.put("paragraph", nParagraph);
+                }
+            }
+            pSfxViewShell->viewCallback(COKitCallbackType::STATE_CHANGED,
+                                        aWriter.finishAndGetAsOString());
+            return;
+        }
 
         std::vector< Any > aTargets( 1, Any( fDuration ) );
         aTargets.insert( aTargets.end(), rTargets.begin(), rTargets.end() );

@@ -3,7 +3,7 @@
  * window.L.Map.StateChanges stores the state changes commands coming from core
  * LOK_CALLBACK_STATE_CHANGED callback
  */
-/* global $ app cool _ RenderManager HandleTravel PreviewEditSection OverviewPreviewsSection OverviewNavigation RenderGeometrySection */
+/* global $ app cool _ RenderManager HandleTravel PreviewEditSection OverviewPreviewsSection OverviewNavigation RenderGeometrySection ClassicMotionPathCreateContext */
 /*eslint no-extend-native:0*/
 window.L.Map.mergeOptions({
 	stateChangeHandler: true
@@ -181,6 +181,11 @@ window.L.Map.StateChangeHandler = window.L.Handler.extend({
 			OverviewPreviewsSection.ensure();
 			app.sectionContainer.requestReDraw();
 			this._map.fire('canvaspreviewrects');
+		}
+
+		// the animation pane asks for a motion path to be drawn for its targets
+		if (commandName == '.uno:DrawMotionPath') {
+			if (state) ClassicMotionPathCreateContext.startFor(state);
 		}
 
 		if (commandName == '.uno:PreviewEditMode') {

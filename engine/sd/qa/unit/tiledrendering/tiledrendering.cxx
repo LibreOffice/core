@@ -9502,6 +9502,51 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSetMotionPath)
     CPPUNIT_ASSERT_EQUAL(sal_Int64(0), aFirstEnd(nVersion).second);
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testAddDrawnMotionPath)
+{
+    // a motion path the client drew gives each target an effect along it, as one undo step
+    SdXImpressDocument* pXImpressDocument = createDoc("motion-paths.fodp");
+    SdPage* pSlide = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+    const sal_uInt64 nMovedId = svx::vector::idOf(*pSlide->GetObj(0));
+    const sal_uInt64 nStillId = svx::vector::idOf(*pSlide->GetObj(1));
+
+    const auto aPathsOf = [&](sal_uInt64 nId) {
+        const auto aPaths = motionPathsIn(vectorReplyOf(pXImpressDocument, pSlide), nId);
+        return aPaths ? aPaths->size() : size_t(0);
+    };
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aPathsOf(nMovedId));
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aPathsOf(nStillId));
+
+    // drawn in twips on the slide, beside the still rectangle, whose middle is at 6803 by 1701
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { u"Kind"_ustr, cpo::uno::Any(u"polygon"_ustr) },
+        { u"Targets"_ustr,
+          cpo::uno::Any(OUString::fromUtf8(R"({"targets":[{"id":")" + std::to_string(nStillId)
+                                           + R"("},{"id":")" + std::to_string(nMovedId)
+                                           + R"("}]})")) },
+        { u"Duration"_ustr, cpo::uno::Any(u"2"_ustr) },
+        { u"Path"_ustr,
+          cpo::uno::Any(
+              u"{\"path\":[{\"points\":[{\"x\":8000,\"y\":2000},{\"x\":10000,\"y\":2000}]}]}"_ustr) },
+    }));
+    dispatchCommand(mxComponent, u".uno:AddMotionPath"_ustr, aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aPathsOf(nMovedId));
+    const auto aStillPaths = motionPathsIn(vectorReplyOf(pXImpressDocument, pSlide), nStillId);
+    CPPUNIT_ASSERT(aStillPaths);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aStillPaths->size());
+    // the path lies where it was drawn, measured from the middle of what moves
+    const auto& rStart
+        = aStillPaths->front().get_child("path").front().second.get_child("points").front().second;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1197.0, rStart.get<double>("x"), 3.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(299.0, rStart.get<double>("y"), 3.0);
+
+    // one undo takes the effects of both targets away
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aPathsOf(nMovedId));
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aPathsOf(nStillId));
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testVectorMotionPaths)
 {
     // an object travels with its motion paths, in twips from its middle, and a changed path

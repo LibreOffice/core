@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <com/sun/star/presentation/XPresentation.hpp>
+#include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <i18nutil/unicode.hxx>
@@ -327,6 +328,28 @@ static bool lcl_sameAsSent(const basegfx::B2DPolyPolygon& rOne, const basegfx::B
         }
     }
     return true;
+}
+
+// the object of that id and the slide it lies on, looked for on every slide, as the client may show
+// another slide than the one this view stands on; nothing where no object has that id
+static SdrObject* lcl_objectOfId(SdDrawDocument& rDoc, sal_uInt64 nObjectId, SdPage*& rpPage)
+{
+    const sal_uInt16 nSlides = rDoc.GetSdPageCount(PageKind::Standard);
+    for (sal_uInt16 nSlide = 0; nSlide < nSlides; ++nSlide)
+    {
+        SdPage* pPage = rDoc.GetSdPage(nSlide, PageKind::Standard);
+        SdrObjListIter aObjects(pPage, SdrIterMode::DeepWithGroups);
+        while (aObjects.IsMore())
+        {
+            SdrObject* pCandidate = aObjects.Next();
+            if (svx::vector::idOf(*pCandidate) == nObjectId)
+            {
+                rpPage = pPage;
+                return pCandidate;
+            }
+        }
+    }
+    return nullptr;
 }
 
 // the path a polygon or a curve is to be created along, given with the request in twips on the
@@ -1587,23 +1610,9 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             if (!oPath || !oWas)
                 break;
 
-            // the object is looked for on every slide, as the client may show another slide than
-            // the one this view stands on
-            const sal_uInt64 nObjectId = pObjectId->GetValue().toUInt64();
             SdPage* pPage = nullptr;
-            SdrObject* pObject = nullptr;
-            const sal_uInt16 nSlides = GetDoc()->GetSdPageCount(PageKind::Standard);
-            for (sal_uInt16 nSlide = 0; nSlide < nSlides && !pObject; ++nSlide)
-            {
-                pPage = GetDoc()->GetSdPage(nSlide, PageKind::Standard);
-                SdrObjListIter aObjects(pPage, SdrIterMode::DeepWithGroups);
-                while (aObjects.IsMore() && !pObject)
-                {
-                    SdrObject* pCandidate = aObjects.Next();
-                    if (svx::vector::idOf(*pCandidate) == nObjectId)
-                        pObject = pCandidate;
-                }
-            }
+            SdrObject* pObject
+                = lcl_objectOfId(*GetDoc(), pObjectId->GetValue().toUInt64(), pPage);
             if (!pObject || !pPage)
                 break;
 
@@ -1628,6 +1637,89 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                     std::make_unique<UndoAnimationPath>(GetDoc(), pPage, pEffect->getNode()));
             pEffect->setMotionPath(*oPath);
             // the step can be undone now, which undo and redo show
+            GetViewFrame()->GetBindings().Invalidate(SID_UNDO);
+            GetViewFrame()->GetBindings().Invalidate(SID_REDO);
+            rReq.Done();
+        }
+        break;
+
+        case SID_ADD_DRAWN_MOTION_PATH:
+        {
+            /*
+                A motion path the client has drawn for the targets the animation pane named, as
+                the pane's own draw function makes it once the path is drawn: one effect along the
+                path for each target, of the kind drawn. The path comes in twips on the slide, the
+                targets by the ids of their objects, a paragraph with its number.
+            */
+            const SfxStringItem* pKind = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+            const SfxStringItem* pTargets = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+            const SfxStringItem* pDuration = rReq.GetArg<SfxStringItem>(FN_PARAM_3);
+            const SfxStringItem* pPath = rReq.GetArg<SfxStringItem>(FN_PARAM_4);
+            if (!pKind || !pTargets || !pPath)
+                break;
+            const std::optional<basegfx::B2DPolyPolygon> oPath(lcl_readPath(pPath->GetValue()));
+            if (!oPath || !oPath->count())
+                break;
+
+            OUString aPresetId;
+            if (pKind->GetValue() == "curve")
+                aPresetId = u"libo-motionpath-curve"_ustr;
+            else if (pKind->GetValue() == "polygon")
+                aPresetId = u"libo-motionpath-polygon"_ustr;
+            else if (pKind->GetValue() == "freeform")
+                aPresetId = u"libo-motionpath-freeform-line"_ustr;
+            else
+                break;
+
+            SdPage* pPage = nullptr;
+            std::vector<cpo::uno::Any> aTargets;
+            try
+            {
+                boost::property_tree::ptree aTree;
+                std::stringstream aStream(
+                    std::string(OUStringToOString(pTargets->GetValue(), RTL_TEXTENCODING_UTF8)));
+                boost::property_tree::read_json(aStream, aTree);
+                for (const auto& rTargetNode : aTree.get_child("targets"))
+                {
+                    SdPage* pTargetPage = nullptr;
+                    SdrObject* pObject = lcl_objectOfId(
+                        *GetDoc(), rTargetNode.second.get<sal_uInt64>("id"), pTargetPage);
+                    // all the targets are on one slide, the one the effects go to
+                    if (!pObject || (pPage && pTargetPage != pPage))
+                        continue;
+                    pPage = pTargetPage;
+                    const cpo::uno::Reference<css::drawing::XShape> xShape(
+                        pObject->getUnoShape(), cpo::uno::UNO_QUERY);
+                    const boost::optional<sal_Int32> oParagraph
+                        = rTargetNode.second.get_optional<sal_Int32>("paragraph");
+                    if (oParagraph)
+                        aTargets.emplace_back(css::presentation::ParagraphTarget(
+                            xShape, static_cast<sal_Int16>(*oParagraph)));
+                    else
+                        aTargets.emplace_back(xShape);
+                }
+            }
+            catch (const boost::property_tree::ptree_error&)
+            {
+                break;
+            }
+            if (aTargets.empty() || !pPage)
+                break;
+
+            // the draw function hands the effects the object drawn, which goes then; this one is
+            // made for that alone, closed where the path is, as an open one would open it
+            rtl::Reference<SdrPathObj> xDrawn(new SdrPathObj(
+                *GetDoc(), oPath->isClosed() ? SdrObjKind::PathFill : SdrObjKind::PathLine,
+                *oPath));
+            const double fDuration = pDuration ? pDuration->GetValue().toDouble() : 0.0;
+
+            // the undo step the animation pane makes for effects it adds
+            if (SfxUndoManager* pManager = GetDocSh()->GetUndoManager())
+                pManager->AddUndoAction(std::make_unique<UndoAnimation>(GetDoc(), pPage));
+            pPage->getMainSequence()->appendMotionPaths(*xDrawn, aTargets, fDuration, aPresetId);
+            // the animation pane lists the new effects now, so a selection of the targets that
+            // follows selects them there too
+            pPage->getMainSequence()->rebuildNow();
             GetViewFrame()->GetBindings().Invalidate(SID_UNDO);
             GetViewFrame()->GetBindings().Invalidate(SID_REDO);
             rReq.Done();

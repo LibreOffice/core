@@ -2822,6 +2822,10 @@ interface DrawView
     [
         ExecMethod = FuSupport ;
     ]
+    SID_ADD_DRAWN_MOTION_PATH
+    [
+        ExecMethod = FuSupport ;
+    ]
     SID_SAVE_BACKGROUND
     [
         ExecMethod = FuTemporary ;

@@ -282,6 +282,9 @@ public:
 
     SAL_DLLPRIVATE CustomAnimationEffectPtr append( const CustomAnimationPresetPtr& pDescriptor, const cpo::uno::Any& rTarget, double fDuration );
     SAL_DLLPRIVATE CustomAnimationEffectPtr append( const SdrPathObj& rPathObj, const cpo::uno::Any& rTarget, double fDuration, const OUString& rPresetId );
+    /// A motion path effect along that path for each of the targets, all but the first starting
+    /// with the one before, so they all move at once.
+    SAL_DLLPRIVATE void appendMotionPaths( const SdrPathObj& rPathObj, const std::vector< cpo::uno::Any >& rTargets, double fDuration, const OUString& rPresetId );
     void append( const CustomAnimationEffectPtr& pEffect );
     SAL_DLLPRIVATE void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, double fDuration );
     SAL_DLLPRIVATE void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, const OUString& rPresetSubType, double fDuration );

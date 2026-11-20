@@ -246,7 +246,6 @@ bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
                     const Any* pTarget = aTargets.getConstArray();
                     double fDuration = 0.0;
                     *pTarget++ >>= fDuration;
-                    bool bFirst = true;
 
                     OUString sPresetId;
                     switch(nSlotId)
@@ -262,14 +261,9 @@ bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
                             break;
                     }
 
-                    while( --nTCount )
-                    {
-                        CustomAnimationEffectPtr pCreated( pMainSequence->append( *pPathObj, *pTarget++, fDuration, sPresetId) );
-                        if( bFirst )
-                            bFirst = false;
-                        else
-                            pCreated->setNodeType( css::presentation::EffectNodeType::WITH_PREVIOUS );
-                    }
+                    pMainSequence->appendMotionPaths(
+                        *pPathObj, std::vector<Any>(pTarget, pTarget + nTCount - 1), fDuration,
+                        sPresetId);
                 }
             }
         }
