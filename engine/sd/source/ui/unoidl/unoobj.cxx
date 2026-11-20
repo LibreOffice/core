@@ -1083,6 +1083,22 @@ cpo::uno::Any SdXShape::GetStyleSheet() const
     return Any( uno::Reference< style::XStyle >( dynamic_cast< SfxUnoStyleSheet* >( pStyleSheet ) ) );
 }
 
+
+void SdXShape::setSize(const css::awt::Size& rSize)
+{
+    mpShape->_setSize(rSize);
+}
+
+css::awt::Point SdXShape::getPosition()
+{
+    return mpShape->_getPosition();
+}
+
+void SdXShape::setPosition(const css::awt::Point& rPos)
+{
+    mpShape->_setPosition(rPos);
+}
+
 class SdUnoEventsAccess : public cppu::WeakImplHelper< css::container::XNameReplace, css::lang::XServiceInfo >
 {
 private:

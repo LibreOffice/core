@@ -463,11 +463,11 @@ SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(const SwFrameFormat* pForm
 
 SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(uno::Reference<drawing::XShape> const& xShape)
 {
-    auto pShape = dynamic_cast<SwXShape*>(xShape.get());
-    if (!pShape)
+    auto pSwXShape = SwXShape::GetSwXShapeFromXShape(xShape);
+    if (!pSwXShape)
         return nullptr;
 
-    SwFrameFormat* pFormat = pShape->GetFrameFormat();
+    SwFrameFormat* pFormat = pSwXShape->GetFrameFormat();
     return getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT,
                                  SdrObject::getSdrObjectFromXShape(xShape));
 }

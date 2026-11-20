@@ -218,7 +218,6 @@ SvxShape::~SvxShape() noexcept
     EndListeningAll(); // call explicitly within SolarMutexGuard
 }
 
-
 void SvxShape::InvalidateSdrObject()
 {
     if(mxSdrObject)
@@ -242,9 +241,15 @@ SdrObjKind SvxShape::getShapeKind() const
 
 void SvxShape::setMaster( SvxShapeMaster* pMaster )
 {
+    assert(((pMaster && !mpImpl->mpMaster) || (!pMaster && mpImpl->mpMaster))
+        && "already have a master or clearing without a master ");
     mpImpl->mpMaster = pMaster;
 }
 
+SvxShapeMaster* SvxShape::getMaster()
+{
+    return mpImpl->mpMaster;
+}
 
 cpo::uno::Any SvxShape::queryAggregation( const cpo::uno::Type& rType )
 {
@@ -395,8 +400,8 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
     SdrObjUserCall* pUser = GetSdrObject()->GetUserCall();
     GetSdrObject()->SetUserCall(nullptr);
 
-    setPosition( maPosition );
-    setSize( maSize );
+    _setPosition( maPosition );
+    _setSize( maSize );
 
     // restore user call after we set the initial size
     GetSdrObject()->SetUserCall( pUser );
@@ -1020,8 +1025,15 @@ static void svx_setLogicRectHack( SdrObject* pObj, const tools::Rectangle& rRect
     }
 }
 
-
 awt::Point SvxShape::getPosition()
+{
+    if( mpImpl->mpMaster )
+        return mpImpl->mpMaster->getPosition();
+    else
+        return _getPosition();
+}
+
+awt::Point SvxShape::_getPosition()
 {
     ::SolarMutexGuard aGuard;
 
@@ -1045,6 +1057,14 @@ awt::Point SvxShape::getPosition()
 
 
 void SvxShape::setPosition( const awt::Point& Position )
+{
+    if (mpImpl->mpMaster)
+        mpImpl->mpMaster->setPosition(Position);
+    else
+        _setPosition(Position);
+}
+
+void SvxShape::_setPosition( const awt::Point& Position )
 {
     ::SolarMutexGuard aGuard;
 
@@ -1091,6 +1111,14 @@ awt::Size SvxShape::getSize()
 
 
 void SvxShape::setSize( const awt::Size& rSize )
+{
+    if (mpImpl->mpMaster)
+        mpImpl->mpMaster->setSize(rSize);
+    else
+        _setSize(rSize);
+}
+
+void SvxShape::_setSize( const awt::Size& rSize )
 {
     ::SolarMutexGuard aGuard;
 

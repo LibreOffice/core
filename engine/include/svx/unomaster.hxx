@@ -69,6 +69,10 @@ public:
     /// SvxShape is going away.
     virtual void disposeShapeMaster() = 0;
 
+    virtual css::awt::Point getPosition() = 0;
+    virtual void setPosition( const css::awt::Point& aPosition ) = 0;
+    virtual void setSize( const css::awt::Size& aSize ) = 0;
+
 protected:
     ~SvxShapeMaster() {}
 };

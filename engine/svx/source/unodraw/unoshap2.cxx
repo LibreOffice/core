@@ -130,27 +130,9 @@ OUString SvxShapeGroup::getShapeType()
     return SvxShape::getShapeType();
 }
 
-awt::Point SvxShapeGroup::getPosition()
-{
-    return SvxShape::getPosition();
-}
-
-
-void SvxShapeGroup::setPosition( const awt::Point& Position )
-{
-    SvxShape::setPosition(Position);
-}
-
-
 awt::Size SvxShapeGroup::getSize()
 {
     return SvxShape::getSize();
-}
-
-
-void SvxShapeGroup::setSize( const awt::Size& rSize )
-{
-    SvxShape::setSize( rSize );
 }
 
 // drawing::XShapeGroup
@@ -518,29 +500,10 @@ OUString SvxShapeControl::getShapeType()
     return SvxShapeText::getShapeType();
 }
 
-awt::Point SvxShapeControl::getPosition()
-{
-    return SvxShapeText::getPosition();
-}
-
-
-void SvxShapeControl::setPosition( const awt::Point& Position )
-{
-    SvxShapeText::setPosition(Position);
-}
-
-
 awt::Size SvxShapeControl::getSize()
 {
     return SvxShapeText::getSize();
 }
-
-
-void SvxShapeControl::setSize( const awt::Size& rSize )
-{
-    SvxShapeText::setSize( rSize );
-}
-
 
 // XControlShape
 
@@ -1639,7 +1602,7 @@ cpo::uno::Sequence< sal_Int8 > SvxCustomShape::getImplementationId()
 // css::drawing::XShape
 
 
-awt::Point SvxCustomShape::getPosition()
+awt::Point SvxCustomShape::_getPosition()
 {
     ::SolarMutexGuard aGuard;
     // A stand-in sits somewhere else than what it refers to, so the base class, which asks the
@@ -1714,7 +1677,7 @@ awt::Point SvxCustomShape::getPosition()
         return css::awt::Point( aPt.X(), aPt.Y() );
     }
     else
-        return SvxShape::getPosition();
+        return SvxShape::_getPosition();
 }
 
 

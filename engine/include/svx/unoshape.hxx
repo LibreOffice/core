@@ -219,7 +219,12 @@ public:
     /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< cpo::uno::Type > const & _getTypes(  );
 
+    virtual css::awt::Point _getPosition();
+    virtual void _setPosition(const css::awt::Point&);
+    virtual void _setSize(const css::awt::Size&);
+
     void setMaster( SvxShapeMaster* pMaster );
+    SvxShapeMaster* getMaster();
 
     // SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) noexcept override final;
@@ -458,10 +463,10 @@ public:
     virtual OUString getShapeType() override;
 
     // XShape
-    virtual css::awt::Point getPosition() override;
-    virtual void setPosition( const css::awt::Point& aPosition ) override;
+    virtual css::awt::Point getPosition() override final { return SvxShapeGroupAnyD::getPosition(); }
+    virtual void setPosition( const css::awt::Point& aPosition ) override final { SvxShapeGroupAnyD::setPosition(aPosition); }
     virtual css::awt::Size getSize() override;
-    virtual void setSize( const css::awt::Size& aSize ) override;
+    virtual void setSize( const css::awt::Size& aSize ) override final { SvxShapeGroupAnyD::setSize(aSize); }
 
     // XShapeGroup
     virtual void enterGroup(  ) override;
@@ -526,10 +531,10 @@ public:
     virtual OUString getShapeType() override;
 
     // XShape
-    virtual css::awt::Point getPosition() override;
-    virtual void setPosition( const css::awt::Point& aPosition ) override;
+    virtual css::awt::Point getPosition() override final { return SvxShapeText::getPosition(); }
+    virtual void setPosition( const css::awt::Point& aPosition ) override final { SvxShapeText::setPosition(aPosition); }
     virtual css::awt::Size getSize() override;
-    virtual void setSize( const css::awt::Size& aSize ) override;
+    virtual void setSize( const css::awt::Size& aSize ) override final { SvxShapeText::setSize(aSize); }
 
     // XControlShape
     virtual cpo::uno::Reference< css::awt::XControlModel > getControl() override;
@@ -800,7 +805,7 @@ public:
     { SvxShapeText::release(); }
 
     // XShape
-    virtual css::awt::Point getPosition() override;
+    virtual css::awt::Point _getPosition() override;
 
     // XPropertySet
     void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;

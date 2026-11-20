@@ -88,6 +88,9 @@ public:
     virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
     virtual void disposeShapeMaster() override;
+    virtual css::awt::Point getPosition(  ) override;
+    virtual void setPosition( const css::awt::Point& aPosition ) override;
+    virtual void setSize( const css::awt::Size& aSize ) override;
 
                             // XInterface
     virtual cpo::uno::Any queryInterface(

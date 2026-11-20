@@ -73,6 +73,9 @@ public:
 
     virtual bool queryAggregation( const cpo::uno::Type & rType, cpo::uno::Any& aAny ) override;
     virtual void disposeShapeMaster() override;
+    virtual css::awt::Point getPosition(  ) override;
+    virtual void setPosition( const css::awt::Point& aPosition ) override;
+    virtual void setSize( const css::awt::Size& aSize ) override;
 
     // XInterface
     virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;

@@ -34,6 +34,7 @@
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <cpo/uno/XAggregation.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <svx/unomaster.hxx>
 
 class SdrMarkList;
 class SdrView;
@@ -51,7 +52,7 @@ class SW_DLLPUBLIC SwFmDrawPage final : public SwFmDrawPage_Base
 {
     SwDoc*          m_pDoc;
     SdrPageView*        m_pPageView;
-    std::vector<rtl::Reference<SwXShape>> m_vShapes;
+    std::vector<rtl::Reference<SvxShape>> m_vShapes; // shapes which have a SwXPage master
     const SfxItemPropertySet* m_pPropertySet;
 
 public:
@@ -71,12 +72,7 @@ public:
     // Derived classes may obtain at this point a derivation or an object
     // that is aggregating a SvxShape.
     virtual cpo::uno::Reference< css::drawing::XShape >  CreateShape( SdrObject *pObj ) const override;
-    void RemoveShape(const SwXShape* pShape)
-    {
-        auto ppShape = find(m_vShapes.begin(), m_vShapes.end(), pShape);
-        if(ppShape != m_vShapes.end())
-            m_vShapes.erase(ppShape);
-    };
+    void RemoveShape(const SwXShape* pShape);
 
     //XEnumerationAccess
     virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration() override;
@@ -117,27 +113,15 @@ public:
 };
 
 class SwShapeDescriptor_Impl;
-typedef
-cppu::WeakImplHelper
-<
-    css::beans::XPropertySet,
-    css::beans::XPropertyState,
-    css::text::XTextContent,
-    css::lang::XServiceInfo,
-    css::lang::XUnoTunnel,
-    css::drawing::XShape
->
-SwXShapeBaseClass;
-class SwXShape : public SwXShapeBaseClass
+
+class SwXShape : public SvxShapeMaster,
+                 public css::text::XTextContent
 {
     friend class SwXGroupShape;
     friend class SwFmDrawPage;
     const SwFmDrawPage* m_pPage;
 
-    cpo::uno::Reference< cpo::uno::XAggregation > m_xShapeAgg;
-    // reference to <XShape>, determined in the
-    // constructor by <queryAggregation> at <xShapeAgg>.
-    cpo::uno::Reference< css::drawing::XShape > mxShape;
+    SvxShape* m_pSvxShape;
 
     const SfxItemPropertySet*           m_pPropSet;
     std::span<const SfxItemPropertyMapEntry>      m_pPropertyMapEntries;
@@ -194,53 +178,43 @@ class SwXShape : public SwXShapeBaseClass
     */
     cpo::uno::Any _getPropAtAggrObj( const OUString& _rPropertyName );
 
+    SdrObject* getSdrObject() const;
+
 protected:
-    virtual ~SwXShape() override;
+    virtual ~SwXShape();
 public:
-    SwXShape(cpo::uno::Reference<cpo::uno::XInterface> & xShape, SwDoc const*const pDoc);
+    SwXShape(SvxShape* pShape, SwDoc const*const pDoc);
 
-    static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-    virtual cpo::uno::Any queryInterface( const cpo::uno::Type& aType ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
-    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
-
-    //XUnoTunnel
-    virtual sal_Int64 getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
-    //XPropertySet
-    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
-    virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
-    virtual void addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-
-    //XPropertyState
+     // SvxShapeMaster
+    virtual bool queryAggregation( const cpo::uno::Type & rType, cpo::uno::Any& aAny ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+    virtual void setPropertyValue( const OUString& aPropertyName,
+                                    const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any getPropertyValue(
+                                    const OUString& PropertyName ) override;
     virtual css::beans::PropertyState getPropertyState( const OUString& PropertyName ) override;
-    virtual cpo::uno::Sequence< css::beans::PropertyState > getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName ) override;
     virtual void setPropertyToDefault( const OUString& PropertyName ) override;
     virtual cpo::uno::Any getPropertyDefault( const OUString& aPropertyName ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
+    virtual void disposeShapeMaster() override;
+    virtual css::awt::Point getPosition(  ) override;
+    virtual void setPosition( const css::awt::Point& aPosition ) override;
+    virtual void setSize( const css::awt::Size& aSize ) override;
+
+    // XInterface
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type& aType ) override;
+    virtual void acquire() noexcept override;
+    virtual void release() noexcept override;
 
     //XTextContent
     virtual void attach(const cpo::uno::Reference< css::text::XTextRange > & xTextRange) override;
     virtual cpo::uno::Reference< css::text::XTextRange >  getAnchor() override;
 
     //XComponent
-    virtual void dispose() override;
     virtual void addEventListener(const cpo::uno::Reference< css::lang::XEventListener > & aListener) override;
     virtual void removeEventListener(const cpo::uno::Reference< css::lang::XEventListener > & aListener) override;
-
-    //XServiceInfo
-    virtual OUString getImplementationName() override;
-    virtual bool supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
-
-    virtual css::awt::Point getPosition(  ) override;
-    virtual void setPosition( const css::awt::Point& aPosition ) override;
-    virtual css::awt::Size getSize(  ) override;
-    virtual void setSize( const css::awt::Size& aSize ) override;
-    virtual OUString getShapeType(  ) override;
+    virtual void dispose() override;
 
     SwShapeDescriptor_Impl*     GetDescImpl() {return m_pImpl.get();}
     SwFrameFormat* GetFrameFormat() const;
@@ -248,6 +222,8 @@ public:
 
     // helper
     static void AddExistingShapeToFormat( SdrObject const & _rObj );
+
+    static SwXShape* GetSwXShapeFromXShape(const cpo::uno::Reference<css::drawing::XShape>&);
 };
 
 class SwXGroupShape final :
@@ -256,7 +232,7 @@ class SwXGroupShape final :
 {
     virtual ~SwXGroupShape() override;
 public:
-    SwXGroupShape(cpo::uno::Reference<cpo::uno::XInterface> & xShape, SwDoc const* pDoc);
+    SwXGroupShape(SvxShape* pShape, SwDoc const* pDoc);
 
     virtual cpo::uno::Any queryInterface( const cpo::uno::Type& aType ) override;
     virtual void acquire(  ) noexcept override;

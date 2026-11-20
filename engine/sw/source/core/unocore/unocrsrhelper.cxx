@@ -146,12 +146,10 @@ void GetSelectableFromAny(uno::Reference<cpo::uno::XInterface> const& xIfc,
         return;
     }
 
-    uno::Reference<lang::XUnoTunnel> const xTunnel(xIfc, UNO_QUERY);
-
-    SwXShape *const pShape(comphelper::getFromUnoTunnel<SwXShape>(xTunnel));
-    if (pShape)
+    SwXShape *const pSwShape = SwXShape::GetSwXShapeFromXShape(uno::Reference<drawing::XShape>(xIfc, UNO_QUERY));
+    if (pSwShape)
     {
-        if (SvxShape * pSvxShape = pShape->GetSvxShape())
+        if (SvxShape * pSvxShape = pSwShape->GetSvxShape())
         {
             SdrObject *const pSdrObject = pSvxShape->GetSdrObject();
             if (pSdrObject)

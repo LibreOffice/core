@@ -47,6 +47,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <svx/svdouno.hxx>
+#include <svx/unoshape.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/form/ListSourceType.hpp>
@@ -496,8 +497,7 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
 
         // To get to the SwXShape* we need an interface that is implemented by SwXShape
 
-        uno::Reference< beans::XPropertySet > xPropSet( m_xShape, UNO_QUERY );
-        SwXShape *pSwShape = comphelper::getFromUnoTunnel<SwXShape>(xPropSet);
+        SwXShape *pSwShape = SwXShape::GetSwXShapeFromXShape(m_xShape);
 
         OSL_ENSURE( pSwShape, "Where is SW-Shape?" );
         if( pSwShape )
@@ -623,7 +623,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
 
     SwViewShell *pVSh = m_xDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
 
-    SwXShape *pSwShape = comphelper::getFromUnoTunnel<SwXShape>(xPropSet);
+    SwXShape *pSwShape = SwXShape::GetSwXShapeFromXShape(rShape);
 
     OSL_ENSURE( pSwShape, "Where is SW-Shape?" );
 

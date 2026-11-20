@@ -50,6 +50,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <svx/VectorObjectContent.hxx>
+#include <svx/unoshape.hxx>
 #include <vcl/canvastools.hxx>
 #include <sfx2/ipclient.hxx>
 #include <editeng/svxacorr.hxx>
@@ -1737,11 +1738,13 @@ cpo::uno::Reference<cpo::uno::XInterface> SwXTextDocument::create(
     if (rServiceName == "com.sun.star.drawing.GroupShape"
         || rServiceName == "com.sun.star.drawing.Shape3DSceneObject")
     {
-        return *new SwXGroupShape(xTmp, m_pDocShell->GetDoc());
+        new SwXGroupShape(dynamic_cast<SvxShape*>(xTmp.get()), m_pDocShell->GetDoc());
+        return xTmp;
     }
     if (rServiceName.startsWith("com.sun.star.drawing."))
     {
-        return *new SwXShape(xTmp, m_pDocShell->GetDoc());
+        new SwXShape(dynamic_cast<SvxShape*>(xTmp.get()), m_pDocShell->GetDoc());
+        return xTmp;
     }
     return xTmp;
 }

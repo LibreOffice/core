@@ -1370,4 +1370,19 @@ cpo::uno::Sequence< OUString > ScShapeObj::getSupportedServiceNames(  )
     return aSupported;
 }
 
+void ScShapeObj::setSize(const css::awt::Size& rSize)
+{
+    mpShape->_setSize(rSize);
+}
+
+css::awt::Point ScShapeObj::getPosition()
+{
+    return mpShape->_getPosition();
+}
+
+void ScShapeObj::setPosition(const css::awt::Point& rPos)
+{
+    mpShape->_setPosition(rPos);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
