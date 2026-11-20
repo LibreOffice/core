@@ -28,6 +28,7 @@
 #include <string_view>
 #include <type_traits>
 
+enum class LoadOption;
 class Session;
 
 template<class T>
@@ -447,9 +448,9 @@ protected:
             const std::string& name, const std::string& id, bool readonly);
     virtual ~Session();
 
-    /// Applies one name=value option of a browser's "load" message. Returns false, applying
-    /// nothing, for a name that a browser's load message does not carry.
-    bool applyBrowserLoadOption(const std::string& name, std::string&& value, std::string& part);
+    /// Applies one option of a browser's "load" message. Returns false, applying nothing, for an
+    /// option that a browser's load message does not carry.
+    bool applyBrowserLoadOption(LoadOption option, std::string&& value, std::string& part);
 
     void updateLastActivityTime()
     {

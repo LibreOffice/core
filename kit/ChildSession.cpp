@@ -34,6 +34,7 @@
 #include <common/FileUtil.hpp>
 #include <common/HexUtil.hpp>
 #include <common/JsonUtil.hpp>
+#include <common/LoadCommand.hpp>
 #include <common/Log.hpp>
 #include <common/NumUtil.hpp>
 #include <common/Png.hpp>
@@ -1333,157 +1334,107 @@ namespace {
 
 void ChildSession::parseLoadCommand(const StringVector& tokens, std::string& part)
 {
-    for (std::size_t i = 1; i < tokens.size(); ++i)
+    std::optional<std::string> signatureConfig;
+    for (auto& [option, value] : LoadCommand::parse(tokens))
     {
-        std::string name;
-        std::string value;
-        if (!COOLProtocol::parseNameValuePair(tokens[i], name, value))
+        switch (option)
         {
-            LOG_WRN("Unexpected load token [" << tokens[i] << "]. Skipping.");
-            continue;
-        }
-
-        if (name == "jail")
-        {
-            _jailedFilePath = std::move(value);
-        }
-        else if (name == "xjail")
-        {
-            _jailedFilePathAnonym = std::move(value);
-        }
-        else if (name == "authorid")
-        {
-            _userId = Uri::decode(value);
-        }
-        else if (name == "xauthorid")
-        {
-            _userIdAnonym = Uri::decode(value);
-        }
-        else if (name == "author")
-        {
-            _userName = Uri::decode(value);
-        }
-        else if (name == "xauthor")
-        {
-            _userNameAnonym = Uri::decode(value);
-        }
-        else if (name == "authorextrainfo")
-        {
-            _userExtraInfo = Uri::decode(value);
-        }
-        else if (name == "authorprivateinfo")
-        {
-            _userPrivateInfo = Uri::decode(value);
-        }
-        else if (name == "signatureconfig")
-        {
-            if (_userPrivateInfo.empty())
-            {
-                LOG_WRN(
-                    "signatureconfig: User private info not set, skipping signature configuration");
-                continue;
-            }
-
-            const std::string decodedSignatureData = Uri::decode(value);
-            if (decodedSignatureData == "{}")
-            {
-                LOG_INF("signatureconfig: Empty signature data received, skipping processing");
-                continue;
-            }
-
-            Poco::JSON::Object::Ptr signatureDataObject;
-            if (!JsonUtil::parseJSON(decodedSignatureData, signatureDataObject))
-            {
-                LOG_ERR("signatureconfig: Failed to parse signature data as JSON: "
-                        << decodedSignatureData);
-                continue;
-            }
-
-            Poco::JSON::Object::Ptr userPrivateInfoObject;
-            if (!JsonUtil::parseJSON(_userPrivateInfo, userPrivateInfoObject))
-            {
-                LOG_ERR("signatureconfig: Failed to parse user private info as JSON: "
-                        << _userPrivateInfo);
-                continue;
-            }
-
-            setSignToUserPrivateConfig("SignatureCert", signatureDataObject,
-                                       userPrivateInfoObject);
-            setSignToUserPrivateConfig("SignatureKey", signatureDataObject,
-                                       userPrivateInfoObject);
-            setSignToUserPrivateConfig("SignatureCa", signatureDataObject,
-                                       userPrivateInfoObject);
-
-            _userPrivateInfo = JsonUtil::jsonToString(userPrivateInfoObject);
-            LOG_INF("signatureconfig: Successfully updated user private info with signature data");
-        }
-        else if (name == "serverprivateinfo")
-        {
-            _serverPrivateInfo = Uri::decode(value);
-        }
-        else if (name == "readonly")
-        {
-            _isReadOnly = value != "0";
-        }
-        else if (name == "remotelink")
-        {
-            _isRemoteLink = value != "0";
-        }
-        else if (name == "isAllowChangeComments")
-        {
-            _isAllowChangeComments = value == "true";
-        }
-        else if (name == "isAllowManageRedlines")
-        {
-            _isAllowManageRedlines = value == "true";
-        }
-        else if (name == "watermarkText")
-        {
-            _watermarkText = Uri::decode(value);
-        }
-        else if (name == "watermarkOpacity")
-        {
-            _watermarkOpacity = std::stod(value);
-        }
-        else if (name == "template")
-        {
-            _docTemplate = Uri::decode(value);
-        }
-        else if (name == "thumbnailSizes")
-        {
-            const std::string sizes = Uri::decode(value);
-            _thumbnailSizes = Thumbnail::parseSizeList(sizes);
-            LOG_DBG("Read " << _thumbnailSizes.size() << " thumbnail sizes from [" << sizes << ']');
-        }
-        else if (name == "enableMacrosExecution")
-        {
-            _enableMacrosExecution = std::move(value);
-        }
-        else if (name == "macroSecurityLevel")
-        {
-            _macroSecurityLevel = std::move(value);
-        }
-        else if (name == "originaldocumenturl")
-        {
-            _originalDocUrl = Uri::decode(value);
-        }
-        else if (name == "verifyHost")
-        {
-            _disableVerifyHost = value == "false";
-        }
-        else if (name == "infilterOptions")
-        {
-            _inFilterOptions = Uri::decode(value);
-        }
-        else if (name == "lang")
-        {
-            setLang(Uri::decode(value));
-        }
-        else if (!applyBrowserLoadOption(name, Uri::decode(value), part))
-        {
-            LOG_WRN("Ignoring the unknown load option [" << name << ']');
+            case LoadOption::Jail:
+                _jailedFilePath = std::move(value);
+                break;
+            case LoadOption::AnonymizedJail:
+                _jailedFilePathAnonym = std::move(value);
+                break;
+            case LoadOption::AuthorId:
+                _userId = std::move(value);
+                break;
+            case LoadOption::AnonymizedAuthorId:
+                _userIdAnonym = std::move(value);
+                break;
+            case LoadOption::Author:
+                _userName = std::move(value);
+                break;
+            case LoadOption::AnonymizedAuthor:
+                _userNameAnonym = std::move(value);
+                break;
+            case LoadOption::AuthorExtraInfo:
+                _userExtraInfo = std::move(value);
+                break;
+            case LoadOption::AuthorPrivateInfo:
+                _userPrivateInfo = std::move(value);
+                break;
+            case LoadOption::SignatureConfig:
+                signatureConfig = std::move(value);
+                break;
+            case LoadOption::ServerPrivateInfo:
+                _serverPrivateInfo = std::move(value);
+                break;
+            case LoadOption::ReadOnly:
+                // The view is writable only when told so, whatever else the value holds.
+                _isReadOnly = value != "false";
+                break;
+            case LoadOption::RemoteLink:
+                _isRemoteLink = value == "true";
+                break;
+            case LoadOption::AllowChangeComments:
+                _isAllowChangeComments = value == "true";
+                break;
+            case LoadOption::AllowManageRedlines:
+                _isAllowManageRedlines = value == "true";
+                break;
+            case LoadOption::WatermarkText:
+                _watermarkText = std::move(value);
+                break;
+            case LoadOption::WatermarkOpacity:
+                _watermarkOpacity = std::stod(value);
+                break;
+            case LoadOption::Template:
+                _docTemplate = std::move(value);
+                break;
+            case LoadOption::ThumbnailSizes:
+                _thumbnailSizes = Thumbnail::parseSizeList(value);
+                LOG_DBG("Read " << _thumbnailSizes.size() << " thumbnail sizes from [" << value
+                                << ']');
+                break;
+            case LoadOption::EnableMacrosExecution:
+                _enableMacrosExecution = std::move(value);
+                break;
+            case LoadOption::MacroSecurityLevel:
+                _macroSecurityLevel = std::move(value);
+                break;
+            case LoadOption::OriginalDocumentUrl:
+                _originalDocUrl = std::move(value);
+                break;
+            case LoadOption::VerifyHost:
+                _disableVerifyHost = value == "false";
+                break;
+            case LoadOption::InFilterOptions:
+                _inFilterOptions = std::move(value);
+                break;
+            case LoadOption::Url:
+            case LoadOption::Part:
+            case LoadOption::Password:
+            case LoadOption::Lang:
+            case LoadOption::DeviceFormFactor:
+            case LoadOption::Timezone:
+            case LoadOption::SpellOnline:
+            case LoadOption::FormattingMarks:
+            case LoadOption::DarkTheme:
+            case LoadOption::DarkBackground:
+            case LoadOption::FocusRingColor:
+            case LoadOption::ClientVisibleArea:
+            case LoadOption::AccessibilityState:
+            case LoadOption::VectorRendering:
+            case LoadOption::Batch:
+                applyBrowserLoadOption(option, std::move(value), part);
+                break;
         }
     }
+
+    // The signing certificates are added to the user private info, which is complete now that
+    // every option is read.
+    if (signatureConfig)
+        applySignatureConfig(*signatureConfig);
 
     if (Anonymizer::enabled())
     {
@@ -1493,6 +1444,43 @@ void ChildSession::parseLoadCommand(const StringVector& tokens, std::string& par
     }
 
     disableSpellCheckIfReadOnly();
+}
+
+void ChildSession::applySignatureConfig(const std::string& signatureData)
+{
+    if (_userPrivateInfo.empty())
+    {
+        LOG_WRN("signatureconfig: User private info not set, skipping signature configuration");
+        return;
+    }
+
+    if (signatureData == "{}")
+    {
+        LOG_INF("signatureconfig: Empty signature data received, skipping processing");
+        return;
+    }
+
+    Poco::JSON::Object::Ptr signatureDataObject;
+    if (!JsonUtil::parseJSON(signatureData, signatureDataObject))
+    {
+        LOG_ERR("signatureconfig: Failed to parse signature data as JSON: " << signatureData);
+        return;
+    }
+
+    Poco::JSON::Object::Ptr userPrivateInfoObject;
+    if (!JsonUtil::parseJSON(_userPrivateInfo, userPrivateInfoObject))
+    {
+        LOG_ERR("signatureconfig: Failed to parse user private info as JSON: "
+                << _userPrivateInfo);
+        return;
+    }
+
+    setSignToUserPrivateConfig("SignatureCert", signatureDataObject, userPrivateInfoObject);
+    setSignToUserPrivateConfig("SignatureKey", signatureDataObject, userPrivateInfoObject);
+    setSignToUserPrivateConfig("SignatureCa", signatureDataObject, userPrivateInfoObject);
+
+    _userPrivateInfo = JsonUtil::jsonToString(userPrivateInfoObject);
+    LOG_INF("signatureconfig: Successfully updated user private info with signature data");
 }
 
 bool ChildSession::loadDocument(const StringVector& tokens)

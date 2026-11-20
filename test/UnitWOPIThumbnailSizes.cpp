@@ -88,7 +88,7 @@ public:
 
     bool filterKitMessage(WebSocketHandler*, std::string& message) override
     {
-        if (message.find("load url=") == std::string::npos)
+        if (message.find(" load ") == std::string::npos)
             return false;
 
         TST_LOG("Load command: [" << message << ']');

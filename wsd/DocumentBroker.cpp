@@ -28,6 +28,7 @@
 #include <common/HexUtil.hpp>
 #include <common/JailUtil.hpp>
 #include <common/JsonUtil.hpp>
+#include <common/LoadCommand.hpp>
 #include <common/Log.hpp>
 #include <common/Message.hpp>
 #include <common/NumUtil.hpp>
@@ -8101,14 +8102,12 @@ bool DocumentBroker::forwardUrpToChild(const std::string& message)
     return _childProcess && _childProcess->sendUrpMessage(message);
 }
 
-std::string
-DocumentBroker::applySignViewSettings(const std::string& message,
-                                      const std::shared_ptr<ClientSession>& session) const
+void DocumentBroker::applySignViewSettings(LoadCommand& command,
+                                           const std::shared_ptr<ClientSession>& session) const
 {
-    std::string finalMsg = message;
     if (!_isViewSettingsUpdated)
     {
-        return finalMsg;
+        return;
     }
 
     Poco::JSON::Object::Ptr signatureJson = new Poco::JSON::Object();
@@ -8121,18 +8120,12 @@ DocumentBroker::applySignViewSettings(const std::string& message,
     signatureJson->set("SignatureKey", signatureKey);
     signatureJson->set("SignatureCa", signatureCa);
 
-    std::string jsonString = JsonUtil::jsonToString(signatureJson);
-
-    std::string encodedJson;
-    Poco::URI::encode(jsonString, "", encodedJson);
-    finalMsg += " signatureconfig=" + encodedJson;
+    command.set(LoadOption::SignatureConfig, JsonUtil::jsonToString(signatureJson));
 
     LOG_INF("Sent signatureconfig with values");
-    return finalMsg;
 }
 
-std::string DocumentBroker::applyBrowserAccessibility(const std::string& message,
-                                                   const std::string& viewId)
+void DocumentBroker::applyBrowserAccessibility(LoadCommand& command, const std::string& viewId)
 {
     bool accessibilityEnabled = false;
     bool lockAccessibilityOn = false;
@@ -8148,7 +8141,7 @@ std::string DocumentBroker::applyBrowserAccessibility(const std::string& message
         LOG_WRN("Cannot lock accessibility on for ClientSession [" << viewId << ']');
 
     if (!accessibilityEnabled)
-        return message;
+        return;
 
     if (lockAccessibilityOn && it != _sessions.end())
     {
@@ -8156,37 +8149,54 @@ std::string DocumentBroker::applyBrowserAccessibility(const std::string& message
         session->sendTextFrame("lockaccessibilityon");
     }
 
-    // Ensure accessibilityState=true is enabled. Overwrite accessibilityState=
-    // if it exists, append otherwise.
-    bool accessibilityOverridden = false;
-    std::string result;
-    result.reserve(message.size());
-    const StringVector tokens = StringVector::tokenize(message);
-    for (size_t i = 0; i < tokens.size(); ++i)
-    {
-        if (i)
-            result.push_back(' ');
-        if (tokens[i].starts_with("accessibilityState"))
-        {
-            result.append("accessibilityState=true");
-            accessibilityOverridden = true;
-        }
-        else
-            result.append(tokens[i]);
-    }
-    if (!accessibilityOverridden)
-    {
-        result.push_back(' ');
-        result.append("accessibilityState=true");
-    }
-    return result;
+    command.set(LoadOption::AccessibilityState, true);
 }
 
-std::string DocumentBroker::applyViewSetting(const std::string& message, const std::string& viewId,
-                                             const std::shared_ptr<ClientSession>& session)
+bool DocumentBroker::sendLoadToChild(const std::shared_ptr<ClientSession>& session,
+                                     LoadCommand command)
 {
-    std::string msgWithSignSettings = applySignViewSettings(message, session);
-    return applyBrowserAccessibility(msgWithSignSettings, viewId);
+    const std::string& viewId = session->getId();
+    applySignViewSettings(command, session);
+    applyBrowserAccessibility(command, viewId);
+    return _childProcess->sendFrame("child-" + viewId + ' ' + command.serialize());
+}
+
+bool DocumentBroker::forwardLoadToChild(const std::shared_ptr<ClientSession>& session,
+                                        LoadCommand command)
+{
+    ASSERT_CORRECT_THREAD();
+    LOG_ASSERT_MSG(session, "Must have a valid ClientSession");
+    if (_sessions.find(session->getId()) == _sessions.end())
+    {
+        LOG_WRN("Cannot forward the load to unknown ClientSession [" << session->getId() << ']');
+        return false;
+    }
+
+    LOG_ASSERT_MSG(!_uriJailed.empty(), "Must have valid _uriJailed");
+    command.set(LoadOption::Jail, _uriJailed);
+    command.set(LoadOption::AnonymizedJail, _uriJailedAnonym);
+
+    LOG_TRC("Forwarding the load to child [" << session->getId() << ']');
+
+#if !MOBILEAPP
+    if (_asyncInstallTask)
+    {
+        auto sendLoad = [selfWeak = weak_from_this(), this, command = std::move(command),
+                         session](bool success)
+        {
+            if (!success)
+                return;
+            std::shared_ptr<DocumentBroker> selfLifecycle = selfWeak.lock();
+            if (!selfLifecycle)
+                return;
+
+            sendLoadToChild(session, command);
+        };
+        _asyncInstallTask->appendCallback(sendLoad);
+        return true;
+    }
+#endif
+    return sendLoadToChild(session, std::move(command));
 }
 
 bool DocumentBroker::forwardToChild(const std::shared_ptr<ClientSession>& session,
@@ -8223,6 +8233,9 @@ bool DocumentBroker::forwardToChild(const std::shared_ptr<ClientSession>& sessio
     // .uno:SaveGraphic is not a document save - it exports an image to a temp file.
     assert(!message.starts_with("uno .uno:Save") || message.starts_with("uno .uno:SaveGraphic"));
 
+    // Nor should a load, which goes to the child as a LoadCommand.
+    assert(!message.starts_with("load "));
+
     LOG_TRC("Forwarding payload to child [" << viewId << "]: " << getAbbreviatedMessage(message));
 
 #if 0 // extreme paste debugging - message can be giant and binary
@@ -8230,47 +8243,13 @@ bool DocumentBroker::forwardToChild(const std::shared_ptr<ClientSession>& sessio
         LOG_TRC("Logging paste payload (" << message.size() << " bytes) '" << message << "' end paste");
 #endif
 
-    std::string msg = "child-" + viewId + ' ';
-    if (message.starts_with("load "))
-    {
-        // Special-case loading.
-        const StringVector tokens = StringVector::tokenize(message);
-        if (tokens.size() > 1 && tokens.equals(0, "load"))
-        {
-            LOG_ASSERT_MSG(!_uriJailed.empty(), "Must have valid _uriJailed");
-
-            msg += "load " + tokens[1];
-            msg += " jail=" + _uriJailed;
-            msg += " xjail=" + _uriJailedAnonym;
-            msg += ' ' + tokens.cat(' ', 2);
-#if !MOBILEAPP
-            if (_asyncInstallTask)
-            {
-                auto sendLoad = [selfWeak = weak_from_this(), this, viewId = std::move(viewId),
-                                 msg = std::move(msg), binary, session](bool success) {
-                    if (!success)
-                        return;
-                    std::shared_ptr<DocumentBroker> selfLifecycle = selfWeak.lock();
-                    if (!selfLifecycle)
-                        return;
-
-                    _childProcess->sendFrame(applyViewSetting(msg, viewId, session), binary);
-                };
-                _asyncInstallTask->appendCallback(sendLoad);
-                return true;
-            }
-#endif
-            return _childProcess->sendFrame(applyViewSetting(msg, viewId, session), binary);
-        }
-    }
-
 #if !MOBILEAPP
     if (forwardPasteToChild(viewId, message, binary))
         return true;
 #endif
 
     // Forward message with prefix to the Kit.
-    return _childProcess->sendFrame(msg + message, binary);
+    return _childProcess->sendFrame("child-" + viewId + ' ' + message, binary);
 }
 
 bool DocumentBroker::forwardToClient(const std::shared_ptr<Message>& payload)

@@ -20,6 +20,7 @@
 
 #include <common/Anonymizer.hpp>
 #include <common/JsonUtil.hpp>
+#include <common/LoadCommand.hpp>
 #include <common/Log.hpp>
 #include <common/Protocol.hpp>
 #include <common/Unit.hpp>
@@ -89,76 +90,61 @@ bool Session::sendBinaryFrame(const char *buffer, int length)
     return _protocol->sendBinaryMessage(std::string_view(buffer, length)) >= length;
 }
 
-bool Session::applyBrowserLoadOption(const std::string& name, std::string&& value,
-                                     std::string& part)
+bool Session::applyBrowserLoadOption(LoadOption option, std::string&& value, std::string& part)
 {
-    if (name == "part")
+    switch (option)
     {
-        if (COOLProtocol::isValidPartId(value))
-            part = std::move(value);
-        else
-            LOG_WRN("Ignoring load option with a malformed part [" << value << ']');
-    }
-    else if (name == "url")
-    {
-        _docURL = std::move(value);
-    }
-    else if (name == "password")
-    {
-        _docPassword = std::move(value);
-        _haveDocPassword = true;
-    }
-    else if (name == "lang")
-    {
-        setLang(value);
-    }
-    else if (name == "timezone")
-    {
-        _timeZone = std::move(value);
-    }
-    else if (name == "deviceFormFactor")
-    {
-        _deviceFormFactor = std::move(value);
-    }
-    else if (name == "spellOnline")
-    {
-        _spellOnline = std::move(value);
-    }
-    else if (name == "formattingMarks")
-    {
-        _formattingMarks = std::move(value);
-    }
-    else if (name == "darkTheme")
-    {
-        _darkTheme = std::move(value);
-    }
-    else if (name == "focusRingColor")
-    {
-        _focusRingColor = std::move(value);
-    }
-    else if (name == "darkBackground")
-    {
-        _darkBackground = std::move(value);
-    }
-    else if (name == "batch")
-    {
-        _batch = std::move(value);
-    }
-    else if (name == "clientvisiblearea")
-    {
-        _initialClientVisibleArea = std::move(value);
-    }
-    else if (name == "accessibilityState")
-    {
-        _accessibilityState = value == "true";
-    }
-    else if (name == "vectorRendering")
-    {
-        _vectorRendering = value == "true";
-    }
-    else
-    {
-        return false;
+        case LoadOption::Part:
+            if (COOLProtocol::isValidPartId(value))
+                part = std::move(value);
+            else
+                LOG_WRN("Ignoring load option with a malformed part [" << value << ']');
+            break;
+        case LoadOption::Url:
+            _docURL = std::move(value);
+            break;
+        case LoadOption::Password:
+            _docPassword = std::move(value);
+            _haveDocPassword = true;
+            break;
+        case LoadOption::Lang:
+            setLang(value);
+            break;
+        case LoadOption::Timezone:
+            _timeZone = std::move(value);
+            break;
+        case LoadOption::DeviceFormFactor:
+            _deviceFormFactor = std::move(value);
+            break;
+        case LoadOption::SpellOnline:
+            _spellOnline = std::move(value);
+            break;
+        case LoadOption::FormattingMarks:
+            _formattingMarks = std::move(value);
+            break;
+        case LoadOption::DarkTheme:
+            _darkTheme = std::move(value);
+            break;
+        case LoadOption::FocusRingColor:
+            _focusRingColor = std::move(value);
+            break;
+        case LoadOption::DarkBackground:
+            _darkBackground = std::move(value);
+            break;
+        case LoadOption::Batch:
+            _batch = std::move(value);
+            break;
+        case LoadOption::ClientVisibleArea:
+            _initialClientVisibleArea = std::move(value);
+            break;
+        case LoadOption::AccessibilityState:
+            _accessibilityState = value == "true";
+            break;
+        case LoadOption::VectorRendering:
+            _vectorRendering = value == "true";
+            break;
+        default:
+            return false;
     }
 
     return true;

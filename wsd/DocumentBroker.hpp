@@ -66,6 +66,7 @@ namespace http
 {
 class Session;
 }
+class LoadCommand;
 class LockContext;
 class PresetsInstallTask;
 class TileCache;
@@ -793,6 +794,9 @@ public:
     /// Forward a message from client session to its respective child session.
     bool forwardToChild(const std::shared_ptr<ClientSession>& session, const std::string& message,
                         bool binary = false);
+
+    /// Send the load command of a client session to its child session, with the jailed document.
+    bool forwardLoadToChild(const std::shared_ptr<ClientSession>& session, LoadCommand command);
 
     int getRenderedTileCount() const { return _debugRenderedTileCount; }
 
@@ -2189,16 +2193,15 @@ private:
     /// Performs aggregated work after servicing all client sessions
     void processBatchUpdates();
 
-    std::string applyBrowserAccessibility(const std::string& message,
-                                       const std::string& viewId);
+    /// Turns accessibility on in the load command when the browser settings of the view ask for it.
+    void applyBrowserAccessibility(LoadCommand& command, const std::string& viewId);
 
-    /// Apply signature view settings to the message
-    std::string applySignViewSettings(const std::string& message,
-                                      const std::shared_ptr<ClientSession>& session) const;
+    /// Adds the signature settings of the view to the load command.
+    void applySignViewSettings(LoadCommand& command,
+                               const std::shared_ptr<ClientSession>& session) const;
 
-    /// Apply all view settings (signature and accessibility) to the message
-    std::string applyViewSetting(const std::string& message, const std::string& viewId,
-                                 const std::shared_ptr<ClientSession>& session);
+    /// Adds the settings of the view to the load command and sends it to the kit.
+    bool sendLoadToChild(const std::shared_ptr<ClientSession>& session, LoadCommand command);
 
     /// What type are we: affects priority.
     const Poco::URI _uriPublic;

@@ -27,6 +27,7 @@
 #include <common/FileExtensions.hpp>
 #include <common/HexUtil.hpp>
 #include <common/JsonUtil.hpp>
+#include <common/LoadCommand.hpp>
 #if defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
 #include <common/SettingsStorage.hpp>
 #endif
@@ -119,15 +120,6 @@ namespace
 {
 std::mutex GlobalSessionMapMutex;
 Util::UnorderedStringMap<std::weak_ptr<ClientSession>> GlobalSessionMap;
-
-/// Write " name=value" to a kit load line with the value URI-encoded, so it stays one token.
-void appendEncodedLoadToken(std::ostringstream& oss, std::string_view name,
-                            const std::string& value)
-{
-    std::string encoded;
-    Poco::URI::encode(value, "", encoded);
-    oss << ' ' << name << '=' << encoded;
-}
 
 } // namespace
 
@@ -3426,7 +3418,8 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
             }
 #endif
 
-            if (!applyBrowserLoadOption(name, std::move(value), loadPart))
+            const LoadOptionInfo* info = LoadCommand::findOption(name);
+            if (!info || !applyBrowserLoadOption(info->option, std::move(value), loadPart))
                 LOG_WRN("Ignoring the load option [" << name
                         << "]: a browser's load message does not carry it");
         }
@@ -3522,152 +3515,151 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
             publicUri.setPath("/" + p);
 #endif
 
-        std::ostringstream oss;
-        oss << std::boolalpha;
-        oss << "load";
-        appendEncodedLoadToken(oss, "url", publicUri.toString());
+        LoadCommand command;
+        command.set(LoadOption::Url, publicUri.toString());
 
         if constexpr (Util::isWopiSupported())
         {
             // if ssl client verification was disabled in online for the wopi server,
             // then exempt that host from ssl host verification also in core
             if (StorageConnectionManager::isStorageVerificationDisabled())
-                oss << " verifyHost=false";
+                command.set(LoadOption::VerifyHost, false);
         }
 
         if (!getUserId().empty() && !getUserName().empty())
         {
-            appendEncodedLoadToken(oss, "authorid", getUserId());
-            appendEncodedLoadToken(oss, "xauthorid", Anonymizer::anonymize(getUserId()));
-            appendEncodedLoadToken(oss, "author", getUserName());
-            appendEncodedLoadToken(oss, "xauthor", Anonymizer::anonymize(getUserName()));
+            command.set(LoadOption::AuthorId, getUserId());
+            command.set(LoadOption::AnonymizedAuthorId, Anonymizer::anonymize(getUserId()));
+            command.set(LoadOption::Author, getUserName());
+            command.set(LoadOption::AnonymizedAuthor, Anonymizer::anonymize(getUserName()));
         }
 
         if (!getUserExtraInfo().empty())
         {
             //TODO: could this include PII?
-            appendEncodedLoadToken(oss, "authorextrainfo", getUserExtraInfo());
+            command.set(LoadOption::AuthorExtraInfo, getUserExtraInfo());
         }
 
         if (!getUserPrivateInfo().empty())
         {
-            appendEncodedLoadToken(oss, "authorprivateinfo", getUserPrivateInfo());
+            command.set(LoadOption::AuthorPrivateInfo, getUserPrivateInfo());
         }
 
         if (!getServerPrivateInfo().empty())
         {
-            appendEncodedLoadToken(oss, "serverprivateinfo", getServerPrivateInfo());
+            command.set(LoadOption::ServerPrivateInfo, getServerPrivateInfo());
         }
 
-        oss << " readonly=" << (isReadOnly() ? 1 : 0);
+        command.set(LoadOption::ReadOnly, isReadOnly());
 
         if (_isRemoteDocumentConnection)
         {
-            oss << " remotelink=1";
+            command.set(LoadOption::RemoteLink, true);
         }
 
         if (isAllowChangeComments())
         {
-            oss << " isAllowChangeComments=true";
+            command.set(LoadOption::AllowChangeComments, true);
         }
 
         if (isAllowManageRedlines())
         {
-            oss << " isAllowManageRedlines=true";
+            command.set(LoadOption::AllowManageRedlines, true);
         }
 
         if (!loadPart.empty())
         {
-            oss << " part=" << loadPart;
+            command.set(LoadOption::Part, loadPart);
         }
 
         if (getHaveDocPassword())
         {
-            appendEncodedLoadToken(oss, "password", getDocPassword());
+            command.set(LoadOption::Password, getDocPassword());
         }
 
         if (!getLang().empty())
         {
-            appendEncodedLoadToken(oss, "lang", getLang());
+            command.set(LoadOption::Lang, getLang());
         }
 
         if (!getDeviceFormFactor().empty())
         {
-            appendEncodedLoadToken(oss, "deviceFormFactor", getDeviceFormFactor());
+            command.set(LoadOption::DeviceFormFactor, getDeviceFormFactor());
         }
 
         if (!getTimezone().empty())
         {
-            appendEncodedLoadToken(oss, "timezone", getTimezone());
+            command.set(LoadOption::Timezone, getTimezone());
         }
 
         if (!getSpellOnline().empty())
         {
-            appendEncodedLoadToken(oss, "spellOnline", getSpellOnline());
+            command.set(LoadOption::SpellOnline, getSpellOnline());
         }
 
         if (!getFormattingMarks().empty())
         {
-            appendEncodedLoadToken(oss, "formattingMarks", getFormattingMarks());
+            command.set(LoadOption::FormattingMarks, getFormattingMarks());
         }
 
         if (!getDarkTheme().empty())
         {
-            appendEncodedLoadToken(oss, "darkTheme", getDarkTheme());
+            command.set(LoadOption::DarkTheme, getDarkTheme());
         }
 
         if (!getDarkBackground().empty())
         {
-            appendEncodedLoadToken(oss, "darkBackground", getDarkBackground());
+            command.set(LoadOption::DarkBackground, getDarkBackground());
         }
 
         if (!getFocusRingColor().empty())
         {
-            appendEncodedLoadToken(oss, "focusRingColor", getFocusRingColor());
+            command.set(LoadOption::FocusRingColor, getFocusRingColor());
         }
 
         if (!getWatermarkText().empty())
         {
-            appendEncodedLoadToken(oss, "watermarkText", getWatermarkText());
-            oss << " watermarkOpacity="
-                << ConfigUtil::getConfigValue<double>("watermark.opacity", 0.2);
+            command.set(LoadOption::WatermarkText, getWatermarkText());
+            command.set(LoadOption::WatermarkOpacity,
+                        ConfigUtil::getConfigValue<double>("watermark.opacity", 0.2));
         }
 
         if (ConfigUtil::hasProperty("security.enable_macros_execution"))
         {
-            oss << " enableMacrosExecution="
-                << ConfigUtil::getConfigValue<bool>("security.enable_macros_execution", false);
+            command.set(
+                LoadOption::EnableMacrosExecution,
+                ConfigUtil::getConfigValue<bool>("security.enable_macros_execution", false));
         }
 
         if (ConfigUtil::hasProperty("security.macro_security_level"))
         {
-            oss << " macroSecurityLevel="
-                << ConfigUtil::getConfigValue<int>("security.macro_security_level", 1);
+            command.set(LoadOption::MacroSecurityLevel,
+                        ConfigUtil::getConfigValue<int>("security.macro_security_level", 1));
         }
 
         if (!getInitialClientVisibleArea().empty())
         {
-            appendEncodedLoadToken(oss, "clientvisiblearea", getInitialClientVisibleArea());
+            command.set(LoadOption::ClientVisibleArea, getInitialClientVisibleArea());
         }
 
         if (!getOriginalDocUrl().empty())
         {
-            appendEncodedLoadToken(oss, "originaldocumenturl", getOriginalDocUrl());
+            command.set(LoadOption::OriginalDocumentUrl, getOriginalDocUrl());
         }
 
         if (ConfigUtil::getConfigValue<bool>("accessibility.enable", Util::isMobileApp()))
         {
-            oss << " accessibilityState=" << getAccessibilityState();
+            command.set(LoadOption::AccessibilityState, getAccessibilityState());
         }
 
         if (getVectorRendering())
         {
-            oss << " vectorRendering=true";
+            command.set(LoadOption::VectorRendering, true);
         }
 
         if (_wopiFileInfo && !_wopiFileInfo->getTemplateSource().empty())
         {
-            appendEncodedLoadToken(oss, "template", _wopiFileInfo->getTemplateSource());
+            command.set(LoadOption::Template, _wopiFileInfo->getTemplateSource());
         }
 
         if (_wopiFileInfo && !_wopiFileInfo->getThumbnailSizes().empty())
@@ -3680,23 +3672,23 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
                 sizes += size;
                 separator = ",";
             }
-            appendEncodedLoadToken(oss, "thumbnailSizes", sizes);
+            command.set(LoadOption::ThumbnailSizes, sizes);
         }
 
         if (!getBatchMode().empty())
         {
-            appendEncodedLoadToken(oss, "batch", getBatchMode());
+            command.set(LoadOption::Batch, getBatchMode());
         }
 
         if (!getInFilterOption().empty())
         {
-            appendEncodedLoadToken(oss, "infilterOptions", getInFilterOption());
+            command.set(LoadOption::InFilterOptions, getInFilterOption());
         }
         else if (auto it = docBroker->getAdditionalFileUrisJailed().find("template"); it != docBroker->getAdditionalFileUrisJailed().end())
         {
             Poco::JSON::Object::Ptr options = new Poco::JSON::Object();
             options->set("TemplateURL", JsonUtil::makePropertyValue("string", it->second));
-            appendEncodedLoadToken(oss, "infilterOptions", JsonUtil::jsonToString(options));
+            command.set(LoadOption::InFilterOptions, JsonUtil::jsonToString(options));
         }
 
 #if ENABLE_FEATURE_LOCK
@@ -3716,7 +3708,7 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
         // The browser gets its first reconnect token here.
         rotateReconnectToken(true);
 
-        return forwardToChild(oss.str(), docBroker);;
+        return docBroker->forwardLoadToChild(client_from_this(), std::move(command));
     }
     catch (const Poco::SyntaxException&)
     {

@@ -209,6 +209,8 @@ private:
 
     /// Parses the "load" command as coolwsd writes it for the kit.
     void parseLoadCommand(const StringVector& tokens, std::string& part);
+    /// Adds the signing certificates of a signatureconfig load option to the user private info.
+    void applySignatureConfig(const std::string& signatureData);
     bool loadDocument(const StringVector& tokens);
     bool saveDocumentBackground(const StringVector &tokens);
 
