@@ -886,4 +886,21 @@ class PathGeometry {
 		}
 		return change;
 	}
+
+	/// The place as far from that point as the other one, in the direction from it of the
+	/// nearest multiple of 45 degrees, in twips.
+	public static inStepsOfFortyFiveDegrees(
+		from: cool.Point,
+		to: cool.Point,
+	): cool.Point {
+		const x = to.x - from.x;
+		const y = to.y - from.y;
+		const step = Math.PI / 4;
+		const angle = Math.round(Math.atan2(y, x) / step) * step;
+		const length = Math.hypot(x, y);
+		return new cool.Point(
+			from.x + Math.cos(angle) * length,
+			from.y + Math.sin(angle) * length,
+		);
+	}
 }

@@ -1338,18 +1338,15 @@ class ClassicLineCreateContext extends ClassicCreateContext {
 		to: cool.Point,
 		modifier: number,
 	): cool.Range2D | null {
-		let x = to.x - from.x;
-		let y = to.y - from.y;
 		// as in the office, Shift turns the line to the nearest multiple of 45 degrees; the line at
 		// 45 degrees keeps to those by itself, and Shift lets it go free
 		const shift = (modifier & app.UNOModifier.SHIFT) !== 0;
-		if (shift !== (this.shape === 'Line_Diagonal')) {
-			const step = Math.PI / 4;
-			const angle = Math.round(Math.atan2(y, x) / step) * step;
-			const length = Math.hypot(x, y);
-			x = Math.cos(angle) * length;
-			y = Math.sin(angle) * length;
-		}
+		const held =
+			shift !== (this.shape === 'Line_Diagonal')
+				? PathGeometry.inStepsOfFortyFiveDegrees(from, to)
+				: to;
+		const x = held.x - from.x;
+		const y = held.y - from.y;
 		this.end = new cool.Point(from.x + x, from.y + y);
 		// with Alt the drag began at the middle of the line
 		this.start =

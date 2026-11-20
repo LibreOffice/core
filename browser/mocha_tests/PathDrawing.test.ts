@@ -162,6 +162,29 @@ describe('PathDrawing', function () {
 		return drawing.release(false);
 	}
 
+	it('the weights of a curve point keep to steps of 45 degrees where asked', function () {
+		const drawing = new PathDrawing(curveOpen, 10);
+		pressAndPull(drawing, [0, 0], [0, 0]);
+		drawing.moveTo(new cool.Point(100, 0), false);
+		drawing.press(new cool.Point(100, 0));
+		// a pull a little off the diagonal lays the weights on it, as far out as the pull went
+		drawing.pull(new cool.Point(150, 40), true);
+		const point = drawing.pointOfTheWeights();
+		const ahead = new cool.Point(
+			(point?.aheadX ?? 0) - 100,
+			(point?.aheadY ?? 0) - 0,
+		);
+		nodeassert.ok(Math.abs(ahead.x - ahead.y) < 1e-9, 'on the diagonal');
+		nodeassert.ok(
+			Math.abs(ahead.length() - Math.hypot(50, 40)) < 1e-9,
+			'as far out',
+		);
+		nodeassert.deepStrictEqual(
+			[point?.behindX, point?.behindY],
+			[100 - ahead.x, 0 - ahead.y],
+		);
+	});
+
 	it('a drag at a point of a curve pulls out mirrored weights, a click gives a corner', function () {
 		const drawing = new PathDrawing(curveOpen, 10);
 		pressAndPull(drawing, [0, 0], [0, 0]);

@@ -242,17 +242,11 @@ class PathDrawing {
 			new cool.Point(start.x, start.y).subtract(at).length() <= this.reach
 		)
 			placed = new cool.Point(start.x, start.y);
-		else if (last && this.kind.inSteps !== turnedOver) {
-			const x = at.x - last.x;
-			const y = at.y - last.y;
-			const step = Math.PI / 4;
-			const angle = Math.round(Math.atan2(y, x) / step) * step;
-			const length = Math.hypot(x, y);
-			placed = new cool.Point(
-				last.x + Math.cos(angle) * length,
-				last.y + Math.sin(angle) * length,
+		else if (last && this.kind.inSteps !== turnedOver)
+			placed = PathGeometry.inStepsOfFortyFiveDegrees(
+				new cool.Point(last.x, last.y),
+				at,
 			);
-		}
 
 		this.next = placed;
 		return placed;
@@ -311,15 +305,13 @@ class PathDrawing {
 		const point = this.pulled === null ? undefined : this.points[this.pulled];
 		if (!point) return;
 
-		let x = to.x - point.x;
-		let y = to.y - point.y;
+		const from = new cool.Point(point.x, point.y);
+		const held = turnedOver
+			? PathGeometry.inStepsOfFortyFiveDegrees(from, to)
+			: to;
+		const x = held.x - point.x;
+		const y = held.y - point.y;
 		const length = Math.hypot(x, y);
-		if (turnedOver) {
-			const step = Math.PI / 4;
-			const angle = Math.round(Math.atan2(y, x) / step) * step;
-			x = Math.cos(angle) * length;
-			y = Math.sin(angle) * length;
-		}
 
 		this.pulledOut =
 			this.pulledOut ||

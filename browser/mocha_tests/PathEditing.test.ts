@@ -237,3 +237,29 @@ describe('Moving a polygon of a motion path by its line', function () {
 		);
 	});
 });
+
+describe('Steps of 45 degrees', function () {
+	it('keeps the distance and turns to the nearest multiple of 45 degrees', function () {
+		const from = new cool.Point(100, 100);
+		const near = (point: cool.Point) => [
+			Math.round(point.x * 1000) / 1000,
+			Math.round(point.y * 1000) / 1000,
+		];
+		// a little above level stays level, as far away as before
+		nodeassert.deepStrictEqual(
+			near(
+				PathGeometry.inStepsOfFortyFiveDegrees(from, new cool.Point(400, 120)),
+			),
+			near(new cool.Point(100 + Math.hypot(300, 20), 100)),
+		);
+		// near the diagonal goes onto it
+		const onTheDiagonal = PathGeometry.inStepsOfFortyFiveDegrees(
+			from,
+			new cool.Point(200, 190),
+		);
+		nodeassert.ok(
+			Math.abs(onTheDiagonal.x - 100 - (onTheDiagonal.y - 100)) < 1e-9,
+			'on the diagonal',
+		);
+	});
+});
