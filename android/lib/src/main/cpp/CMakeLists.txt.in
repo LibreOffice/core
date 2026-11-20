@@ -8,6 +8,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2a")
 add_library(androidapp SHARED
             androidapp.cpp
             AndroidClipboard.cpp
+            AndroidFilePicker.cpp
             ../../../../../common/Authorization.cpp
             ../../../../../common/ConfigUtil.cpp
             ../../../../../common/CommandControl.cpp

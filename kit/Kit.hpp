@@ -614,7 +614,7 @@ public:
 private:
     void postForceModifiedCommand(bool modified);
 
-#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32) && !defined(IOS)
+#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32) && !defined(IOS) && !defined(__ANDROID__)
     /// Sends a filepicker: request, with the title and the file type filters, to the browser
     /// of the view that is current, and keeps the completion until that browser answers. With
     /// no session for the view, completes the pick at once as cancelled.

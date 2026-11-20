@@ -62,4 +62,11 @@ void resolveSystemClipboardClass(JNIEnv* env);
 /** Install the process-global clipboard provider backed by SystemClipboard.java. */
 void install_clipboard_provider(COKit& rOffice);
 
+/** Resolve the LOActivity Java class and its file picker method; needs a thread the JVM
+    created. */
+void resolveFilePickerClass(JNIEnv* env);
+
+/** Install the file picker provider backed by the system document picker of LOActivity. */
+void install_filepicker_provider(COKit& rOffice);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -14,7 +14,9 @@ package org.libreoffice.androidlib
 import android.content.ContentResolver
 import android.net.Uri
 import android.provider.DocumentsContract
+import android.provider.OpenableColumns
 import android.util.Log
+import android.webkit.MimeTypeMap
 import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
@@ -91,6 +93,35 @@ internal object LinkedFiles {
             }
         }
         return null
+    }
+
+    /** A file name for a copy of uri, with an extension from its type when it has none. */
+    @JvmStatic
+    fun displayName(resolver: ContentResolver, uri: Uri): String {
+        var name: String? = null
+        try {
+            val projection = arrayOf(OpenableColumns.DISPLAY_NAME)
+            resolver.query(uri, projection, null, null, null)?.use { cursor ->
+                if (cursor.moveToFirst())
+                    name = cursor.getString(0)
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Cannot read the display name of $uri", e)
+        }
+        if (name.isNullOrEmpty())
+            name = uri.lastPathSegment
+        name = name?.substringAfterLast('/')?.substringAfterLast('\\')
+        if (name.isNullOrEmpty() || name == "." || name == "..")
+            name = "picked"
+
+        // The engine tells the type of a file by its extension as well as by its content.
+        if (name.lastIndexOf('.') <= 0) {
+            val extension = resolver.getType(uri)
+                ?.let { MimeTypeMap.getSingleton().getExtensionFromMimeType(it) }
+            if (!extension.isNullOrEmpty())
+                name = "$name.$extension"
+        }
+        return name
     }
 
     /** Removes a copy made by copyToCache, with the folder it was made in. */

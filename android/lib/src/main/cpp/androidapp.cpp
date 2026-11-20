@@ -110,6 +110,7 @@ JNI_OnLoad(JavaVM* vm, void*) {
     }
 
     resolveSystemClipboardClass(env);
+    resolveFilePickerClass(env);
 
     return JNI_VERSION_1_6;
 }

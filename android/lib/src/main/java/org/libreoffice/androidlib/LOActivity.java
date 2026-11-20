@@ -64,6 +64,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.BufferedWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.ref.WeakReference;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
@@ -204,12 +205,19 @@ public class LOActivity extends AppCompatActivity {
     public static final int REQUEST_COPY = 600;
     public static final int REQUEST_ALL_FILES_ACCESS = 601;
     public static final int REQUEST_LINKED_FOLDER = 602;
+    public static final int REQUEST_PICK_FILE = 603;
 
     /// The files the document links to that wait for the user to allow the folder holding them.
     private JSONArray mPendingLinkedFiles = null;
     /** The copy the engine reads of each linked file, by its path relative to the document. */
     private final Map<String, File> mLinkedFileCopies = new HashMap<>();
     private static final ExecutorService linkedFilesExecutor = Executors.newSingleThreadExecutor();
+
+    private final FilePicker mFilePicker = new FilePicker(this, linkedFilesExecutor);
+
+    /** The activity that was resumed last. File picks of the engine show there. */
+    private static volatile WeakReference<LOActivity> sForegroundActivity =
+        new WeakReference<>(null);
 
     /** Broadcasting event for passing info back to the shell. */
     public static final String LO_ACTIVITY_BROADCAST = "LOActivityBroadcast";
@@ -646,7 +654,7 @@ public class LOActivity extends AppCompatActivity {
      * Extensions the platform knows map to their type, unknown ones are left out. No known type
      * means any file.
      */
-    private static void restrictToAcceptedTypes(Intent intent, String[] acceptTypes) {
+    static void restrictToAcceptedTypes(Intent intent, String[] acceptTypes) {
         ArrayList<String> mimeTypes = new ArrayList<>();
         HashMap<String, Integer> kindCounts = new HashMap<>();
         if (acceptTypes != null) {
@@ -1108,6 +1116,7 @@ public class LOActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.i(TAG, "onResume..");
+        sForegroundActivity = new WeakReference<>(this);
     }
 
     @Override
@@ -1123,6 +1132,9 @@ public class LOActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         stopWatchingForHardwareKeyboard();
+
+        if (sForegroundActivity.get() == this)
+            sForegroundActivity = new WeakReference<>(null);
 
         if (mWebView != null) {
             // Remove the webview from the hierarchy & destroy
@@ -1141,6 +1153,7 @@ public class LOActivity extends AppCompatActivity {
 
         // The copies of the files the document links to go with it.
         linkedFilesExecutor.execute(this::removeLinkedFileCopies);
+        linkedFilesExecutor.execute(mFilePicker::removeCopies);
 
         mProgressDialog.dismiss();
 
@@ -1178,6 +1191,11 @@ public class LOActivity extends AppCompatActivity {
             } else {
                 showReadOnlyToast();
             }
+            return;
+        }
+
+        if (requestCode == REQUEST_PICK_FILE) {
+            mFilePicker.onActivityResult(resultCode, intent);
             return;
         }
 
@@ -1420,6 +1438,8 @@ public class LOActivity extends AppCompatActivity {
             return;
 
         documentLoaded = false;
+        // Cancel an open pick, so the engine dialog closes with the document.
+        mFilePicker.cancelPending();
         // The timeout marks a close in progress.
         mCloseTimeout.set(timeout);
         final String uri = intentUri();
@@ -1831,6 +1851,20 @@ public class LOActivity extends AppCompatActivity {
         for (File copy : mLinkedFileCopies.values())
             LinkedFiles.removeCopy(copy);
         mLinkedFileCopies.clear();
+    }
+
+    boolean isDocumentLoaded() {
+        return documentLoaded;
+    }
+
+    /** False when no activity can show the pick. */
+    @UsedByNative
+    public static boolean showFilePicker(int id, String title, String[] extensions) {
+        final LOActivity activity = sForegroundActivity.get();
+        if (activity == null || activity.isFinishing() || activity.isDestroyed())
+            return false;
+        activity.mFilePicker.show(id, title, extensions);
+        return true;
     }
 
     /** Edit of a file a master document links to: it opens as the document of this activity. */
@@ -2286,6 +2320,9 @@ public class LOActivity extends AppCompatActivity {
     private native void saveAsNative(int documentId, String fileUri, String format, String options);
 
     private native void postUnoCommandNative(int documentId, String command, String arguments, boolean bNotifyWhenFinished);
+
+    /** True when the pick was still open. */
+    native boolean filePickerResult(int id, String fileUrl);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

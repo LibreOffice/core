@@ -4660,7 +4660,7 @@ bool ChildSession::linkedFile(const StringVector& tokens)
         return sendTextFrame("linkedfiles: " + getLinkedFilesJson());
     if (tokens.size() == 4 && tokens.equals(1, "source"))
         return linkedFileSource(tokens);
-#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32) && !defined(IOS)
+#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32) && !defined(IOS) && !defined(__ANDROID__)
     if (tokens.size() == 2 && tokens.equals(1, "enablepick"))
     {
         _docManager->enableLinkPicks();

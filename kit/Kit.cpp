@@ -861,7 +861,7 @@ std::mutex GlobalCallbackMutex;
 Document* GlobalCallbackDocument = nullptr;
 } // namespace
 
-#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32) && !defined(IOS)
+#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32) && !defined(IOS) && !defined(__ANDROID__)
 namespace
 {
 /// The file picker the kit gives the engine: the browser, or the integrator through it.
@@ -917,8 +917,8 @@ Document::Document(const std::shared_ptr<COKit>& loKit, const std::string& jailI
 
     // The browser is this document's file picker: a dialog that needs a file asks the browser
     // of the view that is current, and the uploaded file comes back as a URL in the jail. The
-    // engine keeps one provider for the process, and the iOS app installs its own once.
-#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32) && !defined(IOS)
+    // engine keeps one provider for the process, and the iOS and Android apps install their own.
+#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32) && !defined(IOS) && !defined(__ANDROID__)
     COKitFilePickerProvider& filePickerProvider = kitFilePickerProvider();
     filePickerProvider.pick = pickFile;
     _loKit->installFilePickerProvider(&filePickerProvider);
@@ -2218,7 +2218,7 @@ std::shared_ptr<ChildSession> Document::findSessionByViewId(int viewId)
     return nullptr;
 }
 
-#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32) && !defined(IOS)
+#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32) && !defined(IOS) && !defined(__ANDROID__)
 /// The document and session of the engine's current view. View ids are unique across the
 /// documents of a process, so all of them are searched.
 static std::pair<Document*, std::shared_ptr<ChildSession>> findDocumentOfCurrentView()
@@ -2340,7 +2340,7 @@ void Document::enableLinkPicks()
     filePickerProvider.pickLinkTarget = pickLinkTarget;
     _loKit->installFilePickerProvider(&filePickerProvider);
 }
-#endif // !MACOSAPP && !QTAPP && !_WIN32 && !IOS
+#endif // !MACOSAPP && !QTAPP && !_WIN32 && !IOS && !__ANDROID__
 
 bool Document::completeLinkPick(unsigned id, int viewId, const std::string& relativePath,
                                 const std::string& readUrl)
@@ -4337,9 +4337,9 @@ static void startMainLoop(const COKit* kit, const std::shared_ptr<COKit>& loKit,
     install_clipboard_provider(*loKit);
 #endif
 
-    // The desktop apps show a native file picker where the engine would open
-    // its own file dialog.
-#if defined(MACOSAPP) || defined(QTAPP) || defined(_WIN32)
+    // The desktop apps and the Android app show a native file picker where the engine would
+    // open its own file dialog.
+#if defined(MACOSAPP) || defined(QTAPP) || defined(_WIN32) || defined(__ANDROID__)
     install_filepicker_provider(*loKit);
 #endif
 
