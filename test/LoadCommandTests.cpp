@@ -35,6 +35,8 @@ class LoadCommandTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testParseSkipsBadTokens);
     CPPUNIT_TEST(testParseOnlyReadsLoad);
     CPPUNIT_TEST(testFindOption);
+    CPPUNIT_TEST(testBrowserValues);
+    CPPUNIT_TEST(testServerOptionsTakeNoBrowserValue);
     CPPUNIT_TEST_SUITE_END();
 
     void testEveryOptionRoundTrips();
@@ -46,6 +48,8 @@ class LoadCommandTests : public CPPUNIT_NS::TestFixture
     void testParseSkipsBadTokens();
     void testParseOnlyReadsLoad();
     void testFindOption();
+    void testBrowserValues();
+    void testServerOptionsTakeNoBrowserValue();
 };
 
 void LoadCommandTests::testEveryOptionRoundTrips()
@@ -179,6 +183,75 @@ void LoadCommandTests::testFindOption()
 
     LOK_ASSERT(LoadCommand::findOption("Lang") == nullptr);
     LOK_ASSERT(LoadCommand::findOption("") == nullptr);
+}
+
+void LoadCommandTests::testBrowserValues()
+{
+    constexpr std::string_view testname = __func__;
+
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::Url, "file:///tmp/a b.odt"));
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::Password, "any text, at all"));
+
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::Part, "3"));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::Part, ""));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::Part, "three"));
+
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::Lang, "en-US"));
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::Lang, "es-419"));
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::Lang, "en_US.UTF-8"));
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::Lang, "de-DE@euro"));
+    LOK_ASSERT(
+        LoadCommand::isValidBrowserValue(LoadOption::Lang, "fr-FR-u-ca-gregory-fw-mon-mu-celsius"));
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::Lang, ""));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::Lang, "en,de"));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::Lang, "English (USA)"));
+
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::Timezone, "Europe/London"));
+    LOK_ASSERT(
+        LoadCommand::isValidBrowserValue(LoadOption::Timezone, "America/Argentina/Buenos_Aires"));
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::Timezone, "Etc/GMT+1"));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::Timezone, "London, Europe"));
+
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::DeviceFormFactor, "desktop"));
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::DeviceFormFactor, "tablet"));
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::DeviceFormFactor, "mobile"));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::DeviceFormFactor, "watch"));
+
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::SpellOnline, "true"));
+    LOK_ASSERT(
+        LoadCommand::isValidBrowserValue(LoadOption::SpellOnline, "text:true,spreadsheet:false"));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::SpellOnline, "text: true"));
+
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::DarkTheme, "true"));
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::DarkBackground, "false"));
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::FormattingMarks, ""));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::DarkTheme, "1"));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::Batch, "yes"));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::AccessibilityState, "TRUE"));
+
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::FocusRingColor, "#1a2B3c"));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::FocusRingColor, "1a2b3c"));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::FocusRingColor, "#1a2b3"));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::FocusRingColor, "#1a2b3g"));
+
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::ClientVisibleArea, "0;0;10980;2250"));
+    LOK_ASSERT(LoadCommand::isValidBrowserValue(LoadOption::ClientVisibleArea, "0;0;1098.5;-2"));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::ClientVisibleArea, "0,0,10980,2250"));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::ClientVisibleArea, "0;0;10980"));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::ClientVisibleArea, "0;0;10980;"));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::ClientVisibleArea, "0;0;1-2;2250"));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::ClientVisibleArea, "0;0;.;2250"));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::ClientVisibleArea, "0;0;wide;2250"));
+}
+
+void LoadCommandTests::testServerOptionsTakeNoBrowserValue()
+{
+    constexpr std::string_view testname = __func__;
+
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::ReadOnly, "false"));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::Jail, "file:///tmp/a.odt"));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::AuthorPrivateInfo, "{}"));
+    LOK_ASSERT(!LoadCommand::isValidBrowserValue(LoadOption::MacroSecurityLevel, "1"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LoadCommandTests);

@@ -126,6 +126,16 @@ Util::UnorderedStringMap<std::weak_ptr<ClientSession>> GlobalSessionMap;
 
 namespace
 {
+void clearIfInvalidBrowserSetting(LoadOption option, std::string& value)
+{
+    if (LoadCommand::isValidBrowserValue(option, value))
+        return;
+
+    LOG_WRN("Ignoring the browser setting for the load option ["
+            << LoadCommand::getOptionInfo(option).name << "]: its value is not valid");
+    value.clear();
+}
+
 void logSyntaxErrorDetails(const StringVector& tokens, const std::string& firstLine)
 {
     LOG_WRN("Invalid syntax for '" << tokens[0] << "' message: [" << firstLine << ']');
@@ -3210,6 +3220,7 @@ void ClientSession::overrideDocOption()
 
     std::string darkTheme, darkBackgroundForTheme, accessibilityState;
     JsonUtil::findJSONValue(_browserSettingsJSON, "darkTheme", darkTheme);
+    clearIfInvalidBrowserSetting(LoadOption::DarkTheme, darkTheme);
     JsonUtil::findJSONValue(_browserSettingsJSON, "accessibilityState", accessibilityState);
     Poco::JSON::Object::Ptr darkBackgroundObj =
         _browserSettingsJSON->getObject("darkBackgroundForTheme");
@@ -3224,6 +3235,7 @@ void ClientSession::overrideDocOption()
     {
         JsonUtil::findJSONValue(darkBackgroundObj, darkTheme == "true" ? "dark" : "light",
                                 darkBackgroundForTheme);
+        clearIfInvalidBrowserSetting(LoadOption::DarkBackground, darkBackgroundForTheme);
     }
 
     if (!darkTheme.empty())
@@ -3271,6 +3283,7 @@ void ClientSession::overrideDocOption()
         spellOnline += value;
     }
 
+    clearIfInvalidBrowserSetting(LoadOption::SpellOnline, spellOnline);
     if (!spellOnline.empty())
     {
         setSpellOnline(spellOnline);
@@ -3458,9 +3471,21 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
 #endif
 
             const LoadOptionInfo* info = LoadCommand::findOption(name);
-            if (!info || !applyBrowserLoadOption(info->option, std::move(value), loadPart))
+            if (!info || !info->isValidBrowserValue)
+            {
                 LOG_WRN("Ignoring the load option [" << name
                         << "]: a browser's load message does not carry it");
+                continue;
+            }
+
+            if (!info->isValidBrowserValue(value))
+            {
+                LOG_WRN("Ignoring the load option [" << name << "]: its value is not valid");
+                continue;
+            }
+
+            if (!applyBrowserLoadOption(info->option, std::move(value), loadPart))
+                LOG_ERR("Nothing applies the load option [" << name << ']');
         }
 
 #if !MOBILEAPP
