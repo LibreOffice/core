@@ -47,7 +47,7 @@ public:
     void CheckPointDelete() const;
 
     void Resize( sal_uInt16 nNewSize, bool bDeletePoints = true );
-    void InsertSpace( sal_uInt16 nPos, sal_uInt16 nCount );
+    bool InsertSpace( sal_uInt16 nPos, sal_uInt16 nCount );
     void Remove( sal_uInt16 nPos, sal_uInt16 nCount );
 };
 
