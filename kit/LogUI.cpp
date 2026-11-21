@@ -20,6 +20,7 @@
 
 #include <common/FileUtil.hpp>
 #include <common/Log.hpp>
+#include <common/Util.hpp>
 
 void LogUiCmd::logUiCmdLine(int userId, const std::string& line)
 {

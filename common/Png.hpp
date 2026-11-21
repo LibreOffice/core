@@ -61,6 +61,7 @@
 
 #include <common/Log.hpp>
 #include <common/TraceEvent.hpp>
+#include <common/Util.hpp>
 
 namespace Png
 {

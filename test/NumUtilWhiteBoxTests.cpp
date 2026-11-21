@@ -12,6 +12,7 @@
 #include <config.h>
 
 #include <common/NumUtil.hpp>
+#include <common/Util.hpp>
 
 #include <test/lokassert.hpp>
 

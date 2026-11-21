@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include <common/Util.hpp>
 #include <testlog.hpp>
 
 #include <cassert>
