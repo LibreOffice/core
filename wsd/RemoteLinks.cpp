@@ -853,7 +853,7 @@ void RemoteLinks::onRemoteEvent(DocumentBroker& docBroker, const std::string& ta
     const StringVector arguments = StringVector::tokenize(eventArguments);
     std::string event;
     if (arguments.size())
-        COOLProtocol::getTokenString(arguments[0], "event", event);
+        (void)COOLProtocol::getTokenString(arguments[0], "event", event);
 
     // The kind of a failed or missing event says why the source cannot be read.
     std::string kind;
@@ -884,7 +884,7 @@ void RemoteLinks::onRemoteEvent(DocumentBroker& docBroker, const std::string& ta
     {
         std::string time;
         if (arguments.size() > 1)
-            COOLProtocol::getTokenString(arguments[1], "time", time);
+            (void)COOLProtocol::getTokenString(arguments[1], "time", time);
         RemoteLink saved;
         saved.wopiSrc = wopiSrc;
         saved.lastModifiedTime = Uri::decode(time);
