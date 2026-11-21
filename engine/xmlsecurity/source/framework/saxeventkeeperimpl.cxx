@@ -31,6 +31,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <algorithm>
+#include <cassert>
 
 SAXEventKeeperImpl::SAXEventKeeperImpl( )
     :m_pCurrentBufferNode(nullptr),
@@ -934,7 +935,10 @@ void SAXEventKeeperImpl::addReferenceResolvedListener(
     sal_Int32 referenceId,
     const cpo::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& listener )
 {
-    ElementCollector* pElementCollector = static_cast<ElementCollector*>(findElementMarkBuffer(referenceId));
+    ElementMark* pElementMark = findElementMarkBuffer(referenceId);
+    assert(!pElementMark
+           || pElementMark->getType() == css::xml::crypto::sax::ElementMarkType_ELEMENTCOLLECTOR);
+    ElementCollector* pElementCollector = static_cast<ElementCollector*>(pElementMark);
     if (pElementCollector != nullptr)
     {
         pElementCollector->setReferenceResolvedListener(listener);
