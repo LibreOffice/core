@@ -167,6 +167,12 @@ namespace FileUtil
     /// descriptor, in blocking mode, or -1 with errno undefined.
     int openLocalFileInJail(bool usingMountNamespaces, const std::string& localJailRoot,
                             const std::string& localPath);
+
+    /// Removes the name at localPath, a path that buildLocalPathToJail gives for the jail under
+    /// localJailRoot, reached through no link below the jail. A link at the name is removed
+    /// itself, and a directory stays. Returns true when the name was removed.
+    bool removeLocalFileInJail(bool usingMountNamespaces, const std::string& localJailRoot,
+                               const std::string& localPath);
 #endif
 
     // returns two strings

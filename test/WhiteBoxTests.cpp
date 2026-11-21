@@ -1507,6 +1507,32 @@ void WhiteBoxTests::testOpenFileInJail()
                                                        jailRoot + "-other/user/docs/abc/doc.odt"));
     LOK_ASSERT_EQUAL(-1, FileUtil::openLocalFileInJail(false, jailRoot,
                                                        jailRoot + "/../../outside/secret.txt"));
+
+    // A file through a linked directory, a file outside the jail, a path with ".." and a
+    // directory all stay.
+    LOK_ASSERT(!FileUtil::removeLocalFileInJail(false, jailRoot,
+                                                jailRoot + "/user/docs/linked/secret.txt"));
+    LOK_ASSERT(!FileUtil::removeLocalFileInJail(false, jailRoot, outside + "/secret.txt"));
+    LOK_ASSERT(!FileUtil::removeLocalFileInJail(false, jailRoot,
+                                                jailRoot + "/../../outside/secret.txt"));
+    LOK_ASSERT(!FileUtil::removeLocalFileInJail(false, jailRoot, jailRoot + "/user/docs/abc"));
+    LOK_ASSERT(FileUtil::Stat(jailRoot + "/user/docs/abc").exists());
+
+    // A link at the name is removed and what it points to stays.
+    LOK_ASSERT(FileUtil::removeLocalFileInJail(false, jailRoot,
+                                               jailRoot + "/user/docs/abc/link.odt"));
+    LOK_ASSERT(FileUtil::Stat(outside + "/secret.txt").exists());
+
+    // A file in the jail is removed once, from the jail root or from where its /tmp is mounted
+    // from.
+    LOK_ASSERT(FileUtil::removeLocalFileInJail(false, jailRoot,
+                                               jailRoot + "/user/docs/abc/doc.odt"));
+    LOK_ASSERT(!FileUtil::Stat(jailRoot + "/user/docs/abc/doc.odt").exists());
+    LOK_ASSERT(!FileUtil::removeLocalFileInJail(false, jailRoot,
+                                                jailRoot + "/user/docs/abc/doc.odt"));
+    LOK_ASSERT(FileUtil::removeLocalFileInJail(
+        true, jailRoot, dir + "/jails/tmp/cool-jailid/user/docs/abc/doc.odt"));
+    LOK_ASSERT(!FileUtil::Stat(dir + "/jails/tmp/cool-jailid/user/docs/abc/doc.odt").exists());
 }
 
 void WhiteBoxTests::testStringCompare()

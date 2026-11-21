@@ -652,8 +652,10 @@ namespace FileUtil
 
     namespace
     {
-    /// Opens for reading the regular file at localPath, reached from localDir through no link.
-    int openFileBelow(const std::string& localDir, const std::string& localPath)
+    /// Opens the directory that holds localPath, reached from localDir through no link, and sets
+    /// fileName to the name of localPath in it. Returns the directory, or -1.
+    int openParentBelow(const std::string& localDir, const std::string& localPath,
+                        std::string& fileName)
     {
         std::vector<std::string> components = componentsBelow(localDir, localPath);
         if (components.empty())
@@ -663,9 +665,16 @@ namespace FileUtil
             return -1;
         }
 
-        const std::string fileName = std::move(components.back());
+        fileName = std::move(components.back());
         components.pop_back();
-        const int dirFd = openDirectoriesBelow(localDir, components, /*makeMissing=*/false);
+        return openDirectoriesBelow(localDir, components, /*makeMissing=*/false);
+    }
+
+    /// Opens for reading the regular file at localPath, reached from localDir through no link.
+    int openFileBelow(const std::string& localDir, const std::string& localPath)
+    {
+        std::string fileName;
+        const int dirFd = openParentBelow(localDir, localPath, fileName);
         if (dirFd < 0)
             return -1;
 
@@ -674,6 +683,20 @@ namespace FileUtil
             logOpenFailure(localPath);
         ::close(dirFd);
         return keepIfRegularFile(fd, localPath);
+    }
+
+    /// The local directory to reach localPath from. This is the jail root, or, with mount
+    /// namespaces, the directory the jail's /tmp is mounted from when localPath is below it.
+    std::string localRootOfJailFile(bool usingMountNamespaces, const std::string& localJailRoot,
+                                    const std::string& localPath)
+    {
+        if (usingMountNamespaces)
+        {
+            std::string tmpDir = localPathToJail(true, localJailRoot, "/tmp/").first;
+            if (!componentsBelow(tmpDir, localPath).empty())
+                return tmpDir;
+        }
+        return localJailRoot;
     }
     } // namespace
 
@@ -687,14 +710,25 @@ namespace FileUtil
     int openLocalFileInJail(bool usingMountNamespaces, const std::string& localJailRoot,
                             const std::string& localPath)
     {
-        // With mount namespaces, the files of the jail's /tmp are below where it is mounted from.
-        if (usingMountNamespaces)
-        {
-            const std::string tmpDir = localPathToJail(true, localJailRoot, "/tmp/").first;
-            if (!componentsBelow(tmpDir, localPath).empty())
-                return openFileBelow(tmpDir, localPath);
-        }
-        return openFileBelow(localJailRoot, localPath);
+        return openFileBelow(localRootOfJailFile(usingMountNamespaces, localJailRoot, localPath),
+                             localPath);
+    }
+
+    bool removeLocalFileInJail(bool usingMountNamespaces, const std::string& localJailRoot,
+                               const std::string& localPath)
+    {
+        const std::string localRoot =
+            localRootOfJailFile(usingMountNamespaces, localJailRoot, localPath);
+        std::string fileName;
+        const int dirFd = openParentBelow(localRoot, localPath, fileName);
+        if (dirFd < 0)
+            return false;
+
+        const bool removed = ::unlinkat(dirFd, fileName.c_str(), 0) == 0;
+        if (!removed && errno != ENOENT)
+            LOG_SYS("Failed to remove [" << Anonymizer::anonymizeUrl(localPath) << ']');
+        ::close(dirFd);
+        return removed;
     }
 
     std::string moveFileIntoJail(bool usingMountNamespaces, std::string localJailRoot,

@@ -3304,7 +3304,8 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
                         << (exc.nested() ? " (" + exc.nested()->displayText() + ")" : ""));
             }
 
-            FileUtil::removeFile(filePath.toString());
+            FileUtil::removeLocalFileInJail(COOLWSD::EnableMountNamespaces, jailRoot,
+                                            filePath.toString());
         }
         else
         {
