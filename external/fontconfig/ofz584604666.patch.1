@@ -1,0 +1,23 @@
+--- a/src/fcfreetype.c
++++ b/src/fcfreetype.c
+@@ -2342,9 +2342,9 @@
+ 
+ static inline int    fc_min (int a, int b) { return a <= b ? a : b; }
+ static inline int    fc_max (int a, int b) { return a >= b ? a : b; }
+-static inline FcBool fc_approximately_equal (int x, int y)
++static inline FcBool fc_approximately_equal (int64_t x, int64_t y)
+ {
+-    return abs (x - y) * 33 <= fc_max (abs (x), abs (y));
++    return llabs (x - y) * 33 <= FC_MAX (llabs (x), llabs (y));
+ }
+ 
+ static int
+@@ -2464,7 +2464,7 @@
+     if (num_advances <= 1)
+ 	return FC_SPACING_MONO;
+     else if (num_advances == 2 &&
+-             fc_approximately_equal (fc_min (advances[0], advances[1]) * 2,
++             fc_approximately_equal ((int64_t)fc_min (advances[0], advances[1]) * 2,
+                                      fc_max (advances[0], advances[1])))
+ 	return FC_SPACING_DUAL;
+     else
