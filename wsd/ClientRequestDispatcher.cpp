@@ -2368,41 +2368,42 @@ bool ClientRequestDispatcher::handlePreviewIndexRequest(const Poco::Net::HTTPReq
         std::unique_ptr<WopiStorage::WOPIFileInfo> fileInfo =
             checkFileInfo.wopiFileInfo(documentUri);
 
-        if (fileInfo && !fileInfo->allowsCleanExport())
+        if (fileInfo)
         {
-            LOG_WRN_S("Preview index request for [" << docKey
-                                                    << "] refused: the host allows no export "
-                                                       "for this user");
-            HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, requestSocket,
-                                             "the host allows no export of this document");
-            return;
-        }
+            if (!fileInfo->allowsCleanExport())
+            {
+                LOG_WRN_S("Preview index request for [" << docKey
+                                                        << "] refused: the host allows no export "
+                                                           "for this user");
+                HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, requestSocket,
+                                                 "the host allows no export of this document");
+                return;
+            }
 
-        // The cache holds the previews of this version of the file, so the file is not opened.
-        Poco::JSON::Object::Ptr cached =
-            fileInfo ? PreviewCache::lookup(docKey, fileInfo->getLastModifiedServerTimeString(),
-                                            fileInfo->getSize())
-                     : nullptr;
-        if (cached)
-        {
-            // The storage names the file now, which a rename may have changed.
-            if (Poco::JSON::Object::Ptr file = cached->getObject("file"))
-                file->set("name", fileInfo->getFilename());
+            // The cache holds the previews of this version of the file, so the file is not opened.
+            Poco::JSON::Object::Ptr cached = PreviewCache::lookup(
+                docKey, fileInfo->getLastModifiedServerTimeString(), fileInfo->getSize());
+            if (cached)
+            {
+                // The storage names the file now, which a rename may have changed.
+                if (Poco::JSON::Object::Ptr file = cached->getObject("file"))
+                    file->set("name", fileInfo->getFilename());
 
-            const std::string tag = PreviewSession::generateTag();
-            PreviewCache::registerTag(tag, docKey);
+                const std::string tag = PreviewSession::generateTag();
+                PreviewCache::registerTag(tag, docKey);
 
-            Poco::URI document(documentUri);
-            document.setQueryParameters(Poco::URI::QueryParameters());
-            const long ttl = PreviewSession::TagTtl.count();
+                Poco::URI document(documentUri);
+                document.setQueryParameters(Poco::URI::QueryParameters());
+                const long ttl = PreviewSession::TagTtl.count();
 
-            http::Response response(http::StatusCode::OK);
-            response.add("X-Content-Type-Options", "nosniff");
-            response.set("Cache-Control", "no-store");
-            response.setBody(PreviewCache::buildAnswer(cached, tag, ttl, document),
-                             "application/json");
-            requestSocket->sendAndShutdown(response);
-            return;
+                http::Response response(http::StatusCode::OK);
+                response.add("X-Content-Type-Options", "nosniff");
+                response.set("Cache-Control", "no-store");
+                response.setBody(PreviewCache::buildAnswer(cached, tag, ttl, document),
+                                 "application/json");
+                requestSocket->sendAndShutdown(response);
+                return;
+            }
         }
 
         const SharedSettings sharedSettings(checkFileInfo.wopiInfo());
