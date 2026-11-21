@@ -27,7 +27,6 @@ class CheckPythonHome(unohelper.Base, XJob):
     def execute(self, args):
         # Make sure that the Python prefix is a subdirectory of $BRAND_BASE_DIR
 
-        xServiceManager = self.ctx.ServiceManager
         xUriFactory = UriReferenceFactory.create(self.ctx)
         xUriReference = xUriFactory.parse("vnd.sun.star.expand:$BRAND_BASE_DIR")
         uri = xUriReference.expand(theMacroExpander.get(self.ctx))
