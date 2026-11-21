@@ -11,6 +11,7 @@
 
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
+#include <basegfx/polygon/b2dfillrule.hxx>
 #include <tools/long.hxx>
 #include <sal/config.h>
 #include <vcl/vclptr.hxx>
@@ -98,7 +99,8 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
 
     // helpers for direct paints
     void paintPolyPolygonRGBA(const basegfx::B2DPolyPolygon& rPolyPolygon,
-                              const basegfx::BColor& rColor, double fTransparency = 0.0);
+                              const basegfx::BColor& rColor, double fTransparency = 0.0,
+                              basegfx::FillRule eFillRule = basegfx::FillRule::EvenOdd);
     void processPolygonHairlinePrimitive2D(
         const primitive2d::PolygonHairlinePrimitive2D& rPolygonHairlinePrimitive2D);
     void processPolyPolygonColorPrimitive2D(

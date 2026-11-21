@@ -767,6 +767,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.startElement("polypolygoncolor");
                 rWriter.attribute("color",
                                   convertColorToString(rPolyPolygonColorPrimitive2D.getBColor()));
+                if (rPolyPolygonColorPrimitive2D.getFillRule() == basegfx::FillRule::Nonzero)
+                    rWriter.attribute("fillrule", "nonzero");
 
                 const basegfx::B2DPolyPolygon& aB2DPolyPolygon(
                     rPolyPolygonColorPrimitive2D.getB2DPolyPolygon());

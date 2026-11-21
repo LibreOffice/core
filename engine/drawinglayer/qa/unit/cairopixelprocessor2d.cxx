@@ -11,6 +11,7 @@
 #include <test/bootstrapfixture.hxx>
 
 #include <algorithm>
+#include <optional>
 
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
@@ -394,6 +395,47 @@ public:
                                aQuarter.GetRed() < 50);
     }
 
+    // Two nested squares drawn in the same direction: nonzero fills the inner one, even-odd
+    // leaves it as a hole.
+    static basegfx::B2DPolyPolygon createNestedSquares()
+    {
+        basegfx::B2DPolyPolygon aPolyPolygon(
+            basegfx::utils::createPolygonFromRect(basegfx::B2DRange(10.0, 10.0, 90.0, 90.0)));
+        aPolyPolygon.append(
+            basegfx::utils::createPolygonFromRect(basegfx::B2DRange(30.0, 30.0, 70.0, 70.0)));
+        return aPolyPolygon;
+    }
+
+    static std::optional<Color> renderCenter(basegfx::FillRule eFillRule)
+    {
+        std::unique_ptr<processor2d::BaseProcessor2D> pProcessor(
+            processor2d::createPixelProcessor2DFromScratch(geometry::ViewInformation2D(), 100, 100,
+                                                           /*bUseRGBA=*/true));
+        if (!pProcessor)
+            return {};
+
+        primitive2d::Primitive2DContainer aPrimitives{
+            rtl::Reference<primitive2d::PolyPolygonColorPrimitive2D>(
+                new primitive2d::PolyPolygonColorPrimitive2D(createNestedSquares(),
+                                                             COL_LIGHTRED.getBColor(), eFillRule))
+        };
+        pProcessor->process(aPrimitives);
+
+        Bitmap aBitmap(processor2d::extractBitmapFromBaseProcessor2D(pProcessor));
+        BitmapScopedReadAccess aAccess(aBitmap);
+        return aAccess->GetColor(Point(50, 50));
+    }
+
+    void testNonzeroFillsNestedSameDirectionPolygon()
+    {
+        const std::optional<Color> oNonzero(renderCenter(basegfx::FillRule::Nonzero));
+        if (!oNonzero)
+            return;
+
+        CPPUNIT_ASSERT_GREATER(sal_uInt8(200), oNonzero->GetRed());
+        CPPUNIT_ASSERT_LESS(sal_uInt8(50), renderCenter(basegfx::FillRule::EvenOdd)->GetRed());
+    }
+
     CPPUNIT_TEST_SUITE(CairoPixelProcessor2DTest);
     CPPUNIT_TEST(testFarDownMaskClipsCorrectly);
     CPPUNIT_TEST(testFarDownShapeFillPaints);
@@ -401,6 +443,7 @@ public:
     CPPUNIT_TEST(testFarDownShapeHairlinePaints);
     CPPUNIT_TEST(testOpaqueBitmapReplacedColorFillsBitmapArea);
     CPPUNIT_TEST(testCropSurvivesRotation);
+    CPPUNIT_TEST(testNonzeroFillsNestedSameDirectionPolygon);
     CPPUNIT_TEST_SUITE_END();
 };
 

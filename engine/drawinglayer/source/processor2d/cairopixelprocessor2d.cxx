@@ -1646,12 +1646,13 @@ void CairoPixelProcessor2D::processPolyPolygonColorPrimitive2D(
         return;
 
     const basegfx::BColor aFillColor(getFillColor(rPolyPolygonColorPrimitive2D.getBColor()));
-    paintPolyPolygonRGBA(rPolyPolygonColorPrimitive2D.getB2DPolyPolygon(), aFillColor);
+    paintPolyPolygonRGBA(rPolyPolygonColorPrimitive2D.getB2DPolyPolygonForFillRule(), aFillColor,
+                         0.0, rPolyPolygonColorPrimitive2D.getFillRule());
 }
 
 void CairoPixelProcessor2D::paintPolyPolygonRGBA(const basegfx::B2DPolyPolygon& rPolyPolygon,
                                                  const basegfx::BColor& rColor,
-                                                 double fTransparency)
+                                                 double fTransparency, basegfx::FillRule eFillRule)
 {
     // transparency invalid or completely transparent, done
     if (fTransparency < 0.0 || fTransparency >= 1.0)
@@ -1668,6 +1669,9 @@ void CairoPixelProcessor2D::paintPolyPolygonRGBA(const basegfx::B2DPolyPolygon& 
     }
 
     cairo_save(mpRT);
+
+    if (eFillRule == basegfx::FillRule::Nonzero)
+        cairo_set_fill_rule(mpRT, CAIRO_FILL_RULE_WINDING);
 
     // determine & set color
     const basegfx::BColor aFillColor(maBColorModifierStack.getModifiedColor(rColor));

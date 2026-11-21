@@ -23,6 +23,7 @@
 #include "svgnode.hxx"
 #include "svgtools.hxx"
 #include <tools/fontenum.hxx>
+#include <basegfx/polygon/b2dfillrule.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 
@@ -298,7 +299,8 @@ namespace svgio::svgreader
             void add_fill(
                 const basegfx::B2DPolyPolygon& rPath,
                 drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-                const basegfx::B2DRange& rGeoRange) const;
+                const basegfx::B2DRange& rGeoRange,
+                basegfx::FillRule eFillRule) const;
             void add_stroke(
                 const basegfx::B2DPolyPolygon& rPath,
                 drawinglayer::primitive2d::Primitive2DContainer& rTarget,

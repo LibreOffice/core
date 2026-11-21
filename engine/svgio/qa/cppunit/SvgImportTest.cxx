@@ -2224,6 +2224,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149880)
             "/primitive2D/transform/mask/unhandled/mask/transform/transform/bitmap", 28);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf158262)
+{
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf158262.svg");
+
+    // The default fill rule is nonzero
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[1]", "color", u"#ff0000");
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[1]", "fillrule", u"nonzero");
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[2]", "color", u"#0000ff");
+    assertXPathNoAttribute(pDocument, "/primitive2D/transform/polypolygoncolor[2]", "fillrule");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testRTLtext)
 {
     xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/RTLtext.svg");

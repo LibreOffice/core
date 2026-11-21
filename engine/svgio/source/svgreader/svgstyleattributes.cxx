@@ -52,6 +52,14 @@ const int nStyleDepthLimit = 1024;
 
 namespace svgio::svgreader
 {
+        static basegfx::B2DPolyPolygon createEvenOddPath(const basegfx::B2DPolyPolygon& rPath,
+                                                         basegfx::FillRule eFillRule)
+        {
+            if (eFillRule == basegfx::FillRule::Nonzero)
+                return basegfx::utils::createNonzeroConform(rPath);
+            return rPath;
+        }
+
         static basegfx::B2DLineJoin StrokeLinejoinToB2DLineJoin(StrokeLinejoin aStrokeLinejoin)
         {
             if(StrokeLinejoin::round == aStrokeLinejoin)
@@ -337,7 +345,8 @@ namespace svgio::svgreader
             if(aMergedArea.count() && (pFillGradient || pFillPattern || bStrokeUsed))
             {
                 // create text fill content based on geometry
-                add_fill(aMergedArea, rTarget, aMergedArea.getB2DRange());
+                add_fill(aMergedArea, rTarget, aMergedArea.getB2DRange(),
+                         basegfx::FillRule::EvenOdd);
             }
             else if(pFill)
             {
@@ -616,7 +625,8 @@ namespace svgio::svgreader
         void SvgStyleAttributes::add_fill(
             const basegfx::B2DPolyPolygon& rPath,
             drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-            const basegfx::B2DRange& rGeoRange) const
+            const basegfx::B2DRange& rGeoRange,
+            basegfx::FillRule eFillRule) const
         {
             const basegfx::BColor* pFill = nullptr;
             const SvgGradientNode* pFillGradient = nullptr;
@@ -662,12 +672,14 @@ namespace svgio::svgreader
             if(pFillGradient)
             {
                 // create fill content with SVG gradient primitive
-                add_fillGradient(rPath, aNewFill, *pFillGradient, rGeoRange);
+                add_fillGradient(createEvenOddPath(rPath, eFillRule), aNewFill, *pFillGradient,
+                                 rGeoRange);
             }
             else if(pFillPattern)
             {
                 // create fill content with SVG pattern primitive
-                add_fillPatternTransform(rPath, aNewFill, *pFillPattern, rGeoRange);
+                add_fillPatternTransform(createEvenOddPath(rPath, eFillRule), aNewFill,
+                                         *pFillPattern, rGeoRange);
             }
             else // if(pFill)
             {
@@ -677,14 +689,14 @@ namespace svgio::svgreader
                     // no transparence
                     aNewFill.push_back(
                         new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                            rPath, *pFill));
+                            rPath, *pFill, eFillRule));
                 }
                 else
                 {
                     // transparence
                     aNewFill.push_back(
                         new drawinglayer::primitive2d::PolyPolygonRGBAPrimitive2D(
-                            rPath, *pFill, 1.0 - fFillOpacity));
+                            createEvenOddPath(rPath, eFillRule), *pFill, 1.0 - fFillOpacity));
 
                     // do not embed  again below
                     fFillOpacity = 1.0;
@@ -1222,24 +1234,15 @@ namespace svgio::svgreader
 
             if(!bIsLine)
             {
-                // create fill
-                basegfx::B2DPolyPolygon aPath(rPath);
+                basegfx::FillRule eFillRule(basegfx::FillRule::EvenOdd);
 
                 if(SVGToken::Path == mrOwner.getType() || SVGToken::Polygon == mrOwner.getType())
                 {
                     if(FillRule::evenodd != getClipRule() && FillRule::evenodd != getFillRule())
-                    {
-                        if(getFill() || getSvgGradientNodeFill() || getSvgPatternNodeFill())
-                        {
-                            // nonzero is wanted, solve geometrically (see description on basegfx)
-                            // basegfx::utils::createNonzeroConform() is expensive for huge paths
-                            // and is only needed if path will be filled later on
-                            aPath = basegfx::utils::createNonzeroConform(aPath);
-                        }
-                    }
+                        eFillRule = basegfx::FillRule::Nonzero;
                 }
 
-                add_fill(aPath, rTarget, aGeoRange);
+                add_fill(rPath, rTarget, aGeoRange, eFillRule);
             }
 
             // create stroke

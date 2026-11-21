@@ -22,8 +22,11 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <basegfx/polygon/b2dfillrule.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/color/bcolor.hxx>
+
+#include <mutex>
 
 namespace drawinglayer::primitive2d
 {
@@ -42,13 +45,25 @@ private:
     /// the polygon fill color
     basegfx::BColor maBColor;
 
+    basegfx::FillRule meFillRule;
+
+    /// maPolyPolygon reshaped so that the even-odd rule fills the same area, made on first use
+    mutable std::once_flag maEvenOddOnce;
+    mutable basegfx::B2DPolyPolygon maEvenOddPolyPolygon;
+
+    void createEvenOddPolyPolygon() const;
+
 public:
     /// constructor
     PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,
-                                const basegfx::BColor& rBColor);
+                                const basegfx::BColor& rBColor,
+                                basegfx::FillRule eFillRule = basegfx::FillRule::EvenOdd);
 
-    /// data read access
-    const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
+    /// The geometry to fill with the even-odd rule
+    const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const;
+    /// The geometry as given, to fill with getFillRule
+    const basegfx::B2DPolyPolygon& getB2DPolyPolygonForFillRule() const { return maPolyPolygon; }
+    basegfx::FillRule getFillRule() const { return meFillRule; }
     const basegfx::BColor& getBColor() const { return maBColor; }
 
     /// compare operator

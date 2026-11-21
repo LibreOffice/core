@@ -19,6 +19,7 @@
 
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
@@ -29,10 +30,26 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive2d
 {
 PolyPolygonColorPrimitive2D::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,
-                                                         const basegfx::BColor& rBColor)
+                                                         const basegfx::BColor& rBColor,
+                                                         basegfx::FillRule eFillRule)
     : maPolyPolygon(std::move(aPolyPolygon))
     , maBColor(rBColor)
+    , meFillRule(eFillRule)
 {
+}
+
+void PolyPolygonColorPrimitive2D::createEvenOddPolyPolygon() const
+{
+    maEvenOddPolyPolygon = basegfx::utils::createNonzeroConform(maPolyPolygon);
+}
+
+const basegfx::B2DPolyPolygon& PolyPolygonColorPrimitive2D::getB2DPolyPolygon() const
+{
+    if (meFillRule == basegfx::FillRule::EvenOdd)
+        return maPolyPolygon;
+
+    std::call_once(maEvenOddOnce, &PolyPolygonColorPrimitive2D::createEvenOddPolyPolygon, this);
+    return maEvenOddPolyPolygon;
 }
 
 bool PolyPolygonColorPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
@@ -42,8 +59,8 @@ bool PolyPolygonColorPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) 
         const PolyPolygonColorPrimitive2D& rCompare
             = static_cast<const PolyPolygonColorPrimitive2D&>(rPrimitive);
 
-        return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
-                && getBColor() == rCompare.getBColor());
+        return (getB2DPolyPolygonForFillRule() == rCompare.getB2DPolyPolygonForFillRule()
+                && getFillRule() == rCompare.getFillRule() && getBColor() == rCompare.getBColor());
     }
 
     return false;
@@ -53,7 +70,7 @@ basegfx::B2DRange PolyPolygonColorPrimitive2D::getB2DRange(
     const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     // return range
-    return getB2DPolyPolygon().getB2DRange();
+    return getB2DPolyPolygonForFillRule().getB2DRange();
 }
 
 // provide unique ID
