@@ -2609,7 +2609,7 @@ bool ChildSession::downloadAs(const StringVector& tokens)
                                   _docManager->getObfuscatedFileId());
     }
 
-    getTokenString(tokens[3], "format", format);
+    (void)getTokenString(tokens[3], "format", format);
 
     if (getTokenString(tokens[4], "options", filterOptions))
     {
@@ -5928,7 +5928,7 @@ bool ChildSession::renderSlide(const StringVector& tokens)
     }
 
     std::string hash;
-    getTokenString(tokens[1], "hash", hash);
+    (void)getTokenString(tokens[1], "hash", hash);
 
     // The message names the slide by its part identifier; the slideshow
     // renderer takes the index the page holds now.
@@ -6395,7 +6395,7 @@ bool ChildSession::saveAs(const StringVector& tokens)
     }
 
     if (tokens.size() > 2)
-        getTokenString(tokens[2], "format", format);
+        (void)getTokenString(tokens[2], "format", format);
 
     if (tokens.size() > 3 && getTokenString(tokens[3], "options", filterOptions))
     {
