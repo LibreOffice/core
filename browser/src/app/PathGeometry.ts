@@ -110,7 +110,8 @@ class PathGeometry {
 		continuity: number,
 	): cool.ObjectPathPolygon[] | null {
 		const polygon = path[place.polygon];
-		const points = polygon?.points ?? [];
+		if (!polygon) return null;
+		const points = polygon.points;
 		const point = points[place.point];
 		if (!point) return null;
 
@@ -225,7 +226,8 @@ class PathGeometry {
 		place: PathPlace,
 	): cool.ObjectPathPolygon[] | null {
 		const polygon = path[place.polygon];
-		const points = polygon?.points ?? [];
+		if (!polygon) return null;
+		const points = polygon.points;
 		const at = place.point;
 		if (path.length !== 1 || points.length < 3) return null;
 

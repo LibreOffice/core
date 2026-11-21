@@ -812,7 +812,11 @@ class ShapeLookStore {
 			const kept = JSON.parse(
 				window.localStorage.getItem(ShapeLookStore.storageName) || 'null',
 			);
-			if (kept?.format === ShapeLookStore.format && Array.isArray(kept.keys))
+			if (
+				kept &&
+				kept.format === ShapeLookStore.format &&
+				Array.isArray(kept.keys)
+			)
 				return kept.keys;
 		} catch (error) {
 			// a storage that cannot be read or holds no looks keeps none

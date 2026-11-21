@@ -3315,7 +3315,7 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 		(object.motionPaths ?? []).forEach((_motionPath, path: number) => {
 			const own = shown.flatMap((handle: SelectionHandle) => {
 				const place = MotionPathHandles.placeOf(handle.name);
-				return place?.path === path
+				return place && place.path === path
 					? [
 							{
 								...handle,
@@ -3452,7 +3452,7 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 		by: cool.Point,
 	): cool.SlideObject | null {
 		const paths = object.motionPaths;
-		if (!paths?.[path]?.path[polygon]) return null;
+		if (!paths || !paths[path]?.path[polygon]) return null;
 
 		return {
 			...object,
@@ -3629,7 +3629,7 @@ class MotionPathHandles extends HandlesMovedOneByOne {
 				polygon: line.polygon,
 				inPath: (handleName: string) => {
 					const place = MotionPathHandles.placeOf(handleName);
-					return place?.path === line.path ? place.inPath : null;
+					return place && place.path === line.path ? place.inPath : null;
 				},
 				handOver: (by: cool.Point) => {
 					const moved = MotionPathHandles.withPolygonMovedBy(
