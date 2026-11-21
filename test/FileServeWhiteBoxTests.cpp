@@ -629,8 +629,8 @@ void FileServeTests::testCSPKeepsOutBadSources()
 
 // The settings-upload forward path: coolwsd receives a settings file from the browser and
 // forwards it to the WOPI host, deriving the host-side fileId from the form's filePath + the
-// uploaded file's name. Guards the path validation (traversal, absolute, disabled per-user
-// extensions) and the fileId construction that feed that forward.
+// uploaded file's name. Guards the path validation (only "/settings/<type>/<category>/", disabled
+// per-user extensions) and the fileId construction that feed that forward.
 void FileServeTests::testSettingsUploadFileId()
 {
     constexpr std::string_view testname = __func__;
@@ -655,32 +655,32 @@ void FileServeTests::testSettingsUploadFileId()
         "/settings/userconfig/wordbook/", "en_US.dic", fileId));
     LOK_ASSERT_EQUAL_STR("/settings/userconfig/wordbook/en_US.dic", fileId);
 
+    // Shared extensions are uploaded by the admin.
+    fileId.clear();
+    LOK_ASSERT(FileServerRequestHandler::buildSettingsUploadFileId(
+        "/settings/systemconfig/extensions/", "x.oxt", fileId));
+    LOK_ASSERT_EQUAL_STR("/settings/systemconfig/extensions/x.oxt", fileId);
+
     // Per-user extension installation is disabled: rejected, fileId untouched.
     fileId = "sentinel";
     LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
         "/settings/userconfig/extensions/", "evil.zip", fileId));
     LOK_ASSERT_EQUAL_STR("sentinel", fileId);
 
-    // Duplicate slashes must not smuggle a path past the extensions check.
-    fileId.clear();
-    LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
-        "/settings//userconfig/extensions/", "evil.zip", fileId));
-
-    // A path must be absolute.
-    fileId.clear();
-    LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
-        "settings/userconfig/spif/", "x.xml", fileId));
-
-    // No traversal: "/../", "/./", or a trailing "/.." / "/.".
-    fileId.clear();
-    LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
-        "/settings/../etc/", "passwd", fileId));
-    LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
-        "/settings/./spif/", "x.xml", fileId));
-    LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
-        "/settings/spif/..", "x.xml", fileId));
-    LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
-        "/settings/spif/.", "x.xml", fileId));
+    // Any other path shape is refused.
+    for (const std::string_view path :
+         { "/settings//userconfig/extensions/", "//settings/userconfig/spif/",
+           "/x/settings/userconfig/extensions/", "settings/userconfig/spif/",
+           "/settings/userconfig/spif", "/settings/userconfig/spif/x/", "/settings/spif/",
+           "/settings/userconfig/%65xtensions/", "/settings/UserConfig/spif/",
+           "/settings/../etc/", "/settings/./spif/", "/settings/userconfig/../",
+           "/settings/./extensions/", "/settings/foo/spif/" })
+    {
+        fileId = "sentinel";
+        LOK_ASSERT_MESSAGE(std::string(path), !FileServerRequestHandler::buildSettingsUploadFileId(
+                                                  std::string(path), "x.xml", fileId));
+        LOK_ASSERT_EQUAL_STR("sentinel", fileId);
+    }
 
     // The file name is a single path segment.
     fileId = "sentinel";

@@ -22,6 +22,7 @@
 #include <common/base64.hpp>
 #include <wsd/FileServer.hpp>
 
+#include <algorithm>
 #include <cctype>
 
 PreProcessedFile::PreProcessedFile(std::string filename, const std::string& data)
@@ -464,28 +465,40 @@ std::string FileServerRequestHandler::cssVarsToStyle(const std::string& cssVars)
     return previousStyle;
 }
 
+namespace
+{
+bool isSettingsPathChar(const char c)
+{
+    return (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_' || c == '-';
+}
+
+bool isSettingsPathSegment(const std::string_view segment)
+{
+    return !segment.empty() && std::all_of(segment.begin(), segment.end(), isSettingsPathChar);
+}
+
+/// True for "/settings/<type>/<category>/".
+bool isSettingsUploadPath(std::string_view path)
+{
+    static constexpr std::string_view prefix = "/settings/";
+    if (!path.starts_with(prefix) || !path.ends_with('/'))
+        return false;
+    path.remove_prefix(prefix.size());
+    path.remove_suffix(1);
+    const std::size_t slash = path.find('/');
+    if (slash == std::string_view::npos)
+        return false;
+    const std::string_view type = path.substr(0, slash);
+    return (type == "systemconfig" || type == "userconfig")
+           && isSettingsPathSegment(path.substr(slash + 1));
+}
+}
+
 bool FileServerRequestHandler::buildSettingsUploadFileId(const std::string& filePath,
                                                          const std::string& fileName,
                                                          std::string& fileId)
 {
-    bool bad =
-        !filePath.starts_with('/')
-        || filePath.find("/./") != std::string::npos
-        || filePath.find("/../") != std::string::npos
-        || filePath.ends_with("/.")
-        || filePath.ends_with("/..");
-    if (!bad) {
-        std::string normalized;
-        normalized.reserve(filePath.size());
-        for (auto const c: filePath) {
-            if (c != '/' || normalized.empty() || normalized.back() != '/') {
-                normalized.push_back(c);
-            }
-        }
-        if (normalized.starts_with("/settings/userconfig/extensions/")) {
-            bad = true;
-        }
-    }
+    bool bad = !isSettingsUploadPath(filePath) || filePath == "/settings/userconfig/extensions/";
     if (!FileUtil::isPlainFileName(fileName))
         bad = true;
     if (bad)
