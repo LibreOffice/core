@@ -3970,8 +3970,12 @@ void DocumentBroker::renameThumbnailsForUpload([[maybe_unused]] const bool wrote
     const std::string uploading = _storage->getRootFilePathUploading();
     if (wroteNewVersion)
     {
+        const std::string jailRoot = getJailRoot();
         for (const std::string& size : Thumbnail::listSizes(uploading))
-            FileUtil::removeFile(Thumbnail::filePath(uploading, size));
+        {
+            FileUtil::removeLocalFileInJail(COOLWSD::EnableMountNamespaces, jailRoot,
+                                            Thumbnail::filePath(uploading, size));
+        }
     }
 
     const std::string toUpload = _storage->getRootFilePathToUpload();
@@ -4008,8 +4012,11 @@ DocumentBroker::listThumbnails([[maybe_unused]] const std::string& basePath)
     return thumbnails;
 }
 
-void DocumentBroker::removeThumbnails(const std::vector<UploadedThumbnail>& thumbnails)
+void DocumentBroker::removeThumbnails(
+    [[maybe_unused]] const std::vector<UploadedThumbnail>& thumbnails) const
 {
+#if !MOBILEAPP
+    const std::string jailRoot = getJailRoot();
     for (const UploadedThumbnail& thumbnail : thumbnails)
     {
         const FileUtil::Stat stat(thumbnail.path);
@@ -4024,8 +4031,9 @@ void DocumentBroker::removeThumbnails(const std::vector<UploadedThumbnail>& thum
             continue;
         }
 
-        FileUtil::removeFile(thumbnail.path);
+        FileUtil::removeLocalFileInJail(COOLWSD::EnableMountNamespaces, jailRoot, thumbnail.path);
     }
+#endif // !MOBILEAPP
 }
 
 void DocumentBroker::uploadToStorageInternal(const std::shared_ptr<ClientSession>& session,

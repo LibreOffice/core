@@ -1267,7 +1267,7 @@ private:
 
     /// Deletes each of the given thumbnails whose file is still the one described, and leaves
     /// a file that was written since.
-    static void removeThumbnails(const std::vector<UploadedThumbnail>& thumbnails);
+    void removeThumbnails(const std::vector<UploadedThumbnail>& thumbnails) const;
 
     /// Deletes the thumbnails of the current upload request when they are those of a Save As.
     void removeFailedSaveAsThumbnails();
