@@ -685,9 +685,7 @@ bool SvtPathOptions::SearchFile( OUString& rIniFile, SvtPathOptions::Paths ePath
                 case SvtPathOptions::Paths::NumberText:   aPath = GetNumbertextPath();    break;
                 case SvtPathOptions::Paths::Classification: aPath = GetClassificationPath(); break;
                 case SvtPathOptions::Paths::DocumentTheme: aPath = GetDocumentThemePath(); break;
-                // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
-                case SvtPathOptions::Paths::UserConfig:
-                case SvtPathOptions::Paths::LAST:
+                default:
                     break;
             }
 
