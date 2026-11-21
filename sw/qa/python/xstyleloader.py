@@ -39,10 +39,10 @@ class TestXStyleLoader(unittest.TestCase):
         p1 = PropertyValue(Name="InputStream", Value=xInputStream)
         p2 = PropertyValue(Name="LoadTextStyles", Value=True)
 
-        styles = xDoc.getStyleFamilies()
+        styles = xDoc.StyleFamilies
         styles.loadStylesFromURL("private:stream", [p1, p2])
-        textStyles = styles.getByName("ParagraphStyles")
-        self.assertTrue(textStyles.hasByName("Test_Template"))
+        textStyles = styles["ParagraphStyles"]
+        self.assertIn("Test_Template", textStyles)
 
         xDoc.close(True)
 

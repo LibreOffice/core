@@ -47,16 +47,16 @@ class CheckFlies(unittest.TestCase):
         nCurrentFrameIdx = 0
 
         print (xEmbeddedFrames)
-        for sFrameName in xEmbeddedFrames.getElementNames():
+        for sFrameName in xEmbeddedFrames.ElementNames:
             vExpectedEmbeddedFrames.remove(sFrameName)
             # raises ValueError if not found
             print (sFrameName)
             xEmbeddedFrames[sFrameName]
-            self.assertTrue(xEmbeddedFrames.hasByName(sFrameName),
-                            "Could not find embedded frame by name.")
+            self.assertIn(sFrameName, xEmbeddedFrames,
+                          "Could not find embedded frame by name.")
 
-        self.assertTrue(not(vExpectedEmbeddedFrames),
-                        "Missing expected embedded frames.")
+        self.assertFalse(vExpectedEmbeddedFrames,
+                         "Missing expected embedded frames.")
 
         xEmbeddedFramesIdx = xEmbeddedFrames
 
@@ -71,15 +71,15 @@ class CheckFlies(unittest.TestCase):
         nGraphicFrames = len(vExpectedGraphicFrames)
         xGraphicFrames = xTGOS.getGraphicObjects()
         nCurrentFrameIdx = 0
-        for sFrameName in xGraphicFrames.getElementNames():
+        for sFrameName in xGraphicFrames.ElementNames:
             vExpectedGraphicFrames.remove(sFrameName)
             # raises ValueError if not found
             xGraphicFrames[sFrameName]
-            self.assertTrue(
-                sFrameName in xGraphicFrames,
+            self.assertIn(
+                sFrameName, xGraphicFrames,
                 "Could not find graphics frame by name.")
-        self.assertTrue(
-            not(vExpectedGraphicFrames),
+        self.assertFalse(
+            vExpectedGraphicFrames,
             "Missing expected graphics frames.")
 
         xGraphicFramesIdx = xGraphicFrames
@@ -95,16 +95,16 @@ class CheckFlies(unittest.TestCase):
         xTextFrames = xTFS.getTextFrames()
         nCurrentFrameIdx = 0
 
-        for sFrameName in xTextFrames.getElementNames():
+        for sFrameName in xTextFrames.ElementNames:
             vExpectedTextFrames.remove(sFrameName)
             # raises ValueError if not found
             xTextFrames[sFrameName]
-            self.assertTrue(
-                sFrameName in xTextFrames,
+            self.assertIn(
+                sFrameName, xTextFrames,
                 "Could not find text frame by name.")
 
-        self.assertTrue(
-            not(vExpectedTextFrames), "Missing expected text frames.")
+        self.assertFalse(
+            vExpectedTextFrames, "Missing expected text frames.")
 
         xTextFramesIdx = xTextFrames
 
