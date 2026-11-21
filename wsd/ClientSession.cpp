@@ -2624,17 +2624,15 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     }
     else if (tokens.equals(0, "browsersetting") && tokens.size() >= 3)
     {
-        std::string action;
-        getTokenString(tokens[1], "action", action);
-        if (action == "update")
+        std::string action, json;
+        if (getTokenString(tokens[1], "action", action) && action == "update" &&
+            getTokenString(tokens, "json", json))
         {
-            std::string json;
-            getTokenString(tokens, "json", json);
             // The settings file is written out again with the changes, unless the
             // client says the file already holds them: then only the copies are
             // brought up to date.
             std::string upload;
-            getTokenString(tokens, "upload", upload);
+            (void)getTokenString(tokens, "upload", upload);
             try
             {
                 updateBrowserSettingsJSON(json);
