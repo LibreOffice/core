@@ -9,7 +9,8 @@
  */
 
 #if defined _MSC_VER
-#pragma warning(push, 0)
+#pragma warning(push)
+#pragma warning(disable : 6011) // dereferencing NULL pointer
 #endif
 #include <CbcModel.hpp>
 #include <CbcSolver.hpp>
