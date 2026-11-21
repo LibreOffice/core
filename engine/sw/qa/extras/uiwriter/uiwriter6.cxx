@@ -56,6 +56,7 @@
 #include <editeng/svxacorr.hxx>
 #include <editeng/swafopt.hxx>
 #include <editeng/unolingu.hxx>
+#include <linguistic/misc.hxx>
 #include <COKit/COKit.hxx>
 #include <vcl/scheduler.hxx>
 #include <config_fonts.h>
@@ -2473,6 +2474,60 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf124603)
         // This was 0 (pending spell checking)
         CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pNode->GetWrong()->Count());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testProofreaderSpellingLanguage)
+{
+    uno::Reference<XLinguServiceManager2> xLngSvcMgr(GetLngSvcMgr_Impl());
+    uno::Reference<XSpellChecker> xSpell = xLngSvcMgr->getSpellChecker();
+    if (!xSpell.is() || !xSpell->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
+        return;
+    comphelper::ScopeGuard aGuard([] { linguistic::SetProofreaderSpellingLanguages({}); });
+
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr,
+                    comphelper::InitPropertySequence({ { u"Enable"_ustr, uno::Any(true) } }));
+    emulateTyping(u"thex the ");
+    SwTextNode* pNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+
+    // The same words in a text frame.
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    uno::Reference<text::XTextContent> xFrame(
+        pTextDoc->createInstance(u"com.sun.star.text.TextFrame"_ustr), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xBodyText = pTextDoc->getText();
+    xBodyText->insertTextContent(xBodyText->getEnd(), xFrame, false);
+    uno::Reference<text::XText>(xFrame, uno::UNO_QUERY_THROW)->setString(u"thex the"_ustr);
+    SwTextNode* pFrameNode = nullptr;
+    SwNodes& rNodes = getSwDoc()->GetNodes();
+    for (SwNodeOffset n(0); n < rNodes.Count(); ++n)
+    {
+        SwTextNode* pTextNode = rNodes[n]->GetTextNode();
+        if (pTextNode && pTextNode->FindFlyStartNode())
+            pFrameNode = pTextNode;
+    }
+    CPPUNIT_ASSERT(pFrameNode);
+
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pNode->GetWrong());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pNode->GetWrong()->Count());
+    CPPUNIT_ASSERT(pFrameNode->GetWrong());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pFrameNode->GetWrong()->Count());
+
+    // A grammar checker that marks misspelt words too takes US English: the body
+    // text, which it proofreads, leaves the misspelt word to it, and the text
+    // frame, which it does not proofread, keeps the mark.
+    linguistic::SetProofreaderSpellingLanguages({ LANGUAGE_ENGLISH_US });
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pNode->GetWrong() || !pNode->GetWrong()->Count());
+    CPPUNIT_ASSERT(pFrameNode->GetWrong());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pFrameNode->GetWrong()->Count());
+
+    // The grammar checker gives the language back, and the body text is marked again.
+    linguistic::SetProofreaderSpellingLanguages({});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pNode->GetWrong());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pNode->GetWrong()->Count());
 }
 
 #if !defined(MACOSX)

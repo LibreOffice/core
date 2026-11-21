@@ -1754,9 +1754,9 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
 
         // The kit asks the remote checkers' servers itself: the forkit's
         // answers may not hold in the jail. The local spell checker steps
-        // aside for a server the kit reaches, and takes back what it handed
-        // to one the kit does not.
-        desktop::remotechecker::handLanguagesToRemoteCheckers();
+        // aside in Writer's text for a server the kit reaches, and takes back
+        // what it left to one the kit does not.
+        desktop::remotechecker::leaveLanguagesToRemoteCheckers();
 
         if (bSuppressDialogs)
             comphelper::COKit::setDialogsSuppressed(ViewShellDocId(nThisDocumentId));
@@ -11252,10 +11252,10 @@ static void preloadData()
 
     // setup the remote checkers before spell checking init. Their servers
     // are asked here, within the probe's limit, so the kits are forked with
-    // the languages already handed over; a kit asks again itself, as its
+    // the languages already left to them; a kit asks again itself, as its
     // jail may not reach what this process reaches.
     desktop::remotechecker::setRemoteCheckerConfig();
-    desktop::remotechecker::handLanguagesToRemoteCheckers();
+    desktop::remotechecker::leaveLanguagesToRemoteCheckers();
     desktop::remotechecker::logRemoteCheckerLanguages();
 
     // preload all available dictionaries

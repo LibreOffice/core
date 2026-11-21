@@ -27,6 +27,7 @@
 #include <com/sun/star/linguistic2/XSupportedLocales.hpp>
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/ProofreadingIterator.hpp>
 
 #include <tools/debug.hxx>
@@ -810,6 +811,48 @@ void LngSvcMgr::GetListenerHelper_Impl()
     }
 }
 
+void LngSvcMgr::BroadcastSpellCheckAgain()
+{
+    osl::MutexGuard aGuard(GetLinguMutex());
+    if (mxListenerHelper)
+        mxListenerHelper->AddLngSvcEvt(
+            linguistic2::LinguServiceEventFlags::SPELL_CORRECT_WORDS_AGAIN
+            | linguistic2::LinguServiceEventFlags::SPELL_WRONG_WORDS_AGAIN);
+}
+
+namespace
+{
+// Under the linguistic mutex.
+std::set<LanguageType>& proofreaderSpellingLanguages()
+{
+    static std::set<LanguageType> aLanguages;
+    return aLanguages;
+}
+}
+
+namespace linguistic
+{
+void SetProofreaderSpellingLanguages(const std::set<LanguageType>& rLanguages)
+{
+    {
+        osl::MutexGuard aGuard(GetLinguMutex());
+        if (proofreaderSpellingLanguages() == rLanguages)
+            return;
+        proofreaderSpellingLanguages() = rLanguages;
+    }
+
+    uno::Reference<linguistic2::XLinguServiceManager2> xMgr(
+        linguistic2::LinguServiceManager::create(comphelper::getProcessComponentContext()));
+    if (LngSvcMgr* pMgr = dynamic_cast<LngSvcMgr*>(xMgr.get()))
+        pMgr->BroadcastSpellCheckAgain();
+}
+
+bool IsProofreaderSpellingLanguage(LanguageType nLanguage)
+{
+    osl::MutexGuard aGuard(GetLinguMutex());
+    return proofreaderSpellingLanguages().count(nLanguage) != 0;
+}
+}
 
 void LngSvcMgr::GetSpellCheckerDsp_Impl( bool bSetSvcList )
 {

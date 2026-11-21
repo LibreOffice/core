@@ -1103,7 +1103,11 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs, bool bIsReadOnly)
             if( rWord.getLength() > 0 && LANGUAGE_NONE != eActLang &&
                 !lcl_IsURL(rWord, *this, aScanner.GetBegin(), aScanner.GetLen() ) )
             {
-                if (pArgs->xSpeller.is())
+                // When the dialog checks grammar, the grammar checker finds
+                // the misspelt words of the languages it spell checks itself.
+                if (pArgs->xSpeller.is()
+                    && !(pArgs->bIsGrammarCheck
+                         && linguistic::IsProofreaderSpellingLanguage(eActLang)))
                 {
                     SvxSpellWrapper::CheckSpellLang( pArgs->xSpeller, eActLang );
                     pArgs->xSpellAlt = pArgs->xSpeller->spell( rWord, LanguageTag::convertToLocale(eActLang),
@@ -1416,6 +1420,7 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
     {
         uno::Reference< XSpellChecker > xSpell( ::GetSpellChecker() );
         SwDoc& rDoc = pNode->GetDoc();
+        const bool bProofread = IsProofreadAsYouType(*pNode);
 
         SwScanner aScanner( *pNode, pNode->GetText(), nullptr, ModelToViewHelper(),
                             WordType::DICTIONARY_WORD, nBegin, nEnd);
@@ -1433,7 +1438,10 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
             LanguageType eActLang = aScanner.GetCurrentLanguage();
             DetectAndMarkMissingDictionaries( rDoc, xSpell, eActLang );
 
-            bool bSpell = xSpell.is() && xSpell->hasLocale( LanguageTag::convertToLocale(eActLang) );
+            // The grammar checker marks the misspelt words of the languages it
+            // spell checks itself.
+            bool bSpell = xSpell.is() && xSpell->hasLocale(LanguageTag::convertToLocale(eActLang))
+                          && !(bProofread && linguistic::IsProofreaderSpellingLanguage(eActLang));
             if( bSpell && !rWord.isEmpty() && !lcl_IsURL(rWord, *pNode, nBegin, nLen) )
             {
                 // check for: bAlter => xHyphWord.is()

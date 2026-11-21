@@ -33,6 +33,7 @@
 #include <osl/diagnose.h>
 #include <unotools/linguprops.hxx>
 #include <linguistic/lngprops.hxx>
+#include <linguistic/misc.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/nhypitem.hxx>
 #include <editeng/SpellPortions.hxx>
@@ -937,7 +938,11 @@ uno::Reference< XSpellAlternatives >
             if( xSpell.is() )
             {
                 LanguageType eActLang = pNode->GetLang( nBegin, nLen );
-                if( xSpell->hasLocale( LanguageTag::convertToLocale(eActLang) ))
+                // A word the grammar checker spell checks has its suggestions
+                // in the grammar checker's menu.
+                if (xSpell->hasLocale(LanguageTag::convertToLocale(eActLang))
+                    && !(IsProofreadAsYouType(*pNode)
+                         && linguistic::IsProofreaderSpellingLanguage(eActLang)))
                 {
                     // restrict the maximal number of suggestions displayed
                     // in the context menu.

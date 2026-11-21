@@ -24,9 +24,7 @@
 
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>
-#include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
-#include <cpo/uno/XComponentContext.hpp>
 #include <linguistic/misc.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -47,7 +45,6 @@
 #include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
-#include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -95,47 +92,6 @@ static bool lcl_SeqHasLang( const Sequence< sal_Int16 > & rLangSeq, sal_Int16 nL
 {
     return rLangSeq.hasElements()
         && std::find(rLangSeq.begin(), rLangSeq.end(), nLang) != rLangSeq.end();
-}
-
-// The languages of the local spell checker that a grammar checker which marks
-// misspelt words too serves now. Such a checker takes them over from the local
-// spell checker, and they are spell checked all the same.
-static Sequence<sal_Int16> lcl_getSpellCheckingProofreaderLangs()
-{
-    std::vector<sal_Int16> aLangs;
-    const Reference<XLinguServiceManager2> xLngSvcMgr = LinguMgr::GetLngSvcMgr();
-    if (!xLngSvcMgr.is())
-        return Sequence<sal_Int16>();
-
-    std::vector<LanguageType> aLocalLangs;
-    appendLocaleSeqToLangs(xLngSvcMgr->getAvailableLocales(SN_SPELLCHECKER), aLocalLangs);
-
-    const Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
-    for (const OUString& rImplName :
-         xLngSvcMgr->getAvailableServices(SN_GRAMMARCHECKER, css::lang::Locale()))
-    {
-        try
-        {
-            const Reference<XProofreader> xProofreader(
-                xContext->getServiceManager()->createInstanceWithContext(rImplName, xContext),
-                UNO_QUERY);
-            if (!xProofreader.is() || !xProofreader->isSpellChecker())
-                continue;
-            for (const css::lang::Locale& rLocale : xProofreader->getLocales())
-            {
-                const LanguageType nLang = LanguageTag::convertToLanguageType(rLocale);
-                if (std::find(aLocalLangs.begin(), aLocalLangs.end(), nLang) != aLocalLangs.end()
-                    && xProofreader->hasLocale(rLocale))
-                    aLangs.push_back(static_cast<sal_Int16>(nLang.get()));
-            }
-        }
-        catch (const Exception& rException)
-        {
-            SAL_WARN("svx.dialog", "cannot ask " << rImplName << " for its languages: "
-                                                 << rException.Message);
-        }
-    }
-    return comphelper::containerToSequence(aLangs);
 }
 
 namespace {
@@ -398,8 +354,6 @@ void SvxLanguageBox::SetLanguageList(SvxLanguageListFlags nLangList, bool bHasLa
             for (int i=0; i < aLocales.getLength(); ++i)
                 aSpellUsedLang.getArray()[i] = static_cast<sal_Int16>(LanguageTag::convertToLanguageType(aLocales[i]).get());
         }
-        aSpellUsedLang
-            = comphelper::concatSequences(aSpellUsedLang, lcl_getSpellCheckingProofreaderLangs());
     }
 
     std::vector<LanguageType> aKnown;

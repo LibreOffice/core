@@ -18,8 +18,8 @@
 
 // The remote sentence checkers (LanguageTool, the Duden Korrekturserver and
 // Grammalecte) as the kit sets them up: their settings from the server's
-// environment, the hand-over of languages from the local spell checker, and
-// what the settings dialog is told about them.
+// environment, the languages the local spell checker leaves to them in
+// Writer's text, and what the settings dialog is told about them.
 namespace desktop::remotechecker
 {
 // The variable <pPrefix>_<pName> of the environment the server set up;
@@ -32,10 +32,12 @@ std::optional<bool> envBool(const char* pPrefix, const char* pName);
 // own settings are applied, it puts back what the user may have dropped.
 void setRemoteCheckerConfig();
 
-// Switches the local spell checker off for the languages a reachable remote
-// checker spell checks itself, and back on for the ones no remote checker
-// holds any more.
-void handLanguagesToRemoteCheckers();
+// Leaves the languages a reachable remote checker spell checks itself to it
+// in Writer's text, which it proofreads, and gives back to the local spell
+// checker there the ones no remote checker holds any more. Calc, Impress,
+// Draw, and the shapes and text frames of Writer keep the local spell
+// checker for every language.
+void leaveLanguagesToRemoteCheckers();
 
 // Whether a user's own settings for the checker with this environment prefix
 // (LANGUAGETOOL, DUDEN, GRAMMALECTE) are applied from their document settings.

@@ -20,6 +20,9 @@
 #include <swtypes.hxx>
 
 #include <editeng/unolingu.hxx>
+#include <ndtxt.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
@@ -52,6 +55,18 @@ Size GetGraphicSizeTwip(const Graphic& rGraphic, vcl::RenderContext* pOutDev)
 }
 
 uno::Reference<linguistic2::XSpellChecker> GetSpellChecker() { return LinguMgr::GetSpellChecker(); }
+
+bool IsProofreadAsYouType(const SwTextNode& rNode)
+{
+    // The as-you-type grammar checking walks the content of the pages: the
+    // body text, tables, headers, footers and footnotes. Text in frames gets
+    // spell checking alone.
+    if (rNode.FindFlyStartNode())
+        return false;
+    bool bAutoGrammar = false;
+    SvtLinguConfig().GetProperty(UPN_IS_GRAMMAR_AUTO) >>= bAutoGrammar;
+    return bAutoGrammar;
+}
 
 uno::Reference<linguistic2::XHyphenator> GetHyphenator() { return LinguMgr::GetHyphenator(); }
 

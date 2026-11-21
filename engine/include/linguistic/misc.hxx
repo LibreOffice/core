@@ -33,6 +33,7 @@
 #include <linguistic/lngdllapi.h>
 
 #include <map>
+#include <set>
 #include <vector>
 
 namespace com::sun::star::beans { class XPropertySet; }
@@ -78,6 +79,16 @@ enum class CapType
 };
 
 LNG_DLLPUBLIC ::osl::Mutex& GetLinguMutex();
+
+// The languages that a grammar checker which marks misspelt words too spell
+// checks in the text it proofreads, in place of the local spell checker.
+// Writer's spell checking leaves these languages to that checker where it
+// proofreads; Calc, Impress, Draw, and the shapes and text frames of Writer
+// keep the local spell checker. Setting another set makes the documents check
+// their spelling again: call it with the solar mutex held, as the documents
+// take it on hearing of the change while the linguistic mutex is held.
+LNG_DLLPUBLIC void SetProofreaderSpellingLanguages(const std::set<LanguageType>& rLanguages);
+LNG_DLLPUBLIC bool IsProofreaderSpellingLanguage(LanguageType nLanguage);
 
 const LocaleDataWrapper & GetLocaleDataWrapper( LanguageType nLang );
 

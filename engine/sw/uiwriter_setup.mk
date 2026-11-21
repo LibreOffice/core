@@ -16,6 +16,7 @@ define sw_uiwriter_libraries
     docmodel \
     editeng \
     i18nlangtag \
+    lng \
     sal \
     sfx \
     subsequenttest \

@@ -220,7 +220,7 @@ std::string probeKey(const RemoteChecker& rChecker)
 // it; a no stands for a while. A kit inherits the forkit's answers, but it
 // runs in a jail, which may not reach what the forkit reached: it asks
 // again, and if no answer comes, the local spell checker takes back the
-// languages it handed over.
+// languages it left to the remote checker in Writer's text.
 bool isCurrent(const RemoteCheckerProbe& rProbe)
 {
     if (rProbe.bReachable)
@@ -285,12 +285,6 @@ RemoteCheckerProbe probeRemoteChecker(const RemoteChecker& rChecker)
     return aProbe;
 }
 
-// The languages the local spell checker gave up, as BCP 47 tags, with the
-// spell checkers it had for each: the remote checker that took them may be
-// switched off again, and then it gets them back as they were. Under the
-// solar mutex, which every caller of the hand-over takes.
-std::map<OUString, cpo::uno::Sequence<OUString>> gLocalesHandedOver;
-
 void watchRemoteCheckerConfig();
 
 // Asks the servers of the remote checkers that spell check and are switched
@@ -304,22 +298,43 @@ void askRemoteCheckers()
     }
 }
 
+// The grammar checker that proofreads the locale, as the proofreading
+// iterator picks it: the first of the configured ones that claims the locale.
+// Empty when none does.
+OUString
+getProofreaderOf(const cpo::uno::Reference<css::linguistic2::XLinguServiceManager2>& xLangSrv,
+                 const css::lang::Locale& rLocale)
+{
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext
+        = comphelper::getProcessComponentContext();
+    for (const OUString& rImplName : xLangSrv->getConfiguredServices(SN_GRAMMARCHECKER, rLocale))
+    {
+        const cpo::uno::Reference<css::linguistic2::XSupportedLocales> xChecker(
+            xContext->getServiceManager()->createInstanceWithContext(rImplName, xContext),
+            uno::UNO_QUERY);
+        if (xChecker.is() && xChecker->hasLocale(rLocale))
+            return rImplName;
+    }
+    return OUString();
+}
+
 } // namespace
 
-// Switches the local spell checker off for the languages a reachable remote
-// checker spell checks itself, and back on for the languages no remote
-// checker holds any more. One that has not answered keeps the local spell
-// checker: a language without any spell checking would be worse than one
-// with two. A server without a current answer on record is asked here.
-void handLanguagesToRemoteCheckers()
+// Leaves the languages a reachable remote checker spell checks itself to it
+// in the text it proofreads, and gives back to the local spell checker there
+// the ones no remote checker holds any more. One that has not answered leaves
+// its languages to the local spell checker: a language without any spell
+// checking would be worse than one with two. A server without a current
+// answer on record is asked here.
+void leaveLanguagesToRemoteCheckers()
 {
     watchRemoteCheckerConfig();
 
+    std::set<LanguageType> aLanguages;
     try
     {
         cpo::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv =
             css::linguistic2::LinguServiceManager::create(comphelper::getProcessComponentContext());
-        std::set<OUString> aClaimed;
 
         for (const RemoteChecker& rChecker : aRemoteCheckers)
         {
@@ -333,40 +348,22 @@ void handLanguagesToRemoteCheckers()
                     rChecker.aImplementationName, comphelper::getProcessComponentContext()),
                 uno::UNO_QUERY_THROW);
             for (const css::lang::Locale& rLocale : xRemote->getLocales())
-                aClaimed.insert(LanguageTag::convertToBcp47(rLocale));
-        }
-
-        for (const OUString& rTag : aClaimed)
-        {
-            if (gLocalesHandedOver.count(rTag))
-                continue;
-            const css::lang::Locale aLocale = LanguageTag::convertToLocale(rTag);
-            // Only a language the local spell checker has is taken from it,
-            // and what it had is kept for when it gets the language back.
-            const cpo::uno::Sequence<OUString> aLocal
-                = xLangSrv->getConfiguredServices(SN_SPELLCHECKER, aLocale);
-            if (!aLocal.hasElements())
-                continue;
-            xLangSrv->setConfiguredServices(SN_SPELLCHECKER, aLocale, {});
-            gLocalesHandedOver[rTag] = aLocal;
-        }
-        for (std::map<OUString, cpo::uno::Sequence<OUString>>::iterator aIt = gLocalesHandedOver.begin();
-             aIt != gLocalesHandedOver.end();)
-        {
-            if (aClaimed.count(aIt->first))
             {
-                ++aIt;
-                continue;
+                // A language the local spell checker does not have is the
+                // remote checker's alone anyway. One that another grammar
+                // checker proofreads stays with the local spell checker: the
+                // remote checker does not see that text.
+                if (xLangSrv->getConfiguredServices(SN_SPELLCHECKER, rLocale).hasElements()
+                    && getProofreaderOf(xLangSrv, rLocale) == rChecker.aImplementationName)
+                    aLanguages.insert(LanguageTag::convertToLanguageType(rLocale));
             }
-            xLangSrv->setConfiguredServices(SN_SPELLCHECKER,
-                                            LanguageTag::convertToLocale(aIt->first), aIt->second);
-            aIt = gLocalesHandedOver.erase(aIt);
         }
     }
     catch (const cpo::uno::Exception& rException)
     {
-        SAL_WARN("kit", "Failed to hand languages to the remote checkers: " << rException.Message);
+        SAL_WARN("kit", "Failed to leave languages to the remote checkers: " << rException.Message);
     }
+    linguistic::SetProofreaderSpellingLanguages(aLanguages);
 }
 
 namespace
@@ -374,9 +371,10 @@ namespace
 // Watches the remote checkers' settings, so a checker switched on or off
 // while a document is open takes its languages, or gives them back, at once.
 // A settings file handed in through setOption arrives without the solar
-// mutex: the servers are asked before it is taken, and the hand-over, which
-// changes the spell checker lists the documents hear of, takes it, as the
-// unotools listener does. The watch is set up by the first hand-over.
+// mutex: the servers are asked before it is taken, and leaving the languages,
+// which makes the documents check their spelling again, takes it, as the
+// unotools listener does. The watch is set up the first time the languages
+// are left.
 class RemoteCheckerConfigListener final : public cppu::WeakImplHelper<css::util::XChangesListener>
 {
 public:
@@ -384,7 +382,7 @@ public:
     {
         askRemoteCheckers();
         SolarMutexGuard aGuard;
-        handLanguagesToRemoteCheckers();
+        leaveLanguagesToRemoteCheckers();
     }
 
     void disposing(const css::lang::EventObject&) override {}
@@ -459,9 +457,9 @@ ServerSettings getServerSettings(const char* pPrefix)
 // Applies what the server set up: a value a user dropped from their own
 // settings is the server's again when this runs before theirs are applied.
 // The groups' nested choices, the Duden style checks and the Grammalecte
-// rule families, are the user's own and stay. The languages are handed
-// over separately: by the forkit, whose kits inherit the hand-over, and by
-// a kit, which asks the servers itself and keeps or undoes it.
+// rule families, are the user's own and stay. The languages are left to the
+// remote checkers separately: by the forkit, whose kits inherit what it left,
+// and by a kit, which asks the servers itself and keeps or undoes it.
 void setRemoteCheckerConfig()
 {
     try

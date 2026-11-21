@@ -150,6 +150,9 @@ public:
 
     bool    AddLngSvcEvtBroadcaster(
                 const cpo::uno::Reference< css::linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster );
+
+    // Tells the documents to check their spelling again.
+    void BroadcastSpellCheckAgain();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

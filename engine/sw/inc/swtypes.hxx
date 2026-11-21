@@ -48,6 +48,7 @@ class CharClass;
 class CollatorWrapper;
 class LanguageTag;
 class OutputDevice;
+class SwTextNode;
 
 namespace vcl {
     typedef OutputDevice RenderContext;
@@ -119,6 +120,11 @@ SW_DLLPUBLIC OUString SwResId(TranslateId aId);
 OUString SwResId(TranslateNId aContextSingularPlural, int nCardinality);
 
 cpo::uno::Reference< css::linguistic2::XSpellChecker >  GetSpellChecker();
+// Whether the grammar checker proofreads the text node as you type: text
+// outside frames, while automatic grammar checking is on. There, the local
+// spell checker leaves the languages the grammar checker spell checks itself
+// to it (see linguistic::IsProofreaderSpellingLanguage()).
+bool IsProofreadAsYouType(const SwTextNode& rNode);
 cpo::uno::Reference< css::linguistic2::XHyphenator >    GetHyphenator();
 cpo::uno::Reference< css::linguistic2::XThesaurus >     GetThesaurus();
 cpo::uno::Reference< css::linguistic2::XLinguProperties > GetLinguPropertySet();
