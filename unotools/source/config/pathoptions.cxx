@@ -243,31 +243,8 @@ void SvtPathOptions_Impl::SetPath( SvtPathOptions::Paths ePath, const OUString& 
 {
     std::unique_lock aGuard( m_aMutex );
 
-    OUString    aResult;
-    OUString    aNewValue;
-    Any         a;
-
-    switch ( ePath )
-    {
-        case SvtPathOptions::Paths::AddIn:
-        case SvtPathOptions::Paths::Filter:
-        case SvtPathOptions::Paths::Help:
-        case SvtPathOptions::Paths::Module:
-        case SvtPathOptions::Paths::Plugin:
-        case SvtPathOptions::Paths::Storage:
-        {
-            // These office paths have to be convert back to UCB-URL's
-            osl::FileBase::getFileURLFromSystemPath( rNewPath, aResult );
-            aNewValue = aResult;
-        }
-        break;
-
-        default:
-            aNewValue = rNewPath;
-    }
-
     // Resubstitution is done by the service itself using the substitution service
-    a <<= aNewValue;
+    Any a(rNewPath);
     try
     {
         m_xPathSettings->setFastPropertyValue( m_aMapEnumToPropHandle[ePath], a );
