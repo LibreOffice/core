@@ -684,7 +684,7 @@ rtl::Reference<ScStyleObj> ScStyleFamilyObj::GetObjectByIndex_Impl(sal_Int32 nIn
         ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
 
         SfxStyleSheetIterator aIter( pStylePool, eFamily );
-        if ( nIndex < aIter.Count() )
+        if ( nIndex >= 0 && nIndex < aIter.Count() )
         {
             SfxStyleSheetBase* pStyle = aIter[nIndex];
             if ( pStyle )
