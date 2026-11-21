@@ -990,19 +990,19 @@ void FastSaxParserImpl::produce( bool bForceFlush )
         rEntity.mnProducedEventsSize >= Entity::mnEventListSize))
         return;
 
-    std::unique_lock aGuard(rEntity.maEventProtector);
+    {
+        std::unique_lock aGuard(rEntity.maEventProtector);
 
-    while (rEntity.maPendingEvents.size() >= Entity::mnEventHighWater)
-    { // pause parsing for a bit
-        aGuard.unlock(); // unlock
-        rEntity.maProduceResume.wait();
-        rEntity.maProduceResume.reset();
-        aGuard.lock(); // lock
+        while (rEntity.maPendingEvents.size() >= Entity::mnEventHighWater)
+        { // pause parsing for a bit
+            aGuard.unlock();
+            rEntity.maProduceResume.wait();
+            rEntity.maProduceResume.reset();
+            aGuard.lock();
+        }
+
+        rEntity.maPendingEvents.push(std::move(*rEntity.mxProducedEvents));
     }
-
-    rEntity.maPendingEvents.push(std::move(*rEntity.mxProducedEvents));
-
-    aGuard.unlock(); // unlock
 
     rEntity.mxProducedEvents.reset();
     assert(!rEntity.mxProducedEvents);
