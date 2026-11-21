@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,freetype,\
 	external/freetype/ubsan.patch \
 	external/freetype/freetype-fd-hack.patch.0 \
 	external/freetype/windows.patch \
+	external/freetype/ofz588244686.patch.1 \
 ))
 
 # Enable FreeType's FT_DEBUG_LOGGING at least in --enable-dbgutil DISABLE_DYNLOADING builds (in
