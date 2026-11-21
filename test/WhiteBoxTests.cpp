@@ -1518,6 +1518,22 @@ void WhiteBoxTests::testOpenFileInJail()
     LOK_ASSERT(!FileUtil::removeLocalFileInJail(false, jailRoot, jailRoot + "/user/docs/abc"));
     LOK_ASSERT(FileUtil::Stat(jailRoot + "/user/docs/abc").exists());
 
+    // A file in the jail is copied out of it, and a file through a linked directory is not.
+    LOK_ASSERT(FileUtil::copyLocalFileFromJail(false, jailRoot, jailRoot + "/user/docs/abc/doc.odt",
+                                               dir + "/copy.odt"));
+    LOK_ASSERT_EQUAL(std::string("document"),
+                     openedContents(::open((dir + "/copy.odt").c_str(), O_RDONLY | O_CLOEXEC)));
+    LOK_ASSERT(!FileUtil::copyLocalFileFromJail(
+        false, jailRoot, jailRoot + "/user/docs/linked/secret.txt", dir + "/linked.txt"));
+    LOK_ASSERT(!FileUtil::Stat(dir + "/linked.txt").exists());
+
+    // A file that is already there is not copied over.
+    std::ofstream(jailRoot + "/user/docs/abc/other.odt") << "other";
+    LOK_ASSERT(!FileUtil::copyLocalFileFromJail(
+        false, jailRoot, jailRoot + "/user/docs/abc/other.odt", dir + "/copy.odt"));
+    LOK_ASSERT_EQUAL(std::string("document"),
+                     openedContents(::open((dir + "/copy.odt").c_str(), O_RDONLY | O_CLOEXEC)));
+
     // A link at the name is removed and what it points to stays.
     LOK_ASSERT(FileUtil::removeLocalFileInJail(false, jailRoot,
                                                jailRoot + "/user/docs/abc/link.odt"));

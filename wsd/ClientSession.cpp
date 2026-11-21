@@ -4905,17 +4905,31 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
 
         LOG_TRC("clipboardcontent path: " << clipFile);
 
-        std::string jailClipFile = docBroker->findFileInJail(clipFile);
+        const std::string jailClipFile = docBroker->findFileInJail(clipFile);
         if (jailClipFile.empty())
             LOG_DBG("clipboardcontent produced no output in '" << clipFile << "'");
 
-        bool empty = jailClipFile.empty() ? true : FileUtil::Stat(jailClipFile).size() == 0;
+        std::string clipboardFile;
+        if (!jailClipFile.empty())
+        {
+            const std::string jailRoot = docBroker->getJailRoot();
+            clipboardFile = COOLWSD::SavedClipboards->nextClipFileName();
+            if (!FileUtil::copyLocalFileFromJail(COOLWSD::EnableMountNamespaces, jailRoot,
+                                                 jailClipFile, clipboardFile))
+            {
+                clipboardFile.clear();
+            }
+            FileUtil::removeLocalFileInJail(COOLWSD::EnableMountNamespaces, jailRoot,
+                                            jailClipFile);
+        }
+
+        bool empty = clipboardFile.empty() || FileUtil::Stat(clipboardFile).size() == 0;
 
         if (!empty)
         {
             std::string postProcessedClipFile = COOLWSD::SavedClipboards->nextClipFileName();
             std::ofstream ofs(postProcessedClipFile, std::ofstream::out);
-            std::ifstream ifs(jailClipFile, std::ifstream::in);
+            std::ifstream ifs(clipboardFile, std::ifstream::in);
             bool postProcesed = postProcessCopyPayload(ifs, ofs);
             ifs.close();
             ofs.close();
@@ -4924,8 +4938,8 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
                 FileUtil::removeFile(postProcessedClipFile);
             else
             {
-                FileUtil::removeFile(jailClipFile);
-                jailClipFile = std::move(postProcessedClipFile);
+                FileUtil::removeFile(clipboardFile);
+                clipboardFile = std::move(postProcessedClipFile);
             }
         }
 
@@ -4936,16 +4950,17 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
         if (!empty && (!_wopiFileInfo || !_wopiFileInfo->getDisableCopy()))
         {
             // returns same filename as its arg on rename failure
-            std::string cacheFile = COOLWSD::SavedClipboards->insertClipboard(_clipboardKeys, jailClipFile);
-            if (cacheFile != jailClipFile)
+            std::string cacheFile =
+                COOLWSD::SavedClipboards->insertClipboard(_clipboardKeys, clipboardFile);
+            if (cacheFile != clipboardFile)
             {
-                jailClipFile = std::move(cacheFile);
+                clipboardFile = std::move(cacheFile);
                 removeClipFile = false;
             }
         }
 
         if (removeClipFile)
-            clipFileRemove = std::make_shared<FileUtil::OwnedFile>(jailClipFile);
+            clipFileRemove = std::make_shared<FileUtil::OwnedFile>(clipboardFile);
 
         for (const auto& it : _clipSockets)
         {
@@ -4968,8 +4983,8 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
             session->setFinishedHandler([clipFileRemove](const std::shared_ptr<http::ServerSession>&) {});
 
             // Hand over socket to ServerSession which will async provide
-            // clipboard content backed by jailClipFile
-            session->asyncUpload(jailClipFile, std::move(headers));
+            // clipboard content backed by clipboardFile
+            session->asyncUpload(clipboardFile, std::move(headers));
             socket->setHandler(std::static_pointer_cast<ProtocolHandlerInterface>(session));
 
             LOG_INF("Queued " << (empty?"empty":"clipboard") << " response for send.");

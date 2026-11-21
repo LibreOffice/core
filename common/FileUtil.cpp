@@ -549,6 +549,31 @@ namespace FileUtil
         return dirFd;
     }
 
+    /// Copies fromFd to its end into toFd, and closes both. Returns true when all of it was
+    /// written. The paths are only for messages.
+    bool copyAndClose(int fromFd, int toFd, const std::string& fromPath, const std::string& toPath)
+    {
+        bool copied = true;
+        try
+        {
+            copyContents(fromFd, toFd, fromPath, toPath);
+        }
+        catch (const std::exception& exception)
+        {
+            LOG_ERR(exception.what());
+            copied = false;
+        }
+
+        ::close(fromFd);
+        // A write error can be reported only when the file is closed.
+        if (::close(toFd) != 0 && copied)
+        {
+            LOG_SYS("Failed to write [" << Anonymizer::anonymizeUrl(toPath) << ']');
+            copied = false;
+        }
+        return copied;
+    }
+
     /// Copies the file at localPath to a new file fileName in the directory dirFd.
     bool copyIntoDirectory(const std::string& localPath, int dirFd, const std::string& fileName)
     {
@@ -563,30 +588,15 @@ namespace FileUtil
         ::unlinkat(dirFd, fileName.c_str(), 0);
         const int to = ::openat(dirFd, fileName.c_str(),
                                 O_WRONLY | O_CREAT | O_EXCL | O_NOFOLLOW | O_CLOEXEC, 0666);
-        bool copied = to >= 0;
-        if (!copied)
-            LOG_SYS("Failed to create [" << Anonymizer::anonymizeUrl(fileName) << ']');
-        else
+        if (to < 0)
         {
-            try
-            {
-                copyContents(from, to, localPath, fileName);
-            }
-            catch (const std::exception& exception)
-            {
-                LOG_ERR(exception.what());
-                copied = false;
-            }
+            LOG_SYS("Failed to create [" << Anonymizer::anonymizeUrl(fileName) << ']');
+            ::close(from);
+            return false;
         }
 
-        ::close(from);
-        // A write error can be reported only when the file is closed.
-        if (to >= 0 && ::close(to) != 0 && copied)
-        {
-            LOG_SYS("Failed to write [" << Anonymizer::anonymizeUrl(fileName) << ']');
-            copied = false;
-        }
-        if (!copied && to >= 0)
+        const bool copied = copyAndClose(from, to, localPath, fileName);
+        if (!copied)
             ::unlinkat(dirFd, fileName.c_str(), 0);
         return copied;
     }
@@ -712,6 +722,27 @@ namespace FileUtil
     {
         return openFileBelow(localRootOfJailFile(usingMountNamespaces, localJailRoot, localPath),
                              localPath);
+    }
+
+    bool copyLocalFileFromJail(bool usingMountNamespaces, const std::string& localJailRoot,
+                               const std::string& localPath, const std::string& toPath)
+    {
+        const int from = openLocalFileInJail(usingMountNamespaces, localJailRoot, localPath);
+        if (from < 0)
+            return false;
+
+        const int to = ::open(toPath.c_str(), O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC, 0600);
+        if (to < 0)
+        {
+            LOG_SYS("Failed to create [" << Anonymizer::anonymizeUrl(toPath) << ']');
+            ::close(from);
+            return false;
+        }
+
+        const bool copied = copyAndClose(from, to, localPath, toPath);
+        if (!copied)
+            ::unlink(toPath.c_str());
+        return copied;
     }
 
     bool removeLocalFileInJail(bool usingMountNamespaces, const std::string& localJailRoot,
