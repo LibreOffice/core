@@ -2921,7 +2921,7 @@ void ChildSession::sendDownloadAsResult([[maybe_unused]] const DownloadAsRequest
     // Register download id -> URL mapping in the DocumentBroker
     const std::string docBrokerMessage = "registerdownload: downloadid=" + request._path.tmpDir
                                          + " url=" + request._path.urlInJail +
-                                         " clientid=" + getId();
+                                         " clientid=" + getId() + " source=downloadas";
     _docManager->sendFrame(docBrokerMessage);
 
     // Send download id to the client
@@ -8072,7 +8072,8 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
 
         // Register download id -> URL mapping in the DocumentBroker
         const std::string docBrokerMessage = "registerdownload: downloadid=" + downloadId
-                                             + " url=" + encodedUrlInJail + " clientid=" + getId();
+                                             + " url=" + encodedUrlInJail + " clientid=" + getId()
+                                             + " source=export";
         _docManager->sendFrame(docBrokerMessage);
         sendTextFrame("downloadas: downloadid=" + downloadId
                       + " port=" + std::to_string(ClientPortNumber) + " id=export filename="

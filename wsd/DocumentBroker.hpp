@@ -891,6 +891,8 @@ public:
     /// Get URL for corresponding download id if registered, or empty string otherwise
     std::string getDownloadURL(const std::string& downloadId);
 
+    bool isConvertedDownload(const std::string& downloadId) const;
+
     /// Remove download id mapping
     void unregisterDownloadId(const std::string& downloadId);
 
@@ -2259,8 +2261,14 @@ private:
 
     ServerAuditUtil _serverAudit;
 
-    // Maps download id -> URL
-    std::map<std::string, std::string> _registeredDownloadLinks;
+    struct RegisteredDownload
+    {
+        std::string url;
+        /// True for the document converted by downloadas, false for a file the document exported.
+        bool converted = false;
+    };
+
+    std::map<std::string, RegisteredDownload> _registeredDownloadLinks;
 
     /// The remote links this document may subscribe to, with their
     /// subscriptions and the client-facing view of them.

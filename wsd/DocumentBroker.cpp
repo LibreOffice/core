@@ -7231,9 +7231,15 @@ std::string DocumentBroker::getDownloadURL(const std::string& downloadId)
 {
     auto found = _registeredDownloadLinks.find(downloadId);
     if (found != _registeredDownloadLinks.end())
-        return found->second;
+        return found->second.url;
 
     return std::string();
+}
+
+bool DocumentBroker::isConvertedDownload(const std::string& downloadId) const
+{
+    auto found = _registeredDownloadLinks.find(downloadId);
+    return found != _registeredDownloadLinks.end() && found->second.converted;
 }
 
 void DocumentBroker::unregisterDownloadId(const std::string& downloadId)
@@ -7403,8 +7409,8 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
         }
         else if (message->firstTokenMatches("registerdownload:"))
         {
-            LOG_CHECK_RET(message->tokens().size() == 4, false);
-            std::string downloadid, url, clientId;
+            LOG_CHECK_RET(message->tokens().size() == 5, false);
+            std::string downloadid, url, clientId, source;
             LOG_CHECK_RET(COOLProtocol::getTokenString((*message)[1], "downloadid", downloadid) &&
                               !downloadid.empty(),
                           false);
@@ -7413,6 +7419,9 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
                           false);
             LOG_CHECK_RET(COOLProtocol::getTokenString((*message)[3], "clientid", clientId) &&
                               !clientId.empty(),
+                          false);
+            LOG_CHECK_RET(COOLProtocol::getTokenString((*message)[4], "source", source) &&
+                              (source == "downloadas" || source == "export"),
                           false);
 
             const std::string decoded = Uri::decode(url);
@@ -7445,7 +7454,7 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
                 }
             }
 
-            _registeredDownloadLinks[downloadid] = std::move(url);
+            _registeredDownloadLinks[downloadid] = { std::move(url), source == "downloadas" };
         }
         else if (message->firstTokenMatches("traceevent:"))
         {

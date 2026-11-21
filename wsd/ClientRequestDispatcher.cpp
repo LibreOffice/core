@@ -3258,6 +3258,7 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
 
         std::string downloadId = requestDetails[3];
         std::string url = docBrokerIt->second->getDownloadURL(downloadId);
+        const bool converted = docBrokerIt->second->isConvertedDownload(downloadId);
         docBrokerIt->second->unregisterDownloadId(downloadId);
         std::string jailId = docBrokerIt->second->getJailId();
 
@@ -3300,7 +3301,7 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
                              FileServerRequestHandler::attachmentDisposition(fileName));
 
             // The slideshow is shown as an inline SVG with its own script.
-            if (serveAsAttachment || contentType != "image/svg+xml")
+            if (serveAsAttachment || !converted || contentType != "image/svg+xml")
                 response.set("Content-Security-Policy", "sandbox");
 
             if (COOLWSD::WASMEnabled)

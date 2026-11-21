@@ -97,13 +97,13 @@ void UriTests::testProtocolMessageRoundTripWithSpaces()
         LOK_ASSERT_EQUAL(std::string::npos, encodedUrlInJail.find(' '));
         LOK_ASSERT_EQUAL(std::string::npos, encodedFilename.find(' '));
 
-        // registerdownload: downloadid=<id> url=<url> clientid=<id>
-        // The wsd-side handler asserts tokens.size() == 4.
+        // registerdownload: downloadid=<id> url=<url> clientid=<id> source=export
+        // The wsd-side handler asserts tokens.size() == 5.
         const std::string registerMsg = "registerdownload: downloadid=" + c.tmpDir
                                         + " url=" + encodedUrlInJail
-                                        + " clientid=" + c.clientId;
+                                        + " clientid=" + c.clientId + " source=export";
         StringVector regTokens = StringVector::tokenize(registerMsg);
-        LOK_ASSERT_EQUAL(static_cast<size_t>(4), regTokens.size());
+        LOK_ASSERT_EQUAL(static_cast<size_t>(5), regTokens.size());
 
         // downloadas: downloadid=<id> port=<port> id=export filename=<name>
         // The browser-side parser splits on /[ \n]+/ and matches each token
