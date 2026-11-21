@@ -16,9 +16,8 @@
 
 #pragma once
 
-#include <common/Util.hpp>
-
 #include <cassert>
+#include <cstdint>
 #include <memory>
 #include <string>
 

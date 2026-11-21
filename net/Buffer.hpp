@@ -17,7 +17,6 @@
 #pragma once
 
 #include <common/HexUtil.hpp>
-#include <common/Util.hpp>
 
 #include <assert.h>
 #include <ostream>

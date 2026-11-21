@@ -9,7 +9,6 @@
 
 #include <common/Log.hpp>
 #include <common/StateEnum.hpp>
-#include <common/Util.hpp>
 #include <net/Socket.hpp>
 
 #include <cassert>
