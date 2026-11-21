@@ -727,17 +727,18 @@ SvtModuleOptions::SvtModuleOptions()
     if( m_pImpl )
         return;
 
-    // take the mutex, so we don't accidentally create more than one
-    std::unique_lock aGuard( impl_GetOwnStaticMutex() );
-
-    m_pImpl = g_pModuleOptions.lock();
-    if( !m_pImpl )
     {
+        // take the mutex, so we don't accidentally create more than one
+        std::scoped_lock aGuard( impl_GetOwnStaticMutex() );
+
+        m_pImpl = g_pModuleOptions.lock();
+        if( m_pImpl )
+            return;
         m_pImpl = std::make_shared<SvtModuleOptions_Impl>();
         g_pModuleOptions = m_pImpl;
-        aGuard.unlock(); // because holdConfigItem will call this constructor
-        ItemHolder1::holdConfigItem(EItem::ModuleOptions);
     }
+    // outside the lock, because holdConfigItem will call this constructor
+    ItemHolder1::holdConfigItem(EItem::ModuleOptions);
 }
 
 SvtModuleOptions::~SvtModuleOptions()
