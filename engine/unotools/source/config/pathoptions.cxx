@@ -421,16 +421,17 @@ namespace
 
 SvtPathOptions::SvtPathOptions()
 {
-    // Global access, must be guarded (multithreading)
-    std::unique_lock aGuard( lclMutex() );
-    pImpl = g_pOptions.lock();
-    if ( !pImpl )
     {
+        // Global access, must be guarded (multithreading)
+        std::scoped_lock aGuard( lclMutex() );
+        pImpl = g_pOptions.lock();
+        if ( pImpl )
+            return;
         pImpl = std::make_shared<SvtPathOptions_Impl>();
         g_pOptions = pImpl;
-        aGuard.unlock(); // because holdConfigItem will call this constructor
-        ItemHolder1::holdConfigItem(EItem::PathOptions);
     }
+    // outside the lock, because holdConfigItem will call this constructor
+    ItemHolder1::holdConfigItem(EItem::PathOptions);
 }
 
 SvtPathOptions::~SvtPathOptions()
