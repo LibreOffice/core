@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,fontconfig,\
 	external/fontconfig/fontconfig-2.12.1.patch.1 \
 	external/fontconfig/nowarnnoconfig.patch.1 \
 	external/fontconfig/gperf-check.patch \
+	external/fontconfig/ofz584604666.patch.1 \
 ))
 
 ifneq ($(OS),MACOSX)
