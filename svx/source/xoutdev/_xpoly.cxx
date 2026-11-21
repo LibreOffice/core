@@ -22,6 +22,8 @@
 #include <algorithm>
 #include <cmath>
 
+#include <sal/log.hxx>
+
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>
 #include <tools/helpers.hxx>
@@ -103,7 +105,8 @@ void ImpXPolygon::Resize( sal_uInt16 nNewSize, bool bDeletePoints )
     if ( nSize != 0 && nNewSize > nSize )
     {
         DBG_ASSERT(nResize, "Trying to resize but nResize = 0 !");
-        nNewSize = nSize + ((nNewSize-nSize-1) / nResize + 1) * nResize;
+        sal_uInt32 nRounded = nSize + ((nNewSize - nSize - 1) / nResize + 1) * sal_uInt32(nResize);
+        nNewSize = std::min<sal_uInt32>(nRounded, SAL_MAX_UINT16);
     }
     // create point array
     nSize     = nNewSize;
@@ -141,9 +144,15 @@ void ImpXPolygon::Resize( sal_uInt16 nNewSize, bool bDeletePoints )
     delete[] pOldFlagAry;
 }
 
-void ImpXPolygon::InsertSpace( sal_uInt16 nPos, sal_uInt16 nCount )
+bool ImpXPolygon::InsertSpace( sal_uInt16 nPos, sal_uInt16 nCount )
 {
     CheckPointDelete();
+
+    if (sal_uInt32(nPoints) + nCount > SAL_MAX_UINT16)
+    {
+        SAL_WARN("svx", "XPolygon cannot hold more than 65535 points, dropping the inserted points");
+        return false;
+    }
 
     if ( nPos > nPoints )
         nPos = nPoints;
@@ -164,6 +173,7 @@ void ImpXPolygon::InsertSpace( sal_uInt16 nPos, sal_uInt16 nCount )
     memset( &pFlagAry [nPos], 0, nCount );
 
     nPoints = nPoints + nCount;
+    return true;
 }
 
 void ImpXPolygon::Remove( sal_uInt16 nPos, sal_uInt16 nCount )
@@ -353,7 +363,8 @@ sal_uInt16 XPolygon::GetPointCount() const
 void XPolygon::Insert( sal_uInt16 nPos, const Point& rPt, PolyFlags eFlags )
 {
     if (nPos>m_pImpXPolygon->nPoints) nPos=m_pImpXPolygon->nPoints;
-    m_pImpXPolygon->InsertSpace( nPos, 1 );
+    if (!m_pImpXPolygon->InsertSpace(nPos, 1))
+        return;
     m_pImpXPolygon->pPointAry[nPos] = rPt;
     m_pImpXPolygon->pFlagAry[nPos]  = eFlags;
 }
@@ -364,7 +375,8 @@ void XPolygon::Insert( sal_uInt16 nPos, const XPolygon& rXPoly )
 
     sal_uInt16 nPoints = rXPoly.GetPointCount();
 
-    m_pImpXPolygon->InsertSpace( nPos, nPoints );
+    if (!m_pImpXPolygon->InsertSpace(nPos, nPoints))
+        return;
 
     std::copy_n( rXPoly.m_pImpXPolygon->pPointAry.get(),
             nPoints,
