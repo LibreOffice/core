@@ -1549,6 +1549,34 @@ void WhiteBoxTests::testOpenFileInJail()
     LOK_ASSERT(FileUtil::removeLocalFileInJail(
         true, jailRoot, dir + "/jails/tmp/cool-jailid/user/docs/abc/doc.odt"));
     LOK_ASSERT(!FileUtil::Stat(dir + "/jails/tmp/cool-jailid/user/docs/abc/doc.odt").exists());
+
+    // A file is renamed within its directory, and a link at the name is renamed itself. A name
+    // in another directory, a missing file and a file through a linked directory are refused.
+    const std::string abc = jailRoot + "/user/docs/abc";
+    std::ofstream(abc + "/old.odt") << "old";
+    LOK_ASSERT(FileUtil::renameLocalFileInJail(false, jailRoot, abc + "/old.odt",
+                                               abc + "/new.odt"));
+    LOK_ASSERT(!FileUtil::Stat(abc + "/old.odt").exists());
+    LOK_ASSERT_EQUAL(std::string("old"),
+                     openedContents(FileUtil::openFileInJail(false, jailRoot,
+                                                             "/user/docs/abc/new.odt")));
+    LOK_ASSERT(!FileUtil::renameLocalFileInJail(false, jailRoot, abc + "/new.odt",
+                                                jailRoot + "/user/docs/new.odt"));
+    Poco::File(jailRoot + "/user/docs/abd").createDirectories();
+    LOK_ASSERT(!FileUtil::renameLocalFileInJail(false, jailRoot, abc + "/new.odt",
+                                                jailRoot + "/user/docs/abd/new.odt"));
+    LOK_ASSERT(FileUtil::Stat(abc + "/new.odt").exists());
+    LOK_ASSERT(!FileUtil::renameLocalFileInJail(false, jailRoot, abc + "/missing.odt",
+                                                abc + "/found.odt"));
+    LOK_ASSERT_EQUAL(0, symlink((outside + "/secret.txt").c_str(), (abc + "/link.odt").c_str()));
+    LOK_ASSERT(FileUtil::renameLocalFileInJail(false, jailRoot, abc + "/link.odt",
+                                               abc + "/moved-link.odt"));
+    LOK_ASSERT_EQUAL(-1,
+                     FileUtil::openFileInJail(false, jailRoot, "/user/docs/abc/moved-link.odt"));
+    LOK_ASSERT(!FileUtil::renameLocalFileInJail(false, jailRoot,
+                                                jailRoot + "/user/docs/linked/secret.txt",
+                                                jailRoot + "/user/docs/linked/renamed.txt"));
+    LOK_ASSERT(FileUtil::Stat(outside + "/secret.txt").exists());
 }
 
 void WhiteBoxTests::testStringCompare()

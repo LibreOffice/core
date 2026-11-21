@@ -1262,6 +1262,10 @@ private:
     /// the .uploading names are those of the file under that name, or there are none.
     void renameThumbnailsForUpload(bool wroteNewVersion);
 
+    /// Renames the file oldName in the jail to newName, a name in the same directory. Returns
+    /// true when it was renamed.
+    bool renameInJail(const std::string& oldName, const std::string& newName) const;
+
     /// The thumbnails next to the file at basePath, as they are on disk now.
     static std::vector<UploadedThumbnail> listThumbnails(const std::string& basePath);
 

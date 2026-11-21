@@ -3686,15 +3686,8 @@ void DocumentBroker::handleSaveResponse(const std::shared_ptr<ClientSession>& se
 
             // Rename even if no new save, in case we have an older version.
             const std::string newName = _storage->getRootFilePathUploading();
-            if (::rename(oldName.c_str(), newName.c_str()) < 0)
-            {
-                LOG_SYS("Failed to rename [" << oldName << "] to [" << newName << ']');
-            }
-            else
-            {
-                LOG_TRC("Renamed [" << oldName << "] to [" << newName << ']');
+            if (renameInJail(oldName, newName))
                 renameThumbnailsForUpload(wroteNewVersion);
-            }
         }
     }
 
@@ -3944,20 +3937,26 @@ void DocumentBroker::uploadAfterLoadingTemplate(const std::shared_ptr<ClientSess
         // (save is done in Kit right after loading a template).
         const std::string oldName = _storage->getRootFilePathToUpload();
         const std::string newName = _storage->getRootFilePathUploading();
-        if (::rename(oldName.c_str(), newName.c_str()) < 0)
-        {
-            // It's not an error if there was no file to rename, when the document isn't modified.
-            LOG_SYS("Expected to renamed the document ["
-                    << oldName << "] after template-loading to [" << newName << ']');
-        }
-        else
-        {
-            LOG_TRC("Renamed [" << oldName << "] to [" << newName << ']');
+        // It's not an error if there was no file to rename, when the document isn't modified.
+        if (renameInJail(oldName, newName))
             renameThumbnailsForUpload(/*wroteNewVersion=*/true);
-        }
     }
 
     uploadToStorage(session, /*force=*/false);
+}
+
+bool DocumentBroker::renameInJail([[maybe_unused]] const std::string& oldName,
+                                  [[maybe_unused]] const std::string& newName) const
+{
+#if !MOBILEAPP
+    if (FileUtil::renameLocalFileInJail(COOLWSD::EnableMountNamespaces, getJailRoot(), oldName,
+                                        newName))
+    {
+        LOG_TRC("Renamed [" << oldName << "] to [" << newName << ']');
+        return true;
+    }
+#endif // !MOBILEAPP
+    return false;
 }
 
 void DocumentBroker::renameThumbnailsForUpload([[maybe_unused]] const bool wroteNewVersion)
@@ -3981,16 +3980,7 @@ void DocumentBroker::renameThumbnailsForUpload([[maybe_unused]] const bool wrote
     const std::string toUpload = _storage->getRootFilePathToUpload();
     for (const std::string& size : Thumbnail::listSizes(toUpload))
     {
-        const std::string oldName = Thumbnail::filePath(toUpload, size);
-        const std::string newName = Thumbnail::filePath(uploading, size);
-        if (::rename(oldName.c_str(), newName.c_str()) < 0)
-        {
-            LOG_SYS("Failed to rename [" << oldName << "] to [" << newName << ']');
-        }
-        else
-        {
-            LOG_TRC("Renamed [" << oldName << "] to [" << newName << ']');
-        }
+        renameInJail(Thumbnail::filePath(toUpload, size), Thumbnail::filePath(uploading, size));
     }
 #endif // !MOBILEAPP
 }

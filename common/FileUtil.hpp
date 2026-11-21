@@ -179,6 +179,13 @@ namespace FileUtil
     /// itself, and a directory stays. Returns true when the name was removed.
     bool removeLocalFileInJail(bool usingMountNamespaces, const std::string& localJailRoot,
                                const std::string& localPath);
+
+    /// Renames the name at localPath to toLocalPath, a name in the same directory. localPath is
+    /// a path that buildLocalPathToJail gives for the jail under localJailRoot, and is reached
+    /// through no link below the jail. A link at the name is renamed itself. Returns true when
+    /// the name was renamed.
+    bool renameLocalFileInJail(bool usingMountNamespaces, const std::string& localJailRoot,
+                               const std::string& localPath, const std::string& toLocalPath);
 #endif
 
     // returns two strings

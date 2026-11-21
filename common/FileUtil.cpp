@@ -762,6 +762,37 @@ namespace FileUtil
         return removed;
     }
 
+    bool renameLocalFileInJail(bool usingMountNamespaces, const std::string& localJailRoot,
+                               const std::string& localPath, const std::string& toLocalPath)
+    {
+        const std::size_t nameAt = toLocalPath.rfind('/') + 1;
+        const std::string toFileName = toLocalPath.substr(nameAt);
+        const bool sameDirectory = nameAt != 0 && localPath.rfind('/') + 1 == nameAt &&
+                                   localPath.compare(0, nameAt, toLocalPath, 0, nameAt) == 0;
+        if (!sameDirectory)
+        {
+            LOG_WRN("[" << Anonymizer::anonymizeUrl(toLocalPath) << "] is not a name beside ["
+                        << Anonymizer::anonymizeUrl(localPath) << ']');
+            return false;
+        }
+
+        const std::string localRoot =
+            localRootOfJailFile(usingMountNamespaces, localJailRoot, localPath);
+        std::string fileName;
+        const int dirFd = openParentBelow(localRoot, localPath, fileName);
+        if (dirFd < 0)
+            return false;
+
+        const bool renamed = ::renameat(dirFd, fileName.c_str(), dirFd, toFileName.c_str()) == 0;
+        if (!renamed && errno != ENOENT)
+        {
+            LOG_SYS("Failed to rename [" << Anonymizer::anonymizeUrl(localPath) << "] to ["
+                                         << Anonymizer::anonymizeUrl(toLocalPath) << ']');
+        }
+        ::close(dirFd);
+        return renamed;
+    }
+
     std::string moveFileIntoJail(bool usingMountNamespaces, std::string localJailRoot,
                                  std::string jailPath, const std::string& localPath)
     {
