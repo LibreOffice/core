@@ -9645,7 +9645,8 @@ void DomainMapper_Impl::PopFieldContext()
                         else if (m_nStartGenericField != 0)
                         {
                             --m_nStartGenericField;
-                            PopFieldmark(m_aTextAppendStack, xCrsr, pContext->GetFieldId());
+                            if (xCrsr.is())
+                                PopFieldmark(m_aTextAppendStack, xCrsr, pContext->GetFieldId());
                             if (m_StreamStateStack.top().bTextInserted)
                             {
                                 m_StreamStateStack.top().bTextInserted = false;
