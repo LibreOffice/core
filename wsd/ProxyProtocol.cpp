@@ -63,18 +63,31 @@ void DocumentBroker::handleProxyRequest(
     }
 
     auto protocol = clientSession->getProtocol();
-    socket->setHandler(protocol);
-
-    // this DocumentBroker's poll handles reading & writing
-    addSocketToPoll(socket);
-
     auto proxy = std::static_pointer_cast<ProxyProtocolHandler>(protocol);
     if (requestDetails.equals(RequestDetails::Field::Command, "close"))
     {
         LOG_TRC("Close session");
+
+        // The close request ends with an empty answer, so that a reverse proxy in front of us
+        // sees a complete exchange
+        http::Response httpResponse(http::StatusCode::OK);
+        httpResponse.set("Last-Modified", Util::getHttpTimeNow());
+        httpResponse.add("X-Content-Type-Options", "nosniff");
+        httpResponse.set("Connection", "close");
+        httpResponse.setContentLength(0);
+        socket->send(httpResponse);
+        socket->asyncShutdown();
+        // The request handler of the socket would take a body for another request
+        socket->ignoreInput();
+
         proxy->notifyDisconnected();
         return;
     }
+
+    socket->setHandler(protocol);
+
+    // this DocumentBroker's poll handles reading & writing
+    addSocketToPoll(socket);
 
     proxy->handleRequest(socket);
 }
@@ -113,6 +126,8 @@ void DocumentBroker::proxyOpenRequest(const std::shared_ptr<StreamSocket>& socke
 
     socket->send(httpResponse);
     socket->asyncShutdown();
+    // The request handler of the socket would take a body for another request
+    socket->ignoreInput();
 }
 
 bool ProxyProtocolHandler::hasCompleteMessage(const Buffer& in)

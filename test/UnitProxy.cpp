@@ -41,7 +41,7 @@ public:
         : UnitWSD("UnitProxyProtocol")
         , _sentRequest(false)
     {
-        setTimeout(10s);
+        setTimeout(30s);
     }
 
     void configure(Poco::Util::LayeredConfiguration& config) override
@@ -59,6 +59,67 @@ public:
                                            { LOK_ASSERT_FAIL("Unexpected connection failure"); });
         httpSession->setTimeout(9s);
         return httpSession;
+    }
+
+    /// Sends a tunnel request on a connection of its own. The reply to a tunnel request is the only
+    /// thing sent back on that connection, so the raw bytes are read until the server closes, to
+    /// make anything after the reply visible.
+    static std::string rawTunnelExchange(const std::string& wopiSRC, const std::string& accessToken,
+                                         const std::string& command, const std::string& body)
+    {
+        Poco::URI serverURI(helpers::getTestServerURI());
+        Poco::Net::StreamSocket rawSocket(
+            Poco::Net::SocketAddress(serverURI.getHost(), serverURI.getPort()));
+        rawSocket.setReceiveTimeout(Poco::Timespan(9, 0));
+        const std::string rawRequest = "POST /cool/" + wopiSRC + "/ws?WOPISrc=/wopi/files" +
+                                       wopiSRC + "&compat=/ws/" + accessToken + '/' + command +
+                                       " HTTP/1.1\r\n"
+                                       "Host: " +
+                                       serverURI.getAuthority() +
+                                       "\r\n"
+                                       "ProxyPrefix: https://substituted-into-cool.html-from-here/\r\n"
+                                       "Content-Length: " +
+                                       std::to_string(body.size()) + "\r\n\r\n" + body;
+        rawSocket.sendBytes(rawRequest.data(), rawRequest.size());
+        std::string raw;
+        char buffer[4096];
+        while (true)
+        {
+            const int got = rawSocket.receiveBytes(buffer, sizeof(buffer));
+            if (got <= 0)
+                break;
+            raw.append(buffer, got);
+        }
+        return raw;
+    }
+
+    /// Checks that the bytes hold one complete 200 reply and nothing else, and returns its
+    /// Content-Length.
+    std::streamsize checkSingleReply(const std::string& raw)
+    {
+        const std::size_t headerEnd = raw.find("\r\n\r\n");
+        LOK_ASSERT_MESSAGE("No reply header in: " + raw, headerEnd != std::string::npos);
+        Poco::MemoryInputStream headerStream(raw.data(), headerEnd + 4);
+        Poco::Net::HTTPResponse reply;
+        reply.read(headerStream);
+        LOK_ASSERT_EQUAL(Poco::Net::HTTPResponse::HTTP_OK, reply.getStatus());
+        LOK_ASSERT_EQUAL_MESSAGE("Bytes after the reply in: " + raw,
+                                 headerEnd + 4 + static_cast<std::size_t>(reply.getContentLength()),
+                                 raw.size());
+        return reply.getContentLength();
+    }
+
+    /// Opens a tunnel session on the document and returns its id.
+    std::string openTunnel(const std::shared_ptr<http::Session>& httpSession,
+                           const std::string& path)
+    {
+        http::Request openRequest("cool/" + path + "/ws?WOPISrc=/wopi/files" + path +
+                                  "&compat=/ws/open/open/1");
+        openRequest.set("ProxyPrefix", "https://substituted-into-cool.html-from-here/");
+        const std::shared_ptr<const http::Response> openResponse =
+            httpSession->syncRequest(openRequest);
+        LOK_ASSERT_EQUAL(http::StatusCode::OK, openResponse->statusCode());
+        return openResponse->getBody();
     }
 
     void invokeWSDTest() override
@@ -105,39 +166,25 @@ public:
         LOK_ASSERT_EQUAL(http::Response::State::Complete, httpResponse->state());
         LOK_ASSERT_EQUAL(http::StatusCode::OK, httpResponse->statusCode());
 
-        // The reply to a tunnel request is the only thing sent back on that connection. Read the
-        // raw bytes until the server closes, so anything after the reply is visible.
-        Poco::URI serverURI(helpers::getTestServerURI());
-        Poco::Net::StreamSocket rawSocket(
-            Poco::Net::SocketAddress(serverURI.getHost(), serverURI.getPort()));
-        rawSocket.setReceiveTimeout(Poco::Timespan(9, 0));
-        const std::string rawRequest = "POST /cool/" + wopiSRC + "/ws?WOPISrc=/wopi/files" +
-                                       wopiSRC + "&compat=/ws/" + accessToken +
-                                       "/write/3 HTTP/1.1\r\n"
-                                       "Host: " +
-                                       serverURI.getAuthority() +
-                                       "\r\n"
-                                       "ProxyPrefix: https://substituted-into-cool.html-from-here/\r\n"
-                                       "Content-Length: 1\r\n\r\n.";
-        rawSocket.sendBytes(rawRequest.data(), rawRequest.size());
-        std::string raw;
-        char buffer[4096];
-        while (true)
-        {
-            const int got = rawSocket.receiveBytes(buffer, sizeof(buffer));
-            if (got <= 0)
-                break;
-            raw.append(buffer, got);
-        }
-        const std::size_t headerEnd = raw.find("\r\n\r\n");
-        LOK_ASSERT_MESSAGE("No reply header in: " + raw, headerEnd != std::string::npos);
-        Poco::MemoryInputStream headerStream(raw.data(), headerEnd + 4);
-        Poco::Net::HTTPResponse reply;
-        reply.read(headerStream);
-        LOK_ASSERT_EQUAL(Poco::Net::HTTPResponse::HTTP_OK, reply.getStatus());
-        LOK_ASSERT_EQUAL_MESSAGE("Bytes after the reply in: " + raw,
-                                 headerEnd + 4 + static_cast<std::size_t>(reply.getContentLength()),
-                                 raw.size());
+        checkSingleReply(rawTunnelExchange(wopiSRC, accessToken, "write/3", "."));
+
+        // Closing the session is answered too, with an empty reply
+        LOK_ASSERT_EQUAL(static_cast<std::streamsize>(0),
+                         checkSingleReply(rawTunnelExchange(wopiSRC, accessToken, "close/4", "")));
+
+        // A body of the close request, here another whole request, is not handled as a request.
+        // The first document is unloading now, so this is a session on another one.
+        std::string secondPath;
+        Poco::URI::encode(Poco::Path(helpers::getTempFileCopyPath(TDOC, "empty.odt",
+                                                                  "UnitProxyProtocolSecond"))
+                              .makeAbsolute()
+                              .toString(),
+                          ":/?", secondPath);
+        const std::string closedToken = openTunnel(httpSession, secondPath);
+        LOK_ASSERT_EQUAL(static_cast<std::streamsize>(0),
+                         checkSingleReply(rawTunnelExchange(
+                             secondPath, closedToken, "close/2",
+                             "GET /hosting/capabilities HTTP/1.1\r\nHost: localhost\r\n\r\n")));
 
         TST_LOG("Attempt proxy URL fetch " << httpSession->getUrl() << _req.getUrl());
 
