@@ -75,7 +75,8 @@ void AdminSocketHandler::handleMessage(const std::vector<char> &payload)
 
     if (tokens.equals(0, "auth"))
     {
-        if (tokens.size() < 2)
+        std::string jwtToken;
+        if (tokens.size() < 2 || !COOLProtocol::getTokenString(tokens[1], "jwt", jwtToken))
         {
             LOG_DBG("Auth command without any token");
             sendTextMessage("InvalidAuthToken");
@@ -83,8 +84,6 @@ void AdminSocketHandler::handleMessage(const std::vector<char> &payload)
             ignoreInput();
             return;
         }
-        std::string jwtToken;
-        COOLProtocol::getTokenString(tokens[1], "jwt", jwtToken);
 
         bool decoded = true;
         try
@@ -417,15 +416,15 @@ void AdminSocketHandler::handleMessage(const std::vector<char> &payload)
     }
     else if(tokens.equals(0, "verifyauth"))
     {
-        if (tokens.size() < 3)
+        std::string jwtToken;
+        if (tokens.size() < 3 || !COOLProtocol::getTokenString(tokens[1], "jwt", jwtToken))
         {
             LOG_DBG("Auth command without a token or an id");
             sendTextFrame("InvalidAuthToken");
             return;
         }
-        std::string jwtToken, id;
-        COOLProtocol::getTokenString(tokens[1], "jwt", jwtToken);
-        COOLProtocol::getTokenString(tokens[2], "id", id);
+        std::string id;
+        (void)COOLProtocol::getTokenString(tokens[2], "id", id);
 
         try
         {
