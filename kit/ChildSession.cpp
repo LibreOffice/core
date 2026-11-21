@@ -5163,8 +5163,8 @@ bool ChildSession::contentControlEvent(const StringVector& tokens)
     else if (type == "date" || type == "drop-down")
     {
         std::string data;
-        getTokenString(tokens[2], "selected", data);
-        arguments += R"("selected":")" + JsonUtil::escapeJSONValue(data) + "\"}";
+        if (getTokenString(tokens[2], "selected", data))
+            arguments += R"("selected":")" + JsonUtil::escapeJSONValue(data) + "\"}";
     }
 
     // Each form above closes the object, so an open one is a message of another form.
