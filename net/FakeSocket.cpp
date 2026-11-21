@@ -30,6 +30,7 @@
 #include <condition_variable>
 #include <cstdlib>
 #include <cstring>
+#include <deque>
 #include <iostream>
 #include <sstream>
 #include <mutex>
@@ -67,7 +68,7 @@ struct FakeSocketPair
     bool shutdown[2];
     bool readable[2];
     bool eofDetected[2];                      ///< Flag for fakeSocketHasAnyPendingActivityGlobal() to avoid a busy loop after EOF.
-    std::vector<std::vector<char>> buffer[2];
+    std::deque<std::vector<char>> buffer[2];
 
     FakeSocketPair()
     {
