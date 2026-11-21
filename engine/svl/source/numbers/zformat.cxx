@@ -5180,6 +5180,10 @@ bool SvNumberformat::IsNegativeInBracket() const
 bool SvNumberformat::HasPositiveBracketPlaceholder() const
 {
     sal_uInt16 nCnt = NumFor[0].GetCount();
+    if (!nCnt)
+    {
+        return false;
+    }
     return NumFor[0].Info().sStrArray[nCnt-1] == "_)";
 }
 
