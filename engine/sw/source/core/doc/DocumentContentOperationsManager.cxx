@@ -250,13 +250,15 @@ namespace sw
         SwPosition const*const pCpyStt = &rCpyPam;
 
         std::vector< const ::sw::mark::MarkBase* > vMarksToCopy;
-        for ( auto ppMark = pSrcMarkAccess->getAllMarksBegin();
+        for ( auto ppMark = pSrcMarkAccess->findFirstMarkNotStartsBefore(rStt);
               ppMark != pSrcMarkAccess->getAllMarksEnd();
               ++ppMark )
         {
             const ::sw::mark::MarkBase* const pMark = *ppMark;
 
             auto [/*const SwPosition&*/ rMarkStart, rMarkEnd] = pMark->GetMarkStartEnd();
+            if (rEnd < rMarkStart)
+                break;
             // only include marks that are in the range and not touching both start and end
             // - not for annotation or checkbox marks.
             bool const isIncludeStart(

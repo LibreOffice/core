@@ -1399,6 +1399,16 @@ namespace sw::mark
         return lcl_FindMarkByName(rName, m_vAllMarks);
     }
 
+    // find the first mark that does not start before
+    IDocumentMarkAccess::const_iterator MarkManager::findFirstMarkNotStartsBefore(const SwPosition& rPos) const
+    {
+        return std::lower_bound(
+                m_vAllMarks.begin(),
+                m_vAllMarks.end(),
+                rPos,
+                CompareIMarkStartsBefore<MarkBase>());
+    }
+
     std::vector<sw::mark::Bookmark*>::const_iterator MarkManager::findBookmark(const SwMarkName& rName) const
     {
         return lcl_FindMarkByName(rName, m_vBookmarks);

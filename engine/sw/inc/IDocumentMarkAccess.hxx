@@ -254,6 +254,13 @@ class IDocumentMarkAccess
         */
         virtual const_iterator findMark(const SwMarkName& rMark) const =0;
 
+        /** Find the first mark that does not start before in the all-marks list.
+
+            @returns
+            an iterator pointing to the mark, or pointing to getAllMarksEnd() if nothing was found.
+        */
+        virtual const_iterator findFirstMarkNotStartsBefore(const SwPosition& rPos) const =0;
+
         /** Find the first Bookmark that does not start before.
 
             @returns
