@@ -10,10 +10,12 @@
  */
 
 // A load balancer that picks the server from the WOPISrc query parameter sends a media request to
-// the server that holds its document, and that server answers it.
+// the server that holds its document, and that server answers it with the media's own type.
 
 #include <config.h>
 
+#include <Common.hpp>
+#include <FileUtil.hpp>
 #include <HttpRequest.hpp>
 #include <Unit.hpp>
 #include <UnitHTTP.hpp>
@@ -24,8 +26,11 @@
 #include <test.hpp>
 #include <wsd/COOLWSD.hpp>
 #include <wsd/ClientSession.hpp>
+#include <wsd/DocumentBroker.hpp>
 
 #include <Poco/URI.h>
+
+#include <fstream>
 
 using namespace std::literals;
 
@@ -91,11 +96,35 @@ public:
         LOK_ASSERT(response);
         LOK_ASSERT_EQUAL(http::StatusCode::NotFound, response->statusCode());
 
+        // Known media is served with the type its record gives.
+        const std::string localDir = FileUtil::createRandomTmpDir();
+        const std::string localFile = localDir + "/sound.ogg";
+        std::ofstream(localFile) << "media";
+        const std::string kitFile = brokers[0]->moveFileIntoJail(
+            localFile, JAILED_DOCUMENT_ROOT + std::string("media/sound.ogg"));
+        LOK_ASSERT(!kitFile.empty());
+        FileUtil::removeFile(localDir, true);
+
+        const std::string json = R"({"id":"sound","url":"file://)" + kitFile
+                                 + R"(","mimeType":"audio/ogg"})";
+        std::shared_ptr<DocumentBroker> broker = brokers[0];
+        broker->addCallback([broker, json]() { broker->addEmbeddedMedia("sound", json); });
+
+        const std::string soundURI = sessions[0]->createMediaURI("media", "sound");
+        const auto soundResponse = http::Session::create(helpers::getTestServerURI())
+                                       ->syncRequest(http::Request(
+                                           soundURI.substr(soundURI.find("/cool/media?"))));
+        LOK_ASSERT(soundResponse);
+        LOK_ASSERT_EQUAL(http::StatusCode::OK, soundResponse->statusCode());
+        LOK_ASSERT_EQUAL("audio/ogg"s, soundResponse->header().getContentType());
+        LOK_ASSERT_EQUAL("nosniff"s, soundResponse->get("X-Content-Type-Options"));
+        LOK_ASSERT_EQUAL("sandbox"s, soundResponse->get("Content-Security-Policy"));
+
         socket->asyncShutdown();
         LOK_ASSERT_MESSAGE("Expected successful disconnection of the WebSocket",
                            socket->waitForDisconnection(5s));
 
-        passTest("The media URI reaches the server that holds its document");
+        passTest("The media URI reaches its document's server, which serves the media");
     }
 };
 
