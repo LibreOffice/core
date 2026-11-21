@@ -7282,22 +7282,27 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
         {
             LOG_CHECK_RET(message->tokens().size() == 3, false);
             std::string cmd, kind;
-            COOLProtocol::getTokenString((*message)[1], "cmd", cmd);
-            LOG_CHECK_RET(cmd != "", false);
-            COOLProtocol::getTokenString((*message)[2], "kind", kind);
-            LOG_CHECK_RET(kind != "", false);
+            LOG_CHECK_RET(COOLProtocol::getTokenString((*message)[1], "cmd", cmd) &&
+                              !cmd.empty(),
+                          false);
+            LOG_CHECK_RET(COOLProtocol::getTokenString((*message)[2], "kind", kind) &&
+                              !kind.empty(),
+                          false);
             Util::alertAllUsers(cmd, kind);
         }
         else if (message->firstTokenMatches("registerdownload:"))
         {
             LOG_CHECK_RET(message->tokens().size() == 4, false);
             std::string downloadid, url, clientId;
-            COOLProtocol::getTokenString((*message)[1], "downloadid", downloadid);
-            LOG_CHECK_RET(downloadid != "", false);
-            COOLProtocol::getTokenString((*message)[2], "url", url);
-            LOG_CHECK_RET(url != "", false);
-            COOLProtocol::getTokenString((*message)[3], "clientid", clientId);
-            LOG_CHECK_RET(!clientId.empty(), false);
+            LOG_CHECK_RET(COOLProtocol::getTokenString((*message)[1], "downloadid", downloadid) &&
+                              !downloadid.empty(),
+                          false);
+            LOG_CHECK_RET(COOLProtocol::getTokenString((*message)[2], "url", url) &&
+                              !url.empty(),
+                          false);
+            LOG_CHECK_RET(COOLProtocol::getTokenString((*message)[3], "clientid", clientId) &&
+                              !clientId.empty(),
+                          false);
 
             const std::string decoded = Uri::decode(url);
             const std::string filePath(FileUtil::findFileInJail(COOLWSD::EnableMountNamespaces,
