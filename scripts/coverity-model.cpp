@@ -79,6 +79,18 @@ extern "C" {
     bool rtl_math_approxEqual(double, double) { return coverity_unknown_bool(); }
 }
 
+/* cppu::getCaughtException throws only if the UNO bridge fails to map or rethrow the exception,
+ * which does not happen in practice. Model it as not throwing, so that noexcept functions whose
+ * catch block reports the exception are not flagged.
+ */
+namespace cpo::uno {
+    class Any {};
+}
+
+namespace cppu {
+    cpo::uno::Any getCaughtException() { return cpo::uno::Any(); }
+}
+
 namespace __gnu_cxx {
     /* libstdc++ throws from these when a pthread mutex call fails. Terminating is the acceptable
      * response, so model them as paths that do not return.
