@@ -412,9 +412,9 @@ void BgSaveParentWebSocketHandler::handleMessage(const std::vector<char>& data)
         // The reply the client waits for depends on what the parent kept of the request,
         // so the parent sends it rather than forwarding this on.
         std::string success;
-        if (tokens.size() > 2)
-            COOLProtocol::getTokenString(tokens[2], "success", success);
-        finishExport(success == "true");
+        finishExport(tokens.size() > 2 &&
+                     COOLProtocol::getTokenString(tokens[2], "success", success) &&
+                     success == "true");
         return;
     }
 
