@@ -506,6 +506,33 @@ class CairoSurfaceHelper
         cairo_surface_mark_dirty(mpCairoSurface.get());
     }
 
+#ifdef HAVE_CAIRO_FORMAT_RGB24_888
+    // replace the 3-byte pixels of mpCairoSurface by a 4-byte copy: pixman scales 3-byte
+    // pixels one at a time, and 4-byte ones with its SIMD code
+    void copyToRGB24()
+    {
+        const int nWidth(cairo_image_surface_get_width(mpCairoSurface.get()));
+        const int nHeight(cairo_image_surface_get_height(mpCairoSurface.get()));
+        cairo::CairoSurfaceSharedPtr pCopy(
+            cairo_image_surface_create(CAIRO_FORMAT_RGB24, nWidth, nHeight),
+            &cairo_surface_destroy);
+        if (cairo_surface_status(pCopy.get()) != CAIRO_STATUS_SUCCESS)
+        {
+            SAL_WARN("drawinglayer",
+                     "cairo_image_surface_create failed for: " << nWidth << " x " << nHeight);
+            return;
+        }
+
+        cairo_t* cr(cairo_create(pCopy.get()));
+        cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+        cairo_set_source_surface(cr, mpCairoSurface.get(), 0, 0);
+        cairo_paint(cr);
+        cairo_destroy(cr);
+
+        mpCairoSurface = std::move(pCopy);
+    }
+#endif
+
 // #define TEST_RGB16
 #ifdef TEST_RGB16
     // experimental: create 16bit RGB data for given Bitmap
@@ -557,6 +584,10 @@ public:
     {
         if (nullptr != mpCairoSurface)
         {
+#ifdef HAVE_CAIRO_FORMAT_RGB24_888
+            if (cairo_image_surface_get_format(mpCairoSurface.get()) == CAIRO_FORMAT_RGB24_888)
+                copyToRGB24();
+#endif
         } // all done, we got it directly
         else if (rBitmap.HasAlpha())
             createRGBA(rBitmap);
