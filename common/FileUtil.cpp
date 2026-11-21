@@ -42,6 +42,7 @@
 #include <set>
 #include <stdexcept>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #ifndef _WIN32
@@ -646,7 +647,8 @@ namespace FileUtil
     std::string moveFileIntoJail(bool usingMountNamespaces, std::string localJailRoot,
                                  std::string jailPath, const std::string& localPath)
     {
-        const auto [localDir, destination] =
+        std::string localDir, destination;
+        std::tie(localDir, destination) =
             localPathToJail(usingMountNamespaces, std::move(localJailRoot), std::move(jailPath));
 
         bool moved = false;
@@ -673,9 +675,12 @@ namespace FileUtil
         }
 
         if (!moved)
+        {
             LOG_ERR("Failed to move [" << Anonymizer::anonymizeUrl(localPath) << "] to ["
                                        << Anonymizer::anonymizeUrl(destination) << ']');
-        return moved ? destination : std::string();
+            return std::string();
+        }
+        return destination;
     }
 #endif
 

@@ -4748,7 +4748,7 @@ bool ChildSession::linkedFileSource(const StringVector& tokens)
     }
 
     getLOKitDocument()->setView(_viewId);
-    const std::string url = appFile ? file : Poco::URI(Poco::Path(path)).toString();
+    const std::string url = appFile ? std::move(file) : Poco::URI(Poco::Path(path)).toString();
     const int count = getLOKitDocument()->setLinkedFileSource(id.c_str(), url.c_str());
     if (count < 0)
     {

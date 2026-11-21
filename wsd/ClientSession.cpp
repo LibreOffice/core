@@ -1366,7 +1366,7 @@ bool ClientSession::linkPickerResult(const StringVector& tokens,
         return forwardToChild(answer, docBroker);
 
     // The kit gets the file the storage keeps under that path, or no file.
-    fetchLinkedFiles({ relativePath }, docBroker,
+    fetchLinkedFiles({ std::move(relativePath) }, docBroker,
                      [this, docBroker, answer](const std::string& path,
                                                const std::string& stagedName)
                      {

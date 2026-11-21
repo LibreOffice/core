@@ -449,9 +449,9 @@ std::optional<std::string> gasLibraries(
         if (!nested) {
             return {};
         }
-        auto const [files, filesError] = Extensions::gasScripts(*dir);
+        auto [files, filesError] = Extensions::gasScripts(*dir);
         if (!files) {
-            error = filesError;
+            error = std::move(filesError);
             return {};
         }
         std::vector<std::string> scripts;
@@ -533,9 +533,9 @@ std::optional<Extensions::CallScript> Extensions::makeCallScript(
             if (!libraries) {
                 return {};
             }
-            auto const [files, filesError] = gasScripts(*dir);
+            auto [files, filesError] = gasScripts(*dir);
             if (!files) {
-                error = filesError;
+                error = std::move(filesError);
                 return {};
             }
             std::vector<std::string> names;
