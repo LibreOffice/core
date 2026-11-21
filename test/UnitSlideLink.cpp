@@ -39,6 +39,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <utility>
 #include <vector>
 
 /// The source document as the user knows it. The characters that a reference
@@ -147,6 +148,23 @@ class UnitSlideLink : public UnitWSD
         TST_LOG("Sending as wsd: " << message);
         docBroker->addCallback([docBroker, session, message]()
                                { docBroker->forwardToChild(session, message); });
+    }
+
+    /// The slidelinks: list and the slidelink: reply that answer a slidelink update. The kit sends
+    /// the list of the update just before the reply. The engine announces each change of the links
+    /// once more, later, so the list of an earlier change can still come in ahead of them.
+    std::pair<std::string, std::string>
+    getUpdateAnswer(const std::shared_ptr<http::WebSocketSession>& socket)
+    {
+        std::string list;
+        for (;;)
+        {
+            std::string message =
+                helpers::getResponseStringAny(socket, { "slidelinks:", "slidelink:" }, testname);
+            if (!message.starts_with("slidelinks:"))
+                return { list, message };
+            list = std::move(message);
+        }
     }
 
     /// The link list of the document, from a slidelink list request.
@@ -386,8 +404,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkSection()
         sendAsWsd(std::string("slidelink update source=") + EncodedSourceName +
                   " file=staged.odp time=2021-06-06T10:00:00Z unit=section id=" +
                   encodedSectionId + " name=Opening%20slides%2C%20revised");
-        const std::string updateListReply =
-            helpers::getResponseString(socket, "slidelinks:", testname);
+        const auto [updateListReply, updateReply] = getUpdateAnswer(socket);
         sections = getLinksOfUnit(
             helpers::parseJsonReply(updateListReply, "slidelinks:")->getArray("links"), "section");
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), sections.size());
@@ -399,7 +416,6 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkSection()
                          section->getValue<std::string>("lastModifiedTime"));
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(10), section->getArray("slides")->size());
 
-        const std::string updateReply = helpers::getResponseString(socket, "slidelink:", testname);
         Poco::JSON::Object::Ptr updateObject = helpers::parseJsonReply(updateReply, "slidelink:");
         LOK_ASSERT_EQUAL(std::string("section"), updateObject->getValue<std::string>("unit"));
         LOK_ASSERT_EQUAL(sectionId, updateObject->getValue<std::string>("id"));
@@ -414,8 +430,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkSection()
         stageSource(socket, "staged.odp");
         sendAsWsd(std::string("slidelink update source=") + EncodedSourceName +
                   " file=staged.odp time=2021-07-07T10:00:00Z");
-        const std::string sourceListReply =
-            helpers::getResponseString(socket, "slidelinks:", testname);
+        const auto [sourceListReply, sourceReply] = getUpdateAnswer(socket);
         sections = getLinksOfUnit(
             helpers::parseJsonReply(sourceListReply, "slidelinks:")->getArray("links"), "section");
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), sections.size());
@@ -425,7 +440,6 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkSection()
         LOK_ASSERT_EQUAL(std::string("2021-07-07T10:00:00Z"),
                          section->getValue<std::string>("lastModifiedTime"));
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(10), section->getArray("slides")->size());
-        const std::string sourceReply = helpers::getResponseString(socket, "slidelink:", testname);
         Poco::JSON::Object::Ptr sourceObject = helpers::parseJsonReply(sourceReply, "slidelink:");
         LOK_ASSERT_EQUAL(10, sourceObject->getValue<int>("count"));
         LOK_ASSERT_MESSAGE("an update of the whole source names no unit",
@@ -557,8 +571,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkPresentation()
         sendAsWsd(std::string("slidelink update source=") + EncodedSourceName +
                   " file=staged.odp time=2021-06-06T10:00:00Z unit=presentation id=" +
                   encodedPresentationId + " name=Q3%20deck%20v2.odp");
-        const std::string updateListReply =
-            helpers::getResponseString(socket, "slidelinks:", testname);
+        const auto [updateListReply, updateReply] = getUpdateAnswer(socket);
         links = helpers::parseJsonReply(updateListReply, "slidelinks:")->getArray("links");
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(8), links->size());
         presentations = getLinksOfUnit(links, "presentation");
@@ -590,7 +603,6 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkPresentation()
                                std::find(refreshedParts.begin(), refreshedParts.end(), part) ==
                                    refreshedParts.end());
 
-        const std::string updateReply = helpers::getResponseString(socket, "slidelink:", testname);
         Poco::JSON::Object::Ptr updateObject = helpers::parseJsonReply(updateReply, "slidelink:");
         LOK_ASSERT_EQUAL(std::string("updated"), updateObject->getValue<std::string>("status"));
         LOK_ASSERT_EQUAL(std::string("presentation"),
@@ -606,8 +618,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkPresentation()
         sendAsWsd(std::string("slidelink update source=") + EncodedSourceName +
                   " file=staged.odp time=2021-06-07T10:00:00Z unit=presentation id=" +
                   encodedPresentationId);
-        const std::string unnamedListReply =
-            helpers::getResponseString(socket, "slidelinks:", testname);
+        const auto [unnamedListReply, unnamedReply] = getUpdateAnswer(socket);
         links = helpers::parseJsonReply(unnamedListReply, "slidelinks:")->getArray("links");
         presentations = getLinksOfUnit(links, "presentation");
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), presentations.size());
@@ -625,18 +636,15 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkPresentation()
             LOK_ASSERT_MESSAGE("an old page is still linked",
                                std::find(unnamedParts.begin(), unnamedParts.end(), part) ==
                                    unnamedParts.end());
-        LOK_ASSERT_EQUAL(4, helpers::parseJsonReply(
-                                helpers::getResponseString(socket, "slidelink:", testname),
-                                "slidelink:")
-                                ->getValue<int>("count"));
+        LOK_ASSERT_EQUAL(
+            4, helpers::parseJsonReply(unnamedReply, "slidelink:")->getValue<int>("count"));
 
         // An update of the whole source reads the presentation once, with the links under it,
         // names no unit in its reply, and leaves the presentation the name it recorded.
         stageSource(socket, "staged.odp", "slide-link-presentation-changed.odp");
         sendAsWsd(std::string("slidelink update source=") + EncodedSourceName +
                   " file=staged.odp time=2021-07-07T10:00:00Z");
-        const std::string sourceListReply =
-            helpers::getResponseString(socket, "slidelinks:", testname);
+        const auto [sourceListReply, sourceReply] = getUpdateAnswer(socket);
         links = helpers::parseJsonReply(sourceListReply, "slidelinks:")->getArray("links");
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(8), links->size());
         presentations = getLinksOfUnit(links, "presentation");
@@ -658,7 +666,6 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkPresentation()
             LOK_ASSERT_MESSAGE("an old page is still linked",
                                std::find(sourceParts.begin(), sourceParts.end(), part) ==
                                    sourceParts.end());
-        const std::string sourceReply = helpers::getResponseString(socket, "slidelink:", testname);
         Poco::JSON::Object::Ptr sourceObject = helpers::parseJsonReply(sourceReply, "slidelink:");
         LOK_ASSERT_EQUAL(4, sourceObject->getValue<int>("count"));
         LOK_ASSERT_MESSAGE("an update of the whole source names no unit",
@@ -798,13 +805,11 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkRefresh()
         stageSource(socket, "one.odp");
         sendAsWsd(std::string("slidelink update source=") + EncodedSourceName +
                   " file=one.odp unit=slide id=" + encodeId(insertedParts[1]));
-        const std::string oneListReply =
-            helpers::getResponseString(socket, "slidelinks:", testname);
+        const auto [oneListReply, oneReply] = getUpdateAnswer(socket);
         const std::vector<std::string> parts =
             getParts(helpers::parseJsonReply(oneListReply, "slidelinks:")->getArray("links"), 2);
         LOK_ASSERT_EQUAL(insertedParts[0], parts[0]);
         LOK_ASSERT_MESSAGE("the refreshed page holds a new part", parts[1] != insertedParts[1]);
-        const std::string oneReply = helpers::getResponseString(socket, "slidelink:", testname);
         Poco::JSON::Object::Ptr oneObject = helpers::parseJsonReply(oneReply, "slidelink:");
         LOK_ASSERT_EQUAL(1, oneObject->getValue<int>("count"));
         // The reply names the unit as the command did, by the part the page held then.
@@ -831,13 +836,12 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkRefresh()
 
         // The refreshed pages are the pages read for them, so the reply carries
         // the list they hold now before it reports how many were refreshed.
-        const std::string listReply = helpers::getResponseString(socket, "slidelinks:", testname);
+        const auto [listReply, reply] = getUpdateAnswer(socket);
         Poco::JSON::Object::Ptr listObject = helpers::parseJsonReply(listReply, "slidelinks:");
         const std::vector<std::string> refreshedParts = getParts(listObject->getArray("links"), 2);
         LOK_ASSERT_MESSAGE("a refreshed page holds a new part", refreshedParts[0] != parts[0]);
         LOK_ASSERT_MESSAGE("a refreshed page holds a new part", refreshedParts[1] != parts[1]);
 
-        const std::string reply = helpers::getResponseString(socket, "slidelink:", testname);
         Poco::JSON::Object::Ptr replyObject = helpers::parseJsonReply(reply, "slidelink:");
         LOK_ASSERT_EQUAL(std::string("updated"), replyObject->getValue<std::string>("status"));
         LOK_ASSERT_EQUAL(std::string(SourceName), replyObject->getValue<std::string>("source"));
