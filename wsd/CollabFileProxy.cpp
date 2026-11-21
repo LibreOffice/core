@@ -201,6 +201,9 @@ void CollabFileProxy::doDownload(const std::shared_ptr<TerminatingPoll>& poll,
         if (contentType.empty())
             contentType = "application/octet-stream";
         response.setBody(httpResponse->getBody(), std::move(contentType));
+        response.set("X-Content-Type-Options", "nosniff");
+        response.set("Content-Security-Policy", "sandbox");
+        response.set("Content-Disposition", "attachment");
         // The /cool/collab/fetch endpoint is the byte-stream side of
         // the token-gated download protocol.  CODA's page JS calls
         // it from cool.html's origin (file:// or https://localhost),

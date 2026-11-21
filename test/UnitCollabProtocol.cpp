@@ -543,6 +543,15 @@ public:
             _lastModifiedTime = msg->optValue<std::string>("lastModifiedTime", std::string());
             LOK_ASSERT_MESSAGE("Expected the version with the URL", !_lastModifiedTime.empty());
 
+            std::shared_ptr<http::Response const> const fetched
+                = http::Session::create(helpers::getTestServerURI())
+                      ->syncRequest(http::Request(msg->getValue<std::string>("url")));
+            LOK_ASSERT_EQUAL(http::StatusCode::OK, fetched->statusLine().statusCode());
+            LOK_ASSERT_EQUAL(getFileContent(), fetched->getBody());
+            LOK_ASSERT_EQUAL(std::string("nosniff"), fetched->get("X-Content-Type-Options"));
+            LOK_ASSERT_EQUAL(std::string("sandbox"), fetched->get("Content-Security-Policy"));
+            LOK_ASSERT_EQUAL(std::string("attachment"), fetched->get("Content-Disposition"));
+
             PHASE_TRANSITION(WaitUploadURL);
             _collabWs->sendMessage(
                 R"({"type":"upload","stream":"contents","requestId":"r1","lastModifiedTime":")"
