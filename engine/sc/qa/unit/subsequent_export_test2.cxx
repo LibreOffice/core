@@ -20,6 +20,9 @@
 #include <dpobject.hxx>
 #include <clipparam.hxx>
 #include <formulacell.hxx>
+#include <dbdata.hxx>
+#include <queryentry.hxx>
+#include <queryparam.hxx>
 #include <formula/errorcodes.hxx>
 
 #include <editeng/editobj.hxx>
@@ -745,6 +748,88 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testAutofilterColorsOOXML)
                           + "]/x:fill/x:patternFill/x:fgColor");
         assertXPath(pStyles, sDxfXPath, "rgb", u"FF3465A4");
     }
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testColorFilterDxfCompleteXLSX)
+{
+    // Add color filters for attributes no cell in a table has
+    createScDoc();
+    ScDocument* pDocument = getScDoc();
+    pDocument->SetString(ScAddress(0, 0, 0), u"Name"_ustr);
+    pDocument->SetString(ScAddress(1, 0, 0), u"Value"_ustr);
+    for (SCROW nRow = 1; nRow < 4; ++nRow)
+    {
+        pDocument->SetString(ScAddress(0, nRow, 0), OUString("Item" + OUString::number(nRow)));
+        pDocument->SetValue(ScAddress(1, nRow, 0), nRow);
+    }
+    auto pTable = std::make_unique<ScDBData>(u"Table1"_ustr, 0, 0, 0, 1, 3);
+    ScQueryParam aParam;
+    pTable->GetQueryParam(aParam);
+    ScQueryEntry& rTextColorEntry = aParam.GetEntry(0);
+    rTextColorEntry.bDoQuery = true;
+    rTextColorEntry.nField = 0;
+    rTextColorEntry.SetQueryByTextColor(Color(0x3465A4));
+    ScQueryEntry& rBackgroundColorEntry = aParam.GetEntry(1);
+    rBackgroundColorEntry.bDoQuery = true;
+    rBackgroundColorEntry.nField = 1;
+    rBackgroundColorEntry.SetQueryByBackgroundColor(Color(0xF4B084));
+    pTable->SetQueryParam(aParam);
+    CPPUNIT_ASSERT(pDocument->GetDBCollection()->getNamedDBs().insert(std::move(pTable)));
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pTableXml = parseExport(u"xl/tables/table1.xml"_ustr);
+    CPPUNIT_ASSERT(pTableXml);
+    xmlDocUniquePtr pStyles = parseExport(u"xl/styles.xml"_ustr);
+    CPPUNIT_ASSERT(pStyles);
+
+    const OString sTextColorFilterPath
+        = "/x:table/x:autoFilter/x:filterColumn[@colId='0']/x:colorFilter"_ostr;
+    const OString sBackgroundColorFilterPath
+        = "/x:table/x:autoFilter/x:filterColumn[@colId='1']/x:colorFilter"_ostr;
+    const OString aDxfPath = "/x:styleSheet/x:dxfs/x:dxf"_ostr;
+    const OString aFillColorPath = "/x:fill/x:patternFill/x:fgColor"_ostr;
+
+    // The DxfId (differential formatting record index) referenced by the
+    // filter must exist among the differential formatting records
+    assertXPath(pTableXml, sTextColorFilterPath, "cellColor", u"0");
+    sal_Int32 nDxfId = getXPath(pTableXml, sTextColorFilterPath, "dxfId").toInt32() + 1;
+    assertXPath(pStyles, aDxfPath + "[" + OString::number(nDxfId) + "]" + aFillColorPath, "rgb",
+                u"FF3465A4");
+
+    assertXPath(pTableXml, sBackgroundColorFilterPath, "cellColor", u"1");
+    nDxfId = getXPath(pTableXml, sBackgroundColorFilterPath, "dxfId").toInt32() + 1;
+    assertXPath(pStyles, aDxfPath + "[" + OString::number(nDxfId) + "]" + aFillColorPath, "rgb",
+                u"FFF4B084");
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testColorFilterFromFileDxfCompleteXLSX)
+{
+    // The table in the file has a font color filter and a background color filter, and no cell
+    // of the table has either color. After a roundtrip each filter refers to a dxf that exists
+    // in styles.xml, and the entry has the correct color.
+    createScDoc("xlsx/color-filters-unused-colors.xlsx");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pTableXml = parseExport(u"xl/tables/table1.xml"_ustr);
+    CPPUNIT_ASSERT(pTableXml);
+    xmlDocUniquePtr pStyles = parseExport(u"xl/styles.xml"_ustr);
+    CPPUNIT_ASSERT(pStyles);
+
+    const OString aTextColorFilterPath
+        = "/x:table/x:autoFilter/x:filterColumn[@colId='0']/x:colorFilter"_ostr;
+    const OString aBackgroundColorFilterPath
+        = "/x:table/x:autoFilter/x:filterColumn[@colId='1']/x:colorFilter"_ostr;
+    const OString aDxfPath = "/x:styleSheet/x:dxfs/x:dxf"_ostr;
+    const OString aFillColorPath = "/x:fill/x:patternFill/x:fgColor"_ostr;
+
+    assertXPath(pTableXml, aTextColorFilterPath, "cellColor", u"0");
+    sal_Int32 nDxfId = getXPath(pTableXml, aTextColorFilterPath, "dxfId").toInt32() + 1;
+    assertXPath(pStyles, aDxfPath + "[" + OString::number(nDxfId) + "]" + aFillColorPath, "rgb",
+                u"FFFFC000");
+
+    assertXPath(pTableXml, aBackgroundColorFilterPath, "cellColor", u"1");
+    nDxfId = getXPath(pTableXml, aBackgroundColorFilterPath, "dxfId").toInt32() + 1;
+    assertXPath(pStyles, aDxfPath + "[" + OString::number(nDxfId) + "]" + aFillColorPath, "rgb",
+                u"FF00B050");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testAutofilterTop10XLSX)

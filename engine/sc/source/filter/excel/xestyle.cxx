@@ -52,6 +52,8 @@
 #include <tablestyle.hxx>
 #include <ftools.hxx>
 #include <filterentries.hxx>
+#include <queryentry.hxx>
+#include <queryparam.hxx>
 #include <export/ExportTools.hxx>
 #include <dpobject.hxx>
 #include <dpsave.hxx>
@@ -3121,6 +3123,16 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     // Special number formatter for conversion.
     mxFormatter->FillKeywordTableForExcel( *mpKeywordTable );
 
+    // Add a dxf entry with the color coming from a filter
+    auto addFilterColor = [this, &nDxfId](const Color& rColor)
+    {
+        if (maColorToDxfId.contains(rColor))
+            return;
+
+        addColor(rColor);
+        nDxfId++;
+    };
+
     SCTAB nTables = rRoot.GetDoc().GetTableCount();
     for(SCTAB nTab = 0; nTab < nTables; ++nTab)
     {
@@ -3144,22 +3156,25 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                 // Excel has all filter values stored as foreground colors
                 // Does not matter it is text color or cell background color
                 for (auto& rColor : aFilterEntries.getBackgroundColors())
-                {
-                    if (!maColorToDxfId.emplace(rColor, nDxfId).second)
-                        continue;
-
-                    std::unique_ptr<XclExpCellArea> pExpCellArea(new XclExpCellArea(rColor, 0));
-                    maDxf.push_back(std::make_unique<XclExpDxf>(rRoot, std::move(pExpCellArea)));
-                    nDxfId++;
-                }
+                    addFilterColor(rColor);
                 for (auto& rColor : aFilterEntries.getTextColors())
-                {
-                    if (!maColorToDxfId.emplace(rColor, nDxfId).second)
-                        continue;
+                    addFilterColor(rColor);
+            }
 
-                    std::unique_ptr<XclExpCellArea> pExpCellArea(new XclExpCellArea(rColor, 0));
-                    maDxf.push_back(std::make_unique<XclExpDxf>(rRoot, std::move(pExpCellArea)));
-                    nDxfId++;
+            // The colors in the filter's selection get a dxf as well, because the filter
+            // might not be hitting any current color in the cells
+            ScQueryParam aQueryParam;
+            pData->GetQueryParam(aQueryParam);
+            for (SCSIZE nEntry = 0; nEntry < aQueryParam.GetEntryCount(); ++nEntry)
+            {
+                const ScQueryEntry& rEntry = aQueryParam.GetEntry(nEntry);
+                if (!rEntry.bDoQuery)
+                    break;
+                for (const auto& rItem : rEntry.GetQueryItems())
+                {
+                    if (rItem.meType == ScQueryEntry::ByTextColor
+                        || rItem.meType == ScQueryEntry::ByBackgroundColor)
+                        addFilterColor(rItem.maColor);
                 }
             }
         }
