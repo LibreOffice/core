@@ -358,6 +358,8 @@ namespace Log
         return buffer;
     }
 
+    std::string symbolicErrno(int e) { return Util::symbolicErrno(e); }
+
 } // namespace Log
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

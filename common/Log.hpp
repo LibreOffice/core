@@ -155,6 +155,10 @@ namespace Log
     bool isLogUITimeEnd();
     void setUILogMergeInfo(bool mergeCmd, bool logTimeEndOfMergedCmd);
 
+    /// The symbolic name of an errno value, from Util::symbolicErrno. Defined out of line because
+    /// Util.hpp includes this header.
+    std::string symbolicErrno(int e);
+
     /// Setting the logging level
     void setLevel(const std::string &l);
 
@@ -399,7 +403,7 @@ static constexpr std::size_t skipPathPrefix(const char (&s)[N], std::size_t n = 
     do                                                                                             \
     {                                                                                              \
         const auto onrre = ERRNO; /* Save errno immediately while avoiding name clashes*/          \
-        LOGGER(X << " (" << Util::symbolicErrno(onrre) << ": " << std::strerror(onrre) << ')');    \
+        LOGGER(X << " (" << Log::symbolicErrno(onrre) << ": " << std::strerror(onrre) << ')');     \
     } while (false)
 
 /// Log an ERR entry with the given errno appended.
@@ -502,9 +506,5 @@ static constexpr std::size_t skipPathPrefix(const char (&s)[N], std::size_t n = 
 #define LOG_ASSERT_MSG(condition, message) LOG_ASSERT_INTERNAL(condition, message, LOG_ERR)
 #define LOG_ASSERT(condition) LOG_ASSERT_MSG(condition, "Precondition failed")
 #endif
-
-// Must be included at the _end_ of this file, since it (Util.hpp)
-// includes us (Log.hpp) and that would break the build.
-#include <common/Util.hpp>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
