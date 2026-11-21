@@ -24,6 +24,7 @@
 #include <common/Util.hpp>
 #include <wsd/COOLWSD.hpp>
 
+#include <atomic>
 #include <cstdlib>
 #include <mutex>
 #include <string>
@@ -49,7 +50,7 @@ class ClipboardCache
     Util::UnorderedStringMap<Entry> _cache;
     std::string _cacheDir;
     std::chrono::steady_clock::time_point _nextExpiryTime;
-    int _cacheFileId;
+    std::atomic<int> _cacheFileId;
 public:
     ClipboardCache()
         : _cacheDir(FileUtil::createRandomTmpDir(
