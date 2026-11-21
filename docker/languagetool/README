@@ -6,13 +6,13 @@ it over HTTPS, the way it talks to the Duden Korrekturserver and
 Grammalecte, and underlines what it finds as you type. This directory shows
 how to run it next to Collabora Office.
 
-The service is the collabora/languagetool image on Docker Hub, built from
-https://github.com/CollaboraOnline/docker-languagetool from the release
-tag of LanguageTool, since LanguageTool publishes no binary archive after
-version 6.6. The image is free to use, but unsupported, and it is the open
-source LanguageTool: the rules the premium version adds are not in it (see
+The service is the collabora/languagetool image on Docker Hub, built by
+https://github.com/CollaboraOnline/docker-languagetool from the
+LanguageTool release on Maven Central (languagetool-standalone). The image
+is free to use, but unsupported, and it is the open source LanguageTool:
+the rules the premium version adds are not in it (see
 https://languagetool.org/premium?a=collabora). LanguageTool is released
-under the LGPL 2.1; the licence text is in the image.
+under the LGPL 2.1 or later; the licence text is in the image.
 
 Try it:
 
