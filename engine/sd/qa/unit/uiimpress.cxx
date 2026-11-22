@@ -2925,6 +2925,128 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformMoveSlidePas
     CPPUNIT_ASSERT(bool(aNotesPages == getNotesPagesOfSlides(pDoc)));
 }
 
+namespace
+{
+/// Makes the document nSlides slides after a canvas page.
+SdDrawDocument* makeSlidesAfterCanvasPage(const uno::Reference<lang::XComponent>& xComponent,
+                                          sal_Int32 nSlides)
+{
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(xComponent.get());
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xSlides = xPagesSupplier->getDrawPages();
+    while (xSlides->getCount() < nSlides)
+        xSlides->insertNewByIndex(xSlides->getCount());
+    unotest::MacrosTest::dispatchCommand(xComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(nSlides + 1), pDoc->GetSdPageCount(PageKind::Standard));
+    return pDoc;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformDeleteSlideWithCanvasPage)
+{
+    // Given a canvas page and 2 slides:
+    createSdImpressDoc();
+    SdDrawDocument* pDoc = makeSlidesAfterCanvasPage(mxComponent, 2);
+    const std::map<const SdrPage*, const SdrPage*> aNotesPagesBefore = getNotesPagesOfSlides(pDoc);
+    std::map<const SdrPage*, const SdrPage*> aNotesPages = aNotesPagesBefore;
+    SdPage* pFirstSlide = pDoc->GetSdPage(1, PageKind::Standard);
+    SdPage* pSecondSlide = pDoc->GetSdPage(2, PageKind::Standard);
+
+    // When a transform deletes the canvas page, then it stays, and the transform reports that it
+    // did not apply the command:
+    CPPUNIT_ASSERT(!transformSlides(mxComponent, u"{\"DeleteSlide\": 0}"));
+    checkSlidesWithCanvasPage(pDoc, aNotesPagesBefore);
+
+    // When a transform deletes the first slide:
+    CPPUNIT_ASSERT(transformSlides(mxComponent, u"{\"DeleteSlide\": 1}"));
+
+    // Then its notes page goes with it. Without the accompanying fix in place, this test would
+    // have failed: once the slide was gone, the canvas page and one slide were left, and removing
+    // the page at the place of the slide was refused as if it were that last slide, so the notes
+    // page stayed.
+    aNotesPages.erase(pFirstSlide);
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+    CPPUNIT_ASSERT_EQUAL(pSecondSlide, pDoc->GetSdPage(1, PageKind::Standard));
+
+    // And undo brings both pages back, and redo removes both again.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    checkSlidesWithCanvasPage(pDoc, aNotesPagesBefore);
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+
+    // And the last slide besides the canvas page stays, with nothing left to undo.
+    SfxUndoManager* pUndoManager
+        = dynamic_cast<SdXImpressDocument*>(mxComponent.get())->GetDocShell()->GetUndoManager();
+    const size_t nUndoCount = pUndoManager->GetUndoActionCount();
+    CPPUNIT_ASSERT(!transformSlides(mxComponent, u"{\"DeleteSlide\": 1}"));
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+    CPPUNIT_ASSERT_EQUAL(nUndoCount, pUndoManager->GetUndoActionCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformDeleteFirstSlideAfterCanvas)
+{
+    // Given a canvas page and 3 slides:
+    createSdImpressDoc();
+    SdXImpressDocument* pXImpressDocument = addSlidesAndCanvasPage(mxComponent);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    SdPage* pSecondSlide = pDoc->GetSdPage(2, PageKind::Standard);
+
+    // When a transform deletes the first slide after the canvas page and gives the slide at its
+    // place a layout and a title:
+    const bool bApplied
+        = transformSlides(mxComponent, u"{\"JumpToSlide\": 1}, {\"DeleteSlide\": \"\"}, "
+                                       u"{\"ChangeLayoutByName\": \"AUTOLAYOUT_TITLE\"}, "
+                                       u"{\"SetText.0\": \"Moved up\"}");
+
+    // Then they go to the slide that took the place of the deleted one. Without the accompanying
+    // fix in place, this test would have failed: the transform went back to the canvas page
+    // instead.
+    CPPUNIT_ASSERT(bApplied);
+    CPPUNIT_ASSERT_EQUAL(pSecondSlide, pDoc->GetSdPage(1, PageKind::Standard));
+    SdrTextObj* pTitle = DynCastSdrTextObj(pSecondSlide->GetPresObj(PresObjKind::Title));
+    CPPUNIT_ASSERT(pTitle);
+    CPPUNIT_ASSERT(pTitle->GetOutlinerParaObject());
+    CPPUNIT_ASSERT_EQUAL(u"Moved up"_ustr,
+                         pTitle->GetOutlinerParaObject()->GetTextObject().GetText(0));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testRemoveSlideWithCanvasPage)
+{
+    // Given a canvas page and 2 slides:
+    createSdImpressDoc();
+    SdDrawDocument* pDoc = makeSlidesAfterCanvasPage(mxComponent, 2);
+    const std::map<const SdrPage*, const SdrPage*> aNotesPagesBefore = getNotesPagesOfSlides(pDoc);
+    std::map<const SdrPage*, const SdrPage*> aNotesPages = aNotesPagesBefore;
+    SdPage* pFirstSlide = pDoc->GetSdPage(1, PageKind::Standard);
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xSlides = xPagesSupplier->getDrawPages();
+
+    // When the first slide is removed through the API:
+    xSlides->remove(
+        uno::Reference<drawing::XDrawPage>(xSlides->getByIndex(1), uno::UNO_QUERY_THROW));
+
+    // Then its notes page goes with it. Without the accompanying fix in place, this test would
+    // have failed: the notes page stayed.
+    aNotesPages.erase(pFirstSlide);
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+
+    // And undo brings both pages back, and redo removes both again.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    checkSlidesWithCanvasPage(pDoc, aNotesPagesBefore);
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+
+    // And the last slide besides the canvas page stays, with nothing left to undo.
+    SfxUndoManager* pUndoManager
+        = dynamic_cast<SdXImpressDocument*>(mxComponent.get())->GetDocShell()->GetUndoManager();
+    const size_t nUndoCount = pUndoManager->GetUndoActionCount();
+    xSlides->remove(
+        uno::Reference<drawing::XDrawPage>(xSlides->getByIndex(1), uno::UNO_QUERY_THROW));
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+    CPPUNIT_ASSERT_EQUAL(nUndoCount, pUndoManager->GetUndoActionCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMoveSelectedPartsToOwnPlaceWithSections)
 {
     // Given 3 slides in two sections, with the second slide selected in the slide sorter:

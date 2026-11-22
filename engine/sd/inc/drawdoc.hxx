@@ -1192,6 +1192,9 @@ public:
     /** The overview page carrying the slide previews, or nullptr while the document has none. */
     SAL_DLLPRIVATE SdPage* GetCanvasPage() const { return mpCanvasPage.get(); }
 
+    /** Whether rPage is the only slide besides the canvas page, which RemovePage() keeps. */
+    SAL_DLLPRIVATE bool IsOnlySlideBesidesCanvasPage(const SdPage& rPage) const;
+
     SAL_DLLPRIVATE void ImportCanvasPage();
     SAL_DLLPRIVATE bool ValidateCanvasPage(const SdPage* pPage) const;
 

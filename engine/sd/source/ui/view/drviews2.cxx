@@ -1240,6 +1240,23 @@ void handleDeleteSlide(SlideCommandContext& rCtx, const std::string& rKey,
             nPageIdToDel = 0;
         }
         SdPage* pDelStd = rCtx.mpDoc->GetSdPage(nPageIdToDel, PageKind::Standard);
+        // The only slide besides the canvas page stays, see SdDrawDocument::RemovePage().
+        if (rCtx.mpDoc->IsOnlySlideBesidesCanvasPage(*pDelStd))
+        {
+            lcl_LogWarning("FillApi SlideCmd: The only slide besides the canvas page stays. '"
+                           + rKey + ": " + std::to_string(nPageIdToDel) + "'");
+            TransformWarningCollector::addNotApplied(rKey);
+            return;
+        }
+        // As with the other slide commands, the canvas page stays: the user interface deletes it
+        // only with its own command.
+        if (pDelStd->IsCanvasPage())
+        {
+            lcl_LogWarning("FillApi SlideCmd: The canvas page is not deleted. '" + rKey + ": "
+                           + std::to_string(nPageIdToDel) + "'");
+            TransformWarningCollector::addNotApplied(rKey);
+            return;
+        }
         if (rCtx.mbUndo)
         {
             // Capture the notes page before removal.
@@ -1260,6 +1277,10 @@ void handleDeleteSlide(SlideCommandContext& rCtx, const std::string& rKey,
         if (nPageIdToDel <= rCtx.mnActPageId)
         {
             rCtx.mnNextPageId--;
+            // The slide that takes the place of a deleted first slide is the next to work on, as
+            // without a canvas page, not the canvas page.
+            if (rCtx.mpDoc->HasCanvasPage() && rCtx.mnNextPageId < 1)
+                rCtx.mnNextPageId = 1;
         }
     }
     else

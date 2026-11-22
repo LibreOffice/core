@@ -786,9 +786,10 @@ void SdDrawDocument::DeletePage(sal_uInt16 nPgNum)
 // Remove page
 rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
 {
-    // Do not remove the only non-canvas page
-    if (HasCanvasPage() && GetSdPageCount(PageKind::Standard) == 2
-        && nPgNum == 3 && !mbDestroying)
+    // Do not remove the only non-canvas page. Once a slide is removed, its notes page is the page
+    // at its place, and that goes as well.
+    const SdPage* pPageToRemove = static_cast<const SdPage*>(GetPage(nPgNum));
+    if (!mbDestroying && pPageToRemove && IsOnlySlideBesidesCanvasPage(*pPageToRemove))
         return nullptr;
 
     // Computed before the erase, while the page is still in the model.
@@ -1833,6 +1834,12 @@ void SdDrawDocument::SetupNewPage (
         aVisibleLayers.Set(aBckgrndObj, bIsPageObj);
         pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
     }
+}
+
+bool SdDrawDocument::IsOnlySlideBesidesCanvasPage(const SdPage& rPage) const
+{
+    return HasCanvasPage() && GetSdPageCount(PageKind::Standard) == 2 && !rPage.IsMasterPage()
+           && rPage.GetPageKind() == PageKind::Standard && !rPage.IsCanvasPage();
 }
 
 bool SdDrawDocument::ValidateCanvasPage(const SdPage* pPage) const

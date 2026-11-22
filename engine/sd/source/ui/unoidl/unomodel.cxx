@@ -8970,7 +8970,9 @@ void SdDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPage >& xPag
         if( pSvxPage )
         {
             SdPage* pPage = static_cast<SdPage*>(pSvxPage->GetSdrPage());
-            if(pPage && ( pPage->GetPageKind() == PageKind::Standard ) )
+            // The only slide besides the canvas page stays, see SdDrawDocument::RemovePage().
+            const bool bOnlySlideLeft = pPage && rDoc.IsOnlySlideBesidesCanvasPage(*pPage);
+            if(pPage && ( pPage->GetPageKind() == PageKind::Standard ) && !bOnlySlideLeft)
             {
                 sal_uInt16 nPage = pPage->GetPageNum();
 
