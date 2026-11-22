@@ -921,8 +921,9 @@ void ScColorScaleFormatObj::setPropertyValue(
             if (aEntries.getLength() < 2)
                 throw lang::IllegalArgumentException();
 
-            // TODO: we need to make sure that there are enough entries
             size_t n = size_t(aEntries.getLength());
+            if (n > getCoreObject()->size())
+                throw lang::IllegalArgumentException();
             for (size_t i = 0; i < n; ++i)
             {
                 setColorScaleEntry(getCoreObject()->GetEntry(i), aEntries[i]);
@@ -1588,6 +1589,8 @@ void ScIconSetFormatObj::setPropertyValue(
             // TODO: we need to check that the number of entries
             // corresponds to the icon type
             sal_Int32 nLength = aEntries.getLength();
+            if (o3tl::make_unsigned(nLength) > getCoreObject()->size())
+                throw lang::IllegalArgumentException();
             for (size_t i = 0; i < o3tl::make_unsigned(nLength); ++i)
             {
                 setIconSetEntry(getCoreObject(), aEntries[i], i);
