@@ -127,6 +127,7 @@ SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController
     , m_nId(nSetId)
     , mbDisableQueryBox(false)
     , mbEnableDrawingLayerFillStyles(false)
+    , mbLockOnAndSharingBoxes(false)
     , m_xCntSharedBox(m_xBuilder->weld_check_button(u"checkSameLR"_ustr))
     , m_xCntSharedFirstBox(m_xBuilder->weld_check_button(u"checkSameFP"_ustr))
     , m_xCntNoFirstBox(m_xBuilder->weld_check_button(u"checkNoFP"_ustr))
@@ -470,6 +471,24 @@ void SvxHFPage::InitHandler()
     m_xBackgroundBtn->connect_clicked(LINK(this,SvxHFPage, BackgroundHdl));
 }
 
+void SvxHFPage::LockOnAndSharingBoxes()
+{
+    mbLockOnAndSharingBoxes = true;
+    ApplyBoxLock();
+}
+
+// The page changes the sensitivity of these check boxes as other check boxes toggle and when it
+// is activated, so this runs again after each of those updates.
+void SvxHFPage::ApplyBoxLock()
+{
+    if (!mbLockOnAndSharingBoxes)
+        return;
+    m_xTurnOnBox->set_sensitive(false);
+    m_xCntNoFirstBox->set_sensitive(false);
+    m_xCntSharedBox->set_sensitive(false);
+    m_xCntSharedFirstBox->set_sensitive(false);
+}
+
 void SvxHFPage::TurnOn(const weld::Toggleable* pBox)
 {
     if (m_xTurnOnBox->get_active())
@@ -540,6 +559,7 @@ void SvxHFPage::TurnOn(const weld::Toggleable* pBox)
         else
             m_xTurnOnBox->set_active(true);
     }
+    ApplyBoxLock();
     UpdateExample();
 }
 
@@ -552,6 +572,7 @@ IMPL_LINK_NOARG(SvxHFPage, FirstPageHdl, weld::Toggleable&, void)
 {
     m_xCntSharedFirstBox->set_sensitive(!m_xCntNoFirstBox->get_active());
     m_xCntNoFirstBox->set_sensitive(!m_bIsCalc && !m_xCntSharedFirstBox->get_active());
+    ApplyBoxLock();
 }
 
 IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
@@ -1024,6 +1045,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     }
     ResetBackground_Impl( rSet );
     RangeHdl();
+    ApplyBoxLock();
 }
 
 DeactivateRC SvxHFPage::DeactivatePage( SfxItemSet* _pSet )

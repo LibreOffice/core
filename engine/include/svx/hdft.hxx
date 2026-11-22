@@ -48,6 +48,9 @@ public:
     virtual void PageCreated(const SfxAllItemSet&) override;
 
     void            EnableDynamicSpacing();
+    /// Disables the check boxes that switch the header or footer on, leave it off the first page,
+    /// and share its content between pages. Their states stay as they are.
+    void            LockOnAndSharingBoxes();
 
 protected:
     static const WhichRangesContainer pRanges;
@@ -61,6 +64,7 @@ protected:
     std::unique_ptr<SfxItemSet> m_pBBSet;
     bool            mbDisableQueryBox : 1;
     bool            mbEnableDrawingLayerFillStyles : 1;
+    bool            mbLockOnAndSharingBoxes : 1;
 
     SvxPageWindow m_aBspWin;
     std::unique_ptr<weld::CheckButton> m_xTurnOnBox;
@@ -92,6 +96,7 @@ protected:
 
 private:
     SVX_DLLPRIVATE void         ResetBackground_Impl( const SfxItemSet& rSet );
+    SVX_DLLPRIVATE void         ApplyBoxLock();
     bool m_bIsCalc;
 };
 
