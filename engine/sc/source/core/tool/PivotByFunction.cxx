@@ -16,6 +16,7 @@
 #include <scmatrix.hxx>
 #include <scresid.hxx>
 
+#include <rtl/ustrbuf.hxx>
 #include <svl/sharedstringpool.hxx>
 
 #include <algorithm>
@@ -76,15 +77,16 @@ struct PivotByFunction::Pivot
     bool mbMatrixSizeError = false;
     bool mbArrayResult = false;
 
-    // The layout of the result. The header rows hold one row per column key level, then the labels
-    // of the functions when they lie in a row, then the names of the value columns when the
-    // headers are shown, or when there are several value columns and no function labels set their
-    // columns apart. With a single value column the function labels take the place of the value
-    // names, as in GROUPBY. Functions in a column give every row group one row per result, with
-    // the labels in a column after the row keys.
+    // The layout of the result. When the headers are shown and there are column keys, the header
+    // rows start with a row that holds the names of the column key columns in one cell. Then come
+    // one row per column key level, the labels of the functions when they lie in a row, and the
+    // names of the value columns when the headers are shown, or when there are several value
+    // columns and no function labels set their columns apart. Functions in a column give every
+    // row group one row per result, with the labels in a column after the row keys.
+    bool mbFieldNameRow = false;
     bool mbFunctionRow = false;
-    bool mbReplacedByFunctions = false;
     bool mbValueHeaderRow = false;
+    SCSIZE mnColumnKeyRow = 0;
     SCSIZE mnFunctionRow = 0;
     SCSIZE mnValueHeaderRow = 0;
     SCSIZE mnHeaderRows = 0;
@@ -98,11 +100,11 @@ struct PivotByFunction::Pivot
     {
         const bool bInRows = maFunctions.mbInRows;
         const SCSIZE nResultColumns = maResultColumns.size();
+        mbFieldNameRow = mbShowHeaders && mnColumnKeyColumns > 0;
         mbFunctionRow = !bInRows && maFunctions.mbShowLabels;
-        mbReplacedByFunctions = mbFunctionRow && mnValueColumns == 1;
-        mbValueHeaderRow
-            = (mbShowHeaders || (mnValueColumns > 1 && !mbFunctionRow)) && !mbReplacedByFunctions;
-        mnFunctionRow = mnColumnKeyColumns;
+        mbValueHeaderRow = mbShowHeaders || (mnValueColumns > 1 && !mbFunctionRow);
+        mnColumnKeyRow = mbFieldNameRow ? 1 : 0;
+        mnFunctionRow = mnColumnKeyRow + mnColumnKeyColumns;
         mnValueHeaderRow = mnFunctionRow + (mbFunctionRow ? 1 : 0);
         mnHeaderRows = mnValueHeaderRow + (mbValueHeaderRow ? 1 : 0);
         mnRowsPerGroup = bInRows ? nResultColumns : 1;
@@ -341,7 +343,7 @@ void PivotByFunction::PutHeaderRows(const Pivot& rPivot, const std::vector<size_
                                     const ScMatrixRef& xOutput)
 {
     // Each column group spans one output column per result, and every one of them shows the keys of
-    // the group. The grand total column shows its label in the first header row.
+    // the group. The grand total column shows its label in the first row of column keys.
     svl::SharedStringPool& rStringPool = mrInterpreter.mrStrPool;
     const SCSIZE nColumnKeyColumns = rPivot.mnColumnKeyColumns;
     const SCSIZE nColumnsPerGroup = rPivot.mnColumnsPerGroup;
@@ -357,10 +359,10 @@ void PivotByFunction::PutHeaderRows(const Pivot& rPivot, const std::vector<size_
                 = rPivot.mnFirstResultColumn + nIndex * nColumnsPerGroup + nColumnInGroup;
             const SCSIZE nValueColumn = rPivot.maResultColumns[nColumnInGroup].second;
             if (nColumnNode == 0 && nColumnKeyColumns > 0)
-                xOutput->PutString(aColumnTotalLabel, nOutputColumn, 0);
+                xOutput->PutString(aColumnTotalLabel, nOutputColumn, rPivot.mnColumnKeyRow);
             for (SCSIZE nLevel = 0; nLevel < aKeyRows.size(); ++nLevel)
                 FillKeyCell(rPivot.mxColumnKeys, xOutput, nLevel, aKeyRows[nLevel], nOutputColumn,
-                            nLevel);
+                            rPivot.mnColumnKeyRow + nLevel);
             if (rPivot.mbFunctionRow)
                 putFunctionLabel(rPivot.maFunctions, rPivot.maResultColumns[nColumnInGroup].first,
                                  rStringPool, xOutput, nOutputColumn, rPivot.mnFunctionRow);
@@ -380,7 +382,23 @@ void PivotByFunction::PutHeaderRows(const Pivot& rPivot, const std::vector<size_
                     nOutputColumn, rPivot.mnValueHeaderRow);
         }
     }
-    if (rPivot.mbShowHeaders && !rPivot.mbReplacedByFunctions)
+    if (rPivot.mbFieldNameRow)
+    {
+        OUStringBuffer aNames;
+        for (SCSIZE nColumn = 0; nColumn < nColumnKeyColumns; ++nColumn)
+        {
+            if (nColumn > 0)
+                aNames.append(", ");
+            if (rPivot.mbHasHeaderRow)
+                aNames.append(rPivot.mxColumnKeys->GetString(mrInterpreter.mrContext, nColumn, 0)
+                                  .getString());
+            else
+                aNames.append(getGeneratedName(STR_GROUPBY_COLUMN_FIELD, nColumn));
+        }
+        xOutput->PutString(rStringPool.intern(aNames.makeStringAndClear()),
+                           rPivot.mnFirstResultColumn, 0);
+    }
+    if (rPivot.mbShowHeaders)
     {
         const SCSIZE nFieldRow = rPivot.mnHeaderRows - 1;
         for (SCSIZE nColumn = 0; nColumn < rPivot.mnRowKeyColumns; ++nColumn)
