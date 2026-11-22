@@ -241,6 +241,19 @@ OUString readMarking(const uno::Reference<frame::XModel>& xModel)
     return aLabel.summary();
 }
 
+bool isMarking(const uno::Reference<frame::XModel>& xModel, std::u16string_view rText)
+{
+    StanagLabel aLabel;
+    if (rText.empty() || !readLabel(xModel, aLabel))
+        return false;
+    if (aLabel.aMarking == rText)
+        return true;
+    SpifPolicySet aPolicies;
+    aPolicies.loadProvisioned();
+    const SpifPolicy* pPolicy = aPolicies.findByLabel(aLabel);
+    return pPolicy && pPolicy->deriveMarking(aLabel) == rText;
+}
+
 bool modelSupportsLabel(const uno::Reference<frame::XModel>& xModel)
 {
     // The loading filter is authoritative for the actual format (the file extension

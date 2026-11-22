@@ -58,6 +58,12 @@ SVXCORE_DLLPUBLIC bool readLabel(const cpo::uno::Reference<css::frame::XModel>& 
 /// source of the on-load banner marking, so it matches the dialog's live preview.
 SVXCORE_DLLPUBLIC OUString readMarking(const cpo::uno::Reference<css::frame::XModel>& xModel);
 
+/// Whether rText is the visual marking of the security label of xModel's document: the marking
+/// stored with the label, or the one derived from the policy it was created under. False when
+/// the document carries no label.
+SVXCORE_DLLPUBLIC bool isMarking(const cpo::uno::Reference<css::frame::XModel>& xModel,
+                                 std::u16string_view rText);
+
 /// Whether xModel's document can carry a security label: true only for the OOXML
 /// formats (docx/xlsx/pptx and their template/macro variants), since the label rides
 /// in the OOXML customXml part. Determined from the loading filter, which is
