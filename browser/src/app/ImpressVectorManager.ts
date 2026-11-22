@@ -26,7 +26,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 		return 'slides';
 	}
 
-	override isVectorRendering(): boolean {
+	override drawsSlidesFromVectors(): boolean {
 		return true;
 	}
 

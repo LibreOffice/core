@@ -11,7 +11,9 @@ wholly outside the slide, and are moved and selected there like any other.
 
 ## 0. Switching vector mode on
 
-Vector mode is for Draw and Impress documents only.
+This guide covers Draw and Impress. Text documents and spreadsheets have a vector mode too, in
+which the client does less itself. dev-notes/vector-rendering-modes.md says what each
+application draws and handles itself.
 
 ### In the desktop application
 

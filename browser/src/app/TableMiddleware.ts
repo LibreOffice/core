@@ -538,7 +538,7 @@ class TableMiddleware {
 
 	private updateMoveMarkerVisibility() {
 		if (
-			!RenderManager.isVectorRendering() &&
+			!RenderManager.drawsSlidesFromVectors() &&
 			this.currentTableData &&
 			this.currentTableMarkerJson === this.lastTableMarkerJson &&
 			this.currentTableData.rows &&
@@ -744,7 +744,7 @@ class TableMiddleware {
 
 			// a view that draws from the objects draws the markers among the handles of the
 			// selection, from the same rows and columns
-			if (RenderManager.isVectorRendering()) {
+			if (RenderManager.drawsSlidesFromVectors()) {
 				GraphicSelection.refreshLocalHandles();
 				return;
 			}

@@ -803,7 +803,7 @@ describe('RenderManager for a spreadsheet', function () {
 		nodeassert.ok(manager instanceof CalcVectorManager);
 		nodeassert.strictEqual(RenderManager.calcVectorManager(), manager);
 		nodeassert.strictEqual(RenderManager.drawsFromObjects(), true);
-		nodeassert.strictEqual(RenderManager.isVectorRendering(), false);
+		nodeassert.strictEqual(RenderManager.drawsSlidesFromVectors(), false);
 	});
 
 	it('keeps the change listeners when another manager takes over', function () {

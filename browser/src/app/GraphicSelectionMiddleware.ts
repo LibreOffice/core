@@ -806,7 +806,7 @@ class GraphicSelection {
 
 		if (!this.hasActiveSelection()) {
 			// With nothing selected, on a sheet the arrow keys and Tab belong to the cells.
-			if (!RenderManager.isVectorRendering()) return false;
+			if (!RenderManager.drawsSlidesFromVectors()) return false;
 			const way = GraphicSelection.theWayOf[event.key];
 			if (way) {
 				return Interaction.context().arrowKey(
@@ -2061,7 +2061,7 @@ class GraphicSelection {
 			if (
 				this.inPlaceArea &&
 				this.inPlaceActive &&
-				RenderManager.isVectorRendering()
+				RenderManager.drawsSlidesFromVectors()
 			) {
 				this.showInPlaceFrame();
 				return;
@@ -2074,7 +2074,7 @@ class GraphicSelection {
 			if (
 				left !== undefined &&
 				this.pressedOutside !== undefined &&
-				RenderManager.isVectorRendering()
+				RenderManager.drawsSlidesFromVectors()
 			) {
 				const met = this.pressedOutside;
 				this.pressedOutside = undefined;
@@ -2096,7 +2096,7 @@ class GraphicSelection {
 			this.inPlaceObject = undefined;
 			this.showInPlaceNotebookbar();
 			// the handles come back once the object is no longer active in place
-			if (RenderManager.isVectorRendering()) this.updateSelectionSection();
+			if (RenderManager.drawsSlidesFromVectors()) this.updateSelectionSection();
 		} else if (textMsg.match('INPLACE')) {
 			try {
 				var msgData = this.parseMessage(textMsg);
@@ -2106,7 +2106,7 @@ class GraphicSelection {
 				if (
 					isMathObject &&
 					app.map._docLayer._docType !== 'text' &&
-					!RenderManager.isVectorRendering()
+					!RenderManager.drawsSlidesFromVectors()
 				) {
 					this.inPlaceArea = null;
 					this.inPlaceActive = false;
@@ -2136,13 +2136,13 @@ class GraphicSelection {
 			if (!this.inPlaceArea) this.rectangle = null;
 
 			// an object active in place shows no handles
-			if (RenderManager.isVectorRendering()) this.updateSelectionSection();
+			if (RenderManager.drawsSlidesFromVectors()) this.updateSelectionSection();
 		} else if (
 			this.inPlaceArea &&
 			// In the vector view everything the engine reports while an object is active in
 			// place is a selection inside it, of a part of a chart for one; leaving the object
 			// comes as INPLACE EXIT first, and only then the new selection.
-			((this.inPlaceActive && RenderManager.isVectorRendering()) ||
+			((this.inPlaceActive && RenderManager.drawsSlidesFromVectors()) ||
 				this.selectsInPlaceObject(textMsg))
 		) {
 			/*
@@ -2152,11 +2152,11 @@ class GraphicSelection {
 				stays active. Any other report keeps the frame of the active object.
 			*/
 			// a formula grows and shrinks as it is typed, its window with it
-			if (this.inPlaceMath && RenderManager.isVectorRendering()) {
+			if (this.inPlaceMath && RenderManager.drawsSlidesFromVectors()) {
 				const reported = this.parseMessage(textMsg);
 				if (reported.length > 3) this.inPlaceArea = reported.slice(0, 4);
 			}
-			if (this.inPlaceActive && RenderManager.isVectorRendering()) {
+			if (this.inPlaceActive && RenderManager.drawsSlidesFromVectors()) {
 				const parts = this.selectedObjectIDsOf(
 					this.parseMessage(textMsg)[5],
 				).filter(

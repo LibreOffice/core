@@ -57,7 +57,7 @@ class TableHandles extends HandleGroup {
 	}
 
 	public isShown(): boolean {
-		return RenderManager.isVectorRendering() && !!this.data();
+		return RenderManager.drawsSlidesFromVectors() && !!this.data();
 	}
 
 	// a length in CSS pixels, in twips
@@ -109,7 +109,7 @@ class TableHandles extends HandleGroup {
 
 	public handles(): SelectionHandle[] {
 		const data = this.data();
-		if (!data || !RenderManager.isVectorRendering()) return [];
+		if (!data || !RenderManager.drawsSlidesFromVectors()) return [];
 
 		const handles: SelectionHandle[] = [];
 		// the reach is given as half the width and half the height, in twips

@@ -290,7 +290,7 @@ window.L.Map.include({
 
 		if (fetchThumbnail) {
 			// For Impress/Draw, route thumbnails through the vector renderer.
-			if (RenderManager.isVectorRendering()) {
+			if (RenderManager.drawsSlidesFromVectors()) {
 				const vectorMode = app.activeDocument.activeModes[0];
 				RenderManager.requestThumbnail(id, part, vectorMode, maxWidth, maxHeight);
 			} else {

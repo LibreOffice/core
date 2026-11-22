@@ -310,7 +310,7 @@ class Cursor {
 		// A character or two is as far as the caret slides: twice its height covers that in
 		// any font.
 		const short = sameLine && Math.abs(place.x - last.x) <= 2 * this.rectangle.height;
-		if (short && RenderManager.isVectorRendering() && Cursor.slideTime > 0) {
+		if (short && RenderManager.drawsSlidesFromVectors() && Cursor.slideTime > 0) {
 			this.container.style.transitionDuration = Cursor.slideTime + 'ms';
 			window.L.DomUtil.addClass(this.container, 'leaflet-cursor-slides');
 		}

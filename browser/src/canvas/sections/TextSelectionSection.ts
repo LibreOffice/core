@@ -54,7 +54,7 @@ class TextSelectionSection extends CanvasSectionObject {
 		polygons: Array<Array<cool.SimplePoint>>,
 	) {
 		const glides =
-			RenderManager.isVectorRendering() &&
+			RenderManager.drawsSlidesFromVectors() &&
 			Cursor.slideTime > 0 &&
 			mode === this.mode &&
 			part === this.part &&

@@ -19,11 +19,12 @@ namespace cool {
 			return window.startsDrawnFromVectors(docType);
 		}
 
-		/// Return true if the client draws the slides of a presentation from vector primitives.
-		/// Before the document has a layer, its type is not known yet, and the answer is the one
-		/// for a presentation.
+		/// Return true if the client draws the slides of a presentation or a drawing from vector
+		/// primitives. Before the document has a layer, its type is not known yet, and the answer
+		/// is the one for a presentation. Once it has one, the render manager of its type answers.
 		export function drawsSlidesFromVectors(): boolean {
-			if (app.map && app.map._docLayer) return isEnabled();
+			if (app.map && app.map._docLayer)
+				return RenderManager.drawsSlidesFromVectors();
 			return startsOn('presentation');
 		}
 

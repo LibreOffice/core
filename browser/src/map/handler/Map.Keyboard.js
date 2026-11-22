@@ -1113,7 +1113,7 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			return false;
 		if (keyCode !== this.keyCodes.PAGEUP && keyCode !== this.keyCodes.PAGEDOWN)
 			return false;
-		if (!RenderManager.isVectorRendering() || this._map.getWinId() !== 0)
+		if (!RenderManager.drawsSlidesFromVectors() || this._map.getWinId() !== 0)
 			return false;
 		const docType = this._map.getDocType();
 		if (docType !== 'presentation' && docType !== 'drawing')

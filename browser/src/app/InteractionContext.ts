@@ -249,7 +249,7 @@ class Interaction {
 	public static placeOf(selected: number[]): InteractionPlace {
 		// An object active in place takes everything while it is, whatever it selects inside.
 		if (
-			RenderManager.isVectorRendering() &&
+			RenderManager.drawsSlidesFromVectors() &&
 			GraphicSelection.inPlaceActive &&
 			GraphicSelection.inPlaceArea &&
 			GraphicSelection.inPlaceObject !== undefined

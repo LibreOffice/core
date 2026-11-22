@@ -233,14 +233,14 @@ abstract class RenderManagerBase {
 
 	// -- vector rendering --
 	/// Whether the view draws the objects of slides or drawing pages from vector primitives.
-	isVectorRendering(): boolean {
+	drawsSlidesFromVectors(): boolean {
 		return false;
 	}
 
 	/// Whether the client holds the drawing objects and selects, hit tests
 	/// and moves them itself.
 	drawsFromObjects(): boolean {
-		return this.isVectorRendering();
+		return this.drawsSlidesFromVectors();
 	}
 
 	/// Which changes made here wait for the answers to the changes in flight.
@@ -254,8 +254,9 @@ abstract class RenderManagerBase {
 	}
 
 	/// True when the view draws the pages of the document from vector primitives. Unlike
-	/// isVectorRendering, it is also true for a text document, whose objects the server handles.
-	/// A vector-drawn spreadsheet draws its cells in a section of its own and is false here.
+	/// drawsSlidesFromVectors, it is also true for a text document, whose objects the server
+	/// handles. A vector-drawn spreadsheet draws its cells in a section of its own and is false
+	/// here.
 	drawsFromPrimitives(): boolean {
 		return false;
 	}

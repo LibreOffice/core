@@ -66,7 +66,7 @@ class ViewLayoutVector extends ViewLayoutBase {
 	public static isWanted(): boolean {
 		const type = app.map._docLayer?._docType;
 		return (
-			RenderManager.isVectorRendering() &&
+			RenderManager.drawsSlidesFromVectors() &&
 			!app.file.fileBasedView &&
 			(type === 'presentation' || type === 'drawing')
 		);

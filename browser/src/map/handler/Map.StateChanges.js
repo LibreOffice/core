@@ -75,7 +75,7 @@ window.L.Map.StateChangeHandler = window.L.Handler.extend({
 		// mode asks the hit test again and draws the page anew; the switch itself shows only where
 		// the office reports a mode
 		if (commandName === '.uno:SwitchControlDesignMode') {
-			if (RenderManager.isVectorRendering())
+			if (RenderManager.drawsSlidesFromVectors())
 				RenderGeometrySection.formControlModeChanged();
 			this._map.showFormControlDesignModeSwitch();
 		}
@@ -86,7 +86,7 @@ window.L.Map.StateChangeHandler = window.L.Handler.extend({
 
 			// A vector-rendered view draws the page the mode names, so the
 			// new mode has to reach the canvas as a repaint.
-			if (RenderManager.isVectorRendering() && app.sectionContainer)
+			if (RenderManager.drawsSlidesFromVectors() && app.sectionContainer)
 				app.sectionContainer.requestReDraw();
 		}
 

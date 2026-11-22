@@ -69,7 +69,7 @@ describe(['tagdesktop'], 'Writer pages drawn from vector primitives', function()
 		cy.wrap(null).should(function() {
 			expect(win.RenderManager.drawsFromPrimitives()).to.be.true;
 			// A text document leaves the editing of its objects to the server.
-			expect(win.RenderManager.isVectorRendering()).to.be.false;
+			expect(win.RenderManager.drawsSlidesFromVectors()).to.be.false;
 			// The section that draws the pages from their entries is in place.
 			expect(win.app.sectionContainer.doesSectionExist(
 				win.app.CSections.VectorContent.name)).to.be.true;

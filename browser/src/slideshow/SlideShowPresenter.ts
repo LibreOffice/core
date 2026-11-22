@@ -1591,7 +1591,7 @@ class SlideShowPresenter {
 			// cache instead of the server-rendered bitmap layers. The compositor
 			// comes first: the animation trees of the presentation ask it for
 			// their animated elements.
-			this._slideCompositor = RenderManager.isVectorRendering()
+			this._slideCompositor = RenderManager.drawsSlidesFromVectors()
 				? new SlideShow.VectorCompositor(this)
 				: new SlideShow.LayersCompositor(this);
 		}

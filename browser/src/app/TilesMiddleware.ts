@@ -362,8 +362,8 @@ class RenderManager {
 
 	// vector rendering specific
 
-	static isVectorRendering(): boolean {
-		return RenderManager.ensureInstance().isVectorRendering();
+	static drawsSlidesFromVectors(): boolean {
+		return RenderManager.ensureInstance().drawsSlidesFromVectors();
 	}
 
 	static drawsFromObjects(): boolean {
