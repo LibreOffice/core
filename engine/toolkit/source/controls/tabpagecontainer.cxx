@@ -140,7 +140,7 @@ void UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex, const c
 
     if ( sal_Int32( m_aTabPageVector.size()) ==nIndex )
         m_aTabPageVector.push_back( xTabPageModel );
-    else if ( sal_Int32( m_aTabPageVector.size()) > nIndex )
+    else if ( nIndex >= 0 && sal_Int32( m_aTabPageVector.size()) > nIndex )
     {
         std::vector< uno::Reference< XTabPageModel > >::iterator aIter = m_aTabPageVector.begin();
         aIter += nIndex;

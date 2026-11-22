@@ -208,7 +208,7 @@ namespace toolkit {
         void lcl_checkIndex( const std::vector< cpo::uno::Sequence< OUString > > & rImageSets, const sal_Int32 i_index, const Reference< XInterface >& i_context,
             const bool i_forInsert = false )
         {
-            if ( ( i_index < 0 ) || ( o3tl::make_unsigned( i_index ) > rImageSets.size() + ( i_forInsert ? 1 : 0 ) ) )
+            if ( ( i_index < 0 ) || ( o3tl::make_unsigned( i_index ) >= rImageSets.size() + ( i_forInsert ? 1 : 0 ) ) )
                 throw IndexOutOfBoundsException( OUString(), i_context );
         }
 

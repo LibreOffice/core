@@ -147,7 +147,7 @@ private:
 
     DefaultGridDataModel::CellData const & DefaultGridDataModel::impl_getCellData_throw( std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 const i_column, sal_Int32 const i_row ) const
     {
-        if  (   ( i_row < 0 ) || ( o3tl::make_unsigned( i_row ) > m_aData.size() )
+        if  (   ( i_row < 0 ) || ( o3tl::make_unsigned( i_row ) >= m_aData.size() )
             ||  ( i_column < 0 ) || ( i_column > m_nColumnCount )
             )
             throw IndexOutOfBoundsException( OUString(), *const_cast< DefaultGridDataModel* >( this ) );

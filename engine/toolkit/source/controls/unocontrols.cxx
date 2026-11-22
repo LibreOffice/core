@@ -2650,7 +2650,7 @@ void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
     cpo::uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     sal_uInt16 nOldLen = static_cast<sal_uInt16>(aSeq.getLength());
-    if ( !(nOldLen && ( nPos < nOldLen )) )
+    if ( !(nOldLen && nPos >= 0 && nPos < nOldLen && nCount > 0) )
         return;
 
     if ( nCount > ( nOldLen-nPos ) )
@@ -2683,7 +2683,7 @@ OUString UnoListBoxControl::getItem( sal_Int16 nPos )
     cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
     cpo::uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
-    if ( nPos < aSeq.getLength() )
+    if ( nPos >= 0 && nPos < aSeq.getLength() )
         aItem = aSeq[nPos];
     return aItem;
 }
@@ -3240,7 +3240,7 @@ void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
     cpo::uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     sal_uInt16 nOldLen = static_cast<sal_uInt16>(aSeq.getLength());
-    if ( !nOldLen || ( nPos >= nOldLen ) )
+    if ( !nOldLen || nPos < 0 || nPos >= nOldLen || nCount <= 0 )
         return;
 
     if ( nCount > ( nOldLen-nPos ) )
@@ -3273,7 +3273,7 @@ OUString UnoComboBoxControl::getItem( sal_Int16 nPos )
     cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
     cpo::uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
-    if ( nPos < aSeq.getLength() )
+    if ( nPos >= 0 && nPos < aSeq.getLength() )
         aItem = aSeq[nPos];
     return aItem;
 }
