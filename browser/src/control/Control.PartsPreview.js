@@ -595,7 +595,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		if (!window.mode.isDesktop()) {
 			(new Hammer(img, {recognizers: [[Hammer.Press]]}))
 				.on('press', function (e) {
-					if (this._map.isEditMode()) {
+					if (this._map.isEditMode() && !this._isMasterView()) {
 						this._addDnDTouchHandlers(e);
 					}
 				}.bind(this));
@@ -2970,6 +2970,10 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			viewRect.top <= elemRect.bottom)
 	},
 
+	_isMasterView: function () {
+		return this._map['stateChangeHandler'].getItemValue('.uno:SlideMasterPage') === 'true';
+	},
+
 	_addDnDHandlers: function (elem) {
 		if (app.file.fileBasedView) // No drag & drop for pdf files and the like.
 			return;
@@ -3080,7 +3084,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 	_handleDragStart: function (e) {
 		const partsPreview = this.partsPreview;
-		if (!partsPreview._map.isEditMode()) {
+		// In master view the previews are the masters, which keep their order:
+		// the server moves slides only.
+		if (!partsPreview._map.isEditMode() || partsPreview._isMasterView()) {
 			e.preventDefault();
 			return;
 		}

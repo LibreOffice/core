@@ -6715,6 +6715,12 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate, int n
     if (!pViewSh)
         return;
 
+    // In any master view the parts are the masters, and the position is one in the master list.
+    // MovePages() moves slides by slide positions, and the slide sorter starts no page drag in a
+    // master view either.
+    if (pViewSh->GetEditMode() != EditMode::Page)
+        return;
+
     auto pSlideSorter
         = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewSh->GetViewShellBase());
     sd::slidesorter::SharedPageSelection pSelectedPage
@@ -6725,6 +6731,11 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate, int n
     sd::SlideSectionManager& rSectionMgr = mpDoc->GetSectionManager();
     const sal_Int32 nSectionCount = rSectionMgr.GetSectionCount();
     const sal_uInt16 nPageCount = mpDoc->GetSdPageCount(PageKind::Standard);
+
+    // The position is the slide the moved slides go after, -1 for the start. A client sends the
+    // position it shows, which another view may have removed meanwhile.
+    if (nPosition < -1 || nPosition >= nPageCount)
+        return;
 
     // Sections are positional boundaries - they don't follow dragged slides.
     // When a section's start slide is moved away, the section anchors to

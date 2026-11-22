@@ -1190,6 +1190,11 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage, const std::vector<SdPage*
     sal_uInt16 nPage;
     bool    bSomethingHappened = false;
 
+    // A target past the last slide comes from a position that is not a slide position, such as
+    // that of a master in master view.
+    if (nTargetPage != sal_uInt16(-1) && nTargetPage >= GetSdPageCount(PageKind::Standard))
+        return false;
+
     const bool bUndo = IsUndoEnabled();
 
     if( bUndo )

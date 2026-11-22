@@ -2442,6 +2442,113 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf96206)
     CPPUNIT_ASSERT_EQUAL(nMasterPageCnt1, nMasterPageCnt2);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMoveSelectedPartsInMasterView)
+{
+    // Given a presentation of 3 slides and 5 masters, shown in master view with the first master
+    // selected in the slide sorter:
+    createSdImpressDoc();
+    getSlideSorterViewShell();
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xSlides = xPagesSupplier->getDrawPages();
+    while (xSlides->getCount() < 3)
+        xSlides->insertNewByIndex(xSlides->getCount());
+    uno::Reference<drawing::XMasterPagesSupplier> xMastersSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xMasters = xMastersSupplier->getMasterPages();
+    while (xMasters->getCount() < 5)
+        xMasters->insertNewByIndex(xMasters->getCount());
+    std::vector<SdPage*> aSlides;
+    for (sal_uInt16 nPage = 0; nPage < 3; ++nPage)
+        aSlides.push_back(pDoc->GetSdPage(nPage, PageKind::Standard));
+    SdPage* pFirstMaster = pDoc->GetMasterSdPage(0, PageKind::Standard);
+    dispatchCommand(mxComponent, u".uno:SlideMasterPage"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(1, pXImpressDocument->getEditMode());
+    // The kit selects and moves through this interface.
+    vcl::ITiledRenderable* pRenderable = pXImpressDocument;
+    pRenderable->setPart(0);
+    pRenderable->selectPart(0, 1);
+
+    // When the selected master is dropped after the fifth master, past the last slide, and after
+    // the second master:
+    pRenderable->moveSelectedParts(4, false, -1);
+    pRenderable->moveSelectedParts(1, false, -1);
+
+    // Then neither the masters nor the slides change their order. Without the accompanying fix in
+    // place, this test would have crashed: the position in the master list was read as a slide
+    // position, and there is no fifth slide.
+    CPPUNIT_ASSERT_EQUAL(pFirstMaster, pDoc->GetMasterSdPage(0, PageKind::Standard));
+    for (sal_uInt16 nPage = 0; nPage < 3; ++nPage)
+        CPPUNIT_ASSERT_EQUAL(aSlides[nPage], pDoc->GetSdPage(nPage, PageKind::Standard));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMoveSelectedPartsPastLastSlide)
+{
+    // Given a presentation of 3 slides with the first slide selected in the slide sorter:
+    createSdImpressDoc();
+    getSlideSorterViewShell();
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xSlides = xPagesSupplier->getDrawPages();
+    while (xSlides->getCount() < 3)
+        xSlides->insertNewByIndex(xSlides->getCount());
+    SdPage* pFirstSlide = pDoc->GetSdPage(0, PageKind::Standard);
+    // The kit selects and moves through this interface.
+    vcl::ITiledRenderable* pRenderable = pXImpressDocument;
+    pRenderable->setPart(0);
+    pRenderable->selectPart(0, 1);
+
+    // When a client drops it after a slide that another view has removed:
+    pRenderable->moveSelectedParts(3, false, -1);
+
+    // Then the slides stay as they were. Without the accompanying fix in place, this test would
+    // have crashed on the missing fourth slide.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(pFirstSlide, pDoc->GetSdPage(0, PageKind::Standard));
+
+    // And a drop after the last slide still moves it there.
+    pRenderable->moveSelectedParts(2, false, -1);
+    CPPUNIT_ASSERT_EQUAL(pFirstSlide, pDoc->GetSdPage(2, PageKind::Standard));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMovePageDownInMasterView)
+{
+    // Given a presentation of 3 slides and 5 masters, shown in master view on the last master,
+    // which the slide sorter selects:
+    createSdImpressDoc();
+    getSlideSorterViewShell();
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xSlides = xPagesSupplier->getDrawPages();
+    while (xSlides->getCount() < 3)
+        xSlides->insertNewByIndex(xSlides->getCount());
+    uno::Reference<drawing::XMasterPagesSupplier> xMastersSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xMasters = xMastersSupplier->getMasterPages();
+    while (xMasters->getCount() < 5)
+        xMasters->insertNewByIndex(xMasters->getCount());
+    std::vector<SdPage*> aSlides;
+    for (sal_uInt16 nPage = 0; nPage < 3; ++nPage)
+        aSlides.push_back(pDoc->GetSdPage(nPage, PageKind::Standard));
+    dispatchCommand(mxComponent, u".uno:SlideMasterPage"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(1, pXImpressDocument->getEditMode());
+    vcl::ITiledRenderable* pRenderable = pXImpressDocument;
+    pRenderable->setPart(4);
+
+    // When the selected master is moved down:
+    dispatchCommand(mxComponent, u".uno:MovePageDown"_ustr, {});
+
+    // Then the slides keep their order. Without the accompanying fix in place, this test would
+    // have crashed: the slide sorter took the position after the fifth master for a slide
+    // position, and there is no sixth slide.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pDoc->GetSdPageCount(PageKind::Standard));
+    for (sal_uInt16 nPage = 0; nPage < 3; ++nPage)
+        CPPUNIT_ASSERT_EQUAL(aSlides[nPage], pDoc->GetSdPage(nPage, PageKind::Standard));
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testRedoDeleteSlideKeepsPosition)
 {
     // Redoing the deletion of a slide leaves the current slide where the deleted one was, as the
