@@ -1265,12 +1265,26 @@ void handleMoveSlide(SlideCommandContext& rCtx, const std::string& rKey,
     {
         nMoveFrom = stoi(rKey.substr(10));
     }
-    int nMoveTo = rValue.get_value<int>();
+    const int nRequestedTo = rValue.get_value<int>();
+    int nMoveTo = nRequestedTo;
 
-    if (nMoveFrom == nMoveTo)
+    // The canvas page stays the first slide, see SdDrawDocument::MovePages(): the start of the
+    // slides is after it, and it does not move. MovePage() keeps it in place, but not its notes
+    // page.
+    const bool bCanvasPage = rCtx.mpDoc->HasCanvasPage();
+    if (bCanvasPage && nMoveTo == 0)
+        nMoveTo = 1;
+
+    if (bCanvasPage && nMoveFrom == 0)
+    {
+        lcl_LogWarning("FillApi SlideCmd: The canvas page stays the first slide. '" + rKey + ": "
+                       + std::to_string(nRequestedTo));
+        TransformWarningCollector::addNotApplied(rKey);
+    }
+    else if (nMoveFrom == nMoveTo)
     {
         lcl_LogWarning("FillApi SlideCmd: Move slide to the same position. '" + rKey + ": "
-                       + std::to_string(nMoveTo));
+                       + std::to_string(nRequestedTo));
     }
     else if (nMoveFrom >= rCtx.mnPageCount || nMoveTo > rCtx.mnPageCount)
     {

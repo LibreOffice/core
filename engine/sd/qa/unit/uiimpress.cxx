@@ -2716,6 +2716,76 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMovePageFirstWithCanvasPage)
     CPPUNIT_ASSERT_EQUAL(aSlides[2], pDoc->GetSdPage(3, PageKind::Standard));
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformMoveSlideWithCanvasPage)
+{
+    // Given a canvas page and 3 slides:
+    createSdImpressDoc();
+    SdXImpressDocument* pXImpressDocument = addSlidesAndCanvasPage(mxComponent);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    const std::map<const SdrPage*, const SdrPage*> aNotesPages = getNotesPagesOfSlides(pDoc);
+    std::vector<SdPage*> aSlides;
+    for (sal_uInt16 nPage = 0; nPage < 4; ++nPage)
+        aSlides.push_back(pDoc->GetSdPage(nPage, PageKind::Standard));
+
+    // When a transform moves the canvas page:
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(
+            u"DataJson"_ustr,
+            uR"json({ "Transforms": { "SlideCommands": [ {"MoveSlide.0": 2} ] } })json"_ustr),
+    };
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr, aArgs);
+
+    // Then nothing moves. Without the accompanying fix in place, this test would have failed: the
+    // canvas page kept its place, but its notes page was moved away from it.
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+    for (sal_uInt16 nPage = 0; nPage < 4; ++nPage)
+        CPPUNIT_ASSERT_EQUAL(aSlides[nPage], pDoc->GetSdPage(nPage, PageKind::Standard));
+
+    // And a move of the first slide after the canvas page to the start moves nothing either.
+    aArgs = {
+        comphelper::makePropertyValue(
+            u"DataJson"_ustr,
+            uR"json({ "Transforms": { "SlideCommands": [ {"MoveSlide.1": 0} ] } })json"_ustr),
+    };
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr, aArgs);
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+    for (sal_uInt16 nPage = 0; nPage < 4; ++nPage)
+        CPPUNIT_ASSERT_EQUAL(aSlides[nPage], pDoc->GetSdPage(nPage, PageKind::Standard));
+
+    // And when a transform moves the last slide to the start, it becomes the first slide after
+    // the canvas page, with its notes page.
+    aArgs = {
+        comphelper::makePropertyValue(
+            u"DataJson"_ustr,
+            uR"json({ "Transforms": { "SlideCommands": [ {"MoveSlide.3": 0} ] } })json"_ustr),
+    };
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr, aArgs);
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+    CPPUNIT_ASSERT_EQUAL(aSlides[0], pDoc->GetSdPage(0, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(aSlides[3], pDoc->GetSdPage(1, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(aSlides[1], pDoc->GetSdPage(2, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(aSlides[2], pDoc->GetSdPage(3, PageKind::Standard));
+
+    // And undo puts it back, with its notes page.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+    for (sal_uInt16 nPage = 0; nPage < 4; ++nPage)
+        CPPUNIT_ASSERT_EQUAL(aSlides[nPage], pDoc->GetSdPage(nPage, PageKind::Standard));
+
+    // And a move of the first slide after the canvas page to the end keeps the canvas page first.
+    aArgs = {
+        comphelper::makePropertyValue(
+            u"DataJson"_ustr,
+            uR"json({ "Transforms": { "SlideCommands": [ {"MoveSlide.1": 3} ] } })json"_ustr),
+    };
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr, aArgs);
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+    CPPUNIT_ASSERT_EQUAL(aSlides[0], pDoc->GetSdPage(0, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(aSlides[2], pDoc->GetSdPage(1, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(aSlides[3], pDoc->GetSdPage(2, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(aSlides[1], pDoc->GetSdPage(3, PageKind::Standard));
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testRedoDeleteSlideKeepsPosition)
 {
     // Redoing the deletion of a slide leaves the current slide where the deleted one was, as the
