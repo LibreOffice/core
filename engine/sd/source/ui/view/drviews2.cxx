@@ -1161,11 +1161,23 @@ void handleInsertMasterSlide(SlideCommandContext& rCtx, const std::string& rKey,
     SdPage* pMPage = rCtx.mpDoc->GetMasterSdPage(nMasterPageId, PageKind::Standard);
     SdPage* pPage = rCtx.mpDoc->GetSdPage(rCtx.mnActPageId, PageKind::Standard);
 
+    // A slide inserted at the canvas page goes first among the slides after it, where the server
+    // that sends these commands expects it. CreatePage() refuses the canvas page as the slide to
+    // insert after, so the new slide takes its settings from the slide after the canvas page and
+    // goes before that one.
+    SdPage* pTemplatePage = pPage;
+    sal_Int32 nInsertPosition = pPage->GetPageNum() + 2;
+    if (pPage->IsCanvasPage())
+    {
+        pTemplatePage = rCtx.mpDoc->GetSdPage(1, PageKind::Standard);
+        nInsertPosition = pTemplatePage->GetPageNum();
+    }
+
     // It will move to the next slide.
     rCtx.mnNextPageId
-        = rCtx.mpDoc->CreatePage(pPage, PageKind::Standard, OUString(), OUString(),
+        = rCtx.mpDoc->CreatePage(pTemplatePage, PageKind::Standard, OUString(), OUString(),
                                  AUTOLAYOUT_TITLE_CONTENT, AUTOLAYOUT_NOTES, true, true,
-                                 pPage->GetPageNum() + 2);
+                                 nInsertPosition);
 
     SdPage* pPageStandard = rCtx.mpDoc->GetSdPage(rCtx.mnNextPageId, PageKind::Standard);
     SdPage* pPageNote = rCtx.mpDoc->GetSdPage(rCtx.mnNextPageId, PageKind::Notes);
@@ -1364,6 +1376,14 @@ void handleDuplicateSlide(SlideCommandContext& rCtx, const std::string& rKey,
         nDupSlideId = 0;
     }
     SdPage* pSourceStd = rCtx.mpDoc->GetSdPage(nDupSlideId, PageKind::Standard);
+    // As in the user interface, the canvas page is not duplicated: DuplicatePage() refuses it.
+    if (pSourceStd->IsCanvasPage())
+    {
+        lcl_LogWarning("FillApi SlideCmd: The canvas page is not duplicated. '" + rKey + ": "
+                       + std::to_string(nDupSlideId) + "'");
+        TransformWarningCollector::addNotApplied(rKey);
+        return;
+    }
     rCtx.mpDoc->DuplicatePage(nDupSlideId);
     SdPage* pDupStd = rCtx.mpDoc->GetSdPage(nDupSlideId + 1, PageKind::Standard);
     rCtx.touch(pDupStd);

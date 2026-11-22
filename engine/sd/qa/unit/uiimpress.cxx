@@ -2788,6 +2788,97 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformMoveSlideWit
     CPPUNIT_ASSERT_EQUAL(aSlides[1], pDoc->GetSdPage(3, PageKind::Standard));
 }
 
+namespace
+{
+/// Runs the slide commands as a transform, and returns whether it reports that it applied all.
+bool transformSlides(const uno::Reference<lang::XComponent>& xComponent,
+                     std::u16string_view aSlideCommands)
+{
+    const OUString aJson
+        = OUString::Concat(u"{ \"Transforms\": { \"SlideCommands\": [ ") + aSlideCommands
+          + u" ] } }";
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"DataJson"_ustr, aJson),
+    };
+    css::frame::DispatchResultEvent aEvent;
+    CPPUNIT_ASSERT(unotest::MacrosTest::dispatchCommand(
+                       xComponent, u".uno:TransformDocumentStructure"_ustr, aArgs)
+                   >>= aEvent);
+    OUString aResult;
+    aEvent.Result >>= aResult;
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream(aResult.toUtf8().getStr());
+    boost::property_tree::read_json(aStream, aTree);
+    return aTree.get<bool>("success");
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformInsertAfterCanvasPage)
+{
+    // Given a canvas page and 3 slides:
+    createSdImpressDoc();
+    SdXImpressDocument* pXImpressDocument = addSlidesAndCanvasPage(mxComponent);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    std::map<const SdrPage*, const SdrPage*> aNotesPages = getNotesPagesOfSlides(pDoc);
+    SdPage* pFirstSlide = pDoc->GetSdPage(1, PageKind::Standard);
+
+    // When a transform inserts a slide after the first slide, which is the canvas page, and gives
+    // it a title:
+    const bool bApplied = transformSlides(
+        mxComponent, u"{\"InsertMasterSlide\": 0}, {\"SetText.0\": \"Inserted\"}");
+
+    // Then the slide goes first among the slides after the canvas page, with its notes page, and
+    // the next command works on it. Without the accompanying fix in place, this test would have
+    // crashed: the canvas page refused the insertion, and the transform used the slide it did not
+    // get.
+    CPPUNIT_ASSERT(bApplied);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), pDoc->GetSdPageCount(PageKind::Standard));
+    SdPage* pInserted = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(pFirstSlide, pDoc->GetSdPage(2, PageKind::Standard));
+    aNotesPages[pInserted] = pDoc->GetSdPage(1, PageKind::Notes);
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+    SdrTextObj* pTitle = DynCastSdrTextObj(pInserted->GetPresObj(PresObjKind::Title));
+    CPPUNIT_ASSERT(pTitle);
+    CPPUNIT_ASSERT(pTitle->GetOutlinerParaObject());
+    CPPUNIT_ASSERT_EQUAL(u"Inserted"_ustr,
+                         pTitle->GetOutlinerParaObject()->GetTextObject().GetText(0));
+
+    // And undo takes the slide and its notes page out again.
+    aNotesPages.erase(pInserted);
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+    CPPUNIT_ASSERT_EQUAL(pFirstSlide, pDoc->GetSdPage(1, PageKind::Standard));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformDuplicateCanvasPage)
+{
+    // Given a canvas page and 3 slides:
+    createSdImpressDoc();
+    SdXImpressDocument* pXImpressDocument = addSlidesAndCanvasPage(mxComponent);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    const std::map<const SdrPage*, const SdrPage*> aNotesPages = getNotesPagesOfSlides(pDoc);
+    SfxUndoManager* pUndoManager = pXImpressDocument->GetDocShell()->GetUndoManager();
+    const size_t nUndoCount = pUndoManager->GetUndoActionCount();
+
+    // When a transform duplicates the canvas page:
+    const bool bApplied = transformSlides(mxComponent, u"{\"DuplicateSlide\": 0}");
+
+    // Then nothing is duplicated and nothing is left to undo, as in the user interface, and the
+    // transform reports that it did not apply the command. Without
+    // the accompanying fix in place, this test would have failed: the canvas page refused to be
+    // duplicated, and the transform recorded the insertion of the first slide as a step to undo,
+    // which would have removed that slide.
+    CPPUNIT_ASSERT(!bApplied);
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+    CPPUNIT_ASSERT_EQUAL(nUndoCount, pUndoManager->GetUndoActionCount());
+
+    // And another slide is still duplicated.
+    CPPUNIT_ASSERT(transformSlides(mxComponent, u"{\"DuplicateSlide\": 1}"));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(nUndoCount + 1, pUndoManager->GetUndoActionCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMoveSelectedPartsToOwnPlaceWithSections)
 {
     // Given 3 slides in two sections, with the second slide selected in the slide sorter:
