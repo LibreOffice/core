@@ -796,6 +796,72 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testSlideSectionsODPToPPTX)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testSlideSectionsWithCanvasPageToPPTX)
+{
+    // Given the three sections of 4, 7 and 2 slides, with a canvas page that joined the first one:
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument->GetDoc()->HasCanvasPage());
+
+    // When it is saved as PPTX, which leaves the canvas page out:
+    save(TestFilter::PPTX);
+
+    // Then each section lists the ids of its own slides, in the order of the slide list. Without
+    // the accompanying fix in place, this test would have failed: the slides were looked up with
+    // their position among the pages including the canvas page, so each section listed the ids
+    // of the next slides, the canvas page took the id of the first slide, and the last slide was
+    // in no section.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
+    assertXPath(pXmlDoc, "/p:presentation/p:sldIdLst/p:sldId", 13);
+    static constexpr OString sPath = "/p:presentation/p:extLst/p:ext/p14:sectionLst"_ostr;
+    assertXPath(pXmlDoc, sPath + "/p14:section", 3);
+    const std::array<sal_Int32, 3> aSectionSizes{ 4, 7, 2 };
+    sal_Int32 nSlide = 1;
+    for (size_t nSection = 0; nSection < aSectionSizes.size(); ++nSection)
+    {
+        const OString sSection = sPath + "/p14:section[" + OString::number(nSection + 1) + "]";
+        assertXPath(pXmlDoc, sSection + "/p14:sldIdLst/p14:sldId", aSectionSizes[nSection]);
+        for (sal_Int32 i = 1; i <= aSectionSizes[nSection]; ++i, ++nSlide)
+        {
+            CPPUNIT_ASSERT_EQUAL(
+                getXPath(pXmlDoc, "/p:presentation/p:sldIdLst/p:sldId[" + OString::number(nSlide)
+                                      + "]",
+                         "id"),
+                getXPath(pXmlDoc,
+                         sSection + "/p14:sldIdLst/p14:sldId[" + OString::number(i) + "]", "id"));
+        }
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testSlideSectionOfCanvasPageAloneToPPTX)
+{
+    // Given a first section that holds the canvas page alone, followed by the three sections of
+    // 4, 7 and 2 slides:
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::SlideSectionManager& rMgr = pXImpressDocument->GetDoc()->GetSectionManager();
+    rMgr.RenameSection(0, u"Overview"_ustr);
+    rMgr.AddSection(1, u"Section-1"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rMgr.GetSectionCount());
+
+    // When it is saved as PPTX, which leaves the canvas page out:
+    save(TestFilter::PPTX);
+
+    // Then the section of the canvas page is left out too, and the others keep their slides.
+    // Without the accompanying fix in place, this test would have failed: the section of the
+    // canvas page was written with no slides, and loading it back made it start where the next
+    // section starts.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
+    static constexpr OString sPath = "/p:presentation/p:extLst/p:ext/p14:sectionLst"_ostr;
+    assertXPath(pXmlDoc, sPath + "/p14:section", 3);
+    assertXPath(pXmlDoc, sPath + "/p14:section[1]", "name", u"Section-1");
+    assertXPath(pXmlDoc, sPath + "/p14:section[1]/p14:sldIdLst/p14:sldId", 4);
+    assertXPath(pXmlDoc, sPath + "/p14:section[2]/p14:sldIdLst/p14:sldId", 7);
+    assertXPath(pXmlDoc, sPath + "/p14:section[3]/p14:sldIdLst/p14:sldId", 2);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testCool16078_placeholderKeepsItsOutline)
 {
     // Given a layout whose picture placeholder is clipped to an outline of two <a:path> elements:

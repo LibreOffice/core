@@ -1517,15 +1517,22 @@ void PowerPointExport::WriteSections()
     if (!aSectionList.hasElements())
         return;
 
-    // Build page-name-to-index map for resolving slide names to IDs
+    // Build page-name-to-index map for resolving slide names to IDs. The canvas page, the first
+    // page when there is one, is not exported, so it has no slide id, and the slides after it are
+    // one place earlier in the slide ids than among the pages.
     Reference<XDrawPages> xDrawPages(mXModel->getDrawPages(), uno::UNO_SET_THROW);
     std::map<OUString, sal_Int32> aNameToIndex;
+    OUString sCanvasPageName;
     for (sal_Int32 i = 0; i < xDrawPages->getCount(); ++i)
     {
         Reference<XDrawPage> xPage = xDrawPages->getDrawPageByIndex(i);
         Reference<XNamed> xNamed(xPage, UNO_QUERY);
-        if (xNamed.is())
-            aNameToIndex[xNamed->getName()] = i;
+        if (!xNamed.is())
+            continue;
+        if (mbHasCanvasPage && i == 0)
+            sCanvasPageName = xNamed->getName();
+        else
+            aNameToIndex[xNamed->getName()] = mbHasCanvasPage ? i - 1 : i;
     }
 
     // https://learn.microsoft.com/en-us/openspecs/office_standards/ms-pptx/1f21a089-944d-410b-bd47-4f5e692c2532
@@ -1556,6 +1563,10 @@ void PowerPointExport::WriteSections()
                 rProp.Value >>= aSlideNames;
         }
 
+        // A section of the canvas page alone has no slide to list.
+        if (mbHasCanvasPage && aSlideNames.getLength() == 1 && aSlideNames[0] == sCanvasPageName)
+            continue;
+
         if (sSectionId.isEmpty())
             sSectionId = OStringToOUString(comphelper::xml::generateGUIDString(),
                                            RTL_TEXTENCODING_ASCII_US);
@@ -1567,6 +1578,10 @@ void PowerPointExport::WriteSections()
 
         for (const OUString& rSlideName : aSlideNames)
         {
+            // The canvas page has no slide id to list, and no place among the slide ids.
+            if (mbHasCanvasPage && rSlideName == sCanvasPageName)
+                continue;
+
             sal_Int32 nSlideIndex = -1;
 
             auto it = aNameToIndex.find(rSlideName);
