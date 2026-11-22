@@ -19,12 +19,21 @@ namespace com::sun::star::frame
 {
 class XModel;
 }
+class SwTextContentControl;
 
 // Writer-specific placement of a security-label marking (header/footer, body,
 // portion). The app-agnostic label storage + colour resolution live in
 // <svx/seclabel/SecLabelStore.hxx>.
 namespace sw::seclabel
 {
+/// Tag of the content control that wraps a security label marking in a header or footer. Such a
+/// control is locked against both editing its content and deleting it (sdtContentLocked).
+inline constexpr OUString MARKING_CONTROL_TAG = u"co-security-label-marking"_ustr;
+
+/// Whether rTextContentControl is a security label marking: a content control tagged
+/// MARKING_CONTROL_TAG in a header or footer of the document.
+bool isMarkingContentControl(const SwTextContentControl& rTextContentControl);
+
 /// Mark the header and footer (bold, coloured, centred) of every in-use page style, plus
 /// rPageStyleName. The marking is its own paragraph tagged with the "Security Label"
 /// character style, coexisting with the user's own header/footer content (not replacing

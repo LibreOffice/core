@@ -25,6 +25,7 @@
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
 #include <formatcontentcontrol.hxx>
+#include <SecLabelApply.hxx>
 
 using namespace css;
 using namespace ::cpo;
@@ -38,6 +39,63 @@ public:
         : SwModelTestBase(u"/sw/qa/core/crsr/data/"_ustr)
     {
     }
+
+protected:
+    /// Creates a document with a paragraph "ab", a content control holding "MARK", then "cd", in
+    /// the header (bInHeader) or in the body. The control has the tag rTag and is locked against
+    /// editing and deletion.
+    void createDocumentWithLockedControl(const OUString& rTag, bool bInHeader)
+    {
+        createSwDoc();
+        m_bInHeader = bInHeader;
+        uno::Reference<text::XText> xText;
+        if (bInHeader)
+        {
+            uno::Reference<beans::XPropertySet> xPageStyle(
+                getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+            xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, cpo::uno::Any(true));
+            xText.set(xPageStyle->getPropertyValue(u"HeaderText"_ustr), uno::UNO_QUERY);
+        }
+        else
+            xText = uno::Reference<text::XTextDocument>(mxComponent, uno::UNO_QUERY_THROW)
+                        ->getText();
+        uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+        xText->insertString(xCursor, u"abMARKcd"_ustr, /*bAbsorb=*/false);
+        xCursor->gotoStart(/*bExpand=*/false);
+        xCursor->goRight(2, /*bExpand=*/false);
+        xCursor->goRight(4, /*bExpand=*/true);
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xContentControl(
+            xFactory->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
+        xContentControl->setPropertyValue(u"Tag"_ustr, cpo::uno::Any(rTag));
+        xContentControl->setPropertyValue(u"Lock"_ustr, cpo::uno::Any(u"sdtContentLocked"_ustr));
+        xText->insertTextContent(
+            xCursor, uno::Reference<text::XTextContent>(xContentControl, uno::UNO_QUERY),
+            /*bAbsorb=*/true);
+    }
+
+    /// Tells whether the cursor at nPoint, selecting from nMark when that is given, is read-only.
+    /// In the paragraph of the control, positions 3 to 7 are inside the control.
+    bool isReadOnlyAt(sal_Int32 nPoint, sal_Int32 nMark = -1)
+    {
+        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+        if (m_bInHeader)
+            pWrtShell->SetCursorInHdFt(SIZE_MAX, /*bInHeader=*/true);
+        else
+            pWrtShell->SttEndDoc(/*bStt=*/true);
+        SwPaM* pCursor = pWrtShell->GetCursor();
+        pCursor->DeleteMark();
+        if (nMark >= 0)
+        {
+            pCursor->GetPoint()->SetContent(nMark);
+            pCursor->SetMark();
+        }
+        pCursor->GetPoint()->SetContent(nPoint);
+        return pWrtShell->HasReadonlySel();
+    }
+
+private:
+    bool m_bInHeader = false;
 };
 
 CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testFindReplace)
@@ -229,6 +287,50 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testContentControlProtectedSection)
     // pick a date in a protected section (the new value was inserted, but the placeholder was not
     // removed).
     CPPUNIT_ASSERT(!pWrtShell->HasReadonlySel());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testSecurityLabelMarkingIsReadOnly)
+{
+    // A header paragraph with a marking control between "ab" and "cd": a, b, the start dummy
+    // character, M, A, R, K, the end dummy character, c, d.
+    createDocumentWithLockedControl(sw::seclabel::MARKING_CONTROL_TAG, /*bInHeader=*/true);
+
+    // A cursor inside the marking is read-only, a cursor just outside it is not:
+    CPPUNIT_ASSERT(!isReadOnlyAt(2));
+    CPPUNIT_ASSERT(isReadOnlyAt(3));
+    CPPUNIT_ASSERT(isReadOnlyAt(7));
+    CPPUNIT_ASSERT(!isReadOnlyAt(8));
+
+    // A selection that reaches into the marking or covers it is read-only, one next to it is not:
+    CPPUNIT_ASSERT(isReadOnlyAt(3, 1));
+    CPPUNIT_ASSERT(isReadOnlyAt(9, 7));
+    CPPUNIT_ASSERT(isReadOnlyAt(10, 0));
+    CPPUNIT_ASSERT(!isReadOnlyAt(2, 1));
+    CPPUNIT_ASSERT(!isReadOnlyAt(10, 8));
+
+    // The marking stays read-only when the cursor may not enter protected areas:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SetReadOnlyAvailable(false);
+    CPPUNIT_ASSERT(isReadOnlyAt(5));
+    pWrtShell->SetReadOnlyAvailable(true);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testLockedContentControlWithOtherTagIsEditable)
+{
+    // A locked content control in the header whose tag is not the marking tag keeps its lock in
+    // the document without making the cursor read-only:
+    createDocumentWithLockedControl(u"other"_ustr, /*bInHeader=*/true);
+    CPPUNIT_ASSERT(!isReadOnlyAt(5));
+    CPPUNIT_ASSERT(!isReadOnlyAt(10, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testSecurityLabelMarkingCopyInBodyIsEditable)
+{
+    // A marking control pasted into the body text is not a marking, so it can be edited and
+    // deleted:
+    createDocumentWithLockedControl(sw::seclabel::MARKING_CONTROL_TAG, /*bInHeader=*/false);
+    CPPUNIT_ASSERT(!isReadOnlyAt(5));
+    CPPUNIT_ASSERT(!isReadOnlyAt(10, 0));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

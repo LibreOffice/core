@@ -52,6 +52,7 @@
 
 #include <editsh.hxx>
 #include <textcontentcontrol.hxx>
+#include <SecLabelApply.hxx>
 
 // for the dump "MSC-" compiler
 static sal_Int32 GetSttOrEnd( bool bCondition, const SwContentNode& rNd )
@@ -917,7 +918,52 @@ bool SwPaM::HasReadonlySel(bool bFormView, bool const isReplace) const
         }
     }
 
+    if (!bRet)
+        bRet = TouchesLockedSecurityLabelMarking();
+
     return bRet;
+}
+
+bool SwPaM::TouchesLockedSecurityLabelMarking() const
+{
+    SwContentControlManager& rManager = GetDoc().GetContentControlManager();
+    const SwPosition& rStart = *Start();
+    const SwPosition& rEnd = *End();
+    for (size_t i = 0; i < rManager.GetCount(); ++i)
+    {
+        const SwTextContentControl* pTextContentControl = rManager.UnsortedGet(i);
+        if (!sw::seclabel::isMarkingContentControl(*pTextContentControl))
+            continue;
+
+        // The control spans a dummy character at its start, its content, and a dummy character
+        // at its end. The content lock covers the content. The control lock covers the dummy
+        // characters, because deleting one removes the control.
+        const std::shared_ptr<SwContentControl>& pContentControl
+            = pTextContentControl->GetContentControl().GetContentControl();
+        const bool bContentLocked = pContentControl->GetLock(/*bControl=*/false).value_or(false);
+        const bool bControlLocked = pContentControl->GetLock(/*bControl=*/true).value_or(false);
+        const SwTextNode& rTextNode = *pTextContentControl->GetTextNode();
+        const SwPosition aStartDummy(rTextNode, pTextContentControl->GetStart());
+        const SwPosition aContentStart(rTextNode, pTextContentControl->GetStart() + 1);
+        const SwPosition aEndDummy(rTextNode, *pTextContentControl->End() - 1);
+
+        if (rStart == rEnd)
+        {
+            // A cursor between the two dummy characters types into the content.
+            if (bContentLocked && aStartDummy < rStart && rStart <= aEndDummy)
+                return true;
+            continue;
+        }
+
+        // The selection covers the characters from rStart up to, but not including, rEnd.
+        const bool bSelectsDummy = (rStart <= aStartDummy && aStartDummy < rEnd)
+                                   || (rStart <= aEndDummy && aEndDummy < rEnd);
+        const bool bSelectsContent
+            = aContentStart < aEndDummy && rStart < aEndDummy && aContentStart < rEnd;
+        if ((bControlLocked && bSelectsDummy) || (bContentLocked && bSelectsContent))
+            return true;
+    }
+    return false;
 }
 
 bool SwPaM::HasHiddenSections() const

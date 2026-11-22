@@ -539,7 +539,7 @@ public:
 
     // Can the cursor be set to read only ranges?
     bool IsReadOnlyAvailable() const { return m_bSetCursorInReadOnly; }
-    void SetReadOnlyAvailable( bool bFlag );
+    SW_DLLPUBLIC void SetReadOnlyAvailable( bool bFlag );
     bool IsOverReadOnlyPos( const Point& rPt ) const;
 
     // Methods for aFlyMacroLnk.
@@ -730,7 +730,8 @@ public:
     SW_DLLPUBLIC bool GotoHeaderText();       ///< jump from the content to the header
     bool GotoFooterText();       ///< jump from the content to the footer
     // jump to the header/footer of the given or current PageDesc
-    bool SetCursorInHdFt(size_t nDescNo, bool bInHeader, bool bEven = false, bool bFirst = false);
+    SW_DLLPUBLIC bool SetCursorInHdFt(size_t nDescNo, bool bInHeader, bool bEven = false,
+                                      bool bFirst = false);
     // is point of cursor in header/footer. pbInHeader return true if it is
     // in a headerframe otherwise in a footerframe
     SW_DLLPUBLIC bool IsInHeaderFooter( bool* pbInHeader = nullptr ) const;

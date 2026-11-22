@@ -299,6 +299,9 @@ public:
     /** Is in something protected (readonly) or selection contains
        something protected. */
     bool HasReadonlySel(bool bFormView, bool isReplace) const;
+    /** Does the cursor sit inside, or the selection overlap, a security label marking whose
+       content control lock forbids that edit. */
+    bool TouchesLockedSecurityLabelMarking() const;
     /** Is there hidden sections in the selected area. */
     bool HasHiddenSections() const;
 

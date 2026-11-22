@@ -4051,6 +4051,19 @@ bool SwCursorShell::HasReadonlySel(bool const isReplace) const
             }
         }
     }
+    else
+    {
+        // A security label marking stays read-only when the cursor may not enter protected
+        // areas and when protection is ignored.
+        for (const SwPaM& rCursor : m_pCurrentCursor->GetRingContainer())
+        {
+            if (rCursor.TouchesLockedSecurityLabelMarking())
+            {
+                bRet = true;
+                break;
+            }
+        }
+    }
     return bRet;
 }
 

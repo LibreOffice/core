@@ -30,6 +30,10 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
+#include <formatcontentcontrol.hxx>
+#include <ndtxt.hxx>
+#include <textcontentcontrol.hxx>
+
 #include <vector>
 
 using namespace css;
@@ -333,6 +337,16 @@ void clearAllPageStyles(const uno::Reference<frame::XModel>& xModel)
         clearArea(xPageStyle, FOOTER);
     }
 }
+}
+
+bool isMarkingContentControl(const SwTextContentControl& rTextContentControl)
+{
+    const std::shared_ptr<SwContentControl>& pContentControl
+        = rTextContentControl.GetContentControl().GetContentControl();
+    const SwTextNode* pTextNode = rTextContentControl.GetTextNode();
+    return pContentControl && pContentControl->GetTag() == MARKING_CONTROL_TAG && pTextNode
+           && pTextNode->GetNodes().IsDocNodes()
+           && (pTextNode->FindHeaderStartNode() || pTextNode->FindFooterStartNode());
 }
 
 void applyMarking(const uno::Reference<frame::XModel>& xModel, const OUString& rMarking,
