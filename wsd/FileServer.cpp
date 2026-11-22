@@ -3241,7 +3241,7 @@ void FileServerRequestHandler::preprocessAdminFile(const HTTPRequest& request,
         const std::string& bodyFile = getAdminTemplate("adminClusterBody.html.template");
         Poco::replaceInPlace(templateFile, std::string("<!--%BODY%-->"), bodyFile);
         Poco::replaceInPlace(templateFile, std::string("<!--%MAIN_CONTENT%-->"), adminFile);
-        Poco::replaceInPlace(templateFile, std::string("%ROUTE_TOKEN%"), COOLWSD::RouteToken);
+        Poco::replaceInPlace(templateFile, std::string("%ROUTE_TOKEN%"), COOLWSD::getRouteToken());
     }
     else
     {

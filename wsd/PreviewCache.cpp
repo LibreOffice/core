@@ -458,8 +458,9 @@ std::string PreviewCache::buildContentUrl(const std::string& tag, const Poco::UR
     std::string url = "/cool/preview/" + tag + "/content?WOPISrc=" +
                       Uri::encode(wopiSrc.toString()) +
                       "&ServerId=" + Util::getProcessIdentifier() + "&slide=" + Uri::encode(guid);
-    if (!COOLWSD::RouteToken.empty())
-        url += "&RouteToken=" + COOLWSD::RouteToken;
+    const std::string routeToken = COOLWSD::getRouteToken();
+    if (!routeToken.empty())
+        url += "&RouteToken=" + routeToken;
     return url;
 }
 

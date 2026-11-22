@@ -353,8 +353,9 @@ std::string ClientSession::createPublicURI(const std::string& subPath, const std
         meta = _serverURL.getSubURLForEndpoint(path);
 
 #if !MOBILEAPP
-    if (!COOLWSD::RouteToken.empty())
-        meta += "&RouteToken=" + COOLWSD::RouteToken;
+    const std::string routeToken = COOLWSD::getRouteToken();
+    if (!routeToken.empty())
+        meta += "&RouteToken=" + routeToken;
 #endif // !MOBILEAPP
 
     if (!encode)

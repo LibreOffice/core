@@ -1032,6 +1032,7 @@ bool COOLWSD::AdminEnabled = true;
 bool COOLWSD::UnattendedRun = false;
 bool COOLWSD::SignalParent = false;
 bool COOLWSD::UseEnvVarOptions = false;
+std::mutex COOLWSD::RouteTokenMutex;
 std::string COOLWSD::RouteToken;
 #if ENABLE_DEBUG
 bool COOLWSD::SingleKit = false;
@@ -4405,7 +4406,7 @@ void COOLWSDServer::dumpState(std::ostream& os) const
                                  : (COOLWSD::EnableMountNamespaces ? "namespace" : "chroot"))
        << " containment, " << (COOLWSD::NoSeccomp ? "no " : "") << "api lockdown"
           "\n  Admin: " << (COOLWSD::AdminEnabled ? "enabled" : "disabled")
-       << "\n  RouteToken: " << COOLWSD::RouteToken
+       << "\n  RouteToken: " << COOLWSD::getRouteToken()
 #endif
        << "\n  Uptime (seconds): "
        << std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() -
@@ -5326,6 +5327,18 @@ void COOLWSD::setKitVersion(const std::string& versionJson)
 
     std::lock_guard<std::mutex> lock(KitVersionMutex);
     StoredKitVersion = std::move(version);
+}
+
+std::string COOLWSD::getRouteToken()
+{
+    std::lock_guard<std::mutex> lock(RouteTokenMutex);
+    return RouteToken;
+}
+
+void COOLWSD::setRouteToken(std::string routeToken)
+{
+    std::lock_guard<std::mutex> lock(RouteTokenMutex);
+    RouteToken = std::move(routeToken);
 }
 
 int COOLWSD::getClientPortNumber()

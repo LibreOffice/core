@@ -1473,7 +1473,7 @@ std::string AdminModel::getWopiSrcMap() const
     }
 
     Poco::JSON::Object map;
-    map.set("routeToken", COOLWSD::RouteToken);
+    map.set("routeToken", COOLWSD::getRouteToken());
     map.set("wopiSrc", wopiSrc);
 
     std::ostringstream oss;

@@ -78,7 +78,6 @@ public:
     static bool UnattendedRun; ///< True when run from an unattended test, not interactive.
     static bool SignalParent;
     static bool UseEnvVarOptions;
-    static std::string RouteToken;
 #if ENABLE_DEBUG
     static bool SingleKit;
     static bool ForceCaching;
@@ -113,6 +112,11 @@ public:
     static std::shared_ptr<const KitVersion> getKitVersion();
     /// Stores the version JSON object that a Kit reports, with the fields taken from it.
     static void setKitVersion(const std::string& versionJson);
+
+    /// Returns the route token of this server, or empty when none is set.
+    static std::string getRouteToken();
+    /// Sets the route token of this server.
+    static void setRouteToken(std::string routeToken);
 
     static bool EnableTraceEventLogging;
     static bool EnableAccessibility;
@@ -336,6 +340,10 @@ private:
     static std::mutex KitVersionMutex;
     /// The latest version of the office library. Never null, and never changed once stored.
     static std::shared_ptr<const KitVersion> StoredKitVersion;
+
+    /// Guards RouteToken. It can be set at any time, and read on any thread.
+    static std::mutex RouteTokenMutex;
+    static std::string RouteToken;
 
 private:
     /// UnitWSDInterface
