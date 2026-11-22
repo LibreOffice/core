@@ -3047,6 +3047,66 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testRemoveSlideWithCanvasPage)
     CPPUNIT_ASSERT_EQUAL(nUndoCount, pUndoManager->GetUndoActionCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testLintHiddenSlideAloneBesidesCanvasPage)
+{
+    // Given a canvas page and a hidden slide:
+    createSdImpressDoc();
+    SdDrawDocument* pDoc = makeSlidesAfterCanvasPage(mxComponent, 1);
+    pDoc->GetSdPage(1, PageKind::Standard)->SetExcluded(true);
+
+    // When the lint looks for hidden slides:
+    sd::lint::PresentationLint aLint(*pDoc, sd::lint::LintOptions());
+    aLint.scan();
+
+    // Then it finds none, since the deck has no slide to spare. Without the accompanying fix in
+    // place, this test would have failed: the canvas page counted as a slide, and as a hidden
+    // one.
+    for (const std::shared_ptr<sd::lint::LintFinding>& rpFinding : aLint.getFindings())
+        CPPUNIT_ASSERT(rpFinding->getCategory() != sd::lint::LintCategory::HiddenSlide);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testLintDeleteHiddenSlideBesidesCanvasPage)
+{
+    // Given a canvas page and 2 hidden slides:
+    createSdImpressDoc();
+    SdDrawDocument* pDoc = makeSlidesAfterCanvasPage(mxComponent, 2);
+    pDoc->GetSdPage(1, PageKind::Standard)->SetExcluded(true);
+    pDoc->GetSdPage(2, PageKind::Standard)->SetExcluded(true);
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShellBase& rBase = pXImpressDocument->GetDocShell()->GetViewShell()->GetViewShellBase();
+    SfxUndoManager* pUndoManager = pXImpressDocument->GetDocShell()->GetUndoManager();
+
+    // When the lint fix deletes the hidden slides, one after the other:
+    std::vector<std::shared_ptr<sd::lint::LintFinding>> aHiddenSlides;
+    {
+        sd::lint::PresentationLint aLint(*pDoc, sd::lint::LintOptions());
+        aLint.scan();
+        for (const std::shared_ptr<sd::lint::LintFinding>& rpFinding : aLint.getFindings())
+            if (rpFinding->getCategory() == sd::lint::LintCategory::HiddenSlide)
+                aHiddenSlides.push_back(rpFinding);
+    }
+    // The canvas page is out of the slide show too, but it is no hidden slide to delete. Without
+    // the accompanying fix in place, this test would have failed: it was offered for deletion.
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aHiddenSlides.size());
+    {
+        sd::lint::LintUndoGroup aUndoGroup(rBase, aHiddenSlides[0]->getUndoLabel());
+        aHiddenSlides[0]->fix(rBase);
+    }
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+    const std::map<const SdrPage*, const SdrPage*> aNotesPages = getNotesPagesOfSlides(pDoc);
+    const size_t nUndoCount = pUndoManager->GetUndoActionCount();
+    {
+        sd::lint::LintUndoGroup aUndoGroup(rBase, aHiddenSlides[1]->getUndoLabel());
+        aHiddenSlides[1]->fix(rBase);
+    }
+
+    // Then the first one goes, but the second one stays as the only slide besides the canvas page,
+    // with nothing left to undo. Without the accompanying fix in place, this test would have
+    // failed: the removal of the slide was refused, but recorded as a step to undo.
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+    CPPUNIT_ASSERT_EQUAL(nUndoCount, pUndoManager->GetUndoActionCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMoveSelectedPartsToOwnPlaceWithSections)
 {
     // Given 3 slides in two sections, with the second slide selected in the slide sorter:

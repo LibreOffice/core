@@ -391,6 +391,9 @@ public:
         const rtl::Reference<SdPage> xPage = mxPage.get();
         if (mrDoc.GetSdPageCount(PageKind::Standard) < 2 || !xPage)
             return;
+        // The only slide besides the canvas page stays too, see SdDrawDocument::RemovePage().
+        if (mrDoc.IsOnlySlideBesidesCanvasPage(*xPage))
+            return;
 
         if (!xPage->IsInserted() || !xPage->IsExcluded())
             return;
@@ -1139,14 +1142,16 @@ void collectHiddenSlides(SdDrawDocument& rDoc, std::vector<std::shared_ptr<LintF
 {
     const sal_uInt16 nPageCount = rDoc.GetSdPageCount(PageKind::Standard);
 
-    // A one-slide deck has nothing to spare, so hiding that slide is not worth a row.
-    if (nPageCount < 2)
+    // A one-slide deck has nothing to spare, so hiding that slide is not worth a row. The canvas
+    // page is not one of the slides to count.
+    if (nPageCount - (rDoc.HasCanvasPage() ? 1 : 0) < 2)
         return;
 
     for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
     {
+        // The canvas page is out of the slide show by design, not a hidden slide to delete.
         SdPage* pPage = rDoc.GetSdPage(nPage, PageKind::Standard);
-        if (!pPage || !pPage->IsExcluded())
+        if (!pPage || !pPage->IsExcluded() || pPage->IsCanvasPage())
             continue;
 
         rFindings.push_back(
