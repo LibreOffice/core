@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <iterator>
 #include <memory>
 #include <set>
 
@@ -6728,6 +6729,13 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate, int n
     if (!pSelectedPage)
         return;
 
+    // The canvas page stays the first slide and does not move, see SdDrawDocument::MovePages().
+    std::vector<SdPage*> aSelectedPages;
+    std::copy_if(pSelectedPage->begin(), pSelectedPage->end(), std::back_inserter(aSelectedPages),
+                 [](const SdPage* pPage) { return !pPage->IsCanvasPage(); });
+    if (aSelectedPages.empty())
+        return;
+
     sd::SlideSectionManager& rSectionMgr = mpDoc->GetSectionManager();
     const sal_Int32 nSectionCount = rSectionMgr.GetSectionCount();
     const sal_uInt16 nPageCount = mpDoc->GetSdPageCount(PageKind::Standard);
@@ -6750,7 +6758,7 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate, int n
     // slide to become the new start of that section, overriding the
     // default anchor for that one section.
 
-    std::set<SdPage*> aMovedPages(pSelectedPage->begin(), pSelectedPage->end());
+    std::set<SdPage*> aMovedPages(aSelectedPages.begin(), aSelectedPages.end());
 
     struct SectionAnchor
     {
@@ -6787,10 +6795,9 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate, int n
 
         // Override one section's anchor with the first moved slide so it
         // becomes the new section start (drop onto section header UX).
-        if (nIntoSection >= 0 && nIntoSection < nSectionCount
-            && !pSelectedPage->empty())
+        if (nIntoSection >= 0 && nIntoSection < nSectionCount)
         {
-            aAnchors[nIntoSection].pPage = (*pSelectedPage)[0];
+            aAnchors[nIntoSection].pPage = aSelectedPages[0];
         }
     }
 
@@ -6802,7 +6809,7 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate, int n
         ? std::make_unique<sd::UndoSlideSection>(*mpDoc, SdResId(STR_UNDO_MOVEPAGES))
         : nullptr;
 
-    mpDoc->MovePages(nPosition, *pSelectedPage);
+    mpDoc->MovePages(nPosition, aSelectedPages);
 
     // The new page order leaves only the current page selected in the document, and that is
     // the selection clients show. The slide sorter takes the same selection, so the next move

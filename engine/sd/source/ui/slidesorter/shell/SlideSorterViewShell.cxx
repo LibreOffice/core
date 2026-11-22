@@ -761,11 +761,8 @@ void SlideSorterViewShell::ExecMovePageFirst (SfxRequest& /*rReq*/)
     // transfer the SlideSorter selection to SdPages
     SyncPageSelectionToDocument(xSelection);
 
-    // Moves selected pages after page -1
-    if (!GetDoc()->HasCanvasPage())
-        GetDoc()->MoveSelectedPages( sal_uInt16(-1) );
-    else
-        GetDoc()->MoveSelectedPages(1);
+    // Moves selected pages after page -1, which is after the canvas page when there is one
+    GetDoc()->MoveSelectedPages( sal_uInt16(-1) );
 
     PostMoveSlidesActions(xSelection);
 }

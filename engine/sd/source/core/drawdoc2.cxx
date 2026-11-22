@@ -1195,6 +1195,16 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage, const std::vector<SdPage*
     if (nTargetPage != sal_uInt16(-1) && nTargetPage >= GetSdPageCount(PageKind::Standard))
         return false;
 
+    // The canvas page stays the first slide. It is not moved, and the slides moved to the start go
+    // after it. MovePage() keeps the canvas page in place, but not its notes page, which would be
+    // moved away from it.
+    std::vector<SdPage*> aMovedPages;
+    for (SdPage* pSelectedPage : rSelectedPages)
+        if (!pSelectedPage->IsCanvasPage())
+            aMovedPages.push_back(pSelectedPage);
+    if (HasCanvasPage() && nTargetPage == sal_uInt16(-1))
+        nTargetPage = 0;
+
     const bool bUndo = IsUndoEnabled();
 
     if( bUndo )
@@ -1212,7 +1222,7 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage, const std::vector<SdPage*
             pPage = GetSdPage(nPage, PageKind::Standard);
         }
 
-        if (pPage->IsSelected())
+        if (pPage->IsSelected() && !pPage->IsCanvasPage())
         {
             nPage = sal_uInt16(-1);
         }
@@ -1221,7 +1231,7 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage, const std::vector<SdPage*
     // Insert before the first page
     if (nPage == sal_uInt16(-1))
     {
-        for (auto iter = rSelectedPages.rbegin(); iter != rSelectedPages.rend(); ++iter)
+        for (auto iter = aMovedPages.rbegin(); iter != aMovedPages.rend(); ++iter)
         {
             nPage = (*iter)->GetPageNum();
             if (nPage != 0)
@@ -1243,7 +1253,7 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage, const std::vector<SdPage*
     {
         nTargetPage = 2 * nPage + 1;    // PageKind::Standard --> absolute
 
-        for (const auto& rpPage : rSelectedPages)
+        for (const auto& rpPage : aMovedPages)
         {
             nPage = rpPage->GetPageNum();
             if (nPage > nTargetPage)

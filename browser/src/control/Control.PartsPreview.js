@@ -595,7 +595,10 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		if (!window.mode.isDesktop()) {
 			(new Hammer(img, {recognizers: [[Hammer.Press]]}))
 				.on('press', function (e) {
-					if (this._map.isEditMode() && !this._isMasterView()) {
+					// The overview slide stays the first slide.
+					const partId = parseInt(this._findClickedPart(e.target.parentNode)) - 1;
+					if (this._map.isEditMode() && !this._isMasterView() &&
+						!this._isOverviewPart(partId)) {
 						this._addDnDTouchHandlers(e);
 					}
 				}.bind(this));
@@ -2974,6 +2977,10 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		return this._map['stateChangeHandler'].getItemValue('.uno:SlideMasterPage') === 'true';
 	},
 
+	_isOverviewPart: function (part) {
+		return app.impress.hasOverviewPage && part === 0;
+	},
+
 	_addDnDHandlers: function (elem) {
 		if (app.file.fileBasedView) // No drag & drop for pdf files and the like.
 			return;
@@ -3095,7 +3102,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		const targetNode = (e.target.id.startsWith('preview') ? e.target : e.target.parentNode);
 		const part = partsPreview._findClickedPart(targetNode);
 		const partId = parseInt(part) - 1; // The first part is just a drop-site for reordering.
-		if (part === -1 || partId < 0) {
+		// The overview slide stays the first slide.
+		if (part === -1 || partId < 0 || partsPreview._isOverviewPart(partId)) {
 			e.preventDefault();
 			return;
 		}
@@ -3147,6 +3155,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		const draggedParts = [];
 		if (includeSelection) {
 			for (let i = 0; i < this._previewTiles.length; i++) {
+				if (this._isOverviewPart(i))
+					continue;
 				if (i === partId || app.impress.isSlideSelected(i))
 					draggedParts.push(i);
 			}
@@ -3512,6 +3522,12 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			// spot of the sorter.
 			if (frame.parentNode !== this._partsPreviewCont || this._isFrameHidden(frame))
 				continue;
+			// Nothing goes before the overview slide: the gap can open after
+			// its frame, but never before it.
+			if (this._isOverviewPart(i)) {
+				lastFrame = frame;
+				continue;
+			}
 			const rect = frame.getBoundingClientRect();
 			let pointerBefore;
 			if (state.grid) {

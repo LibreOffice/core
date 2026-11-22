@@ -139,6 +139,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdoutl.hxx>
+#include <map>
 #include <set>
 #include <sstream>
 #include <vector>
@@ -2547,6 +2548,172 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMovePageDownInMasterView)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pDoc->GetSdPageCount(PageKind::Standard));
     for (sal_uInt16 nPage = 0; nPage < 3; ++nPage)
         CPPUNIT_ASSERT_EQUAL(aSlides[nPage], pDoc->GetSdPage(nPage, PageKind::Standard));
+}
+
+namespace
+{
+/// Maps every slide to the notes page that follows it.
+std::map<const SdrPage*, const SdrPage*> getNotesPagesOfSlides(const SdDrawDocument* pDoc)
+{
+    std::map<const SdrPage*, const SdrPage*> aNotesPages;
+    for (sal_uInt16 nPage = 1; nPage + 1 < pDoc->GetPageCount(); nPage += 2)
+        aNotesPages[pDoc->GetPage(nPage)] = pDoc->GetPage(nPage + 1);
+    return aNotesPages;
+}
+
+/// Checks that the canvas page is the first slide and every slide is followed by its notes page.
+void checkSlidesWithCanvasPage(const SdDrawDocument* pDoc,
+                               const std::map<const SdrPage*, const SdrPage*>& rNotesPages)
+{
+    CPPUNIT_ASSERT(pDoc->HasCanvasPage());
+    CPPUNIT_ASSERT(pDoc->GetSdPage(0, PageKind::Standard)->IsCanvasPage());
+    CPPUNIT_ASSERT_EQUAL(rNotesPages.size() * 2 + 1, size_t(pDoc->GetPageCount()));
+    for (sal_uInt16 nPage = 1; nPage + 1 < pDoc->GetPageCount(); nPage += 2)
+    {
+        const SdrPage* pSlide = pDoc->GetPage(nPage);
+        CPPUNIT_ASSERT_EQUAL(PageKind::Standard, static_cast<const SdPage*>(pSlide)->GetPageKind());
+        CPPUNIT_ASSERT(rNotesPages.contains(pSlide));
+        CPPUNIT_ASSERT_EQUAL(rNotesPages.at(pSlide), pDoc->GetPage(nPage + 1));
+    }
+}
+
+SdXImpressDocument* addSlidesAndCanvasPage(const uno::Reference<lang::XComponent>& xComponent)
+{
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(xComponent.get());
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xSlides = xPagesSupplier->getDrawPages();
+    while (xSlides->getCount() < 3)
+        xSlides->insertNewByIndex(xSlides->getCount());
+    unotest::MacrosTest::dispatchCommand(xComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
+    checkSlidesWithCanvasPage(pDoc, getNotesPagesOfSlides(pDoc));
+    return pXImpressDocument;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMoveSelectedPartsBeforeCanvasPage)
+{
+    // Given a canvas page and 3 slides, with the last slide selected in the slide sorter:
+    createSdImpressDoc();
+    getSlideSorterViewShell();
+    SdXImpressDocument* pXImpressDocument = addSlidesAndCanvasPage(mxComponent);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    const std::map<const SdrPage*, const SdrPage*> aNotesPages = getNotesPagesOfSlides(pDoc);
+    SdPage* pLastSlide = pDoc->GetSdPage(3, PageKind::Standard);
+    // The kit selects and moves through this interface.
+    vcl::ITiledRenderable* pRenderable = pXImpressDocument;
+    pRenderable->setPart(3);
+    pRenderable->selectPart(3, 1);
+
+    // When the slide is dropped before the first preview, the canvas page:
+    pRenderable->moveSelectedParts(-1, false, -1);
+
+    // Then it becomes the first slide after the canvas page, with its notes page. Without the
+    // accompanying fix in place, this test would have failed: the canvas page kept its place, but
+    // the notes page of the slide went between the canvas page and its notes page.
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+    CPPUNIT_ASSERT_EQUAL(pLastSlide, pDoc->GetSdPage(1, PageKind::Standard));
+
+    // And undo puts it back as the last slide, with its notes page.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+    CPPUNIT_ASSERT_EQUAL(pLastSlide, pDoc->GetSdPage(3, PageKind::Standard));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMoveSelectedPartsCanvasPage)
+{
+    // Given a canvas page and 3 slides, with the canvas page and the first slide selected in the
+    // slide sorter:
+    createSdImpressDoc();
+    getSlideSorterViewShell();
+    SdXImpressDocument* pXImpressDocument = addSlidesAndCanvasPage(mxComponent);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    const std::map<const SdrPage*, const SdrPage*> aNotesPages = getNotesPagesOfSlides(pDoc);
+    std::vector<SdPage*> aSlides;
+    for (sal_uInt16 nPage = 0; nPage < 4; ++nPage)
+        aSlides.push_back(pDoc->GetSdPage(nPage, PageKind::Standard));
+    // The kit selects and moves through this interface.
+    vcl::ITiledRenderable* pRenderable = pXImpressDocument;
+    pRenderable->setPart(0);
+    pRenderable->selectPart(0, 1);
+    pRenderable->selectPart(1, 1);
+    sd::slidesorter::controller::PageSelector& rSelector
+        = getSlideSorterViewShell()->GetSlideSorter().GetController().GetPageSelector();
+    CPPUNIT_ASSERT_EQUAL(2, rSelector.GetSelectedPageCount());
+    CPPUNIT_ASSERT(rSelector.IsPageSelected(0));
+
+    // When they are dropped after the last slide:
+    pRenderable->moveSelectedParts(3, false, -1);
+
+    // Then the slide moves there and the canvas page stays the first slide. Without the
+    // accompanying fix in place, this test would have failed: the canvas page kept its place, but
+    // its notes page was moved away from it.
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+    CPPUNIT_ASSERT_EQUAL(aSlides[0], pDoc->GetSdPage(0, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(aSlides[2], pDoc->GetSdPage(1, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(aSlides[3], pDoc->GetSdPage(2, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(aSlides[1], pDoc->GetSdPage(3, PageKind::Standard));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMovePageDownWithCanvasPage)
+{
+    // Given a canvas page and 3 slides, with the canvas page and the first slide selected in the
+    // slide sorter:
+    createSdImpressDoc();
+    getSlideSorterViewShell();
+    SdXImpressDocument* pXImpressDocument = addSlidesAndCanvasPage(mxComponent);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    const std::map<const SdrPage*, const SdrPage*> aNotesPages = getNotesPagesOfSlides(pDoc);
+    std::vector<SdPage*> aSlides;
+    for (sal_uInt16 nPage = 0; nPage < 4; ++nPage)
+        aSlides.push_back(pDoc->GetSdPage(nPage, PageKind::Standard));
+    // The kit selects through this interface.
+    vcl::ITiledRenderable* pRenderable = pXImpressDocument;
+    pRenderable->setPart(0);
+    pRenderable->selectPart(0, 1);
+    pRenderable->selectPart(1, 1);
+
+    // When they are moved down:
+    dispatchCommand(mxComponent, u".uno:MovePageDown"_ustr, {});
+
+    // Then the slide moves down and the canvas page stays the first slide. Without the
+    // accompanying fix in place, this test would have failed: the slide sorter passed the canvas
+    // page to the move, which kept the canvas page in place, but moved its notes page away from
+    // it.
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+    CPPUNIT_ASSERT_EQUAL(aSlides[0], pDoc->GetSdPage(0, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(aSlides[2], pDoc->GetSdPage(1, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(aSlides[1], pDoc->GetSdPage(2, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(aSlides[3], pDoc->GetSdPage(3, PageKind::Standard));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMovePageFirstWithCanvasPage)
+{
+    // Given a canvas page and 3 slides, with the last slide selected in the slide sorter:
+    createSdImpressDoc();
+    getSlideSorterViewShell();
+    SdXImpressDocument* pXImpressDocument = addSlidesAndCanvasPage(mxComponent);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    const std::map<const SdrPage*, const SdrPage*> aNotesPages = getNotesPagesOfSlides(pDoc);
+    std::vector<SdPage*> aSlides;
+    for (sal_uInt16 nPage = 0; nPage < 4; ++nPage)
+        aSlides.push_back(pDoc->GetSdPage(nPage, PageKind::Standard));
+    vcl::ITiledRenderable* pRenderable = pXImpressDocument;
+    // The kit selects through this interface.
+    pRenderable->setPart(3);
+    pRenderable->selectPart(3, 1);
+
+    // When the slide is moved to the start:
+    dispatchCommand(mxComponent, u".uno:MovePageFirst"_ustr, {});
+
+    // Then it becomes the first slide after the canvas page. Without the accompanying fix in place,
+    // this test would have failed: the slide went after the first slide, as the second slide.
+    checkSlidesWithCanvasPage(pDoc, aNotesPages);
+    CPPUNIT_ASSERT_EQUAL(aSlides[0], pDoc->GetSdPage(0, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(aSlides[3], pDoc->GetSdPage(1, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(aSlides[1], pDoc->GetSdPage(2, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(aSlides[2], pDoc->GetSdPage(3, PageKind::Standard));
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testRedoDeleteSlideKeepsPosition)

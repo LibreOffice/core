@@ -334,9 +334,11 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                         pDocument->GetSdPage(i, PageKind::Notes)->SetSelected(
                             i == nNewPageIndex);
                     }
-                    // Move the selected page to the head of the document
+                    // Move the selected page to the head of the document, which is after the
+                    // canvas page when there is one
+                    SdPage* pNewPage = pDocument->GetSdPage(nNewPageIndex, ePageKind);
                     pDocument->MoveSelectedPages (sal_uInt16(-1));
-                    nNewPageIndex = 0;
+                    nNewPageIndex = pNewPage ? (pNewPage->GetPageNum() - 1) / 2 : 0;
                 }
             else
                 nNewPageIndex = pDocument->CreatePage (
