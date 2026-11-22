@@ -154,6 +154,8 @@ public:
     /// Tracks the URIs that are switching to Disconnected (WASM) Mode.
     /// The time is when the switch request was made. We expire the request after a certain
     /// time, in case the user fails to load WASM, it will revert to Collaborative mode.
+    /// The map belongs to the thread of the web server poll, and only that thread reads or
+    /// changes it.
     static Util::UnorderedStringMap<std::chrono::steady_clock::time_point> Uri2WasmModeMap;
 
     static std::unordered_set<std::string> EditFileExtensions;

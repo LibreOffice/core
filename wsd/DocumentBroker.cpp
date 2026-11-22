@@ -9477,7 +9477,11 @@ void DocumentBroker::switchToOffline()
     details.getParamByName("access_token", access_token);
     // const std::string wopiSrc = session->getPublicUri().getPath() + "?access_token=" + access_token;
     const std::string wopiSrc = session->getPublicUri().getPath();
-    COOLWSD::Uri2WasmModeMap[wopiSrc] = std::chrono::steady_clock::now();
+    const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+    // The web server poll runs its callbacks before it reads new requests, so the entry is in
+    // the map before the reloaded page asks for its files.
+    if (const std::shared_ptr<TerminatingPoll> webServerPoll = COOLWSD::getWebServerPoll())
+        webServerPoll->addCallback([wopiSrc, now]() { COOLWSD::Uri2WasmModeMap[wopiSrc] = now; });
 
     // End activity to allow for unloading.
     endActivity();
