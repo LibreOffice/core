@@ -35,6 +35,8 @@ namespace i18nutil {
 const int FIND_NOT_FOUND    = 0;
 const int FIND_FOUND        = 1;
 const int FIND_NO_RING      = 2;
+/// The match is left as it is: it is not counted, and the search goes on after it.
+const int FIND_PASSED_OVER  = 4;
 
 struct SwFindParas
 {

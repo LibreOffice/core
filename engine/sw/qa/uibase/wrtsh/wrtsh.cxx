@@ -74,6 +74,8 @@
 #include <vcl/keycodes.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <editeng/svxacorr.hxx>
+#include <svl/srchitem.hxx>
+#include <IDocumentState.hxx>
 
 using namespace css;
 using namespace ::cpo;
@@ -1290,6 +1292,34 @@ CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelMarkingRefusesCutAndPaste)
 
     // Then the marking is unchanged:
     CPPUNIT_ASSERT_EQUAL(u"SEcret"_ustr, getHeaderString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelMarkingRefusesReplaceAll)
+{
+    // "SEcret" is in the body text and is the header marking:
+    createDocumentWithMarking();
+    auto replaceAll = [this] {
+        dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr,
+                        { comphelper::makePropertyValue(u"SearchItem.SearchString"_ustr,
+                                                        u"SEcret"_ustr),
+                          comphelper::makePropertyValue(u"SearchItem.ReplaceString"_ustr,
+                                                        u"public"_ustr),
+                          comphelper::makePropertyValue(
+                              u"SearchItem.Command"_ustr,
+                              static_cast<sal_Int16>(SvxSearchCmd::REPLACE_ALL)) });
+    };
+
+    // Replace All changes the body text and not the marking:
+    replaceAll();
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"public body"_ustr, xTextDocument->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(u"SEcret"_ustr, getHeaderString());
+
+    // When only the marking matches, Replace All does not take the document as modified:
+    getSwDoc()->getIDocumentState().ResetModified();
+    replaceAll();
+    CPPUNIT_ASSERT_EQUAL(u"SEcret"_ustr, getHeaderString());
+    CPPUNIT_ASSERT(!getSwDoc()->getIDocumentState().IsModified());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelMarkingRefusesAutoCorrect)

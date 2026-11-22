@@ -836,15 +836,17 @@ static sal_Int32 lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
                 *pNew->GetMark() = *pCurrentCursor->GetMark();
             }
 
-            ++nFound;
+            const bool bCounted = !(FIND_PASSED_OVER & nFndRet);
+            if (bCounted)
+                ++nFound;
 
-            if( !( eFndRngs & FindRanges::InSelAll) )
+            if( bCounted && !( eFndRngs & FindRanges::InSelAll) )
             {
                 bEnd = true;
                 break;
             }
 
-            if ((coSrchRplcThreshold == nFound)
+            if (bCounted && (coSrchRplcThreshold == nFound)
                 && rDoc.GetIDocumentUndoRedo().DoesUndo()
                 && rParas.IsReplaceMode())
             {

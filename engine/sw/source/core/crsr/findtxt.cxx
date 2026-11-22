@@ -1024,6 +1024,10 @@ int SwFindParaText::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
             m_aSText, fnMove, rRegion, bInReadOnly, m_bFindAll, m_pLayout, m_bMustStartWithCurrentNode, xSearchItem);
     m_bMustStartWithCurrentNode = false;
 
+    // A locked security label marking keeps its text: the match is passed over.
+    if (bFnd && m_bReplace && rCursor.TouchesLockedSecurityLabelMarking())
+        return FIND_NO_RING | FIND_PASSED_OVER;
+
     if( bFnd && m_bReplace ) // replace string
     {
         // use replace method in SwDoc
