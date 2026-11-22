@@ -224,7 +224,7 @@ void UncachedDataSequence::replaceByIndex( ::sal_Int32 Index, const cpo::uno::An
 {
     std::unique_lock<std::mutex> aGuard;
     Sequence< Any > aData( getData());
-    if( Index < aData.getLength() &&
+    if( Index >= 0 && Index < aData.getLength() &&
         m_xDataProvider.is() )
     {
         aData.getArray()[Index] = Element;
