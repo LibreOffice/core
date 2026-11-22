@@ -2108,7 +2108,23 @@ std::unique_ptr<SmStructureNode> SmParser5::DoUnOper()
     }
 
     // get argument
-    xArg = DoPower();
+    const bool bIsSign
+        = eType == TPLUS || eType == TMINUS || eType == TPLUSMINUS || eType == TMINUSPLUS;
+
+    if (bIsSign
+        && (m_aCurToken.eType == TRGROUP || m_aCurToken.eType == TEND
+            || m_aCurToken.eType == TNEWLINE))
+    {
+        // A sign without an argument is a valid standalone symbol,
+        // e.g. the superscript in M^{+}.
+        // Keep the two-child structure required by SmUnHorNode.
+        auto xEmpty = std::make_unique<SmExpressionNode>(m_aCurToken);
+        xEmpty->SetSelection(m_aCurESelection);
+        xEmpty->SetSubNodes(nullptr, nullptr);
+        xArg = std::move(xEmpty);
+    }
+    else
+        xArg = DoPower();
 
     if (eType == TABS)
     {
