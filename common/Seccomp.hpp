@@ -13,6 +13,9 @@
 
 #include <common/Protocol.hpp>
 
+#include <cstdint>
+#include <string_view>
+
 namespace Seccomp
 {
 enum class Type : std::uint8_t
@@ -31,6 +34,11 @@ namespace Rlimit
 /// This must accommodate the hundreds of fds during init (shared libs,
 /// fonts, the user profile) before a document is even loaded.
 constexpr int MinRequiredOpenFiles = 4096;
+
+/// The number of bytes in count units of unitBytes each, for a unitBytes of at most 2^32. count
+/// is a decimal number. Zero or a negative count gives zero, which stands for unlimited. A result
+/// that rlim_t can't hold becomes the largest finite limit, RLIM_INFINITY - 1.
+std::uint64_t limitInBytes(std::string_view count, std::uint64_t unitBytes);
 
 /// Handles setconfig command with limit_... subcommands.
 /// Returns true iff it handled the command, regardless of success/failure.

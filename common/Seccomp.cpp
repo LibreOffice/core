@@ -22,6 +22,7 @@
 #include <common/NumUtil.hpp>
 #include <common/SigUtil.hpp>
 
+#include <algorithm>
 #include <csignal>
 #include <dlfcn.h>
 #include <ftw.h>
@@ -325,21 +326,34 @@ static void setRLimit(rlim_t confLim, int resource, const std::string& resourceT
                                  << limTextWithUnit);
 }
 
+std::uint64_t limitInBytes(std::string_view count, std::uint64_t unitBytes)
+{
+    // The count is below 2^31 and the unit at most 2^32, so their product fits in 64 bits.
+    const std::int32_t number = NumUtil::stoi(count);
+    if (number <= 0)
+        return 0;
+
+    // A 32-bit rlim_t can't hold a limit of 4 GiB or more, so the result is capped at the largest
+    // finite limit, RLIM_INFINITY - 1. With a 64-bit rlim_t, every product is below the cap.
+    constexpr std::uint64_t largestLimit = static_cast<std::uint64_t>(RLIM_INFINITY) - 1;
+    return std::min(static_cast<std::uint64_t>(number) * unitBytes, largestLimit);
+}
+
 bool handleSetrlimitCommand(const StringVector& tokens)
 {
     if (tokens.size() == 3 && tokens.equals(0, "setconfig"))
     {
         if (tokens.equals(1, "limit_virt_mem_mb"))
         {
-            setRLimit(NumUtil::stoi(tokens[2]) * 1024 * 1024, RLIMIT_AS, "RLIMIT_AS", "bytes");
+            setRLimit(limitInBytes(tokens[2], 1024 * 1024), RLIMIT_AS, "RLIMIT_AS", "bytes");
         }
         else if (tokens.equals(1, "limit_stack_mem_kb"))
         {
-            setRLimit(NumUtil::stoi(tokens[2]) * 1024, RLIMIT_STACK, "RLIMIT_STACK", "bytes");
+            setRLimit(limitInBytes(tokens[2], 1024), RLIMIT_STACK, "RLIMIT_STACK", "bytes");
         }
         else if (tokens.equals(1, "limit_file_size_mb"))
         {
-            setRLimit(NumUtil::stoi(tokens[2]) * 1024 * 1024, RLIMIT_FSIZE, "RLIMIT_FSIZE",
+            setRLimit(limitInBytes(tokens[2], 1024 * 1024), RLIMIT_FSIZE, "RLIMIT_FSIZE",
                       "bytes");
         }
         else if (tokens.equals(1, "limit_num_open_files"))

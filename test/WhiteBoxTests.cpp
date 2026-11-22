@@ -24,6 +24,7 @@
 #include <common/Protocol.hpp>
 #include <common/RegexUtil.hpp>
 #include <common/SaveResult.hpp>
+#include <common/Seccomp.hpp>
 #include <common/StateEnum.hpp>
 #include <common/ThreadPool.hpp>
 #include <common/Thumbnail.hpp>
@@ -103,6 +104,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testThumbnailParseSize);
     CPPUNIT_TEST(testThumbnailParseSizeList);
     CPPUNIT_TEST(testParseThumbnailSizes);
+    CPPUNIT_TEST(testRlimitInBytes);
     CPPUNIT_TEST_SUITE_END();
 
     void testCOOLProtocolFunctions();
@@ -148,6 +150,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testThumbnailParseSize();
     void testThumbnailParseSizeList();
     void testParseThumbnailSizes();
+    void testRlimitInBytes();
 
     size_t waitForThreads(size_t count);
 };
@@ -1963,6 +1966,24 @@ void WhiteBoxTests::testParseThumbnailSizes()
     LOK_ASSERT_EQUAL(
         std::string("16x16,32x32,64x64,128x128"),
         sizes(R"({"ThumbnailSizes":["16x16","bad","32x32","16x16","64x64","128x128","256x256"]})"));
+}
+
+void WhiteBoxTests::testRlimitInBytes()
+{
+    constexpr std::string_view testname = __func__;
+
+    LOK_ASSERT_EQUAL(std::uint64_t(8000) * 1024, Rlimit::limitInBytes("8000", 1024));
+
+    // Limits of 2 GiB and more, in megabytes, are counted in full.
+    LOK_ASSERT_EQUAL(std::uint64_t(2048) * 1024 * 1024, Rlimit::limitInBytes("2048", 1024 * 1024));
+    LOK_ASSERT_EQUAL(std::uint64_t(3000) * 1024 * 1024, Rlimit::limitInBytes("3000", 1024 * 1024));
+    LOK_ASSERT_EQUAL(std::uint64_t(4096) * 1024 * 1024, Rlimit::limitInBytes("4096", 1024 * 1024));
+    LOK_ASSERT_EQUAL(std::uint64_t(2147483647) * 1024 * 1024,
+                     Rlimit::limitInBytes("2147483647", 1024 * 1024));
+
+    // Zero, and a negative count, stand for unlimited.
+    LOK_ASSERT_EQUAL(std::uint64_t(0), Rlimit::limitInBytes("0", 1024 * 1024));
+    LOK_ASSERT_EQUAL(std::uint64_t(0), Rlimit::limitInBytes("-1", 1024 * 1024));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WhiteBoxTests);
