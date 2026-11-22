@@ -297,6 +297,7 @@ public:
     void testTrackedChangeMoveNotification();
     void testPaintedAreaOutlivesTheLastView();
     void testVectorDeltaPushCoalescing();
+    void testPresentationDrawnFromVectorsWhileAViewIs();
     void testWriterVectorDeltaPush();
     void testTileInvalidationCompression();
     void testPartInInvalidation();
@@ -442,6 +443,7 @@ public:
     CPPUNIT_TEST(testTrackedChangeMoveNotification);
     CPPUNIT_TEST(testPaintedAreaOutlivesTheLastView);
     CPPUNIT_TEST(testVectorDeltaPushCoalescing);
+    CPPUNIT_TEST(testPresentationDrawnFromVectorsWhileAViewIs);
     CPPUNIT_TEST(testWriterVectorDeltaPush);
     CPPUNIT_TEST(testTileInvalidationCompression);
     CPPUNIT_TEST(testPartInInvalidation);
@@ -2818,6 +2820,39 @@ void DesktopKitTest::testVectorDeltaPushCoalescing()
     const std::string& rPayload = std::get<1>(aNotificationList.back());
     CPPUNIT_ASSERT(rPayload.starts_with(std::string(aPartId) + "\n{"));
     CPPUNIT_ASSERT(rPayload.find("vectorprimitivesdelta") != std::string::npos);
+}
+
+void DesktopKitTest::testPresentationDrawnFromVectorsWhileAViewIs()
+{
+    // Given a presentation with two views:
+    COKitDocumentImpl* pDocument = loadDoc("blank_presentation.odp");
+    const int nFirstView = pDocument->getView();
+    const int nSecondView = pDocument->createView();
+    const ViewShellDocId nDocId = SfxViewShell::Current()->GetDocId();
+    CPPUNIT_ASSERT(!comphelper::COKit::isDrawnFromVectors(nDocId));
+    vcl::ITiledRenderable* pTiledRenderable
+        = dynamic_cast<vcl::ITiledRenderable*>(pDocument->mxComponent.get());
+    CPPUNIT_ASSERT(pTiledRenderable);
+    const OString aRequest = ".uno:VectorPrimitives?partid=" + pTiledRenderable->getPartId(0, 0);
+
+    // When both views ask for the primitives of a slide:
+    pDocument->setView(nFirstView);
+    pDocument->getCommandValues(aRequest.getStr());
+    pDocument->setView(nSecondView);
+    pDocument->getCommandValues(aRequest.getStr());
+
+    // Then the presentation is drawn from vectors:
+    CPPUNIT_ASSERT(comphelper::COKit::isDrawnFromVectors(nDocId));
+
+    // And when the first view draws from tiles again, the second one still draws from vectors:
+    pDocument->setView(nFirstView);
+    pDocument->getCommandValues(".uno:DrawFromTiles");
+    CPPUNIT_ASSERT(comphelper::COKit::isDrawnFromVectors(nDocId));
+
+    // And when the second view draws from tiles too, no view draws from vectors any more:
+    pDocument->setView(nSecondView);
+    pDocument->getCommandValues(".uno:DrawFromTiles");
+    CPPUNIT_ASSERT(!comphelper::COKit::isDrawnFromVectors(nDocId));
 }
 
 void DesktopKitTest::testTileInvalidationCompression()

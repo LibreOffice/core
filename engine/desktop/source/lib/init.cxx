@@ -1750,6 +1750,11 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
 
         COKitDocumentImpl* pDocument = new COKitDocumentImpl(xComponent, nThisDocumentId);
         aDrawnFromVectorsGuard.dismiss();
+
+        // VectorRendering names the client of a presentation. A document of another type is drawn
+        // from vectors once one of its views asks for primitives.
+        if (bDrawnFromVectors && pDocument->getDocumentType() != COKitDocumentType::PRESENTATION)
+            comphelper::COKit::clearDrawnFromVectors(ViewShellDocId(nThisDocumentId));
         pDocument->maOriginalDocumentUrlKey = aOriginalDocumentUrlKey;
 
         // The kit asks the remote checkers' servers itself: the forkit's
@@ -9773,6 +9778,22 @@ std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
 
             pViewShell->setDrawsFromObjects(false);
 
+            // The document is drawn from vectors for as long as one of its views draws from
+            // objects.
+            const ViewShellDocId nDocId = pViewShell->GetDocId();
+            bool bDrawnFromVectors = false;
+            for (SfxViewShell* pShell = SfxViewShell::GetFirst(false); pShell;
+                 pShell = SfxViewShell::GetNext(*pShell, false))
+            {
+                if (pShell->GetDocId() == nDocId && pShell->drawsFromObjects())
+                {
+                    bDrawnFromVectors = true;
+                    break;
+                }
+            }
+            if (!bDrawnFromVectors)
+                comphelper::COKit::clearDrawnFromVectors(nDocId);
+
             // The states such a view gave itself are the engine's again: all are sent anew.
             pViewShell->GetViewFrame().GetBindings().InvalidateAll(true);
         }
@@ -9808,6 +9829,10 @@ std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
             if (eType == COKitDocumentType::PRESENTATION || eType == COKitDocumentType::DRAWING
                 || eType == COKitDocumentType::SPREADSHEET)
                 pViewShell->setDrawsFromObjects(true);
+
+            // A slide or a page that a view draws from primitives keeps its images encoded.
+            if (eType == COKitDocumentType::PRESENTATION || eType == COKitDocumentType::DRAWING)
+                comphelper::COKit::setDrawnFromVectors(pViewShell->GetDocId());
 
             // A view that draws from primitives paints no bitmap tiles, so the request for the
             // primitives is its first content.

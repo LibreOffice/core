@@ -678,8 +678,12 @@ load [part=<part>] url=<url> [timestamp=<time>] [lang=<locale>] [deviceFormFacto
     vectorRendering=true says that the client draws the slides of a
     presentation from vector primitives instead of tiles. The client does
     not know the type of the document when it loads, so it sends this for
-    every type. The engine reads it only from the load that opens the
-    document, so a client that joins an open document does not change it.
+    every type, and the engine reads it only for a presentation. The
+    engine reads it only from the load that opens the document, so a
+    client that joins an open document does not change it. After the
+    load, a presentation or a drawing is drawn from vector primitives
+    from the time a view asks for them, until every view that asked has
+    sent .uno:DrawFromTiles.
 
     timestamp is in tzfile(5) format. For example: Pacific/Auckland.
 
