@@ -1974,6 +1974,22 @@ sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
         pMasterCanvas->NbcRemoveObject(0);
     }
 
+    // The master page of the canvas page was created together with a notes master page of the
+    // same layout, which follows it. The notes page of the canvas page takes that one, as it has
+    // when the document is loaded, not the notes master of the slide it was made from, which the
+    // slides may leave behind for another master.
+    const sal_uInt16 nNotesMasterNum = pMasterCanvas->GetPageNum() + 1;
+    SdPage* pNotesMasterCanvas = nNotesMasterNum < GetMasterPageCount()
+                                     ? static_cast<SdPage*>(GetMasterPage(nNotesMasterNum))
+                                     : nullptr;
+    if (pNotesMasterCanvas
+        && (pNotesMasterCanvas->GetPageKind() != PageKind::Notes
+            || pNotesMasterCanvas->GetLayoutName() != pMasterCanvas->GetLayoutName()))
+        pNotesMasterCanvas = nullptr;
+    if (SdrPage* pCanvasNotesPage = GetPage(pCanvasPage->GetPageNum() + 1);
+        pCanvasNotesPage && pNotesMasterCanvas)
+        pCanvasNotesPage->TRG_SetMasterPage(*pNotesMasterCanvas);
+
     populatePagePreviewsGrid();
     connectPagePreviews();
     NotifyKitCanvasPreviewRectangles();
@@ -1989,14 +2005,8 @@ sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
         AddUndo(std::make_unique<sd::UndoSlideSection>(*this, SdResId(STR_INSERTPAGE),
                                                        std::move(aOldSections)));
         AddUndo(SdrUndoFactory::CreateUndoNewPage(*pMasterCanvas));
-        // The master page of the canvas page was created together with a notes master page of the
-        // same layout, which follows it, so undo removes that one too.
-        const sal_uInt16 nNotesMasterNum = pMasterCanvas->GetPageNum() + 1;
-        auto* pNotesMasterCanvas = nNotesMasterNum < GetMasterPageCount()
-                                       ? static_cast<SdPage*>(GetMasterPage(nNotesMasterNum))
-                                       : nullptr;
-        if (pNotesMasterCanvas && pNotesMasterCanvas->GetPageKind() == PageKind::Notes
-            && pNotesMasterCanvas->GetLayoutName() == pMasterCanvas->GetLayoutName())
+        // Undo removes the notes master page of the canvas page too.
+        if (pNotesMasterCanvas)
             AddUndo(SdrUndoFactory::CreateUndoNewPage(*pNotesMasterCanvas));
         AddUndo(SdrUndoFactory::CreateUndoNewPage(*pCanvasPage));
         if (SdrPage* pCanvasNotesPage = GetPage(pCanvasPage->GetPageNum() + 1))

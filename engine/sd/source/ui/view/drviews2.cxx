@@ -2426,9 +2426,14 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
             // moving the last slide off a master that is not marked to be kept removes it.
             std::set<rtl::Reference<SdPage>> aReplacedMasters;
 
+            // The canvas page keeps its own master, as the user interface assigns it none, and
+            // the deck the first and the last slide are counted in starts after it.
+            const sal_uInt16 nFirstSlide = GetDoc()->HasCanvasPage() ? 1 : 0;
             for (sal_uInt16 i = 0; i < nStdCount; ++i)
             {
                 SdPage* pPage = GetDoc()->GetSdPage(i, PageKind::Standard);
+                if (pPage->IsCanvasPage())
+                    continue;
                 if (!bFirstApplication && !aCtx.maTouchedPages.contains(pPage))
                     continue;
 
@@ -2451,7 +2456,7 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                         aMaster = aChooser.masterForPart(itPart->second, pPage->GetAutoLayout());
                 }
                 if (aMaster.isEmpty())
-                    aMaster = aChooser.masterForSlide(pPage->GetAutoLayout(), i == 0,
+                    aMaster = aChooser.masterForSlide(pPage->GetAutoLayout(), i == nFirstSlide,
                                                       i + 1 == nStdCount);
 
                 // Import the master from the template the first time it is used;

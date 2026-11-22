@@ -3151,6 +3151,60 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformKeepsCanvasP
                          int(pDoc->GetSdPage(1, PageKind::Standard)->GetAutoLayout()));
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureApplyTemplateWithCanvasPage)
+{
+    // The template masters a title slide and a content slide take in a deck without a canvas page.
+    static constexpr std::u16string_view aCommands
+        = u"{\"ApplyTemplate\": \"Cobalt\"}, "
+          u"{\"ChangeLayoutByName\": \"AUTOLAYOUT_TITLE\"}, {\"InsertMasterSlide\": 0}, "
+          u"{\"ChangeLayoutByName\": \"AUTOLAYOUT_TITLE_CONTENT\"}, "
+          u"{\"InsertMasterSlide\": 0}, {\"ChangeLayoutByName\": \"AUTOLAYOUT_TITLE\"}";
+    createSdImpressDoc();
+    transformSlides(mxComponent, aCommands);
+    SdDrawDocument* pPlainDoc = dynamic_cast<SdXImpressDocument*>(mxComponent.get())->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pPlainDoc->GetSdPageCount(PageKind::Standard));
+    std::vector<OUString> aExpectedMasters;
+    for (sal_uInt16 nPage = 0; nPage < 3; ++nPage)
+        aExpectedMasters.push_back(
+            static_cast<SdPage&>(
+                pPlainDoc->GetSdPage(nPage, PageKind::Standard)->TRG_GetMasterPage())
+                .GetName());
+    CPPUNIT_ASSERT(aExpectedMasters[0].startsWith("Cobalt"));
+    CPPUNIT_ASSERT(aExpectedMasters[0] != aExpectedMasters[1]);
+
+    // Given a canvas page and one slide:
+    createSdImpressDoc();
+    SdDrawDocument* pDoc = makeSlidesAfterCanvasPage(mxComponent, 1);
+    SdPage* pCanvasPage = pDoc->GetSdPage(0, PageKind::Standard);
+    SdrPage* pCanvasMaster = &pCanvasPage->TRG_GetMasterPage();
+    CPPUNIT_ASSERT(static_cast<SdPage*>(pCanvasMaster)->IsCanvasMasterPage());
+
+    // When the same transform runs, at the first slide after the canvas page:
+    transformSlides(mxComponent,
+                    rtl::Concat2View(OUString::Concat(u"{\"JumpToSlide\": 1}, ") + aCommands));
+
+    // Then the canvas page keeps its own master, and the slides after it take the masters they
+    // take without a canvas page, the first one that of a title slide that opens the deck.
+    // Without the accompanying fix in place, this test would have failed: the canvas page took a
+    // master of the template, and its own master was removed as one the slides left behind.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(pCanvasMaster, &pCanvasPage->TRG_GetMasterPage());
+    CPPUNIT_ASSERT(static_cast<SdPage*>(pCanvasMaster)->IsCanvasMasterPage());
+    for (sal_uInt16 nPage = 0; nPage < 3; ++nPage)
+    {
+        SdPage* pSlide = pDoc->GetSdPage(nPage + 1, PageKind::Standard);
+        CPPUNIT_ASSERT_EQUAL(aExpectedMasters[nPage],
+                             static_cast<SdPage&>(pSlide->TRG_GetMasterPage()).GetName());
+    }
+
+    // And the notes page of the canvas page keeps a master, the notes master of the canvas page,
+    // although the slides left the master the canvas page was made from.
+    SdPage* pCanvasNotesPage = pDoc->GetSdPage(0, PageKind::Notes);
+    CPPUNIT_ASSERT(pCanvasNotesPage->TRG_HasMasterPage());
+    CPPUNIT_ASSERT_EQUAL(pDoc->GetMasterPage(pCanvasMaster->GetPageNum() + 1),
+                         &pCanvasNotesPage->TRG_GetMasterPage());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMoveSelectedPartsToOwnPlaceWithSections)
 {
     // Given 3 slides in two sections, with the second slide selected in the slide sorter:
