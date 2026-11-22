@@ -214,7 +214,7 @@ struct CellLine
  */
 struct Cell                                       // Cell
 {
-    unsigned char key;                            // Index value of border style
+    size_t    key;                                // Index value of border style
     short     p;
     short     color;                              // cell color
     short     x, y;                               // [x,y] cell pos

@@ -303,7 +303,7 @@ bool TxtBox::Read(HWPFile & hwpf)
     for (ii = 0; ii < ncell && bSuccess; ii++)
     {
         bSuccess = cell[ii].Read(hwpf);
-        cell[ii].key = sal::static_int_cast<unsigned char>(ii);
+        cell[ii].key = ii;
     }
     if (!bSuccess)
         return false;
