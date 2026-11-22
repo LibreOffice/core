@@ -1149,7 +1149,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testMultipleCategoryAxisLablesDOCX)
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:noMultiLvlLbl", "val", u"0");
 }
 
-CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf116163)
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf116163_chartLabelRotationExportsFromPPTX)
 {
     loadFromFile(u"pptx/tdf116163.pptx");
     save(TestFilter::PPTX);
@@ -1160,7 +1160,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf116163)
                 u"-5400000");
 }
 
-CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf111824)
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf111824_test3DBarChartZAxis)
 {
     loadFromFile(u"xlsx/tdf111824.xlsx");
     save(TestFilter::XLSX);
@@ -1190,7 +1190,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, test3DAreaChartZAxis)
                 zAxisIdOf3DAreachart);
 }
 
-CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf119029)
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf119029_chartLabelRotationExportsFromODPToPPTX)
 {
     loadFromFile(u"odp/tdf119029.odp");
     // Only use "chart", without number, because the number depends on the previous tests
