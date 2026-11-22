@@ -3107,6 +3107,50 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testLintDeleteHiddenSlideBesidesCanvasPage
     CPPUNIT_ASSERT_EQUAL(nUndoCount, pUndoManager->GetUndoActionCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformKeepsCanvasPage)
+{
+    // Given a canvas page and 3 slides, and a transform at the first slide, the canvas page:
+    createSdImpressDoc();
+    SdXImpressDocument* pXImpressDocument = addSlidesAndCanvasPage(mxComponent);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    SdPage* pCanvasPage = pDoc->GetSdPage(0, PageKind::Standard);
+    const AutoLayout eCanvasLayout = pCanvasPage->GetAutoLayout();
+    const size_t nCanvasObjects = pCanvasPage->GetObjCount();
+    const SdrObject* pCanvasPreview = pCanvasPage->GetObj(0);
+    const OUString aCanvasName = pCanvasPage->GetName();
+    const AutoLayout eTitleOnly = AUTOLAYOUT_TITLE_ONLY;
+    CPPUNIT_ASSERT(eCanvasLayout != eTitleOnly);
+
+    // When it changes the layout of the slide it is at, its objects, its notes or its name:
+    const bool bLayoutApplied
+        = transformSlides(mxComponent, u"{\"ChangeLayoutByName\": \"AUTOLAYOUT_TITLE_ONLY\"}");
+    const bool bTextApplied = transformSlides(mxComponent, u"{\"SetText.0\": \"text\"}");
+    const bool bImageApplied = transformSlides(
+        mxComponent, u"{\"InsertImageAt.0.0\": \"data:image/png;base64,\"}");
+    const bool bNotesApplied = transformSlides(mxComponent, u"{\"SetNotes\": \"notes\"}");
+    const bool bNameApplied = transformSlides(mxComponent, u"{\"RenameSlide\": \"name\"}");
+
+    // Then the canvas page stays as it is, and the transform reports each command as not
+    // applied. Without the accompanying fix in place, this test would have failed: the canvas
+    // page took the layout, with its placeholders.
+    CPPUNIT_ASSERT(!bLayoutApplied);
+    CPPUNIT_ASSERT(!bTextApplied);
+    CPPUNIT_ASSERT(!bImageApplied);
+    CPPUNIT_ASSERT(!bNotesApplied);
+    CPPUNIT_ASSERT(!bNameApplied);
+    CPPUNIT_ASSERT_EQUAL(int(eCanvasLayout), int(pCanvasPage->GetAutoLayout()));
+    CPPUNIT_ASSERT_EQUAL(nCanvasObjects, size_t(pCanvasPage->GetObjCount()));
+    CPPUNIT_ASSERT_EQUAL(pCanvasPreview, const_cast<const SdrObject*>(pCanvasPage->GetObj(0)));
+    CPPUNIT_ASSERT_EQUAL(aCanvasName, pCanvasPage->GetName());
+
+    // And a slide still takes the layout.
+    CPPUNIT_ASSERT(transformSlides(
+        mxComponent,
+        u"{\"JumpToSlide\": 1}, {\"ChangeLayoutByName\": \"AUTOLAYOUT_TITLE_ONLY\"}"));
+    CPPUNIT_ASSERT_EQUAL(int(eTitleOnly),
+                         int(pDoc->GetSdPage(1, PageKind::Standard)->GetAutoLayout()));
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMoveSelectedPartsToOwnPlaceWithSections)
 {
     // Given 3 slides in two sections, with the second slide selected in the slide sorter:

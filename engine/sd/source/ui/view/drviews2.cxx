@@ -1629,6 +1629,15 @@ void handleInsertImageAt(SlideCommandContext& rCtx, const std::string& rKey,
     }
 
     SdPage* pPage = rCtx.mpDoc->GetSdPage(nSlideId, PageKind::Standard);
+    // The slide previews of the canvas page are the document's to keep. This command names its
+    // slide, so the driver does not check it, see lcl_ChangesSlideContent().
+    if (pPage->IsCanvasPage())
+    {
+        lcl_LogWarning("FillApi SlideCmd InsertImageAt: The canvas page is not changed. '" + rKey
+                       + "'");
+        TransformWarningCollector::addNotApplied(rKey);
+        return;
+    }
     int nObjCount = pPage->GetObjCount();
     if (nObjId < 0 || nObjId >= nObjCount)
     {
@@ -1887,6 +1896,17 @@ const SlideCommand* lcl_FindSlideCommand(const std::string& rKey)
             return &rCommand;
     }
     return nullptr;
+}
+
+// Whether the command changes the layout, the objects, the notes or the name of the slide it runs
+// on. The canvas page is left alone by these: its slide previews and their connectors are the
+// document's to keep, and the user interface offers no layout for it either.
+bool lcl_ChangesSlideContent(const SlideCommand& rCommand)
+{
+    return rCommand.mpHandler == &handleChangeLayout || rCommand.mpHandler == &handleSetText
+           || rCommand.mpHandler == &handleInsertImage
+           || rCommand.mpHandler == &handleEditTextObject
+           || rCommand.mpHandler == &handleSetNotes || rCommand.mpHandler == &handleRenameSlide;
 }
 
 class ClassificationCommon
@@ -2330,7 +2350,16 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                             mpDrawView->ShowSdrPage(pPageStandard);
                         }
 
-                        if (pCommand)
+                        if (pCommand && !bDirectPageTarget && lcl_ChangesSlideContent(*pCommand)
+                            && GetDoc()
+                                   ->GetSdPage(aCtx.mnActPageId, PageKind::Standard)
+                                   ->IsCanvasPage())
+                        {
+                            lcl_LogWarning("FillApi SlideCmd: The canvas page is not changed. '"
+                                           + aItem3.first + "'");
+                            TransformWarningCollector::addNotApplied(aItem3.first);
+                        }
+                        else if (pCommand)
                             pCommand->mpHandler(aCtx, aItem3.first, aItem3.second);
                         else
                             TransformWarningCollector::addNotApplied(aItem3.first);
