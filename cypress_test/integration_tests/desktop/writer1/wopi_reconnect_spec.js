@@ -6,7 +6,7 @@ import { stubParentPostMessage } from '../../common/postmessage_helper';
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'WOPI app-loaded state across reconnect', function() {
 
 	beforeEach(function() {
-		setupAndLoadDocument('writer/focus.odt');
+		setupAndLoadDocument('writer/focus.odt', false, false, undefined, 'vector=false');
 	});
 
 	// Regression test for a save-as that only worked once.
