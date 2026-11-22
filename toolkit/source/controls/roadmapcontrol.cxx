@@ -174,8 +174,10 @@ namespace toolkit
         if ( !xRoadmapItem.is() )
             throw IllegalArgumentException();
         Reference< XServiceInfo > xServiceInfo( xRoadmapItem, UNO_QUERY );
-        bool bIsRoadmapItem = xServiceInfo->supportsService(u"com.sun.star.awt.RoadmapItem"_ustr);
-        if ( !bIsRoadmapItem )
+        if (!xServiceInfo.is() || !xServiceInfo->supportsService(u"com.sun.star.awt.RoadmapItem"_ustr))
+            throw IllegalArgumentException();
+        Reference< XPropertySet > xPropertySet( xRoadmapItem, UNO_QUERY );
+        if (!xPropertySet.is())
             throw IllegalArgumentException();
     }
 
@@ -270,7 +272,7 @@ namespace toolkit
 
     void SAL_CALL UnoControlRoadmapModel::removeByIndex( sal_Int32 Index)
     {
-        if ((Index < 0) || ( o3tl::make_unsigned(Index) > maRoadmapItems.size()))
+        if ((Index < 0) || ( o3tl::make_unsigned(Index) >= maRoadmapItems.size()))
             throw IndexOutOfBoundsException();
         Reference< XInterface > xRoadmapItem;
         maRoadmapItems.erase( maRoadmapItems.begin() + Index );
@@ -300,6 +302,8 @@ namespace toolkit
 
     void SAL_CALL UnoControlRoadmapModel::replaceByIndex( const sal_Int32 Index, const Any& Element)
     {
+        if ((Index < 0) || ( o3tl::make_unsigned(Index) >= maRoadmapItems.size()))
+            throw IndexOutOfBoundsException();
         Reference< XInterface > xRoadmapItem;
         Element >>= xRoadmapItem;
         MakeRMItemValidation( Index, xRoadmapItem);
