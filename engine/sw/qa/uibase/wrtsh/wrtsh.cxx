@@ -63,6 +63,15 @@
 #include <drawdoc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <swdtflvr.hxx>
+#include <SecLabelApply.hxx>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <IDocumentRedlineAccess.hxx>
+#include <redline.hxx>
+#include <vcl/keycodes.hxx>
+#include <editeng/acorrcfg.hxx>
+#include <editeng/svxacorr.hxx>
 
 using namespace css;
 using namespace ::cpo;
@@ -77,6 +86,69 @@ public:
     Test()
         : SwModelTestBase(u"/sw/qa/uibase/wrtsh/data/"_ustr)
     {
+    }
+
+protected:
+    /// Creates a document with "SEcret body" as its body text and the security label marking
+    /// "SEcret" in its header. In the paragraph of the marking, position 0 is before the marking
+    /// control, positions 1 to 7 are inside it and position 8 is after it.
+    void createDocumentWithMarking()
+    {
+        createSwDoc();
+        uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+        xTextDocument->getText()->setString(u"SEcret body"_ustr);
+        uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+        sw::seclabel::applyMarking(xModel, u"SEcret"_ustr, 0xC00000, u"Standard"_ustr);
+    }
+
+    /// The text of the header of the default page style.
+    OUString getHeaderString()
+    {
+        uno::Reference<beans::XPropertySet> xPageStyle(
+            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        uno::Reference<text::XText> xHeader(xPageStyle->getPropertyValue(u"HeaderText"_ustr),
+                                            uno::UNO_QUERY);
+        return xHeader->getString();
+    }
+
+    /// The text portion that starts the marking text, at position 1 of the marking paragraph.
+    uno::Reference<beans::XPropertySet> getMarkingTextPortion()
+    {
+        uno::Reference<beans::XPropertySet> xPageStyle(
+            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        uno::Reference<text::XText> xHeader(xPageStyle->getPropertyValue(u"HeaderText"_ustr),
+                                            uno::UNO_QUERY);
+        uno::Reference<text::XTextCursor> xCursor = xHeader->createTextCursor();
+        xCursor->gotoStart(/*bExpand=*/false);
+        xCursor->goRight(2, /*bExpand=*/false);
+        return uno::Reference<beans::XPropertySet>(xCursor, uno::UNO_QUERY);
+    }
+
+    /// Puts the cursor into the paragraph of the header marking at nPoint, selecting from nMark
+    /// when that is given.
+    void setHeaderCursor(sal_Int32 nPoint, sal_Int32 nMark = -1)
+    {
+        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+        CPPUNIT_ASSERT(pWrtShell->SetCursorInHdFt(SIZE_MAX, /*bInHeader=*/true));
+        pWrtShell->SttPara(/*bSelect=*/false);
+        const sal_Int32 nStart = nMark >= 0 ? nMark : nPoint;
+        if (nStart > 0)
+            pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, nStart,
+                             /*bBasicCall=*/false);
+        if (nMark >= 0 && nPoint > nMark)
+            pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, nPoint - nMark,
+                             /*bBasicCall=*/false);
+        CPPUNIT_ASSERT_EQUAL(nPoint, pWrtShell->GetCursor()->GetPoint()->GetContentIndex());
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    /// Sends one key press of nKeyCode, with nCharacter as its text.
+    void pressKey(sal_Unicode nCharacter, sal_uInt16 nKeyCode)
+    {
+        SwXTextDocument* pTextDocument = getSwTextDoc();
+        pTextDocument->postKeyEvent(COKitKeyEventType::DOWN, nCharacter, nKeyCode);
+        pTextDocument->postKeyEvent(COKitKeyEventType::UP, nCharacter, nKeyCode);
+        Scheduler::ProcessEventsToIdle();
     }
 };
 
@@ -1064,6 +1136,152 @@ CPPUNIT_TEST_FIXTURE(Test, testTogglePointEditModeReportsTheDrawingViewState)
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!pDrawView->IsFrameDragSingles());
     CPPUNIT_ASSERT_EQUAL(pDrawView->IsFrameDragSingles(), rView.IsDrawSelMode());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelMarkingRefusesTyping)
+{
+    // Given a header with a security label marking:
+    createDocumentWithMarking();
+
+    // When typing inside the marking, and Backspace and Delete at its edges:
+    setHeaderCursor(3);
+    emulateTyping(u"x");
+    setHeaderCursor(8);
+    pressKey(0, KEY_BACKSPACE);
+    setHeaderCursor(0);
+    pressKey(0, KEY_DELETE);
+
+    // Then the marking is unchanged:
+    CPPUNIT_ASSERT_EQUAL(u"SEcret"_ustr, getHeaderString());
+
+    // And typing just before and just after the marking adds the user's text:
+    setHeaderCursor(8);
+    emulateTyping(u"b");
+    setHeaderCursor(0);
+    emulateTyping(u"a");
+    CPPUNIT_ASSERT_EQUAL(u"aSEcretb"_ustr, getHeaderString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelMarkingRefusesTrackedDeletion)
+{
+    // Given a header with a security label marking, and change tracking on:
+    createDocumentWithMarking();
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // When deleting the whole marking paragraph:
+    setHeaderCursor(8, 0);
+    pressKey(0, KEY_DELETE);
+
+    // Then the marking is unchanged and no deletion is recorded:
+    CPPUNIT_ASSERT_EQUAL(u"SEcret"_ustr, getHeaderString());
+    CPPUNIT_ASSERT_EQUAL(SwRedlineTable::size_type(0),
+                         pDoc->getIDocumentRedlineAccess().GetRedlineTable().size());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelMarkingIsNoTrackedChange)
+{
+    // With change tracking on, applying, changing and removing a label records no change, so
+    // rejecting changes cannot take a marking away:
+    createSwDoc();
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    sw::seclabel::applyMarking(xModel, u"SEcret"_ustr, 0xC00000, u"Standard"_ustr);
+    sw::seclabel::applyMarking(xModel, u"Other"_ustr, 0xC00000, u"Standard"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Other"_ustr, getHeaderString());
+    sw::seclabel::removeLabel(xModel, u"Standard"_ustr);
+    CPPUNIT_ASSERT_EQUAL(OUString(), getHeaderString());
+    CPPUNIT_ASSERT_EQUAL(SwRedlineTable::size_type(0),
+                         pDoc->getIDocumentRedlineAccess().GetRedlineTable().size());
+    CPPUNIT_ASSERT(pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelMarkingRefusesCutAndPaste)
+{
+    // Given a header with a security label marking:
+    createDocumentWithMarking();
+
+    // When cutting the marking text:
+    setHeaderCursor(7, 1);
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
+
+    // And pasting the copied body text into the marking:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->EndPara(/*bSelect=*/true);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+    setHeaderCursor(4);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    // Then the marking is unchanged:
+    CPPUNIT_ASSERT_EQUAL(u"SEcret"_ustr, getHeaderString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelMarkingRefusesAutoCorrect)
+{
+    // Given a header marking "SEcret", which the two initial capitals correction would change to
+    // "Secret":
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
+    const bool bCapitalStartWord = pAutoCorrect->IsAutoCorrFlag(ACFlags::CapitalStartWord);
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartWord, true);
+    comphelper::ScopeGuard aGuard([pAutoCorrect, bCapitalStartWord] {
+        pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartWord, bCapitalStartWord);
+    });
+    createDocumentWithMarking();
+
+    // When typing a space just after the marking:
+    setHeaderCursor(8);
+    emulateTyping(u" ");
+
+    // Then the marking is unchanged:
+    CPPUNIT_ASSERT_EQUAL(u"SEcret "_ustr, getHeaderString());
+
+    // While the same correction applies to the body text:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    emulateTyping(u" SEcret ");
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"SEcret body Secret "_ustr, xTextDocument->getText()->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelMarkingRefusesCharacterFormatting)
+{
+    // Given a header with a security label marking:
+    createDocumentWithMarking();
+
+    // When making the marking text italic and giving it another character style:
+    setHeaderCursor(7, 1);
+    dispatchCommand(mxComponent, u".uno:Italic"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
+                    { comphelper::makePropertyValue(u"Style"_ustr, u"Emphasis"_ustr),
+                      comphelper::makePropertyValue(u"FamilyName"_ustr,
+                                                    u"CharacterStyles"_ustr) });
+
+    // Then its formatting is unchanged:
+    uno::Reference<beans::XPropertySet> xPortion = getMarkingTextPortion();
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                         getProperty<awt::FontSlant>(xPortion, u"CharPosture"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Security Label"_ustr,
+                         getProperty<OUString>(xPortion, u"CharStyleName"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelMarkingAllowsParagraphFormatting)
+{
+    // Given a header with a centred security label marking:
+    createDocumentWithMarking();
+
+    // When aligning the marking paragraph left, with the cursor just after the marking:
+    setHeaderCursor(8);
+    dispatchCommand(mxComponent, u".uno:LeftPara"_ustr, {});
+
+    // Then the paragraph is aligned left:
+    CPPUNIT_ASSERT_EQUAL(
+        style::ParagraphAdjust_LEFT,
+        static_cast<style::ParagraphAdjust>(
+            getProperty<sal_Int16>(getMarkingTextPortion(), u"ParaAdjust"_ustr)));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

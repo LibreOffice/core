@@ -30,9 +30,19 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
+#include <IDocumentRedlineAccess.hxx>
+#include <charfmt.hxx>
+#include <doc.hxx>
+#include <docsh.hxx>
+#include <fchrfmt.hxx>
 #include <formatcontentcontrol.hxx>
+#include <hintids.hxx>
+#include <ndhints.hxx>
 #include <ndtxt.hxx>
+#include <pam.hxx>
 #include <textcontentcontrol.hxx>
+#include <txatbase.hxx>
+#include <unotxdoc.hxx>
 
 #include <vector>
 
@@ -51,6 +61,39 @@ namespace
 constexpr OUString MARKING_STYLE = u"Security Label"_ustr;
 constexpr OUString BOOKMARK_DOC_START = u"__CplSecLabelDocStart"_ustr;
 constexpr OUString BOOKMARK_DOC_END = u"__CplSecLabelDocEnd"_ustr;
+
+// The document of xModel, or nullptr.
+SwDoc* getDocument(const uno::Reference<frame::XModel>& xModel)
+{
+    auto pTextDocument = dynamic_cast<SwXTextDocument*>(xModel.get());
+    return pTextDocument && pTextDocument->GetDocShell() ? pTextDocument->GetDocShell()->GetDoc()
+                                                         : nullptr;
+}
+
+// Switches change recording off while it lives, so that the label's own edits to its markings
+// are never recorded as changes that could be rejected.
+class RecordingOff
+{
+    IDocumentRedlineAccess* m_pRedlineAccess = nullptr;
+    RedlineFlags m_eFlags = RedlineFlags::NONE;
+
+public:
+    explicit RecordingOff(const uno::Reference<frame::XModel>& xModel)
+    {
+        if (SwDoc* pDoc = getDocument(xModel))
+        {
+            m_pRedlineAccess = &pDoc->getIDocumentRedlineAccess();
+            m_eFlags = m_pRedlineAccess->GetRedlineFlags();
+            m_pRedlineAccess->SetRedlineFlags_intern(m_eFlags & ~RedlineFlags::On);
+        }
+    }
+
+    ~RecordingOff()
+    {
+        if (m_pRedlineAccess)
+            m_pRedlineAccess->SetRedlineFlags_intern(m_eFlags);
+    }
+};
 
 bool getBool(const uno::Reference<beans::XPropertySet>& xPageStyle, const OUString& rProp)
 {
@@ -145,7 +188,9 @@ bool isTextEffectivelyEmpty(const uno::Reference<text::XText>& xText)
 // Insert rMarking as its own formatted paragraph in xText -- at the start (bAtStart) or
 // end -- coexisting with any existing content. When xText is empty the marking becomes
 // its sole paragraph (no extra blank line). If rBookmark is non-empty the paragraph is
-// also bookmarked (body markings, for precise in-session removal).
+// also bookmarked (body markings, for precise in-session removal). Otherwise (header and footer
+// markings) the marking sits in a plain-text content control tagged MARKING_CONTROL_TAG, locked
+// against editing its content and against deleting it.
 void insertMarkingParagraph(const uno::Reference<frame::XModel>& xModel,
                             const uno::Reference<text::XText>& xText, const OUString& rMarking,
                             sal_Int32 nColor, bool bAtStart, const OUString& rBookmark)
@@ -179,11 +224,23 @@ void insertMarkingParagraph(const uno::Reference<frame::XModel>& xModel,
         xPara->gotoStartOfParagraph(true);
     formatMarkingSelection(xCursor, nColor, /*bCenterParagraph*/ true);
 
-    if (rBookmark.isEmpty())
-        return;
     uno::Reference<lang::XMultiServiceFactory> xFactory(xModel, uno::UNO_QUERY);
     if (!xFactory.is())
         return;
+    if (rBookmark.isEmpty())
+    {
+        uno::Reference<beans::XPropertySet> xControl(
+            xFactory->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
+        if (!xControl.is())
+            return;
+        xControl->setPropertyValue(u"PlainText"_ustr, cpo::uno::Any(true));
+        xControl->setPropertyValue(u"Tag"_ustr, cpo::uno::Any(MARKING_CONTROL_TAG));
+        xControl->setPropertyValue(u"Alias"_ustr, cpo::uno::Any(u"Security label marking"_ustr));
+        xControl->setPropertyValue(u"Lock"_ustr, cpo::uno::Any(u"sdtContentLocked"_ustr));
+        xText->insertTextContent(
+            xCursor, uno::Reference<text::XTextContent>(xControl, uno::UNO_QUERY), true);
+        return;
+    }
     uno::Reference<text::XTextContent> xMark(
         xFactory->createInstance(u"com.sun.star.text.Bookmark"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XNamed> xNamed(xMark, uno::UNO_QUERY);
@@ -193,13 +250,25 @@ void insertMarkingParagraph(const uno::Reference<frame::XModel>& xModel,
     xText->insertTextContent(xCursor, xMark, true);
 }
 
-// Whether a paragraph is wholly one of our markings: every non-empty run carries the marker
-// style, and at least one does. Empty runs are ignored -- a paragraph mark can retain the
-// style after a merge (deleting a marking paragraph leaves its styled, empty mark behind), and
-// counting that would wrongly flag the user's own text as a marking. A paragraph that mixes
-// the user's plain text with a styled run is not a whole-paragraph marking (portion markings
-// are removed separately). The empty-paragraph short-circuit also keeps the removal sweep from
-// looping on the empty paragraph left when a header's sole marking is cleared.
+// Whether a text portion is a security label marking content control.
+bool isMarkingControl(const uno::Reference<beans::XPropertySet>& xPortion)
+{
+    OUString sType;
+    if (!xPortion.is() || !(xPortion->getPropertyValue(u"TextPortionType"_ustr) >>= sType)
+        || sType != u"ContentControl"_ustr)
+        return false;
+    uno::Reference<beans::XPropertySet> xControl(xPortion->getPropertyValue(u"ContentControl"_ustr),
+                                                 uno::UNO_QUERY);
+    OUString sTag;
+    return xControl.is() && (xControl->getPropertyValue(u"Tag"_ustr) >>= sTag)
+           && sTag == MARKING_CONTROL_TAG;
+}
+
+// Whether a paragraph is wholly one of our markings: a marking content control or, without one
+// (files labelled before markings were locked), runs with the marking style. Empty runs are
+// ignored, as a merge can leave a styled, empty paragraph mark behind, and an empty paragraph is
+// never a marking, so the removal sweep cannot loop on it. Text inserted at the start of a
+// marking paragraph takes the marking style, so next to a control a styled run is user text.
 bool isMarkingParagraph(const uno::Reference<text::XTextContent>& xPara)
 {
     uno::Reference<text::XTextRange> xRange(xPara, uno::UNO_QUERY);
@@ -209,21 +278,69 @@ bool isMarkingParagraph(const uno::Reference<text::XTextContent>& xPara)
     if (!xPortions.is())
         return false; // e.g. a table, not a paragraph
     uno::Reference<container::XEnumeration> xEnum = xPortions->createEnumeration();
-    bool bHasMarking = false;
+    bool bHasControl = false;
+    bool bHasStyledRun = false;
     while (xEnum->hasMoreElements())
     {
         uno::Reference<beans::XPropertySet> xPortion(xEnum->nextElement(), uno::UNO_QUERY);
+        if (isMarkingControl(xPortion))
+        {
+            bHasControl = true;
+            continue;
+        }
         uno::Reference<text::XTextRange> xPortionRange(xPortion, uno::UNO_QUERY);
         if (!xPortionRange.is() || xPortionRange->getString().isEmpty())
             continue; // ignore empty runs (e.g. a styled paragraph mark left by a merge)
         OUString sStyle;
         if (xPortion.is() && (xPortion->getPropertyValue(u"CharStyleName"_ustr) >>= sStyle)
             && sStyle == MARKING_STYLE)
-            bHasMarking = true;
+            bHasStyledRun = true;
         else
             return false; // a non-empty run of the user's own text: not a whole-paragraph marking
     }
-    return bHasMarking;
+    return bHasControl ? !bHasStyledRun : bHasStyledRun;
+}
+
+// Delete each marking content control whose paragraph also holds other content, together with
+// its text. The rest of the paragraph stays, without the marking style it took when it was
+// inserted, so it is never taken for a marking later.
+void removeMarkingControlsBesideUserContent(const uno::Reference<frame::XModel>& xModel)
+{
+    SwDoc* pDoc = getDocument(xModel);
+    if (!pDoc)
+        return;
+    SwContentControlManager& rManager = pDoc->GetContentControlManager();
+    std::vector<SwTextContentControl*> aToDelete;
+    for (size_t i = 0; i < rManager.GetCount(); ++i)
+    {
+        SwTextContentControl* pTextContentControl = rManager.UnsortedGet(i);
+        if (isMarkingContentControl(*pTextContentControl)
+            && *pTextContentControl->End() - pTextContentControl->GetStart()
+                   < pTextContentControl->GetTextNode()->Len())
+            aToDelete.push_back(pTextContentControl);
+    }
+    // Deleting a control erases it from the manager, so the controls are collected first.
+    for (SwTextContentControl* pTextContentControl : aToDelete)
+    {
+        SwTextNode& rTextNode = *pTextContentControl->GetTextNode();
+        pTextContentControl->Delete(/*bSaveContents=*/false);
+        std::vector<std::pair<sal_Int32, sal_Int32>> aStyledRuns;
+        if (const SwpHints* pHints = rTextNode.GetpSwpHints())
+        {
+            for (size_t i = 0; i < pHints->Count(); ++i)
+            {
+                const SwTextAttr* pHint = pHints->Get(i);
+                const SwCharFormat* pFormat = pHint->Which() == RES_TXTATR_CHARFMT
+                                                  ? pHint->GetCharFormat().GetCharFormat()
+                                                  : nullptr;
+                if (pFormat && pFormat->GetName().toString() == MARKING_STYLE)
+                    aStyledRuns.emplace_back(pHint->GetStart(), *pHint->End());
+            }
+        }
+        for (const auto& [nStart, nEnd] : aStyledRuns)
+            pDoc->ResetAttrs(SwPaM(rTextNode, nStart, rTextNode, nEnd), /*bTextAttr=*/true,
+                             { RES_TXTATR_CHARFMT });
+    }
 }
 
 // Delete a whole marking paragraph swept from a header/footer text (xParaRange is the enumerated
@@ -325,6 +442,7 @@ void markArea(const uno::Reference<frame::XModel>& xModel,
 // or remove leaves none behind.
 void clearAllPageStyles(const uno::Reference<frame::XModel>& xModel)
 {
+    removeMarkingControlsBesideUserContent(xModel);
     uno::Reference<style::XStyleFamily> xPageStyles = getPageStyles(xModel);
     if (!xPageStyles.is())
         return;
@@ -352,6 +470,7 @@ bool isMarkingContentControl(const SwTextContentControl& rTextContentControl)
 void applyMarking(const uno::Reference<frame::XModel>& xModel, const OUString& rMarking,
                   sal_Int32 nColor, std::u16string_view rPageStyleName)
 {
+    RecordingOff aRecordingOff(xModel);
     uno::Reference<style::XStyleFamily> xPageStyles = getPageStyles(xModel);
     if (!xPageStyles.is())
         return;
@@ -378,6 +497,7 @@ void applyMarking(const uno::Reference<frame::XModel>& xModel, const OUString& r
 
 void removeLabel(const uno::Reference<frame::XModel>& xModel, std::u16string_view /*rPageStyleName*/)
 {
+    RecordingOff aRecordingOff(xModel);
     removeBodyMarkings(xModel);
     clearAllPageStyles(xModel);
 }
@@ -482,6 +602,7 @@ void removePortionMarkings(const uno::Reference<frame::XModel>& xModel)
 void applyBodyMarkings(const uno::Reference<frame::XModel>& xModel, const OUString& rMarking,
                        sal_Int32 nColor, bool bStart, bool bEnd)
 {
+    RecordingOff aRecordingOff(xModel);
     uno::Reference<text::XTextDocument> xTextDoc(xModel, uno::UNO_QUERY);
     if (!xTextDoc.is())
         return;
@@ -503,6 +624,7 @@ void applyBodyMarkings(const uno::Reference<frame::XModel>& xModel, const OUStri
 
 void removeBodyMarkings(const uno::Reference<frame::XModel>& xModel)
 {
+    RecordingOff aRecordingOff(xModel);
     removePortionMarkings(xModel);
     removeBookmarkedMarking(xModel, BOOKMARK_DOC_START, true);
     removeBookmarkedMarking(xModel, BOOKMARK_DOC_END, false);
@@ -511,6 +633,7 @@ void removeBodyMarkings(const uno::Reference<frame::XModel>& xModel)
 void applyPortionMarking(const uno::Reference<frame::XModel>& xModel,
                          std::u16string_view rMarking, sal_Int32 nColor)
 {
+    RecordingOff aRecordingOff(xModel);
     // Portion marking annotates one portion: the paragraph holding the view cursor.
     uno::Reference<text::XTextViewCursorSupplier> xSupplier(xModel->getCurrentController(),
                                                             uno::UNO_QUERY);

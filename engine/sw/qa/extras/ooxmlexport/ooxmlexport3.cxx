@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
+#include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XViewCursor.hpp>
 #include <comphelper/sequenceashashmap.hxx>
@@ -47,6 +48,39 @@ class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
+
+protected:
+    /// The properties of the first content control in paragraph nParagraph of xText, or an empty
+    /// reference when that paragraph has none.
+    uno::Reference<beans::XPropertySet> getContentControl(const uno::Reference<text::XText>& xText,
+                                                          int nParagraph)
+    {
+        uno::Reference<container::XEnumerationAccess> xPortions(
+            getParagraphOfText(nParagraph, xText), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xEnum = xPortions->createEnumeration();
+        while (xEnum->hasMoreElements())
+        {
+            uno::Reference<beans::XPropertySet> xPortion(xEnum->nextElement(), uno::UNO_QUERY);
+            if (getProperty<OUString>(xPortion, u"TextPortionType"_ustr) == "ContentControl")
+                return uno::Reference<beans::XPropertySet>(
+                    xPortion->getPropertyValue(u"ContentControl"_ustr), uno::UNO_QUERY);
+        }
+        return {};
+    }
+
+    /// The strings of the paragraphs of xText, each followed by a newline.
+    OUString getParagraphStrings(const uno::Reference<text::XText>& xText)
+    {
+        OUStringBuffer aStrings;
+        uno::Reference<container::XEnumerationAccess> xAccess(xText, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xEnum = xAccess->createEnumeration();
+        while (xEnum->hasMoreElements())
+        {
+            uno::Reference<text::XTextRange> xParagraph(xEnum->nextElement(), uno::UNO_QUERY);
+            aStrings.append(xParagraph->getString() + "\n");
+        }
+        return aStrings.makeStringAndClear();
+    }
 };
 
 DECLARE_OOXMLEXPORT_TEST(testFdo68418, "fdo68418.docx")
@@ -241,6 +275,18 @@ CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelHeaderVariants)
     CPPUNIT_ASSERT_EQUAL(u"SECRET//X"_ustr, areaText(u"HeaderTextFirst"_ustr)); // first page
     CPPUNIT_ASSERT_EQUAL(u"SECRET//X"_ustr, areaText(u"FooterTextLeft"_ustr)); // footer left
     CPPUNIT_ASSERT_EQUAL(u"SECRET//X"_ustr, areaText(u"FooterTextFirst"_ustr)); // footer first
+
+    // Every variant holds the marking in a locked content control.
+    for (const OUString& rProp : { u"HeaderText"_ustr, u"HeaderTextLeft"_ustr,
+                                   u"HeaderTextFirst"_ustr, u"FooterTextLeft"_ustr,
+                                   u"FooterTextFirst"_ustr })
+    {
+        uno::Reference<beans::XPropertySet> xControl
+            = getContentControl(getProperty<uno::Reference<text::XText>>(xPageStyle, rProp), 1);
+        CPPUNIT_ASSERT(xControl.is());
+        CPPUNIT_ASSERT_EQUAL(u"sdtContentLocked"_ustr,
+                             getProperty<OUString>(xControl, u"Lock"_ustr));
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelRemove)
@@ -389,6 +435,123 @@ CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelFooterFieldCoexist)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), static_cast<sal_Int32>(aParas.size()));
     CPPUNIT_ASSERT_EQUAL(u"SECRET//X"_ustr, aParas[1]);
     CPPUNIT_ASSERT(aParas[0].indexOf(u"SECRET//X"_ustr) < 0); // field paragraph untouched
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelMarkingIsLocked)
+{
+    // Given a header with the user's own text:
+    createSwDoc();
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
+    xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, cpo::uno::Any(true));
+    uno::Reference<text::XText> xHeader(xPageStyle->getPropertyValue(u"HeaderText"_ustr),
+                                        uno::UNO_QUERY);
+    xHeader->setString(u"My Header"_ustr);
+
+    // When a label is applied and the document saved to DOCX and reloaded:
+    sw::seclabel::applyMarking(xModel, u"SECRET//X"_ustr, 0xC00000, u"Standard"_ustr);
+    saveAndReload(TestFilter::DOCX);
+
+    // Then the marking sits in a content control whose tag and lock the file keeps, and the
+    // user's text is not in a control:
+    xmlDocUniquePtr pXmlHeader = parseExport(u"word/header1.xml"_ustr);
+    assertXPath(pXmlHeader, "//w:sdt/w:sdtPr/w:tag", "val", sw::seclabel::MARKING_CONTROL_TAG);
+    assertXPath(pXmlHeader, "//w:sdt/w:sdtPr/w:lock", "val", u"sdtContentLocked");
+    xPageStyle = getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr);
+    xHeader.set(xPageStyle->getPropertyValue(u"HeaderText"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xControl = getContentControl(xHeader, 1);
+    CPPUNIT_ASSERT(xControl.is());
+    CPPUNIT_ASSERT_EQUAL(sw::seclabel::MARKING_CONTROL_TAG,
+                         getProperty<OUString>(xControl, u"Tag"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"sdtContentLocked"_ustr, getProperty<OUString>(xControl, u"Lock"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"SECRET//X"_ustr, getParagraphOfText(1, xHeader)->getString());
+    CPPUNIT_ASSERT(!getContentControl(xHeader, 2).is());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelMarkingInUserParagraph)
+{
+    // Given a header marking whose paragraph also holds the user's text, as after the user joins
+    // their paragraph to the marking paragraph:
+    createSwDoc();
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    sw::seclabel::applyMarking(xModel, u"SECRET//X"_ustr, 0xC00000, u"Standard"_ustr);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
+    uno::Reference<text::XText> xHeader(xPageStyle->getPropertyValue(u"HeaderText"_ustr),
+                                        uno::UNO_QUERY);
+    xHeader->insertString(xHeader->getStart(), u"Mine "_ustr, /*bAbsorb=*/false);
+    CPPUNIT_ASSERT_EQUAL(u"Mine SECRET//X\n"_ustr, getParagraphStrings(xHeader));
+    uno::Reference<text::XTextRange> xControlRange(getContentControl(xHeader, 1),
+                                                   uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"SECRET//X"_ustr, xControlRange->getString());
+
+    // When the label is changed:
+    sw::seclabel::applyMarking(xModel, u"SECRET//Y"_ustr, 0xC00000, u"Standard"_ustr);
+
+    // Then the old marking is gone, the user's text stays, and the new marking is on top:
+    CPPUNIT_ASSERT_EQUAL(u"SECRET//Y\nMine \n"_ustr, getParagraphStrings(xHeader));
+    CPPUNIT_ASSERT(getProperty<OUString>(getRun(getParagraphOfText(2, xHeader), 1),
+                                         u"CharStyleName"_ustr)
+                   != "Security Label");
+
+    // And removing the label leaves only the user's text:
+    sw::seclabel::removeLabel(xModel, u"Standard"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Mine \n"_ustr, getParagraphStrings(xHeader));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelChangeKeepsOneMarkingParagraph)
+{
+    // Given a header that holds only a marking:
+    createSwDoc();
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    sw::seclabel::applyMarking(xModel, u"SECRET//X"_ustr, 0xC00000, u"Standard"_ustr);
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
+    uno::Reference<text::XText> xHeader(xPageStyle->getPropertyValue(u"HeaderText"_ustr),
+                                        uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"SECRET//X\n"_ustr, getParagraphStrings(xHeader));
+
+    // When the label is changed, then the header holds only the new marking:
+    sw::seclabel::applyMarking(xModel, u"SECRET//Y"_ustr, 0xC00000, u"Standard"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"SECRET//Y\n"_ustr, getParagraphStrings(xHeader));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelStyleOnlyMarkingBecomesLocked)
+{
+    // Given a header marking that only has the marking character style and no content control,
+    // as in a file labelled before markings were locked:
+    createSwDoc();
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xModel, uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xCharStyle(
+        xFactory->createInstance(u"com.sun.star.style.CharacterStyle"_ustr), uno::UNO_QUERY);
+    getStyles(u"CharacterStyles"_ustr)->insertByName(u"Security Label"_ustr,
+                                                     cpo::uno::Any(xCharStyle));
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getStyleByName(u"Standard"_ustr));
+    xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, cpo::uno::Any(true));
+    uno::Reference<text::XText> xHeader(xPageStyle->getPropertyValue(u"HeaderText"_ustr),
+                                        uno::UNO_QUERY);
+    uno::Reference<text::XTextCursor> xCursor = xHeader->createTextCursor();
+    xHeader->insertString(xCursor, u"SECRET//X"_ustr, /*bAbsorb=*/false);
+    xHeader->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
+    xHeader->insertString(xCursor, u"My Header"_ustr, /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    uno::Reference<text::XParagraphCursor> xParagraphCursor(xCursor, uno::UNO_QUERY);
+    xParagraphCursor->gotoEndOfParagraph(/*bExpand=*/true);
+    uno::Reference<beans::XPropertySet>(xCursor, uno::UNO_QUERY_THROW)
+        ->setPropertyValue(u"CharStyleName"_ustr, cpo::uno::Any(u"Security Label"_ustr));
+    CPPUNIT_ASSERT(!getContentControl(xHeader, 1).is());
+
+    // When the label is applied again:
+    sw::seclabel::applyMarking(xModel, u"SECRET//X"_ustr, 0xC00000, u"Standard"_ustr);
+
+    // Then the old marking is replaced by one locked marking, and the user's text stays:
+    CPPUNIT_ASSERT_EQUAL(u"SECRET//X\nMy Header\n"_ustr, getParagraphStrings(xHeader));
+    uno::Reference<beans::XPropertySet> xControl = getContentControl(xHeader, 1);
+    CPPUNIT_ASSERT(xControl.is());
+    CPPUNIT_ASSERT_EQUAL(u"sdtContentLocked"_ustr, getProperty<OUString>(xControl, u"Lock"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelBodyMarking)

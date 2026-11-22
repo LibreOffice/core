@@ -36,8 +36,9 @@ bool isMarkingContentControl(const SwTextContentControl& rTextContentControl);
 
 /// Mark the header and footer (bold, coloured, centred) of every in-use page style, plus
 /// rPageStyleName. The marking is its own paragraph tagged with the "Security Label"
-/// character style, coexisting with the user's own header/footer content (not replacing
-/// it); a prior marking is cleared first, so re-labelling never stacks banners.
+/// character style, in a content control tagged MARKING_CONTROL_TAG and locked against editing
+/// and deletion, coexisting with the user's own header/footer content (not replacing it); a
+/// prior marking is cleared first, so re-labelling never stacks banners.
 SW_DLLPUBLIC void applyMarking(const cpo::uno::Reference<css::frame::XModel>& xModel,
                                const OUString& rMarking, sal_Int32 nColor,
                                std::u16string_view rPageStyleName);
@@ -60,8 +61,8 @@ SW_DLLPUBLIC void applyPortionMarking(const cpo::uno::Reference<css::frame::XMod
                                       std::u16string_view rMarking, sal_Int32 nColor);
 
 /// Clear the label's Writer markings: the body (cover/end-page) markings and the
-/// header/footer markings of every page style (identified by the "Security Label"
-/// character style, so the user's own header/footer content is left intact). The
+/// header/footer markings of every page style (identified by their content control, or by the
+/// "Security Label" character style, so the user's own header/footer content is left intact). The
 /// customXml part is removed separately (svx::seclabel::removeLabelPart); the watermark
 /// by the caller. rPageStyleName is unused (all styles are swept).
 SW_DLLPUBLIC void removeLabel(const cpo::uno::Reference<css::frame::XModel>& xModel,
