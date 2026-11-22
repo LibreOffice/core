@@ -1249,13 +1249,15 @@ void SlotManager::MoveSectionUp()
     auto pUndo = bUndo
         ? std::make_unique<sd::UndoSlideSection>(*pDoc, SdResId(STR_UNDO_MOVE_SLIDE_SECTION))
         : nullptr;
-    oCtx->pMgr->MoveSection(oCtx->nSectionIndex, oCtx->nSectionIndex - 1);
+    const bool bMoved = oCtx->pMgr->MoveSection(oCtx->nSectionIndex, oCtx->nSectionIndex - 1);
     if (bUndo)
     {
-        pDoc->AddUndo(std::move(pUndo));
+        if (bMoved)
+            pDoc->AddUndo(std::move(pUndo));
         pDoc->EndUndo();
     }
-    NotifySectionChange();
+    if (bMoved)
+        NotifySectionChange();
 }
 
 void SlotManager::MoveSectionDown()
@@ -1272,13 +1274,15 @@ void SlotManager::MoveSectionDown()
     auto pUndo = bUndo
         ? std::make_unique<sd::UndoSlideSection>(*pDoc, SdResId(STR_UNDO_MOVE_SLIDE_SECTION))
         : nullptr;
-    oCtx->pMgr->MoveSection(oCtx->nSectionIndex, oCtx->nSectionIndex + 1);
+    const bool bMoved = oCtx->pMgr->MoveSection(oCtx->nSectionIndex, oCtx->nSectionIndex + 1);
     if (bUndo)
     {
-        pDoc->AddUndo(std::move(pUndo));
+        if (bMoved)
+            pDoc->AddUndo(std::move(pUndo));
         pDoc->EndUndo();
     }
-    NotifySectionChange();
+    if (bMoved)
+        NotifySectionChange();
 }
 
 /** Insert a slide.  The insertion position depends on a) the selection and

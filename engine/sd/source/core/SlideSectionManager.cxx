@@ -444,14 +444,14 @@ void SlideSectionManager::RenameSection(sal_Int32 nSectionIndex, const OUString&
     NotifySectionsChanged();
 }
 
-void SlideSectionManager::MoveSection(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
+bool SlideSectionManager::MoveSection(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
 {
     if (nOldIndex < 0 || nOldIndex >= static_cast<sal_Int32>(maSections.size()))
-        return;
+        return false;
     if (nNewIndex < 0 || nNewIndex >= static_cast<sal_Int32>(maSections.size()))
-        return;
+        return false;
     if (nOldIndex == nNewIndex)
-        return;
+        return false;
 
     sal_uInt16 nPageCount = mrDoc.GetSdPageCount(PageKind::Standard);
 
@@ -474,7 +474,7 @@ void SlideSectionManager::MoveSection(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
     // A first section of the canvas page alone would be left without slides by a section moved
     // above it, just as it has no slides to move below another one.
     if (bCanvasPageInSection && aSlideCounts[0] == 0 && nNewIndex == 0)
-        return;
+        return false;
 
     // 2. Calculate slide range for the source section
     sal_Int32 nSrcStart = maSections[nOldIndex].mnStartIndex;
@@ -484,7 +484,7 @@ void SlideSectionManager::MoveSection(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
     sal_Int32 nSrcCount = aSlideCounts[nOldIndex];
 
     if (nSrcCount <= 0)
-        return;
+        return false;
 
     // 3. Mark the source section's slides as selected
     mrDoc.UnselectAllPages();
@@ -552,6 +552,7 @@ void SlideSectionManager::MoveSection(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
         maSections[0].mnStartIndex = 0;
 
     NotifySectionsChanged();
+    return true;
 }
 
 void SlideSectionManager::OnSlideInserted(sal_Int32 nNewStandardIndex)

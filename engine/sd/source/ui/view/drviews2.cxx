@@ -3109,13 +3109,15 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         ? std::make_unique<sd::UndoSlideSection>(
                               *GetDoc(), SdResId(STR_UNDO_MOVE_SLIDE_SECTION))
                         : nullptr;
-                    rMgr.MoveSection(nSectionIdx, nSectionIdx - 1);
+                    const bool bMoved = rMgr.MoveSection(nSectionIdx, nSectionIdx - 1);
                     if (bUndo)
                     {
-                        GetDoc()->AddUndo(std::move(pUndo));
+                        if (bMoved)
+                            GetDoc()->AddUndo(std::move(pUndo));
                         GetDoc()->EndUndo();
                     }
-                    GetDocSh()->SetModified();
+                    if (bMoved)
+                        GetDocSh()->SetModified();
                 }
             }
 
@@ -3141,13 +3143,15 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         ? std::make_unique<sd::UndoSlideSection>(
                               *GetDoc(), SdResId(STR_UNDO_MOVE_SLIDE_SECTION))
                         : nullptr;
-                    rMgr.MoveSection(nSectionIdx, nSectionIdx + 1);
+                    const bool bMoved = rMgr.MoveSection(nSectionIdx, nSectionIdx + 1);
                     if (bUndo)
                     {
-                        GetDoc()->AddUndo(std::move(pUndo));
+                        if (bMoved)
+                            GetDoc()->AddUndo(std::move(pUndo));
                         GetDoc()->EndUndo();
                     }
-                    GetDocSh()->SetModified();
+                    if (bMoved)
+                        GetDocSh()->SetModified();
                 }
             }
 

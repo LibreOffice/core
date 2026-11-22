@@ -144,8 +144,8 @@ public:
     /// Rename a section.
     void RenameSection(sal_Int32 nSectionIndex, const OUString& rNewName);
 
-    /// Move a section (and its slides) to a new position.
-    void MoveSection(sal_Int32 nOldIndex, sal_Int32 nNewIndex);
+    /// Move a section (and its slides) to a new position. False when nothing moved.
+    bool MoveSection(sal_Int32 nOldIndex, sal_Int32 nNewIndex);
 
     /// Get a snapshot of all sections (for undo support).
     std::vector<SlideSection> GetSectionsSnapshot() const;

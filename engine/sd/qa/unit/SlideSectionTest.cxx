@@ -524,6 +524,39 @@ CPPUNIT_TEST_FIXTURE(SlideSectionTest, testMoveSectionAroundCanvasPageAlone)
                                 { u"Section-0"_ustr, 3 }, { u"Section-2"_ustr, 7 } });
 }
 
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testMoveSectionCommandThatMovesNothing)
+{
+    // Given a first section that holds the canvas page alone, followed by the three sections of
+    // the fixture, shown on the canvas page in an unmodified document:
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+    sd::SlideSectionManager& rMgr = getSectionManager();
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    rMgr.AddSection(1, u"Section-0"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rMgr.GetSectionCount());
+    showSlide(0);
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::DrawDocShell* pDocShell = pXImpressDocument->GetDocShell();
+    pDocShell->SetModified(false);
+    const size_t nUndoCount = getUndoManager().GetUndoActionCount();
+
+    // When its section is moved down, which the canvas page does not allow:
+    dispatchCommand(mxComponent, u".uno:MoveSlideSectionDown"_ustr, {});
+
+    // Then nothing is left to undo and the document is not modified. Without the accompanying fix
+    // in place, this test would have failed: the move that did nothing was recorded as a step to
+    // undo, and the document was marked modified.
+    CPPUNIT_ASSERT_EQUAL(u"Section-1"_ustr, rMgr.GetSection(0).maName);
+    CPPUNIT_ASSERT_EQUAL(nUndoCount, getUndoManager().GetUndoActionCount());
+    CPPUNIT_ASSERT(!pDocShell->IsModified());
+
+    // And the next section still moves down, as one step to undo.
+    showSlide(1);
+    dispatchCommand(mxComponent, u".uno:MoveSlideSectionDown"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"Section-0"_ustr, rMgr.GetSection(2).maName);
+    CPPUNIT_ASSERT_EQUAL(nUndoCount + 1, getUndoManager().GetUndoActionCount());
+    CPPUNIT_ASSERT(pDocShell->IsModified());
+}
+
 CPPUNIT_TEST_FIXTURE(SlideSectionTest, testUndoRedoMoveSectionWithCanvasPage)
 {
     // Given the three sections of the fixture, with a canvas page that joined the first one, and
