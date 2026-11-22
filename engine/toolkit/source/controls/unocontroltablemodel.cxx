@@ -186,7 +186,7 @@ namespace svt::table
     void UnoControlTableModel::removeColumn( ColPos const i_position )
     {
         DBG_TESTSOLARMUTEX();
-        ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( o3tl::make_unsigned( i_position ) <= aColumns.size() ),
+        ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( o3tl::make_unsigned( i_position ) < aColumns.size() ),
             "UnoControlTableModel::removeColumn: illegal position!" );
 
         // remove the column
