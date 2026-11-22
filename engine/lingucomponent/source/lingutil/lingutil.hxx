@@ -49,9 +49,9 @@ void MergeNewStyleDicsAndOldStyleDics( std::vector< SvtLinguConfigDictionaryEntr
 // configuration entries, plus the old style ones that add a locale none of those names.
 std::vector< SvtLinguConfigDictionaryEntry > GetSpellDics();
 
-// The BCP-47 names of the locales those dictionaries cover. Only a dictionary whose first
+// The BCP-47 names of the locales the given dictionaries cover. Only a dictionary whose first
 // file exists counts, and only the languages allowed for this process are kept.
-std::set< OUString > GetSpellDicLocaleNames( const std::vector< SvtLinguConfigDictionaryEntry > &rDics );
+std::set< OUString > GetDicLocaleNames( const std::vector< SvtLinguConfigDictionaryEntry > &rDics );
 
 //Find an encoding from a charset string, using
 //rtl_getTextEncodingFromMimeCharset and falling back to

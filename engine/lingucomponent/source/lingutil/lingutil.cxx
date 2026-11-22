@@ -335,7 +335,7 @@ std::vector< SvtLinguConfigDictionaryEntry > GetSpellDics()
     return aDics;
 }
 
-std::set< OUString > GetSpellDicLocaleNames( const std::vector< SvtLinguConfigDictionaryEntry > &rDics )
+std::set< OUString > GetDicLocaleNames( const std::vector< SvtLinguConfigDictionaryEntry > &rDics )
 {
     std::set< OUString > aLocaleNamesSet;
     if (rDics.empty())

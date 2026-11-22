@@ -26,7 +26,6 @@
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
-#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <osl/mutex.hxx>
@@ -127,17 +126,7 @@ Sequence< Locale > Thesaurus::getLocales()
         if (!aDics.empty())
         {
             // get supported locales from the dictionaries-to-use...
-            std::set<OUString> aLocaleNamesSet;
-            for (auto const& dict : aDics)
-            {
-                for (const auto& rLocaleName : dict.aLocaleNames)
-                {
-                    if (!comphelper::COKit::isAllowlistedLanguage(rLocaleName))
-                        continue;
-
-                    aLocaleNamesSet.insert( rLocaleName );
-                }
-            }
+            std::set<OUString> aLocaleNamesSet( GetDicLocaleNames( aDics ) );
             // ... and add them to the resulting sequence
             std::vector<Locale> aLocalesVec;
             aLocalesVec.reserve(aLocaleNamesSet.size());

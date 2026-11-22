@@ -138,7 +138,7 @@ Sequence< Locale > SpellChecker::getLocales()
         if (!aDics.empty())
         {
             // get supported locales from the dictionaries-to-use...
-            std::set<OUString> aLocaleNamesSet( GetSpellDicLocaleNames( aDics ) );
+            std::set<OUString> aLocaleNamesSet( GetDicLocaleNames( aDics ) );
             // ... and add them to the resulting sequence
             m_aSuppLocales.realloc( aLocaleNamesSet.size() );
             std::transform(

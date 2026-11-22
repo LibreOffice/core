@@ -315,7 +315,7 @@ Sequence< Locale > MacSpellChecker::getLocales()
             // service claims only the rest, so the two are never chained for one locale, where
             // a word one of them forbids on purpose would be accepted by the other.
             std::set<LanguageType> aHunspellLanguages;
-            for (const OUString& rName : GetSpellDicLocaleNames(GetSpellDics()))
+            for (const OUString& rName : GetDicLocaleNames(GetSpellDics()))
                 aHunspellLanguages.insert(LanguageTag(rName).getLanguageType());
 
             // now add the shared dictionaries

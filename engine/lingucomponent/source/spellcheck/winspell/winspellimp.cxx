@@ -134,7 +134,7 @@ void WinSpellChecker::ReadLocales()
     // The locales an installed hunspell dictionary covers, as language ids so that the
     // spelling of the tag does not matter when comparing.
     std::set<LanguageType> aHunspellLanguages;
-    for (const OUString& rName : GetSpellDicLocaleNames(GetSpellDics()))
+    for (const OUString& rName : GetDicLocaleNames(GetSpellDics()))
         aHunspellLanguages.insert(LanguageTag(rName).getLanguageType());
 
     for (const OUString& rTag : aTags)

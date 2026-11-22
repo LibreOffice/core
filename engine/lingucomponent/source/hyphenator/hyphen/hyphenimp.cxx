@@ -19,7 +19,6 @@
 
 #include <cpo/uno/Reference.h>
 
-#include <comphelper/kit.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
@@ -144,16 +143,7 @@ void Hyphenator::ensureLocales()
         if (!aDics.empty())
         {
             // get supported locales from the dictionaries-to-use...
-            std::set<OUString> aLocaleNamesSet;
-            for (auto const& dict : aDics)
-            {
-                for (const auto& rLocaleName : dict.aLocaleNames)
-                {
-                    if (!comphelper::COKit::isAllowlistedLanguage(rLocaleName))
-                        continue;
-                    aLocaleNamesSet.insert( rLocaleName );
-                }
-            }
+            std::set<OUString> aLocaleNamesSet( GetDicLocaleNames( aDics ) );
             // ... and add them to the resulting sequence
             std::vector<Locale> aLocalesVec;
             aLocalesVec.reserve(aLocaleNamesSet.size());
