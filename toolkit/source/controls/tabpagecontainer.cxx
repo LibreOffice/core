@@ -176,7 +176,7 @@ void SAL_CALL UnoControlTabPageContainerModel::replaceByIndex( ::sal_Int32 /*Ind
 uno::Any SAL_CALL UnoControlTabPageContainerModel::getByIndex( ::sal_Int32 nIndex )
 {
     std::unique_lock aGuard( m_aMutex );
-    if ( nIndex < 0 || o3tl::make_unsigned(nIndex) > m_aTabPageVector.size() )
+    if ( nIndex < 0 || o3tl::make_unsigned(nIndex) >= m_aTabPageVector.size() )
         throw lang::IndexOutOfBoundsException();
     return uno::Any(m_aTabPageVector[nIndex]);
 }
