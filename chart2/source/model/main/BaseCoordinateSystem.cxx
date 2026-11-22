@@ -238,7 +238,7 @@ const rtl::Reference< Axis > & BaseCoordinateSystem::getAxisByDimension2(
 
     OSL_ASSERT( m_aAllAxis.size() == static_cast< size_t >( m_nDimensionCount));
 
-    if( nAxisIndex < 0 || o3tl::make_unsigned(nAxisIndex) > m_aAllAxis[ nDimensionIndex ].size() )
+    if( nAxisIndex < 0 || o3tl::make_unsigned(nAxisIndex) >= m_aAllAxis[ nDimensionIndex ].size() )
         throw lang::IndexOutOfBoundsException();
 
     return m_aAllAxis[ nDimensionIndex ][nAxisIndex];
