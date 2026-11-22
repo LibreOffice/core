@@ -332,11 +332,22 @@ static SurfaceSharedPtr surfaceFromXBitmap(const uno::Reference<rendering::XBitm
             vcl::bitmap::CanvasCairoExtractBitmapData(aBitmap, data, bHasAlpha, nWidth, nHeight);
 
             // both of the cairo formats use a 32-bit pixel
-            pSurface = rSurfaceProvider->getOutputDevice()->CreateSurface(CairoSurfaceSharedPtr(
-                cairo_image_surface_create_for_data(
-                    data, bHasAlpha ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24, nWidth, nHeight,
-                    nWidth * 4),
-                &cairo_surface_destroy));
+            cairo_surface_t* pCairoSurface = cairo_image_surface_create_for_data(
+                data, bHasAlpha ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24, nWidth, nHeight,
+                nWidth * 4);
+
+            static cairo_user_data_key_t aBitmapDataKey;
+            if (cairo_surface_status(pCairoSurface) == CAIRO_STATUS_SUCCESS
+                && cairo_surface_set_user_data(pCairoSurface, &aBitmapDataKey, data, free)
+                       == CAIRO_STATUS_SUCCESS)
+            {
+                // Keep the pixel data alive until the Cairo surface is destroyed.
+                data = nullptr;
+                pSurface = rSurfaceProvider->getOutputDevice()->CreateSurface(
+                    CairoSurfaceSharedPtr(pCairoSurface, &cairo_surface_destroy));
+            }
+            else
+                cairo_surface_destroy(pCairoSurface);
 
             if (data)
                 free(data);
