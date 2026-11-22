@@ -231,10 +231,7 @@ void AccessibleGridControlTable::selectAllAccessibleChildren()
     SolarMutexGuard aSolarGuard;
 
     ensureAlive();
-    Sequence< sal_Int32 > selectedRows = getSelectedAccessibleRows();
-    auto selectedRowsRange = asNonConstRange(selectedRows);
-    for(tools::Long i=0; i<m_aTable.GetRowCount(); i++)
-        selectedRowsRange[i]=i;
+    m_aTable.SelectAllRows(true);
 }
 sal_Int64 AccessibleGridControlTable::getSelectedAccessibleChildCount()
 {
