@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <file/FStatement.hxx>
 #include <file/FConnection.hxx>
@@ -537,7 +536,7 @@ void OStatement_Base::GetAssignValues()
         OSL_ENSURE(pInsertAtomCommalist != nullptr,"OResultSet: pInsertAtomCommalist must not be NULL!");
         OSL_ENSURE(pInsertAtomCommalist->count() > 0,"OResultSet: pInsertAtomCommalist <= 0");
 
-        sal_Int32 nIndex=0;
+        size_t nIndex=0;
         for (size_t i = 0; i < pInsertAtomCommalist->count(); i++)
         {
             OSQLParseNode * pRow_Value_Const = pInsertAtomCommalist->getChild(i); // row_value_constructor
@@ -607,9 +606,10 @@ void OStatement_Base::GetAssignValues()
     }
 }
 
-void OStatement_Base::ParseAssignValues(const std::vector< OUString>& aColumnNameList,OSQLParseNode* pRow_Value_Constructor_Elem, sal_Int32 nIndex)
+void OStatement_Base::ParseAssignValues(const std::vector< OUString>& aColumnNameList,OSQLParseNode* pRow_Value_Constructor_Elem, size_t nIndex)
 {
-    OSL_ENSURE(o3tl::make_unsigned(nIndex) <= aColumnNameList.size(),"SdbFileCursor::ParseAssignValues: nIndex > aColumnNameList.GetTokenCount()");
+    if (nIndex >= aColumnNameList.size())
+        throwFunctionSequenceException(*this);
     const OUString& aColumnName(aColumnNameList[nIndex]);
     OSL_ENSURE(aColumnName.getLength() > 0,"OResultSet: Column-Name not found");
     assert(pRow_Value_Constructor_Elem != nullptr && "OResultSet: pRow_Value_Constructor_Elem must not be NULL!");
