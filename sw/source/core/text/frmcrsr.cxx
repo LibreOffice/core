@@ -427,7 +427,8 @@ bool SwTextFrame::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
         SwTextCursor aLine( pFrame, &aInf );
         SwCursorMoveState aTmpState( CursorMoveState::SetOnlyText );
         aTmpState.m_bRealHeight = true;
-        aLine.GetCharRect( &rOrig, nOffset, &aTmpState, nMaxY );
+        aLine.GetCharRect(&rOrig, nOffset, &aTmpState, nMaxY,
+                          /*bExtraBlankWidthAtLineEndOnly*/ true);
         if( aTmpState.m_aRealHeight.X() >= 0 )
         {
             rOrig.SetPosY(rOrig.Pos().Y() + aTmpState.m_aRealHeight.X());

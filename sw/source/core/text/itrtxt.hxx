@@ -277,7 +277,7 @@ public:
         CtorInitTextCursor(pTextFrame, pTextSizeInf);
     }
     void GetCharRect(SwRect *, TextFrameIndex, SwCursorMoveState* = nullptr,
-        const tools::Long nMax = 0 );
+        const tools::Long nMax = 0, bool bExtraBlankWidthAtLineEndOnly = false);
     void GetEndCharRect(SwRect *, TextFrameIndex, SwCursorMoveState* = nullptr,
         const tools::Long nMax = 0 );
     TextFrameIndex GetModelPositionForViewPoint( SwPosition *pPos, const Point &rPoint,

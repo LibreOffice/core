@@ -1342,7 +1342,8 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
 }
 
 void SwTextCursor::GetCharRect( SwRect* pOrig, TextFrameIndex const nOfst,
-                               SwCursorMoveState* pCMS, const tools::Long nMax )
+                               SwCursorMoveState* pCMS, const tools::Long nMax,
+                               bool bExtraBlankWidthAtLineEndOnly )
 {
     CharCursorToLine(nOfst);
 
@@ -1369,7 +1370,8 @@ void SwTextCursor::GetCharRect( SwRect* pOrig, TextFrameIndex const nOfst,
 
     // If necessary, as catch up, do the adjustment
     GetAdjusted();
-    AddExtraBlankWidth();
+    if (!bExtraBlankWidthAtLineEndOnly || nOfst == m_nStart + m_pCurr->GetLen())
+        AddExtraBlankWidth();
 
     const Point aCharPos( GetTopLeft() );
 
