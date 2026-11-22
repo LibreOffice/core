@@ -12,9 +12,24 @@
 #include <sddllapi.h>
 #include <svx/seclabel/SecurityLabelTarget.hxx>
 
+class SdDrawDocument;
+
 namespace sd
 {
 class DrawViewShell;
+struct HeaderFooterSettings;
+}
+
+namespace sd::seclabel
+{
+/// Whether rSettings show the security label marking of rDocument as the footer: the footer is
+/// visible and its text is the marking stored with the label or the marking derived from its
+/// policy.
+SD_DLLPUBLIC bool showsMarking(SdDrawDocument& rDocument, const HeaderFooterSettings& rSettings);
+
+/// The footer text of the first slide of rDocument that shows the security label marking, or an
+/// empty string when no slide shows it.
+SD_DLLPUBLIC OUString findMarkingFooter(SdDrawDocument& rDocument);
 }
 
 /// Impress implementation of the security-label placement target: the marking is written

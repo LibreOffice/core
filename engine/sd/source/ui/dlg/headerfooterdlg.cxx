@@ -45,6 +45,7 @@
 
 #include <undoheaderfooter.hxx>
 #include <sdundogr.hxx>
+#include <SdSecurityLabelTarget.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -122,6 +123,8 @@ private:
     SdDrawDocument&     mrDoc;
     LanguageType        meOldLanguage;
     bool                mbHandoutMode;
+    /// Whether the footer keeps its text and stays visible on every slide.
+    bool                mbKeepFooter;
 
     std::unique_ptr<weld::Builder> mxBuilder;
     std::unique_ptr<weld::Container> mxContainer;
@@ -160,6 +163,9 @@ public:
     HeaderFooterTabPage(weld::Container* pParent, SdDrawDocument& rDoc, SdPage* pActualPage, bool bHandoutMode );
 
     void    init( const HeaderFooterSettings& rSettings, bool bNotOnTitle );
+    /// Shows the footer as visible on every slide, with the check boxes and the text of the
+    /// footer and the "not on title slide" check box disabled.
+    void    KeepFooter();
     void    getData( HeaderFooterSettings& rSettings, bool& rNotOnTitle );
     void    update();
 };
@@ -222,6 +228,10 @@ HeaderFooterDialog::HeaderFooterDialog(ViewShell& rViewShell, weld::Window* pPar
 
     maNotesHandoutSettings = pNotes->getHeaderFooterSettings();
     mxNotesHandoutsTabPage->init( maNotesHandoutSettings, false );
+
+    maMarkingFooterText = sd::seclabel::findMarkingFooter(rDoc);
+    if (!maMarkingFooterText.isEmpty())
+        mxSlideTabPage->KeepFooter();
 }
 
 HeaderFooterDialog::~HeaderFooterDialog()
@@ -283,6 +293,14 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
     // change slide settings first ...
 
     mxSlideTabPage->getData( aNewSettings, bNewNotOnTitle );
+
+    // The security label marking stays the visible footer of every slide it is applied to.
+    if (!maMarkingFooterText.isEmpty())
+    {
+        aNewSettings.mbFooterVisible = true;
+        aNewSettings.maFooterText = maMarkingFooterText;
+        bNewNotOnTitle = false;
+    }
 
     // only if we pressed apply or apply all on the slide tab page or if the slide settings
     // have been changed
@@ -369,6 +387,7 @@ void HeaderFooterDialog::change( SdUndoGroup* pUndoGroup, SdPage* pPage, const H
 HeaderFooterTabPage::HeaderFooterTabPage(weld::Container* pParent, SdDrawDocument& rDoc, SdPage* pActualPage, bool bHandoutMode)
     : mrDoc(rDoc)
     , mbHandoutMode(bHandoutMode)
+    , mbKeepFooter(false)
     , mxBuilder(Application::CreateBuilder(pParent, u"modules/simpress/ui/headerfootertab.ui"_ustr))
     , mxContainer(mxBuilder->weld_container(u"HeaderFooterTab"_ustr))
     , mxFTIncludeOn(mxBuilder->weld_label(u"include_label"_ustr))
@@ -483,6 +502,16 @@ void HeaderFooterTabPage::init( const HeaderFooterSettings& rSettings, bool bNot
     update();
 }
 
+void HeaderFooterTabPage::KeepFooter()
+{
+    mbKeepFooter = true;
+    mxCBFooter->set_active(true);
+    mxCBFooter->set_sensitive(false);
+    mxCBNotOnTitle->set_active(false);
+    mxCBNotOnTitle->set_sensitive(false);
+    update();
+}
+
 void HeaderFooterTabPage::getData( HeaderFooterSettings& rSettings, bool& rNotOnTitle )
 {
     rSettings.mbDateTimeVisible = mxCBDateTime->get_active();
@@ -517,7 +546,7 @@ void HeaderFooterTabPage::update()
     mxFTDateTimeFormat->set_sensitive( mxCBDateTime->get_active() && mxRBDateTimeAutomatic->get_active() );
     mxFTDateTimeLanguage->set_sensitive( mxCBDateTime->get_active() && mxRBDateTimeAutomatic->get_active() );
     mxCBDateTimeLanguage->set_sensitive( mxCBDateTime->get_active() && mxRBDateTimeAutomatic->get_active() );
-    mxFooterBox->set_sensitive( mxCBFooter->get_active() );
+    mxFooterBox->set_sensitive( mxCBFooter->get_active() && !mbKeepFooter );
     mxHeaderBox->set_sensitive( mxCBHeader->get_active() );
 
     HeaderFooterSettings aSettings;

@@ -23,6 +23,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/outlobj.hxx>
+#include <svx/seclabel/SecLabelStore.hxx>
 #include <svx/svdotext.hxx>
 #include <tools/json_writer.hxx>
 
@@ -143,6 +144,28 @@ void fitFootersToText(SdDrawDocument* pDoc)
         if (pMaster && aDoneMasters.insert(pMaster).second)
             fitFooterToText(*pDoc, *pMaster, *pPage);
     }
+}
+}
+
+namespace sd::seclabel
+{
+bool showsMarking(SdDrawDocument& rDocument, const HeaderFooterSettings& rSettings)
+{
+    sd::DrawDocShell* pDocShell = rDocument.GetDocSh();
+    return rSettings.mbFooterVisible && pDocShell
+           && svx::seclabel::isMarking(pDocShell->GetModel(), rSettings.maFooterText);
+}
+
+OUString findMarkingFooter(SdDrawDocument& rDocument)
+{
+    const sal_uInt16 nCount = rDocument.GetSdPageCount(PageKind::Standard);
+    for (sal_uInt16 i = 0; i < nCount; ++i)
+    {
+        const SdPage* pPage = rDocument.GetSdPage(i, PageKind::Standard);
+        if (pPage && showsMarking(rDocument, pPage->getHeaderFooterSettings()))
+            return pPage->getHeaderFooterSettings().maFooterText;
+    }
+    return OUString();
 }
 }
 

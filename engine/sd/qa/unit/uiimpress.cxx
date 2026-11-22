@@ -92,6 +92,8 @@
 #include <svx/sderitm.hxx>
 #include <DrawViewShell.hxx>
 #include <SdSecurityLabelTarget.hxx>
+#include <svx/seclabel/SecLabelStore.hxx>
+#include <svx/seclabel/StanagLabel.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <SlideSorter.hxx>
 #include <controller/SlsClipboard.hxx>
@@ -7706,6 +7708,55 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSecurityLabelFooterFitsMarking)
     CPPUNIT_ASSERT_GREATER(aOrigRect.GetHeight(), aRect.GetHeight());
     CPPUNIT_ASSERT_EQUAL(aOrigRect.Bottom(), aRect.Bottom());
     CPPUNIT_ASSERT_EQUAL(tools::Long(pMaster->GetLeftBorder()), aRect.Left());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSecurityLabelFooterShowsMarking)
+{
+    // A labelled presentation with two slides; only the second one shows the marking:
+    createSdImpressDoc();
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    svx::seclabel::StanagLabel aLabel;
+    aLabel.aPolicyId = u"urn:oid:1.2.826.0.1310.1.2.0"_ustr;
+    aLabel.aClassification = u"SECRET"_ustr;
+    aLabel.aCreationDateTime = u"2026-06-21T10:00:00Z"_ustr;
+    aLabel.aMarking = u"SECRET//X"_ustr;
+    svx::seclabel::storeLabelPart(
+        uno::Reference<frame::XModel>(mxComponent, uno::UNO_QUERY), aLabel.toBindingXml(),
+        svx::seclabel::buildItemProps(u"{B6E4D8A1-1A35-4F0E-9B7A-71F4C0F5E0D3}"_ustr,
+                                      svx::seclabel::STANAG_BINDING_SCHEMA));
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+    SdPage* pSecond = pDoc->GetSdPage(1, PageKind::Standard);
+    sd::HeaderFooterSettings aSettings = pSecond->getHeaderFooterSettings();
+    aSettings.mbFooterVisible = true;
+    aSettings.maFooterText = u"SECRET//X"_ustr;
+    pSecond->setHeaderFooterSettings(aSettings);
+
+    // A visible footer with the marking shows it, a hidden or different footer does not:
+    CPPUNIT_ASSERT(sd::seclabel::showsMarking(*pDoc, aSettings));
+    CPPUNIT_ASSERT(!sd::seclabel::showsMarking(
+        *pDoc, pDoc->GetSdPage(0, PageKind::Standard)->getHeaderFooterSettings()));
+    aSettings.maFooterText = u"My footer"_ustr;
+    CPPUNIT_ASSERT(!sd::seclabel::showsMarking(*pDoc, aSettings));
+
+    // The marking is found from any slide, though the first one does not show it:
+    CPPUNIT_ASSERT_EQUAL(u"SECRET//X"_ustr, sd::seclabel::findMarkingFooter(*pDoc));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFooterWithoutLabelShowsNoMarking)
+{
+    // Without a security label, no footer shows a marking, whatever its text:
+    createSdImpressDoc();
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    SdPage* pFirst = pDoc->GetSdPage(0, PageKind::Standard);
+    sd::HeaderFooterSettings aSettings = pFirst->getHeaderFooterSettings();
+    aSettings.mbFooterVisible = true;
+    aSettings.maFooterText = u"SECRET//X"_ustr;
+    pFirst->setHeaderFooterSettings(aSettings);
+    CPPUNIT_ASSERT(!sd::seclabel::showsMarking(*pDoc, aSettings));
+    CPPUNIT_ASSERT(sd::seclabel::findMarkingFooter(*pDoc).isEmpty());
 }
 
 namespace

@@ -40,6 +40,8 @@ private:
 
     HeaderFooterSettings    maSlideSettings;
     HeaderFooterSettings    maNotesHandoutSettings;
+    /// The security label marking that slide footers show, or empty when no slide shows it.
+    OUString                maMarkingFooterText;
 
     SdDrawDocument&         mrDoc;
     SdPage*                 mpCurrentPage;
