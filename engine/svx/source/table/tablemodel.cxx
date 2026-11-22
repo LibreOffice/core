@@ -587,7 +587,7 @@ CellRef TableModel::createCell()
 
 void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
 {
-    if( !(nCount && mpTableObj) )
+    if( !(nCount > 0 && nIndex >= 0 && mpTableObj) )
         return;
 
     try
@@ -667,7 +667,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
 {
     sal_Int32 nColCount = getColumnCountImpl();
 
-    if( !(mpTableObj && nCount && (nIndex >= 0) && (nIndex < nColCount)) )
+    if( !(mpTableObj && nCount > 0 && (nIndex >= 0) && (nIndex < nColCount)) )
         return;
 
     try
@@ -777,7 +777,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
 
 void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
 {
-    if( !(nCount && mpTableObj) )
+    if( !(nCount > 0 && nIndex >= 0 && mpTableObj) )
         return;
 
     SdrModel& rModel(mpTableObj->getSdrModelFromSdrObject());
@@ -841,7 +841,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
 {
     sal_Int32 nRowCount = getRowCountImpl();
 
-    if( !(mpTableObj && nCount && (nIndex >= 0) && (nIndex < nRowCount)) )
+    if( !(mpTableObj && nCount > 0 && (nIndex >= 0) && (nIndex < nRowCount)) )
         return;
 
     SdrModel& rModel(mpTableObj->getSdrModelFromSdrObject());
