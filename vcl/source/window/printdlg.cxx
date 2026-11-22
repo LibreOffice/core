@@ -1226,7 +1226,7 @@ void PrintDialog::updateOrientationBox( const bool bAutomatic )
     }
 }
 
-void PrintDialog::updatePaperSizeBox()
+void PrintDialog::updatePaperSizeBox(const Size* pPaperSize)
 {
     VclPtr<Printer> aPrt( maPController->getPrinter() );
 
@@ -1236,7 +1236,7 @@ void PrintDialog::updatePaperSizeBox()
         return;
 
     mePaper = aPrt->GetPaper();
-    const Size aCurPaperSize(aPrt->GetSizeOfPaper());
+    const Size aCurPaperSize = pPaperSize ? *pPaperSize : aPrt->GetSizeOfPaper();
     PaperInfo aCurInfo(aCurPaperSize.getWidth(), aCurPaperSize.getHeight());
     aCurInfo.doSloppyFit(true);
 
@@ -2143,6 +2143,7 @@ IMPL_LINK_NOARG(PrintDialog, ClickSetupHdl, weld::Button&, void)
 {
     const Size aSavedCustomSize = maCustomPaperSize;
     const bool bHadCustomEntry = mbHasCustomPaperEntry;
+    const Size aSavedSelectedPaperSize = maSelectedPaperSize;
     // Save orientation dropdown — Properties dialog can clobber it.
     const int nSavedOrient = mxOrientationBox->get_active();
 
@@ -2161,9 +2162,10 @@ IMPL_LINK_NOARG(PrintDialog, ClickSetupHdl, weld::Button&, void)
             setPaperSizes();
         }
 
-        // tdf#173642: setPaperSizes() selects the paper matching the document,
-        // which would discard a paper picked in the dropdown.
-        updatePaperSizeBox();
+        // Restore the paper size selected before opening printer properties.
+        updatePaperSizeBox(aSavedSelectedPaperSize.IsEmpty()
+                       ? nullptr
+                       : &aSavedSelectedPaperSize);
     }
 
     // Sync maSelectedPaperSize with current combobox selection.
