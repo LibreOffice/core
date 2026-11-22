@@ -4862,6 +4862,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_MODIFY_FIELD:
         {
             OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
+            const SdrTextObj* pTextEditObject = mpDrawView->GetTextEditObject();
 
             if( pOLV )
             {
@@ -4876,7 +4877,15 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                     vcl::Window* pWin = GetActiveWindow();
                     ScopedVclPtr<AbstractSdModifyFieldDlg> pDlg(pFact->CreateSdModifyFieldDlg(pWin ? pWin->GetFrameWeld() : nullptr, oFieldItem->GetField(), pOLV->GetAttribs()));
-                    if( pDlg->Execute() == RET_OK )
+                    const short nResult = pDlg->Execute();
+
+                    // The dialog runs its own event loop, in which the text edit can end or start.
+                    // The field is changed only when the text edit is on the same object as when
+                    // the dialog opened, and the OutlinerView of that text edit is looked up again.
+                    pOLV = mpDrawView->GetTextEditObject() == pTextEditObject
+                               ? mpDrawView->GetTextEditOutlinerView()
+                               : nullptr;
+                    if (nResult == RET_OK && pOLV)
                     {
                         // To make a correct SetAttribs() call at the utlinerView
                         // it is necessary to split the actions here

@@ -57,6 +57,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/XCell.hpp>
+#include <com/sun/star/text/textfield/Type.hpp>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/string.hxx>
 #include <boost/property_tree/json_parser.hpp>
@@ -70,9 +71,11 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <tools/date.hxx>
 #include <tools/json_writer.hxx>
 
 #include <vcl/BitmapReadAccess.hxx>
+#include <vcl/event.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
@@ -524,6 +527,122 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testParagraphDialogTextEditEnds)
         nIndent,
         pParaObject->GetTextObject().GetParaAttribs(0).Get(EE_PARA_LRSPACE).ResolveTextLeft({}));
     CPPUNIT_ASSERT_EQUAL(nShapeIndent, pTitle->GetMergedItem(EE_PARA_LRSPACE).ResolveTextLeft({}));
+}
+
+namespace
+{
+/// Finds the child window of rParent, at any depth, that has the id rId in its .ui file.
+vcl::Window* findChildWindow(vcl::Window& rParent, std::u16string_view rId)
+{
+    for (vcl::Window* pChild = rParent.GetWindow(GetWindowType::FirstChild); pChild;
+         pChild = pChild->GetWindow(GetWindowType::Next))
+    {
+        if (pChild->get_id() == rId)
+            return pChild;
+        if (vcl::Window* pFound = findChildWindow(*pChild, rId))
+            return pFound;
+    }
+    return nullptr;
+}
+
+/// Presses and releases the space key on the button with the id rId in rDialog, which clicks it.
+bool clickButton(vcl::Window& rDialog, std::u16string_view rId)
+{
+    vcl::Window* pButton = findChildWindow(rDialog, rId);
+    if (!pButton)
+        return false;
+
+    const KeyEvent aSpace(' ', vcl::KeyCode(KEY_SPACE));
+    pButton->KeyInput(aSpace);
+    pButton->KeyUp(aSpace);
+    return true;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testModifyFieldDialogTextEditEnds)
+{
+    // Given a date field that follows the current date, at the start of the title of the first
+    // slide.
+    SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
+    SdTestViewCallback aView;
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    auto pTitle = dynamic_cast<SdrTextObj*>(pViewShell->GetActualPage()->GetObj(0));
+    CPPUNIT_ASSERT(pTitle);
+    pView->MarkObj(pTitle, pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pTitle);
+    OutlinerView* pOutlinerView = pView->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOutlinerView);
+    pOutlinerView->SetSelection(ESelection(0, 0));
+    pOutlinerView->InsertField(
+        SvxFieldItem(SvxDateField(Date(1, 1, 2000), SvxDateType::Var), EE_FEATURE_FIELD));
+    pView->SdrEndTextEdit();
+
+    // The date type of the field, as the title holds it outside of a text edit.
+    auto getDateType = [pTitle]() {
+        const OutlinerParaObject* pParaObject = pTitle->GetOutlinerParaObject();
+        CPPUNIT_ASSERT(pParaObject);
+        auto pDateField = dynamic_cast<const SvxDateField*>(
+            pParaObject->GetTextObject().GetFieldData(0, 0, css::text::textfield::Type::DATE));
+        CPPUNIT_ASSERT(pDateField);
+        return pDateField->GetType();
+    };
+    CPPUNIT_ASSERT_EQUAL(SvxDateType::Var, getDateType());
+
+    // The edit field dialog picks the date type given and presses OK. When the text edit is to end
+    // while the dialog is open, it ends first.
+    OUString sTypeButton;
+    bool bEndTextEdit = false;
+    bool bTypePicked = false;
+    bool bClosed = false;
+    auto aPickType = [&](vcl::Window& rDialog) {
+        if (bEndTextEdit)
+            pView->SdrEndTextEdit();
+        bTypePicked = clickButton(rDialog, sTypeButton);
+        bClosed = clickButton(rDialog, u"ok");
+    };
+    // Starts a text edit in the title with the field selected.
+    auto selectField = [&]() {
+        pView->SdrBeginTextEdit(pTitle);
+        OutlinerView* pFieldView = pView->GetTextEditOutlinerView();
+        CPPUNIT_ASSERT(pFieldView);
+        pFieldView->SetSelection(ESelection(0, 0, 0, 1));
+        CPPUNIT_ASSERT(pFieldView->GetFieldAtSelection());
+    };
+
+    // When the dialog is answered while the text edit goes on.
+    selectField();
+    sTypeButton = u"fixedRB"_ustr;
+    DialogAnswer aAnswer(aPickType);
+    aAnswer.post();
+    dispatchCommand(mxComponent, u".uno:ModifyField"_ustr, {});
+
+    // Then the field gets the type picked.
+    CPPUNIT_ASSERT(aAnswer.isAnswered());
+    CPPUNIT_ASSERT(bTypePicked);
+    CPPUNIT_ASSERT(bClosed);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    pView->SdrEndTextEdit();
+    CPPUNIT_ASSERT_EQUAL(SvxDateType::Fix, getDateType());
+
+    // When the text edit ends while the dialog is open, and the dialog is answered after that.
+    selectField();
+    sTypeButton = u"varRB"_ustr;
+    bEndTextEdit = true;
+    bTypePicked = false;
+    bClosed = false;
+    DialogAnswer aAnswerAfterEnd(aPickType);
+    aAnswerAfterEnd.post();
+    dispatchCommand(mxComponent, u".uno:ModifyField"_ustr, {});
+
+    // Then the field keeps its type, because the change is for the field that was selected when the
+    // dialog opened. Without the accompanying fix in place, the answer of the dialog was applied
+    // after the text edit had ended.
+    CPPUNIT_ASSERT(aAnswerAfterEnd.isAnswered());
+    CPPUNIT_ASSERT(bTypePicked);
+    CPPUNIT_ASSERT(bClosed);
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(SvxDateType::Fix, getDateType());
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesPanelTypingCreatesNotesObject)
