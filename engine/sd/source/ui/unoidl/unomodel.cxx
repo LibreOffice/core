@@ -6809,7 +6809,8 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate, int n
         ? std::make_unique<sd::UndoSlideSection>(*mpDoc, SdResId(STR_UNDO_MOVEPAGES))
         : nullptr;
 
-    mpDoc->MovePages(nPosition, aSelectedPages);
+    const bool bMoved = mpDoc->MovePages(nPosition, aSelectedPages);
+    bool bSectionsChanged = false;
 
     // The new page order leaves only the current page selected in the document, and that is
     // the selection clients show. The slide sorter takes the same selection, so the next move
@@ -6861,11 +6862,14 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate, int n
 
         if (bChanged)
             rSectionMgr.RestoreSectionsSnapshot(aNewSections);
+        bSectionsChanged = bChanged;
     }
 
     if (pSectionUndo)
     {
-        mpDoc->AddUndo(std::move(pSectionUndo));
+        // A drop on the place the slides already have is no step to undo.
+        if (bMoved || bSectionsChanged)
+            mpDoc->AddUndo(std::move(pSectionUndo));
         mpDoc->EndUndo();
     }
 }

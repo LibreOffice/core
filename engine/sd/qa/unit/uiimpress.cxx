@@ -2786,6 +2786,52 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformMoveSlideWit
     CPPUNIT_ASSERT_EQUAL(aSlides[1], pDoc->GetSdPage(3, PageKind::Standard));
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMoveSelectedPartsToOwnPlaceWithSections)
+{
+    // Given 3 slides in two sections, with the second slide selected in the slide sorter:
+    createSdImpressDoc();
+    getSlideSorterViewShell();
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xSlides = xPagesSupplier->getDrawPages();
+    while (xSlides->getCount() < 3)
+        xSlides->insertNewByIndex(xSlides->getCount());
+    sd::SlideSectionManager& rMgr = pDoc->GetSectionManager();
+    rMgr.AddSection(0, u"First"_ustr);
+    rMgr.AddSection(2, u"Second"_ustr);
+    SdPage* pSecondSlide = pDoc->GetSdPage(1, PageKind::Standard);
+    // The kit selects and moves through this interface.
+    vcl::ITiledRenderable* pRenderable = pXImpressDocument;
+    pRenderable->setPart(1);
+    pRenderable->selectPart(1, 1);
+    SfxUndoManager* pUndoManager = pXImpressDocument->GetDocShell()->GetUndoManager();
+    const size_t nUndoCount = pUndoManager->GetUndoActionCount();
+
+    // When the slide is dropped after the first slide, the place it already has:
+    pRenderable->moveSelectedParts(0, false, -1);
+
+    // Then nothing is left to undo. Without the accompanying fix in place, this test would have
+    // failed: the sections of the document were recorded as a step to undo that did nothing.
+    CPPUNIT_ASSERT_EQUAL(pSecondSlide, pDoc->GetSdPage(1, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(nUndoCount, pUndoManager->GetUndoActionCount());
+
+    // And a drop on its own place that makes it the first slide of the second section changes the
+    // sections alone, as one step to undo, which undo takes back.
+    pRenderable->moveSelectedParts(1, false, 1);
+    CPPUNIT_ASSERT_EQUAL(pSecondSlide, pDoc->GetSdPage(1, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rMgr.GetSection(1).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(nUndoCount + 1, pUndoManager->GetUndoActionCount());
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rMgr.GetSection(1).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(nUndoCount, pUndoManager->GetUndoActionCount());
+
+    // And a drop after the last slide moves it, as one step to undo.
+    pRenderable->moveSelectedParts(2, false, -1);
+    CPPUNIT_ASSERT_EQUAL(pSecondSlide, pDoc->GetSdPage(2, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(nUndoCount + 1, pUndoManager->GetUndoActionCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testRedoDeleteSlideKeepsPosition)
 {
     // Redoing the deletion of a slide leaves the current slide where the deleted one was, as the
