@@ -38,11 +38,25 @@
 
 #include <string>
 
+namespace
+{
+// The setting that holds the URL of a remote JSON of the given kind, or an empty string for an
+// unknown kind
+std::string_view configKeyForKind(const std::string& kind)
+{
+    if (kind == RemoteConfigKind)
+        return RemoteConfigUrlKey;
+    if (kind == RemoteFontConfigKind)
+        return RemoteFontConfigUrlKey;
+    return std::string_view();
+}
+} // namespace
+
 void RemoteJSONPoll::start()
 {
     Poco::URI remoteServerURI(_conf.getString(_configKey));
 
-    if (_expectedKind == "configuration")
+    if (_expectedKind == RemoteConfigKind)
     {
         if (remoteServerURI.empty())
         {
@@ -104,8 +118,6 @@ void RemoteJSONPoll::pollingThread()
 
                 if (statusCode == http::StatusCode::OK)
                 {
-                    _eTagValue = httpResponse->get("ETag");
-
                     const std::string& body = httpResponse->getBody();
 
                     LOG_DBG("Got " << body.size() << " bytes for " << remoteServerURI.toString());
@@ -117,14 +129,30 @@ void RemoteJSONPoll::pollingThread()
                         JsonUtil::findJSONValue(remoteJson, "kind", kind);
                         if (kind == _expectedKind)
                         {
+                            // Only an accepted JSON counts as known on the next poll, so a
+                            // rejected one is fetched and reported again
+                            _eTagValue = httpResponse->get("ETag");
                             handleJSON(remoteJson);
                         }
                         else
                         {
-                            LOG_ERR("Make sure that " << remoteServerURI.toString()
-                                                      << " contains a property 'kind' with "
-                                                         "value '"
-                                                      << _expectedKind << "'");
+                            const std::string_view kindConfigKey = configKeyForKind(kind);
+                            if (!kindConfigKey.empty())
+                            {
+                                // A JSON of the other known kind, e.g. the font list URL set
+                                // as the remote config URL
+                                LOG_ERR(remoteServerURI.toString()
+                                        << " (from " << _configKey << ") has 'kind' set to '"
+                                        << kind << "' instead of '" << _expectedKind
+                                        << "': a JSON of that kind goes in " << kindConfigKey);
+                            }
+                            else
+                            {
+                                LOG_ERR("Make sure that " << remoteServerURI.toString()
+                                                          << " contains a property 'kind' with "
+                                                             "value '"
+                                                          << _expectedKind << "'");
+                            }
                         }
                     }
                     else

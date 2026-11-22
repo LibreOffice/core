@@ -29,6 +29,7 @@
 #include <Poco/Util/LayeredConfiguration.h>
 
 #include <string>
+#include <string_view>
 
 /**
   A custom socket poll to fetch remote config every 60 seconds.
@@ -38,6 +39,12 @@
   remote config itself, or the font configuration.  It si passed via the
   uriConfigKey param.
 */
+// The kinds of remote JSON, and the settings that hold their URLs
+constexpr std::string_view RemoteConfigKind = "configuration";
+constexpr std::string_view RemoteConfigUrlKey = "remote_config.remote_url";
+constexpr std::string_view RemoteFontConfigKind = "fontconfiguration";
+constexpr std::string_view RemoteFontConfigUrlKey = "remote_font_config.url";
+
 class RemoteJSONPoll : public SocketPoll
 {
 public:
@@ -71,7 +78,8 @@ class RemoteConfigPoll : public RemoteJSONPoll
 {
 public:
     RemoteConfigPoll(Poco::Util::LayeredConfiguration& config)
-        : RemoteJSONPoll(config, "remote_config.remote_url", "remoteconfig_poll", "configuration")
+        : RemoteJSONPoll(config, std::string(RemoteConfigUrlKey), "remoteconfig_poll",
+                         std::string(RemoteConfigKind))
     {
         constexpr int PRIO_JSON = -200; // highest priority
         _persistConfig = new ConfigUtil::AppConfigMap;
@@ -123,8 +131,8 @@ class RemoteFontConfigPoll : public RemoteJSONPoll
 {
 public:
     RemoteFontConfigPoll(Poco::Util::LayeredConfiguration& config)
-        : RemoteJSONPoll(config, "remote_font_config.url", "remotefontconfig_poll",
-                         "fontconfiguration")
+        : RemoteJSONPoll(config, std::string(RemoteFontConfigUrlKey), "remotefontconfig_poll",
+                         std::string(RemoteFontConfigKind))
     {
     }
 
