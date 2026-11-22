@@ -35,10 +35,13 @@
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <fchrfmt.hxx>
+#include <fmtcntnt.hxx>
+#include <fmthdft.hxx>
 #include <formatcontentcontrol.hxx>
 #include <hintids.hxx>
 #include <ndhints.hxx>
 #include <ndtxt.hxx>
+#include <pagedesc.hxx>
 #include <pam.hxx>
 #include <textcontentcontrol.hxx>
 #include <txatbase.hxx>
@@ -465,6 +468,49 @@ bool isMarkingContentControl(const SwTextContentControl& rTextContentControl)
     return pContentControl && pContentControl->GetTag() == MARKING_CONTROL_TAG && pTextNode
            && pTextNode->GetNodes().IsDocNodes()
            && (pTextNode->FindHeaderStartNode() || pTextNode->FindFooterStartNode());
+}
+
+bool hasLockedMarking(SwDoc& rDoc, const SwPageDesc& rPageDesc, bool bHeader)
+{
+    SwContentControlManager& rManager = rDoc.GetContentControlManager();
+    const SwFrameFormat* aPageFormats[] = { &rPageDesc.GetMaster(), &rPageDesc.GetLeft(),
+                                            &rPageDesc.GetFirstMaster(),
+                                            &rPageDesc.GetFirstLeft() };
+    for (size_t i = 0; i < rManager.GetCount(); ++i)
+    {
+        const SwTextContentControl* pTextContentControl = rManager.UnsortedGet(i);
+        if (!isMarkingContentControl(*pTextContentControl)
+            || !pTextContentControl->GetContentControl().GetContentControl()->GetLock(
+                    /*bControl=*/true).value_or(false))
+            continue;
+
+        const SwNodeOffset nIndex = pTextContentControl->GetTextNode()->GetIndex();
+        for (const SwFrameFormat* pPageFormat : aPageFormats)
+        {
+            const SwFrameFormat* pFormat = bHeader ? pPageFormat->GetHeader().GetHeaderFormat()
+                                                   : pPageFormat->GetFooter().GetFooterFormat();
+            const SwNodeIndex* pStart = pFormat ? pFormat->GetContent().GetContentIdx() : nullptr;
+            if (pStart && pStart->GetIndex() < nIndex
+                && nIndex < pStart->GetNode().EndOfSectionIndex())
+                return true;
+        }
+    }
+    return false;
+}
+
+bool takesMarkingOff(SwDoc& rDoc, const SwPageDesc& rOld, const SwPageDesc& rNew)
+{
+    return (hasLockedMarking(rDoc, rOld, /*bHeader=*/true)
+            && (rOld.GetMaster().GetHeader().IsActive() != rNew.GetMaster().GetHeader().IsActive()
+                || rOld.IsWithoutFirstHeader() != rNew.IsWithoutFirstHeader()
+                || rOld.IsHeaderShared() != rNew.IsHeaderShared()
+                || rOld.IsFirstShared() != rNew.IsFirstShared()))
+           || (hasLockedMarking(rDoc, rOld, /*bHeader=*/false)
+               && (rOld.GetMaster().GetFooter().IsActive()
+                       != rNew.GetMaster().GetFooter().IsActive()
+                   || rOld.IsWithoutFirstFooter() != rNew.IsWithoutFirstFooter()
+                   || rOld.IsFooterShared() != rNew.IsFooterShared()
+                   || rOld.IsFirstShared() != rNew.IsFirstShared()));
 }
 
 void applyMarking(const uno::Reference<frame::XModel>& xModel, const OUString& rMarking,

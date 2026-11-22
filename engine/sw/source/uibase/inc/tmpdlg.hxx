@@ -33,6 +33,10 @@ class SwTemplateDlgController final : public SfxStyleDialogController
     SwWrtShell*     m_pWrtShell;
     bool            m_bNewStyle;
 
+    /// Whether the edited page style has a locked security label marking in its header
+    /// (bHeader) or its footer.
+    bool HasLockedMarking(bool bHeader);
+
 public:
     /// @param sPage
     /// Identifies name of page to open at by default

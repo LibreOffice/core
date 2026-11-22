@@ -51,6 +51,7 @@
 
 #include <cmdid.h>
 #include <SwStyleNameMapper.hxx>
+#include <SecLabelApply.hxx>
 #include <svl/stritem.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/eitem.hxx>
@@ -299,6 +300,16 @@ void SwTemplateDlgController::RefreshInputSet()
     pInSet->SetParent( &GetStyleSheet().GetItemSet() );
 }
 
+bool SwTemplateDlgController::HasLockedMarking(bool bHeader)
+{
+    if (m_bNewStyle || m_nType != SfxStyleFamily::Page)
+        return false;
+    auto pStyleSheet = dynamic_cast<SwDocStyleSheet*>(&GetStyleSheet());
+    const SwPageDesc* pPageDesc = pStyleSheet ? pStyleSheet->GetPageDesc() : nullptr;
+    return pPageDesc
+           && sw::seclabel::hasLockedMarking(*m_pWrtShell->GetDoc(), *pPageDesc, bHeader);
+}
+
 void SwTemplateDlgController::PageCreated(const OUString& rId, SfxTabPage &rPage )
 {
     // set style's and metric's names
@@ -402,6 +413,8 @@ void SwTemplateDlgController::PageCreated(const OUString& rId, SfxTabPage &rPage
         {
             static_cast<SvxHeaderPage&>(rPage).EnableDynamicSpacing();
         }
+        if (HasLockedMarking(/*bHeader=*/true))
+            static_cast<SvxHeaderPage&>(rPage).LockOnAndSharingBoxes();
 
         // set DrawingLayer FillStyles active
         aSet.Put(SfxBoolItem(SID_DRAWINGLAYER_FILLSTYLES, true));
@@ -413,6 +426,8 @@ void SwTemplateDlgController::PageCreated(const OUString& rId, SfxTabPage &rPage
         {
             static_cast<SvxFooterPage&>(rPage).EnableDynamicSpacing();
         }
+        if (HasLockedMarking(/*bHeader=*/false))
+            static_cast<SvxFooterPage&>(rPage).LockOnAndSharingBoxes();
 
         // set DrawingLayer FillStyles active
         aSet.Put(SfxBoolItem(SID_DRAWINGLAYER_FILLSTYLES, true));

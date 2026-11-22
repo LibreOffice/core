@@ -58,6 +58,7 @@
 #include <unotools/syslocale.hxx>
 #include <svx/swframetypes.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <SecLabelApply.hxx>
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
@@ -404,6 +405,11 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFormatFooter &rFo
 void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
 {
     assert(i < m_PageDescs.size() && "PageDescs is out of range.");
+
+    // A header or footer that holds a locked security label marking stays on every page, so a
+    // change that would take it off a page is not applied.
+    if (sw::seclabel::takesMarkingOff(*this, *m_PageDescs[i], rChged))
+        return;
 
     SwPageDesc& rDesc = *m_PageDescs[i];
     SwRootFrame* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();

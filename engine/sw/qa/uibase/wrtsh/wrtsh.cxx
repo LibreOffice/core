@@ -64,6 +64,8 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <swdtflvr.hxx>
 #include <SecLabelApply.hxx>
+#include <fmthdft.hxx>
+#include <pagedesc.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -1136,6 +1138,76 @@ CPPUNIT_TEST_FIXTURE(Test, testTogglePointEditModeReportsTheDrawingViewState)
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!pDrawView->IsFrameDragSingles());
     CPPUNIT_ASSERT_EQUAL(pDrawView->IsFrameDragSingles(), rView.IsDrawSelMode());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelMarkingKeepsHeaderAndFooter)
+{
+    // A header and footer that hold a security label marking stay on, on the first page too,
+    // with the same content sharing, whichever way the user tries to change that:
+    createDocumentWithMarking();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    const SwPageDesc aOld(pWrtShell->GetPageDesc(0));
+
+    // The menu and the header bar:
+    pWrtShell->ChangeHeaderOrFooter(UIName(), /*bHeader=*/true, /*bOn=*/false,
+                                    /*bShowWarning=*/false);
+    pWrtShell->ChangeHeaderOrFooter(UIName(), /*bHeader=*/false, /*bOn=*/false,
+                                    /*bShowWarning=*/false);
+
+    // A changed page style, as the sidebar and the page style dialog apply theirs:
+    auto changePageStyle = [pWrtShell](auto aChange) {
+        SwPageDesc aDesc(pWrtShell->GetPageDesc(0));
+        aChange(aDesc);
+        pWrtShell->ChgPageDesc(0, aDesc);
+    };
+    changePageStyle([](SwPageDesc& rDesc) {
+        rDesc.GetMaster().SetFormatAttr(SwFormatHeader(false));
+        rDesc.GetMaster().SetFormatAttr(SwFormatFooter(false));
+    });
+    changePageStyle([](SwPageDesc& rDesc) {
+        rDesc.ChgWithoutFirstHeader(true);
+        rDesc.ChgWithoutFirstFooter(true);
+    });
+    changePageStyle([](SwPageDesc& rDesc) {
+        rDesc.ChgHeaderShare(!rDesc.IsHeaderShared());
+        rDesc.ChgFooterShare(!rDesc.IsFooterShared());
+    });
+    changePageStyle([](SwPageDesc& rDesc) { rDesc.ChgFirstShare(!rDesc.IsFirstShared()); });
+
+    const SwPageDesc& rKept = pWrtShell->GetPageDesc(0);
+    CPPUNIT_ASSERT(rKept.GetMaster().GetHeader().IsActive());
+    CPPUNIT_ASSERT(rKept.GetMaster().GetFooter().IsActive());
+    CPPUNIT_ASSERT(!rKept.IsWithoutFirstHeader());
+    CPPUNIT_ASSERT(!rKept.IsWithoutFirstFooter());
+    CPPUNIT_ASSERT_EQUAL(aOld.IsHeaderShared(), rKept.IsHeaderShared());
+    CPPUNIT_ASSERT_EQUAL(aOld.IsFooterShared(), rKept.IsFooterShared());
+    CPPUNIT_ASSERT_EQUAL(aOld.IsFirstShared(), rKept.IsFirstShared());
+    CPPUNIT_ASSERT_EQUAL(u"SEcret"_ustr, getHeaderString());
+    CPPUNIT_ASSERT(sw::seclabel::hasLockedMarking(*getSwDoc(), rKept, /*bHeader=*/true));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testHeaderAndFooterWithoutMarkingCanBeSwitchedOff)
+{
+    // A header and footer that hold only the user's text can be switched off from the menu and
+    // through a changed page style:
+    createSwDoc();
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    for (const OUString& rArea : { u"Header"_ustr, u"Footer"_ustr })
+    {
+        xPageStyle->setPropertyValue(rArea + "IsOn", cpo::uno::Any(true));
+        uno::Reference<text::XText> xText(xPageStyle->getPropertyValue(rArea + "Text"),
+                                          uno::UNO_QUERY);
+        xText->setString(u"Mine"_ustr);
+    }
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->ChangeHeaderOrFooter(UIName(), /*bHeader=*/true, /*bOn=*/false,
+                                    /*bShowWarning=*/false);
+    SwPageDesc aDesc(pWrtShell->GetPageDesc(0));
+    aDesc.GetMaster().SetFormatAttr(SwFormatFooter(false));
+    pWrtShell->ChgPageDesc(0, aDesc);
+    CPPUNIT_ASSERT(!getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr));
+    CPPUNIT_ASSERT(!getProperty<bool>(xPageStyle, u"FooterIsOn"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelMarkingRefusesTyping)

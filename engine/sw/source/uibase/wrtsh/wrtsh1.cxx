@@ -131,6 +131,7 @@
 #include <textcontentcontrol.hxx>
 
 #include <UndoAttribute.hxx>
+#include <SecLabelApply.hxx>
 
 using namespace sw::mark;
 using namespace com::sun::star;
@@ -2329,6 +2330,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
     StartUndo( SwUndoId::HEADER_FOOTER ); // #i7983#
     bool bExecute = true;
     bool bCursorSet = false;
+    bool bKeptMarking = false;
     for( size_t nFrom = 0, nTo = GetPageDescCnt();
             nFrom < nTo; ++nFrom )
     {
@@ -2336,6 +2338,13 @@ void SwWrtShell::ChangeHeaderOrFooter(
         UIName sTmp(aDesc.GetName());
         if( rStyleName.toString().isEmpty() || rStyleName == sTmp )
         {
+            // A header or footer that holds a locked security label marking stays on.
+            if (!bOn && sw::seclabel::hasLockedMarking(*GetDoc(), aDesc, bHeader))
+            {
+                bKeptMarking = true;
+                continue;
+            }
+
             bool bChgd = false;
 
             if( bShowWarning && !bOn && GetActiveView() && GetActiveView() == &GetView() &&
@@ -2411,6 +2420,9 @@ void SwWrtShell::ChangeHeaderOrFooter(
     }
     EndUndo( SwUndoId::HEADER_FOOTER ); // #i7983#
     EndAllAction();
+
+    if (bKeptMarking && GetActiveView() == &GetView())
+        InfoReadOnlyDialog(/*bAsync=*/true);
 }
 
 void SwWrtShell::SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow )

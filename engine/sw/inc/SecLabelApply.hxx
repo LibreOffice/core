@@ -19,6 +19,8 @@ namespace com::sun::star::frame
 {
 class XModel;
 }
+class SwDoc;
+class SwPageDesc;
 class SwTextContentControl;
 
 // Writer-specific placement of a security-label marking (header/footer, body,
@@ -33,6 +35,15 @@ inline constexpr OUString MARKING_CONTROL_TAG = u"co-security-label-marking"_ust
 /// Whether rTextContentControl is a security label marking: a content control tagged
 /// MARKING_CONTROL_TAG in a header or footer of the document.
 bool isMarkingContentControl(const SwTextContentControl& rTextContentControl);
+
+/// Whether the header (bHeader) or the footer of rPageDesc, in any of its variants, holds a
+/// security label marking that is locked against deletion.
+SW_DLLPUBLIC bool hasLockedMarking(SwDoc& rDoc, const SwPageDesc& rPageDesc, bool bHeader);
+
+/// Whether changing the page style rOld into rNew would take a locked marking off some page: a
+/// header or footer that holds one would be switched off, left off the first page, or change how
+/// its content is shared between pages.
+bool takesMarkingOff(SwDoc& rDoc, const SwPageDesc& rOld, const SwPageDesc& rNew);
 
 /// Mark the header and footer (bold, coloured, centred) of every in-use page style, plus
 /// rPageStyleName. The marking is its own paragraph tagged with the "Security Label"
