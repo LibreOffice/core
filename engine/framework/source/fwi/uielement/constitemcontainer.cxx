@@ -172,7 +172,7 @@ sal_Int32 ConstItemContainer::getCount()
 
 Any ConstItemContainer::getByIndex( sal_Int32 Index )
 {
-    if ( sal_Int32( m_aItemVector.size()) <= Index )
+    if ( Index < 0 || sal_Int32( m_aItemVector.size()) <= Index )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
     return Any( m_aItemVector[Index] );
 }

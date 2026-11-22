@@ -150,7 +150,7 @@ sal_Int32 ItemContainer::getCount()
 Any ItemContainer::getByIndex( sal_Int32 Index )
 {
     ShareGuard aLock( m_aShareMutex );
-    if ( sal_Int32( m_aItemVector.size()) <= Index )
+    if ( Index < 0 || sal_Int32( m_aItemVector.size()) <= Index )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 
     return Any( m_aItemVector[Index] );
@@ -167,7 +167,7 @@ void ItemContainer::insertByIndex( sal_Int32 Index, const Any& aItem )
     ShareGuard aLock( m_aShareMutex );
     if ( sal_Int32( m_aItemVector.size()) == Index )
         m_aItemVector.push_back( aSeq );
-    else if ( sal_Int32( m_aItemVector.size()) >Index )
+    else if ( Index >= 0 && sal_Int32( m_aItemVector.size()) > Index )
     {
         std::vector< Sequence< PropertyValue > >::iterator aIter = m_aItemVector.begin();
         aIter += Index;
@@ -180,7 +180,7 @@ void ItemContainer::insertByIndex( sal_Int32 Index, const Any& aItem )
 void ItemContainer::removeByIndex( sal_Int32 nIndex )
 {
     ShareGuard aLock( m_aShareMutex );
-    if ( static_cast<sal_Int32>(m_aItemVector.size()) <= nIndex )
+    if ( nIndex < 0 || static_cast<sal_Int32>(m_aItemVector.size()) <= nIndex )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 
     m_aItemVector.erase(m_aItemVector.begin() + nIndex);
@@ -194,7 +194,7 @@ void ItemContainer::replaceByIndex( sal_Int32 Index, const Any& aItem )
                                         static_cast<OWeakObject *>(this), 2 );
 
     ShareGuard aLock( m_aShareMutex );
-    if ( sal_Int32( m_aItemVector.size()) <= Index )
+    if ( Index < 0 || sal_Int32( m_aItemVector.size()) <= Index )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 
     m_aItemVector[Index] = std::move(aSeq);

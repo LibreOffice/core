@@ -50,7 +50,7 @@ void PropertySetContainer::insertByIndex( sal_Int32 Index, const cpo::uno::Any& 
 
     sal_Int32 nSize = m_aPropertySetVector.size();
 
-    if ( nSize < Index )
+    if ( Index < 0 || nSize < Index )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 
     Reference< XPropertySet > aPropertySetElement;
@@ -76,7 +76,7 @@ void PropertySetContainer::removeByIndex( sal_Int32 nIndex )
 {
     std::unique_lock g(m_aMutex);
 
-    if ( static_cast<sal_Int32>(m_aPropertySetVector.size()) <= nIndex )
+    if ( nIndex < 0 || static_cast<sal_Int32>(m_aPropertySetVector.size()) <= nIndex )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 
     m_aPropertySetVector.erase(m_aPropertySetVector.begin() +  nIndex);
@@ -87,7 +87,7 @@ void PropertySetContainer::replaceByIndex( sal_Int32 Index, const cpo::uno::Any&
 {
     std::unique_lock g(m_aMutex);
 
-    if ( static_cast<sal_Int32>(m_aPropertySetVector.size()) <= Index )
+    if ( Index < 0 || static_cast<sal_Int32>(m_aPropertySetVector.size()) <= Index )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 
     Reference< XPropertySet > aPropertySetElement;
@@ -114,7 +114,7 @@ Any PropertySetContainer::getByIndex( sal_Int32 Index )
 {
     std::unique_lock g(m_aMutex);
 
-    if ( static_cast<sal_Int32>(m_aPropertySetVector.size()) <= Index )
+    if ( Index < 0 || static_cast<sal_Int32>(m_aPropertySetVector.size()) <= Index )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 
     return Any(m_aPropertySetVector[ Index ]);

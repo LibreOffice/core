@@ -555,7 +555,7 @@ void SvUnoImageMap::insertByIndex( sal_Int32 nIndex, const Any& Element )
 {
     SvUnoImageMapObject* pObject = getObject( Element );
     const sal_Int32 nCount = maObjectList.size();
-    if( nullptr == pObject || nIndex > nCount )
+    if( nullptr == pObject || nIndex < 0 || nIndex > nCount )
         throw IndexOutOfBoundsException();
 
     if( nIndex == nCount )
@@ -571,7 +571,7 @@ void SvUnoImageMap::insertByIndex( sal_Int32 nIndex, const Any& Element )
 void SvUnoImageMap::removeByIndex( sal_Int32 nIndex )
 {
     const sal_Int32 nCount = maObjectList.size();
-    if( nIndex >= nCount )
+    if( nIndex < 0 || nIndex >= nCount )
         throw IndexOutOfBoundsException();
 
     if( nCount - 1 == nIndex )
@@ -591,7 +591,7 @@ void SvUnoImageMap::replaceByIndex( sal_Int32 nIndex, const Any& Element )
 {
     SvUnoImageMapObject* pObject = getObject( Element );
     const sal_Int32 nCount = maObjectList.size();
-    if( nullptr == pObject || nIndex >= nCount )
+    if( nullptr == pObject || nIndex < 0 || nIndex >= nCount )
         throw IndexOutOfBoundsException();
 
     auto aIter = maObjectList.begin();
@@ -608,7 +608,7 @@ sal_Int32 SvUnoImageMap::getCount(  )
 Any SvUnoImageMap::getByIndex( sal_Int32 nIndex )
 {
     const sal_Int32 nCount = maObjectList.size();
-    if( nIndex >= nCount )
+    if( nIndex < 0 || nIndex >= nCount )
         throw IndexOutOfBoundsException();
 
     auto aIter = maObjectList.begin();
