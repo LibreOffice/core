@@ -15,6 +15,9 @@
 
 #include <config.h>
 
+#include <dirent.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -28,8 +31,12 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <chrono>
+#include <fstream>
 #include <map>
+#include <regex>
+#include <sstream>
 #include <string>
+#include <vector>
 
 using namespace std::literals;
 
@@ -42,6 +49,7 @@ class LoggingTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testIso8601Time);
     CPPUNIT_TEST(testClockAsString);
     CPPUNIT_TEST(testUnwritableLogFile);
+    CPPUNIT_TEST(testRotationKeepsOtherWriters);
     CPPUNIT_TEST_SUITE_END();
 
     void testLogPrefix();
@@ -49,6 +57,7 @@ class LoggingTests : public CPPUNIT_NS::TestFixture
     void testIso8601Time();
     void testClockAsString();
     void testUnwritableLogFile();
+    void testRotationKeepsOtherWriters();
 };
 
 namespace
@@ -411,6 +420,181 @@ void LoggingTests::testUnwritableLogFile()
     LOK_ASSERT_EQUAL(pid, waitpid(pid, &status, 0));
     LOK_ASSERT_MESSAGE("Expected the process to go on logging",
                        WIFEXITED(status) && WEXITSTATUS(status) == 0);
+}
+
+namespace
+{
+std::string readFile(const std::string& path)
+{
+    std::ifstream file(path, std::ios::binary);
+    std::ostringstream content;
+    content << file.rdbuf();
+    return content.str();
+}
+
+std::vector<std::string> listDirectory(const std::string& path)
+{
+    std::vector<std::string> names;
+    DIR* dir = opendir(path.c_str());
+    if (!dir)
+        return names;
+    for (dirent* entry = readdir(dir); entry; entry = readdir(dir))
+    {
+        const std::string name = entry->d_name;
+        if (name != "." && name != "..")
+            names.push_back(name);
+    }
+    closedir(dir);
+    return names;
+}
+
+/// A directory for a log, removed with its files however the test ends
+class LogDirectory
+{
+    std::string _path;
+
+public:
+    LogDirectory()
+    {
+        char dirTemplate[] = "/tmp/cool-log-rotation-XXXXXX";
+        if (mkdtemp(dirTemplate))
+            _path = dirTemplate;
+    }
+
+    ~LogDirectory()
+    {
+        if (_path.empty())
+            return;
+        chmod(_path.c_str(), 0700);
+        for (const std::string& name : listDirectory(_path))
+            unlink((_path + '/' + name).c_str());
+        rmdir(_path.c_str());
+    }
+
+    const std::string& path() const { return _path; }
+};
+
+/// Creates the log as a Kit finds it, then, in a child, as the logging is set up once per
+/// process, appends a line to it as a Kit does, fills it through coolwsd's logging with the
+/// rotation at 1 KB, and appends another line. Returns whether the child got through, and the
+/// inode of the file the Kit wrote to in @inode.
+bool rotateWithKitLines(const std::string& path, const std::string& archive, ino_t& inode)
+{
+    const int created = ::open(path.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0640);
+    if (created < 0)
+        return false;
+    struct stat st;
+    const bool known = fstat(created, &st) == 0;
+    ::close(created);
+    if (!known)
+        return false;
+    inode = st.st_ino;
+
+    const pid_t pid = fork();
+    if (pid < 0)
+        return false;
+    if (pid == 0)
+    {
+        const int kit = ::open(path.c_str(), O_WRONLY | O_APPEND);
+        const std::string beforeLine = "kit line before the rotation\n";
+        const std::string afterLine = "kit line after the rotation\n";
+        if (kit < 0
+            || ::write(kit, beforeLine.data(), beforeLine.size())
+                   != static_cast<ssize_t>(beforeLine.size()))
+            _exit(1);
+
+        const std::map<std::string, std::string> config = {
+            { "path", path },
+            { "rotation", "1 K" },
+            { "archive", archive },
+            { "compress", "false" },
+        };
+        Log::initialize("rotating", "error", /*withColor=*/false, /*logToFile=*/true, config,
+                        /*logToFileUICmd=*/false, {});
+        for (int i = 0; i < 40; ++i)
+            LOG_ERR("Filling the log to rotate it, line " << i);
+
+        if (::write(kit, afterLine.data(), afterLine.size())
+            != static_cast<ssize_t>(afterLine.size()))
+            _exit(1);
+        _exit(0);
+    }
+
+    int status = 0;
+    return waitpid(pid, &status, 0) == pid && WIFEXITED(status) && WEXITSTATUS(status) == 0;
+}
+} // namespace
+
+/// A rotated log keeps the file that the Kit processes write to: they opened it before their
+/// chroot and cannot open it again, so the rotation copies the log to the archive and truncates
+/// it in place, and their next lines go to the same, now short file.
+void LoggingTests::testRotationKeepsOtherWriters()
+{
+    constexpr std::string_view testname = __func__;
+
+    for (const std::string archive : { "timestamp", "number" })
+    {
+        LogDirectory dir;
+        LOK_ASSERT_MESSAGE("Failed to create a directory", !dir.path().empty());
+        const std::string path = dir.path() + "/coolwsd.log";
+
+        ino_t kitInode = 0;
+        LOK_ASSERT_MESSAGE("Expected the child to log", rotateWithKitLines(path, archive, kitInode));
+        struct stat after;
+        LOK_ASSERT_EQUAL(0, stat(path.c_str(), &after));
+        LOK_ASSERT_EQUAL_MESSAGE("The log is still the file the Kit writes to", kitInode,
+                                 after.st_ino);
+
+        const std::regex archiveName(archive == "timestamp"
+                                         ? R"(coolwsd\.log\.[0-9]{17}(\.[0-9]+)?)"
+                                         : R"(coolwsd\.log\.[0-9]+)");
+        std::string archived;
+        int archives = 0;
+        for (const std::string& name : listDirectory(dir.path()))
+        {
+            if (name == "coolwsd.log")
+                continue;
+            LOK_ASSERT_MESSAGE("Unexpected file " + name + " with " + archive + " archives",
+                               std::regex_match(name, archiveName));
+            archived += readFile(dir.path() + '/' + name);
+            ++archives;
+        }
+        LOK_ASSERT_MESSAGE("Expected archives", archives > 0);
+        LOK_ASSERT_MESSAGE("The Kit's earlier line is archived",
+                           archived.find("kit line before the rotation") != std::string::npos);
+
+        const std::string live = readFile(path);
+        LOK_ASSERT_MESSAGE("The log was truncated", after.st_size < 2048);
+        LOK_ASSERT_MESSAGE("The Kit's later line is in the log: " + live,
+                           live.find("kit line after the rotation") != std::string::npos);
+        LOK_ASSERT_MESSAGE("No holes in the log", live.find('\0') == std::string::npos);
+    }
+
+    // When the archive cannot be written, the log stays, with a single notice why. Permissions
+    // do not hold root back.
+    if (geteuid() != 0)
+    {
+        LogDirectory dir;
+        LOK_ASSERT_MESSAGE("Failed to create a directory", !dir.path().empty());
+        const std::string path = dir.path() + "/coolwsd.log";
+        const int created = ::open(path.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0640);
+        LOK_ASSERT_MESSAGE("Failed to create the log file", created >= 0);
+        ::close(created);
+        LOK_ASSERT_EQUAL(0, chmod(dir.path().c_str(), 0500));
+
+        ino_t kitInode = 0;
+        LOK_ASSERT_MESSAGE("Expected the child to log",
+                           rotateWithKitLines(path, "timestamp", kitInode));
+        const std::string live = readFile(path);
+        LOK_ASSERT_MESSAGE("The log was kept: " + live,
+                           live.find("kit line before the rotation") != std::string::npos);
+        const std::string notice = "the log could not be archived";
+        const std::size_t first = live.find(notice);
+        LOK_ASSERT_MESSAGE("A notice says why: " + live, first != std::string::npos);
+        LOK_ASSERT_MESSAGE("A single notice: " + live,
+                           live.find(notice, first + 1) == std::string::npos);
+        LOK_ASSERT_EQUAL(std::size_t(1), listDirectory(dir.path()).size());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LoggingTests);

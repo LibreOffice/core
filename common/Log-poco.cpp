@@ -22,8 +22,14 @@
 #include <common/StaticLogHelper.hpp>
 #include <common/Util.hpp>
 
+#include <Poco/ArchiveStrategy.h>
 #include <Poco/AutoPtr.h>
+#include <Poco/DateTime.h>
+#include <Poco/DateTimeFormatter.h>
+#include <Poco/File.h>
 #include <Poco/FileChannel.h>
+#include <Poco/LocalDateTime.h>
+#include <Poco/LogFile.h>
 #include <Poco/Logger.h>
 #include <Poco/Version.h>
 
@@ -37,11 +43,13 @@
 #include <iomanip>
 #include <iostream>
 #include <mutex>
+#include <fcntl.h>
 #include <poll.h>
 #include <sstream>
 #include <string>
 #include <string_view>
 #include <thread>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <unordered_map>
 #include <unordered_set>
@@ -481,6 +489,258 @@ namespace Log
 
     namespace
     {
+    /// What a rotation did with the log
+    enum class LogCopy
+    {
+        // copyPath holds it, and the file is truncated
+        Archived,
+        // It could not be copied, and stays in the file
+        Kept,
+        // The disk had no room for the copy, and the file is truncated to make some
+        Dropped,
+    };
+
+    /// Copies the log file to copyPath and truncates it right after the last read, so that only
+    /// the lines appended in between are lost, of which the last line archived may be a part. The
+    /// copy is plain reads and writes, without the fsync of Poco::File::copyTo, to keep that window
+    /// short. When the disk has no room for the copy, the file is truncated all the same, so that
+    /// it stays within its rotation limit; otherwise a failed copy leaves the log as it is. The
+    /// reason of a failure goes to @problem.
+    LogCopy copyAndTruncate(const std::string& path, const std::string& copyPath,
+                            std::string& problem)
+    {
+        const int in = ::open(path.c_str(), O_RDWR | O_CLOEXEC);
+        if (in < 0)
+        {
+            problem = std::strerror(errno);
+            return LogCopy::Kept;
+        }
+
+        struct stat st;
+        const mode_t mode = ::fstat(in, &st) == 0 ? (st.st_mode & 0777) : 0640;
+        // A file or link that someone else put at this name is never written through
+        const int out = ::open(copyPath.c_str(),
+                               O_WRONLY | O_CREAT | O_EXCL | O_NOFOLLOW | O_CLOEXEC, mode);
+        if (out < 0)
+        {
+            problem = std::strerror(errno);
+            ::close(in);
+            return LogCopy::Kept;
+        }
+
+        int error = 0;
+        char buffer[65536];
+        while (error == 0)
+        {
+            const ssize_t got = ::read(in, buffer, sizeof(buffer));
+            if (got == 0)
+                break;
+            if (got < 0)
+            {
+                if (errno != EINTR)
+                    error = errno;
+                continue;
+            }
+            for (ssize_t written = 0; error == 0 && written < got;)
+            {
+                const ssize_t put = ::write(out, buffer + written, got - written);
+                if (put > 0)
+                    written += put;
+                else if (put == 0)
+                    error = EIO;
+                else if (errno != EINTR)
+                    error = errno;
+            }
+        }
+
+        const bool noRoom = error == ENOSPC || error == EDQUOT || error == EFBIG;
+        bool truncated = false;
+        if (error == 0 || noRoom)
+        {
+            truncated = ::ftruncate(in, 0) == 0;
+            if (!truncated)
+                error = errno;
+        }
+        ::close(in);
+        ::close(out);
+
+        if (error == 0)
+            return LogCopy::Archived;
+
+        problem = std::strerror(error);
+        // A copy of a log that is still there would be archived twice
+        ::unlink(copyPath.c_str());
+        return noRoom && truncated ? LogCopy::Dropped : LogCopy::Kept;
+    }
+
+    /// Archives a rotated log file by copying it and truncating it in place, instead of renaming
+    /// it. The Kit processes keep writing to the file they opened before their chroot, and cannot
+    /// open it again from inside their jail; they append, so after the truncation their lines go to
+    /// the start of the same file. The lines they write between the end of the copy and the
+    /// truncation are lost. The archives are named by number, as Poco's ArchiveByNumberStrategy
+    /// names them, or by timestamp, as its ArchiveByTimestampStrategy does.
+    template <class DT> class CopyTruncateArchiveStrategy final : public Poco::ArchiveStrategy
+    {
+        const bool _byNumber;
+        /// The last notice about a rotation that did not archive the log
+        std::string _lastNotice;
+
+        /// Notes in the log when a rotation did not archive it, once for each reason in a row, as
+        /// one that kept the log is tried again with the next line
+        void notice(Poco::LogFile& file, LogCopy result, const std::string& problem)
+        {
+            if (result == LogCopy::Archived)
+            {
+                _lastNotice.clear();
+                return;
+            }
+
+            const std::string text =
+                (result == LogCopy::Dropped
+                     ? "Log rotation: no room to archive the log, so it was dropped: "
+                     : "Log rotation: the log could not be archived, so it goes on growing: ") +
+                problem;
+            if (text == _lastNotice)
+                return;
+
+            _lastNotice = text;
+            try
+            {
+                file.write(text);
+            }
+            catch (const std::exception&)
+            {
+                // Nothing can be logged then
+            }
+        }
+
+        /// Archives the copy of the log, when there is one. A coolwsd that stopped while it
+        /// archived may have left one behind, which the next open or rotation archives.
+        void archiveCopy(const std::string& path)
+        {
+            const std::string copyPath = path + ".copy";
+            if (!Poco::File(copyPath).exists())
+                return;
+
+            if (_byNumber)
+            {
+                int count = 0;
+                while (exists(path + '.' + std::to_string(count)))
+                    ++count;
+                for (int n = count; n > 0; --n)
+                    moveFile(path + '.' + std::to_string(n - 1), path + '.' + std::to_string(n));
+                moveFile(copyPath, path + ".0");
+            }
+            else
+            {
+                std::string timestampPath = path + '.';
+                Poco::DateTimeFormatter::append(timestampPath, DT().timestamp(),
+                                                "%Y%m%d%H%M%S%i");
+                // Two rotations within a millisecond get archives of their own
+                std::string archivePath = timestampPath;
+                for (int n = 1; exists(archivePath); ++n)
+                    archivePath = timestampPath + '.' + std::to_string(n);
+                moveFile(copyPath, archivePath);
+            }
+        }
+
+    public:
+        explicit CopyTruncateArchiveStrategy(bool byNumber)
+            : _byNumber(byNumber)
+        {
+        }
+
+        Poco::LogFile* open(Poco::LogFile* file) override
+        {
+            Poco::FastMutex::ScopedLock lock(_rotateMutex);
+
+            while (_compressingCount > 0)
+                _compressingComplete.wait(_rotateMutex, 1000);
+
+            try
+            {
+                archiveCopy(file->path());
+            }
+            catch (const std::exception&)
+            {
+                // The copy stays, and the next rotation archives it
+            }
+            return file;
+        }
+
+        Poco::LogFile* archive(Poco::LogFile* file) override
+        {
+            Poco::FastMutex::ScopedLock lock(_rotateMutex);
+
+            while (_compressingCount > 0)
+                _compressingComplete.wait(_rotateMutex, 1000);
+
+            const std::string path = file->path();
+            delete file;
+
+            LogCopy result = LogCopy::Kept;
+            std::string problem;
+            try
+            {
+                archiveCopy(path);
+                // The copy left behind is compressed before the numbers move on
+                while (_compressingCount > 0)
+                    _compressingComplete.wait(_rotateMutex, 1000);
+                result = copyAndTruncate(path, path + ".copy", problem);
+            }
+            catch (const std::exception& exc)
+            {
+                problem = exc.what();
+            }
+
+            // Opened at once, so that a rotation by time finds it still empty
+            Poco::LogFile* const newFile = new Poco::LogFile(path);
+            notice(*newFile, result, problem);
+            if (result == LogCopy::Archived)
+            {
+                try
+                {
+                    archiveCopy(path);
+                }
+                catch (const std::exception&)
+                {
+                    // The copy stays, and the next rotation archives it
+                }
+            }
+
+            // Otherwise the end of the compression purges the old archives
+            if (_compressingCount == 0 && _purgeCallback)
+                _purgeCallback();
+
+            return newFile;
+        }
+    };
+
+    /// Makes the channel archive its rotated files by copying them, when it rotates them at all.
+    /// The archives are named by timestamp when the archive property says so, and by number
+    /// otherwise, as by FileChannel itself.
+    void archiveByCopying(Poco::FileChannel& channel,
+                          const std::map<std::string, std::string>& config)
+    {
+        const std::map<std::string, std::string>::const_iterator rotation = config.find("rotation");
+        if (rotation == config.end() || rotation->second == "never")
+            return;
+
+        const std::map<std::string, std::string>::const_iterator archive = config.find("archive");
+        const bool byNumber = archive == config.end() || archive->second != "timestamp";
+
+        const std::map<std::string, std::string>::const_iterator times = config.find("times");
+        Poco::ArchiveStrategy* strategy;
+        if (times != config.end() && times->second == "local")
+            strategy = new CopyTruncateArchiveStrategy<Poco::LocalDateTime>(byNumber);
+        else
+            strategy = new CopyTruncateArchiveStrategy<Poco::DateTime>(byNumber);
+
+        const std::map<std::string, std::string>::const_iterator compress = config.find("compress");
+        strategy->compress(compress != config.end() && Util::toLower(compress->second) == "true");
+        channel.setArchiveStrategy(strategy);
+    }
+
     /// Creates and opens the file channel with the given properties, or returns null, with the
     /// reason in @error, when the file cannot be opened.
     /// Open it now, instead of waiting for the first log message: the Kit would otherwise
@@ -491,9 +751,11 @@ namespace Log
     {
         try
         {
-            AutoPtr<Channel> channel = static_cast<Poco::Channel*>(new Poco::FileChannel(path));
+            Poco::FileChannel* fileChannel = new Poco::FileChannel(path);
+            AutoPtr<Channel> channel = static_cast<Poco::Channel*>(fileChannel);
             for (const auto& pair : config)
                 channel->setProperty(pair.first, pair.second);
+            archiveByCopying(*fileChannel, config);
 
             channel->open();
             return channel;
