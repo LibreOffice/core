@@ -546,7 +546,7 @@ void OStatement_Base::GetAssignValues()
                 ParseAssignValues(aColumnNameList,pRow_Value_Const,nIndex++); // only one Columnname allowed per loop
             }
             else if(pRow_Value_Const->isToken())
-                ParseAssignValues(aColumnNameList,pRow_Value_Const,i);
+                ParseAssignValues(aColumnNameList,pRow_Value_Const,nIndex++);
             else
             {
                 if(pRow_Value_Const->count() == aColumnNameList.size())
