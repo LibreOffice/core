@@ -394,6 +394,167 @@ CPPUNIT_TEST_FIXTURE(SlideSectionTest, testMoveSectionWithLeadingNonSectionSlide
         CPPUNIT_ASSERT_EQUAL(aLeadingPages[i], pDoc->GetSdPage(i, PageKind::Standard));
 }
 
+namespace
+{
+// The slides of the document in their order.
+std::vector<SdPage*> getSlides(SdDrawDocument* pDoc)
+{
+    std::vector<SdPage*> aSlides;
+    for (sal_uInt16 i = 0; i < pDoc->GetSdPageCount(PageKind::Standard); ++i)
+        aSlides.push_back(pDoc->GetSdPage(i, PageKind::Standard));
+    return aSlides;
+}
+
+// The slides from nStart to nEnd, but not nEnd, of rSlides, appended to rRange.
+void appendSlides(std::vector<SdPage*>& rRange, const std::vector<SdPage*>& rSlides,
+                  sal_Int32 nStart, sal_Int32 nEnd)
+{
+    rRange.insert(rRange.end(), rSlides.begin() + nStart, rSlides.begin() + nEnd);
+}
+
+void assertSectionStarts(const sd::SlideSectionManager& rMgr,
+                         const std::vector<std::pair<OUString, sal_Int32>>& rExpected)
+{
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(rExpected.size()), rMgr.GetSectionCount());
+    for (size_t i = 0; i < rExpected.size(); ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(rExpected[i].first, rMgr.GetSection(i).maName);
+        CPPUNIT_ASSERT_EQUAL(rExpected[i].second, rMgr.GetSection(i).mnStartIndex);
+    }
+}
+}
+
+// The canvas page stays the first slide when the slides move, so moving the section it is in
+// moves only the other slides of the section, and the canvas page joins the section that becomes
+// the first one. The fixture's sections start at 0, 4 and 11 of 13 slides, and at 0, 5 and 12 of
+// 14 once the canvas page joined the first one.
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testMoveSectionWithCanvasPage)
+{
+    // Given the three sections of the fixture, with a canvas page that joined the first one:
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+    SdDrawDocument* pDoc = getDoc();
+    sd::SlideSectionManager& rMgr = getSectionManager();
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    CPPUNIT_ASSERT(pDoc->GetSdPage(0, PageKind::Standard)->IsCanvasPage());
+    assertSectionStarts(rMgr, { { u"Section-1"_ustr, 0 }, { u"Section-2"_ustr, 5 },
+                                { u"Section-3"_ustr, 12 } });
+    const std::vector<SdPage*> aBefore = getSlides(pDoc);
+
+    // When the first section is moved below the second one:
+    rMgr.MoveSection(0, 1);
+
+    // Then the canvas page is still the first slide, in the second section, which comes first now
+    // and is followed by the other slides of the first section. Without the accompanying fix in
+    // place, this test would have failed: the sections were counted as if the canvas page had
+    // moved, so each one started a slide too early.
+    assertSectionStarts(rMgr, { { u"Section-2"_ustr, 0 }, { u"Section-1"_ustr, 8 },
+                                { u"Section-3"_ustr, 12 } });
+    std::vector<SdPage*> aExpected;
+    appendSlides(aExpected, aBefore, 0, 1);
+    appendSlides(aExpected, aBefore, 5, 12);
+    appendSlides(aExpected, aBefore, 1, 5);
+    appendSlides(aExpected, aBefore, 12, 14);
+    CPPUNIT_ASSERT(bool(aExpected == getSlides(pDoc)));
+
+    // And when the first section is moved back up, the canvas page joins it again.
+    rMgr.MoveSection(1, 0);
+    assertSectionStarts(rMgr, { { u"Section-1"_ustr, 0 }, { u"Section-2"_ustr, 5 },
+                                { u"Section-3"_ustr, 12 } });
+    CPPUNIT_ASSERT(bool(aBefore == getSlides(pDoc)));
+}
+
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testMoveSectionTwoPlacesWithCanvasPage)
+{
+    // Given the three sections of the fixture, with a canvas page that joined the first one:
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+    SdDrawDocument* pDoc = getDoc();
+    sd::SlideSectionManager& rMgr = getSectionManager();
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    const std::vector<SdPage*> aBefore = getSlides(pDoc);
+
+    // When the first section is moved to the end:
+    rMgr.MoveSection(0, 2);
+
+    // Then the canvas page joins the second section, and the other slides of the first section
+    // come last.
+    assertSectionStarts(rMgr, { { u"Section-2"_ustr, 0 }, { u"Section-3"_ustr, 8 },
+                                { u"Section-1"_ustr, 10 } });
+    std::vector<SdPage*> aExpected;
+    appendSlides(aExpected, aBefore, 0, 1);
+    appendSlides(aExpected, aBefore, 5, 14);
+    appendSlides(aExpected, aBefore, 1, 5);
+    CPPUNIT_ASSERT(bool(aExpected == getSlides(pDoc)));
+
+    // And when the last section is moved to the start, the canvas page joins it.
+    rMgr.MoveSection(2, 0);
+    assertSectionStarts(rMgr, { { u"Section-1"_ustr, 0 }, { u"Section-2"_ustr, 5 },
+                                { u"Section-3"_ustr, 12 } });
+    CPPUNIT_ASSERT(bool(aBefore == getSlides(pDoc)));
+}
+
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testMoveSectionAroundCanvasPageAlone)
+{
+    // Given a first section that holds the canvas page alone, followed by the three sections of
+    // the fixture:
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+    SdDrawDocument* pDoc = getDoc();
+    sd::SlideSectionManager& rMgr = getSectionManager();
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    rMgr.AddSection(1, u"Section-0"_ustr);
+    const std::vector<std::pair<OUString, sal_Int32>> aStarts{ { u"Section-1"_ustr, 0 },
+                                                               { u"Section-0"_ustr, 1 },
+                                                               { u"Section-2"_ustr, 5 },
+                                                               { u"Section-3"_ustr, 12 } };
+    assertSectionStarts(rMgr, aStarts);
+    const std::vector<SdPage*> aBefore = getSlides(pDoc);
+
+    // When the section of the canvas page is moved down, or the next section is moved above it:
+    rMgr.MoveSection(0, 1);
+    rMgr.MoveSection(1, 0);
+
+    // Then neither move happens, since the canvas page stays the first slide. Without the
+    // accompanying fix in place, this test would have failed: the second move left the section of
+    // the canvas page without slides, starting where the third section starts.
+    assertSectionStarts(rMgr, aStarts);
+    CPPUNIT_ASSERT(bool(aBefore == getSlides(pDoc)));
+
+    // And a section moved below it still moves.
+    rMgr.MoveSection(3, 1);
+    assertSectionStarts(rMgr, { { u"Section-1"_ustr, 0 }, { u"Section-3"_ustr, 1 },
+                                { u"Section-0"_ustr, 3 }, { u"Section-2"_ustr, 7 } });
+}
+
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testUndoRedoMoveSectionWithCanvasPage)
+{
+    // Given the three sections of the fixture, with a canvas page that joined the first one, and
+    // the first section moved below the second one the way the section commands do:
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+    SdDrawDocument* pDoc = getDoc();
+    sd::SlideSectionManager& rMgr = getSectionManager();
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    const std::vector<SdPage*> aBefore = getSlides(pDoc);
+    pDoc->BegUndo(u"Move section"_ustr);
+    std::unique_ptr<sd::UndoSlideSection> pUndo
+        = std::make_unique<sd::UndoSlideSection>(*pDoc, u"Move section"_ustr);
+    rMgr.MoveSection(0, 1);
+    pDoc->AddUndo(std::move(pUndo));
+    pDoc->EndUndo();
+    const std::vector<SdPage*> aMoved = getSlides(pDoc);
+    CPPUNIT_ASSERT(bool(aBefore != aMoved));
+
+    // When the move is undone, then the sections and the slides are as before:
+    getUndoManager().Undo();
+    assertSectionStarts(rMgr, { { u"Section-1"_ustr, 0 }, { u"Section-2"_ustr, 5 },
+                                { u"Section-3"_ustr, 12 } });
+    CPPUNIT_ASSERT(bool(aBefore == getSlides(pDoc)));
+
+    // And when it is redone, they are as after the move.
+    getUndoManager().Redo();
+    assertSectionStarts(rMgr, { { u"Section-2"_ustr, 0 }, { u"Section-1"_ustr, 8 },
+                                { u"Section-3"_ustr, 12 } });
+    CPPUNIT_ASSERT(bool(aMoved == getSlides(pDoc)));
+}
+
 // Undo/redo of AddSection restores the original section layout.
 CPPUNIT_TEST_FIXTURE(SlideSectionTest, testUndoRedoAddSection)
 {

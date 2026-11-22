@@ -464,8 +464,22 @@ void SlideSectionManager::MoveSection(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
         aSlideCounts.push_back(nEnd - maSections[i].mnStartIndex);
     }
 
+    // The canvas page stays the first slide when the slides move, see
+    // SdDrawDocument::MovePages(). In the first section it counts as a leading slide, which the
+    // section that becomes the first one takes again in step 7.
+    const bool bCanvasPageInSection
+        = mrDoc.HasCanvasPage() && maSections[0].mnStartIndex == 0;
+    if (bCanvasPageInSection)
+        --aSlideCounts[0];
+    // A first section of the canvas page alone would be left without slides by a section moved
+    // above it, just as it has no slides to move below another one.
+    if (bCanvasPageInSection && aSlideCounts[0] == 0 && nNewIndex == 0)
+        return;
+
     // 2. Calculate slide range for the source section
     sal_Int32 nSrcStart = maSections[nOldIndex].mnStartIndex;
+    if (bCanvasPageInSection && nOldIndex == 0)
+        ++nSrcStart;
     sal_Int32 nSrcEnd = nSrcStart + aSlideCounts[nOldIndex];
     sal_Int32 nSrcCount = aSlideCounts[nOldIndex];
 
@@ -534,6 +548,8 @@ void SlideSectionManager::MoveSection(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
         maSections[i].mnStartIndex = nCurrentIdx;
         nCurrentIdx += aSlideCounts[i];
     }
+    if (bCanvasPageInSection)
+        maSections[0].mnStartIndex = 0;
 
     NotifySectionsChanged();
 }
