@@ -897,6 +897,8 @@ void OInterfaceContainer::impl_replacedElement( const ContainerEvent& _rEvent, :
 
 void OInterfaceContainer::insertByIndex( sal_Int32 _nIndex, const Any& _rElement )
 {
+    if (_nIndex < 0)
+        throw IndexOutOfBoundsException();
     Reference< XPropertySet > xElement;
     _rElement >>= xElement;
     implInsert( _nIndex, xElement, true /* event handling */ , nullptr /* not yet approved */ , true /* notification */ );
