@@ -2271,6 +2271,26 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testFormulaGroupsAsSharedFormulasXLSX)
     CPPUNIT_ASSERT_EQUAL(6.0, pDocument->GetValue(ScAddress(3, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testXLSXTableReferenceFormulasStayPlain)
+{
+    // The table in the file has a calculated column in B2:B4 with the formula
+    // Table1[[#This Row],[Price]]*2. After a round trip each of these cells must have
+    // its own plain formula.
+    createScDoc("xlsx/table-reference-shared-formula.xlsx");
+    CPPUNIT_ASSERT_EQUAL(SCROW(3),
+                         getScDoc()->GetFormulaCell(ScAddress(1, 1, 0))->GetSharedLength());
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    for (SCROW nRow = 2; nRow <= 4; ++nRow)
+    {
+        const OString aFormulaPath = "//x:c[@r='B" + OString::number(nRow) + "']/x:f";
+        assertXPathNoAttribute(pSheet, aFormulaPath, "t");
+        assertXPathContent(pSheet, aFormulaPath, u"Table1[[#This Row],[Price]]*2");
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -253,6 +253,13 @@ bool XclExpShrfmlaBuffer::IsValidTokenArray( const ScTokenArray& rArray ) const
             case svExternalName:
                 // External references aren't allowed.
                 return false;
+            case svIndex:
+            {
+                if (p->GetOpCode() == ocTableRef)
+                    // Excel's shared formula cannot include a structured table reference.
+                    return false;
+            }
+            break;
             default:
                 ;
         }
