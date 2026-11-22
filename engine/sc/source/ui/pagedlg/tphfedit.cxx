@@ -60,7 +60,14 @@ ScEditWindow::ScEditWindow(ScEditWindowLocation eLoc, weld::Window* pDialog)
     : eLocation(eLoc)
     , mbRTL(ScGlobal::IsSystemRTL())
     , mpDialog(pDialog)
+    , mbReadOnly(false)
 {
+}
+
+void ScEditWindow::SetReadOnly()
+{
+    mbReadOnly = true;
+    m_xEditView->SetReadOnly(true);
 }
 
 void ScEditWindow::makeEditEngine()
@@ -170,11 +177,15 @@ void ScEditWindow::SetText( const EditTextObject& rTextObject )
 
 void ScEditWindow::InsertField( const SvxFieldItem& rFld )
 {
-    m_xEditView->InsertField( rFld );
+    if (!mbReadOnly)
+        m_xEditView->InsertField( rFld );
 }
 
 void ScEditWindow::SetCharAttributes()
 {
+    if (mbReadOnly)
+        return;
+
     SfxObjectShell* pDocSh  = SfxObjectShell::Current();
 
     SfxViewShell*       pViewSh = SfxViewShell::Current();

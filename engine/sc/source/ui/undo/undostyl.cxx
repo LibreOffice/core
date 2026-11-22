@@ -166,6 +166,9 @@ void ScUndoModifyStyle::DoChange( ScDocShell& rDocSh, const OUString& rName,
                 pStyle->SetParent( aNewParent );
 
             SfxItemSet& rStyleSet = pStyle->GetItemSet();
+            std::optional<SfxItemSet> oOldSet;
+            if (eStyleFamily == SfxStyleFamily::Page)
+                oOldSet.emplace(rStyleSet);
             const std::optional<SfxItemSet>& pNewSet = rData.GetItems();
             OSL_ENSURE( pNewSet, "no ItemSet for style" );
             if (pNewSet)
@@ -183,7 +186,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell& rDocSh, const OUString& rName,
                     rDoc.RenamePageStyleInUse( rName, aNewName );
 
                 if (pNewSet)
-                    rDoc.ModifyStyleSheet( *pStyle, *pNewSet );
+                    rDoc.ModifyStyleSheet( *pStyle, *pNewSet, &*oOldSet );
 
                 rDocSh.PageStyleModified( aNewName, true );
             }

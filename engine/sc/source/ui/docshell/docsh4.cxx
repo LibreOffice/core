@@ -2250,6 +2250,8 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
 
                         SfxItemSet&     rStyleSet = pStyleSheet->GetItemSet();
                         rStyleSet.MergeRange( XATTR_FILL_FIRST, XATTR_FILL_LAST );
+                        // The dialog writes its result into the style itself.
+                        auto xOldSet = std::make_shared<SfxItemSet>(rStyleSet);
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
@@ -2258,6 +2260,7 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                         auto xRequest = std::make_shared<SfxRequest>(rReq);
                         pDlg->StartExecuteAsync([this, pDlg, xRequest=std::move(xRequest), pStyleSheet,
                                                  xOldData=std::move(xOldData), aOldName, &rStyleSet,
+                                                 xOldSet=std::move(xOldSet),
                                                  nCurTab, &rCaller, bUndo](sal_Int32 nResult) {
                             if ( nResult == RET_OK )
                             {
@@ -2278,7 +2281,8 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                                 }
 
                                 if ( pOutSet )
-                                    m_pDocument->ModifyStyleSheet( *pStyleSheet, *pOutSet );
+                                    m_pDocument->ModifyStyleSheet( *pStyleSheet, *pOutSet,
+                                                                   xOldSet.get() );
 
                                 // memorizing for GetState():
                                 GetPageOnFromPageStyleSet( &rStyleSet, nCurTab, m_bHeaderOn, m_bFooterOn );

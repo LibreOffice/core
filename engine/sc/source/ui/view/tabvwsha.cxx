@@ -1805,7 +1805,8 @@ void ScTabViewShell::ExecuteStyleEditDialog(VclPtr<SfxAbstractTabDialog> pDlg,
                     rBindings.Invalidate( FID_RESET_PRINTZOOM );
                 }
 
-                rDoc.ModifyStyleSheet( *pStyleSheet, *pOutSet );
+                // The dialog has already written its result into the style.
+                rDoc.ModifyStyleSheet( *pStyleSheet, *pOutSet, xOldSet.get() );
                 rBindings.Invalidate( FID_RESET_PRINTZOOM );
             }
             else

@@ -2365,8 +2365,11 @@ public:
     bool            IsPageStyleInUse( std::u16string_view rStrPageStyle, SCTAB* pInTab );
     bool            RemovePageStyleInUse( std::u16string_view rStrPageStyle );
     bool            RenamePageStyleInUse( std::u16string_view rOld, const OUString& rNew );
-    void            ModifyStyleSheet( SfxStyleSheetBase& rPageStyle,
-                                      const SfxItemSet&  rChanges );
+    /// Apply rChanges to rPageStyle. pOldSet, when given, is the item set of rPageStyle before
+    /// rChanges were written into it.
+    SC_DLLPUBLIC void ModifyStyleSheet( SfxStyleSheetBase& rPageStyle,
+                                        const SfxItemSet&  rChanges,
+                                        const SfxItemSet*  pOldSet = nullptr );
 
     void            PageStyleModified( SCTAB nTab, const OUString& rNewName );
 

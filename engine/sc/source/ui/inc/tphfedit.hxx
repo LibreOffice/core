@@ -53,6 +53,10 @@ public:
 
     void            InsertField( const SvxFieldItem& rFld );
 
+    /// Makes the text unchangeable: typing, inserting fields and changing the character
+    /// attributes leave it as it is.
+    void            SetReadOnly();
+
     void            SetNumType(SvxNumType eNumType);
 
     virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
@@ -72,6 +76,7 @@ private:
     ScEditWindowLocation eLocation;
     bool mbRTL;
     weld::Window* mpDialog;
+    bool mbReadOnly;
 
     unotools::WeakReference<ScAccessibleEditObject> mxAcc;
 

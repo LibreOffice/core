@@ -38,6 +38,8 @@
 #include <scuitphfedit.hxx>
 #include <memory>
 #include <helpids.h>
+#include <docsh.hxx>
+#include <seclabelmarking.hxx>
 
 
 ScHFPage::ScHFPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet, sal_uInt16 nSetId)
@@ -81,6 +83,13 @@ void ScHFPage::Reset( const SfxItemSet* rSet )
 {
     SvxHFPage::Reset( rSet );
     TurnOnHdl(*m_xTurnOnBox);
+
+    // A header or footer whose centre text is a security label marking stays as it is.
+    const ScPageHFItem& rContent = aDataSet.Get(
+        m_nId == SID_ATTR_PAGE_HEADERSET ? ATTR_PAGE_HEADERRIGHT : ATTR_PAGE_FOOTERRIGHT);
+    auto pDocShell = dynamic_cast<ScDocShell*>(SfxObjectShell::Current());
+    if (pDocShell && sc::seclabel::isMarking(pDocShell->GetDocument(), rContent.GetCenterArea()))
+        LockOnAndSharingBoxes();
 }
 
 bool ScHFPage::FillItemSet( SfxItemSet* rOutSet )

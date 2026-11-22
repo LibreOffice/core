@@ -39,6 +39,13 @@
 #include <vcl/print.hxx>
 #include <vcl/scheduler.hxx>
 #include <stlsheet.hxx>
+#include <attrib.hxx>
+#include <editutil.hxx>
+#include <scitems.hxx>
+#include <stlpool.hxx>
+#include <svx/pageitem.hxx>
+#include <svx/seclabel/SecLabelStore.hxx>
+#include <svx/seclabel/StanagLabel.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -3009,6 +3016,127 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testPasteRepeatedBlockKeepsFontHeight)
                                      nMidFontHeight, pDoc->GetRowHeight(nRow, 0));
     }
     CPPUNIT_ASSERT_GREATER(nMidFontHeight, pDoc->GetRowHeight(151, 0));
+}
+
+namespace
+{
+/// The page style of the first sheet.
+SfxStyleSheetBase* getFirstPageStyle(ScDocument& rDoc)
+{
+    return rDoc.GetStyleSheetPool()->Find(rDoc.GetPageStyle(0), SfxStyleFamily::Page);
+}
+
+/// A header or footer content item whose left area is rLeft and centre area is rCenter.
+ScPageHFItem makeContent(ScDocument& rDoc, TypedWhichId<ScPageHFItem> nWhich,
+                         const OUString& rLeft, const OUString& rCenter)
+{
+    ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
+    ScPageHFItem aContent(nWhich);
+    rEngine.SetTextCurrentDefaults(rLeft);
+    aContent.SetLeftArea(rEngine.CreateTextObject());
+    rEngine.SetTextCurrentDefaults(rCenter);
+    aContent.SetCenterArea(rEngine.CreateTextObject());
+    return aContent;
+}
+
+/// Changes that switch the header off, make left, right and first pages differ, and write "Mine"
+/// and "Other" into the left and centre areas of the header.
+SfxItemSet makeHeaderChanges(ScDocument& rDoc, const SfxItemSet& rStyleSet)
+{
+    SfxItemSet aChanges(rStyleSet);
+    SfxItemSet aHeaderSet(rStyleSet.Get(ATTR_PAGE_HEADERSET).GetItemSet());
+    aHeaderSet.Put(SfxBoolItem(ATTR_PAGE_ON, false));
+    aHeaderSet.Put(SfxBoolItem(ATTR_PAGE_SHARED, false));
+    aHeaderSet.Put(SfxBoolItem(ATTR_PAGE_SHARED_FIRST, false));
+    aChanges.Put(SvxSetItem(ATTR_PAGE_HEADERSET, aHeaderSet));
+    aChanges.Put(makeContent(rDoc, ATTR_PAGE_HEADERRIGHT, u"Mine"_ustr, u"Other"_ustr));
+    return aChanges;
+}
+
+/// Stores a security label whose marking is "SECRET//X" in the document xComponent.
+void storeLabel(const uno::Reference<lang::XComponent>& xComponent)
+{
+    svx::seclabel::StanagLabel aLabel;
+    aLabel.aPolicyId = u"urn:oid:1.2.826.0.1310.1.2.0"_ustr;
+    aLabel.aClassification = u"SECRET"_ustr;
+    aLabel.aCreationDateTime = u"2026-06-21T10:00:00Z"_ustr;
+    aLabel.aMarking = u"SECRET//X"_ustr;
+    svx::seclabel::storeLabelPart(
+        uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY), aLabel.toBindingXml(),
+        svx::seclabel::buildItemProps(u"{B6E4D8A1-1A35-4F0E-9B7A-71F4C0F5E0D3}"_ustr,
+                                      svx::seclabel::STANAG_BINDING_SCHEMA));
+}
+
+/// Gives the header of the first page style the centre text rCenter, switched on and shared.
+void setHeader(ScDocument& rDoc, const OUString& rCenter)
+{
+    SfxItemSet& rStyleSet = getFirstPageStyle(rDoc)->GetItemSet();
+    SfxItemSet aHeaderSet(rStyleSet.Get(ATTR_PAGE_HEADERSET).GetItemSet());
+    aHeaderSet.Put(SfxBoolItem(ATTR_PAGE_ON, true));
+    aHeaderSet.Put(SfxBoolItem(ATTR_PAGE_SHARED, true));
+    aHeaderSet.Put(SfxBoolItem(ATTR_PAGE_SHARED_FIRST, true));
+    rStyleSet.Put(SvxSetItem(ATTR_PAGE_HEADERSET, aHeaderSet));
+    rStyleSet.Put(makeContent(rDoc, ATTR_PAGE_HEADERRIGHT, OUString(), rCenter));
+}
+
+/// Checks that the header of rStyleSet is still on, shared, and centred on the marking.
+void checkMarkingKept(const SfxItemSet& rStyleSet)
+{
+    const SfxItemSet& rHeaderSet = rStyleSet.Get(ATTR_PAGE_HEADERSET).GetItemSet();
+    CPPUNIT_ASSERT(rHeaderSet.Get(ATTR_PAGE_ON).GetValue());
+    CPPUNIT_ASSERT(rHeaderSet.Get(ATTR_PAGE_SHARED).GetValue());
+    CPPUNIT_ASSERT(rHeaderSet.Get(ATTR_PAGE_SHARED_FIRST).GetValue());
+    CPPUNIT_ASSERT_EQUAL(u"SECRET//X"_ustr,
+                         rStyleSet.Get(ATTR_PAGE_HEADERRIGHT).GetCenterArea()->GetText(0));
+}
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testSecurityLabelMarkingKeepsHeader)
+{
+    // A labelled spreadsheet whose header is centred on the marking:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    storeLabel(mxComponent);
+    setHeader(*pDoc, u"SECRET//X"_ustr);
+    SfxStyleSheetBase* pStyle = getFirstPageStyle(*pDoc);
+
+    // A header dialog result that switches the header off, makes the pages differ and replaces
+    // the marking keeps the header and the marking, and still changes the left area:
+    pDoc->ModifyStyleSheet(*pStyle, makeHeaderChanges(*pDoc, pStyle->GetItemSet()));
+    checkMarkingKept(pStyle->GetItemSet());
+    CPPUNIT_ASSERT_EQUAL(
+        u"Mine"_ustr,
+        pStyle->GetItemSet().Get(ATTR_PAGE_HEADERRIGHT).GetLeftArea()->GetText(0));
+
+    // So does the same change once it is already written into the style, as the page style
+    // dialog and undo do:
+    const SfxItemSet aOldSet(pStyle->GetItemSet());
+    const SfxItemSet aChanges = makeHeaderChanges(*pDoc, aOldSet);
+    pStyle->GetItemSet().Put(aChanges);
+    pDoc->ModifyStyleSheet(*pStyle, aChanges, &aOldSet);
+    checkMarkingKept(pStyle->GetItemSet());
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testHeaderWithoutMarkingCanBeChanged)
+{
+    // Given a spreadsheet without a security label, whose header has the same centre text:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    setHeader(*pDoc, u"SECRET//X"_ustr);
+
+    // When a header dialog switches the header off, makes left and right pages differ, and
+    // changes the left and centre areas:
+    SfxStyleSheetBase* pStyle = getFirstPageStyle(*pDoc);
+    pDoc->ModifyStyleSheet(*pStyle, makeHeaderChanges(*pDoc, pStyle->GetItemSet()));
+
+    // Then every change applies:
+    const SfxItemSet& rStyleSet = pStyle->GetItemSet();
+    const SfxItemSet& rHeaderSet = rStyleSet.Get(ATTR_PAGE_HEADERSET).GetItemSet();
+    CPPUNIT_ASSERT(!rHeaderSet.Get(ATTR_PAGE_ON).GetValue());
+    CPPUNIT_ASSERT(!rHeaderSet.Get(ATTR_PAGE_SHARED).GetValue());
+    CPPUNIT_ASSERT(!rHeaderSet.Get(ATTR_PAGE_SHARED_FIRST).GetValue());
+    CPPUNIT_ASSERT_EQUAL(u"Other"_ustr,
+                         rStyleSet.Get(ATTR_PAGE_HEADERRIGHT).GetCenterArea()->GetText(0));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

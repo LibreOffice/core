@@ -35,6 +35,8 @@
 #include <patattr.hxx>
 
 #include <scuitphfedit.hxx>
+#include <docsh.hxx>
+#include <seclabelmarking.hxx>
 #include <memory>
 
 
@@ -175,6 +177,15 @@ void ScHFEditPage::Reset( const SfxItemSet* rCoreSet )
         m_xWndRight->SetText( *pRight );
 
     SetSelectDefinedList();
+
+    // The centre area that holds a security label marking is read-only. A predefined header or
+    // footer replaces every area, so the list of them is disabled.
+    auto pDocShell = dynamic_cast<ScDocShell*>(SfxObjectShell::Current());
+    if (pDocShell && sc::seclabel::isMarking(pDocShell->GetDocument(), pItem->GetCenterArea()))
+    {
+        m_xWndCenter->SetReadOnly();
+        m_xLbDefined->set_sensitive(false);
+    }
 }
 
 bool ScHFEditPage::FillItemSet( SfxItemSet* rCoreSet )

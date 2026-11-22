@@ -18,6 +18,7 @@
  */
 
 #include <scitems.hxx>
+#include <seclabelmarking.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -209,7 +210,8 @@ OutputDevice* ScDocument::GetRefDevice(bool bForceVirtDev)
 }
 
 void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
-                                   const SfxItemSet&  rChanges )
+                                   const SfxItemSet&  rChanges,
+                                   const SfxItemSet*  pOldSet )
 {
     SfxItemSet& rSet = rStyleSheet.GetItemSet();
 
@@ -219,7 +221,10 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
             {
                 const sal_uInt16 nOldScale = getScaleValue(rStyleSheet, ATTR_PAGE_SCALE);
                 const sal_uInt16 nOldScaleToPages = getScaleValue(rStyleSheet, ATTR_PAGE_SCALETOPAGES);
-                rSet.Put( rChanges );
+                // A header or footer that holds a security label marking keeps it.
+                const std::optional<SfxItemSet> oKept
+                    = sc::seclabel::keepMarking(*this, pOldSet ? *pOldSet : rSet, rChanges);
+                rSet.Put( oKept ? *oKept : rChanges );
                 const sal_uInt16 nNewScale        = getScaleValue(rStyleSheet, ATTR_PAGE_SCALE);
                 const sal_uInt16 nNewScaleToPages = getScaleValue(rStyleSheet, ATTR_PAGE_SCALETOPAGES);
 

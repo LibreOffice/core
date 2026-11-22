@@ -310,6 +310,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/refupdat \
     sc/source/core/tool/scmatrix \
     sc/source/core/tool/scopetools \
+    sc/source/core/tool/seclabelmarking \
     sc/source/core/tool/sharedformula \
     sc/source/core/tool/sharedstringpoolpurge \
     sc/source/core/tool/stringutil \

@@ -114,6 +114,8 @@ void ScSecurityLabelTarget::applyMarking(const svx::seclabel::LabelPlacement& rP
     xPageStyle->setPropertyValue(SC_UNO_PAGE_HDRSHARED, cpo::uno::Any(true));
     xPageStyle->setPropertyValue(SC_UNO_PAGE_FTRON, cpo::uno::Any(true));
     xPageStyle->setPropertyValue(SC_UNO_PAGE_FTRSHARED, cpo::uno::Any(true));
+    xPageStyle->setPropertyValue(SC_UNO_PAGE_FIRSTHDRSHARED, cpo::uno::Any(true));
+    xPageStyle->setPropertyValue(SC_UNO_PAGE_FIRSTFTRSHARED, cpo::uno::Any(true));
     setCenterText(xPageStyle, SC_UNO_PAGE_RIGHTHDRCON, rPlacement.aMarking, rPlacement.nColor);
     setCenterText(xPageStyle, SC_UNO_PAGE_RIGHTFTRCON, rPlacement.aMarking, rPlacement.nColor);
 }
