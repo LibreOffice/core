@@ -507,7 +507,7 @@ void ScCondFormatObj::createEntry(const sal_Int32 nType, const sal_Int32 nPos)
 void ScCondFormatObj::removeByIndex(const sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
-    if (getCoreObject()->size() >= o3tl::make_unsigned(nIndex))
+    if (o3tl::make_unsigned(nIndex) >= getCoreObject()->size())
         throw lang::IllegalArgumentException();
 
     getCoreObject()->RemoveEntry(nIndex);
