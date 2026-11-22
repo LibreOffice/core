@@ -174,7 +174,7 @@ void UnoControlTabPageContainerModel::replaceByIndex( ::sal_Int32 /*Index*/, con
 cpo::uno::Any UnoControlTabPageContainerModel::getByIndex( ::sal_Int32 nIndex )
 {
     std::unique_lock aGuard( m_aMutex );
-    if ( nIndex < 0 || o3tl::make_unsigned(nIndex) > m_aTabPageVector.size() )
+    if ( nIndex < 0 || o3tl::make_unsigned(nIndex) >= m_aTabPageVector.size() )
         throw lang::IndexOutOfBoundsException();
     return cpo::uno::Any(m_aTabPageVector[nIndex]);
 }

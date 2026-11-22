@@ -563,7 +563,7 @@ sal_Int32 XoNavigationOrderAccess::getCount(  )
 
 Any XoNavigationOrderAccess::getByIndex( sal_Int32 Index )
 {
-    if( (Index < 0) || (Index > getCount()) )
+    if( (Index < 0) || (Index >= getCount()) )
         throw IndexOutOfBoundsException();
 
     return Any( maShapes[Index] );
