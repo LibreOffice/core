@@ -3651,11 +3651,10 @@ std::string getCapabilitiesJson(bool convertToAvailable)
     // Set the product version hash
     capabilities->set("productVersionHash", Util::getCoolVersionHash());
 
-    // Set the kit version
-    capabilities->set("productKitVersion", COOLWSD::LOKitVersionNumber);
-
-    // Set the kit version hash
-    capabilities->set("productKitVersionHash", COOLWSD::LOKitVersionHash);
+    // Set the kit version and its hash
+    const std::shared_ptr<const COOLWSD::KitVersion> kitVersion = COOLWSD::getKitVersion();
+    capabilities->set("productKitVersion", kitVersion->number);
+    capabilities->set("productKitVersionHash", kitVersion->hash);
 
     // Set that this is a proxy.php-enabled instance
     capabilities->set("hasProxyPrefix", COOLWSD::IsProxyPrefixEnabled);

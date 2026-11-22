@@ -1048,9 +1048,9 @@ std::string COOLWSD::ServerName;
 std::string COOLWSD::FileServerRoot;
 std::string COOLWSD::ServiceRoot;
 std::string COOLWSD::TmpFontDir;
-std::string COOLWSD::LOKitVersion;
-std::string COOLWSD::LOKitVersionNumber;
-std::string COOLWSD::LOKitVersionHash;
+std::mutex COOLWSD::KitVersionMutex;
+std::shared_ptr<const COOLWSD::KitVersion> COOLWSD::StoredKitVersion =
+    std::make_shared<const COOLWSD::KitVersion>();
 std::string COOLWSD::ConfigFile =
 #if defined(MACOS) && MOBILEAPP
     getResourcePath("coolwsd", "xml");
@@ -4173,15 +4173,7 @@ private:
                         forKitPid = value;
                 }
                 else if (param.first == "version")
-                {
-                    COOLWSD::LOKitVersion = param.second;
-                    Poco::JSON::Object::Ptr object;
-                    if (JsonUtil::parseJSON(COOLWSD::LOKitVersion, object))
-                    {
-                        COOLWSD::LOKitVersionNumber = JsonUtil::getJSONValue<std::string>(object, "ProductVersion") + JsonUtil::getJSONValue<std::string>(object, "ProductExtension");
-                        COOLWSD::LOKitVersionHash = JsonUtil::getJSONValue<std::string>(object, "BuildId").substr(0, 8);
-                    }
-                }
+                    COOLWSD::setKitVersion(param.second);
                 else if (param.first.size() > 6 &&
                          param.first.compare(0, 5, "adms_") == 0)
                     admsProps[param.first.substr(5)] = param.second;
@@ -4399,11 +4391,12 @@ void COOLWSDServer::dumpState(std::ostream& os) const
 
     std::string version, hash;
     Util::getVersionInfo(version, hash);
+    const std::shared_ptr<const COOLWSD::KitVersion> kitVersion = COOLWSD::getKitVersion();
 
     THREAD_UNSAFE_DUMP_BEGIN
     os << "COOLWSDServer: " << version << " - " << hash << " state dumping"
 #if !MOBILEAPP
-          "\n  Kit version: " << COOLWSD::LOKitVersion << "\n  Ports: server " << ClientPortNumber
+          "\n  Kit version: " << kitVersion->json << "\n  Ports: server " << ClientPortNumber
        << " prisoner " << MasterLocation
        << "\n  SSL: " << (ConfigUtil::isSslEnabled() ? "https" : "http")
        << "\n  SSL-Termination: " << (ConfigUtil::isSSLTermination() ? "yes" : "no")
@@ -4434,7 +4427,9 @@ void COOLWSDServer::dumpState(std::ostream& os) const
        << "\n  ChildRoot: " << COOLWSD::ChildRoot
        << "\n  FileServerRoot: " << COOLWSD::FileServerRoot
        << "\n  ServiceRoot: " << COOLWSD::ServiceRoot
-       << "\n  LOKitVersion: " << COOLWSD::LOKitVersion
+       << "\n  KitVersion: " << kitVersion->json
+       << "\n  KitVersionNumber: " << kitVersion->number
+       << "\n  KitVersionHash: " << kitVersion->hash
        << "\n  HostIdentifier: " << Util::getProcessIdentifier()
        << "\n  ConfigFile: " << COOLWSD::ConfigFile
        << "\n  LogLevel: " << COOLWSD::LogLevel
@@ -5295,6 +5290,34 @@ int COOLWSD::main(const std::vector<std::string>& /*args*/)
 #endif
 
     return returnValue;
+}
+
+std::shared_ptr<const COOLWSD::KitVersion> COOLWSD::getKitVersion()
+{
+    std::lock_guard<std::mutex> lock(KitVersionMutex);
+    return StoredKitVersion;
+}
+
+void COOLWSD::setKitVersion(const std::string& versionJson)
+{
+    // Every Kit reports its version, and all Kits that fork from one forkit run the same library.
+    // A new version is stored only when a new forkit loads a different library.
+    const std::shared_ptr<const KitVersion> previous = getKitVersion();
+    if (previous->json == versionJson)
+        return;
+
+    auto version = std::make_shared<KitVersion>();
+    version->json = versionJson;
+    Poco::JSON::Object::Ptr object;
+    if (JsonUtil::parseJSON(versionJson, object))
+    {
+        version->number = JsonUtil::getJSONValue<std::string>(object, "ProductVersion") +
+                          JsonUtil::getJSONValue<std::string>(object, "ProductExtension");
+        version->hash = JsonUtil::getJSONValue<std::string>(object, "BuildId").substr(0, 8);
+    }
+
+    std::lock_guard<std::mutex> lock(KitVersionMutex);
+    StoredKitVersion = std::move(version);
 }
 
 int COOLWSD::getClientPortNumber()

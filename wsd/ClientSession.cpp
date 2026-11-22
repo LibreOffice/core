@@ -1581,7 +1581,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         // Send COOL version information
         sendTextFrame("coolserver " + Util::getVersionJSON(EnableExperimental));
         // Send LOKit version information
-        sendTextFrame("lokitversion " + COOLWSD::LOKitVersion);
+        sendTextFrame("lokitversion " + COOLWSD::getKitVersion()->json);
 
         // If Trace Event generation and logging is enabled (whether it can be turned on), tell it
         // to cool

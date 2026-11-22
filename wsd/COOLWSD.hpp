@@ -95,9 +95,23 @@ public:
     static std::string FileServerRoot;
     static std::string ServiceRoot; ///< There are installations that need prefixing every page with some path.
     static std::string TmpFontDir;
-    static std::string LOKitVersion;
-    static std::string LOKitVersionNumber;
-    static std::string LOKitVersionHash;
+    /// The version of the office library that the Kits run.
+    struct KitVersion
+    {
+        /// The version JSON object of the library, as text. Empty until the first Kit connects.
+        std::string json;
+        /// ProductVersion followed by ProductExtension, for example "25.04.8.2".
+        std::string number;
+        /// The first 8 characters of BuildId, the commit the library was built from.
+        std::string hash;
+    };
+
+    /// Returns the version of the office library. The fields of the result belong to one version,
+    /// and the result stays the same when a new version is stored.
+    static std::shared_ptr<const KitVersion> getKitVersion();
+    /// Stores the version JSON object that a Kit reports, with the fields taken from it.
+    static void setKitVersion(const std::string& versionJson);
+
     static bool EnableTraceEventLogging;
     static bool EnableAccessibility;
     static bool EnableMountNamespaces;
@@ -315,6 +329,11 @@ private:
                                        const std::string& root, std::vector<std::string>& allowed,
                                        bool onlyAllowed = false);
     static void appendAllowedAliasGroups(const Poco::Util::LayeredConfiguration& conf, std::vector<std::string>& allowed);
+
+    /// Guards StoredKitVersion. One thread replaces the pointer while others copy it.
+    static std::mutex KitVersionMutex;
+    /// The latest version of the office library. Never null, and never changed once stored.
+    static std::shared_ptr<const KitVersion> StoredKitVersion;
 
 private:
     /// UnitWSDInterface

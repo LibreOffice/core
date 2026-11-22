@@ -30,6 +30,7 @@
 #include <common/Thumbnail.hpp>
 #include <common/Util.hpp>
 #include <kit/KitHelper.hpp>
+#include <wsd/COOLWSD.hpp>
 #include <wsd/TileCache.hpp>
 #include <wsd/TileDesc.hpp>
 #include <wsd/wopi/WopiStorage.hpp>
@@ -105,6 +106,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testThumbnailParseSizeList);
     CPPUNIT_TEST(testParseThumbnailSizes);
     CPPUNIT_TEST(testRlimitInBytes);
+    CPPUNIT_TEST(testKitVersion);
     CPPUNIT_TEST_SUITE_END();
 
     void testCOOLProtocolFunctions();
@@ -151,6 +153,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testThumbnailParseSizeList();
     void testParseThumbnailSizes();
     void testRlimitInBytes();
+    void testKitVersion();
 
     size_t waitForThreads(size_t count);
 };
@@ -1984,6 +1987,46 @@ void WhiteBoxTests::testRlimitInBytes()
     // Zero, and a negative count, stand for unlimited.
     LOK_ASSERT_EQUAL(std::uint64_t(0), Rlimit::limitInBytes("0", 1024 * 1024));
     LOK_ASSERT_EQUAL(std::uint64_t(0), Rlimit::limitInBytes("-1", 1024 * 1024));
+}
+
+void WhiteBoxTests::testKitVersion()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::string initialJson = COOLWSD::getKitVersion()->json;
+
+    const std::string firstJson =
+        R"({"ProductVersion":"1.2","ProductExtension":".3.4","BuildId":"0123456789abcdef"})";
+    COOLWSD::setKitVersion(firstJson);
+    const std::shared_ptr<const COOLWSD::KitVersion> first = COOLWSD::getKitVersion();
+    LOK_ASSERT_EQUAL(firstJson, first->json);
+    LOK_ASSERT_EQUAL(std::string("1.2.3.4"), first->number);
+    LOK_ASSERT_EQUAL(std::string("01234567"), first->hash);
+
+    // Another Kit of the same library leaves the stored version as it is.
+    COOLWSD::setKitVersion(firstJson);
+    LOK_ASSERT(COOLWSD::getKitVersion() == first);
+
+    // A library of another release is stored with all its fields, and a version returned before
+    // keeps the fields of the first library.
+    const std::string secondJson =
+        R"({"ProductVersion":"5.6","ProductExtension":".7.8","BuildId":"fedcba9876543210"})";
+    COOLWSD::setKitVersion(secondJson);
+    const std::shared_ptr<const COOLWSD::KitVersion> second = COOLWSD::getKitVersion();
+    LOK_ASSERT_EQUAL(secondJson, second->json);
+    LOK_ASSERT_EQUAL(std::string("5.6.7.8"), second->number);
+    LOK_ASSERT_EQUAL(std::string("fedcba98"), second->hash);
+    LOK_ASSERT_EQUAL(firstJson, first->json);
+    LOK_ASSERT_EQUAL(std::string("1.2.3.4"), first->number);
+
+    // A version that is not JSON is kept as text, with the other fields empty.
+    COOLWSD::setKitVersion("unknown");
+    const std::shared_ptr<const COOLWSD::KitVersion> unknown = COOLWSD::getKitVersion();
+    LOK_ASSERT_EQUAL(std::string("unknown"), unknown->json);
+    LOK_ASSERT(unknown->number.empty());
+    LOK_ASSERT(unknown->hash.empty());
+
+    COOLWSD::setKitVersion(initialJson);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WhiteBoxTests);

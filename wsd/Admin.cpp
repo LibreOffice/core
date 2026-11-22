@@ -145,7 +145,7 @@ void AdminSocketHandler::handleMessage(const std::vector<char> &payload)
         sendTextFrame("coolserver " + Util::getVersionJSON(EnableExperimental));
 
         // Send LOKit version information
-        sendTextFrame("lokitversion " + COOLWSD::LOKitVersion);
+        sendTextFrame("lokitversion " + COOLWSD::getKitVersion()->json);
     }
     else if (tokens.equals(0, "subscribe") && tokens.size() > 1)
     {

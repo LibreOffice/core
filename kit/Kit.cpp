@@ -5284,7 +5284,7 @@ void lokit_main(
         assert(coKit);
         MobileKit = coKit.get();
 
-        COOLWSD::LOKitVersion = coKit->getVersionInfo();
+        COOLWSD::setKitVersion(coKit->getVersionInfo());
 
         // Dummies
         const std::string jailId = "jailid";
