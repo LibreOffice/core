@@ -18962,8 +18962,8 @@ private:
 
             m_bUserSelectEntry = false;
 
-            // if we are in mru mode always start with the cursor at the top of the menu
-            if (m_nMaxMRUCount)
+            // if there are MRU entries, always start with the first MRU entry.
+            if (m_nMRUCount)
                 set_active_including_mru(0, true);
         }
     }
@@ -20752,8 +20752,8 @@ private:
 
             m_bActivateCalled = false;
 
-            // if we are in mru mode always start with the cursor at the top of the menu
-            if (m_nMaxMRUCount)
+            // if there are MRU entries, always start with the cursor at the top of the menu
+            if (m_nMRUCount)
                 tree_view_set_cursor(0);
 
             GdkRectangle aAnchor {0, 0, gtk_widget_get_allocated_width(pComboBox), gtk_widget_get_allocated_height(pComboBox) };
