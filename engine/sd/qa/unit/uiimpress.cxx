@@ -3205,6 +3205,79 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureApplyTemplateWithCanv
                          &pCanvasNotesPage->TRG_GetMasterPage());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformCanvasMaster)
+{
+    // Given a canvas page and 3 slides, with the master of the canvas page among the masters:
+    createSdImpressDoc();
+    SdXImpressDocument* pXImpressDocument = addSlidesAndCanvasPage(mxComponent);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    sal_uInt16 nCanvasMaster = 0;
+    while (!pDoc->GetMasterSdPage(nCanvasMaster, PageKind::Standard)->IsCanvasMasterPage())
+        ++nCanvasMaster;
+    SdPage* pCanvasMaster = pDoc->GetMasterSdPage(nCanvasMaster, PageKind::Standard);
+    SdrPage* pSlideMaster = &pDoc->GetSdPage(1, PageKind::Standard)->TRG_GetMasterPage();
+
+    // When a transform inserts slides after the first slide on the master of the canvas page, by
+    // its index and by its name, and on a master past the last one:
+    CPPUNIT_ASSERT(transformSlides(
+        mxComponent, rtl::Concat2View(u"{\"JumpToSlide\": 1}, {\"InsertMasterSlide\": "
+                                      + OUString::number(nCanvasMaster) + u"}")));
+    CPPUNIT_ASSERT(transformSlides(
+        mxComponent, rtl::Concat2View(u"{\"JumpToSlide\": 1}, {\"InsertMasterSlideByName\": \""
+                                      + pCanvasMaster->GetName() + u"\"}")));
+    CPPUNIT_ASSERT(
+        transformSlides(mxComponent, u"{\"JumpToSlide\": 1}, {\"InsertMasterSlide\": 99}"));
+
+    // Then each slide takes the master of the slide it follows, and its notes page the notes
+    // master of that slide. Without the accompanying fix in place, this test would have failed:
+    // the slides took the master of the canvas page, which goes with the canvas page.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(7), pDoc->GetSdPageCount(PageKind::Standard));
+    SdrPage* pNotesMaster = &pDoc->GetSdPage(1, PageKind::Notes)->TRG_GetMasterPage();
+    for (sal_uInt16 nPage = 2; nPage <= 4; ++nPage)
+    {
+        CPPUNIT_ASSERT_EQUAL(pSlideMaster,
+                             &pDoc->GetSdPage(nPage, PageKind::Standard)->TRG_GetMasterPage());
+        CPPUNIT_ASSERT_EQUAL(pNotesMaster,
+                             &pDoc->GetSdPage(nPage, PageKind::Notes)->TRG_GetMasterPage());
+    }
+
+    // And when the slide it follows is on the master of the canvas page itself, as an older
+    // version could leave it, the new slide takes the first master for slides.
+    pDoc->GetSdPage(1, PageKind::Standard)->TRG_SetMasterPage(*pCanvasMaster);
+    CPPUNIT_ASSERT(
+        transformSlides(mxComponent, u"{\"JumpToSlide\": 1}, {\"InsertMasterSlide\": 99}"));
+    SdPage* pNewSlide = pDoc->GetSdPage(2, PageKind::Standard);
+    CPPUNIT_ASSERT(!static_cast<SdPage&>(pNewSlide->TRG_GetMasterPage()).IsCanvasMasterPage());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformCanvasMasterFirst)
+{
+    // Given a canvas page and one slide with a template applied, which leaves the master of the
+    // canvas page as the first master:
+    createSdImpressDoc();
+    SdDrawDocument* pDoc = makeSlidesAfterCanvasPage(mxComponent, 1);
+    transformSlides(mxComponent, u"{\"JumpToSlide\": 1}, {\"ApplyTemplate\": \"Cobalt\"}");
+    CPPUNIT_ASSERT(pDoc->GetMasterSdPage(0, PageKind::Standard)->IsCanvasMasterPage());
+    SdPage* pSlide = pDoc->GetSdPage(1, PageKind::Standard);
+
+    // When a transform inserts a slide on the first master, as the server sends it, and fills it:
+    const bool bApplied = transformSlides(
+        mxComponent, u"{\"JumpToSlide\": 1}, {\"InsertMasterSlide\": 0}, "
+                     u"{\"ChangeLayoutByName\": \"AUTOLAYOUT_TITLE_ONLY\"}");
+
+    // Then the slide is inserted with a master for slides, and the layout goes to it, not to the
+    // slide before it. Without the accompanying fix in place, this test would have failed: the
+    // slide took the master of the canvas page.
+    CPPUNIT_ASSERT(bApplied);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pDoc->GetSdPageCount(PageKind::Standard));
+    SdPage* pInserted = pDoc->GetSdPage(2, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(&pSlide->TRG_GetMasterPage(), &pInserted->TRG_GetMasterPage());
+    CPPUNIT_ASSERT_EQUAL(&pDoc->GetSdPage(1, PageKind::Notes)->TRG_GetMasterPage(),
+                         &pDoc->GetSdPage(2, PageKind::Notes)->TRG_GetMasterPage());
+    CPPUNIT_ASSERT_EQUAL(int(AUTOLAYOUT_TITLE_ONLY), int(pInserted->GetAutoLayout()));
+    CPPUNIT_ASSERT(int(pSlide->GetAutoLayout()) != int(AUTOLAYOUT_TITLE_ONLY));
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMoveSelectedPartsToOwnPlaceWithSections)
 {
     // Given 3 slides in two sections, with the second slide selected in the slide sorter:

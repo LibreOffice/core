@@ -1173,6 +1173,29 @@ void handleInsertMasterSlide(SlideCommandContext& rCtx, const std::string& rKey,
         nInsertPosition = pTemplatePage->GetPageNum();
     }
 
+    // The master of the canvas page is no master for a slide: the canvas page takes it along when
+    // it goes, and a slide on it would be left without a master. A new slide asked to go on it
+    // takes the master of the slide it takes its settings from, as in the user interface, or the
+    // first master for slides if that slide is on the master of the canvas page too. The server
+    // asks for the first master, which is the one of the canvas page once a template replaced the
+    // others, so this is logged but not reported.
+    if (pMPage->IsCanvasMasterPage())
+    {
+        KIT_WARN("sd.transform", "FillApi SlideCmd: The master of the canvas page is not for "
+                                 "slides. '" << rKey << ": " << nMasterPageId << "'");
+        SdPage* pTemplateMaster = static_cast<SdPage*>(&pTemplatePage->TRG_GetMasterPage());
+        nMasterPageId = 0;
+        while (nMasterPageId + 1 < rCtx.mnMasterPageCount)
+        {
+            SdPage* pCandidate = rCtx.mpDoc->GetMasterSdPage(nMasterPageId, PageKind::Standard);
+            if (pTemplateMaster->IsCanvasMasterPage() ? !pCandidate->IsCanvasMasterPage()
+                                                      : pCandidate == pTemplateMaster)
+                break;
+            ++nMasterPageId;
+        }
+        pMPage = rCtx.mpDoc->GetMasterSdPage(nMasterPageId, PageKind::Standard);
+    }
+
     // It will move to the next slide.
     rCtx.mnNextPageId
         = rCtx.mpDoc->CreatePage(pTemplatePage, PageKind::Standard, OUString(), OUString(),
