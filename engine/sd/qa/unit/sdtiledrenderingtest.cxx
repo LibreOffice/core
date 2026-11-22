@@ -9,12 +9,14 @@
 
 #include <sdtiledrenderingtest.hxx>
 
+#include <comphelper/configuration.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <COKit/COKit.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/process.h>
+#include <officecfg/Office/Impress.hxx>
 
 #include <drawdoc.hxx>
 #include <unomodel.hxx>
@@ -42,6 +44,14 @@ void SdTiledRenderingTest::setUp()
     // prevent showing warning message box
     osl_setEnvironment(u"OOX_NO_SMARTART_WARNING"_ustr.pData, u"1"_ustr.pData);
     comphelper::COKit::setActive(true);
+
+    // The notes pane remembers in the configuration whether it is open, and the tests run in one
+    // process. Each test starts with the notes pane closed, whatever an earlier test left.
+    auto xChanges = comphelper::ConfigurationChanges::create();
+    officecfg::Office::Impress::MultiPaneGUI::NotesPane::Visible::ImpressView::set(false, xChanges);
+    officecfg::Office::Impress::MultiPaneGUI::NotesPane::Visible::OutlineView::set(false, xChanges);
+    officecfg::Office::Impress::MultiPaneGUI::NotesPane::Visible::NotesView::set(false, xChanges);
+    xChanges->commit();
 }
 
 void SdTiledRenderingTest::tearDown()
