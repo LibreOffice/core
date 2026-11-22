@@ -1373,13 +1373,6 @@ void Window::ImplPointToLogic(vcl::RenderContext const & rRenderContext, vcl::Fo
 {
     Size aSize = rFont.GetFontSize();
 
-    // On macOS the native toolkits express font sizes in Quartz points, which
-    // already are VCL's logical (device independent) pixels; the display
-    // scaling is handled by the window's backing store. Applying the screen DPI
-    // here would scale the text twice, so keep the point size as-is.
-#ifdef MACOSX
-    (void)bUseRenderContextDPI;
-#else
     if (aSize.Width())
     {
         aSize.setWidth( aSize.Width() *
@@ -1391,7 +1384,6 @@ void Window::ImplPointToLogic(vcl::RenderContext const & rRenderContext, vcl::Fo
         * ( bUseRenderContextDPI ? rRenderContext.GetDPIY() : mpWindowImpl->mpFrameData->mnDPIY) );
     aSize.AdjustHeight(72/2 );
     aSize.setHeight( aSize.Height() / 72 );
-#endif
 
     aSize = rRenderContext.PixelToLogic(aSize);
 
@@ -1403,7 +1395,6 @@ void Window::ImplLogicToPoint(vcl::RenderContext const & rRenderContext, vcl::Fo
     Size aSize = rFont.GetFontSize();
     aSize = rRenderContext.LogicToPixel(aSize);
 
-#ifndef MACOSX
     if (aSize.Width())
     {
         aSize.setWidth( aSize.Width() * 72 );
@@ -1413,7 +1404,6 @@ void Window::ImplLogicToPoint(vcl::RenderContext const & rRenderContext, vcl::Fo
     aSize.setHeight( aSize.Height() * 72 );
     aSize.AdjustHeight(mpWindowImpl->mpFrameData->mnDPIY / 2 );
     aSize.setHeight( aSize.Height() / ( mpWindowImpl->mpFrameData->mnDPIY) );
-#endif
 
     rFont.SetFontSize(aSize);
 }
