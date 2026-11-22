@@ -591,7 +591,7 @@ void asyncConnect(std::string host, const std::string& port, const bool isSSL,
                         {
                             LOG_DBG('#' << fd << " New socket connected to " << host << ':' << port
                                         << " (" << (isSSL ? "SSL)" : "Unencrypted)"));
-                            result = AsyncConnectResult::Ok;
+                            result = AsyncConnectResult::Connected;
                             break;
                         }
 

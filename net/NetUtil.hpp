@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include <common/StateEnum.hpp>
+
 #include <algorithm>
 #include <chrono>
 #include <functional>
@@ -125,8 +127,9 @@ connect(const std::string& host, const std::string& port, bool isSSL,
         const std::shared_ptr<ProtocolHandlerInterface>& protocolHandler,
         const AddressFilter& addressFilter = AddressFilter());
 
-enum class AsyncConnectResult : std::uint8_t {
-    Ok = 0,
+STATE_ENUM(AsyncConnectResult,
+    Unknown, //< No connection result yet.
+    Connected, //< Successfully connected.
     SocketError,
     ConnectionError,
     HostNameError,
@@ -134,7 +137,7 @@ enum class AsyncConnectResult : std::uint8_t {
     SSLHandShakeFailure,
     MissingSSLError,
     AddressNotAllowed
-};
+);
 
 using asyncConnectCB =
     std::function<void(std::shared_ptr<StreamSocket>, AsyncConnectResult result)>;

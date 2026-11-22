@@ -1434,7 +1434,7 @@ Session::Session(std::string hostname, Protocol protocolType, int portNumber)
     , _timeout(getDefaultTimeout())
     , _connected(false)
     , _asyncShutdownOnFinish(false)
-    , _result(net::AsyncConnectResult::Ok)
+    , _result(net::AsyncConnectResult::Unknown)
 {
     assert(!_host.empty() && portNumber > 0 && !_port.empty() &&
            "Invalid hostname and portNumber for http::Sesssion");
