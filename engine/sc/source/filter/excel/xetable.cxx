@@ -2720,6 +2720,18 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
             pPrevEntry = std::move(p);
         }
         ++nFrom;
+
+        // The rows up to the end of both runs of equal hidden state and height match pPrevEntry,
+        // so none of them before nXclRow gets an entry: skip them, instead of one by one up to
+        // the last row of the sheet.
+        if ( nFrom < nXclRow && !maOutlineBfr.IsCollapsed() && maOutlineBfr.GetLevel() == 0 &&
+             !( bRowAlwaysEmpty && !pPrevEntry->IsEmpty() ) &&
+             bHidden == pPrevEntry->IsHidden() && nHeight == pPrevEntry->GetHeight() )
+        {
+            const SCROW nRunEnd = std::min(lastSameHiddenRow, lastSameHeightRow);
+            if ( nRunEnd >= static_cast<SCROW>(nFrom) )
+                nFrom = std::min<size_t>(nRunEnd + 1, nXclRow);
+        }
     }
     itr = maRowMap.find(nXclRow);
     return *itr->second;
