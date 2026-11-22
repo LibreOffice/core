@@ -1247,6 +1247,9 @@ std::unique_ptr<ScIconSetInfo> ScIconSetFormat::GetIconSetInfo(const ScAddress& 
         pInfo->eIconSetType = mpFormatData->eIconSetType;
     }
 
+    if (pInfo->nIconIndex < 0 || pInfo->nIconIndex >= getIconSetElements(pInfo->eIconSetType))
+        return nullptr;
+
     pInfo->mbShowValue = mpFormatData->mbShowValue;
     pInfo->eConditionMode = eMode;
     return pInfo;
@@ -1554,6 +1557,9 @@ sal_Int32 ScIconSetFormat::getIconSetElements( ScIconSetType eType )
 OUString ScIconSetFormat::getIconName(ScIconSetType const eType, sal_Int32 const nIndex)
 {
     OUString sBitmap;
+
+    if (nIndex < 0 || nIndex >= getIconSetElements(eType))
+        return sBitmap;
 
     for(const ScIconSetBitmapMap & i : aBitmapMap)
     {
