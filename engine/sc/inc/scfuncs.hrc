@@ -4586,7 +4586,7 @@ const TranslateId ocPIVOTBY_ARY[] =
     NC_("ocPIVOTBY", "Filter array"),
     NC_("ocPIVOTBY", "A column of TRUE or FALSE values, one per row, that selects the rows to include."),
     NC_("ocPIVOTBY", "Relative to"),
-    NC_("ocPIVOTBY", "The total that a function with two parameters receives. 0 - column total (default). 1 - row total. 2 - grand total. 3 - column total of the parent row group. 4 - row total of the parent column group.")
+    NC_("ocPIVOTBY", "The total that a function with two parameters receives. 0 - column total (default). 1 - row total. 2 - grand total. 3 - total of the parent column group in the same row. 4 - total of the parent row group in the same column.")
 };
 
 // -=*# Resource for function LAMBDA #*=-
