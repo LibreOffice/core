@@ -157,14 +157,13 @@ tasks.register('copyUnpackAssets', Copy) {
 
     into('share') {
         from "${coInstdir}/share"
-        // extensions - for the dictionaries for hunspell
-        includes = ['extensions/dict-de/**', 'extensions/dict-en/**', 'extensions/dict-es/**', 'extensions/dict-fr/**', 'extensions/dict-pt-BR/**']
+        // The spelling and hyphenation dictionaries. Hunspell reads them with fopen, so they are
+        // unpacked to real files. They are registered by share/registry/dictionaries.xcd.
+        includes = ['dictionaries/dict-de/**', 'dictionaries/dict-en/**', 'dictionaries/dict-es/**', 'dictionaries/dict-fr/**', 'dictionaries/dict-pt-BR/**']
         exclude { FileTreeElement details ->
             !(details.file.isDirectory() ||
-                    details.file.name.endsWith('.xcu') ||
                     details.file.name.endsWith('.dic') ||
-                    details.file.name.endsWith('.aff') ||
-                    details.file.name.endsWith('.xml'))
+                    details.file.name.endsWith('.aff'))
         }
     }
 }
@@ -188,6 +187,14 @@ tasks.register('copyAssets', Copy) {
         from "${coInstdir}/share"
         // Filter data is needed by e.g. the drawingML preset shape import.
         includes = ['registry/**', 'filter/**', 'gallery/**', 'palette/**', 'theme_definitions/collabora/**']
+        // The dictionaries are unpacked under $APP_DATA_DIR, and $BRAND_BASE_DIR is the read-only
+        // /assets inside the APK. The locations in the configuration are changed to match.
+        filesMatching('registry/dictionaries.xcd') {
+            filter { String line ->
+                line.replace('vnd.sun.star.expand:$BRAND_BASE_DIR/share/dictionaries/',
+                        'vnd.sun.star.expand:file://$APP_DATA_DIR/share/dictionaries/')
+            }
+        }
     }
 }
 
