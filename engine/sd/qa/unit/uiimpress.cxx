@@ -2879,6 +2879,52 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformDuplicateCan
     CPPUNIT_ASSERT_EQUAL(nUndoCount + 1, pUndoManager->GetUndoActionCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformMoveSlidePastLast)
+{
+    // A slide moved one place past the last slide after a canvas page becomes the last slide too,
+    // with its notes page.
+    {
+        createSdImpressDoc();
+        SdXImpressDocument* pCanvasDocument = addSlidesAndCanvasPage(mxComponent);
+        SdDrawDocument* pCanvasDoc = pCanvasDocument->GetDoc();
+        const std::map<const SdrPage*, const SdrPage*> aCanvasNotesPages
+            = getNotesPagesOfSlides(pCanvasDoc);
+        SdPage* pFirstSlide = pCanvasDoc->GetSdPage(1, PageKind::Standard);
+        CPPUNIT_ASSERT(transformSlides(mxComponent, u"{\"MoveSlide.1\": 4}"));
+        checkSlidesWithCanvasPage(pCanvasDoc, aCanvasNotesPages);
+        CPPUNIT_ASSERT_EQUAL(pFirstSlide, pCanvasDoc->GetSdPage(3, PageKind::Standard));
+    }
+
+    // Given 3 slides:
+    createSdImpressDoc();
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xSlides = xPagesSupplier->getDrawPages();
+    while (xSlides->getCount() < 3)
+        xSlides->insertNewByIndex(xSlides->getCount());
+    const std::map<const SdrPage*, const SdrPage*> aNotesPages = getNotesPagesOfSlides(pDoc);
+    std::vector<SdPage*> aSlides;
+    for (sal_uInt16 nPage = 0; nPage < 3; ++nPage)
+        aSlides.push_back(pDoc->GetSdPage(nPage, PageKind::Standard));
+
+    // When a transform moves the first slide one place past the last slide:
+    transformSlides(mxComponent, u"{\"MoveSlide.0\": 3}");
+
+    // Then it becomes the last slide, followed by its notes page. Without the accompanying fix in
+    // place, this test would have failed: the notes page came before the slide.
+    CPPUNIT_ASSERT_EQUAL(aSlides[1], pDoc->GetSdPage(0, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(aSlides[2], pDoc->GetSdPage(1, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(aSlides[0], pDoc->GetSdPage(2, PageKind::Standard));
+    CPPUNIT_ASSERT(bool(aNotesPages == getNotesPagesOfSlides(pDoc)));
+
+    // And undo puts it back.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    for (sal_uInt16 nPage = 0; nPage < 3; ++nPage)
+        CPPUNIT_ASSERT_EQUAL(aSlides[nPage], pDoc->GetSdPage(nPage, PageKind::Standard));
+    CPPUNIT_ASSERT(bool(aNotesPages == getNotesPagesOfSlides(pDoc)));
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMoveSelectedPartsToOwnPlaceWithSections)
 {
     // Given 3 slides in two sections, with the second slide selected in the slide sorter:

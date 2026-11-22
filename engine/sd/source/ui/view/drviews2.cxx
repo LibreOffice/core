@@ -1286,6 +1286,10 @@ void handleMoveSlide(SlideCommandContext& rCtx, const std::string& rKey,
     const bool bCanvasPage = rCtx.mpDoc->HasCanvasPage();
     if (bCanvasPage && nMoveTo == 0)
         nMoveTo = 1;
+    // One place past the last slide is the end. MovePage() would put the pages after the last one
+    // in the order they come, the notes page before the slide.
+    if (nMoveTo == rCtx.mnPageCount)
+        nMoveTo = rCtx.mnPageCount - 1;
 
     if (bCanvasPage && nMoveFrom == 0)
     {
@@ -1298,15 +1302,15 @@ void handleMoveSlide(SlideCommandContext& rCtx, const std::string& rKey,
         lcl_LogWarning("FillApi SlideCmd: Move slide to the same position. '" + rKey + ": "
                        + std::to_string(nRequestedTo));
     }
-    else if (nMoveFrom >= rCtx.mnPageCount || nMoveTo > rCtx.mnPageCount)
+    else if (nMoveFrom >= rCtx.mnPageCount || nMoveTo >= rCtx.mnPageCount)
     {
         lcl_LogWarning("FillApi SlideCmd: Slide idx >= Slide count. '" + rKey + ": "
-                       + std::to_string(nMoveTo));
+                       + std::to_string(nRequestedTo));
     }
     else if (nMoveFrom < 0 || nMoveTo < 0)
     {
         lcl_LogWarning("FillApi SlideCmd: Slide idx < 0. '" + rKey + ": "
-                       + std::to_string(nMoveTo));
+                       + std::to_string(nRequestedTo));
     }
     else
     {
