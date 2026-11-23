@@ -34,6 +34,7 @@
 #include <pdf/ResourceDict.hxx>
 #include <pdf/BitmapID.hxx>
 #include <pdf/Matrix3.hxx>
+#include <impglyphitem.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -61,10 +62,11 @@
 #include <vcl/settings.hxx>
 #include <pdf/ExternalPDFStreams.hxx>
 #include <pdf/pdfbuildin_fonts.hxx>
-#include <salgdi.hxx>
 
 class FontSubsetInfo;
 class ZCodec;
+
+typedef sal_Unicode sal_Ucs; // TODO: use sal_UCS4 instead of sal_Unicode
 
 namespace vcl::pdf
 {

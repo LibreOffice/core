@@ -52,8 +52,6 @@ namespace vcl
 class FileDefinitionWidgetDraw;
 }
 
-typedef sal_Unicode sal_Ucs; // TODO: use sal_UCS4 instead of sal_Unicode
-
 // note: if you add any new methods to class SalGraphics using coordinates
 //       make sure they have a corresponding protected pure virtual method
 //       which has to be implemented by the platform dependent part.
