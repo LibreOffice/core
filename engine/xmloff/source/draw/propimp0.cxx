@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cmath>
+
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <propimp0.hxx>
@@ -71,13 +73,18 @@ bool XMLDurationPropertyHdl::exportXML(
     const cpo::uno::Any& rValue,
     const SvXMLUnitConverter& ) const
 {
-    double nVal = 0;
+    double fSeconds = 0.0;
 
-    if(rValue >>= nVal)
+    if(rValue >>= fSeconds)
     {
+        // Round the to whole nanoseconds before splitting it to avoid truncation after
+        // floating point inaccuracy
+        const sal_Int64 nNanoSeconds
+            = static_cast<sal_Int64>(std::round(fSeconds * ::tools::Time::nanoSecPerSec));
         util::Duration aDuration;
-        aDuration.Seconds = static_cast<sal_uInt16>(nVal);
-        aDuration.NanoSeconds = static_cast<sal_uInt32>((nVal - aDuration.Seconds) * ::tools::Time::nanoSecPerSec);
+        aDuration.Seconds = static_cast<sal_uInt16>(nNanoSeconds / ::tools::Time::nanoSecPerSec);
+        aDuration.NanoSeconds
+            = static_cast<sal_uInt32>(nNanoSeconds % ::tools::Time::nanoSecPerSec);
 
         OUStringBuffer aOut;
         ::sax::Converter::convertDuration(aOut, aDuration);
