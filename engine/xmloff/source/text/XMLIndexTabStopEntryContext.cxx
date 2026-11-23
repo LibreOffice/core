@@ -75,7 +75,7 @@ void XMLIndexTabStopEntryContext::startFastElement(
             {
                 sal_Int32 nTmp;
                 if (GetImport().GetMM100UnitConverter().
-                                        convertMeasureToCore(nTmp, aIter.toView()))
+                                        convertMeasureToCore(nTmp, aIter.toView(), 0))
                 {
                     nTabPosition = nTmp;
                     bTabPositionOK = true;
@@ -85,8 +85,8 @@ void XMLIndexTabStopEntryContext::startFastElement(
             case XML_ELEMENT(STYLE, XML_LEADER_CHAR):
             {
                 sLeaderChar = aIter.toString();
-                // valid only, if we have a char!
-                bLeaderCharOK = !sLeaderChar.isEmpty();
+                // valid only, if we have a single char!
+                bLeaderCharOK = sLeaderChar.getLength() == 1;
                 break;
             }
             case XML_ELEMENT(STYLE, XML_WITH_TAB):

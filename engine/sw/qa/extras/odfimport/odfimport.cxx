@@ -2078,6 +2078,30 @@ CPPUNIT_TEST_FIXTURE(Test, testTocChapterDisplay)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTocTabStopInvalid)
+{
+    // Given a table of contents whose tab stop entry has a negative position and a leader of two
+    // characters:
+    // Without the fix in place, loading failed with a format error in content.xml.
+    createSwDoc("toc-tab-stop-invalid.fodt");
+
+    // Then the tab stop is at the start and has the default leader:
+    uno::Reference<text::XDocumentIndexesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTOC(xSupplier->getDocumentIndexes()->getByIndex(0),
+                                             uno::UNO_QUERY);
+    uno::Reference<container::XIndexReplace> xLevelFormats(
+        getProperty<uno::Reference<container::XIndexReplace>>(xTOC, u"LevelFormat"_ustr));
+    cpo::uno::Sequence<beans::PropertyValues> aLevel;
+    xLevelFormats->getByIndex(1) >>= aLevel;
+    comphelper::SequenceAsHashMap aToken(aLevel[1]);
+    CPPUNIT_ASSERT_EQUAL(u"TokenTabStop"_ustr,
+                         aToken.getUnpackedValueOrDefault(u"TokenType"_ustr, OUString()));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                         aToken.getUnpackedValueOrDefault(u"TabStopPosition"_ustr, sal_Int32(-1)));
+    CPPUNIT_ASSERT_EQUAL(u" "_ustr, aToken.getUnpackedValueOrDefault(u"TabStopFillCharacter"_ustr,
+                                                                    OUString()));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
