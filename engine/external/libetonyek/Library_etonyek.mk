@@ -75,9 +75,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,etonyek,\
 	UnpackedTarball/libetonyek/src/lib/IWORKStylesheet \
 	UnpackedTarball/libetonyek/src/lib/IWORKSubDirStream \
 	UnpackedTarball/libetonyek/src/lib/IWORKTable \
-	UnpackedTarball/libetonyek/src/lib/IWORKTableRecorder \
 	UnpackedTarball/libetonyek/src/lib/IWORKText \
-	UnpackedTarball/libetonyek/src/lib/IWORKTextRecorder \
 	UnpackedTarball/libetonyek/src/lib/IWORKTextRedirector \
 	UnpackedTarball/libetonyek/src/lib/IWORKToken \
 	UnpackedTarball/libetonyek/src/lib/IWORKTokenizer \

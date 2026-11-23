@@ -575,11 +575,11 @@
           "dest-filename": "libe-book-0.1.4.tar.xz"
         },
         {
-          "url": "https://gerrit.collaboraoffice.com/src/libetonyek-0.1.13.tar.xz",
-          "sha256": "032b71cb597edd92a0b270b916188281bc35be55296b263f6817b29adbcb1709",
+          "url": "https://gerrit.collaboraoffice.com/src/libetonyek-0.1.14.tar.xz",
+          "sha256": "11b33496db3f36af0456086229d154e6d0e64f27bff96112e1036da1db38d631",
           "type": "file",
           "dest": "engine/external/tarballs",
-          "dest-filename": "libetonyek-0.1.13.tar.xz"
+          "dest-filename": "libetonyek-0.1.14.tar.xz"
         },
         {
           "url": "https://gerrit.collaboraoffice.com/src/libexttextcat-3.4.9.tar.xz",

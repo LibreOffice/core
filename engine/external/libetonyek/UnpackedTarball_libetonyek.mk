@@ -17,10 +17,7 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libetonyek))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
 	external/libetonyek/win_build.patch.1 \
-	external/libetonyek/ubsan.patch \
 	external/libetonyek/rpath.patch \
-	external/libetonyek/enumarith.patch \
-	external/libetonyek/mdds3.0.patch.1 \
 ))
 
 ifneq ($(OS),MACOSX)
