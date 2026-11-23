@@ -9263,6 +9263,60 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTextBoxTakesALineColor)
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, pTextBox->GetMergedItem(XATTR_LINECOLOR).GetColorValue());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDeletedColumnOfSelectedCellsCanBeUndone)
+{
+    // a column deleted from selected cells leaves no text edit behind, so undo takes it back
+    createSdImpressDoc();
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { u"Rows"_ustr, cpo::uno::Any(sal_Int32(3)) },
+                                           { u"Columns"_ustr, cpo::uno::Any(sal_Int32(3)) } }));
+    dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    auto pTableObject
+        = dynamic_cast<sdr::table::SdrTableObj*>(pViewShell->GetActualPage()->GetObj(2));
+    CPPUNIT_ASSERT(pTableObject);
+    SdrView* pView = pViewShell->GetView();
+    auto pTableController
+        = dynamic_cast<sdr::table::SvxTableController*>(pView->getSelectionController().get());
+    CPPUNIT_ASSERT(pTableController);
+
+    // the first column, as its select square selects it
+    pTableController->setSelectedCells(sdr::table::CellPos(0, 0), sdr::table::CellPos(0, 2));
+    dispatchCommand(mxComponent, u".uno:DeleteColumns"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pTableObject->getColumnCount());
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pTableObject->getColumnCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDeletedRowKeepsTheTyping)
+{
+    // one typing in a cell is still typing after the row of that cell is deleted
+    createSdImpressDoc();
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { u"Rows"_ustr, cpo::uno::Any(sal_Int32(3)) },
+                                           { u"Columns"_ustr, cpo::uno::Any(sal_Int32(3)) } }));
+    dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    auto pTableObject
+        = dynamic_cast<sdr::table::SdrTableObj*>(pViewShell->GetActualPage()->GetObj(2));
+    CPPUNIT_ASSERT(pTableObject);
+    SdrView* pView = pViewShell->GetView();
+    pView->SdrBeginTextEdit(pTableObject);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+
+    dispatchCommand(mxComponent, u".uno:DeleteRows"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pTableObject->getRowCount());
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

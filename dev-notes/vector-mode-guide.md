@@ -827,7 +827,7 @@ handle, as it cannot be turned.
 | Marker | Where | What it does |
 |---|---|---|
 | Anchor | At the upper left corner | Drag it to move the table; the arrow keys on it move the table too. |
-| Select square | Above each column, beside each row | A click selects the cells of that column or row; a click on the one selected alone takes the selection away again. With Shift a column or row next to the selection joins it, one at its edge leaves it. Delete deletes that column or row, or all the selected ones it is part of; deleting the last one deletes the table, as elsewhere in Online. |
+| Select square | Above each column, beside each row | A click selects the cells of that column or row; a click on the one selected alone takes the selection away again. With Shift a column or row next to the selection joins it, one at its edge leaves it. Delete deletes that column or row, or all the selected ones it is part of; deleting the last one deletes the table, as elsewhere in Online. The table stays selected after it, with no cell in text edit, so Ctrl+Z takes the delete back at once. |
 | Border marker | Above each border between columns and at the right end, beside each border between rows and at the bottom | Drag it to move that border: a line across the table shows where it goes, and it stays a little away from the borders beside it. The arrow keys on it move the border a step. The upper and the left border move with the table and have no marker. |
 | Insert bar | At the right and below the table | A click adds a column or a row after the one the text cursor stands in. |
 

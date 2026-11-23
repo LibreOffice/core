@@ -916,6 +916,10 @@ void SvxTableController::onDelete( sal_uInt16 nSId )
         CellPos aStart, aEnd;
         getSelectedCells( aStart, aEnd );
 
+        // one typing in a cell goes on typing next to what is deleted, a range of cells selected
+        // leaves the table selected as a whole
+        const bool bTyping = !mbCellSelectionMode;
+
         if( pTableObj->IsTextEditActive() )
             mrView.SdrEndTextEdit(true);
 
@@ -935,7 +939,8 @@ void SvxTableController::onDelete( sal_uInt16 nSId )
             {
                 Reference< XTableColumns > xCols( mxTable->getColumns() );
                 xCols->removeByIndex( aStart.mnCol, nRemovedColumns );
-                EditCell(aStart, nullptr, TblAction::NONE);
+                if (bTyping)
+                    EditCell(aStart, nullptr, TblAction::NONE);
             }
             break;
         }
@@ -951,7 +956,8 @@ void SvxTableController::onDelete( sal_uInt16 nSId )
             {
                 Reference< XTableRows > xRows( mxTable->getRows() );
                 xRows->removeByIndex( aStart.mnRow, nRemovedRows );
-                EditCell(aStart, nullptr, TblAction::NONE);
+                if (bTyping)
+                    EditCell(aStart, nullptr, TblAction::NONE);
             }
             break;
         }
