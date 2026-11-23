@@ -13,7 +13,8 @@
 	The changes of the path of an object, sent to the engine. A move of points travels at once.
 	Every other change names points by their index in the path the client has, so it is not sent
 	while an undo or a redo is on its way, and point moves that still wait are sent first. Such a
-	change can add or remove points and weights, so the keyboard leaves the points.
+	change can add or remove points and weights, so the keyboard keeps its place rather than its
+	handle.
 */
 class ObjectPathSink implements PathSink {
 	public readonly wholeTwips: boolean = true;
