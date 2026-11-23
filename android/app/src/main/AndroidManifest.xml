@@ -129,7 +129,6 @@
                 <data android:mimeType="image/x-svm" />
                 <data android:mimeType="image/x-wmf" />
                 <data android:mimeType="image/svg+xml" />
-                <data android:mimeType="application/pdf" />
             </intent-filter>
             <!-- HACK to support ODF files on Chrome OS, inspired by
                  https://stackoverflow.com/questions/1733195/android-intent-filter-for-a-particular-file-extension

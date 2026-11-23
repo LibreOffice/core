@@ -53,6 +53,7 @@ public class FileUtilities {
     private static final Map<String, String> extensionToMimeTypeMap = new HashMap<String, String>();
     static {
         // Please keep this in sync with AndroidManifest.xml
+        // Exception: PDFs, which we want to read but not suggest ourselves for
 
         // ODF
         mExtnMap.put(".odt", DOC);
