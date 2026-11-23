@@ -3159,7 +3159,7 @@ function showWelcomeSVG() {
 	};
 
 	// Track other collab users known via the collab WebSocket.
-	// Each entry: {id: string, name: string, canWrite: bool}
+	// Each entry: {id: string, name: string}
 	global.collab.users = [];
 
 	// Handler for ongoing collab WebSocket notifications.

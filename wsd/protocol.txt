@@ -3000,8 +3000,8 @@ server -> client messages on /cool/collab/ws
     /cool/ws sessions while a /cool/collab connection is open, so for the first connection they
     arrive after {"type":"authenticated"}, as {"type":"user_joined"} (followed by
     {"type":"editing_started"} for one that can write).  Each <user> object carries "id" (the
-    integrator user id) and "name" (display name), and here also "canWrite" (true if this view
-    holds write access).  When a user of a /cool/collab connection has an avatar registered with the
+    integrator user id) and "name" (display name).  When a user of a /cool/collab connection has an
+    avatar registered with the
     broker, the object also carries "avatar":"<path>" pointing at the /cool/collab/avatar endpoint
     described below.  "editingActive" is true once any peer has sent {"type":"editing_started"}, or
     a /cool/ws session that can write has joined.
@@ -3010,14 +3010,13 @@ server -> client messages on /cool/collab/ws
 {"type":"user_left","user":<user>}
 
     A peer connected or disconnected, also one of a /cool/ws session.  Sent to every other client.
-    The <user> of "user_joined" also carries "canWrite", the one of "user_left" does not.
 
 {"type":"editing_started","user":<user>}
 
     Some peer transitioned from viewing to editing.  Sent each time a client sends
     {"type":"editing_started"}, and when a /cool/ws session that can write joins.  The broker
     tracks an "editing started" flag, so a late-joining client gets the same information through
-    user_list's "editingActive".  The <user> carries "canWrite" only for a /cool/ws session.
+    user_list's "editingActive".
 
 {"type":"switch_to_collab","user":{"id":"<id>","name":"<name>"}}
 {"type":"saved_and_switching","user":{"id":"<id>","name":"<name>"}}

@@ -24,7 +24,6 @@
 
 #include <algorithm>
 #include <atomic>
-#include <optional>
 #include <sstream>
 
 /// Global CollabBrokers map - keyed by docKey
@@ -223,7 +222,7 @@ void CollabBroker::sendToEditingUsers(
 namespace
 {
 /// Serialize a handler's user info as a JSON object (fields: id,
-/// name, avatar if present, and optionally canWrite).
+/// name, and avatar if present).
 ///
 /// The avatar URL is rewritten to a server-hosted proxy
 /// (/cool/collab/avatar?...) which returns the cached image bytes.
@@ -233,8 +232,7 @@ namespace
 void appendUserJson(std::ostringstream& oss,
                     const std::string& wopiSrc,
                     const std::string& brokerTag,
-                    const std::shared_ptr<CollabSocketHandler>& h,
-                    bool withCanWrite)
+                    const std::shared_ptr<CollabSocketHandler>& h)
 {
     oss << "{\"id\":\"" << JsonUtil::escapeJSONValue(h->getUserId()) << "\""
            ",\"name\":\"" << JsonUtil::escapeJSONValue(h->getUsername()) << "\"";
@@ -247,9 +245,6 @@ void appendUserJson(std::ostringstream& oss,
         oss << ",\"avatar\":\""
             << JsonUtil::escapeJSONValue(proxy) << "\"";
     }
-    if (withCanWrite)
-        oss << ",\"canWrite\":"
-            << (h->getUserCanWrite() ? "true" : "false");
     oss << '}';
 }
 
@@ -257,14 +252,11 @@ void appendUserJson(std::ostringstream& oss,
 /// field: we don't carry the WOPI token from the /cool/ws session
 /// over, so the cool.html renderer falls back to the default icon.
 std::string externalUserJson(const std::string& userId,
-                             const std::string& username,
-                             std::optional<bool> canWrite)
+                             const std::string& username)
 {
     std::ostringstream oss;
     oss << "{\"id\":\"" << JsonUtil::escapeJSONValue(userId) << "\""
            ",\"name\":\"" << JsonUtil::escapeJSONValue(username) << "\"";
-    if (canWrite.has_value())
-        oss << ",\"canWrite\":" << (*canWrite ? "true" : "false");
     oss << '}';
     return oss.str();
 }
@@ -287,7 +279,7 @@ std::string CollabBroker::getUserListJson(const std::shared_ptr<CollabSocketHand
             if (!first)
                 oss << ',';
             first = false;
-            appendUserJson(oss, _wopiSrc, tag, handler, true);
+            appendUserJson(oss, _wopiSrc, tag, handler);
         }
     }
 
@@ -297,7 +289,7 @@ std::string CollabBroker::getUserListJson(const std::shared_ptr<CollabSocketHand
             oss << ',';
         first = false;
         oss << externalUserJson(
-            ext.userId, ext.username, ext.canWrite);
+            ext.userId, ext.username);
     }
 
     oss << "],\"editingActive\":" << (_editingStarted ? "true" : "false")
@@ -309,7 +301,7 @@ void CollabBroker::notifyUserJoined(const std::shared_ptr<CollabSocketHandler>& 
 {
     std::ostringstream oss;
     oss << "{\"type\":\"user_joined\",\"user\":";
-    appendUserJson(oss, _wopiSrc, _accessToken.getCurrent(), handler, true);
+    appendUserJson(oss, _wopiSrc, _accessToken.getCurrent(), handler);
     oss << "}";
     const std::string message = oss.str();
 
@@ -332,7 +324,7 @@ void CollabBroker::notifyUserLeft(const std::shared_ptr<CollabSocketHandler>& ha
 {
     std::ostringstream oss;
     oss << "{\"type\":\"user_left\",\"user\":";
-    appendUserJson(oss, _wopiSrc, _accessToken.getCurrent(), handler, false);
+    appendUserJson(oss, _wopiSrc, _accessToken.getCurrent(), handler);
     oss << "}";
     const std::string message = oss.str();
 
@@ -355,7 +347,7 @@ void CollabBroker::notifyEditingStarted(const std::shared_ptr<CollabSocketHandle
 {
     std::ostringstream oss;
     oss << "{\"type\":\"editing_started\",\"user\":";
-    appendUserJson(oss, _wopiSrc, _accessToken.getCurrent(), handler, false);
+    appendUserJson(oss, _wopiSrc, _accessToken.getCurrent(), handler);
     oss << "}";
     const std::string message = oss.str();
 
@@ -448,7 +440,7 @@ void CollabBroker::addExternalSession(const std::string& sessionId,
                                       bool canWrite)
 {
     const std::string userJson = externalUserJson(
-        userId, username, canWrite);
+        userId, username);
     const std::string joined =
         "{\"type\":\"user_joined\",\"user\":" + userJson + "}";
     const std::string editStarted = canWrite
@@ -486,7 +478,7 @@ void CollabBroker::removeExternalSession(const std::string& sessionId)
         return;
 
     const std::string userJson = externalUserJson(
-        it->second.userId, it->second.username, std::nullopt);
+        it->second.userId, it->second.username);
     _externalSessions.erase(it);
 
     LOG_INF("CollabBroker [" << _docKey << "]: external session ["

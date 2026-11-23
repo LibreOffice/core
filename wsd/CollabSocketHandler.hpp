@@ -100,9 +100,6 @@ public:
     /// Returns the username from WOPI (available after successful authentication)
     const std::string& getUsername() const { return _username; }
 
-    /// Returns whether the user can write (available after successful authentication)
-    bool getUserCanWrite() const { return _userCanWrite; }
-
     /// Returns the user's avatar URL from WOPI UserExtraInfo
     /// (may be empty)
     const std::string& getAvatar() const { return _avatar; }
