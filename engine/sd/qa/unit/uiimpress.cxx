@@ -2418,6 +2418,28 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteFromOtherDocumentKeepsSlidePositi
     CPPUNIT_ASSERT_EQUAL(aSrcRect, pDstShape->GetSnapRect());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSelectedSlideCountAfterSlideRemoval)
+{
+    // Given a presentation with two slides, both selected in the slide sorter:
+    createSdImpressDoc();
+    dispatchCommand(mxComponent, u".uno:DuplicatePage"_ustr, {});
+    SdDrawDocument* pDoc = dynamic_cast<SdXImpressDocument*>(mxComponent.get())->GetDoc();
+    sd::slidesorter::controller::PageSelector& rSelector
+        = getSlideSorterViewShell()->GetSlideSorter().GetController().GetPageSelector();
+    rSelector.SelectAllPages();
+    CPPUNIT_ASSERT_EQUAL(2, rSelector.GetSelectedPageCount());
+
+    // When the second slide is removed through the API:
+    uno::Reference<drawing::XDrawPages> xPages
+        = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()->getDrawPages();
+    xPages->remove(uno::Reference<drawing::XDrawPage>(xPages->getByIndex(1), uno::UNO_QUERY_THROW));
+
+    // Then only the slide that is left counts as selected:
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT(rSelector.IsPageSelected(0));
+    CPPUNIT_ASSERT_EQUAL(1, rSelector.GetSelectedPageCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSlidePasteSizeMismatch)
 {
     // Given a 4:3 presentation, with the first slide selected:

@@ -388,6 +388,8 @@ void SlideSorterModel::SetDocumentSlides (
     SynchronizeDocumentSelection();
     mxSlides = nullptr;
     ClearDescriptorList ();
+    // The cleared list holds no selected pages, so the count is zero until the new pages come.
+    mrSlideSorter.GetController().GetPageSelector().CountSelectedPages();
 
     // Reset the current page to cause everybody to release references to it.
     mrSlideSorter.GetController().GetCurrentSlideManager().NotifyCurrentSlideChange(-1);
@@ -551,6 +553,8 @@ bool SlideSorterModel::NotifyPageEvent (const SdrPage* pSdrPage)
     {
         InsertSlide(pPage, bSelected);
     }
+    // A removed slide takes its selection with it, so the selected pages are counted again.
+    mrSlideSorter.GetController().GetPageSelector().CountSelectedPages();
     CheckModel(*this);
 
     return true;
