@@ -35,6 +35,7 @@
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -47,6 +48,7 @@
 #include <comphelper/kit.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <editeng/boxitem.hxx>
 #include <sfx2/docfile.hxx>
 #include <test/commontesttools.hxx>
@@ -2016,6 +2018,36 @@ CPPUNIT_TEST_FIXTURE(Test, testRepeatedCellWithNestedTable)
         u"start"_ustr,
         uno::Reference<text::XText>(xOuter->getCellByName(u"B2"_ustr), uno::UNO_QUERY_THROW)
             ->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTocChapterOutlineLevelOutOfRange)
+{
+    // Given a table of contents whose chapter entries have the out of range outline levels 0 and
+    // 11, and the valid outline level 2:
+    // Without the fix in place, loading failed with a format error in content.xml.
+    createSwDoc("toc-chapter-outline-level-out-of-range.fodt");
+
+    // Then the out of range levels are ignored, so the chapter number is not truncated:
+    uno::Reference<text::XDocumentIndexesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTOC(xSupplier->getDocumentIndexes()->getByIndex(0),
+                                             uno::UNO_QUERY);
+    uno::Reference<container::XIndexReplace> xLevelFormats(
+        getProperty<uno::Reference<container::XIndexReplace>>(xTOC, u"LevelFormat"_ustr));
+    for (sal_Int32 nLevel = 1; nLevel <= 3; ++nLevel)
+    {
+        cpo::uno::Sequence<beans::PropertyValues> aLevel;
+        xLevelFormats->getByIndex(nLevel) >>= aLevel;
+        comphelper::SequenceAsHashMap aToken(aLevel[0]);
+        CPPUNIT_ASSERT_EQUAL(u"TokenEntryNumber"_ustr,
+                             aToken.getUnpackedValueOrDefault(u"TokenType"_ustr, OUString()));
+        // The getter leaves out the default, unlimited level.
+        CPPUNIT_ASSERT_EQUAL(nLevel == 3, aToken.find(u"ChapterLevel"_ustr) != aToken.end());
+    }
+    cpo::uno::Sequence<beans::PropertyValues> aLevel3;
+    xLevelFormats->getByIndex(3) >>= aLevel3;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), comphelper::SequenceAsHashMap(aLevel3[0])
+                                           .getUnpackedValueOrDefault(u"ChapterLevel"_ustr,
+                                                                      sal_Int16(0)));
 }
 
 } // end of anonymous namespace

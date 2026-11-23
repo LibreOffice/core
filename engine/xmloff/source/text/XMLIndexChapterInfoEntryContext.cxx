@@ -20,12 +20,14 @@
 
 #include "XMLIndexChapterInfoEntryContext.hxx"
 
+#include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/text/ChapterFormat.hpp>
 
 #include <sax/tools/converter.hxx>
 #include <sal/log.hxx>
 
 #include "XMLIndexTemplateContext.hxx"
+#include <xmloff/txtimp.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -101,12 +103,13 @@ void XMLIndexChapterInfoEntryContext::startFastElement(
             case XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL):
             {
                 sal_Int32 nTmp;
-                if (::sax::Converter::convertNumber(nTmp, aIter.toView(), 0, SAL_MAX_INT16))
+                if (::sax::Converter::convertNumber(nTmp, aIter.toView()) && nTmp >= 1
+                    && nTmp <= GetImport().GetTextImport()->GetChapterNumbering()->getCount())
                 {
-//control on range is carried out in the UNO level
                     nOutlineLevel = static_cast<sal_uInt16>(nTmp);
                     bOutlineLevelOK = true;
                 }
+                // else: value out of range -> ignore
                 break;
             }
             default:

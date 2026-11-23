@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:table-of-content text:name="Table of Contents1">
+    <text:table-of-content-source text:outline-level="3">
+     <text:table-of-content-entry-template text:outline-level="1">
+      <text:index-entry-chapter text:display="number" text:outline-level="0"/>
+      <text:index-entry-text/>
+     </text:table-of-content-entry-template>
+     <text:table-of-content-entry-template text:outline-level="2">
+      <text:index-entry-chapter text:display="number" text:outline-level="11"/>
+      <text:index-entry-text/>
+     </text:table-of-content-entry-template>
+     <text:table-of-content-entry-template text:outline-level="3">
+      <text:index-entry-chapter text:display="number" text:outline-level="2"/>
+      <text:index-entry-text/>
+     </text:table-of-content-entry-template>
+    </text:table-of-content-source>
+    <text:index-body/>
+   </text:table-of-content>
+   <text:h text:outline-level="1">Heading</text:h>
+  </office:text>
+ </office:body>
+</office:document>
