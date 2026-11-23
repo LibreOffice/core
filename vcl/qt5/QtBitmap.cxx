@@ -174,12 +174,4 @@ void QtBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
 
 bool QtBitmap::GetSystemData(BitmapSystemData& /*rData*/) { return false; }
 
-bool QtBitmap::ScalingSupported() const { return false; }
-
-bool QtBitmap::Scale(const double& /*rScaleX*/, const double& /*rScaleY*/,
-                     BmpScaleFlag /*nScaleFlag*/)
-{
-    return false;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

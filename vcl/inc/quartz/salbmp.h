@@ -72,9 +72,6 @@ public:
 
     bool            GetSystemData( BitmapSystemData& rData ) override;
 
-    bool            ScalingSupported() const override;
-    bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) override;
-
 private:
     // quartz helper
     bool            CreateContext();

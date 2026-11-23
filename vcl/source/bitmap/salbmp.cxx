@@ -92,6 +92,10 @@ sal_uInt16 SalBitmap::GetBitCount() const
     }
 }
 
+bool SalBitmap::ScalingSupported() const { return false; }
+
+bool SalBitmap::Scale(const double&, const double&, BmpScaleFlag) { return false; }
+
 namespace
 {
 

@@ -51,10 +51,6 @@ public:
     virtual BitmapBuffer* AcquireBuffer(BitmapAccessMode nMode) override;
     virtual void ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode) override;
     virtual bool GetSystemData(BitmapSystemData& rData) override;
-
-    virtual bool ScalingSupported() const override;
-    virtual bool Scale(const double& rScaleX, const double& rScaleY,
-                       BmpScaleFlag nScaleFlag) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

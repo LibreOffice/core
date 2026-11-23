@@ -77,8 +77,8 @@ public:
     virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) = 0;
     virtual bool            GetSystemData( BitmapSystemData& rData ) = 0;
 
-    virtual bool            ScalingSupported() const = 0;
-    virtual bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) = 0;
+    virtual bool ScalingSupported() const;
+    virtual bool Scale(const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag);
     void                    DropScaledCache();
 
     virtual bool            ConvertToGreyscale()
