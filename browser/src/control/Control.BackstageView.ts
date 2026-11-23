@@ -488,8 +488,8 @@ class BackstageView extends window.L.Class {
 			const minutes = String(date.getMinutes()).padStart(2, '0');
 			const seconds = String(date.getSeconds()).padStart(2, '0');
 
-			// TODO: Need Local formatting here?
-			return `${year}/${month}/${day} at ${hours}:${minutes}:${seconds}`;
+			// The local date and time in ISO 8601 form, with a space instead of the "T".
+			return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 		} catch {
 			return timestamp;
 		}
