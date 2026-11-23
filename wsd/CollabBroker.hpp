@@ -44,6 +44,7 @@ constexpr auto CollabUploadTokenExpiry = std::chrono::minutes(5);
 struct CollabFetchRequest
 {
     std::string streamUrl;       ///< URL to fetch from
+    bool hostChecked;            // Whether streamUrl is on the WOPI host that passed the host check
     std::string accessToken;     ///< WOPI access token to add to streamUrl, or empty
     std::string wopiSrc;         ///< Original WOPISrc for validation
     std::string docKey;          ///< Document key to verify live CollabBroker
@@ -258,6 +259,7 @@ extern std::mutex CollabFetchRequestsMutex;
 /// The token can be used with /cool/collab/fetch?token=... endpoint.
 /// The brokerTag is the broker's current access token for validation.
 std::string createCollabFetchRequest(const std::string& streamUrl,
+                                      bool hostChecked,
                                       const std::string& accessToken,
                                       const std::string& wopiSrc,
                                       const std::string& docKey,

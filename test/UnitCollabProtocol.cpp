@@ -1481,6 +1481,67 @@ private:
     std::shared_ptr<http::WebSocketSession> collabWs_;
 };
 
+// A fetch of the document from a FileUrl whose host cannot be reached answers 502:
+class UnitCollabFetchNoConnection: public WopiTestServer {
+public:
+    UnitCollabFetchNoConnection():
+        WopiTestServer("UnitCollabFetchNoConnection"), phase_(Phase::Connect) {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
+
+    void configCheckFileInfo(
+        Poco::Net::HTTPRequest const &, Poco::JSON::Object::Ptr & fileInfo) override
+    {
+        fileInfo->set("FileUrl", "http://nonexistent.invalid/file");
+    }
+
+    void invokeWSDTest() override {
+        switch (phase_) {
+        case Phase::Connect:
+            TRANSITION_STATE(phase_, Phase::WaitAuth);
+            // The WOPISrc, followed by the test name for the request to coolwsd:
+            collabWs_ = startCollabConnection(
+                socketPoll(),
+                Uri::encode(
+                    getWopiHostURI() + "/wopi/files/0?testname=UnitCollabFetchNoConnection")
+                    + "&testname=UnitCollabFetchNoConnection",
+                "anything");
+            break;
+        case Phase::WaitAuth:
+            if (!pollCollabMessage(collabWs_, "user_list")) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitFetchUrl);
+            collabWs_->sendMessage(R"({"type":"fetch","stream":"contents","requestId":"f1"})");
+            break;
+        case Phase::WaitFetchUrl: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "fetch_url");
+            if (!msg) {
+                break;
+            }
+            std::shared_ptr<http::Response const> const response = http::get(
+                helpers::getTestServerURI(),
+                msg->getValue<std::string>("url") + "&testname=UnitCollabFetchNoConnection");
+            LOK_ASSERT_EQUAL(http::StatusCode::BadGateway, response->statusLine().statusCode());
+            TRANSITION_STATE(phase_, Phase::Done);
+            collabWs_->asyncShutdown();
+            passTest("The fetch from an unreachable host was answered with 502");
+            break;
+        }
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    STATE_ENUM(Phase, Connect, WaitAuth, WaitFetchUrl, Done) phase_;
+
+    std::shared_ptr<http::WebSocketSession> collabWs_;
+};
+
 // The server speaks its own protocol with a newer collab client, and ignores a query parameter
 // and a message field that it does not know:
 class UnitCollabProtocolNumber: public WopiTestServer {
@@ -2131,7 +2192,7 @@ private:
 
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [18] { new UnitCollabProtocol(),
+    return new UnitBase* [19] { new UnitCollabProtocol(),
                                 new UnitCollabCheckFileInfoTransient(),
                                 new UnitCollabUploadTimestamp(), new UnitCollabUploadConflict(),
                                 new UnitCollabUploadConflictModified(),
@@ -2141,8 +2202,9 @@ UnitBase** unit_create_wsd_multi(void)
                                 new UnitCollabAvatar(),
                                 new UnitCollabConnections(), new UnitCollabTokenRenewal(),
                                 new UnitCollabMethods(), new UnitCollabRouting(),
-                                new UnitCollabFetchRedirect(), new UnitCollabProtocolNumber(),
-                                new UnitCollabEditorFrame(), nullptr };
+                                new UnitCollabFetchRedirect(), new UnitCollabFetchNoConnection(),
+                                new UnitCollabProtocolNumber(), new UnitCollabEditorFrame(),
+                                nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

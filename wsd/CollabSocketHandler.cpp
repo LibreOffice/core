@@ -540,7 +540,7 @@ void CollabSocketHandler::sendFetchError(const std::string& stream, const std::s
 }
 
 void CollabSocketHandler::sendFetchUrl(const std::string& stream, const std::string& requestId,
-                                       const std::string& url)
+                                       const std::string& url, bool hostChecked)
 {
     // Get the broker's access token for secure validation
     auto broker = _broker.lock();
@@ -559,8 +559,8 @@ void CollabSocketHandler::sendFetchUrl(const std::string& stream, const std::str
 
     // Create a fetch token that the client can use to download via HTTP
     const std::string token =
-        createCollabFetchRequest(url, settings ? std::string() : _accessToken, _wopiSrc, _docKey,
-                                 brokerTag, requestId, stream);
+        createCollabFetchRequest(url, hostChecked, settings ? std::string() : _accessToken,
+                                 _wopiSrc, _docKey, brokerTag, requestId, stream);
 
     // Build the download URL
     std::ostringstream downloadUrl;
@@ -627,6 +627,7 @@ void CollabSocketHandler::handleFetch(const std::string& stream, const std::stri
 
     // Build the URL for the requested stream
     std::string url;
+    bool hostChecked = false;
     if (stream == "contents" && !_allowsCleanExport)
     {
         LOG_WRN("Collab: refusing " << stream << " fetch, the host allows no clean export");
@@ -654,6 +655,7 @@ void CollabSocketHandler::handleFetch(const std::string& stream, const std::stri
             contentsUri.setPath(contentsUri.getPath() + "/contents");
             contentsUri.addQueryParameter("access_token", _accessToken);
             url = contentsUri.toString();
+            hostChecked = true;
         }
     }
     else if (stream == "userSettings")
@@ -672,7 +674,7 @@ void CollabSocketHandler::handleFetch(const std::string& stream, const std::stri
         return;
     }
 
-    sendFetchUrl(stream, requestId, url);
+    sendFetchUrl(stream, requestId, url, hostChecked);
 }
 
 namespace
@@ -743,7 +745,7 @@ void CollabSocketHandler::answerSettingsFileFetch(const Poco::JSON::Object::Ptr&
         return;
     }
 
-    sendFetchUrl(SettingsFileStream, request.requestId, uri);
+    sendFetchUrl(SettingsFileStream, request.requestId, uri, false);
 }
 
 void CollabSocketHandler::handleSettingsFileFetch(const std::string& requestId,

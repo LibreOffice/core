@@ -1578,8 +1578,8 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
                 _id, requestDetails, socket, fetchRequest.wopiSrc, fetchRequest.accessToken);
 
             // Download directly from the pre-configured stream URL
-            proxy->handleFetchRequest(fetchRequest.streamUrl, COOLWSD::getWebServerPoll(),
-                                      disposition,
+            proxy->handleFetchRequest(fetchRequest.streamUrl, fetchRequest.hostChecked,
+                                      COOLWSD::getWebServerPoll(), disposition,
                                       CollabSocketHandler::settingsSecretFields(
                                           fetchRequest.stream, fetchRequest.streamUrl));
         }
@@ -1708,7 +1708,7 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
             auto proxy = std::make_shared<CollabFileProxy>(
                 _id, requestDetails, socket, broker->getWopiSrc(),
                 avatar.accessToken);
-            proxy->handleFetchRequest(avatar.url,
+            proxy->handleFetchRequest(avatar.url, false,
                 COOLWSD::getWebServerPoll(), disposition);
         }
         else if (isCollab && requestDetails.equals(2, "ws") && requestDetails.isWebSocket())

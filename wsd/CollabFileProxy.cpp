@@ -29,6 +29,23 @@
 #include <Poco/JSON/Parser.h>
 #include <Poco/URI.h>
 
+namespace {
+
+// The handler that answers the client with 502 when no connection to the host comes about (as when
+// its name does not resolve, or when none of its addresses is allowed):
+http::Session::ConnectFailCallback badGatewayOnConnectFail(
+    std::weak_ptr<StreamSocket> const & socket, std::string const & uriAnonym)
+{
+    return [socket, uriAnonym](std::shared_ptr<http::Session> const &) {
+        LOG_ERR("CollabFileProxy: no connection to [" << uriAnonym << ']');
+        if (std::shared_ptr<StreamSocket> const client = socket.lock()) {
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::BadGateway, client);
+        }
+    };
+}
+
+}
+
 CollabFileProxy::CollabFileProxy(std::string id, const RequestDetails& requestDetails,
                                  const std::shared_ptr<StreamSocket>& socket,
                                  const std::string& wopiSrc, const std::string& accessToken)
@@ -41,7 +58,7 @@ CollabFileProxy::CollabFileProxy(std::string id, const RequestDetails& requestDe
 {
 }
 
-void CollabFileProxy::handleFetchRequest(const std::string& streamUrl,
+void CollabFileProxy::handleFetchRequest(const std::string& streamUrl, bool hostChecked,
                                          const std::shared_ptr<TerminatingPoll>& poll,
                                          SocketDisposition& disposition,
                                          std::span<const std::string_view> secretFields)
@@ -67,14 +84,14 @@ void CollabFileProxy::handleFetchRequest(const std::string& streamUrl,
 
     // Transfer to poll and start download directly (bypassing CheckFileInfo)
     disposition.setTransfer(*poll,
-        [this, poll, uri = std::move(uri), keepalive = shared_from_this()](
+        [this, poll, uri = std::move(uri), hostChecked, keepalive = shared_from_this()](
             const std::shared_ptr<Socket>& moveSocket)
         {
             LOG_TRC('#' << moveSocket->getFD()
                         << ": CollabFileProxy: starting direct fetch for ["
                         << Anonymizer::anonymizeUrl(uri.toString()) << ']');
 
-            doDownload(poll, uri, HTTP_REDIRECTION_LIMIT);
+            doDownload(poll, uri, HTTP_REDIRECTION_LIMIT, hostChecked);
         });
 }
 
@@ -117,7 +134,7 @@ void CollabFileProxy::handleUploadRequest(const std::string& targetUrl,
 }
 
 void CollabFileProxy::doDownload(const std::shared_ptr<TerminatingPoll>& poll,
-                                 const Poco::URI& uri, int redirectLimit)
+                                 const Poco::URI& uri, int redirectLimit, bool hostChecked)
 {
     const std::string uriAnonym = Anonymizer::anonymizeUrl(uri.toString());
     LOG_DBG("CollabFileProxy: downloading from [" << uriAnonym << ']');
@@ -125,7 +142,8 @@ void CollabFileProxy::doDownload(const std::shared_ptr<TerminatingPoll>& poll,
     // The poll keeps the session alive until it finishes, and the session's callback keeps this
     // proxy alive:
     std::shared_ptr<http::Session> const httpSession
-        = StorageConnectionManager::getHttpSession(uri);
+        = hostChecked ? StorageConnectionManager::getWopiHttpSession(uri)
+                      : StorageConnectionManager::getHttpSession(uri);
     Authorization auth = Authorization::create(uri);
     http::Request httpRequest = StorageConnectionManager::createHttpRequest(uri, auth);
 
@@ -165,7 +183,7 @@ void CollabFileProxy::doDownload(const std::shared_ptr<TerminatingPoll>& poll,
                 const std::string location = httpResponse->get("Location");
                 LOG_TRC("CollabFileProxy: redirect to ["
                         << Anonymizer::anonymizeUrl(location) << ']');
-                doDownload(poll, Poco::URI(location), redirectLimit - 1);
+                doDownload(poll, Poco::URI(location), redirectLimit - 1, false);
                 return;
             }
             else
@@ -214,6 +232,7 @@ void CollabFileProxy::doDownload(const std::shared_ptr<TerminatingPoll>& poll,
     };
 
     httpSession->setFinishedHandler(std::move(finishedCallback));
+    httpSession->setConnectFailHandler(badGatewayOnConnectFail(_socket, uriAnonym));
     httpSession->asyncRequest(httpRequest, poll);
 }
 
@@ -227,7 +246,7 @@ void CollabFileProxy::doUpload(const std::shared_ptr<TerminatingPoll>& poll,
     // The poll keeps the session alive until it finishes, and the session's callback keeps this
     // proxy alive:
     std::shared_ptr<http::Session> const httpSession
-        = StorageConnectionManager::getHttpSession(uri);
+        = StorageConnectionManager::getWopiHttpSession(uri);
     Authorization auth = Authorization::create(uri);
     http::Request httpRequest = StorageConnectionManager::createHttpRequest(uri, auth);
 
@@ -338,6 +357,7 @@ void CollabFileProxy::doUpload(const std::shared_ptr<TerminatingPoll>& poll,
     };
 
     httpSession->setFinishedHandler(std::move(finishedCallback));
+    httpSession->setConnectFailHandler(badGatewayOnConnectFail(_socket, uriAnonym));
     httpSession->asyncRequest(httpRequest, poll);
 }
 
