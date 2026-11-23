@@ -824,10 +824,22 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testModernCommentPptxRoundtrip)
     CPPUNIT_ASSERT_EQUAL(rAnnotations[0]->GetId(), rAnnotations[1]->GetParentId());
     CPPUNIT_ASSERT_EQUAL(rAnnotations[0]->GetId(), rAnnotations[2]->GetParentId());
 
-    // The moment each entry was written comes back too.
+    // The moment each entry was written comes back too, for the replies as well as the root.
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(22), rAnnotations[0]->getDateTimeUTC().Minutes);
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(22), rAnnotations[0]->getDateTimeUTC().Seconds);
-    CPPUNIT_ASSERT_EQUAL(u"Comment Author"_ustr, rAnnotations[0]->getAuthor());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(22), rAnnotations[1]->getDateTimeUTC().Minutes);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(39), rAnnotations[1]->getDateTimeUTC().Seconds);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(23), rAnnotations[2]->getDateTimeUTC().Minutes);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), rAnnotations[2]->getDateTimeUTC().Seconds);
+
+    // Every entry, a reply included, names its author and the author's initials through the
+    // author list that is saved beside the comments.
+    for (auto const& xAnnotation : rAnnotations)
+    {
+        CPPUNIT_ASSERT_EQUAL(u"Comment Author"_ustr, xAnnotation->getAuthor());
+        CPPUNIT_ASSERT_EQUAL(u"CA"_ustr, xAnnotation->getInitials());
+        CPPUNIT_ASSERT(xAnnotation->IsThreaded());
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(AnnotationTest, testReplyWithoutRootPptxRoundtrip)
