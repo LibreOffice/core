@@ -30,7 +30,6 @@ public:
     explicit GtkSurface(const GtkSalGraphics* pGraphics, int x, int y, int width, int height);
 
     // Surface interface
-    virtual CairoSharedPtr getCairo() const override;
     virtual CairoSurfaceSharedPtr getCairoSurface() const override { return mpSurface; }
     virtual SurfaceSharedPtr getSimilar(int nContentType, int width, int height) const override;
 

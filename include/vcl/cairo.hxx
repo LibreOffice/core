@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <vcl/dllapi.h>
+
 #include <memory>
 
 // Cairo uses 24.8 fixed-point internally. Coordinates beyond this
@@ -35,7 +37,7 @@ namespace cairo {
 
     typedef std::shared_ptr<cairo_surface_t> CairoSurfaceSharedPtr;
     typedef std::shared_ptr<cairo_t>         CairoSharedPtr;
-    struct Surface;
+    class Surface;
     typedef std::shared_ptr<Surface>         SurfaceSharedPtr;
 
     /** Cairo surface interface
@@ -43,13 +45,13 @@ namespace cairo {
         For each cairo-supported platform, there's an implementation of
         this interface
      */
-    struct Surface
+    class VCL_DLLPUBLIC Surface
     {
     public:
         virtual ~Surface() {}
 
         // Query methods
-        virtual CairoSharedPtr getCairo() const = 0;
+        CairoSharedPtr getCairo() const;
         virtual CairoSurfaceSharedPtr getCairoSurface() const = 0;
         virtual SurfaceSharedPtr getSimilar(int cairo_content_type, int width, int height) const = 0;
 

@@ -142,17 +142,6 @@ namespace cairo
     }
 
     /**
-     * Surface::getCairo:  Create Cairo (drawing object) for the Canvas surface
-     *
-     * @return new Cairo or NULL
-     **/
-    CairoSharedPtr X11Surface::getCairo() const
-    {
-        return CairoSharedPtr( cairo_create(mpSurface.get()),
-                               &cairo_destroy );
-    }
-
-    /**
      * Surface::getSimilar:  Create new similar Canvas surface
      * @param cairo_content_type format of the new surface (cairo_content_t from cairo/src/cairo.h)
      * @param width width of the new surface

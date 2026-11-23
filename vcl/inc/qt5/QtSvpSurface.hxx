@@ -31,7 +31,6 @@ public:
     ~QtSvpSurface() override;
 
     // Surface interface
-    CairoSharedPtr getCairo() const override;
     CairoSurfaceSharedPtr getCairoSurface() const override { return m_pSurface; }
     SurfaceSharedPtr getSimilar(int nContentType, int width, int height) const override;
 
