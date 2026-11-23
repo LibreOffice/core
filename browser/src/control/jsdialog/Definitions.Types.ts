@@ -626,6 +626,7 @@ interface IconViewJSON extends WidgetJSON {
 	textWithIconEnabled: boolean; // To identify if we should add text below the icon or not.
 	selectionmode: string; // single or multiple
 	notifytoprowscrolled?: boolean; // report the row the user scrolls to the top
+	allowNoSelection?: boolean; // the view may have no entry selected
 }
 
 interface IconViewListJSON extends WidgetJSON {

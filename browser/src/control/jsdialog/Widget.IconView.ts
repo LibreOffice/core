@@ -763,17 +763,23 @@ JSDialog.iconView = function (
 	});
 
 	const createEntries = () => {
-		const shouldSelectFirstEntry =
-			data.entries?.length > 0 ?
-				!data.entries.some((entry) => entry.selected === true)
-			:	false;
-		if (shouldSelectFirstEntry) {
-			const firstValid = data.entries.find((entry) => !entry.separator);
+		const hasSelection = !!data.entries?.some(
+			(entry) => entry.selected === true,
+		);
+		if (!hasSelection && !data.allowNoSelection) {
+			const firstValid = data.entries?.find((entry) => !entry.separator);
 			if (firstValid) firstValid.selected = true;
 		}
 
 		for (const i in data.entries) {
 			_iconViewEntry(iconview, data, data.entries[i], builder);
+		}
+
+		// With no entry selected, the first entry takes the keyboard focus when the user tabs
+		// into the view.
+		if (!hasSelection && data.allowNoSelection) {
+			const firstEntry = iconview.querySelector('.ui-iconview-entry');
+			if (firstEntry) firstEntry.setAttribute('tabindex', '0');
 		}
 	};
 

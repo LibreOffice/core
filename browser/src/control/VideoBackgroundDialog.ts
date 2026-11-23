@@ -72,6 +72,8 @@ class VideoBackgroundDialog {
 				type: 'iconview',
 				singleclickactivate: true,
 				textWithIconEnabled: true,
+				// A video of the user's own, or no video, matches none of the samples.
+				allowNoSelection: true,
 				entries: samples.map((sample, index) => ({
 					row: index,
 					text: sample.text,
