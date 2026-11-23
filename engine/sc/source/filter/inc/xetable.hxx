@@ -751,7 +751,15 @@ public:
         @descr  Possible, if passed record directly follows this record and has equal contents.
         @return  true = This record is equal to passed record and has been updated. */
     bool                TryMerge( const XclExpColinfo& rColInfo );
+    /** Tries to merge this record with the passed record, before the XF identifiers are
+        converted into Excel XF indexes.
+        @descr  Possible, if passed record directly follows this record, has the same XF
+                identifier and default format, and equal width, flags and outline level.
+        @return  true = This record is equal to passed record and has been updated. */
+    bool                TryMergeUnconverted( const XclExpColinfo& rColInfo );
 
+    /** Returns the index of the last column represented by this record. */
+    sal_uInt16   GetLastXclCol() const { return mnLastXclCol; }
     /** Returns the Excel width of the column(s). */
     sal_uInt16   GetColWidth() const { return mnWidth; }
     /** Returns the final Excel XF index of the column(s). */
@@ -808,9 +816,8 @@ public:
     double              GetDefColWidth() const { return maDefcolwidth.GetValue(); }
     /** Returns true, if the default width is the one a reader gives to a standard column. */
     bool                IsAssumedDefColWidth() const { return maDefcolwidth.IsAssumedWidth(); }
-    /** Returns the default cell format of the passed column. One record per column exists
-        until Finalize() merges columns that share a format, so before that the passed column
-        is the record index. */
+    /** Returns the default cell format of the passed column. Before Finalize() each record
+        covers a run of neighbouring columns that share their format, width and flags. */
     const ScPatternAttr* GetDefPattern( SCCOL nScCol ) const;
 
 private:

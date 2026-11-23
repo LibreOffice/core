@@ -1891,6 +1891,21 @@ bool XclExpColinfo::TryMerge( const XclExpColinfo& rColInfo )
     return false;
 }
 
+bool XclExpColinfo::TryMergeUnconverted( const XclExpColinfo& rColInfo )
+{
+    if( (maXFId.mnXFId == rColInfo.maXFId.mnXFId) &&
+        ScPatternAttr::areSame( GetDefPattern(), rColInfo.GetDefPattern() ) &&
+        (mnWidth == rColInfo.mnWidth) &&
+        (mnFlags == rColInfo.mnFlags) &&
+        (mnOutlineLevel == rColInfo.mnOutlineLevel) &&
+        (mnLastXclCol + 1 == rColInfo.mnFirstXclCol) )
+    {
+        mnLastXclCol = rColInfo.mnLastXclCol;
+        return true;
+    }
+    return false;
+}
+
 void XclExpColinfo::WriteBody( XclExpStream& rStrm )
 {
     // if last column is equal to last possible column, Excel adds one more
@@ -1945,7 +1960,12 @@ void XclExpColinfoBuffer::Initialize( SCROW nLastScRow )
 
     for( sal_uInt16 nScCol = 0, nLastScCol = GetMaxPos().Col(); nScCol <= nLastScCol; ++nScCol )
     {
-        maColInfos.AppendNewRecord( new XclExpColinfo( GetRoot(), nScCol, nLastScRow, maOutlineBfr ) );
+        rtl::Reference< XclExpColinfo > xColInfo = new XclExpColinfo( GetRoot(), nScCol, nLastScRow, maOutlineBfr );
+        // A sheet has 16384 columns and most of them are alike, so a column that equals the one
+        // before it extends that record, and the buffer holds one record per run of columns.
+        XclExpColinfo* pPrevColInfo = maColInfos.GetLastRecord();
+        if( !pPrevColInfo || !pPrevColInfo->TryMergeUnconverted( *xColInfo ) )
+            maColInfos.AppendNewRecord( xColInfo );
         if( maOutlineBfr.GetLevel() > mnHighestOutlineLevel )
         {
            mnHighestOutlineLevel = maOutlineBfr.GetLevel();
@@ -1955,7 +1975,18 @@ void XclExpColinfoBuffer::Initialize( SCROW nLastScRow )
 
 const ScPatternAttr* XclExpColinfoBuffer::GetDefPattern( SCCOL nScCol ) const
 {
-    const XclExpColinfo* pColInfo = maColInfos.GetRecord( static_cast< size_t >( nScCol ) );
+    // The records cover the columns in order, so the first one that ends at or after nScCol
+    // holds it.
+    size_t nLow = 0, nHigh = maColInfos.GetSize();
+    while( nLow < nHigh )
+    {
+        size_t nMid = nLow + (nHigh - nLow) / 2;
+        if( maColInfos.GetRecord( nMid )->GetLastXclCol() < nScCol )
+            nLow = nMid + 1;
+        else
+            nHigh = nMid;
+    }
+    const XclExpColinfo* pColInfo = maColInfos.GetRecord( nLow );
     return pColInfo ? pColInfo->GetDefPattern() : nullptr;
 }
 
