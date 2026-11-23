@@ -47,6 +47,12 @@
 	// Report a hover to C++ only when the insert index changes.
 	let lastOverInsert = -2;
 
+	// The ids of the tabs that the strip shows, in their order, joined by commas.
+	let shownIdOrder = '';
+	// A tab of this strip is being dragged.
+	let dragInProgress = false;
+	const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
 	function el(tag, props) {
 		const e = document.createElement(tag);
 		if (props) for (const k in props) e[k] = props[k];
@@ -253,6 +259,8 @@
 			tab.draggable = true;
 			tab.dataset.id = String(t.id);
 			tab.dataset.index = String(idx);
+			// The name pairs the tab with its earlier self in an animated change of the strip.
+			tab.style.viewTransitionName = 'tab-' + t.id;
 			tab.setAttribute('role', 'tab');
 			// A background tab with a preview gets the app's hover card, which shows the name too.
 			// The active tab keeps the plain title tooltip.
@@ -318,11 +326,13 @@
 				ev.dataTransfer.effectAllowed = 'move';
 				ev.dataTransfer.setData('text/x-coda-tab', String(t.id));
 				tab.classList.add('dragging');
+				dragInProgress = true;
 				dragState.inStripDropHandled = false;
 				if (bridge) bridge.tabDragStarted(t.id);
 			});
 			tab.addEventListener('dragend', () => {
 				tab.classList.remove('dragging');
+				dragInProgress = false;
 				clearDropMarkers();
 				// C++ decides the cross-window move; we only report whether
 				// our own drop handled it.
@@ -343,6 +353,7 @@
 
 		const add = el('div');
 		add.id = 'new-tab';
+		add.style.viewTransitionName = 'new-tab';
 		add.textContent = '+';
 		add.title = newText;
 		add.addEventListener('click', () => {
@@ -351,6 +362,35 @@
 		strip.appendChild(add);
 
 		if (activeId !== activeIdInView) scrollActiveTabIntoView();
+	}
+
+	// When tabs open, close or change places, every tab slides from its old place and width to its
+	// new ones. A change that leaves the order of the tabs as it is shows at once, and so does every
+	// change during a drag, in a strip that scrolls, and for a user who asks for less motion.
+	function renderAnimated() {
+		const idOrder = tabs.map((t) => t.id).join(',');
+		// The first tabs of a new strip show at once too.
+		const orderChanged = shownIdOrder !== '' && idOrder !== shownIdOrder;
+		shownIdOrder = idOrder;
+
+		const strip = document.getElementById('strip');
+		if (
+			!orderChanged ||
+			!document.startViewTransition ||
+			reducedMotion.matches ||
+			dragInProgress ||
+			strip.scrollWidth > strip.clientWidth
+		) {
+			render();
+			return;
+		}
+
+		const transition = document.startViewTransition(() => {
+			render();
+			// Tabs that slide outside the visible part of a strip that scrolls would be drawn
+			// over the edges of the strip.
+			if (strip.scrollWidth > strip.clientWidth) transition.skipTransition();
+		});
 	}
 
 	function onTabsChanged(json) {
@@ -364,7 +404,7 @@
 		if (active) activeId = active.id;
 		// A new tab takes its share of the strip at once.
 		if (tabs.length > previousCount) unlockTabWidths();
-		render();
+		renderAnimated();
 	}
 
 	function onThemeChanged(theme) {

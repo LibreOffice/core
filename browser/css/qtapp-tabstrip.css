@@ -294,3 +294,34 @@ body {
 	background: var(--strip-hover);
 	color: var(--color-main-text);
 }
+/* An animated change of the strip moves the tabs and the + button, each of which has a
+   view-transition-name, and leaves the rest of the page as it is. The old and the new picture of a
+   tab keep their size and line up at the start of the tab, so a tab that gets wider or narrower
+   shows more or less of itself rather than a stretched picture. The pointer reaches the strip
+   underneath while the animation runs. */
+:root {
+	view-transition-name: none;
+}
+/* stylelint does not know the view transition pseudo-elements yet. */
+/* stylelint-disable selector-pseudo-element-no-unknown */
+::view-transition {
+	pointer-events: none;
+}
+::view-transition-group(*) {
+	animation-duration: 180ms;
+}
+::view-transition-image-pair(*) {
+	overflow: clip;
+}
+::view-transition-old(*),
+::view-transition-new(*) {
+	width: 100%;
+	height: 100%;
+	object-fit: none;
+	object-position: left center;
+}
+:root[dir='rtl']::view-transition-old(*),
+:root[dir='rtl']::view-transition-new(*) {
+	object-position: right center;
+}
+/* stylelint-enable selector-pseudo-element-no-unknown -- see above */
