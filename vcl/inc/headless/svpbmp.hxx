@@ -38,14 +38,13 @@ public:
                            bool bClear, bool bWithoutAlpha = false);
 
     // SalBitmap
+    using SalBitmap::Create;
     SAL_DLLPRIVATE virtual bool            Create(const Size& rSize,
                                    vcl::PixelFormat ePixelFormat,
                                    const BitmapPalette& rPalette) override;
     SAL_DLLPRIVATE virtual bool            Create( const SalBitmap& rSalBmp ) override;
     SAL_DLLPRIVATE virtual bool            Create( const SalBitmap& rSalBmp,
                                     SalGraphics& rGraphics ) override;
-    SAL_DLLPRIVATE virtual bool            Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
-                                    Size& rSize ) override;
     SAL_DLLPRIVATE void                    Create(const std::optional<BitmapBuffer> & pBuf);
     const BitmapBuffer*     GetBuffer() const
     {

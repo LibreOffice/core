@@ -56,11 +56,10 @@ public:
 public:
 
     // SalBitmap methods
+    using SalBitmap::Create;
     bool            Create( const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rPal ) override;
     bool            Create( const SalBitmap& rSalBmp ) override;
     bool            Create( const SalBitmap& rSalBmp, SalGraphics& rGraphics ) override;
-    virtual bool    Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
-                            Size& rSize ) override;
 
     void            Destroy() override;
 

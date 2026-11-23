@@ -66,8 +66,8 @@ public:
     virtual bool            Create( const SalBitmap& rSalBmp ) = 0;
     virtual bool            Create( const SalBitmap& rSalBmp,
                                     SalGraphics& rGraphics ) = 0;
-    virtual bool            Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
-                                    Size& rSize ) = 0;
+    virtual bool Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& rBitmapCanvas,
+                        Size& rSize);
     virtual void            Destroy() = 0;
     virtual Size            GetSize() const = 0;
     sal_uInt16              GetBitCount() const;

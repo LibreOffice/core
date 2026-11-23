@@ -92,6 +92,11 @@ sal_uInt16 SalBitmap::GetBitCount() const
     }
 }
 
+bool SalBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>&, Size&)
+{
+    return false;
+}
+
 bool SalBitmap::ScalingSupported() const { return false; }
 
 bool SalBitmap::Scale(const double&, const double&, BmpScaleFlag) { return false; }
