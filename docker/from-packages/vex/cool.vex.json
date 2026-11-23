@@ -58,7 +58,13 @@
       "analysis": {
         "state": "false_positive",
         "detail": "Fixed upstream in graphite2 1.3.10 (2017); the bundled 1.3.15 contains the fix. Flagged only because of a sloppy NVD version range."
-      }
+      },
+      "properties": [
+        {
+          "name": "collabora:platforms",
+          "value": "server, windows, macos, snap"
+        }
+      ]
     },
     {
       "id": "CVE-2021-25630",
@@ -183,7 +189,13 @@
       "analysis": {
         "state": "false_positive",
         "detail": "Fixed upstream in January 2024, first released in libtiff 4.7.0; the bundled 4.7.2 contains the fix."
-      }
+      },
+      "properties": [
+        {
+          "name": "collabora:platforms",
+          "value": "server, windows, macos"
+        }
+      ]
     },
     {
       "id": "CVE-2023-6228",
@@ -200,7 +212,13 @@
       "analysis": {
         "state": "false_positive",
         "detail": "Fixed upstream in November 2023, first released in libtiff 4.7.0; the bundled 4.7.2 contains the fix."
-      }
+      },
+      "properties": [
+        {
+          "name": "collabora:platforms",
+          "value": "server, windows, macos"
+        }
+      ]
     },
     {
       "id": "CVE-2024-25114",
@@ -257,7 +275,13 @@
         "state": "not_affected",
         "justification": "code_not_present",
         "detail": "The bundled raptor is built with --enable-parsers=\"rdfxml\" only (engine/external/redland/ExternalProject_raptor.mk), so the vulnerable N-Triples parser is not compiled in. The upstream fix is additionally backported via engine/external/redland/raptor/raptor-backport-unreleased-fixes.patch.1."
-      }
+      },
+      "properties": [
+        {
+          "name": "collabora:platforms",
+          "value": "server, windows, macos, flatpak, snap"
+        }
+      ]
     },
     {
       "id": "CVE-2024-57823",
@@ -265,7 +289,13 @@
       "analysis": {
         "state": "resolved_with_pedigree",
         "detail": "The upstream fix (return an empty buffer when the path length reaches 0) is backported via engine/external/redland/raptor/raptor-backport-unreleased-fixes.patch.1, and CVE-2024-57823.patch.1 additionally makes the path length sanity checks unconditional. The reported trigger, the Turtle parser, is not compiled in either (--enable-parsers=\"rdfxml\")."
-      }
+      },
+      "properties": [
+        {
+          "name": "collabora:platforms",
+          "value": "server, windows, macos, flatpak, snap"
+        }
+      ]
     },
     {
       "id": "CVE-2025-10911",
@@ -273,7 +303,13 @@
       "analysis": {
         "state": "resolved_with_pedigree",
         "detail": "The upstream fix (GNOME libxslt merge request !77, 'Use a dedicated node type to maintain the list of cached RVTs', the same commit RHEL backports for this CVE) is applied to the bundled 1.1.45 via engine/external/libxslt/77.patch.1."
-      }
+      },
+      "properties": [
+        {
+          "name": "collabora:platforms",
+          "value": "server, windows, macos"
+        }
+      ]
     },
     {
       "id": "CVE-2025-15367",
@@ -323,7 +359,13 @@
       "analysis": {
         "state": "false_positive",
         "detail": "Fixed upstream in libxml2 2.13.8/2.14.2 (2025); the bundled 2.15.4 contains the fix."
-      }
+      },
+      "properties": [
+        {
+          "name": "collabora:platforms",
+          "value": "server, windows, macos"
+        }
+      ]
     },
     {
       "id": "CVE-2025-6170",
@@ -354,7 +396,13 @@
         "state": "not_affected",
         "detail": "The mitigation for this unfixed libxslt flaw lives in libxml2 >= 2.14 (per the Debian security tracker); the bundled libxml2 is 2.15.4, and libxslt only ever runs against it (both are statically linked together).",
         "justification": "protected_by_mitigating_control"
-      }
+      },
+      "properties": [
+        {
+          "name": "collabora:platforms",
+          "value": "server, windows, macos"
+        }
+      ]
     },
     {
       "id": "CVE-2026-110447",
@@ -376,7 +424,13 @@
         "state": "not_affected",
         "detail": "Python scripting is optional (the pyuno packages are separate and excluded from the container image unless built with 'withpython') and macro execution is disabled by default (security.enable_macros_execution); no product code uses this module, it is only reachable from user-authored macros.",
         "justification": "requires_configuration"
-      }
+      },
+      "properties": [
+        {
+          "name": "collabora:platforms",
+          "value": "server"
+        }
+      ]
     },
     {
       "id": "CVE-2026-19672",
@@ -385,7 +439,13 @@
         "state": "not_affected",
         "detail": "Python scripting is optional (the pyuno packages are separate and excluded from the container image unless built with 'withpython') and macro execution is disabled by default (security.enable_macros_execution); no product code uses this module, it is only reachable from user-authored macros.",
         "justification": "requires_configuration"
-      }
+      },
+      "properties": [
+        {
+          "name": "collabora:platforms",
+          "value": "server"
+        }
+      ]
     },
     {
       "id": "CVE-2026-23623",
@@ -443,7 +503,13 @@
       "analysis": {
         "state": "false_positive",
         "detail": "The bundled tiff-4.7.2 tarball already contains the upstream fix (libtiff commit 782a11d6, 'prevent integer overflow ... in YCbCr tile decoding functions'): all four affected 'incr' computations are the fixed const tmsize_t form. Verified in the tarball source; the advisory's version range is inaccurate."
-      }
+      },
+      "properties": [
+        {
+          "name": "collabora:platforms",
+          "value": "server, windows, macos"
+        }
+      ]
     },
     {
       "id": "CVE-2026-48164",
