@@ -42,10 +42,10 @@
 
 SalObject* X11SalInstance::CreateObject(SalFrame* pParent, SystemWindowData* pWindowData)
 {
-    return X11SalObject::CreateObject(pParent, pWindowData, false);
+    return X11SalObject::CreateObject(pParent, pWindowData);
 }
 
-X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow )
+X11SalObject* X11SalObject::CreateObject(SalFrame* pParent, SystemWindowData* pWindowData)
 {
     int error_base, event_base;
     X11SalObject*       pObject  = new X11SalObject();
@@ -152,10 +152,6 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     }
 
     GetX11SalData()->ErrorTrapPush();
-    if( bShow ) {
-        XMapWindow( pDisp, pObject->maSecondary );
-        XMapWindow( pDisp, pObject->maPrimary );
-    }
 
     rObjData.pDisplay      = pDisp;
     rObjData.SetWindowHandle(pObject->maSecondary);

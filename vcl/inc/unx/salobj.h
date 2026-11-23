@@ -64,7 +64,8 @@ class X11SalObject final : public SalObject
 
 public:
     static VCL_DLLPUBLIC bool Dispatch( XEvent* pEvent );
-    static VCL_DLLPUBLIC X11SalObject* CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow );
+    static VCL_DLLPUBLIC X11SalObject* CreateObject(SalFrame* pParent,
+                                                    SystemWindowData* pWindowData);
 
     X11SalObject();
     virtual ~X11SalObject() override;
