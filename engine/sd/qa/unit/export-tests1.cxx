@@ -200,6 +200,13 @@ CPPUNIT_TEST_FIXTURE(SdExportTest1, testTransparentBackground)
     createSdImpressDoc("odp/transparent_background.odp");
     saveAndReload(TestFilter::ODP);
 
+    // The first text span has a transparent character background and the second one has yellow
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//style:style[@style:family='text']/"
+                         "style:text-properties[@fo:background-color='transparent']");
+    assertXPath(pXmlDoc, "//style:style[@style:family='text']/"
+                         "style:text-properties[@fo:background-color='#ffff00']");
+
     const SdrPage* pPage = GetPage(1);
 
     const SdrTextObj* pObj1 = DynCastSdrTextObj(pPage->GetObj(0));
@@ -297,7 +304,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest1, testDecorative)
             {
                 for (auto j = xShapes->getCount(); j != 0; --j)
                 {
-                    uno::Reference<beans::XPropertySet> xInnerShape(xShapes->getShapeByIndex(i - 1),
+                    uno::Reference<beans::XPropertySet> xInnerShape(xShapes->getShapeByIndex(j - 1),
                                                                     uno::UNO_QUERY);
                     uno::Reference<container::XNamed> xInnerNamed(xInnerShape, uno::UNO_QUERY);
                     OString const innerName(
@@ -354,6 +361,12 @@ CPPUNIT_TEST_FIXTURE(SdExportTest1, testTdf142716)
 CPPUNIT_TEST_FIXTURE(SdExportTest1, testMediaEmbedding)
 {
     createSdImpressDoc("media_embedding.odp");
+    saveAndReload(TestFilter::ODP);
+
+    // The sound keeps the media type guessed from its file name
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//draw:plugin[@xlink:href='Media/button-1.wav']", "mime-type",
+                u"audio/x-wav");
 
     const SdrPage* pPage = GetPage(1);
 
