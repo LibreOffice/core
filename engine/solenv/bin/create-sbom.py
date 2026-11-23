@@ -1232,21 +1232,21 @@ def add_dependencies(files_by_package, files_by_package_extra_deps):
             elif PLATFORM == "unix":
                 return ("program/python.bin", set())
             elif PLATFORM == "darwin":
-                return ("Contents/Resources/python", set())
+                return (f"{productname}.app/Contents/Resources/python", set())
             else:
                 raise Exception("unexpected Python file on mobile platform")
         elif ext in (".xba", ".xdl"):
             if PLATFORM == "win32" or PLATFORM == "unix":
                 return ("program/soffice.bin", set())
             elif PLATFORM == "darwin":
-                return ("Contents/MacOS/soffice", set())
+                return (f"{productname}.app/Contents/MacOS/soffice", set())
             else:
                 raise Exception("unexpected Basic file on mobile platform")
         elif ext == ".xsl":
             if PLATFORM == "win32" or PLATFORM == "unix":
                 return ("program/soffice.bin", set())
             elif PLATFORM == "darwin":
-                return ("Contents/MacOS/soffice", set())
+                return (f"{productname}.app/Contents/MacOS/soffice", set())
             else:
                 raise Exception("TODO mobile platform")
         elif ext == ".pl":
