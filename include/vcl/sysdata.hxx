@@ -145,7 +145,6 @@ struct SystemGraphicsData
     CGContextRef    rCGContext;     // CoreGraphics graphic context
 #elif defined( UNX )
     sal_uIntPtr     hDrawable;      // a drawable
-    void*           pVisual;        // the visual in use
     int             nScreen;        // the current screen of the drawable
 #endif
 #if USE_HEADLESS_CODE
@@ -163,7 +162,6 @@ struct SystemGraphicsData
         : rCGContext(NULL)
 #elif defined( UNX )
         : hDrawable(0)
-        , pVisual( nullptr )
         , nScreen( 0 )
 #endif
     { }
