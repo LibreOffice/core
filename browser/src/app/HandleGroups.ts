@@ -3012,10 +3012,15 @@ class PathHandles extends HandlesMovedOneByOne {
 		return true;
 	}
 
-	/// Adds a point to the path of the selected object, on the edge nearest to the press. The
-	/// press is in twips on the page.
-	public addAt(at: cool.SimplePoint): void {
-		this.selection.pathEditor()?.insertPointAt(new cool.Point(at.x, at.y));
+	/// Adds a point to the path of the selected object, on the edge nearest to the press, which
+	/// the press drags on, and answers the name of its handle; nothing where no edge is near.
+	/// The press is in twips on the page.
+	public addForADrag(at: cool.SimplePoint): string | null {
+		return (
+			this.selection
+				.pathEditor()
+				?.insertPointForADrag(new cool.Point(at.x, at.y)) ?? null
+		);
 	}
 
 	/// Closes the path of the selected object, or opens it again where it is closed.
@@ -3032,6 +3037,12 @@ class PathHandles extends HandlesMovedOneByOne {
 	public handOver(handle: SelectionHandle, to: cool.Point): void {
 		const editing = this.selection.pathEditor();
 		if (!editing) return;
+
+		// a point a press just added goes out where the drag let go of it, with its place
+		if (editing.waitsToBeAdded(handle.name)) {
+			editing.addTheWaitingPoint(to);
+			return;
+		}
 
 		editing.moveTo(handle.name, to);
 		HeldSteps.hold(this.selection, handle, to);

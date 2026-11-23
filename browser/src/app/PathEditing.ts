@@ -142,8 +142,18 @@ class PathEditing implements HandleSource {
 		{
 			path: cool.ObjectPathPolygon[];
 			from: cool.ObjectPathPolygon[] | undefined;
-			wait: ReturnType<typeof setTimeout>;
+			wait: ReturnType<typeof setTimeout> | undefined;
 		}
+	>();
+
+	/*
+		The points added here by a press that are not sent yet, by the key of the path: the
+		addition as it stood and the name of the handle of the point. Such a point is dragged on
+		by the same press and goes out when the drag lets go of it.
+	*/
+	private static waitingAdditions = new Map<
+		string,
+		{ name: string; addition: PathPointAddition }
 	>();
 
 	/// How long a path changed here is shown without an answer, in milliseconds.
@@ -210,6 +220,7 @@ class PathEditing implements HandleSource {
 	*/
 	private changeHere(
 		change: (path: cool.ObjectPathPolygon[]) => cool.ObjectPathPolygon[] | null,
+		untilLetGo: boolean = false,
 	): cool.ObjectPathPolygon[] | null {
 		const path = this.path();
 		if (!path) return null;
@@ -230,13 +241,17 @@ class PathEditing implements HandleSource {
 		PathEditing.forget(this.key);
 		const key = this.key;
 		const sink = this.sink;
+		// a change that waits for a drag to let go has nothing sent to wait for yet
 		PathEditing.changedHere.set(key, {
 			path: changed,
 			from: from,
-			wait: setTimeout(() => {
-				PathEditing.forget(key);
-				sink.shownPathChanged();
-			}, PathEditing.longestWait),
+			wait:
+				untilLetGo ? undefined : (
+					setTimeout(() => {
+						PathEditing.forget(key);
+						sink.shownPathChanged();
+					}, PathEditing.longestWait)
+				),
 		});
 		sink.shownPathChanged();
 		return changed;
@@ -621,6 +636,74 @@ class PathEditing implements HandleSource {
 		this.changeHere((path) => PathGeometry.withoutThePoint(path, place));
 		this.sink.deletePoints(places);
 		return true;
+	}
+
+	/*
+		Adds a point on the edge nearest to that place, in twips on the page, here only, and
+		answers the name of its handle; nothing where no edge is near. The press that added it
+		drags it on, and it goes out once the drag lets go of it, where the drag leaves it, so
+		adding and placing it are one change and one step to undo, as in the office.
+	*/
+	public insertPointForADrag(at: cool.Point): string | null {
+		const made: { addition?: PathPointAddition } = {};
+		this.changeHere((path) => {
+			const added = PathGeometry.withAPointAt(path, at, this.sink.wholeTwips);
+			made.addition = added?.addition;
+			return added?.path ?? null;
+		}, true);
+		if (!made.addition) return null;
+
+		const name = PathEditing.pointName(
+			made.addition.polygon,
+			made.addition.point,
+		);
+		PathEditing.waitingAdditions.set(this.key, {
+			name: name,
+			addition: made.addition,
+		});
+		return name;
+	}
+
+	/// Whether the point of that handle was added here and waits for its drag to let go of it.
+	public waitsToBeAdded(handleName: string): boolean {
+		return PathEditing.waitingAdditions.get(this.key)?.name === handleName;
+	}
+
+	/*
+		Sends the point that waits, where the drag let go of it, in twips on the page. Its own
+		two weights go along by as much as it moved, as a drag of a point carries them.
+	*/
+	public addTheWaitingPoint(at: cool.Point): void {
+		const waiting = PathEditing.waitingAdditions.get(this.key);
+		if (!waiting) return;
+		PathEditing.waitingAdditions.delete(this.key);
+
+		const added = waiting.addition;
+		const by = new cool.Point(
+			Math.round(at.x) - added.x,
+			Math.round(at.y) - added.y,
+		);
+		const placed: PathPointAddition = {
+			...added,
+			x: added.x + by.x,
+			y: added.y + by.y,
+			weights: added.weights.map((weight: PathPointMove) =>
+				weight.polygon === added.polygon && weight.point === added.point ?
+					{ ...weight, x: weight.x + by.x, y: weight.y + by.y }
+				:	weight,
+			),
+		};
+
+		this.changeHere((path) => this.pathFor(waiting.name, at) ?? path);
+		this.sink.addPoint(placed);
+	}
+
+	/// Takes the point that waits away again, as the drag that would place it was called off.
+	public dropTheWaitingPoint(): void {
+		if (!PathEditing.waitingAdditions.delete(this.key)) return;
+
+		PathEditing.forget(this.key);
+		this.sink.shownPathChanged();
 	}
 
 	/// Adds a point on the edge nearest to that place, in twips on the page.

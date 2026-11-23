@@ -1271,10 +1271,14 @@ class Dispatcher {
 			GraphicSelection.selectionSection?.switchThePathPoints();
 		};
 
-		// The next press on the selected object adds a point to its path. The points are shown
-		// first if they are hidden.
+		// Insert Points switches adding points to the path on and off, as in the office. The
+		// points are shown first if they are hidden.
 		this.actionsMap[SelectionSection.addPathPointCommand] = () => {
 			const section = GraphicSelection.selectionSection;
+			if (section?.isAddingAPathPoint()) {
+				SelectionSection.stopAddingAPoint();
+				return;
+			}
 			if (section && !section.pathPointsAreShown())
 				section.switchThePathPoints();
 			section?.startAddingAPathPoint();

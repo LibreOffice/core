@@ -226,8 +226,8 @@ describe(['tagdesktop'], 'Points of a polygon on a vector slide', function() {
 			expect(pathPoints(win), 'points after Delete').to.have.length(3);
 		});
 
-		// Add Point waits for one press and adds a point on the nearest edge. The press is a little
-		// inside the left edge, so it lands on the object.
+		// Add Point adds a point on the nearest edge with a press. The press is a little inside the
+		// left edge, so it lands on the object.
 		desktopHelper.selectNotebookbarTab('Shape');
 		cy.cGet('#Shape-container #shape-edit-points .arrowbackground:visible').click();
 		desktopHelper.getOpenMenuEntries().eq(0).click();
@@ -240,6 +240,51 @@ describe(['tagdesktop'], 'Points of a polygon on a vector slide', function() {
 		cy.wrap(null).should(function() {
 			expect(pathPoints(win), 'points after Add Point').to.have.length(4);
 		});
+		// adding goes on for the next press, until Escape
+		helper.waitForMapState('insertpathpoint', 'true');
+		helper.typeIntoDocument('{esc}');
+		helper.waitForMapState('insertpathpoint', 'false');
+	});
+
+	it('A press with Add Point adds a point and drags it on, as one step to undo.', function() {
+		var win = this.win;
+		selectByTab(win, 2);
+		cy.wrap(null).should(function() {
+			expect(pathPoints(win), 'points of the polygon').to.have.length(4);
+		});
+		switchThePoints(win, true);
+		desktopHelper.selectNotebookbarTab('Shape');
+		cy.cGet('#Shape-container #shape-edit-points .arrowbackground:visible').click();
+		desktopHelper.getOpenMenuEntries().eq(0).click();
+		helper.waitForMapState('insertpathpoint', 'true');
+
+		// the press is in the middle of the upper edge, and the drag takes the new point down
+		var target;
+		cy.then(function() {
+			var points = pathPoints(win);
+			var middle = {
+				x: (points[0].x + points[1].x) / 2,
+				y: (points[0].y + points[1].y) / 2,
+			};
+			target = { x: middle.x, y: middle.y + 1000 };
+			dragFrom(win, middle, target);
+		});
+		cy.wrap(null).should(function() {
+			var points = pathPoints(win);
+			expect(points, 'points after the drag').to.have.length(5);
+			expect(points.some(function(point) {
+				return Math.abs(point.x - target.x) < 60 && Math.abs(point.y - target.y) < 60;
+			}), 'a point where the drag let go').to.equal(true);
+		});
+
+		// adding and placing the point is one step: one undo takes the point away
+		cy.then(function() {
+			win.app.map.sendUnoCommand('.uno:Undo');
+		});
+		cy.wrap(null).should(function() {
+			expect(pathPoints(win), 'points after the undo').to.have.length(4);
+		});
+		helper.typeIntoDocument('{esc}');
 		helper.waitForMapState('insertpathpoint', 'false');
 	});
 

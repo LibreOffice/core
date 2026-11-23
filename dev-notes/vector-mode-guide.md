@@ -433,8 +433,12 @@ turn handle, the yellow ones and those of its motion paths; every other mode hid
 A double click still edits the text. A connector, a table, a group and a selection of more than one
 object switch nothing.
 
-With Add Point or Add New the pointer turns into a cross over the object, and the next press adds
-the point there; Escape ends it without one.
+With Add Point the pointer turns into a cross over the object, as with Insert Points in the
+office. Every press on the object puts a point on the nearest edge and drags it on with the same
+press; letting go places it, as one step to undo, and a click without a drag leaves it on the
+edge. Adding goes on for the next press until Escape, Add Point again, or the points are hidden.
+Escape during the drag takes the new point away again. With Add New the next press adds a glue
+point there; Escape ends it without one.
 
 A click on a point opens its menu:
 

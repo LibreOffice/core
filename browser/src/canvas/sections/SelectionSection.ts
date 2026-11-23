@@ -223,7 +223,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 	public static readonly pathPointsCommand: string =
 		SelectionSection.pathPoints.showCommand;
 
-	/// The command whose state is whether the next press on the object adds a point to its path.
+	/// The command whose state is whether a press on the object adds a point to its path.
 	public static readonly addPathPointCommand: string =
 		SelectionSection.pathPoints.addCommand;
 
@@ -360,7 +360,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		return SelectionSection.tiePoints.areAddedFor(this.keyOfTheSelection());
 	}
 
-	/// Whether the next press on the object adds a point to its path.
+	/// Whether a press on the object adds a point to its path.
 	public isAddingAPathPoint(): boolean {
 		return SelectionSection.pathPoints.areAddedFor(this.keyOfTheSelection());
 	}
@@ -375,9 +375,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	/*
-		Starts adding a point to the path. The next press on the object, away from its handles,
-		adds a point on the nearest edge. The pointer over the object becomes a cross. Adding ends
-		after that point, on Escape, or when the points are hidden.
+		Starts adding points to the path. Every press on the object, away from its handles, adds a
+		point on the nearest edge and drags it on. The pointer over the object becomes a cross.
+		Adding ends on Escape, with Insert Points again, or when the points are hidden.
 	*/
 	public startAddingAPathPoint(): void {
 		this.startAddingAPoint(SelectionSection.pathPoints);
@@ -3576,19 +3576,45 @@ abstract class SelectionSection extends CanvasSectionObject {
 		this.pressedHandle = handle ?? null;
 
 		/*
-			While a point is being added, a press on the object off its handles gives the object a
-			new point there, and adding ends. A point of the path goes on the edge of the path
-			nearest to the press. The press is taken like a press on a handle, so the click that
-			follows goes nowhere else.
+			While points of the path are being added, a press on the object off its handles puts a
+			point on the edge of the path nearest to it and drags that point on, as in the office,
+			and adding goes on for the next press. The drag is the one a press on the point would
+			begin.
 		*/
-		const addsAPathPoint =
-			!handle &&
-			this.isAddingAPathPoint() &&
-			this.pathGroup()?.takesAPress(onCanvas[0], onCanvas[1]);
-		if (addsAPathPoint) this.pathGroup()?.addAt(at);
+		const pathGroup = this.pathGroup();
+		const addedPoint =
+			(
+				!handle &&
+				this.isAddingAPathPoint() &&
+				pathGroup?.takesAPress(onCanvas[0], onCanvas[1])
+			) ?
+				pathGroup.addForADrag(at)
+			:	null;
+		const addedHandle =
+			addedPoint ?
+				this.handles().find((one: SelectionHandle) => one.name === addedPoint)
+			:	undefined;
+		if (pathGroup && addedHandle) {
+			this.pressedAHandle = true;
+			this.pressedHandle = addedHandle;
+			this.pressedGroup = pathGroup;
+			this.interaction = pathGroup.interactionFor(addedHandle, at);
+			this.interaction?.tookHoldAt(at, addedHandle);
+			this.lastMoved = null;
+			this.stopPropagating();
+			e.stopPropagation();
+			return;
+		}
+
+		/*
+			While a point to tie a connector to is being added, a press on the object off its
+			handles gives the object a new point there, and adding ends. The press is taken like a
+			press on a handle, so the click that follows goes nowhere else.
+		*/
 		if (
-			addsAPathPoint ||
-			(!handle && this.isAddingATiePoint() && this.tiePointGroup()?.addAt(at))
+			!handle &&
+			this.isAddingATiePoint() &&
+			this.tiePointGroup()?.addAt(at)
 		) {
 			SelectionSection.stopAddingAPoint();
 			this.pressedAHandle = true;
@@ -3821,6 +3847,12 @@ abstract class SelectionSection extends CanvasSectionObject {
 				this.switchTheHandleMode();
 				this.interaction = null;
 				this.followTheOtherMode(this.pressedHandle);
+			} else if (
+				this.pressedHandle?.name &&
+				this.editor?.waitsToBeAdded(this.pressedHandle.name)
+			) {
+				// a point the press added stays where it was added, as no drag moved it
+				this.editor.addTheWaitingPoint(this.pressedHandle.point);
 			} else if (this.pressedHandle?.name) {
 				// a handle answers a click only where the mouse is let go on it, as a button does
 				const onCanvas = [
@@ -4242,6 +4274,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 		the objects have them, which is where they belong.
 	*/
 	private endTheInteraction(carriedOut: boolean): void {
+		// a point a press added for the drag goes again where the drag was called off
+		if (!carriedOut) this.editor?.dropTheWaitingPoint();
+
 		/*
 			What the drag did stays on the objects until the engine answers with its own version of
 			them. The client worked the change out and has already sent it, so waiting for it to
