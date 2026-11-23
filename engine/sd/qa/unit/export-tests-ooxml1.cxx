@@ -1221,6 +1221,29 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf127090)
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr", "rot", u"-5400000");
 }
 
+// A picture the document only points at is pointed at by the file that is written, rather than
+// being written as a picture stored in that file under no name at all.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testLinkedPictureKeepsItsLink)
+{
+    // Given a document holding one picture of its own and one it only points at:
+    createSdImpressDoc("pptx/customxml.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the picture was written as held by the file under an empty name, which points at
+    // nothing, so a reader found no picture there at all.
+    assertXPath(pXmlDoc, "//a:blip[@r:link]", 1);
+    assertXPath(pXmlDoc, "//a:blip[@r:embed='']", 0);
+
+    // The file says that the picture lives outside it.
+    xmlDocUniquePtr pRels = parseExport(u"ppt/slides/_rels/slide1.xml.rels"_ustr);
+    assertXPath(pRels, "/rels:Relationships/rels:Relationship[@TargetMode='External']", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testCustomXml)
 {
     // Load document and export it to a temporary file

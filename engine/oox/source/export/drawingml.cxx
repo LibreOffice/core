@@ -1957,10 +1957,27 @@ void DrawingML::WriteXGraphicBlip(uno::Reference<beans::XPropertySet> const & rX
 
     sRelId = writeGraphicToStorage(aGraphic, bRelPathToMedia);
 
+    // A picture the document only points at holds nothing to store, so the file points at it in
+    // the same way. One that holds nothing and names nowhere is left out: a picture that names
+    // no file of its own is a picture a reader cannot find.
+    OUString sLinkId;
+    if (sRelId.isEmpty())
+    {
+        const OUString aOriginUrl = aGraphic.getOriginURL();
+        if (aOriginUrl.isEmpty())
+            return;
+
+        sLinkId = mpFB->addRelation(mpFS->getOutputStream(),
+                                    oox::getRelationship(Relationship::IMAGE), aOriginUrl,
+                                    /*bExternal=*/true);
+    }
+    const sal_Int32 nIdAttribute = sLinkId.isEmpty() ? XML_embed : XML_link;
+    const OUString& rId = sLinkId.isEmpty() ? sRelId : sLinkId;
+
     if (isDiagaramExport())
-        mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_xmlns, XML_r), mpFB->getNamespaceURL(OOX_NS(officeRel)), FSNS(XML_r, XML_embed), sRelId);
+        mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_xmlns, XML_r), mpFB->getNamespaceURL(OOX_NS(officeRel)), FSNS(XML_r, nIdAttribute), rId);
     else
-        mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), sRelId);
+        mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_r, nIdAttribute), rId);
 
     const auto& pVectorGraphicDataPtr = aGraphic.getVectorGraphicData();
 
