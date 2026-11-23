@@ -559,16 +559,30 @@ void fillHeapHoles()
         topBytes = std::max(info.keepcost, 0);
     }
     // The top chunk ends at the program break. Memory from it is not a hole.
-    const char* const topStart = static_cast<char*>(sbrk(0)) - topBytes;
+    void* const programBreak = sbrk(0);
+    if (programBreak == reinterpret_cast<void*>(-1))
+    {
+        LOG_WRN("Not filling heap holes: the program break is unknown");
+        return;
+    }
+    const char* const topStart = static_cast<char*>(programBreak) - topBytes;
 
     // The total stays within the free space that malloc reports, which is none when another
-    // allocator replaces the one of glibc.
+    // allocator replaces the one of glibc. The fill of the forkit keeps about 7 MB, and the total
+    // also stays within MaxFillBytes, in case the numbers of malloc do not describe this heap.
+    constexpr std::size_t MaxFillBytes = 128 * 1024 * 1024;
     std::size_t filled = 0;
     std::size_t count = 0;
+    bool limitReached = false;
     const auto fillSize = [&](std::size_t size)
     {
         while (filled + size <= freeBytes)
         {
+            if (filled + size > MaxFillBytes)
+            {
+                limitReached = true;
+                return;
+            }
             void* chunk = malloc(size);
             if (!chunk)
                 return;
@@ -588,6 +602,11 @@ void fillHeapHoles()
         fillSize(size);
     for (std::size_t size = 1032; size >= 24; size -= 16)
         fillSize(size);
+
+    if (limitReached)
+        LOG_WRN("Stopped filling heap holes at " << filled << " bytes, the limit of "
+                                                 << MaxFillBytes << ", while malloc reports "
+                                                 << freeBytes << " free bytes");
 
     LOG_DBG("Filled " << count << " heap holes, " << filled << " bytes of " << freeBytes
                       << " free, in "
