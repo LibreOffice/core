@@ -44,7 +44,7 @@ ONLINE_BUILD := $(CURDIR)/online
 # so the MSYS2 side does not depend on the user's environment.
 run_msys2 = MSYSTEM=MSYS MSYS=winsymlinks:nativestrict "$(MSYS2_BASH)" --noprofile --norc -c "export PATH=\"/usr/local/bin:/usr/bin:/bin:/opt/bin:\$$PATH\" CONFIG_SITE=/dev/null; $(1)"
 
-.PHONY: all engine browser app clean-app
+.PHONY: all engine browser app clean-app sbom
 
 all: app
 
@@ -96,6 +96,13 @@ browser: $(ONLINE_BUILD)/config.status
 #    Git/nologo), which MSBuild then rejects.
 app: browser
 	"$(MSBUILD)" -restore -nologo -p:Configuration=$(CONFIG) -p:Platform=$(PLATFORM) -p:SolutionDir='$(SOLUTION_DIR)\' '$(SLN)'
+
+# 5. The SBOM of the app as it is in the output tree, written to its sbom\
+#    directory, in MSYS2 for python3 (scripts/create-product-sbom.py). Run it
+#    when the tree is final, before package_appx.py packages it; the debug
+#    symbols and import libraries are not packaged (-nopdb).
+sbom: app
+	$(call run_msys2,cd '$(ONLINE_BUILD)' && make product-sbom PRODUCT_SBOM_ARGS='--platform windows --tree $(ONLINE_BUILD)/windows/coda/$(PLATFORM)/$(CONFIG) --staging $(ONLINE_BUILD)/sbom-staging --engine-root= --exclude \*.pdb --exclude \*.lib')
 
 clean-app:
 	"$(MSBUILD)" -t:Clean -nologo -p:Configuration=$(CONFIG) -p:Platform=$(PLATFORM) -p:SolutionDir='$(SOLUTION_DIR)\' '$(SLN)'
