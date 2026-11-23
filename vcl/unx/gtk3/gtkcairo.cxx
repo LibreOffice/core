@@ -28,7 +28,7 @@ namespace cairo
  *
  * Set the mpSurface as pSurface
  **/
-Gtk3Surface::Gtk3Surface(CairoSurfaceSharedPtr pSurface)
+GtkSurface::GtkSurface(CairoSurfaceSharedPtr pSurface)
     : mpGraphics(nullptr)
     , cr(nullptr)
     , mpSurface(std::move(pSurface))
@@ -44,7 +44,7 @@ Gtk3Surface::Gtk3Surface(CairoSurfaceSharedPtr pSurface)
  *
  * Set the mpSurface to the new surface or NULL
  **/
-Gtk3Surface::Gtk3Surface(const GtkSalGraphics* pGraphics, int x, int y, int width, int height)
+GtkSurface::GtkSurface(const GtkSalGraphics* pGraphics, int x, int y, int width, int height)
     : mpGraphics(pGraphics)
     , cr(pGraphics->getCairoContext())
 {
@@ -53,7 +53,7 @@ Gtk3Surface::Gtk3Surface(const GtkSalGraphics* pGraphics, int x, int y, int widt
                     &cairo_surface_destroy);
 }
 
-Gtk3Surface::~Gtk3Surface()
+GtkSurface::~GtkSurface()
 {
     if (cr)
         cairo_destroy(cr);
@@ -64,7 +64,7 @@ Gtk3Surface::~Gtk3Surface()
  *
  * @return new Cairo or NULL
  **/
-CairoSharedPtr Gtk3Surface::getCairo() const
+CairoSharedPtr GtkSurface::getCairo() const
 {
     return CairoSharedPtr(cairo_create(mpSurface.get()), &cairo_destroy);
 }
@@ -82,15 +82,15 @@ CairoSharedPtr Gtk3Surface::getCairo() const
  *
  * @return new surface or NULL
  **/
-SurfaceSharedPtr Gtk3Surface::getSimilar(int cairo_content_type, int width, int height) const
+SurfaceSharedPtr GtkSurface::getSimilar(int cairo_content_type, int width, int height) const
 {
-    return std::make_shared<Gtk3Surface>(CairoSurfaceSharedPtr(
+    return std::make_shared<GtkSurface>(CairoSurfaceSharedPtr(
         cairo_surface_create_similar(
             mpSurface.get(), static_cast<cairo_content_t>(cairo_content_type), width, height),
         &cairo_surface_destroy));
 }
 
-void Gtk3Surface::flush() const
+void GtkSurface::flush() const
 {
     cairo_surface_flush(mpSurface.get());
     //Wonder if there is any benefit in using cairo_fill/stroke extents on
@@ -100,7 +100,7 @@ void Gtk3Surface::flush() const
         mpGraphics->WidgetQueueDraw();
 }
 
-VclPtr<VirtualDevice> Gtk3Surface::createVirtualDevice() const
+VclPtr<VirtualDevice> GtkSurface::createVirtualDevice() const
 {
     SystemGraphicsData aSystemGraphicsData;
 

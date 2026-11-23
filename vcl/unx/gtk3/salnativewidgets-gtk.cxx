@@ -2826,12 +2826,12 @@ bool GtkSalGraphics::SupportsCairo() const
 
 cairo::SurfaceSharedPtr GtkSalGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
 {
-    return std::make_shared<cairo::Gtk3Surface>(rSurface);
+    return std::make_shared<cairo::GtkSurface>(rSurface);
 }
 
 cairo::SurfaceSharedPtr GtkSalGraphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int x, int y, int width, int height) const
 {
-    return std::make_shared<cairo::Gtk3Surface>(this, x, y, width, height);
+    return std::make_shared<cairo::GtkSurface>(this, x, y, width, height);
 }
 
 #endif

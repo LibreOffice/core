@@ -17,7 +17,7 @@ class GtkSalGraphics;
 
 namespace cairo
 {
-class Gtk3Surface : public Surface
+class GtkSurface : public Surface
 {
     const GtkSalGraphics* mpGraphics;
     cairo_t* cr;
@@ -25,9 +25,9 @@ class Gtk3Surface : public Surface
 
 public:
     /// takes over ownership of passed cairo_surface
-    explicit Gtk3Surface(CairoSurfaceSharedPtr pSurface);
+    explicit GtkSurface(CairoSurfaceSharedPtr pSurface);
     /// create surface on subarea of given drawable
-    explicit Gtk3Surface(const GtkSalGraphics* pGraphics, int x, int y, int width, int height);
+    explicit GtkSurface(const GtkSalGraphics* pGraphics, int x, int y, int width, int height);
 
     // Surface interface
     virtual CairoSharedPtr getCairo() const override;
@@ -38,7 +38,7 @@ public:
 
     virtual void flush() const override;
 
-    virtual ~Gtk3Surface() override;
+    virtual ~GtkSurface() override;
 };
 }
 
