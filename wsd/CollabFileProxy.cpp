@@ -123,7 +123,7 @@ void CollabFileProxy::doDownload(const std::shared_ptr<TerminatingPoll>& poll,
     const auto startTime = std::chrono::steady_clock::now();
 
     http::Session::FinishedCallback finishedCallback =
-        [this, &poll, startTime, uriAnonym, redirectLimit, keepalive = shared_from_this()](
+        [this, poll, startTime, uriAnonym, redirectLimit, keepalive = shared_from_this()](
             const std::shared_ptr<http::Session>& session)
     {
         if (SigUtil::getShutdownRequestFlag())
