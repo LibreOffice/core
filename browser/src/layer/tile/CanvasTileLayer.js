@@ -822,8 +822,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			}
 		}
 		else if (textMsg.startsWith('cellselectionarea:')) {
-			// a spreadsheet active in place in another document shows its selection as text does
-			if (this.isCalc())
+			// a spreadsheet active in place in another document shows its selection as text does,
+			// the cells of a table on a slide or a page come here
+			if (this.isCalc() || !GraphicSelection.inPlaceCalc)
 				this._onCellSelectionAreaMsg(textMsg);
 		}
 		else if (textMsg.startsWith('cellautofillarea:')) {
