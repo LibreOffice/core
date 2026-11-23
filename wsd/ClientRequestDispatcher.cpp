@@ -1517,6 +1517,11 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
             // command
             LOG_INF("CollabFetch request: " << request.getURI());
 
+            if (request.getMethod() != Poco::Net::HTTPRequest::HTTP_GET) {
+                HttpHelper::sendErrorAndShutdown(http::StatusCode::MethodNotAllowed, socket);
+                return MessageResult::Ignore;
+            }
+
             // Extract token from query parameters
             std::string token;
             Poco::URI requestUri(request.getURI());
@@ -1582,6 +1587,11 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
         {
             // /cool/collab/put?token=... endpoint - upload via token from WebSocket upload command
             LOG_INF("CollabPut request: " << request.getURI());
+
+            if (request.getMethod() != Poco::Net::HTTPRequest::HTTP_POST) {
+                HttpHelper::sendErrorAndShutdown(http::StatusCode::MethodNotAllowed, socket);
+                return MessageResult::Ignore;
+            }
 
             // Extract token from query parameters
             std::string token;
@@ -1650,6 +1660,11 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
             // access_token) so peers can load it without
             // needing the integrator's cookies.
             LOG_INF("CollabAvatar request: " << request.getURI());
+
+            if (request.getMethod() != Poco::Net::HTTPRequest::HTTP_GET) {
+                HttpHelper::sendErrorAndShutdown(http::StatusCode::MethodNotAllowed, socket);
+                return MessageResult::Ignore;
+            }
 
             Poco::URI requestUri(request.getURI());
             std::string wopiSrc, userId, token;

@@ -3153,7 +3153,8 @@ one), so that a load balancer that routes by WOPISrc sends it to the server of t
     to.  The token is one-shot: it is consumed by the first request, also one that then fails, and
     it expires after 5 minutes.  The reply is 400 without a token, 401 for an unknown or expired
     token, 410 when no /cool/collab connection to the document is open (also during the grace period
-    described for {"type":"bye"}), and 403 or 502 when the integrator refused or failed.
+    described for {"type":"bye"}), and 403 or 502 when the integrator refused or failed.  A request
+    with another method gets 405, and leaves the token for a request with the right method.
 
 /cool/collab/put?token=<one-shot-token>
 
@@ -3170,4 +3171,4 @@ one), so that a load balancer that routes by WOPISrc sends it to the server of t
     whole URL as "avatar" in a <user> object.  No message renews that URL, so it stops working
     after the second change.  The reply is 400 when a parameter is missing, 410 when no /cool/collab
     connection to the document is open, 401 for an access token that is no longer valid, and 404
-    when the user has no avatar.
+    when the user has no avatar.  A request with another method than GET gets 405.

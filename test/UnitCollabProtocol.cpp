@@ -1245,6 +1245,91 @@ private:
     std::string getFileToken_;
 };
 
+// The fetch address answers only GET, and the upload address only POST, and a request with
+// another method leaves the one-shot token for the right one:
+class UnitCollabMethods: public WopiTestServer {
+public:
+    UnitCollabMethods(): WopiTestServer("UnitCollabMethods"), phase_(Phase::Connect) {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
+
+    void invokeWSDTest() override {
+        switch (phase_) {
+        case Phase::Connect:
+            TRANSITION_STATE(phase_, Phase::WaitAuth);
+            // The WOPISrc, followed by the test name for the request to coolwsd:
+            collabWs_ = startCollabConnection(
+                socketPoll(),
+                Uri::encode(getWopiHostURI() + "/wopi/files/0?testname=UnitCollabMethods")
+                    + "&testname=UnitCollabMethods",
+                "anything");
+            break;
+        case Phase::WaitAuth:
+            if (!pollCollabMessage(collabWs_, "user_list")) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitFetchUrl);
+            collabWs_->sendMessage(R"({"type":"fetch","stream":"contents","requestId":"f1"})");
+            break;
+        case Phase::WaitFetchUrl: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "fetch_url");
+            if (!msg) {
+                break;
+            }
+            std::string const url
+                = msg->getValue<std::string>("url") + "&testname=UnitCollabMethods";
+            http::Request post(url, http::Request::VERB_POST);
+            post.setBody("Not a download", "application/octet-stream");
+            std::shared_ptr<http::Response const> const refused
+                = http::Session::create(helpers::getTestServerURI())->syncRequest(post);
+            LOK_ASSERT_EQUAL(
+                http::StatusCode::MethodNotAllowed, refused->statusLine().statusCode());
+            std::shared_ptr<http::Response const> const response
+                = http::get(helpers::getTestServerURI(), url);
+            LOK_ASSERT_EQUAL(http::StatusCode::OK, response->statusLine().statusCode());
+            LOK_ASSERT_EQUAL(getFileContent(), response->getBody());
+            TRANSITION_STATE(phase_, Phase::WaitUploadUrl);
+            collabWs_->sendMessage(
+                R"({"type":"upload","stream":"contents","requestId":"u1","force":true})");
+            break;
+        }
+        case Phase::WaitUploadUrl: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "upload_url");
+            if (!msg) {
+                break;
+            }
+            std::string const url
+                = msg->getValue<std::string>("url") + "&testname=UnitCollabMethods";
+            std::shared_ptr<http::Response const> const refused
+                = http::get(helpers::getTestServerURI(), url);
+            LOK_ASSERT_EQUAL(
+                http::StatusCode::MethodNotAllowed, refused->statusLine().statusCode());
+            LOK_ASSERT_EQUAL(std::string("Hello, world"), getFileContent());
+            http::Request post(url, http::Request::VERB_POST);
+            post.setBody("Uploaded by the collab client", "application/octet-stream");
+            std::shared_ptr<http::Response const> const response
+                = http::Session::create(helpers::getTestServerURI())->syncRequest(post);
+            LOK_ASSERT_EQUAL(http::StatusCode::OK, response->statusLine().statusCode());
+            LOK_ASSERT_EQUAL(std::string("Uploaded by the collab client"), getFileContent());
+            TRANSITION_STATE(phase_, Phase::Done);
+            collabWs_->asyncShutdown();
+            passTest("Each address took only its own method");
+            break;
+        }
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    STATE_ENUM(Phase, Connect, WaitAuth, WaitFetchUrl, WaitUploadUrl, Done) phase_;
+
+    std::shared_ptr<http::WebSocketSession> collabWs_;
+};
+
 // The fetch and upload addresses carry the WOPISrc of the document, without its query:
 class UnitCollabRouting: public WopiTestServer {
 public:
@@ -2046,7 +2131,7 @@ private:
 
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [17] { new UnitCollabProtocol(),
+    return new UnitBase* [18] { new UnitCollabProtocol(),
                                 new UnitCollabCheckFileInfoTransient(),
                                 new UnitCollabUploadTimestamp(), new UnitCollabUploadConflict(),
                                 new UnitCollabUploadConflictModified(),
@@ -2055,9 +2140,9 @@ UnitBase** unit_create_wsd_multi(void)
                                 new UnitCollabSettingsListUnreachable(),
                                 new UnitCollabAvatar(),
                                 new UnitCollabConnections(), new UnitCollabTokenRenewal(),
-                                new UnitCollabRouting(), new UnitCollabFetchRedirect(),
-                                new UnitCollabProtocolNumber(), new UnitCollabEditorFrame(),
-                                nullptr };
+                                new UnitCollabMethods(), new UnitCollabRouting(),
+                                new UnitCollabFetchRedirect(), new UnitCollabProtocolNumber(),
+                                new UnitCollabEditorFrame(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
