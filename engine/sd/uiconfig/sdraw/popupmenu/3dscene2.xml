@@ -45,4 +45,6 @@
   <menu:menuitem menu:id=".uno:EnterGroup"/>
   <menu:menuitem menu:id=".uno:LeaveGroup"/>
   <menu:menuitem menu:id=".uno:Window3D"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:InsertAnnotation"/>
 </menu:menupopup>

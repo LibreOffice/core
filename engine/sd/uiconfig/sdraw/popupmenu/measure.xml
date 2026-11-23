@@ -59,4 +59,6 @@
   <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:EditStyle"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:InsertAnnotation"/>
 </menu:menupopup>

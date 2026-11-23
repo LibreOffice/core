@@ -82,8 +82,10 @@ public:
 
     /**
      * Insert a new annotation on the current page. When oPosition holds a
-     * value, the annotation is placed at that point (mm/100, top-left origin);
-     * otherwise the next free spot is found by scanning the page from (0, 0).
+     * value, the annotation is placed at that point (mm/100, top-left origin).
+     * Otherwise, when shapes are selected, it is placed at the top right corner of the
+     * selection. Without a selection the next free spot is found by scanning the page from
+     * (0, 0).
      * When oSize holds a value (mm100), the annotation marker spans that
      * area; otherwise a small fixed marker is used. The explicit-position /
      * explicit-size paths are used by Online for click-to-place and
@@ -115,6 +117,10 @@ public:
     SdPage* GetNextPage( SdPage const * pPage, bool bForward );
 
     SdPage* GetCurrentPage();
+
+    /// Top left corner (mm/100) for a new annotation at the top right corner of the shapes
+    /// selected on rPage, kept inside the page. Empty when no shape is selected.
+    std::optional<Point> GetPositionBesideSelection(const SdPage& rPage) const;
 
     void ShowAnnotations(bool bShow);
     static bool isVisibleAnnotations();

@@ -114,6 +114,45 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationInsert)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->getAnnotations().size());
 }
 
+CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationInsertOnSelectedShape)
+{
+    createSdDrawDoc();
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+
+    // A shape away from the top left corner of the page, and selected.
+    rtl::Reference<SdrRectObj> pShape = new SdrRectObj(
+        pPage->getSdrModelFromSdrPage(), tools::Rectangle(Point(5000, 4000), Size(6000, 3000)));
+    pPage->InsertObject(pShape.get());
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pShape.get(), pView->GetSdrPageView());
+
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
+
+    // The comment marker sits on the top right corner of the shape. Without a selected shape it
+    // would be at the top left corner of the page.
+    // The marker is 5 mm wide, and its centre is on the corner.
+    const tools::Rectangle aShapeRect = pShape->GetSnapRect();
+    const double fExpectedX = (aShapeRect.Right() - 250) / 100.0; // mm
+    const double fExpectedY = (aShapeRect.Top() - 250) / 100.0;
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->getAnnotations().size());
+    geometry::RealPoint2D aPosition = pPage->getAnnotations().at(0)->getPosition();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(fExpectedX, aPosition.X, 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(fExpectedY, aPosition.Y, 1E-4);
+
+    // A second comment on the same shape goes below the first one.
+    pView->UnmarkAll();
+    pView->MarkObj(pShape.get(), pView->GetSdrPageView());
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->getAnnotations().size());
+    aPosition = pPage->getAnnotations().at(1)->getPosition();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(fExpectedX, aPosition.X, 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(fExpectedY + 5.0, aPosition.Y, 1E-4);
+}
+
 CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDeleteAll)
 {
     createSdDrawDoc();

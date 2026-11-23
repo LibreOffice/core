@@ -84,6 +84,7 @@
 #include <sdmod.hxx>
 
 #include <svx/svdobj.hxx>
+#include <svx/svdview.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdopath.hxx>
@@ -101,6 +102,7 @@
 
 #include <sfx2/objsh.hxx>
 
+#include <algorithm>
 #include <cmath>
 #include <memory>
 #include <optional>
@@ -556,6 +558,11 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText,
         // Caller-supplied position.
         x = oPosition->X();
         y = oPosition->Y();
+    }
+    else if (std::optional<Point> oBesideSelection = GetPositionBesideSelection(*pPage))
+    {
+        x = oBesideSelection->X();
+        y = oBesideSelection->Y();
     }
     else
     {
@@ -1400,6 +1407,59 @@ SdPage* AnnotationManagerImpl::GetCurrentPage()
     if (auto pMainViewShell = mrBase.GetMainViewShell().get())
         return pMainViewShell->getCurrentPage();
     return nullptr;
+}
+
+std::optional<Point> AnnotationManagerImpl::GetPositionBesideSelection(const SdPage& rPage) const
+{
+    SdrView* pView = mrBase.GetDrawView();
+    if (!pView)
+        return {};
+
+    // Annotation markers are objects on the page too. Only the other shapes count, so a
+    // selected comment does not get the new one placed next to it.
+    ::tools::Rectangle aBound;
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    for (size_t i = 0; i < rMarkList.GetMarkCount(); ++i)
+    {
+        const SdrObject* pObject = rMarkList.GetMark(i)->GetMarkedSdrObj();
+        if (!pObject || pObject->isAnnotationObject()
+            || pObject->getSdrPageFromSdrObject() != &rPage)
+            continue;
+        aBound.Union(pObject->GetSnapRect());
+    }
+    if (aBound.IsEmpty())
+        return {};
+
+    // The marker sits on the top right corner of the shapes, and moves down past markers
+    // already there, so several comments on one shape stay apart. The marker is 500 mm/100
+    // wide and high, as set in InsertAnnotation.
+    constexpr ::tools::Long nMarkerSize = 500;
+    const Size aPageSize = rPage.GetSize();
+    const ::tools::Long nMaxX = std::max<::tools::Long>(aPageSize.Width() - nMarkerSize, 0);
+    const ::tools::Long nMaxY = std::max<::tools::Long>(aPageSize.Height() - nMarkerSize, 0);
+    const ::tools::Long nX = std::clamp<::tools::Long>(aBound.Right() - nMarkerSize / 2, 0, nMaxX);
+    ::tools::Long nY = std::clamp<::tools::Long>(aBound.Top() - nMarkerSize / 2, 0, nMaxY);
+
+    const sdr::annotation::AnnotationVector& rAnnotations = rPage.getAnnotations();
+    bool bMoved = true;
+    while (bMoved && nY < nMaxY)
+    {
+        bMoved = false;
+        const ::tools::Rectangle aNewRect(Point(nX, nY), Size(nMarkerSize, nMarkerSize));
+        for (const auto& rxAnnotation : rAnnotations)
+        {
+            const geometry::RealPoint2D aPosition(rxAnnotation->getPosition());
+            const Point aPoint(::tools::Long(aPosition.X * 100.0),
+                               ::tools::Long(aPosition.Y * 100.0));
+            if (aNewRect.Overlaps(::tools::Rectangle(aPoint, Size(nMarkerSize, nMarkerSize))))
+            {
+                nY = std::min(aPoint.Y() + nMarkerSize, nMaxY);
+                bMoved = true;
+                break;
+            }
+        }
+    }
+    return Point(nX, nY);
 }
 
 AnnotationManager::AnnotationManager( ViewShellBase& rViewShellBase )

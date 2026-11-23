@@ -75,4 +75,6 @@
   <menu:menuitem menu:id=".uno:ExecuteAnimationEffect"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ExportTo"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:InsertAnnotation"/>
 </menu:menupopup>

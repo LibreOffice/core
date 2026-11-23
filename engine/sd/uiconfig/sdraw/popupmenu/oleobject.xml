@@ -54,4 +54,5 @@
   <menu:menuitem menu:id=".uno:NameGroup"/>
   <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:InsertAnnotation"/>
 </menu:menupopup>

@@ -72,4 +72,6 @@
   <menu:menuitem menu:id=".uno:TableTransformDialog"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:TableDialog"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:InsertAnnotation"/>
 </menu:menupopup>

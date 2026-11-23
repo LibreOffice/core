@@ -12,7 +12,7 @@
  * Impress tile layer is used to display a presentation document
  */
 
-/* global app $ cool RenderManager ViewLayoutVector ViewLayoutFileBased */
+/* global app $ cool RenderManager ViewLayoutVector ViewLayoutFileBased GraphicSelection */
 
 // Single source of truth for Impress view modes. Keyed by the core
 // 'contextchange' context. 'mode' is the persisted string, 'uno' enters the
@@ -227,20 +227,26 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 	newAnnotation: function (commentData) {
 		// commentData.position (twips, top-left) lets the caller pin the new
 		// comment to a specific document point; used by the PDF click-to-place
-		// flow. Without it the marker lands at the current viewport top-left.
+		// flow. Without it and without a selected shape, the marker lands at the
+		// current viewport top-left.
 		// commentData.size (twips, [w,h]) further pins the marker rectangle
 		// to a user-dragged area; without it the marker stays at the default
 		// 566x566 twips placeholder.
-		const anchorX =
-			commentData.position ?
-				commentData.position[0]
-			:	app.activeDocument.activeLayout.viewedRectangle.x1;
-		const anchorY =
-			commentData.position ?
-				commentData.position[1]
-			:	app.activeDocument.activeLayout.viewedRectangle.y1;
+		// With a shape selected, the engine places the comment on the top right
+		// corner of the shape, so the marker is shown there while it is edited.
 		const w = commentData.size ? commentData.size[0] : 566;
 		const h = commentData.size ? commentData.size[1] : 566;
+		const shape =
+			GraphicSelection.hasActiveSelection() ? GraphicSelection.rectangle : null;
+		let anchorX = app.activeDocument.activeLayout.viewedRectangle.x1;
+		let anchorY = app.activeDocument.activeLayout.viewedRectangle.y1;
+		if (commentData.position) {
+			anchorX = commentData.position[0];
+			anchorY = commentData.position[1];
+		} else if (shape) {
+			anchorX = Math.max(shape.x2 - w / 2, 0);
+			anchorY = Math.max(shape.y1 - h / 2, 0);
+		}
 		commentData.anchorPos = [anchorX, anchorY];
 		commentData.rectangle = [anchorX, anchorY, w, h];
 

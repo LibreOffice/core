@@ -35,4 +35,6 @@
   <menu:menuitem menu:id=".uno:CustomAnimation"/>
   <menu:menuitem menu:id=".uno:AnimationEffects"/>
   <menu:menuitem menu:id=".uno:ExecuteAnimationEffect"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:InsertAnnotation"/>
 </menu:menupopup>
