@@ -10,8 +10,8 @@
  */
 
 /*
- * Shows the typing of this view in its cell edit before the engine answers. The typing goes into a
- * copy of the text edits of the sheet. Each change is kept under the sequence number of its input
+ * Shows the typing of this view in its cell edit, or in the text it edits in a drawing object,
+ * before the engine answers. The typing goes into a copy of the text edits of the sheet. Each change is kept under the sequence number of its input
  * message until an engine answer includes it, and the changes an answer does not include are
  * applied to it again. A change that no longer fits drops the typing.
  */
@@ -22,6 +22,14 @@ namespace cool {
 		column: number,
 		row: number,
 	) => Point | undefined;
+
+	/// Where the text edits of a sheet stand in tile twips. A cell edit is placed from the corner
+	/// of its first cell, and the text edited in a drawing object takes the placing of the object.
+	export interface CalcEditPlaces {
+		cell: CalcCellOrigin;
+		/// The placing of an object from print twips into tile twips, or undefined.
+		object: (id: number) => CalcObjectPlacing | undefined;
+	}
 
 	/// The caret of this view, in tile twips. anchor is the other end of a selection, or null.
 	export interface CalcCaret {
@@ -38,13 +46,15 @@ namespace cool {
 		logical: LogicalCaret;
 	}
 
-	/// The first cell of the cell edit that a typed change went into.
-	interface CalcTypedCell {
+	/// The edit that a typed change went into: the first cell of a cell edit, or the drawing object
+	/// whose text is edited.
+	interface CalcTypedPlace {
 		column: number;
 		row: number;
+		parent: number | undefined;
 	}
 
-	/// The cell edit of a view, placed in tile twips.
+	/// The text edit of a view, placed in tile twips.
 	interface CalcEditTree {
 		tree: PredictionTree;
 		edit: CalcTextEdit;
@@ -88,7 +98,7 @@ namespace cool {
 		/// The text edits of that sheet with the typing in them.
 		private typed: CalcTextEdit[] | null = null;
 		/// The changes the engine has not answered.
-		private pending = new TextPrediction<CalcTypedCell>();
+		private pending = new TextPrediction<CalcTypedPlace>();
 		/// True from an input that moves the edit until the engine reports the caret again.
 		private held = false;
 
@@ -119,12 +129,12 @@ namespace cool {
 		canTypeAt(
 			edits: CalcTextEdit[],
 			viewId: number,
-			origin: CalcCellOrigin,
+			places: CalcEditPlaces,
 			caret: CalcCaret,
 		): boolean {
 			if (this.held) return false;
 			return this.pending.canTypeAt(caret, () =>
-				this.placeOf(edits, viewId, origin, caret),
+				this.placeOf(edits, viewId, places, caret),
 			);
 		}
 
@@ -134,7 +144,7 @@ namespace cool {
 			part: number,
 			edits: CalcTextEdit[],
 			viewId: number,
-			origin: CalcCellOrigin,
+			places: CalcEditPlaces,
 			caret: CalcCaret,
 			ticket: InputTicket,
 			build: (selected: SelectedAround | null) => PredictedChange,
@@ -146,7 +156,7 @@ namespace cool {
 					// Typing in another sheet starts over from the edits of the engine there.
 					if (this.part !== part) this.forget();
 					const copy = this.typed ?? CalcTyping.copyOf(edits);
-					const place = this.placeOf(copy, viewId, origin, caret);
+					const place = this.placeOf(copy, viewId, places, caret);
 					return place ? { ...place, edits: copy } : null;
 				},
 				build,
@@ -154,6 +164,7 @@ namespace cool {
 					ticket,
 					column: place.edit.column ?? 0,
 					row: place.edit.row ?? 0,
+					parent: place.edit.parent,
 				}),
 			);
 			if (!typed || !typed.caretAfter) return null;
@@ -169,7 +180,7 @@ namespace cool {
 			edits: CalcTextEdit[],
 			inputSequence: number | undefined,
 			viewId: number,
-			origin: CalcCellOrigin,
+			places: CalcEditPlaces,
 		): CalcTypedCaret | null {
 			if (this.part !== part || !this.pending.has()) return null;
 			const left = this.pending.answered(inputSequence);
@@ -179,15 +190,12 @@ namespace cool {
 			}
 
 			const typed = CalcTyping.copyOf(edits);
-			const placed = this.treeOf(typed, viewId, origin);
+			const placed = this.treeOf(typed, viewId, places);
 			if (
 				!placed ||
-				// A change applies in the cell it was typed in only.
+				// A change applies in the cell or the object it was typed in only.
 				!TextPrediction.applyAgain(left, (change) =>
-					(
-						placed.edit.column === change.column &&
-						placed.edit.row === change.row
-					) ?
+					CalcTyping.isEditOf(placed.edit, change) ?
 						{ tree: placed.tree, objectId: CalcTyping.entryId }
 					:	null,
 				)
@@ -199,14 +207,15 @@ namespace cool {
 			return this.caretIn(placed.tree, left[left.length - 1].caretAfter);
 		}
 
-		/// The caret after the newest change. It follows its cell when the sheet geometry changes.
+		/// The caret after the newest change. It follows its cell or its object when the sheet
+		/// geometry changes.
 		caretAfterTyping(
 			viewId: number,
-			origin: CalcCellOrigin,
+			places: CalcEditPlaces,
 		): CalcTypedCaret | null {
 			const newest = this.pending.newest();
 			if (!this.typed || !newest) return null;
-			const placed = this.treeOf(this.typed, viewId, origin);
+			const placed = this.treeOf(this.typed, viewId, places);
 			if (!placed) return null;
 			return this.caretIn(placed.tree, newest.caretAfter);
 		}
@@ -216,8 +225,10 @@ namespace cool {
 		keepsCaret(update: CaretUpdate): boolean {
 			this.held = false;
 			return this.pending.keepsCaret(update, {
-				// A caret in a drawing object is not in the cell.
-				inEdit: () => false,
+				// A caret in a drawing object is in the typing when the typing went into the text
+				// of that object.
+				inEdit: (objectId, newest) =>
+					newest.parent !== undefined && newest.parent === objectId,
 				elsewhere: () => this.forget(),
 			});
 		}
@@ -229,27 +240,25 @@ namespace cool {
 			this.pending.forget();
 		}
 
-		/// The cell edit in tile twips. The tree shares its primitives, so changes reach the edit.
+		/// The text edit of the view in tile twips. The tree shares its primitives, so changes
+		/// reach the edit.
 		private treeOf(
 			edits: CalcTextEdit[],
 			viewId: number,
-			origin: CalcCellOrigin,
+			places: CalcEditPlaces,
 		): CalcEditTree | null {
 			const edit = edits.find(
 				(one) =>
 					one.viewId === viewId &&
-					one.parent === undefined &&
-					one.column !== undefined &&
-					one.row !== undefined,
+					(one.parent !== undefined ||
+						(one.column !== undefined && one.row !== undefined)),
 			);
-			if (!edit || edit.column === undefined || edit.row === undefined)
-				return null;
-			// A cell edit is in twips from the top-left corner of its first cell.
-			const corner = origin(edit.column, edit.row);
-			if (!corner) return null;
+			if (!edit) return null;
+			const matrix = CalcTyping.placingOf(edit, places);
+			if (!matrix) return null;
 			const move: TransformPrimitive = {
 				type: TransformPrimitive.type,
-				matrix: [1, 0, 0, 1, corner.x, corner.y],
+				matrix,
 				children: edit.primitives,
 			};
 			const id = CalcTyping.entryId;
@@ -268,10 +277,10 @@ namespace cool {
 		private placeOf(
 			edits: CalcTextEdit[],
 			viewId: number,
-			origin: CalcCellOrigin,
+			places: CalcEditPlaces,
 			caret: CalcCaret,
 		): (CalcEditTree & TypingPlace) | null {
-			const placed = this.treeOf(edits, viewId, origin);
+			const placed = this.treeOf(edits, viewId, places);
 			if (!placed) return null;
 			const position = TextPrediction.caretAt(
 				placed.tree,
@@ -292,6 +301,33 @@ namespace cool {
 						logical: { paragraph: logical.paragraph, index: logical.index },
 					}
 				:	null;
+		}
+
+		/// The matrix that takes the edit into tile twips, or null when it cannot be placed. A cell
+		/// edit is in twips from the top-left corner of its first cell, and the text edited in a
+		/// drawing object is in print twips of the sheet, placed as the object is.
+		private static placingOf(
+			edit: CalcTextEdit,
+			places: CalcEditPlaces,
+		): number[] | null {
+			if (edit.parent !== undefined) {
+				const placing = places.object(edit.parent);
+				return placing ? calcPlacedMatrix(placing, [1, 0, 0, 1, 0, 0]) : null;
+			}
+			if (edit.column === undefined || edit.row === undefined) return null;
+			const corner = places.cell(edit.column, edit.row);
+			return corner ? [1, 0, 0, 1, corner.x, corner.y] : null;
+		}
+
+		/// True when the change went into the edit: the same drawing object, or the same first cell
+		/// of a cell edit.
+		private static isEditOf(
+			edit: CalcTextEdit,
+			change: CalcTypedPlace,
+		): boolean {
+			if (edit.parent !== undefined || change.parent !== undefined)
+				return edit.parent === change.parent;
+			return edit.column === change.column && edit.row === change.row;
 		}
 
 		/// A copy of the text edits that a change can go into.

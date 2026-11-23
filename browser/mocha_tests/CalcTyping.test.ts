@@ -15,6 +15,18 @@ describe('CalcTyping', function () {
 	const part = 1;
 	const origin: cool.CalcCellOrigin = (column: number, row: number) =>
 		column === 2 && row === 4 ? new cool.Point(1000, 2000) : undefined;
+	// The drawing object 7 stands 1000 right and 3000 down of its place in print twips.
+	const object = 7;
+	const objectPlacing: cool.CalcObjectPlacing = {
+		scaleX: 1,
+		scaleY: 1,
+		moveX: 1000,
+		moveY: 3000,
+	};
+	const places: cool.CalcEditPlaces = {
+		cell: origin,
+		object: (id: number) => (id === object ? objectPlacing : undefined),
+	};
 
 	function cellEdit(
 		text: string,
@@ -44,6 +56,27 @@ describe('CalcTyping', function () {
 					paragraph: 0,
 				} as cool.Primitive,
 			],
+		};
+	}
+
+	// The text that the view edits in a drawing object, in print twips of the sheet.
+	function objectEdit(text: string, parent = object): cool.CalcTextEdit {
+		const edit = cellEdit(text);
+		return {
+			kind: 'texteditoverlay',
+			viewId,
+			parent,
+			primitives: edit.primitives,
+		};
+	}
+
+	// The caret before the given index of the text in the object, in tile twips.
+	function objectCaretAt(index: number): cool.CalcCaret {
+		return {
+			rectangle: new cool.SimpleRectangle(1050 + index * 100, 2960, 0, 300),
+			logical: { paragraph: 0, index },
+			anchor: null,
+			selected: false,
 		};
 	}
 
@@ -84,7 +117,7 @@ describe('CalcTyping', function () {
 			part,
 			edits,
 			viewId,
-			origin,
+			places,
 			caret,
 			sentAs(sequence),
 			(selected) => cool.typedChange(text, selected),
@@ -134,7 +167,7 @@ describe('CalcTyping', function () {
 			part,
 			edits,
 			viewId,
-			origin,
+			places,
 			caretAt(3),
 			sentAs(5),
 			(selected) => cool.deletedChange(1, 0, selected),
@@ -169,7 +202,7 @@ describe('CalcTyping', function () {
 
 		const answer = [cellEdit('abcd')];
 		nodeassert.strictEqual(
-			typing.answered(part, answer, 5, viewId, origin),
+			typing.answered(part, answer, 5, viewId, places),
 			null,
 		);
 		nodeassert.strictEqual(typing.editsOf(part, answer), answer);
@@ -183,7 +216,7 @@ describe('CalcTyping', function () {
 		type(typing, edits, caretAt(4), 'e', 6);
 
 		const answer = [cellEdit('abcd')];
-		const typed = typing.answered(part, answer, 5, viewId, origin);
+		const typed = typing.answered(part, answer, 5, viewId, places);
 		nodeassert.strictEqual(textOf(typing.editsOf(part, answer)), 'abcde');
 		nodeassert.strictEqual(textOf(answer), 'abcd');
 		nodeassert.deepStrictEqual(typed?.logical, { paragraph: 0, index: 5 });
@@ -196,7 +229,7 @@ describe('CalcTyping', function () {
 
 		const answer = [cellEdit('abc', 3)];
 		nodeassert.strictEqual(
-			typing.answered(part, answer, 4, viewId, origin),
+			typing.answered(part, answer, 4, viewId, places),
 			null,
 		);
 		nodeassert.strictEqual(typing.editsOf(part, answer), answer);
@@ -260,13 +293,116 @@ describe('CalcTyping', function () {
 		// The cell moved 300 twips right, as after a zoom or a wider column before it.
 		const moved: cool.CalcCellOrigin = (column: number, row: number) =>
 			column === 2 && row === 4 ? new cool.Point(1300, 2000) : undefined;
-		const typed = typing.caretAfterTyping(viewId, moved);
+		const typed = typing.caretAfterTyping(viewId, { ...places, cell: moved });
 		nodeassert.strictEqual(typed?.geometry.x, 1750);
 		nodeassert.strictEqual(typed?.geometry.top, 1960);
 		nodeassert.deepStrictEqual(typed?.logical, { paragraph: 0, index: 4 });
 
 		typing.forget();
-		nodeassert.strictEqual(typing.caretAfterTyping(viewId, moved), null);
+		nodeassert.strictEqual(
+			typing.caretAfterTyping(viewId, { ...places, cell: moved }),
+			null,
+		);
+	});
+
+	it('shows typed text in the text that the view edits in a drawing object', function () {
+		const typing = newTyping();
+		const edits = [objectEdit('abc')];
+		const typed = type(typing, edits, objectCaretAt(3), 'd', 5);
+
+		nodeassert.strictEqual(textOf(typing.editsOf(part, edits)), 'abcd');
+		// The caret is placed as the object is, from print twips into tile twips.
+		nodeassert.strictEqual(typed?.geometry.x, 1450);
+		nodeassert.strictEqual(typed?.geometry.top, 2960);
+		nodeassert.deepStrictEqual(typed?.logical, { paragraph: 0, index: 4 });
+	});
+
+	it('shows nothing in the text of an object that the sheet does not place', function () {
+		const typing = newTyping();
+		const edits = [objectEdit('abc', object + 1)];
+
+		nodeassert.strictEqual(type(typing, edits, objectCaretAt(3), 'd', 5), null);
+		nodeassert.strictEqual(typing.isTyping(), false);
+	});
+
+	it('types the rest again into the text of the object', function () {
+		const typing = newTyping();
+		const edits = [objectEdit('abc')];
+		type(typing, edits, objectCaretAt(3), 'd', 5);
+		type(typing, edits, objectCaretAt(4), 'e', 6);
+
+		const answer = [objectEdit('abcd')];
+		const typed = typing.answered(part, answer, 5, viewId, places);
+		nodeassert.strictEqual(textOf(typing.editsOf(part, answer)), 'abcde');
+		nodeassert.deepStrictEqual(typed?.logical, { paragraph: 0, index: 5 });
+	});
+
+	it('drops the typing when the view edits the text of another object', function () {
+		const typing = newTyping();
+		type(typing, [objectEdit('abc')], objectCaretAt(3), 'd', 5);
+
+		const answer = [objectEdit('abc', object + 1)];
+		nodeassert.strictEqual(
+			typing.answered(part, answer, 4, viewId, places),
+			null,
+		);
+		nodeassert.strictEqual(typing.editsOf(part, answer), answer);
+	});
+
+	it('keeps the typing while the engine reports the caret in the object typed in', function () {
+		const typing = newTyping();
+		type(typing, [objectEdit('abc')], objectCaretAt(3), 'd', 5);
+
+		nodeassert.strictEqual(
+			typing.keepsCaret({
+				inputSequence: 5,
+				paragraph: '0',
+				index: '4',
+				object: String(object),
+			}),
+			false,
+		);
+		nodeassert.strictEqual(typing.isTyping(part), true);
+
+		typing.keepsCaret({
+			inputSequence: 5,
+			paragraph: '0',
+			index: '4',
+			object: String(object + 1),
+		});
+		nodeassert.strictEqual(typing.isTyping(), false);
+	});
+
+	it('places the caret of the typing again where the object stands now', function () {
+		const typing = newTyping();
+		type(typing, [objectEdit('abc')], objectCaretAt(3), 'd', 5);
+
+		// The object moved 300 twips right, as after a wider column before it.
+		const moved: cool.CalcEditPlaces = {
+			cell: origin,
+			object: () => ({ ...objectPlacing, moveX: 1300 }),
+		};
+		const typed = typing.caretAfterTyping(viewId, moved);
+		nodeassert.strictEqual(typed?.geometry.x, 1750);
+		nodeassert.strictEqual(typed?.geometry.top, 2960);
+	});
+
+	it('wraps the typing in the text of an object at the width of its text area', function () {
+		const typing = newTyping();
+		// "aaa bbb" fills the 700 wide text area of the object. Typing at its end takes the
+		// last word to a line of its own, as the engine wraps it.
+		const edit = objectEdit('aaa bbb');
+		const run = edit.primitives[0] as cool.TextSimplePortionPrimitive;
+		run.textAreaWidth = 700;
+		run.lineWidth = 700;
+		const edits = [edit];
+		type(typing, edits, objectCaretAt(7), 'x', 5);
+
+		const runs = typing.editsOf(part, edits)[0]
+			.primitives as cool.TextSimplePortionPrimitive[];
+		nodeassert.strictEqual(runs.length, 2);
+		nodeassert.strictEqual(cool.visibleText(runs[0]), 'aaa');
+		nodeassert.strictEqual(cool.visibleText(runs[1]), 'bbbx');
 	});
 
 	it('names the inputs after which the edit stands somewhere else', function () {

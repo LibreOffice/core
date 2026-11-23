@@ -215,19 +215,19 @@ class CalcVectorManager extends VectorManagerBase {
 		return this._typing.canTypeAt(
 			context.edits,
 			context.viewId,
-			context.origin,
+			context.places,
 			context.caret,
 		);
 	}
 
-	/// Show typed text in the cell edit before the engine answers, replacing a selection in the
-	/// paragraph of the caret. True when it shows.
+	/// Show typed text in the text edit of this view before the engine answers, replacing a
+	/// selection in the paragraph of the caret. True when it shows.
 	override predictTextInsert(text: string): boolean {
 		return this._type((selected) => cool.typedChange(text, selected));
 	}
 
-	/// Delete before characters left of the caret and after characters right of it in the cell edit
-	/// of this view. True when it shows.
+	/// Delete before characters left of the caret and after characters right of it in the text
+	/// edit of this view. True when it shows.
 	override predictTextDelete(before: number, after: number): boolean {
 		if (before <= 0 && after <= 0) return false;
 		return this._type((selected) =>
@@ -252,7 +252,7 @@ class CalcVectorManager extends VectorManagerBase {
 			const context = this._typingContext();
 			const typed =
 				context ?
-					this._typing.caretAfterTyping(context.viewId, context.origin)
+					this._typing.caretAfterTyping(context.viewId, context.places)
 				:	null;
 			if (typed) {
 				this._showTypedCaret(typed);
@@ -276,7 +276,7 @@ class CalcVectorManager extends VectorManagerBase {
 			context.part,
 			context.edits,
 			context.viewId,
-			context.origin,
+			context.places,
 			caret,
 			// The ticket takes the number of the input message sent next.
 			cool.InputSequence.ticketForTheNextMessage(),
@@ -294,12 +294,13 @@ class CalcVectorManager extends VectorManagerBase {
 		cool.showCaret(typed.geometry);
 	}
 
-	/// What typing in a cell edit needs, or null when no cell edit caret shows.
+	/// What typing in a text edit of this view needs, in a cell or in a drawing object, or null
+	/// when no caret shows.
 	private _typingContext(): {
 		part: number;
 		edits: cool.CalcTextEdit[];
 		viewId: number;
-		origin: cool.CalcCellOrigin;
+		places: cool.CalcEditPlaces;
 		caret: cool.CalcCaret;
 	} | null {
 		const docLayer = app.map && app.map._docLayer;
@@ -319,14 +320,17 @@ class CalcVectorManager extends VectorManagerBase {
 			part,
 			edits: sheet.textEdits,
 			viewId,
-			origin: (column: number, row: number) => {
-				const x = geometry
-					.getColumnsGeometry()
-					.getElementDataAny(column, 'tiletwips');
-				const y = geometry
-					.getRowsGeometry()
-					.getElementDataAny(row, 'tiletwips');
-				return x && y ? new cool.Point(x.startpos, y.startpos) : undefined;
+			places: {
+				cell: (column: number, row: number) => {
+					const x = geometry
+						.getColumnsGeometry()
+						.getElementDataAny(column, 'tiletwips');
+					const y = geometry
+						.getRowsGeometry()
+						.getElementDataAny(row, 'tiletwips');
+					return x && y ? new cool.Point(x.startpos, y.startpos) : undefined;
+				},
+				object: (id: number) => this.objectPlacingOf(part, id),
 			},
 			caret: {
 				rectangle: cursor.rectangle,
@@ -1223,7 +1227,7 @@ class CalcVectorManager extends VectorManagerBase {
 			edits,
 			inputSequence,
 			context.viewId,
-			context.origin,
+			context.places,
 		);
 		if (typed) this._showTypedCaret(typed);
 	}
