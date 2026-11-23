@@ -701,6 +701,16 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testBnc480256)
     xCell.set(xTable->getCellByPosition(1, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue(u"BottomBorder"_ustr) >>= aBorderLine;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), sal_Int32(aBorderLine.LineWidth));
+
+    // The border without a line is written as a line without fill and
+    // has no width.
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    static constexpr OString sBottomBorder(
+        "/p:sld/p:cSld/p:spTree/p:graphicFrame[2]/a:graphic/a:graphicData/a:tbl/a:tr[1]/a:tc[2]/"
+        "a:tcPr/a:lnB"_ostr);
+    assertXPath(pXmlDoc, sBottomBorder + "/a:noFill");
+    assertXPathNoAttribute(pXmlDoc, sBottomBorder, "w");
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testUnknownAttributes)
