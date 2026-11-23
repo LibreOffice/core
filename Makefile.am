@@ -629,6 +629,7 @@ EXTRA_DIST = \
              gbuild/StaticLibrary_simd.mk \
              gbuild/StaticLibrary_wsd.mk \
              gbuild/StaticLibrary_wsdglobals.mk \
+             scripts/create-product-sbom.py \
              scripts/create-sbom.py \
              scripts/sbom-externals.json \
              scripts/genlangmaps.py \
@@ -1216,4 +1217,20 @@ sbom-scan: collabora-online-sbom.spdx.json
 		$(ENGINE_BUILDDIR)/workdir/CustomTarget/instsetoo_native/sbom/*-sbom.spdx.json \
 		$(abs_top_builddir)/collabora-online-sbom.spdx.json
 
-.PHONY: cleanup setup-wsd systemplate sbom-check sbom-audit sbom-freshness sbom-scan
+# The SBOM of a Collabora Office desktop product, run by its packaging on the
+# product as it ships (see scripts/create-product-sbom.py and SBOM.md). The
+# Windows app's configure names the engine build tree LOBUILDDIR only.
+#   make product-sbom PRODUCT_SBOM_STEP=all|stage|finalize \
+#        PRODUCT_SBOM_ARGS="--platform ... --tree ... --engine-root ..."
+PRODUCT_SBOM_STEP ?= all
+product-sbom:
+	@$(MAKE) $(AM_MAKEFLAGS) -C browser sbom-shipped-js.txt
+	$(PYTHON) $(abs_top_srcdir)/scripts/create-product-sbom.py \
+		$(PRODUCT_SBOM_STEP) \
+		$(if $(filter finalize,$(PRODUCT_SBOM_STEP)),, \
+			--srcdir $(abs_top_srcdir) \
+			--builddir $(abs_top_builddir) \
+			--engine-builddir $(or $(ENGINE_BUILDDIR),$(LOBUILDDIR))) \
+		$(PRODUCT_SBOM_ARGS)
+
+.PHONY: cleanup setup-wsd systemplate sbom-check sbom-audit sbom-freshness sbom-scan product-sbom
