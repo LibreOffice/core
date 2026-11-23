@@ -9,8 +9,10 @@ from the source copy of parts that use `source: .`, breaking the build.
 
 - `snapcraft.yaml` — snap package definition. Four parts: `local-parts` (the
   command-chain wrapper), `collabora-office` (the engine plus Collabora Online
-  and coda-qt in one build — POCO is built within the engine), `branding`, and
-  `mythes-pl`.
+  and coda-qt in one build — POCO is built within the engine), `mythes-pl`,
+  and `sbom`, which runs last and writes the SBOM of the primed snap to
+  `$SNAP/usr/share/sbom` (see "Collabora Office desktop products" in
+  `SBOM.md`).
 - `local/bin/set-chromium-flags` — command-chain wrapper that assembles
   `QTWEBENGINE_CHROMIUM_FLAGS` at launch
 - `hooks/configure` — initialises the `enable-gpu` snap option

@@ -160,6 +160,7 @@ parts:
         --prefix=$(pwd)/inst \
         --disable-dbus \
         --disable-epm \
+        --enable-sbom \
         --disable-gio \
         --disable-gtk3 \
         --disable-gui \
@@ -569,4 +570,28 @@ parts:
       cp -a extracted/usr/share/mythes/.            "$CRAFT_PART_INSTALL/usr/share/mythes/"
       cp -a extracted/usr/share/myspell/dicts/.     "$CRAFT_PART_INSTALL/usr/share/myspell/dicts/"
       cp -a extracted/usr/share/myspell/infos/ooo/. "$CRAFT_PART_INSTALL/usr/share/myspell/infos/ooo/"
-      rm -rf extracted mythes-pl_*.deb
+      # the .deb stays: the sbom part reads its name and version
+      rm -rf extracted
+
+  # The SBOM of the snap, in $SNAP/usr/share/sbom. It describes the files as
+  # they are primed, so it runs after every other part has primed its own;
+  # the build trees it reads are those of the collabora-office part. The
+  # Ubuntu packages staged by the parts are named with their versions, the
+  # snaps the app runs on with those it was built against.
+  sbom:
+    plugin: nil
+    after: [collabora-office, local-parts, mythes-pl]
+    override-prime: |
+      set -e
+      craftctl default
+      PARTS="$(dirname "$(dirname "$CRAFT_PART_BUILD")")"
+      make -C "$PARTS/collabora-office/build" product-sbom \
+        PRODUCT_SBOM_ARGS="--platform snap --tree $CRAFT_PRIME \
+          --staging $CRAFT_PART_BUILD/sbom-staging \
+          --engine-root usr/lib/collaboraoffice/ \
+          --snap-stage-packages $PARTS/collabora-office/stage_packages \
+          --snap-stage-packages $PARTS/mythes-pl/build \
+          --snap-platform core24 \
+          --snap-platform kf6-core24=kde-qt6-core24-sdk \
+          --snap-platform gpu-2404 \
+          --exclude 'meta/*'"
