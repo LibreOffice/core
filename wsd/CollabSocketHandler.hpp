@@ -46,6 +46,8 @@ class CollabSocketHandler : public WebSocketHandler
     bool _isAuthenticated = false;
     bool _isValidating = false;
     std::shared_ptr<CheckFileInfo> _checkFileInfo;
+    // Whether the sign-in's CheckFileInfo was tried again after a temporary error or no answer:
+    bool _checkFileInfoRetried = false;
     // The CheckFileInfo that a new access token from the client has to pass:
     std::shared_ptr<CheckFileInfo> _renewalCheckFileInfo;
     std::weak_ptr<StreamSocket> _socketWeak;

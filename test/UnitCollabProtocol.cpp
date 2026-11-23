@@ -495,12 +495,73 @@ public:
             }
             case Phase::Done:
             {
-                LOK_ASSERT_MESSAGE("Expected CheckFileInfo to have been asked", _refused > 0);
+                LOK_ASSERT_EQUAL_MESSAGE("Expected CheckFileInfo to be tried twice",
+                                         std::size_t(2), _refused);
                 passTest("A busy host reads as no answer, not a failure to load");
                 break;
             }
         }
     }
+};
+
+// A sign-in whose CheckFileInfo the host answers with a temporary error once succeeds:
+class UnitCollabCheckFileInfoRetry: public WopiTestServer {
+public:
+    UnitCollabCheckFileInfoRetry():
+        WopiTestServer("UnitCollabCheckFileInfoRetry"), phase_(Phase::Connect),
+        checkFileInfos_(0) {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
+
+    std::unique_ptr<http::Response>
+    assertCheckFileInfoRequest(Poco::Net::HTTPRequest const &) override
+    {
+        ++checkFileInfos_;
+        if (checkFileInfos_ > 1) {
+            return nullptr;
+        }
+        // A body keeps the answer from reaching coolwsd as a dropped connection:
+        auto response = std::make_unique<http::Response>(http::StatusCode::ServiceUnavailable);
+        response->setBody("busy", "text/plain");
+        return response;
+    }
+
+    void invokeWSDTest() override {
+        switch (phase_) {
+        case Phase::Connect:
+            TRANSITION_STATE(phase_, Phase::WaitAuth);
+            // The WOPISrc, followed by the test name for the request to coolwsd:
+            collabWs_ = startCollabConnection(
+                socketPoll(),
+                Uri::encode(
+                    getWopiHostURI() + "/wopi/files/0?testname=UnitCollabCheckFileInfoRetry")
+                    + "&testname=UnitCollabCheckFileInfoRetry",
+                "anything");
+            break;
+        case Phase::WaitAuth:
+            if (!pollCollabMessage(collabWs_, "user_list")) {
+                break;
+            }
+            LOK_ASSERT_EQUAL(2, checkFileInfos_);
+            TRANSITION_STATE(phase_, Phase::Done);
+            collabWs_->asyncShutdown();
+            passTest("The sign-in succeeded on the second CheckFileInfo");
+            break;
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    STATE_ENUM(Phase, Connect, WaitAuth, Done) phase_;
+
+    // The CheckFileInfo requests that the host got:
+    int checkFileInfos_;
+
+    std::shared_ptr<http::WebSocketSession> collabWs_;
 };
 
 /// An upload by a collab client with the version that it got is refused once the document changed
@@ -2333,8 +2394,9 @@ private:
 
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [21] { new UnitCollabProtocol(),
+    return new UnitBase* [22] { new UnitCollabProtocol(),
                                 new UnitCollabCheckFileInfoTransient(),
+                                new UnitCollabCheckFileInfoRetry(),
                                 new UnitCollabUploadTimestamp(), new UnitCollabUploadConflict(),
                                 new UnitCollabUploadConflictModified(),
                                 new UnitCollabNoCleanExport(), new UnitCollabSettingsStreams(),

@@ -331,6 +331,16 @@ void CollabSocketHandler::onCheckFileInfoFinished(CheckFileInfo& cfi)
         case CheckFileInfo::State::NoAnswer:
         case CheckFileInfo::State::Transient:
         {
+            // The host gets one more try, as for /cool/ws (and the new CheckFileInfo replaces the
+            // finished one, which stays alive until its callback returns):
+            if (!_checkFileInfoRetried) {
+                _checkFileInfoRetried = true;
+                LOG_WRN("Collab: trying CheckFileInfo again for WOPISrc: "
+                        << Anonymizer::anonymizeUrl(_wopiSrc));
+                startValidation();
+                return;
+            }
+
             // The host either didn't answer in time or asked us to come back
             // later. Report it as a timeout rather than a load failure: nothing
             // is wrong with the document or the user's access to it.
