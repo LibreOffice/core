@@ -93,6 +93,7 @@
 #include <ViewShellBase.hxx>
 #include <Window.hxx>
 #include <drawdoc.hxx>
+#include <fupoor.hxx>
 #include <sdpage.hxx>
 #include <sdresid.hxx>
 #include <strings.hrc>
@@ -189,6 +190,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarFieldCommitsBeforeTextEdit
     CPPUNIT_ASSERT_EQUAL(sal_Int16(3), DynCastSdrTextObj(pShape)->GetTextColumnsNumber());
 
     // When the shape is double-clicked to edit its text:
+    SfxUndoManager* pUndoManager = pXImpressDocument->GetDocShell()->GetUndoManager();
+    const size_t nUndoCount = pUndoManager->GetUndoActionCount();
     const Point aCenter = pShape->GetSnapRect().Center();
     const int nX = o3tl::toTwips(aCenter.getX(), o3tl::Length::mm100);
     const int nY = o3tl::toTwips(aCenter.getY(), o3tl::Length::mm100);
@@ -199,7 +202,17 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarFieldCommitsBeforeTextEdit
     // Then the text of the shape is edited. Without the fix in place, the field took its value
     // again when text edit took the focus, which ended the text tool while it was starting text
     // edit, and the document crashed.
-    CPPUNIT_ASSERT(pView->IsTextEdit());
+    // This fails now and then on CI only, so the message tells what the view was doing instead.
+    std::ostringstream aState;
+    const rtl::Reference<sd::FuPoor>& xFunction = pViewShell->GetCurrentFunction();
+    aState << "function slot "
+           << (xFunction.is() ? OString::number(xFunction->GetSlotID()) : "none"_ostr)
+           << ", document window has focus " << pViewShell->GetActiveWindow()->HasFocus()
+           << ", marked objects " << pView->GetMarkedObjectList().GetMarkCount()
+           << ", undo actions added:";
+    for (size_t i = pUndoManager->GetUndoActionCount(); i > nUndoCount; --i)
+        aState << " '" << pUndoManager->GetUndoActionComment(i - nUndoCount - 1) << "'";
+    CPPUNIT_ASSERT_MESSAGE(aState.str(), pView->IsTextEdit());
     CPPUNIT_ASSERT_EQUAL(pShape, static_cast<SdrObject*>(pView->GetTextEditObject()));
 }
 
