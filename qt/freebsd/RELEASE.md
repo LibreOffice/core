@@ -125,6 +125,8 @@ Expected result: `distinfo` is rewritten with a `SHA256` and `SIZE` line for eve
 
 ### 5.5 Packing list
 
+The package carries its SBOM in `share/collabora-office/sbom/`, written at the end of `post-install` from the staged files and naming the FreeBSD packages the binaries load (see "Collabora Office desktop products" in `SBOM.md` in the repository); the two files are in `pkg-plist` like any other.
+
 `pkg-plist` is committed in the repository and only changes when the set of installed files changes, which happens when the engine gains or loses a library, a language is added or removed, or the app installs a new file. It contains no version numbers, so a plain version bump never touches it. To regenerate it, a staged build is needed:
 
 ```sh

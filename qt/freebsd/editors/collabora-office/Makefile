@@ -197,5 +197,12 @@ post-install:
 # templates) readable by the build user only, and the engine's installer keeps
 # those modes. Root owns the files in the package, so open them up.
 	${FIND} ${STAGEDIR}${LO_PATH} -type f -exec ${CHMOD} a+r {} +
+# The SBOM of the package, made from the staged files as they are packaged,
+# with the FreeBSD packages the libraries the binaries load come from
+	cd ${WRKSRC} && ${SETENV} ${MAKE_ENV} ${MAKE_CMD} product-sbom \
+		PRODUCT_SBOM_ARGS="--platform freebsd \
+			--tree ${STAGEDIR}${PREFIX} \
+			--staging ${WRKDIR}/sbom-staging \
+			--engine-root ${LO_PATH:S,^${PREFIX}/,,}/"
 
 .include <bsd.port.mk>

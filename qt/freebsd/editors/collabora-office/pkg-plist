@@ -3744,6 +3744,8 @@ share/coda-qt/translations/coda_uk.qm
 share/coda-qt/translations/coda_vi.qm
 share/coda-qt/translations/coda_zh_CN.qm
 share/coda-qt/translations/coda_zh_TW.qm
+share/collabora-office/sbom/collabora-office.cdx.json
+share/collabora-office/sbom/collabora-office.spdx.json
 share/coolwsd/browser/admin-templates/adminBody.html.template
 share/coolwsd/browser/admin-templates/adminClusterBody.html.template
 share/coolwsd/browser/admin-templates/adminshell.html.template
