@@ -25,7 +25,6 @@
 #include <vcl/cairo.hxx>
 #include <vcl/salgtype.hxx>
 
-struct BitmapSystemData;
 class SalFrame;
 struct SystemEnvData;
 struct SystemGraphicsData;
