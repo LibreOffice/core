@@ -49,7 +49,7 @@ class QtObject final : public QObject, public SalObject
     bool m_bForwardKey;
 
 public:
-    QtObject(QtFrame* pParent, bool bShow);
+    QtObject(QtFrame* pParent);
     ~QtObject() override;
 
     QtFrame* frame() const { return m_pParent; }

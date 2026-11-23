@@ -411,7 +411,7 @@ SalObject* QtInstance::CreateObject(SalFrame* pParent, SystemWindowData*)
     assert(!pParent || dynamic_cast<QtFrame*>(pParent));
 
     SalObject* pRet(nullptr);
-    RunInMainThread([&]() { pRet = new QtObject(static_cast<QtFrame*>(pParent), false); });
+    RunInMainThread([&]() { pRet = new QtObject(static_cast<QtFrame*>(pParent)); });
     assert(pRet);
     return pRet;
 }

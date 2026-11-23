@@ -29,7 +29,7 @@
 #include <QtGui/QMouseEvent>
 #include <QtWidgets/QVBoxLayout>
 
-QtObject::QtObject(QtFrame* pParent, bool bShow)
+QtObject::QtObject(QtFrame* pParent)
     : m_pParent(pParent)
     , m_pQWindow(nullptr)
     , m_pQWidget(nullptr)
@@ -61,9 +61,6 @@ QtObject::QtObject(QtFrame* pParent, bool bShow)
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
     m_pQWidget->setLayout(layout);
-
-    if (bShow)
-        m_pQWidget->show();
 
     QtFrame::FillSystemEnvData(m_aSystemData, m_pQWidget);
 }
