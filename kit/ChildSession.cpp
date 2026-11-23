@@ -7949,20 +7949,24 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
 
         if (isPending) // dialog ret=ok, local save has been started
         {
+            _exportBlockedUI = true;
             sendTextFrame("blockui: ");
             sendProgressFrame("start", "", "exporting");
             return;
         }
-        else if (isAbort) // dialog ret=cancel, local save was aborted
+
+        // The export was aborted or this is its status message. Only lift the block that
+        // "PENDING" set.
+        if (_exportBlockedUI)
+            sendTextFrame("unblockui: ");
+        _exportBlockedUI = false;
+        sendProgressFrame("finish", "", "exporting");
+
+        if (isAbort) // dialog ret=cancel, local save was aborted
         {
             _exportAsWopiUrl.clear();
-            sendProgressFrame("finish", "", "exporting");
             return;
         }
-
-        // this is export status message
-        sendTextFrame("unblockui: ");
-        sendProgressFrame("finish", "", "exporting");
 
         if (isError) // local save failed
         {

@@ -512,6 +512,7 @@ public:
             << "\n\tdocType: " << _docType
             // FIXME: _pixmapCache
             << "\n\texportAsWopiUrl: " << _exportAsWopiUrl
+            << "\n\texportBlockedUI: " << _exportBlockedUI
             << "\n\tviewRenderedState: " << _viewRenderState
             << "\n\tisDumpingTiles: " <<_isDumpingTiles
             << "\n\tclientVisibleArea: " << _clientVisibleArea.toString()
@@ -588,6 +589,9 @@ private:
 
     /// stores wopi url for export as operation
     std::string _exportAsWopiUrl;
+
+    /// Whether "PENDING" blocked the UI for an export.
+    bool _exportBlockedUI = false;
 
     /// stores info about the view
     std::string _viewRenderState;

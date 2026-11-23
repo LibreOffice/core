@@ -69,6 +69,7 @@
 #include <vcl/weld.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 
 #include <sfx2/docfile.hxx>
@@ -91,7 +92,6 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
-#include <osl/file.hxx>
 #include <svl/cryptosign.hxx>
 
 #include <vcl/abstdlg.hxx>
@@ -1123,39 +1123,21 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
 
     if (comphelper::COKit::isActive())
     {
-#ifdef IOS
-        // The iOS app (and maybe the Android app) have fails to set the URL to
-        // save to so we need to set it to a temporary file.
-        // Note: the iOS app is responsible for deleting the temporary file.
+        // Without a file picker there is no URL to export to. Suggest one named as recommended.
         if (nStoreMode & EXPORT_REQUESTED && aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE).isEmpty())
         {
-            // Mirror the "export/docbasename.pdf" path format to match the
-            // format used in the "downloadas" message handler in the iOS app's
-            // -[DocumentViewController userContentController:didReceiveScriptMessage]
-            // selector.
-            // Important note: temporary files created here must be in their
-            // own subdirectory since the iOS app's UIDocumentPickerDelegate
-            // will try to delete both the temporary file and its parent
-            // directory.
-            OUString aFullName = u"export/" + aRecommendedName;
-            OUString aBaseName;
-            OUString aExtension;
-            sal_Int32 nPos = aFullName.lastIndexOf( '.' );
-            if ( nPos >= 0 )
-            {
-                aBaseName = aFullName.copy(0, nPos);
-                aExtension = aFullName.copy(nPos, aFullName.getLength() - nPos);
-            }
-            aURL = INetURLObject(::utl::CreateTempURL( aBaseName, false, aExtension, nullptr, true));
-
-            // Remove any stale files left from a previous export
-            OUString fileURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-            if (!fileURL.isEmpty())
-                osl::File::remove(fileURL);
+            aSuggestedName = aRecommendedName;
+#ifdef _WIN32
+            // The Windows save dialog opens in the folder of this URL.
+            aURL = INetURLObject(SvtPathOptions().GetWorkPath());
+#else
+            aURL = INetURLObject(::utl::GetTempNameBaseDirectory());
+#endif
+            aURL.insertName(aRecommendedName, false, INetURLObject::LAST_SEGMENT,
+                            INetURLObject::EncodeMechanism::All);
         }
         else
         {
-#endif
             // The picker's auto-extension handling may have stripped the
             // extension off aURL, leaving for example "annual report v1.2".
             // We need to put the extension back. Do not use
@@ -1169,9 +1151,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
             aURL.removeSegment();
             aURL.insertName(aRecommendedName, bHadFinalSlash, INetURLObject::LAST_SEGMENT,
                             INetURLObject::EncodeMechanism::All);
-#ifdef IOS
         }
-#endif
     }
     else
     {
@@ -1607,6 +1587,11 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
     const OUString sFilterNameString(aFilterNameString);
     const OUString sFilterOptionsString(aFilterOptionsString);
     const OUString sFilterDataString(aFilterDataString);
+
+    // Fetch the current view early. Saving may spin the main loop, which may change the current
+    // view.
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+
     bool bUseFilterOptions = false;
     INetURLObject aURL;
 
@@ -1713,7 +1698,20 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
             if (comphelper::COKit::fileSaveDialog(aFileName, aNewURI))
             {
                 if (aNewURI.isEmpty())
+                {
+                    // On Windows the callback is the native save dialog, and it returns no location
+                    // when the user cancels it, so that is reported as an abort. Elsewhere the
+                    // callback returns no location only when it fails to create one.
+                    if (pViewShell)
+                    {
+#ifdef _WIN32
+                        pViewShell->viewCallback(COKitCallbackType::EXPORT_FILE, "ABORT"_ostr);
+#else
+                        pViewShell->viewCallback(COKitCallbackType::EXPORT_FILE, "ERROR"_ostr);
+#endif
+                    }
                     return false;
+                }
                 aFileName = aNewURI;
             }
         }
@@ -1801,10 +1799,6 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
     }
 
     OSL_ENSURE( aModelData.GetMediaDescr().find( u"Password"_ustr ) == aModelData.GetMediaDescr().end(), "The Password property of MediaDescriptor should not be used here!" );
-
-    // Fetch the current view early, saving may spin the main loop, which may change the current
-    // view.
-    SfxViewShell* pViewShell = SfxViewShell::Current();
 
     if ( officecfg::Office::Common::Save::Document::EditProperty::get()
       && ( !aModelData.GetStorable()->hasLocation()
