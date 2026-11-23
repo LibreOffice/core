@@ -941,8 +941,8 @@ void TabManager::showTabContextMenu(int tabId, int x, int y)
     connect(moveToNewWindowAction, &QAction::triggered, this, [this, tabId]() {
         onSourceDragEnded(tabId, false);
     });
-    // The only tab of a window is already alone in it.
-    moveToNewWindowAction->setEnabled(_tabs.size() > 1);
+    // The only tab of a window is already alone in it. A Backstage tab stays in its window.
+    moveToNewWindowAction->setEnabled(_tabs.size() > 1 && !it->webView->isStarterScreen());
 
     QPoint globalPos = _shellView->mapToGlobal(QPoint(x, y));
     menu.exec(globalPos);

@@ -259,7 +259,8 @@
 		tabs.forEach((t, idx) => {
 			const tab = el('div');
 			tab.className = 'tab' + (t.id === activeId ? ' active' : '');
-			tab.draggable = true;
+			// A Backstage tab stays in its window, and in its place in the strip.
+			tab.draggable = t.docType !== 'starter';
 			tab.dataset.id = String(t.id);
 			tab.dataset.index = String(idx);
 			// The name pairs the tab with its earlier self in an animated change of the strip.
