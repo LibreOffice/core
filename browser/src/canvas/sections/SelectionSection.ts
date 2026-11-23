@@ -2146,6 +2146,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	onDraw(): void {
+		this.tellTheStatusBar();
 		this.drawTheMotionPaths();
 		this.drawTheInteraction();
 		this.drawTheConnectorsAwaitingAnswer();
@@ -4133,6 +4134,49 @@ abstract class SelectionSection extends CanvasSectionObject {
 	/// the container does not hand its release to a section that is gone.
 	onRemove(): void {
 		if (this.interaction) this.containerObject.cancelPress();
+		this.toldTheStatusBar = null;
+		app.map.statusBar?.showObjectGeometry(null);
+	}
+
+	/*
+		The upright box round the selected objects, in twips on the page, as the office's status
+		bar shows it: round the frames the objects are mapped to, not round what their lines take
+		up, with a running drag laid on.
+	*/
+	private boxForTheStatusBar(): cool.Range2D | undefined {
+		const drag = this.dragMatrix();
+		const corners: cool.Point[] = [];
+		for (const objectId of RenderGeometrySection.theOnesThatDraw(
+			this.selectedObjects(),
+		)) {
+			const mapping = RenderGeometrySection.transformOf(objectId);
+			if (!mapping) continue;
+
+			const placed = drag ? mapping.then(drag) : mapping;
+			for (const [x, y] of [
+				[0, 0],
+				[1, 0],
+				[0, 1],
+				[1, 1],
+			])
+				corners.push(placed.apply(x, y));
+		}
+		return corners.length ? cool.Range2D.fromPoints(corners) : undefined;
+	}
+
+	/// What the status bar was told last, so it is told again only when that changes.
+	private toldTheStatusBar: string | null = null;
+
+	/// Tells the status bar where the selection stands and how large it is, which follows a drag
+	/// at every step.
+	private tellTheStatusBar(): void {
+		const box = this.boxForTheStatusBar();
+		const told =
+			box ? [box.minX, box.minY, box.width, box.height].join(',') : 'none';
+		if (told === this.toldTheStatusBar) return;
+
+		this.toldTheStatusBar = told;
+		app.map.statusBar?.showObjectGeometry(box ?? null);
 	}
 
 	onDragCancel(): void {

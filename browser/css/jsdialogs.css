@@ -641,6 +641,44 @@ td.jsdialog > [id^='table-box']:not(.sidebar) {
 	color: var(--color-status-badge) !important;
 }
 
+/* the text of the selection takes the room that is left, left-aligned, as the office shows it */
+#toolbar-down #selectiontext-container {
+	flex: 1 1 auto;
+	min-width: 0;
+	grid-template-columns: 1fr auto;
+}
+
+#toolbar-down #SelectionText {
+	text-align: start;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* the position and the size of the selection, each after its symbol, as the office shows them */
+#toolbar-down #ObjectPosition::before,
+#toolbar-down #ObjectSize::before {
+	content: '';
+	display: inline-block;
+	width: 16px;
+	height: 12px;
+	margin-inline-end: 4px;
+	vertical-align: middle;
+	background: url('images/statusbarposition.svg') center / contain no-repeat;
+}
+
+#toolbar-down #ObjectSize::before {
+	background-image: url('images/statusbarsize.svg');
+}
+
+[data-theme='dark'] #toolbar-down #ObjectPosition::before {
+	background-image: url('images/dark/statusbarposition.svg');
+}
+
+[data-theme='dark'] #toolbar-down #ObjectSize::before {
+	background-image: url('images/dark/statusbarsize.svg');
+}
+
 #toolbar-down .ui-badge:hover,
 #toolbar-down .menubutton:hover .unolabel {
 	color: var(--color-main-text) !important;

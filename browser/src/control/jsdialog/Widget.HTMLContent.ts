@@ -67,6 +67,14 @@ function getStatusbarItemMetadata(id: string): StatusbarItemMetadata {
 				cooltip: _('Choice of functions'),
 				configLabel: _('Table Cell Functions'),
 			};
+		case 'selectiontext':
+			return { cooltip: _('Selection'), configLabel: _('Selection') };
+		case 'layoutstatus':
+			return { cooltip: _('Master Slide'), configLabel: _('Master Slide') };
+		case 'objectposition':
+			return { cooltip: _('Position'), configLabel: _('Position') };
+		case 'objectsize':
+			return { cooltip: _('Size'), configLabel: _('Size') };
 		case 'shapesize':
 			return {
 				cooltip: _('Size of selected shape'),
@@ -259,6 +267,15 @@ function getDocumentStatusElements(text: string, builder: any) {
 	return docstat;
 }
 
+// the items of a presentation or a drawing that tell about the selection, by the id of the item
+// and the id of its element
+const selectionItemElements: { [id: string]: string } = {
+	selectiontext: 'SelectionText',
+	layoutstatus: 'LayoutStatus',
+	objectposition: 'ObjectPosition',
+	objectsize: 'ObjectSize',
+};
+
 function getShapeSizeElements(text: string, builder: any) {
 	return getStatusbarItemElement(
 		'ShapeSize',
@@ -331,6 +348,13 @@ var getElementsFromId = function (
 		return getPageStatusElements(data.text, builder);
 	else if (id === 'documentstatus')
 		return getDocumentStatusElements(data.text, builder);
+	else if (selectionItemElements[id])
+		return getStatusbarItemElement(
+			selectionItemElements[id],
+			getStatusbarItemMetadata(id).cooltip,
+			data.text,
+			builder,
+		);
 	else if (id === 'shapesize') return getShapeSizeElements(data.text, builder);
 };
 

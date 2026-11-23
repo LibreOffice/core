@@ -12,7 +12,7 @@
  * JSDialog.StatusBar - statusbar component
  */
 
-/* global app JSDialog _ _UNO  getPermissionModeElements URLPopUpSection */
+/* global app JSDialog _ _UNO  getPermissionModeElements URLPopUpSection RenderManager ClassicCreateContext */
 class StatusBar extends JSDialog.Toolbar {
 	constructor(map) {
 		super(map, 'Statusbar', 'toolbar-down');
@@ -298,9 +298,13 @@ class StatusBar extends JSDialog.Toolbar {
 			this._generateStateTableCellMenuItem(2, false),			// spreadsheet
 			{type: 'separator', id: 'statetablebreak', orientation: 'vertical', visible: false, dataPriority: 7}, // spreadsheet
 			this._generateHtmlItem('permissionmode'),					// spreadsheet, text, presentation
+			this._generateHtmlItem('selectiontext', 2),					// presentation, drawing
 			{type: 'toolitem', id: 'signstatus', command: '.uno:Signature', w2icon: '', text: _UNO('.uno:Signature'), visible: false},
 			{type: 'spacer',  id: 'permissionspacer'},
 			this._generateHtmlItem('documentstatus', 2),					// spreadsheet, text, presentation, drawing
+			this._generateHtmlItem('layoutstatus', 3),					// presentation, drawing
+			this._generateHtmlItem('objectposition', 1),					// presentation, drawing drawn from objects
+			this._generateHtmlItem('objectsize', 1),						// presentation, drawing drawn from objects
 			{type: 'customtoolitem',  id: 'multi-page-view', command: 'multipageview', text: _('Multi Page View'), dataPriority: 10, visible: false,
 				configLabel: _('Multi Page View')},
 			{type: 'customtoolitem',  id: 'prevpage', command: 'prev', text: _UNO('.uno:PageUp', 'text'), pressAndHold: true, dataPriority: 9,
@@ -550,6 +554,7 @@ class StatusBar extends JSDialog.Toolbar {
 				this.showItem('zoomreset', false);
 				this.showItem('notespanel', true);
 				this.showItem('notespanelbreak', true);
+				this._showTheSelectionItems();
 			}
 			break;
 		case 'drawing':
@@ -559,6 +564,7 @@ class StatusBar extends JSDialog.Toolbar {
 				this.showItem('languagestatusbreak', !app.map.isReadOnlyMode());
 				this.showItem('permissionmode-container', true);
 				this.showItem('documentstatus-container', true);
+				this._showTheSelectionItems();
 			}
 			break;
 		}
@@ -591,6 +597,71 @@ class StatusBar extends JSDialog.Toolbar {
 		});
 
 		JSDialog.RefreshScrollables();
+	}
+
+	/*
+		Shows the text of the selection, the master slide, and the place and the size, as the
+		office's status bar does in a presentation or a drawing. The text of the selection takes
+		the room the spacer would, left-aligned. The place and the size are always shown while the
+		page is drawn from objects, so they do not come and go with every click.
+	*/
+	_showTheSelectionItems() {
+		this.showItem('selectiontext-container', true);
+		this.showItem('permissionspacer', false);
+		this.showItem('layoutstatus-container', true);
+
+		var fromObjects = RenderManager.drawsFromObjects();
+		this.showItem('objectposition-container', fromObjects);
+		this.showItem('objectsize-container', fromObjects);
+		if (!fromObjects || this._followsTheMouse)
+			return;
+
+		// with nothing selected the place is the one of the mouse, and the size none
+		this._followsTheMouse = true;
+		this.showObjectGeometry(null, null);
+		app.events.on('pointeronthepage', this._mouseMoved.bind(this));
+	}
+
+	/// The event says the place of the mouse on the page, in twips.
+	_mouseMoved(event) {
+		this._mouseAt = { x: event.detail.x, y: event.detail.y };
+		if (!this._selectionGeometry)
+			this._writeObjectGeometry(this._positionText(this._mouseAt), this._sizeText(0, 0));
+	}
+
+	_positionText(at) {
+		return ClassicCreateContext.inTheUnit(at.x) + ' / ' + ClassicCreateContext.inTheUnit(at.y);
+	}
+
+	_sizeText(width, height) {
+		return ClassicCreateContext.inTheUnit(width) + ' x ' + ClassicCreateContext.inTheUnit(height);
+	}
+
+	/*
+		Shows where the selected objects stand and how large they are, the box round them in
+		twips, or the place of the mouse and no size where box is null. The texts are written into
+		the items as they are, since they change with every step of a drag.
+	*/
+	showObjectGeometry(box) {
+		this._selectionGeometry = box;
+		if (box)
+			this._writeObjectGeometry(this._positionText({x: box.minX, y: box.minY}),
+				this._sizeText(box.width, box.height));
+		else
+			this._writeObjectGeometry(this._positionText(this._mouseAt || {x: 0, y: 0}),
+				this._sizeText(0, 0));
+	}
+
+	_writeObjectGeometry(position, size) {
+		var positionItem = document.getElementById('ObjectPosition');
+		var sizeItem = document.getElementById('ObjectSize');
+		if (positionItem && sizeItem) {
+			positionItem.textContent = position;
+			sizeItem.textContent = size;
+			return;
+		}
+		this.updateHtmlItem('ObjectPosition', position);
+		this.updateHtmlItem('ObjectSize', size);
 	}
 
 	updateLanguageItem(language) {
@@ -715,6 +786,12 @@ class StatusBar extends JSDialog.Toolbar {
 		}
 		else if (commandName === '.uno:Size') {
 			this.updateHtmlItem('ShapeSize', state ? state : ' ');
+		}
+		else if (commandName === '.uno:Context') {
+			this.updateHtmlItem('SelectionText', state ? state : ' ');
+		}
+		else if (commandName === '.uno:LayoutStatus') {
+			this.updateHtmlItem('LayoutStatus', state ? state : ' ');
 		}
 		else if (commandName == '.uno:StateTableCell') {
 			this.updateHtmlItem('StateTableCell', state ? this.localizeStateTableCell(state) : ' ');

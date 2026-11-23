@@ -475,7 +475,7 @@ abstract class ClassicCreateContext implements InteractionMode {
 		The length in the unit the sidebar measures positions and sizes in: inches where the
 		ruler says so or the language is American English, centimetres otherwise.
 	*/
-	protected static inTheUnit(twips: number): string {
+	public static inTheUnit(twips: number): string {
 		const ruler = app.map.stateChangeHandler.getItemValue(
 			'.uno:LeftRightParaMargin',
 		);

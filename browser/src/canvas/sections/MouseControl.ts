@@ -475,6 +475,11 @@ class MouseControl extends CanvasSectionObject {
 		// current mouse location.
 		this.refreshPosition(point);
 		this.keysHeld = MouseControl.readModifier(e);
+		// the place of the mouse on the page, in twips
+		app.events.fire('pointeronthepage', {
+			x: this.currentPosition.pX / app.twipsToPixels,
+			y: this.currentPosition.pY / app.twipsToPixels,
+		});
 
 		this.setCursorType();
 

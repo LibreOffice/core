@@ -704,6 +704,13 @@ color of their own, since they are the object's defaults and not points someone 
   puts in the first effect of the category, as on the desktop.
 - The toolbar and the menus change their states at once with the selection, since the client
   works them out itself.
+- The status bar of a presentation or a drawing has the fields of the desktop's: after the
+  language the text of the selection, taking the room that is left, then the master slide, and
+  the position and the size, each after its symbol, in the unit of the ruler. Position and size
+  are always shown: for a selection the upright box round the frames of its objects, which
+  follows a drag at every step, and with nothing selected the place of the mouse and no size.
+  The client works the two out itself. The text of the selection and the master slide come from
+  the engine.
 - Changes made by other people editing the same document arrive as they happen. When they
   delete an object you have selected, your selection goes to what is left, staying in the
   group you stood in.
