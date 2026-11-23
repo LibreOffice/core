@@ -32,4 +32,12 @@ describe('A new access token on the /cool/collab connection of a page', function
 		collab.ws = null;
 		nodeassert.deepEqual(sent, ['{"type":"access_token","token":"a%20b"}']);
 	});
+
+	it('is kept URI-encoded for a later reconnect, as the first one is', function () {
+		page.window._codaRemoteInfo = { accessToken: 'first' };
+		page.window.collab.renewAccessToken('a b');
+		const kept = page.window._codaRemoteInfo.accessToken;
+		delete page.window._codaRemoteInfo;
+		nodeassert.equal(kept, 'a%20b');
+	});
 });

@@ -3208,12 +3208,18 @@ function showWelcomeSVG() {
 	// A new access token from the integrator replaces the one of the connection, for the uploads
 	// that follow (once the server has checked it) and for a reconnect:
 	global.collab.renewAccessToken = (token) => {
+		// The page keeps the token URI-encoded, as it has the first one:
+		const encoded = encodeURIComponent(token);
 		if (window._codaRemoteInfo) {
-			window._codaRemoteInfo.accessToken = token;
+			window._codaRemoteInfo.accessToken = encoded;
 		}
+		if (global.ThisIsTheEmscriptenApp) {
+			window.accessToken = encoded;
+		}
+
 		const ws = global.collab.ws;
 		if (ws && ws.readyState === WebSocket.OPEN) {
-			ws.send(JSON.stringify({type: 'access_token', token: encodeURIComponent(token)}));
+			ws.send(JSON.stringify({type: 'access_token', token: encoded}));
 		}
 	};
 
