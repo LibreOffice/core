@@ -852,6 +852,8 @@ QString TabManager::currentTabsJson() const
     QJsonArray arr;
     for (const auto& e : _tabs)
     {
+        if (e.leavingStrip)
+            continue;
         QJsonObject obj;
         obj["id"] = e.id;
         obj["title"] = e.webView->documentTitle();
@@ -864,6 +866,23 @@ QString TabManager::currentTabsJson() const
         arr.append(obj);
     }
     return QString::fromUtf8(QJsonDocument(arr).toJson(QJsonDocument::Compact));
+}
+
+void TabManager::setTabLeavingStrip(WebView* wv, bool leaving)
+{
+    for (Entry& e : _tabs)
+    {
+        if (e.webView.get() != wv)
+            continue;
+        if (e.leavingStrip == leaving)
+            return;
+        e.leavingStrip = leaving;
+        // A tab that leaves goes from the strip with the next change, together with the tab that
+        // takes its place. A tab that comes back shows at once.
+        if (!leaving)
+            emitTabsChangedNow();
+        return;
+    }
 }
 
 void TabManager::emitTabsChangedNow()

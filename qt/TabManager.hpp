@@ -66,6 +66,9 @@ public:
 
     int tabCount() const { return static_cast<int>(_tabs.size()); }
 
+    // While leaving is true, the tab strip leaves out the tab of the view. The tab stays open.
+    void setTabLeavingStrip(WebView* wv, bool leaving);
+
     // Runs the document's save-if-dirty round-trip first (see Bridge::
     // saveAndClose); the tab goes away once the page-JS confirms with
     // CLOSE_WINDOW. Emits requestWindowClose if this was the last tab.
@@ -141,6 +144,8 @@ private:
         bool closeWaitsForSave = false;
         // True while this tab's view waits for a save result before it is dropped.
         bool dropWaitsForSave = false;
+        // True while the tab strip leaves the tab out, see setTabLeavingStrip().
+        bool leavingStrip = false;
         // True from the moment this tab is asked to save for a drop until it is activated
         // again, so one drop asks for one save.
         bool dropSaveAsked = false;

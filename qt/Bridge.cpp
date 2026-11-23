@@ -87,6 +87,24 @@ namespace
         }
     }
 
+    // Run openDocument, which opens one or more documents and returns whether it did. A document
+    // opened from the starter screen takes the place of the starter's tab: the tab leaves the tab
+    // strip in the same change that brings the document there, and closes after that.
+    void openInPlaceOfStarter(QPointer<WebView> starter, const std::function<bool()>& openDocument)
+    {
+        QPointer<TabManager> manager;
+        if (starter && starter->isStarterScreen())
+            if (auto* window = qobject_cast<TabbedWindow*>(starter->mainWindow()))
+                manager = window->manager();
+        if (manager)
+            manager->setTabLeavingStrip(starter, true);
+
+        if (openDocument())
+            closeStarterScreen(starter);
+        else if (manager && starter)
+            manager->setTabLeavingStrip(starter, false);
+    }
+
     std::string percentDecoded(const std::string& value)
     {
         return QUrl::fromPercentEncoding(QByteArray::fromStdString(value)).toStdString();
@@ -1492,8 +1510,12 @@ QVariant Bridge::cool(const QString& messageStr)
                                  displayUris << QString::fromStdString(
                                      coda::hostDisplayUriForPath(filePath));
 
-                             coda::openFiles(filePaths, displayUris);
-                             closeStarterScreen(_owner);
+                             openInPlaceOfStarter(_owner,
+                                                  [&]()
+                                                  {
+                                                      coda::openFiles(filePaths, displayUris);
+                                                      return true;
+                                                  });
 
                              // The picked document opens in its own window; return the
                              // originating window to its document view.
@@ -1511,8 +1533,7 @@ QVariant Bridge::cool(const QString& messageStr)
         else if (message == "uno .uno:NewDocPresentation") docType = "impress";
         else if (message == "uno .uno:NewDocDraw") docType = "draw";
 
-        if (coda::openNewDocument(docType, {}, {}))
-            closeStarterScreen(_owner);
+        openInPlaceOfStarter(_owner, [&]() { return coda::openNewDocument(docType, {}, {}); });
     }
     else if (message == "uno .uno:SaveAs")
     {
@@ -1731,8 +1752,12 @@ QVariant Bridge::cool(const QString& messageStr)
         {
             if (drafts::contains(absolutePath.toStdString()))
             {
-                coda::openDraftCopy(absolutePath);
-                closeStarterScreen(_owner);
+                openInPlaceOfStarter(_owner,
+                                     [&]()
+                                     {
+                                         coda::openDraftCopy(absolutePath);
+                                         return true;
+                                     });
                 LOG_INF("opendoc: opened draft: " << absolutePath.toStdString());
                 return {};
             }
@@ -1742,8 +1767,12 @@ QVariant Bridge::cool(const QString& messageStr)
 
         const QStringList displayUri{ QString::fromStdString(
             coda::hostDisplayUriForPath(absolutePath)) };
-        coda::openFiles(QStringList() << absolutePath, displayUri);
-        closeStarterScreen(_owner);
+        openInPlaceOfStarter(_owner,
+                             [&]()
+                             {
+                                 coda::openFiles(QStringList() << absolutePath, displayUri);
+                                 return true;
+                             });
 
         LOG_INF("opendoc: opened file: " << absolutePath.toStdString());
         return {};
@@ -1775,8 +1804,9 @@ QVariant Bridge::cool(const QString& messageStr)
         std::string decodedBasename;
         Poco::URI::decode(basenameToken, decodedBasename);
 
-        if (coda::openNewDocument(typeToken, templatePath, decodedBasename))
-            closeStarterScreen(_owner);
+        openInPlaceOfStarter(
+            _owner,
+            [&]() { return coda::openNewDocument(typeToken, templatePath, decodedBasename); });
     }
     else if (tokens.equals(0, "switchToServerMode"))
     {
