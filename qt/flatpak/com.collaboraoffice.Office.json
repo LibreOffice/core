@@ -340,6 +340,7 @@
         "make check-qtapp"
       ],
       "build-commands": [
+        "python3 scripts/create-product-sbom.py snapshot --tree /app --output sbom-preexisting.txt",
         "cd engine && ./autogen.sh --with-distro=CPLinuxQtFlatpak --prefix=$(pwd)/inst && make && make distro-pack-install && make cmd cmd='$(SRCDIR)/solenv/bin/assemble-flatpak.sh com.collaboraoffice.Office'",
         "autoreconf -vfi",
         "./configure --prefix=/app --enable-qtapp --disable-server --enable-qtapp-tests --with-atspi-driver-path=/app/lib/selenium-webdriver-at-spi/selenium-webdriver-at-spi.py --enable-ld --with-lo-builddir=$(pwd)/engine --with-lokit-path=$(pwd)/engine/include --with-lo-path=/app/collaboraoffice --with-vendor=\"Collabora Productivity Limited\" --with-app-name=\"Collabora Office\" --with-info-url=https://collaboraoffice.com/",
@@ -351,7 +352,8 @@
         "/collaboraoffice/LICENSE.html"
       ],
       "post-install": [
-        "python3 scripts/insert-coda-license.py /app/collaboraoffice/LICENSE.html CODA-THIRDPARTYLICENSES.html"
+        "python3 scripts/insert-coda-license.py /app/collaboraoffice/LICENSE.html CODA-THIRDPARTYLICENSES.html",
+        "make product-sbom PRODUCT_SBOM_STEP=stage PRODUCT_SBOM_ARGS=\"--platform flatpak --tree /app --staging /app/share/sbom/.staging --engine-root collaboraoffice/ --preexisting $(pwd)/sbom-preexisting.txt --exclude 'lib/debug/*' --exclude 'share/man/*'\""
       ],
       "sources": [
         {
@@ -987,6 +989,13 @@
           "dest": "engine/external/tarballs",
           "dest-filename": "opendyslexic-0.910.12-rc2-2019.10.17.zip"
         }
+      ]
+    },
+    {
+      "name": "collabora-office-sbom",
+      "buildsystem": "simple",
+      "build-commands": [
+        "python3 /app/share/sbom/.staging/create-product-sbom.py finalize --tree /app --staging /app/share/sbom/.staging"
       ]
     }
   ]
