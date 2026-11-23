@@ -22,6 +22,14 @@ $(eval $(call gb_Module_add_targets,instsetoo_native,\
 ))
 endif
 
+else ifeq ($(ENABLE_SBOM),TRUE)
+
+# The products that ship instdir without the installer still need the
+# documents their own SBOM is assembled from
+$(eval $(call gb_Module_add_targets,instsetoo_native,\
+	CustomTarget_sbom \
+))
+
 endif
 
 $(eval $(call gb_Module_add_targets,instsetoo_native,\

@@ -2221,6 +2221,15 @@ AC_ARG_WITH(package-format,
          Example: --with-package-format='deb rpm']),
 ,)
 
+AC_ARG_ENABLE(sbom,
+    AS_HELP_STRING([--enable-sbom],
+        [Generate the SPDX SBOM documents of the installation in instdir also
+         when no installation set is packaged. Products that ship instdir by
+         other means than the installer (the desktop apps, the flatpak, the
+         snap, the FreeBSD port) build their own SBOM from these documents.
+         --with-package-format implies it.]),
+,)
+
 AC_ARG_WITH(tls,
     AS_HELP_STRING([--with-tls],
         [Decides which TLS/SSL and cryptographic implementations to use for
@@ -5772,6 +5781,16 @@ else
     AC_MSG_RESULT([none])
 fi
 AC_SUBST(PKGFORMAT)
+
+AC_MSG_CHECKING([whether to generate the SBOM of the installation])
+ENABLE_SBOM=
+if test -n "$PKGFORMAT" -o "$enable_sbom" = yes; then
+    ENABLE_SBOM=TRUE
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_SBOM)
 
 dnl ===================================================================
 dnl handle help related options

@@ -862,6 +862,14 @@ def process_install_script(install_script, root_gids):
         lang = get_lang(module)
         files = get_files(module, lang)
         if len(files) == 0:
+            # without --with-myspell-dicts the dictionary packages are empty
+            # and are not made
+            if gid.startswith("gid_Module_Root_Extension_Dictionary_") \
+                    and os.environ.get("WITH_MYSPELL_DICTS") != "TRUE":
+                for package in [package for package in sbom_data
+                                if sbom_data[package][0] == gid]:
+                    del sbom_data[package]
+                continue
             raise Exception(f"unexpected root module with no files: {gid}")
         result[gid] = files
 
@@ -883,14 +891,15 @@ def process_install_script(install_script, root_gids):
     return result
 
 
-def read_externals_file(path):
+def read_externals_file(path, allow_empty=False):
     """Read a temp file."""
     entries = []
     with open(path, "r", encoding="utf-8") as f:
         for line in f.readlines():
             if line != "\n":
                 entries += line.strip().split(" ")
-        if len(entries) == 0: # practically impossible to build with none
+        if len(entries) == 0 and not allow_empty:
+            # practically impossible to build with none
             raise Exception(f"externals file empty: {path}")
     return entries
 
@@ -903,10 +912,10 @@ def read_externals(path):
         result[(e[1], e[2])] = e[0]
     return result
 
-def read_external_staticlink(path):
+def read_external_staticlink(path, allow_empty=False):
     """Read the gb_External_StaticLink value from a temp file."""
     # note: this can only contain content in a *top-level* make invocation
-    entries = read_externals_file(path)
+    entries = read_externals_file(path, allow_empty)
     result = {}
     for entry in entries:
         e = entry.split(";")
@@ -1629,8 +1638,12 @@ def sbom_add_files(files_by_package, externals_by_package):
 
         # dictionaries contain odd mixture of licenses
         if is_dictionary:
-            assert(len(non_mpl_licenses) != 0)
-            if len(non_mpl_licenses) == 1:
+            if len(non_mpl_licenses) == 0:
+                # built without the dictionaries, the English, Hungarian
+                # and Slovenian ones still install the wordbooks of
+                # extras/source/wordbook, which are the tree's own
+                concluded = root_license
+            elif len(non_mpl_licenses) == 1:
                 concluded = next(iter(non_mpl_licenses))
             else:
                 concluded = " AND ".join([l if l.find(" ") == -1 else "(" + l + ")" for l in non_mpl_licenses])
@@ -1675,7 +1688,10 @@ def gen_product(ziplist, packinfos, install_script, languages, externalsfile,
     files_by_package = process_install_script(install_script, root_gids)
     externalfiles = read_externals(externalsfile)
     externalstaticlink = read_external_staticlink(externalstaticfile)
-    externalpackagestaticlink = read_external_staticlink(externalpackagestaticfile)
+    # only shipped external packages that link another external statically
+    # are listed, and a build that takes the usual ones from the system
+    # (Python, curl, NSS) may have none
+    externalpackagestaticlink = read_external_staticlink(externalpackagestaticfile, True)
     assign_externals(files_by_package, externalfiles)
     files = locate_files(files_by_package, ziplist, product, filelistdirs)
     installed = {file["instpath"]: gid for gid in files for file in files[gid]}

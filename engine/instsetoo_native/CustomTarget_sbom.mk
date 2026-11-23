@@ -50,7 +50,7 @@ instsetoo_SBOM : $(instsetoo_create_SBOM) \
 	EXTERNALFILESLIST=$(shell $(gb_MKTEMP)) \
 	&& { git -C $(SRCDIR) ls-files -z -- external 2>/dev/null \
 		|| (cd $(SRCDIR) && find external ! -type d -print0) ; } > $${EXTERNALFILESLIST} \
-	&& $(if $(filter LINUX,$(OS_FOR_BUILD)),$(gb_Python_PRECOMMAND) $(INSTROOT_FOR_BUILD)/program/python.bin,$(call gb_ExternalExecutable_get_command,python)) \
+	&& $(if $(and $(filter LINUX,$(OS_FOR_BUILD)),$(filter PYTHON,$(BUILD_TYPE))),$(gb_Python_PRECOMMAND) $(INSTROOT_FOR_BUILD)/program/python.bin,$(call gb_ExternalExecutable_get_command,python)) \
 		$(instsetoo_create_SBOM) \
 		$(gb_CustomTarget_workdir)/instsetoo_native/sbom \
 		$(gb_CustomTarget_workdir)/readlicense_oo/license/LICENSE.html \
