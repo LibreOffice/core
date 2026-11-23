@@ -552,7 +552,7 @@ void CanvasHelper::drawTextLayout(const rendering::XCanvas*,
     }
 }
 
-uno::Reference<rendering::XCachedPrimitive>
+rtl::Reference<CachedBitmap>
 CanvasHelper::implDrawBitmap(const rendering::XCanvas* pCanvas,
                              const uno::Reference<rendering::XBitmap>& xBitmap,
                              const rendering::ViewState& viewState,
@@ -618,7 +618,7 @@ CanvasHelper::implDrawBitmap(const rendering::XCanvas* pCanvas,
 
             // Returning a cache object is not useful, the XBitmap
             // itself serves this purpose
-            return uno::Reference<rendering::XCachedPrimitive>(nullptr);
+            return {};
         }
         else if (mpOutDevProvider->getOutDev().HasFastDrawTransformedBitmap())
         {
@@ -653,7 +653,7 @@ CanvasHelper::implDrawBitmap(const rendering::XCanvas* pCanvas,
 
                 mp2ndOutDevProvider->getOutDev().DrawTransformedBitmapEx(aMatrix, aBmp);
             }
-            return uno::Reference<rendering::XCachedPrimitive>(nullptr);
+            return {};
         }
         else
         {
@@ -762,7 +762,7 @@ CanvasHelper::implDrawBitmap(const rendering::XCanvas* pCanvas,
             // created GraphicObject, which possibly cached
             // display bitmap - return cache object, to retain
             // that information.
-            return uno::Reference<rendering::XCachedPrimitive>(
+            return rtl::Reference<CachedBitmap>(
                 new CachedBitmap(std::move(pGrfObj), aPt, aSz, aGrfAttr, viewState, renderState,
                                  // cast away const, need to
                                  // change refcount (as this is
@@ -773,7 +773,7 @@ CanvasHelper::implDrawBitmap(const rendering::XCanvas* pCanvas,
     }
 
     // Nothing rendered
-    return uno::Reference<rendering::XCachedPrimitive>(nullptr);
+    return {};
 }
 
 uno::Reference<rendering::XCachedPrimitive> CanvasHelper::drawBitmap(

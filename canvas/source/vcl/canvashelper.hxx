@@ -26,6 +26,8 @@
 #include "cachedbitmap.hxx"
 #include "outdevprovider.hxx"
 
+#include <rtl/ref.hxx>
+
 namespace vclcanvas
 {
 /** Helper class for basic canvas functionality. Also offers
@@ -217,7 +219,7 @@ protected:
     bool mbHaveAlpha;
 
 private:
-    css::uno::Reference<css::rendering::XCachedPrimitive>
+    rtl::Reference<CachedBitmap>
     implDrawBitmap(const css::rendering::XCanvas* rCanvas,
                    const css::uno::Reference<css::rendering::XBitmap>& xBitmap,
                    const css::rendering::ViewState& viewState,
