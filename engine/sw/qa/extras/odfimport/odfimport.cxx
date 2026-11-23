@@ -35,6 +35,7 @@
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/ChapterFormat.hpp>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -2048,6 +2049,33 @@ CPPUNIT_TEST_FIXTURE(Test, testTocChapterOutlineLevelOutOfRange)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), comphelper::SequenceAsHashMap(aLevel3[0])
                                            .getUnpackedValueOrDefault(u"ChapterLevel"_ustr,
                                                                       sal_Int16(0)));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTocChapterDisplay)
+{
+    // Given a table of contents whose chapter entries use each chapter display value:
+    // Without the fix in place, loading failed with a format error in content.xml.
+    createSwDoc("toc-chapter-display.fodt");
+
+    // Then each is shown as a chapter number, with or without its prefix and suffix:
+    uno::Reference<text::XDocumentIndexesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTOC(xSupplier->getDocumentIndexes()->getByIndex(0),
+                                             uno::UNO_QUERY);
+    uno::Reference<container::XIndexReplace> xLevelFormats(
+        getProperty<uno::Reference<container::XIndexReplace>>(xTOC, u"LevelFormat"_ustr));
+    // The getter leaves out the default, text::ChapterFormat::NUMBER.
+    const sal_Int16 aExpected[] = { -1, -1, text::ChapterFormat::DIGIT, text::ChapterFormat::DIGIT,
+                                    -1 };
+    for (sal_Int32 nLevel = 1; nLevel <= 5; ++nLevel)
+    {
+        cpo::uno::Sequence<beans::PropertyValues> aLevel;
+        xLevelFormats->getByIndex(nLevel) >>= aLevel;
+        comphelper::SequenceAsHashMap aToken(aLevel[0]);
+        CPPUNIT_ASSERT_EQUAL(u"TokenEntryNumber"_ustr,
+                             aToken.getUnpackedValueOrDefault(u"TokenType"_ustr, OUString()));
+        CPPUNIT_ASSERT_EQUAL(aExpected[nLevel - 1],
+                             aToken.getUnpackedValueOrDefault(u"ChapterFormat"_ustr, sal_Int16(-1)));
+    }
 }
 
 } // end of anonymous namespace

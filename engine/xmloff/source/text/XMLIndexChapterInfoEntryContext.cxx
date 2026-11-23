@@ -156,6 +156,23 @@ void XMLIndexChapterInfoEntryContext::startFastElement(
                 }
             }
         }
+        else
+        {
+            // the entry number of a table of contents shows the chapter number only, with or
+            // without its prefix and suffix
+            switch (nChapterInfo)
+            {
+                case ChapterFormat::NUMBER:
+                case ChapterFormat::DIGIT:
+                    break;
+                case ChapterFormat::NO_PREFIX_SUFFIX:
+                    nChapterInfo = ChapterFormat::DIGIT;
+                    break;
+                default:
+                    nChapterInfo = ChapterFormat::NUMBER;
+                    break;
+            }
+        }
     }
     if (bOutlineLevelOK)
         m_nValues++;
