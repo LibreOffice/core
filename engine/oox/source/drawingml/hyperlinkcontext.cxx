@@ -37,9 +37,11 @@ using namespace ::oox::core;
 namespace oox::drawingml {
 
 HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
-        const AttributeList& rAttribs, PropertyMap& aProperties, bool bTextRun )
+        const AttributeList& rAttribs, PropertyMap& aProperties, bool* pKeepsTextColor,
+        bool bTextRun )
     : ContextHandler2( rParent )
     , maProperties(aProperties)
+    , mpKeepsTextColor(pKeepsTextColor)
 {
     OUString sURL, sHref;
     OUString aRelId = rAttribs.getStringDefaulted( R_TOKEN( id ) );
@@ -170,7 +172,8 @@ ContextHandlerRef HyperLinkContext::onCreateContext(
     switch( aElement )
     {
     case A_TOKEN( extLst ):
-        maProperties.setProperty(PROP_CharColor, XML_fillcolor);
+        if (mpKeepsTextColor)
+            *mpKeepsTextColor = true;
         break;
     case A_TOKEN( snd ):
         // TODO use getEmbeddedWAVAudioFile() here

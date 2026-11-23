@@ -33,6 +33,7 @@ public:
                             ::oox::core::ContextHandler2Helper const & rParent,
                             const ::oox::AttributeList& rAttribs,
                             PropertyMap& aProperties,
+                            bool* pKeepsTextColor = nullptr,
                             bool bTextRun = false );
     virtual             ~HyperLinkContext() override;
 
@@ -40,6 +41,9 @@ public:
 
 private:
     PropertyMap&        maProperties;
+    /// Where the answer goes whether the document states that the link is drawn in the colour
+    /// of its text. Null for a link on a shape, which holds no run of its own.
+    bool*               mpKeepsTextColor;
 };
 
 } // namespace oox::drawingml

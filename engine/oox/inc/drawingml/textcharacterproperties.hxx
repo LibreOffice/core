@@ -37,6 +37,9 @@ namespace oox::drawingml {
 struct TextCharacterProperties
 {
     PropertyMap         maHyperlinkPropertyMap;
+    /// True where the document stated that a link here is drawn in the colour of the text
+    /// around it, and false where it stated nothing, which stands for the colour of links.
+    bool                mbHyperlinkKeepsTextColor = false;
     TextFont            maLatinFont;
     TextFont            maLatinThemeFont;
     TextFont            maAsianFont;

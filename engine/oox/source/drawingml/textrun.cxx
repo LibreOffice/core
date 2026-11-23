@@ -160,7 +160,7 @@ sal_Int32 TextRun::insertAt(
 
                 xTextFieldCursor->gotoEnd( true );
 
-                if (!maTextCharacterProperties.maHyperlinkPropertyMap.hasProperty(PROP_CharColor))
+                if (!maTextCharacterProperties.mbHyperlinkKeepsTextColor)
                     aTextCharacterProps.maFillProperties.maFillColor.setSchemeClr(XML_hlink);
 
                 aTextCharacterProps.maFillProperties.moFillType = XML_solidFill;

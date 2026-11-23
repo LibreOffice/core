@@ -178,6 +178,7 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
         case A_TOKEN( hlinkMouseOver ): // CT_Hyperlink
             return new HyperLinkContext( *this, rAttribs,
                                          mrTextCharacterProperties.maHyperlinkPropertyMap,
+                                         &mrTextCharacterProperties.mbHyperlinkKeepsTextColor,
                                          /*bTextRun=*/true );
         case W_TOKEN( rFonts ):
             if( rAttribs.hasAttribute(W_TOKEN(ascii)) )

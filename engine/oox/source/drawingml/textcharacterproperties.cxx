@@ -47,6 +47,8 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
 {
     // overwrite all properties existing in rSourceProps
     maHyperlinkPropertyMap.assignUsed( rSourceProps.maHyperlinkPropertyMap );
+    if (rSourceProps.mbHyperlinkKeepsTextColor)
+        mbHyperlinkKeepsTextColor = true;
     maLatinFont.assignIfUsed( rSourceProps.maLatinFont );
     maLatinThemeFont.assignIfUsed( rSourceProps.maLatinThemeFont );
     maAsianFont.assignIfUsed( rSourceProps.maAsianFont );
