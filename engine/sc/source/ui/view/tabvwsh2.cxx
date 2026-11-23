@@ -51,6 +51,9 @@
 #include <svl/stritem.hxx>
 #include <vcl/EnumContext.hxx>
 #include <fuconcustomshape.hxx>
+#include <svx/RequestedRectangle.hxx>
+
+#include <optional>
 
 SdrView* ScTabViewShell::GetDrawView() const
 {
@@ -139,6 +142,9 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
                 sStringItemValue = pStringItem->GetValue();
     }
     bool bSwitchCustom = ( !sStringItemValue.isEmpty() && !sDrawCustom.isEmpty() && sStringItemValue != sDrawCustom );
+    // The rectangle of an object that the client dragged out or clicked. Such an object is a new
+    // one, never a click on the active tool that turns it off, as in Impress.
+    const std::optional<tools::Rectangle> oRequestedRectangle = svx::getRequestedRectangle(pArgs);
 
     if (nNewId == SID_INSERT_FRAME)                     // from Tbx button
         nNewId = SID_DRAW_TEXT;
@@ -157,7 +163,8 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         bEx = true;
     }
     else if ( nNewId == nDrawSfxId && ( nNewId != SID_FM_CREATE_CONTROL ||
-                                    eNewFormObjKind == eFormObjKind || eNewFormObjKind == SdrObjKind::NONE ) && !bSwitchCustom )
+                                    eNewFormObjKind == eFormObjKind || eNewFormObjKind == SdrObjKind::NONE ) && !bSwitchCustom
+              && !oRequestedRectangle )
     {
         // #i52871# if a different custom shape is selected, the slot id can be the same,
         // so the custom shape type string has to be compared, too.
@@ -237,6 +244,9 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     // for COKit - choosing a shape should construct it directly
     bool bCreateDirectly = false;
+    // whether the object is made in the requested rectangle, instead of the middle of what the
+    // client shows
+    bool bInRequestedRectangle = false;
 
     switch (nNewId)
     {
@@ -345,6 +355,13 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
             bCreateDirectly = comphelper::COKit::isActive();
 
+            // a shape dragged out in the client is made at once in its rectangle
+            if (oRequestedRectangle)
+            {
+                bCreateDirectly = true;
+                bInRequestedRectangle = true;
+            }
+
             if ( nNewId != SID_DRAW_CS_ID )
             {
                 const SfxStringItem* pEnumCommand = rReq.GetArg<SfxStringItem>(nNewId);
@@ -413,6 +430,8 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     }
 
     tools::Rectangle aNewObjectRectangle(aInsertPos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
+    if (bInRequestedRectangle)
+        aNewObjectRectangle = *oRequestedRectangle;
 
     ScDrawView* pDrView = GetScDrawView();
 

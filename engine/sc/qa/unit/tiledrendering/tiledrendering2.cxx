@@ -50,6 +50,7 @@
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdmark.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/xfillit0.hxx>
@@ -1651,6 +1652,50 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPaintOtherSheetKeepsSelection)
     const ScMarkData& rMark = rViewData.GetMarkData();
     CPPUNIT_ASSERT(rMark.IsMarked());
     CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 1, 0, 1, 1), rMark.GetMarkArea());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCreateShapeInRectangle)
+{
+    // A shape dragged out in the client is made in its rectangle, not in the default size in the
+    // middle of what the client shows.
+    createDoc("empty.ods");
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { u"X"_ustr, cpo::uno::Any(sal_Int32(1500)) },
+        { u"Y"_ustr, cpo::uno::Any(sal_Int32(1000)) },
+        { u"Width"_ustr, cpo::uno::Any(sal_Int32(4000)) },
+        { u"Height"_ustr, cpo::uno::Any(sal_Int32(3000)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:BasicShapes.rectangle"_ustr, aArgs);
+
+    SdrPage* pDrawPage = pViewData->GetDocument().GetDrawLayer()->GetPage(0);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDrawPage->GetObjCount());
+    SdrObject* pShape = pDrawPage->GetObj(0);
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::CustomShape, pShape->GetObjIdentifier());
+    const tools::Rectangle aRectangle = pShape->GetLogicRect();
+    CPPUNIT_ASSERT_EQUAL(o3tl::convert(1500, o3tl::Length::twip, o3tl::Length::mm100),
+                         static_cast<sal_Int64>(aRectangle.Left()));
+    CPPUNIT_ASSERT_EQUAL(o3tl::convert(1000, o3tl::Length::twip, o3tl::Length::mm100),
+                         static_cast<sal_Int64>(aRectangle.Top()));
+    CPPUNIT_ASSERT_EQUAL(o3tl::convert(4000, o3tl::Length::twip, o3tl::Length::mm100),
+                         static_cast<sal_Int64>(aRectangle.GetWidth()));
+    CPPUNIT_ASSERT_EQUAL(o3tl::convert(3000, o3tl::Length::twip, o3tl::Length::mm100),
+                         static_cast<sal_Int64>(aRectangle.GetHeight()));
+
+    // The new shape is the selection, and one undo step takes it away.
+    const SdrMarkList& rMarkList = pViewData->GetViewShell()->GetScDrawView()->GetMarkedObjectList();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rMarkList.GetMarkCount());
+    CPPUNIT_ASSERT_EQUAL(pShape, rMarkList.GetMark(0)->GetMarkedSdrObj());
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pDrawPage->GetObjCount());
+
+    // A second shape of the same kind dragged out right after the first one is made too; the
+    // request did not turn the active tool off.
+    dispatchCommand(mxComponent, u".uno:BasicShapes.rectangle"_ustr, aArgs);
+    dispatchCommand(mxComponent, u".uno:BasicShapes.rectangle"_ustr, aArgs);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pDrawPage->GetObjCount());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

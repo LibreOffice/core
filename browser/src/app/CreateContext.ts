@@ -161,12 +161,33 @@ abstract class ClassicCreateContext implements InteractionMode {
 	protected placeArguments(box: cool.Range2D): {
 		[name: string]: { type: string; value: any };
 	} {
+		const place = ClassicCreateContext.inTheEngine(box);
 		return {
-			X: ClassicCreateContext.twipsArgument(box.minX),
-			Y: ClassicCreateContext.twipsArgument(box.minY),
-			Width: ClassicCreateContext.twipsArgument(box.width),
-			Height: ClassicCreateContext.twipsArgument(box.height),
+			X: ClassicCreateContext.twipsArgument(place.minX),
+			Y: ClassicCreateContext.twipsArgument(place.minY),
+			Width: ClassicCreateContext.twipsArgument(place.width),
+			Height: ClassicCreateContext.twipsArgument(place.height),
 		};
+	}
+
+	/// The rectangle as the engine reads it. A sheet is placed by tile twips here, while Calc
+	/// reads print twips, as for a shape moved by its handles; the sign of a right-to-left sheet
+	/// stays.
+	protected static inTheEngine(box: cool.Range2D): cool.Range2D {
+		const sheetGeometry = app.map._docLayer.sheetGeometry;
+		if (app.map._docLayer._docType !== 'spreadsheet' || !sheetGeometry)
+			return box;
+		const inPrintTwips = (x: number, y: number): cool.Point => {
+			const sign = x < 0 ? -1 : 1;
+			const print = sheetGeometry.getPrintTwipsPointFromTile(
+				new cool.Point(Math.abs(x), y),
+			);
+			return new cool.Point(sign * print.x, print.y);
+		};
+		return cool.Range2D.fromPoints([
+			inPrintTwips(box.minX, box.minY),
+			inPrintTwips(box.maxX, box.maxY),
+		]);
 	}
 
 	/// What is written beside the mouse while it drags, of that size of the drag.

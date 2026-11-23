@@ -132,6 +132,7 @@
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsClipboard.hxx>
 #include <svl/srchitem.hxx>
+#include <svx/RequestedRectangle.hxx>
 #include <svx/srchdlg.hxx>
 
 #include <algorithm>
@@ -154,36 +155,11 @@ namespace sd {
 
 // Permanent Functions
 
-// the rectangle a shape is to be created in, given with the request in twips on the slide; the
-// slide's own area does not limit it, a shape may lie beside the slide
+// the rectangle a shape is to be created in, given with the request in twips on the slide; it
+// stays a function of this library, as lcl_getShapeBuild finds the library by its address
 static std::optional<::tools::Rectangle> lcl_getRequestedRectangle(SfxRequest const& rReq)
 {
-    const SfxItemSet* pArgs = rReq.GetArgs();
-    if (!pArgs)
-        return std::nullopt;
-
-    const SfxInt32Item* pXItem = pArgs->GetItem<SfxInt32Item>(FN_PARAM_2, false);
-    const SfxInt32Item* pYItem = pArgs->GetItem<SfxInt32Item>(FN_PARAM_3, false);
-    const SfxInt32Item* pWidthItem = pArgs->GetItem<SfxInt32Item>(FN_PARAM_4, false);
-    const SfxInt32Item* pHeightItem = pArgs->GetItem<SfxInt32Item>(FN_PARAM_5, false);
-    if (!pXItem || !pYItem || !pWidthItem || !pHeightItem)
-        return std::nullopt;
-
-    constexpr sal_Int32 nMostTwips = 10000000;
-    const sal_Int32 nX(pXItem->GetValue());
-    const sal_Int32 nY(pYItem->GetValue());
-    const sal_Int32 nWidth(pWidthItem->GetValue());
-    const sal_Int32 nHeight(pHeightItem->GetValue());
-    if (nWidth <= 0 || nHeight <= 0 || std::abs(nX) > nMostTwips || std::abs(nY) > nMostTwips
-        || nWidth > nMostTwips || nHeight > nMostTwips)
-        return std::nullopt;
-
-    auto toMm100 = [](sal_Int32 nTwips) {
-        return static_cast<::tools::Long>(
-            o3tl::convert(nTwips, o3tl::Length::twip, o3tl::Length::mm100));
-    };
-    return ::tools::Rectangle(Point(toMm100(nX), toMm100(nY)),
-                              Size(toMm100(nWidth), toMm100(nHeight)));
+    return svx::getRequestedRectangle(rReq.GetArgs());
 }
 
 // the two points a line or a connector is to be created between, given with the request in twips
