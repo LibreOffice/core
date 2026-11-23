@@ -516,7 +516,7 @@ class StatusBar extends JSDialog.Toolbar {
 				this.showItem('StateTableCellMenu', !app.map.isReadOnlyMode());
 				this.showItem('statetablebreak', !app.map.isReadOnlyMode());
 				this.showItem('permissionmode-container', true);
-				this.showItem('documentstatus-container', true);
+				this.showItem('documentstatus-container', this.isSaveIndicatorActive());
 			}
 			break;
 
@@ -533,7 +533,7 @@ class StatusBar extends JSDialog.Toolbar {
 				this.showItem('languagestatusbreak', !app.map.isReadOnlyMode());
 				this.showItem('permissionmode-container', true);
 				this.showItem('showcomments-container', true);
-				this.showItem('documentstatus-container', true);
+				this.showItem('documentstatus-container', this.isSaveIndicatorActive());
 				this.showItem('fitwidthzoom-writer', true);
 				this.showItem('fitwidthzoom-impress', false);
 				this.showItem('zoomreset', false);
@@ -548,7 +548,7 @@ class StatusBar extends JSDialog.Toolbar {
 				this.showItem('languagestatus', !app.map.isReadOnlyMode());
 				this.showItem('languagestatusbreak', !app.map.isReadOnlyMode());
 				this.showItem('permissionmode-container', true);
-				this.showItem('documentstatus-container', true);
+				this.showItem('documentstatus-container', this.isSaveIndicatorActive());
 				this.showItem('fitwidthzoom-writer', false);
 				this.showItem('fitwidthzoom-impress', true);
 				this.showItem('zoomreset', false);
@@ -563,7 +563,7 @@ class StatusBar extends JSDialog.Toolbar {
 				this.showItem('languagestatus', !app.map.isReadOnlyMode());
 				this.showItem('languagestatusbreak', !app.map.isReadOnlyMode());
 				this.showItem('permissionmode-container', true);
-				this.showItem('documentstatus-container', true);
+				this.showItem('documentstatus-container', this.isSaveIndicatorActive());
 				this._showTheSelectionItems();
 			}
 			break;
