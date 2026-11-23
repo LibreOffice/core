@@ -24,8 +24,8 @@ that produces the thing it describes.
 
 The two SPDX documents follow the same conventions — per-file SHA512 hashes
 with BSI TR-03183-2 purpose flags, externals identified by CPE with their
-source tarball and its SHA256, static linking expressed as `contains` with
-`software_softwareLinkage: "static"` — so they can be read as one set.
+source tarball and its SHA256, static linking expressed as `hasStaticLink` —
+so they can be read as one set.
 
 ### Engine
 

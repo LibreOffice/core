@@ -596,15 +596,16 @@ def add_source_artifact(graph, fragment, pkg_spdx_id, locator, sha256=None,
     """Emit the source artifact a package is generated from."""
     source_spdx_id = make_spdx_id(f"{fragment}-source")
     source_element = {
-        "type": "software_SoftwareArtifact",
+        "type": "software_Package",
         "spdxId": source_spdx_id,
+        "creationInfo": "_:creationinfo",
         "software_primaryPurpose": "source",
     }
     if locator:
         source_element["externalRef"] = [{
             "type": "ExternalRef",
-            "externalRefType": "SourceArtifact",
-            "locator": locator,
+            "externalRefType": "sourceArtifact",
+            "locator": [locator],
         }]
     if sha256 or sha512:
         source_element["verifiedUsing"] = [{
@@ -615,6 +616,8 @@ def add_source_artifact(graph, fragment, pkg_spdx_id, locator, sha256=None,
     graph.append(source_element)
     graph.append({
         "type": "Relationship",
+        "spdxId": next_rel_id(),
+        "creationInfo": "_:creationinfo",
         "from": source_spdx_id,
         "relationshipType": "generates",
         "to": [pkg_spdx_id],
@@ -680,18 +683,23 @@ def emit_file(graph, parent_id, instpath, abspath):
         "algorithm": "sha512",
         "hashValue": get_sha512(abspath),
     }
-    if flags:
-        hash_element["software_additionalPurpose"] = flags
-        hash_element["comment"] = ("software_additionalPurpose field is "
-            "used to indicate the properties of BSI TR-03183-2")
-    graph.append({
+    file_element = {
         "type": "software_File",
         "spdxId": file_spdx_id,
+        "creationInfo": "_:creationinfo",
         "name": instpath,
         "verifiedUsing": [hash_element],
-    })
+    }
+    # where the engine's generator puts them
+    if flags:
+        file_element["software_additionalPurpose"] = flags
+        file_element["comment"] = ("software_additionalPurpose field is "
+            "used to indicate the properties of BSI TR-03183-2")
+    graph.append(file_element)
     graph.append({
         "type": "Relationship",
+        "spdxId": next_rel_id(),
+        "creationInfo": "_:creationinfo",
         "from": parent_id,
         "relationshipType": "hasDistributionArtifact",
         "to": [file_spdx_id],
@@ -1050,6 +1058,8 @@ def main():
         if deps:
             graph.append({
                 "type": "Relationship",
+                "spdxId": next_rel_id(),
+                "creationInfo": "_:creationinfo",
                 "from": npm_ids[name],
                 "relationshipType": "dependsOn",
                 "to": deps,
@@ -1099,9 +1109,10 @@ def main():
             if static_ids:
                 graph.append({
                     "type": "Relationship",
+                    "spdxId": next_rel_id(),
+                    "creationInfo": "_:creationinfo",
                     "from": file_spdx_id,
-                    "relationshipType": "contains",
-                    "software_softwareLinkage": "static",
+                    "relationshipType": "hasStaticLink",
                     "to": static_ids,
                     "completeness": "noAssertion",
                 })
@@ -1120,6 +1131,8 @@ def main():
             if sysdeps:
                 graph.append({
                     "type": "Relationship",
+                    "spdxId": next_rel_id(),
+                    "creationInfo": "_:creationinfo",
                     "from": file_spdx_id,
                     "relationshipType": "dependsOn",
                     "to": sysdeps,
