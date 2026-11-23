@@ -157,7 +157,7 @@ namespace cairo
         maSysData( rSysData ),
         mpSurface(
             cairo_xlib_surface_create( rSysData.pDisplay,
-                                       reinterpret_cast<Drawable>(rData.aPixmap),
+                                       reinterpret_cast<Drawable>(nullptr),
                                        rSysData.pVisual,
                                        rData.mnWidth, rData.mnHeight ),
             &cairo_surface_destroy)

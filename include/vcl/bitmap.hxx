@@ -109,10 +109,6 @@ struct BitmapSystemData
 {
     #if defined(_WIN32)
     void* pDIB; // device independent byte buffer
-    #elif defined( MACOSX ) || defined( IOS )
-    // Nothing needed, apparently
-    #else
-    void* aPixmap;
     #endif
     int mnWidth;
     int mnHeight;
