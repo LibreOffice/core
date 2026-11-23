@@ -112,7 +112,7 @@ private:
 
     void FreeColorMap();
 
-    SalFrame*                       m_pFrame; // the SalFrame which created this Graphics or NULL
+    X11SalFrame* m_pFrame; // the SalFrame which created this Graphics or NULL
     SalVirtualDevice*               m_pVDev;  // the SalVirtualDevice which created this Graphics or NULL
 
 

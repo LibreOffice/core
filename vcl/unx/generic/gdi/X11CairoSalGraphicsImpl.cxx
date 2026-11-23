@@ -19,9 +19,11 @@
 
 #include "X11CairoSalGraphicsImpl.hxx"
 
+#include <salframe.hxx>
+#include <unx/salframe.h>
+
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
-#include <salframe.hxx>
 
 X11CairoSalGraphicsImpl::X11CairoSalGraphicsImpl(X11SalGraphics& rParent, CairoCommon& rCairoCommon)
     : mrParent(rParent)
