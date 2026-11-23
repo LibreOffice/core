@@ -3145,13 +3145,16 @@ function showWelcomeSVG() {
 			};
 			global.collab.addNotificationListener(listener);
 
+			// Storage refuses this upload (409) if the file in storage is no longer the version that
+			// the client has, and takes it unchecked when forced (by Overwrite, or for a host that
+			// gives no versions):
+			const lastModifiedTime = force ? undefined : global.collab.lastModifiedTime;
 			ws.send(JSON.stringify({
 				type: 'upload',
 				stream: 'contents',
 				requestId: 'wasm-save',
-				// Storage refuses this upload (409) if the file in storage is no longer this version.
-				// Overwrite sets force, which sends no version, so storage accepts the upload unchecked.
-				lastModifiedTime: force ? undefined : global.collab.lastModifiedTime
+				lastModifiedTime: lastModifiedTime,
+				force: lastModifiedTime ? undefined : true
 			}));
 		});
 	};

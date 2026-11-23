@@ -3057,8 +3057,8 @@ server -> client messages on /cool/collab/ws
 {"type":"upload_error","stream":"<name>","requestId":"<id>","error":"<text>"}
 
     Reply to a client-sent {"type":"upload"} that cannot be served ("Upload only supported for
-    contents stream", "The host allows this user no writes", "Session expired", "Server shutting
-    down").
+    contents stream", "The host allows this user no writes", "The upload has neither
+    lastModifiedTime nor force", "Session expired", "Server shutting down").
 
 {"type":"error","error":"<text>"[,"requestId":"<id>"]}
 
@@ -3076,14 +3076,17 @@ client -> server messages on /cool/collab/ws
     {"type":"fetch_error"} (failure), carrying the same "requestId" so the client can correlate
     replies with requests (and none when the request had none).
 
-{"type":"upload","stream":"contents","requestId":"<id>"[,"lastModifiedTime":"<time>"]}
+{"type":"upload","stream":"contents","requestId":"<id>"(,"lastModifiedTime":"<time>"|,"force":true)}
 
     Request a one-shot URL for uploading modified document bytes.  Server replies with
     {"type":"upload_url"} (success) or {"type":"upload_error"} (failure), with "requestId" as for
     "fetch".  With "lastModifiedTime",
     the upload is refused with 409 if storage no longer has the version of that time.  The client
     gets that time as "lastModifiedTime" in the {"type":"fetch_url"} for the "contents" stream, and
-    then as "LastModifiedTime" in the JSON that each successful /cool/collab/put returns.
+    then as "LastModifiedTime" in the JSON that each successful /cool/collab/put returns.  With
+    "force":true instead, storage takes the upload unchecked (for a user who chose to overwrite, or
+    for a client that has no version, as the integrator gives none).  The upload needs one of the
+    two.
 
 {"type":"editing_started"}
 

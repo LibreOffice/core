@@ -501,7 +501,7 @@ public:
 };
 
 /// An upload by a collab client with the version that it got is refused once the document changed
-/// in storage, unless the client leaves the version out:
+/// in storage, one without a version is refused unless the client forces it:
 class UnitCollabUploadTimestamp: public WopiTestServer {
 public:
     UnitCollabUploadTimestamp():
@@ -591,7 +591,7 @@ public:
                 break;
             }
 
-            PHASE_TRANSITION(WaitForcedUploadURL);
+            PHASE_TRANSITION(WaitUnversionedRefused);
             http::Request request(msg->getValue<std::string>("url"), http::Request::VERB_POST);
             request.setBody("Uploaded again by the collab client", "application/octet-stream");
             std::shared_ptr<http::Response const> const response
@@ -600,6 +600,18 @@ public:
             LOK_ASSERT_EQUAL(std::string("Saved by someone else"), getFileContent());
 
             _collabWs->sendMessage(R"({"type":"upload","stream":"contents","requestId":"r3"})");
+            break;
+        }
+        case Phase::WaitUnversionedRefused: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(_collabWs, "upload_error");
+            if (!msg) {
+                break;
+            }
+            LOK_ASSERT_EQUAL(std::string("r3"), msg->getValue<std::string>("requestId"));
+
+            PHASE_TRANSITION(WaitForcedUploadURL);
+            _collabWs->sendMessage(
+                R"({"type":"upload","stream":"contents","requestId":"r4","force":true})");
             break;
         }
         case Phase::WaitForcedUploadURL: {
@@ -617,7 +629,7 @@ public:
             LOK_ASSERT_EQUAL(std::string("Forced by the collab client"), getFileContent());
 
             _collabWs->asyncShutdown();
-            passTest("A stale collab upload was refused, and one without a version was not");
+            passTest("A stale collab upload was refused, and a forced one was not");
             break;
         }
         case Phase::Done:
@@ -628,7 +640,7 @@ public:
 private:
     enum class Phase {
         ConnectCollab, WaitCollabAuth, WaitFetchURL, WaitUploadURL, WaitStaleUploadURL,
-        WaitForcedUploadURL, Done
+        WaitUnversionedRefused, WaitForcedUploadURL, Done
     } _phase;
 
     std::shared_ptr<http::WebSocketSession> _collabWs;
@@ -706,7 +718,8 @@ public:
         }
         case Phase::Upload: {
             PHASE_TRANSITION(WaitUploadURL);
-            _collabWs->sendMessage(R"({"type":"upload","stream":"contents","requestId":"r1"})");
+            _collabWs->sendMessage(
+                R"({"type":"upload","stream":"contents","requestId":"r1","force":true})");
             break;
         }
         case Phase::WaitUploadURL: {
@@ -825,7 +838,8 @@ public:
         }
         case Phase::Upload: {
             PHASE_TRANSITION(WaitUploadURL);
-            _collabWs->sendMessage(R"({"type":"upload","stream":"contents","requestId":"r1"})");
+            _collabWs->sendMessage(
+                R"({"type":"upload","stream":"contents","requestId":"r1","force":true})");
             break;
         }
         case Phase::WaitUploadURL: {
@@ -1149,7 +1163,8 @@ public:
                     && url.ends_with(
                         "&WOPISrc=" + Uri::encode(getWopiHostURI() + "/wopi/files/0")));
             TRANSITION_STATE(phase_, Phase::WaitUploadUrl);
-            collabWs_->sendMessage(R"({"type":"upload","stream":"contents","requestId":"u1"})");
+            collabWs_->sendMessage(
+                R"({"type":"upload","stream":"contents","requestId":"u1","force":true})");
             break;
         }
         case Phase::WaitUploadUrl: {

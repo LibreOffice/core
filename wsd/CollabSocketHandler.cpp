@@ -412,7 +412,8 @@ void CollabSocketHandler::handleAuthenticatedMessage(const std::string& msg)
     {
         const std::string stream = json->optValue<std::string>("stream", "contents");
         handleUpload(
-            stream, requestId, json->optValue<std::string>("lastModifiedTime", std::string()));
+            stream, requestId, json->optValue<std::string>("lastModifiedTime", std::string()),
+            json->optValue<bool>("force", false));
     }
     else if (type == "editing_started")
     {
@@ -583,7 +584,7 @@ void CollabSocketHandler::handleFetch(const std::string& stream, const std::stri
 }
 
 void CollabSocketHandler::handleUpload(const std::string& stream, const std::string& requestId,
-                                       const std::string& lastModifiedTime)
+                                       const std::string& lastModifiedTime, bool force)
 {
     LOG_INF("Collab: handling upload request for stream: " << stream
             << ", requestId: " << requestId);
@@ -605,6 +606,8 @@ void CollabSocketHandler::handleUpload(const std::string& stream, const std::str
         error = "Upload only supported for contents stream";
     else if (!_userCanWrite)
         error = "The host allows this user no writes";
+    else if (lastModifiedTime.empty() && !force)
+        error = "The upload has neither lastModifiedTime nor force";
     if (!error.empty())
     {
         LOG_WRN("Collab: refusing upload of stream " << stream << ": " << error);
@@ -641,7 +644,8 @@ void CollabSocketHandler::handleUpload(const std::string& stream, const std::str
 
     // Create an upload token that the client can use to POST via HTTP
     const std::string token = createCollabUploadRequest(
-        targetUrl, _accessToken, _wopiSrc, _docKey, brokerTag, requestId, lastModifiedTime);
+        targetUrl, _accessToken, _wopiSrc, _docKey, brokerTag, requestId,
+        force ? "" : lastModifiedTime);
 
     // Send the upload URL to the client
     std::ostringstream oss;
