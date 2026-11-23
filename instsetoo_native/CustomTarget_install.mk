@@ -80,6 +80,11 @@ instsetoo_wipe:
 	$(call gb_Output_announce,wiping installation output dir,$(true),WPE,6)
 	rm -rf $(instsetoo_OUT)
 
+python_compileall: $(call gb_Postprocess_get_target,AllModulesButInstsetNative)
+	$(call gb_Output_announce,compiling python files,$(true),PYC,4)
+	$(if $(SOURCE_DATE_EPOCH),export SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH) &&) \
+	$(gb_Python_INSTALLED_EXECUTABLE) -m compileall -f -q $(INSTROOTBASE) -s $(INSTDIR)
+
 # list both as prerequisites so that make won't treat the $(template) one as intermediate /
 # won't attempt to delete it after the $(template)/Binary and the rest of the chain was made
 instsetoo_msi_templates: $(foreach template,openoffice ooohelppack sdkoo,$(addprefix \
@@ -117,7 +122,7 @@ $(instsetoo_installer_targets): $(SRCDIR)/solenv/bin/make_installer.pl \
                 bin/find-requires-x11.sh) \
         ,instsetoo_msi_templates) \
         $(call gb_Postprocess_get_target,AllModulesButInstsetNative) \
-        | instsetoo_wipe $(if $(filter msi,$(PKGFORMAT)),$(gb_Make_JobLimiter))
+        | instsetoo_wipe $(call gb_Helper_optional,PYTHON,python_compileall) $(if $(filter msi,$(PKGFORMAT)),$(gb_Make_JobLimiter))
 	$(call gb_Output_announce,$(if $(filter en-US$(COMMA)%,$(instsetoo_installer_langs)),$(subst $(instsetoo_installer_langs),multilang,$@),$@),$(true),INS,1)
 	$(if $(filter %msi‧nostrip,$@),$(gb_Make_JobLimiter) grab)
 	$(call gb_Trace_StartRange,$@,INSTALLER)
