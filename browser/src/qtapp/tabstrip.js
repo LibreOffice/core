@@ -49,6 +49,9 @@
 
 	// The ids of the tabs that the strip shows, in their order, joined by commas.
 	let shownIdOrder = '';
+	// The view-transition-name of each tab that has the name of a tab that it replaced, by tab id.
+	// Every other tab has the name 'tab-' followed by its id.
+	const inheritedTransitionNames = new Map();
 	// A tab of this strip is being dragged.
 	let dragInProgress = false;
 	const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -260,7 +263,7 @@
 			tab.dataset.id = String(t.id);
 			tab.dataset.index = String(idx);
 			// The name pairs the tab with its earlier self in an animated change of the strip.
-			tab.style.viewTransitionName = 'tab-' + t.id;
+			tab.style.viewTransitionName = transitionNameOf(t.id);
 			tab.setAttribute('role', 'tab');
 			// A background tab with a preview gets the app's hover card, which shows the name too.
 			// The active tab keeps the plain title tooltip.
@@ -364,6 +367,27 @@
 		if (activeId !== activeIdInView) scrollActiveTabIntoView();
 	}
 
+	function transitionNameOf(id) {
+		return inheritedTransitionNames.get(id) || 'tab-' + id;
+	}
+
+	// A document that opens from the Backstage takes the place of the Backstage tab: in one change
+	// of the strip a starter tab goes and a new tab comes. The new tab then has the name of the
+	// starter tab, so the starter tab turns into it, and the name stays with the new tab.
+	function inheritTransitionNames(previousTabs) {
+		const ids = new Set(tabs.map((t) => t.id));
+		const previousIds = new Set(previousTabs.map((t) => t.id));
+		const replaced = previousTabs.find(
+			(t) => t.docType === 'starter' && !ids.has(t.id),
+		);
+		const added = tabs.find((t) => !previousIds.has(t.id));
+		if (replaced && added)
+			inheritedTransitionNames.set(added.id, transitionNameOf(replaced.id));
+
+		for (const id of inheritedTransitionNames.keys())
+			if (!ids.has(id)) inheritedTransitionNames.delete(id);
+	}
+
 	// When tabs open, close or change places, every tab slides from its old place and width to its
 	// new ones. A change that leaves the order of the tabs as it is shows at once, and so does every
 	// change during a drag, in a strip that scrolls, and for a user who asks for less motion.
@@ -394,6 +418,7 @@
 	}
 
 	function onTabsChanged(json) {
+		const previousTabs = tabs;
 		const previousCount = tabs.length;
 		try {
 			tabs = JSON.parse(json) || [];
@@ -404,6 +429,7 @@
 		if (active) activeId = active.id;
 		// A new tab takes its share of the strip at once.
 		if (tabs.length > previousCount) unlockTabWidths();
+		inheritTransitionNames(previousTabs);
 		renderAnimated();
 	}
 
