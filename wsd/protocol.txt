@@ -3027,7 +3027,8 @@ server -> client messages on /cool/collab/ws
 {"type":"saved_and_switching","user":{"id":"<id>","name":"<name>"}}
 
     Sent during a local-to-server transition.  "switch_to_collab" comes from a peer that wants to
-    join collaborative editing, and only reaches a peer whose user sent {"type":"editing_started"}.
+    join collaborative editing, and only reaches a peer that edits (so far one whose user sent
+    {"type":"editing_started"}).
     "saved_and_switching" comes from a peer that edited a local copy, once it has saved that copy
     back to the integrator or has nothing to save.
 
@@ -3065,8 +3066,9 @@ server -> client messages on /cool/collab/ws
 
 {"type":"access_token","accepted":<bool>}
 
-    Reply to a client-sent {"type":"access_token"}: whether the server took the new token.  When
-    it did not, the connection keeps the token that it had.
+    Reply to a client-sent {"type":"access_token"}: whether the server took the new token (not when
+    the integrator refused it or did not answer, or when it is for another user).  When it did not,
+    the connection keeps the token that it had.
 
 {"type":"error","error":"<text>"[,"requestId":"<id>"]}
 
@@ -3106,7 +3108,7 @@ client -> server messages on /cool/collab/ws
     then as "LastModifiedTime" in the JSON that each successful /cool/collab/put returns.  With
     "force":true instead, storage takes the upload unchecked (for a user who chose to overwrite, or
     for a client that has no version, as the integrator gives none).  The upload needs one of the
-    two.
+    two, and with both, "force" wins.
 
 {"type":"editing_started"}
 
@@ -3121,7 +3123,7 @@ client -> server messages on /cool/collab/ws
     "switch_to_collab", and a peer that edits a local copy answers with "saved_and_switching" once
     it has saved that copy back to the integrator or has nothing to save.  The server does not tie
     the two together.  "switch_to_collab" is forwarded to the
-    other peers whose users sent {"type":"editing_started"}, and "saved_and_switching" to all other
+    other peers that edit, and "saved_and_switching" to all other
     peers, both with the sender's user object added.
 
 {"type":"bye"}
@@ -3136,7 +3138,8 @@ client -> server messages on /cool/collab/ws
     A new access token for <wopi-url>, URI-encoded as in the first message, such as one that the
     integrator posts to the editor page with Reset_Access_Token.  The server checks it with a
     CheckFileInfo and takes it, together with the rights that it gives, for the fetches and uploads
-    that follow, if it is for the same user.  The server answers with {"type":"access_token"}.
+    that follow, if it is for the same user.  The server answers with {"type":"access_token"} at
+    most once per request (a newer request replaces one that it still checks).
 
 HTTP byte-stream endpoints under /cool/collab/
 ----------------------------------------------
@@ -3146,8 +3149,9 @@ origin of the page of CODA and COWASM, so they answer without CORS headers.  The
 one-shot token is what authenticates a request.  Each of these addresses that the server hands out
 also carries the WOPISrc of the document without its query (and the server's RouteToken when it has
 one), so that a load balancer that routes by WOPISrc sends it to the server of the document.
+Clients use the addresses as they get them, so a later server can change their form.
 
-/cool/collab/fetch?token=<one-shot-token>
+/cool/collab/fetch?token=<one-shot-token>&WOPISrc=<wopi-url>
 
     GET.  Returns the bytes of the stream that the matching {"type":"fetch"} WS request resolved
     to.  The token is one-shot: it is consumed by the first request, also one that then fails, and
@@ -3156,7 +3160,7 @@ one), so that a load balancer that routes by WOPISrc sends it to the server of t
     described for {"type":"bye"}), and 403 or 502 when the integrator refused or failed.  A request
     with another method gets 405, and leaves the token for a request with the right method.
 
-/cool/collab/put?token=<one-shot-token>
+/cool/collab/put?token=<one-shot-token>&WOPISrc=<wopi-url>
 
     POST.  Accepts modified document body bytes from a peer that requested an upload URL via
     {"type":"upload"}.  Same one-shot token semantics and replies, plus 409 as described for
