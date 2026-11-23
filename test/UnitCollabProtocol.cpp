@@ -1193,7 +1193,8 @@ public:
             }
             LOK_ASSERT_EQUAL(false, msg->getValue<bool>("accepted"));
             TRANSITION_STATE(phase_, Phase::WaitRenewedAccepted);
-            collabWs_->sendMessage(R"({"type":"access_token","token":"renewed"})");
+            // The token "re=newed", URI-encoded as the page sends it:
+            collabWs_->sendMessage(R"({"type":"access_token","token":"re%3Dnewed"})");
             break;
         }
         case Phase::WaitRenewedAccepted: {
@@ -1215,7 +1216,7 @@ public:
                 helpers::getTestServerURI(),
                 msg->getValue<std::string>("url") + "&testname=UnitCollabTokenRenewal");
             LOK_ASSERT_EQUAL(http::StatusCode::OK, response->statusLine().statusCode());
-            LOK_ASSERT_EQUAL(std::string("renewed"), getFileToken_);
+            LOK_ASSERT_EQUAL(std::string("re=newed"), getFileToken_);
             TRANSITION_STATE(phase_, Phase::Done);
             collabWs_->asyncShutdown();
             passTest("The fetch went with the renewed token");

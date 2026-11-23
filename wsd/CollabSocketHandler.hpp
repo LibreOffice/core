@@ -41,6 +41,7 @@ class CollabSocketHandler : public WebSocketHandler
     std::string _wopiSrc;
     /// The WOPISrc as it passed the WOPI host check, without the access token.
     Poco::URI _wopiUri;
+    // The access token, without the URI encoding in which the client sends it:
     std::string _accessToken;
     bool _isAuthenticated = false;
     bool _isValidating = false;
