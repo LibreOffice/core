@@ -2920,6 +2920,8 @@ Connection:
 
     wss://<host><service-root>/cool/collab/ws?WOPISrc=<wopi-url>&protocol=<number>
 
+    <wopi-url> is the WOPISrc of the document, as for /cool/ws, without an access token (which
+    the client sends in its first message).
     "protocol" is the number of the protocol that the client speaks (see "Protocol numbers"
     below).  The server refuses the upgrade with 400 when WOPISrc is missing, or when
     client_document_loading.enable in coolwsd.xml is off.  The first message from the client is

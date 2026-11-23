@@ -289,7 +289,9 @@ if (window.ThisIsTheEmscriptenApp) {
 			_codaUploadOnSave(fileBytes, 'WASM').catch(() => {});
 		};
 
-		global.collab.fetchFile(fullDocUrl, accessToken).then(function(result) {
+		// The collab WebSocket gets the WOPISrc as /cool/ws does, without the access token (which
+		// goes in its first message):
+		global.collab.fetchFile(wopiSrc, accessToken).then(function(result) {
 			window.app.console.log('WASM: Using collab fetch URL: ' + result.url);
 			if (result.filename) {
 				map['wopi'].BaseFileName = result.filename;
