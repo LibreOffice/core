@@ -3,8 +3,11 @@
 Collabora Online ships SBOMs describing everything in the product: the
 server, the browser client, the Collabora Office engine underneath, and — for
 the container images — the base image and the distribution packages on top of
-it. This document explains how those documents are generated, how to check
-them, and how to scan them for known vulnerabilities.
+it. Every Collabora Office desktop product (Windows, macOS, flatpak, snap,
+FreeBSD) carries one too, see [Collabora Office desktop
+products](#collabora-office-desktop-products). This document explains how
+those documents are generated, how to check them, and how to scan them for
+known vulnerabilities.
 
 If you are here because a scan came back clean and you want to know whether
 to believe it, read [What a scan does not tell you](#what-a-scan-does-not-tell-you)
@@ -21,6 +24,7 @@ that produces the thing it describes.
 | Engine, one document per distro package | SPDX 3.0.1 | `engine/solenv/bin/create-sbom.py` | `engine/workdir/CustomTarget/instsetoo_native/sbom/<package>-sbom.spdx.json`, copied to `engine/instdir/sbom/` |
 | Online (coolwsd + browser) | SPDX 3.0.1 | `scripts/create-sbom.py` | `collabora-online-sbom.spdx.json` |
 | Container image | CycloneDX 1.6 **and** SPDX 3.0.1 | `docker/from-packages/scripts/generate-image-sbom.py` | `/usr/share/sbom/collabora-online.cdx.json` and `collabora-online-image-sbom.spdx.json` inside the image |
+| Desktop product, one per artifact | CycloneDX 1.6 **and** SPDX 3.0.1 | `scripts/create-product-sbom.py` | `collabora-office.cdx.json` and `collabora-office.spdx.json` inside the product, and next to the download |
 
 The two SPDX documents follow the same conventions — per-file SHA512 hashes
 with BSI TR-03183-2 purpose flags, externals identified by CPE with their
@@ -316,6 +320,139 @@ directly (`trivy sbom sbom.cdx.json`, `grype sbom:sbom.cdx.json`). Read it
 together with the VEX attestation: the scan reports raw findings, the VEX
 records which of them affect the product, and why.
 
+## Collabora Office desktop products
+
+Every place a Collabora Office desktop binary ships carries the SBOM of
+exactly what ships there, built when the product is built: one CycloneDX 1.6
+document, the one to scan, and the same content as one SPDX 3.0.1 document.
+
+| Product | Built by | In the product | Next to the download |
+| --- | --- | --- | --- |
+| Windows (Microsoft Store, sideload `.appx`) | `windows/coda/build/orchestrator.mk` `sbom`, before `package_appx.py` | `sbom\collabora-office.cdx.json` in the install directory | `CollaboraOffice_<version>-<build>.cdx.json` |
+| macOS (App Store, `.dmg`) | `macos/add-sbom.sh`, on the universal bundle before it is exported | `Contents/Resources/sbom/` | `CollaboraOffice_<version>-<build>.cdx.json` |
+| Flatpak (Flathub, bundle) | `qt/flatpak/com.collaboraoffice.Office.json` | `/app/share/sbom/` | next to `CODA-Q.flatpak` |
+| Snap (Snap Store) | the `sbom` part of `snap/snapcraft.yaml` | `$SNAP/usr/share/sbom/` | archived with the `.snap` |
+| FreeBSD (port, pkg) | `post-install` of `qt/freebsd/editors/collabora-office` | `/usr/local/share/collabora-office/sbom/` | — |
+
+The stores (Microsoft Store, App Store, Flathub, Snap Store, the FreeBSD
+package mirrors) distribute only the product, so there the SBOM inside it is
+the one; where we host a download, a copy lies next to it.
+
+### What it describes
+
+Every file the product's build installs, and every component, in one of
+three layers (the `collabora:layer` property of each CycloneDX component).
+What the store packaging adds afterwards — the MSIX manifest and assets,
+the code signature of the Mac app, the flatpak's appstream data, the
+license directory of the FreeBSD package — is not described.
+
+| Layer | Means | Examples |
+| --- | --- | --- |
+| `built` | built by us from source and shipped | the engine's externals, POCO, the npm packages of the browser client |
+| `bundled-binary` | a prebuilt third-party binary shipped inside the product | the Ubuntu packages the snap stages (`pkg:deb/ubuntu/...`), QtWebEngine from the flatpak's base app, the WebView2 loader and other NuGet packages on Windows |
+| `platform` | needed at run time but not shipped | the flatpak runtime and the libraries the engine takes from it, the snap's base and content snaps, the FreeBSD packages the binaries load (with the CPE the port declares), the WebView2 runtime, VCLibs and .NET on Windows, macOS itself |
+
+The products differ in what they bundle and what they take from the
+platform — the Windows and macOS apps bundle everything, the flatpak, the
+snap and the FreeBSD port take what their platform offers (see their engine
+configurations in `engine/distro-configs/`) — and the SBOM follows from the
+build, not from a list: the engine records what it took from the system
+(`SYSTEM_*` in its `config_host.mk`), the binaries what they load. A platform
+component carries the version the product was built against, which is not
+necessarily the one installed where it runs; the scan helper below can
+replace it.
+
+### How it is made
+
+`scripts/create-product-sbom.py` assembles it from what the build already
+knows:
+
+* the engine's per-package documents (configure the engine with
+  `--enable-sbom`, which the desktop products' configurations do) and
+  `installed-files.json`, the list of every file the engine installs, which
+  the engine writes next to them;
+* the app's own document, from `scripts/create-sbom.py`, with what each app
+  binary links from the link line of its build (the configured Makefile, the
+  `.vcxproj` files, the Xcode project) and what it loads from the binary
+  itself (ELF, PE or Mach-O);
+* the platform: the flatpak manifest and `pkg-config`, the `.deb`s the snap
+  parts staged, `pkg which` on FreeBSD, `AppxManifest.xml.in` on Windows.
+
+It runs in two steps, `stage` where the build trees are and `finalize` on the
+product as it ships (or both at once, `all`). `finalize` hashes every file
+and fails if a file of the product is not described, or a described one is
+gone. The split exists because some packaging changes files after the
+build: flatpak-builder strips the binaries after a module is installed, so
+the flatpak finalizes in a module of its own after that, and the Mac app is
+signed when it is exported. For the Mac the hashes of the Mach-O binaries
+are therefore those before signing — the SBOM says so in
+`collabora:hash-basis` — and the code signature is what verifies them: a
+file added after signing would break the seal.
+
+The engine lists only its executables and archives with hashes, as for the
+server; its other files are covered by the package they belong to. A file
+the engine delivered into instdir without installing it (the Windows and
+Mac apps copy all of instdir) is described as a file of the product.
+
+### How to analyze it where the product runs
+
+    # the SBOM of the Collabora Office installed here, scanned against the VEX,
+    # with the versions of the platform components that are installed here
+    scripts/scan-sbom.py --installed --probe \
+        --vex docker/from-packages/vex/cool.vex.json --out-dir scan
+
+    # or one from a download, with the build-time platform versions
+    scripts/scan-sbom.py --cdx CollaboraOffice_26.04.6.2-1234.cdx.json \
+        --vex docker/from-packages/vex/cool.vex.json --out-dir scan
+
+It needs grype (and trivy, if there) as for `make sbom-scan`, and reports
+the same classes, plus `PLATFORM` for what is found in components the
+product does not ship. `--probe` asks `flatpak info`, `snap list`,
+`pkg query`, `sw_vers`, or on Windows the registry and `Get-AppxPackage`.
+The scanners can also be pointed at the CycloneDX document directly
+(`grype sbom:collabora-office.cdx.json`, `trivy sbom ...`); the VEX the
+document points at (`externalReferences`, type `exploitability-statement`)
+tells which findings are assessed.
+
+What the scanners cover differs by platform, and so does who fixes what:
+
+* **Windows, macOS**: everything but the operating system is ours and is
+  matched by CPE and purl (NuGet). The WebView2 runtime is Microsoft's
+  Evergreen runtime, which Microsoft updates; WebKit comes with macOS.
+* **Flatpak**: what the product ships is ours; the libraries the engine takes
+  from the runtime (curl, openssl, libxml2, ...) are listed with the NVD names
+  the engine uses when it bundles them, so the same CVEs match, but they are
+  fixed by a runtime update, which Flathub delivers. QtWebEngine from the base
+  app is listed, but the Chromium inside it is not matched by any scanner:
+  Qt's security advisories are what covers it.
+* **Snap**: the staged Ubuntu packages ship inside the snap, so they are ours
+  to refresh: a rebuild picks up Ubuntu's security updates. Ubuntu's security
+  data is about source packages, so each one carries its source package as
+  well — the `upstream` qualifier of its purl for grype, the
+  `aquasecurity:trivy:SrcName` and `SrcVersion` properties for trivy; without
+  them neither scanner reports anything for these packages. The base and
+  content snaps are updated by their publishers.
+* **FreeBSD**: the packages the product depends on are FreeBSD's; `pkg audit`
+  checks them against VuXML, which is the authority there, and the scanners
+  match those whose ports declare a CPE.
+
+### VEX for several products
+
+All products share `docker/from-packages/vex/cool.vex.json`. A statement
+whose reasoning holds for some products only — a patch to a bundled library
+that another product takes from the system, an argument about what the
+container image contains — names them in a `collabora:platforms` property
+(`server` for Collabora Online, `windows`, `macos`, `flatpak`, `snap`,
+`freebsd`), and `scan-sbom.py` applies it to those only. A statement without
+the property applies to all. When writing a statement, check whether its
+evidence is true for every product: "the bundled version contains the fix"
+is not, where a product takes that library from the system.
+
+The SBOMs point at the VEX on the GitHub mirror of this repository,
+`https://raw.githubusercontent.com/CollaboraOnline/online.mirror/main/docker/from-packages/vex/cool.vex.json`,
+which follows the branch, so an assessment made after a release reaches
+those who already have the product.
+
 ## What a scan does not tell you
 
 Three ways a vulnerability scan of a correct, complete SBOM stays silent about
@@ -384,7 +521,7 @@ it as above.
 | `scripts/sbom-externals.json` | online component annotations |
 | `scripts/audit-sbom-cpes.py` | CPE identifier audit (`make sbom-audit`) |
 | `scripts/check-external-freshness.py` | upstream freshness (`make sbom-freshness`) |
-| `scripts/scan-sbom.py` | scan of the engine and online SBOMs against the VEX (`make sbom-scan`) |
+| `scripts/scan-sbom.py` | scan of the engine and online SBOMs, or of a desktop product's, against the VEX (`make sbom-scan`) |
 | `THIRDPARTYLICENSES` | license texts of the direct dependencies |
 | `engine/solenv/bin/create-sbom.py` | engine SBOM generator |
 | `engine/readlicense_oo/license/license.xml` | engine component annotations |
@@ -395,4 +532,6 @@ it as above.
 | `docker/from-packages/scripts/generate-vex.py` | VEX finding merge |
 | `docker/from-packages/scripts/publish.sh` | sign and attest a published image |
 | `docker/from-packages/vex/cool.vex.json` | VEX statements |
+| `scripts/create-product-sbom.py` | SBOM of a desktop product |
+| `macos/add-sbom.sh` | puts the SBOM into the Mac app |
 | `docker/cosign.pub` | public key the published images are verified with |
