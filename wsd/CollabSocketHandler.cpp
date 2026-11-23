@@ -488,8 +488,7 @@ void CollabSocketHandler::handleFetch(const std::string& stream, const std::stri
 
     // Build the URL for the requested stream
     std::string url;
-    if ((stream == "contents" || stream == "fileUrl" || stream == "templateSource") &&
-        !_allowsCleanExport)
+    if (stream == "contents" && !_allowsCleanExport)
     {
         LOG_WRN("Collab: refusing " << stream << " fetch, the host allows no clean export");
         std::ostringstream oss;
@@ -517,18 +516,6 @@ void CollabSocketHandler::handleFetch(const std::string& stream, const std::stri
             contentsUri.addQueryParameter("access_token", _accessToken);
             url = contentsUri.toString();
         }
-    }
-    else if (stream == "userSettings" && _wopiInfo)
-    {
-        url = _wopiInfo->optValue<std::string>("UserSettingsUri", std::string());
-    }
-    else if (stream == "templateSource" && _wopiInfo)
-    {
-        url = _wopiInfo->optValue<std::string>("TemplateSource", std::string());
-    }
-    else if (stream == "fileUrl" && _wopiInfo)
-    {
-        url = _wopiInfo->optValue<std::string>("FileUrl", std::string());
     }
 
     if (url.empty())

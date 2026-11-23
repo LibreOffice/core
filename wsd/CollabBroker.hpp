@@ -49,7 +49,7 @@ struct CollabFetchRequest
     std::string docKey;          ///< Document key to verify live CollabBroker
     std::string brokerTag;       ///< Broker access token at time of request
     std::string requestId;       ///< Client-provided request ID
-    std::string stream;          ///< Stream name (contents, userSettings, etc.)
+    std::string stream;          ///< Stream name (contents)
     std::chrono::steady_clock::time_point expiry;  ///< When this token expires
 };
 

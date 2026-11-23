@@ -3038,8 +3038,8 @@ server -> client messages on /cool/collab/ws
 {"type":"fetch_error","stream":"<name>","requestId":"<id>","error":"<text>"[,"cleanExport":false]}
 
     Reply to a client-sent {"type":"fetch"} that cannot be served ("Stream not available",
-    "Session expired", "Server shutting down").  A fetch of the document bytes ("contents",
-    "fileUrl" or "templateSource") by a user whose integrator disallows a clean copy (DisableExport,
+    "Session expired", "Server shutting down").  A fetch of the document bytes ("contents") by a
+    user whose integrator disallows a clean copy (DisableExport,
     DisableCopy or WatermarkText) carries "error":"Export not allowed" and "cleanExport":false; such a
     user can open the document only through /cool/ws.
 
@@ -3066,8 +3066,8 @@ client -> server messages on /cool/collab/ws
 {"type":"fetch","stream":"<name>","requestId":"<id>"}
 
     Request a one-shot URL for downloading the bytes of a stream: "contents" (the default, the
-    current document bytes), "fileUrl" (the document from the integrator's FileUrl),
-    "templateSource" or "userSettings".  Server replies with {"type":"fetch_url"} (success) or
+    current document bytes, from the integrator's FileUrl when CheckFileInfo has one, and the only
+    stream).  Server replies with {"type":"fetch_url"} (success) or
     {"type":"fetch_error"} (failure), carrying the same "requestId" so the client can correlate
     replies with requests (and none when the request had none).
 

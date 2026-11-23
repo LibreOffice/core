@@ -892,8 +892,6 @@ public:
     {
         fileInfo->set("UserCanWrite", false);
         fileInfo->set("DisableExport", true);
-        fileInfo->set("FileUrl", getWopiHostURI() + "/wopi/files/0/contents");
-        fileInfo->set("TemplateSource", getWopiHostURI() + "/wopi/files/0/contents");
     }
 
     void invokeWSDTest() override {
@@ -925,29 +923,6 @@ public:
             LOK_ASSERT_EQUAL(
                 std::string("Export not allowed"), msg->getValue<std::string>("error"));
             LOK_ASSERT_EQUAL(false, msg->getValue<bool>("cleanExport"));
-            TRANSITION_STATE(phase_, Phase::WaitFileUrlRefused);
-            collabWs_->sendMessage(R"({"type":"fetch","stream":"fileUrl","requestId":"f2"})");
-            break;
-        }
-        case Phase::WaitFileUrlRefused: {
-            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "fetch_error");
-            if (!msg) {
-                break;
-            }
-            LOK_ASSERT_EQUAL(std::string("f2"), msg->getValue<std::string>("requestId"));
-            LOK_ASSERT_EQUAL(false, msg->getValue<bool>("cleanExport"));
-            TRANSITION_STATE(phase_, Phase::WaitTemplateSourceRefused);
-            collabWs_->sendMessage(
-                R"({"type":"fetch","stream":"templateSource","requestId":"f3"})");
-            break;
-        }
-        case Phase::WaitTemplateSourceRefused: {
-            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "fetch_error");
-            if (!msg) {
-                break;
-            }
-            LOK_ASSERT_EQUAL(std::string("f3"), msg->getValue<std::string>("requestId"));
-            LOK_ASSERT_EQUAL(false, msg->getValue<bool>("cleanExport"));
             TRANSITION_STATE(phase_, Phase::WaitUploadRefused);
             collabWs_->sendMessage(R"({"type":"upload","stream":"contents","requestId":"u1"})");
             break;
@@ -973,8 +948,7 @@ public:
 
 private:
     STATE_ENUM(
-        Phase, ConnectCollab, WaitCollabAuth, WaitContentsRefused, WaitFileUrlRefused,
-        WaitTemplateSourceRefused, WaitUploadRefused, Done) phase_;
+        Phase, ConnectCollab, WaitCollabAuth, WaitContentsRefused, WaitUploadRefused, Done) phase_;
 
     std::shared_ptr<http::WebSocketSession> collabWs_;
 };
