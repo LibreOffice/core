@@ -45,6 +45,9 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     // The space around the notice's text, in points:
     private static let noticeInsets = NSEdgeInsets(top: 8, left: 12, bottom: 8, right: 8)
     private static let noticeCloseWidth: CGFloat = 24
+    private let noticeDontShowAgain = NSButton(title: "Don't show again", target: nil, action: nil)
+    // Keeps the choice of the user not to see the current notice again:
+    private var dontShowNoticeAgain: (() -> Void)?
     private var editorForm: Data?
     private var editorFormUrl: URL?
     private var editorFrameInfo: WKFrameInfo?
@@ -175,11 +178,15 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         close.isBordered = false
         close.toolTip = "Close"
         close.widthAnchor.constraint(equalToConstant: Self.noticeCloseWidth).isActive = true
+        noticeDontShowAgain.target = self
+        noticeDontShowAgain.action = #selector(hideNoticeAndRemember)
         noticeText.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        noticeText.setContentCompressionResistancePriority(.required, for: .vertical)
         notice.orientation = .horizontal
         notice.alignment = .top
         notice.edgeInsets = Self.noticeInsets
         notice.addArrangedSubview(noticeText)
+        notice.addArrangedSubview(noticeDontShowAgain)
         notice.addArrangedSubview(close)
         notice.setHuggingPriority(.defaultHigh, for: .vertical)
         notice.wantsLayer = true
@@ -196,8 +203,9 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     }
 
     // Shows the text above the integrator's site, until the user closes it:
-    private func showNotice(_ text: String) {
+    private func showNotice(_ text: String, dontShowAgain: @escaping () -> Void) {
         noticeText.stringValue = text
+        dontShowNoticeAgain = dontShowAgain
         notice.layer?.backgroundColor = NSColor.systemYellow.withAlphaComponent(0.2).cgColor
         notice.isHidden = false
         fitNoticeText()
@@ -207,11 +215,18 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         notice.isHidden = true
     }
 
+    @objc private func hideNoticeAndRemember() {
+        dontShowNoticeAgain?()
+        hideNotice()
+    }
+
     // The notice's text wraps at the width that the window leaves it:
     private func fitNoticeText() {
         let width = window?.contentView?.bounds.width ?? Self.defaultSize.width
         noticeText.preferredMaxLayoutWidth = max(
-            0, width - Self.noticeInsets.left - Self.noticeInsets.right - notice.spacing - Self.noticeCloseWidth)
+            0,
+            width - Self.noticeInsets.left - Self.noticeInsets.right - 2 * notice.spacing
+                - noticeDontShowAgain.fittingSize.width - Self.noticeCloseWidth)
     }
 
     func windowDidResize(_ notification: Notification) {
@@ -373,21 +388,29 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     }
 
     private func showServerEditorNotice(reason: String, editorUrl: URL) {
+        let origin = Self.origin(of: editorUrl) ?? ""
+        if COWrapper.isServerEditorNoticeHidden(reason: reason, origin: origin) {
+            return
+        }
+        let dontShowAgain = { COWrapper.hideServerEditorNotice(reason: reason, origin: origin) }
         let server = editorUrl.host ?? "The server"
         let app = AppDelegate.getAppName()
         if reason == COWrapper.disabledReason() {
             showNotice(
                 "\(server) does not allow editing in \(app), so the document is open in the server's own editor. "
                 + "To edit documents from \(server) in \(app), ask the server's administrator to allow that "
-                + "(client_document_loading.enable in coolwsd.xml).")
+                + "(client_document_loading.enable in coolwsd.xml).",
+                dontShowAgain: dontShowAgain)
         } else if reason == COWrapper.outdatedReason() {
             showNotice(
                 "This version of \(app) is too old to edit documents from \(server), so the document is open in the "
-                + "server's own editor. To edit documents from \(server) in \(app), update your copy of \(app).")
+                + "server's own editor. To edit documents from \(server) in \(app), update your copy of \(app).",
+                dontShowAgain: dontShowAgain)
         } else {
             showNotice(
                 "\(server) runs a version of Collabora Online that does not support editing in \(app), "
-                + "so the document is open in the server's own editor.")
+                + "so the document is open in the server's own editor.",
+                dontShowAgain: dontShowAgain)
         }
     }
 

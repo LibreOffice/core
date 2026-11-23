@@ -60,6 +60,13 @@ namespace Desktop
     int getUIZoomPercent();
     void setUIZoomPercent(int percent);
 
+    // Whether the user chose not to see again the notice that says why a document from the server
+    // with that origin is open in the server's own editor, for that reason (one of those in
+    // common/EditorFrameScripts.hpp, and for the reason that the app is too old only as long as the
+    // app has the version that it had then):
+    bool isServerEditorNoticeHidden(std::string const & reason, std::string const & origin);
+    void hideServerEditorNotice(std::string const & reason, std::string const & origin);
+
     // Fetch the AI provider's model list (proxy for the desktop, which has no
     // server). payload is {"provider","apiKey","baseUrl"}; returns the provider's
     // JSON body or {"error":...}.

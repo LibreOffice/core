@@ -14,6 +14,7 @@
 #include "SettingsStorage.hpp"
 
 #include <common/ConfigUtil.hpp>
+#include <common/EditorFrameScripts.hpp>
 #include <common/Log.hpp>
 #include <common/SettingsSecrets.hpp>
 #include <common/Util.hpp>
@@ -23,6 +24,7 @@
 
 #include <Poco/DirectoryIterator.h>
 #include <Poco/File.h>
+#include <Poco/JSON/Array.h>
 #include <Poco/JSON/Object.h>
 #include <Poco/JSON/Parser.h>
 #include <Poco/Path.h>
@@ -370,6 +372,57 @@ int getUIZoomPercent()
 void setUIZoomPercent(int percent)
 {
     writePreference("uiZoomPercent", percent);
+}
+
+// The notices that the user chose not to see again, which preferences.json keeps under this key as
+// an object that maps each reason to an array of origins (or, for the reason that the app is too
+// old, to the app's version at that time):
+static char const hiddenServerEditorNoticesKey[] = "hiddenServerEditorNotices";
+
+static std::string serverEditorNoticeEntry(std::string const & reason, std::string const & origin) {
+    return reason == EditorFrameScripts::outdatedReason
+        ? Util::getCoolVersion() + ' ' + Util::getCoolVersionHash()
+        : origin;
+}
+
+bool isServerEditorNoticeHidden(std::string const & reason, std::string const & origin) {
+    try {
+        Poco::JSON::Object::Ptr const notices
+            = readPreferences()->getObject(hiddenServerEditorNoticesKey);
+        Poco::JSON::Array::Ptr const entries = notices ? notices->getArray(reason) : nullptr;
+        if (entries) {
+            std::string const entry = serverEditorNoticeEntry(reason, origin);
+            for (auto const & value: *entries) {
+                if (value.isString() && value.extract<std::string>() == entry) {
+                    return true;
+                }
+            }
+        }
+    } catch (std::exception const & ex) {
+        LOG_ERR("isServerEditorNoticeHidden failed: " << ex.what());
+    }
+    return false;
+}
+
+void hideServerEditorNotice(std::string const & reason, std::string const & origin) {
+    try {
+        Poco::JSON::Object::Ptr notices
+            = readPreferences()->getObject(hiddenServerEditorNoticesKey);
+        if (!notices) {
+            notices = new Poco::JSON::Object();
+        }
+        // The version of the app replaces that of an older one:
+        Poco::JSON::Array::Ptr entries
+            = reason == EditorFrameScripts::outdatedReason ? nullptr : notices->getArray(reason);
+        if (!entries) {
+            entries = new Poco::JSON::Array();
+        }
+        entries->add(serverEditorNoticeEntry(reason, origin));
+        notices->set(reason, entries);
+        writePreference(hiddenServerEditorNoticesKey, notices);
+    } catch (std::exception const & ex) {
+        LOG_ERR("hideServerEditorNotice failed: " << ex.what());
+    }
 }
 
 } // namespace Desktop

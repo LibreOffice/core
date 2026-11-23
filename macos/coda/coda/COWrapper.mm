@@ -694,6 +694,14 @@ void install_filepicker_provider(COKit &rOffice)
     return EditorFrameScripts::isServerEditorReason([reason UTF8String]);
 }
 
++ (bool)isServerEditorNoticeHidden:(NSString *)reason origin:(NSString *)origin {
+    return Desktop::isServerEditorNoticeHidden([reason UTF8String], [origin UTF8String]);
+}
+
++ (void)hideServerEditorNotice:(NSString *)reason origin:(NSString *)origin {
+    Desktop::hideServerEditorNotice([reason UTF8String], [origin UTF8String]);
+}
+
 + (void)saveAsWith:(Document *)document url:(NSString *)url format:(NSString *)format filterOptions:(NSString *)filterOptions {
     DocumentData::get(document.appDocId).loKitDocument->saveAs([url UTF8String], [format UTF8String], [filterOptions UTF8String]);
 }

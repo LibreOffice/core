@@ -18,6 +18,7 @@
 #include <common/EditorFrameScripts.hpp>
 #include <common/Log.hpp>
 #include <common/MobileApp.hpp>
+#include <common/SettingsStorage.hpp>
 #include <common/Uri.hpp>
 #include <net/FakeSocket.hpp>
 #include <qt/CoolLocalSchemeHandler.hpp>
@@ -40,6 +41,7 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QPointer>
+#include <QPushButton>
 #include <QSize>
 #include <QStyle>
 #include <QTimer>
@@ -59,6 +61,7 @@
 #include <QWebEngineView>
 
 #include <chrono>
+#include <functional>
 #include <map>
 #include <memory>
 #include <optional>
@@ -260,7 +263,7 @@ public:
 
     void setPage(CloudAccountPage * page) { _page = page; }
     void setView(QWebEngineView * view);
-    void showNotice(QString const & text);
+    void showNotice(QString const & text, std::function<void()> const & dontShowAgain);
     void hideNotice() { _notice->hide(); }
 
 protected:
@@ -270,6 +273,7 @@ private:
     QPointer<CloudAccountPage> _page;
     QWidget * _notice;
     QLabel * _noticeText;
+    std::function<void()> _dontShowNoticeAgain;
 };
 
 /// The pages with an editor frame, by the session of the frame.
@@ -465,8 +469,14 @@ void CloudAccountWindow::setView(QWebEngineView * view) {
     close->setAutoRaise(true);
     close->setToolTip(QObject::tr("Close"));
     connect(close, &QToolButton::clicked, _notice, &QWidget::hide);
+    auto * dontShowAgain = new QPushButton(QObject::tr("Don't show again"));
+    connect(dontShowAgain, &QPushButton::clicked, _notice, [this] {
+        _dontShowNoticeAgain();
+        _notice->hide();
+    });
     auto * noticeLayout = new QHBoxLayout(_notice);
     noticeLayout->addWidget(_noticeText, 1);
+    noticeLayout->addWidget(dontShowAgain, 0, Qt::AlignTop);
     noticeLayout->addWidget(close, 0, Qt::AlignTop);
     _notice->setAutoFillBackground(true);
     _notice->setBackgroundRole(QPalette::ToolTipBase);
@@ -481,8 +491,11 @@ void CloudAccountWindow::setView(QWebEngineView * view) {
     setCentralWidget(central);
 }
 
-void CloudAccountWindow::showNotice(QString const & text) {
+void CloudAccountWindow::showNotice(
+    QString const & text, std::function<void()> const & dontShowAgain)
+{
     _noticeText->setText(text);
+    _dontShowNoticeAgain = dontShowAgain;
     _notice->show();
 }
 
@@ -845,6 +858,13 @@ void CloudAccountPage::showServerEditorNotice(QUrl const & origin, QString const
     if (!window) {
         return;
     }
+    auto const originText = origin.toString().toStdString();
+    if (Desktop::isServerEditorNoticeHidden(reason.toStdString(), originText)) {
+        return;
+    }
+    auto const dontShowAgain = [reason = reason.toStdString(), originText] {
+        Desktop::hideServerEditorNotice(reason, originText);
+    };
     auto const server = origin.host();
     auto const app = QStringLiteral(APP_NAME);
     if (reason.toStdString() == EditorFrameScripts::disabledReason) {
@@ -853,18 +873,21 @@ void CloudAccountPage::showServerEditorNotice(QUrl const & origin, QString const
                         "own editor. To edit documents from %1 in %2, ask the server's "
                         "administrator to allow that (client_document_loading.enable in "
                         "coolwsd.xml).")
-                .arg(server, app));
+                .arg(server, app),
+            dontShowAgain);
     } else if (reason.toStdString() == EditorFrameScripts::outdatedReason) {
         window->showNotice(
             QObject::tr("This version of %2 is too old to edit documents from %1, so the "
                         "document is open in the server's own editor. To edit documents from %1 "
                         "in %2, update your copy of %2.")
-                .arg(server, app));
+                .arg(server, app),
+            dontShowAgain);
     } else {
         window->showNotice(
             QObject::tr("%1 runs a version of Collabora Online that does not support editing in "
                         "%2, so the document is open in the server's own editor.")
-                .arg(server, app));
+                .arg(server, app),
+            dontShowAgain);
     }
 }
 }

@@ -207,6 +207,8 @@ struct DocumentTab
     std::map<std::string, std::string> serverEditorReasons;
     // The notice at the top of an account window, null until it first shows:
     HWND noticeWindow = nullptr;
+    // Keeps the choice of the user not to see the current notice again:
+    std::function<void()> dontShowNoticeAgain;
 };
 
 // One top-level window. It holds its documents in the order the tab strip shows
@@ -3501,19 +3503,29 @@ static POINT stripPointToScreen(const WindowState& window, double x, double y)
 constexpr int NOTICE_PADDING = 8;
 constexpr int NOTICE_BUTTON_WIDTH = 64;
 constexpr int NOTICE_BUTTON_HEIGHT = 24;
+// The space on either side of the text of the notice's button that hides it and keeps it hidden,
+// in pixels at 96 DPI:
+constexpr int NOTICE_DONT_SHOW_AGAIN_MARGIN = 12;
+// The control IDs of the notice's buttons:
+constexpr int NOTICE_CLOSE_ID = 1;
+constexpr int NOTICE_DONT_SHOW_AGAIN_ID = 2;
 
 static HFONT noticeFontOf(HWND notice) {
     auto const font = reinterpret_cast<HFONT>(GetWindowLongPtrW(notice, GWLP_USERDATA));
     return font ? font : static_cast<HFONT>(GetStockObject(DEFAULT_GUI_FONT));
 }
 
-// The text of a notice of the given size wraps to the left of its close button:
+static int noticeDontShowAgainWidth(HWND notice);
+
+// The text of a notice of the given size wraps to the left of its buttons:
 static RECT noticeTextRect(HWND notice, int width, int height) {
     UINT const dpi = GetDpiForWindow(notice);
     int const padding = MulDiv(NOTICE_PADDING, dpi, USER_DEFAULT_SCREEN_DPI);
     int const buttonWidth = MulDiv(NOTICE_BUTTON_WIDTH, dpi, USER_DEFAULT_SCREEN_DPI);
+    int const dontShowAgainWidth = noticeDontShowAgainWidth(notice);
     return {
-        padding, padding, std::max(padding, width - 2 * padding - buttonWidth),
+        padding, padding,
+        std::max(padding, width - 3 * padding - buttonWidth - dontShowAgainWidth),
         std::max(padding, height - padding)};
 }
 
@@ -3521,6 +3533,20 @@ static std::wstring noticeText(HWND notice) {
     std::wstring text(GetWindowTextLengthW(notice) + 1, L'\0');
     text.resize(GetWindowTextW(notice, text.data(), static_cast<int>(text.size())));
     return text;
+}
+
+// The width of the notice's button that hides it and keeps it hidden, as its text needs in the
+// notice's font:
+static int noticeDontShowAgainWidth(HWND notice) {
+    UINT const dpi = GetDpiForWindow(notice);
+    std::wstring const text = noticeText(GetDlgItem(notice, NOTICE_DONT_SHOW_AGAIN_ID));
+    HDC const dc = GetDC(notice);
+    HGDIOBJ const oldFont = SelectObject(dc, noticeFontOf(notice));
+    SIZE size = {};
+    GetTextExtentPoint32W(dc, text.c_str(), text.size(), &size);
+    SelectObject(dc, oldFont);
+    ReleaseDC(notice, dc);
+    return size.cx + 2 * MulDiv(NOTICE_DONT_SHOW_AGAIN_MARGIN, dpi, USER_DEFAULT_SCREEN_DPI);
 }
 
 // Puts the notice at the top of the bounds, as high as its wrapped text needs, with the message
@@ -3534,8 +3560,10 @@ static int placeNotice(HWND notice, RECT const & bounds) {
     }
     auto const oldFont = reinterpret_cast<HFONT>(
         SetWindowLongPtrW(notice, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(font)));
-    HWND const close = GetWindow(notice, GW_CHILD);
+    HWND const close = GetDlgItem(notice, NOTICE_CLOSE_ID);
     SendMessageW(close, WM_SETFONT, reinterpret_cast<WPARAM>(noticeFontOf(notice)), FALSE);
+    HWND const dontShowAgain = GetDlgItem(notice, NOTICE_DONT_SHOW_AGAIN_ID);
+    SendMessageW(dontShowAgain, WM_SETFONT, reinterpret_cast<WPARAM>(noticeFontOf(notice)), FALSE);
     if (oldFont) {
         DeleteObject(oldFont);
     }
@@ -3544,6 +3572,7 @@ static int placeNotice(HWND notice, RECT const & bounds) {
     int const padding = MulDiv(NOTICE_PADDING, dpi, USER_DEFAULT_SCREEN_DPI);
     int const buttonWidth = MulDiv(NOTICE_BUTTON_WIDTH, dpi, USER_DEFAULT_SCREEN_DPI);
     int const buttonHeight = MulDiv(NOTICE_BUTTON_HEIGHT, dpi, USER_DEFAULT_SCREEN_DPI);
+    int const dontShowAgainWidth = noticeDontShowAgainWidth(notice);
     RECT text = noticeTextRect(notice, width, 0);
     HDC const dc = GetDC(notice);
     HGDIOBJ const oldDcFont = SelectObject(dc, noticeFontOf(notice));
@@ -3557,6 +3586,9 @@ static int placeNotice(HWND notice, RECT const & bounds) {
     SetWindowPos(
         close, nullptr, width - padding - buttonWidth, padding, buttonWidth, buttonHeight,
         SWP_NOZORDER | SWP_NOACTIVATE);
+    SetWindowPos(
+        dontShowAgain, nullptr, width - 2 * padding - buttonWidth - dontShowAgainWidth, padding,
+        dontShowAgainWidth, buttonHeight, SWP_NOZORDER | SWP_NOACTIVATE);
     InvalidateRect(notice, nullptr, FALSE);
     return height;
 }
@@ -3574,7 +3606,14 @@ static RECT belowNotice(DocumentTab const & tab, RECT bounds) {
 static LRESULT CALLBACK NoticeWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
     case WM_COMMAND:
-        // The close button hides the notice, and the web view takes its place:
+        if (LOWORD(wParam) == NOTICE_DONT_SHOW_AGAIN_ID) {
+            for (auto & [id, tab]: documentTabs) {
+                if (tab.noticeWindow == hWnd && tab.dontShowNoticeAgain) {
+                    tab.dontShowNoticeAgain();
+                }
+            }
+        }
+        // Either button hides the notice, and the web view takes its place:
         ShowWindow(hWnd, SW_HIDE);
         if (WindowState * window = findWindow(GetParent(hWnd))) {
             layoutTabs(*window);
@@ -3607,7 +3646,9 @@ static LRESULT CALLBACK NoticeWndProc(HWND hWnd, UINT message, WPARAM wParam, LP
 }
 
 // Shows the text at the top of the account window, above its web view, until the user closes it:
-static void showNotice(DocumentTab & account, std::string const & text) {
+static void showNotice(
+    DocumentTab & account, std::string const & text, std::function<void()> const & dontShowAgain)
+{
     if (!account.noticeWindow) {
         account.noticeWindow = CreateWindowExW(
             0, noticeWindowClass, L"", WS_CHILD | WS_CLIPCHILDREN, 0, 0, 0, 0, account.hWnd,
@@ -3618,9 +3659,14 @@ static void showNotice(DocumentTab & account, std::string const & text) {
         }
         CreateWindowExW(
             0, L"BUTTON", L"Close", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON, 0, 0, 0, 0,
-            account.noticeWindow, nullptr, appInstance, nullptr);
+            account.noticeWindow, reinterpret_cast<HMENU>(NOTICE_CLOSE_ID), appInstance, nullptr);
+        CreateWindowExW(
+            0, L"BUTTON", translate("QObject", "Don't show again").c_str(),
+            WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON, 0, 0, 0, 0, account.noticeWindow,
+            reinterpret_cast<HMENU>(NOTICE_DONT_SHOW_AGAIN_ID), appInstance, nullptr);
     }
     SetWindowTextW(account.noticeWindow, Util::string_to_wide_string(text).c_str());
+    account.dontShowNoticeAgain = dontShowAgain;
     ShowWindow(account.noticeWindow, SW_SHOWNA);
     if (WindowState * window = findWindow(account.hWnd)) {
         layoutTabs(*window);
@@ -6095,6 +6141,13 @@ static void handleEditorFrameMessage(int accountTabId, ICoreWebView2Frame* sende
 static void showServerEditorNotice(
     DocumentTab & account, std::string const & editorUrl, std::string const & reason)
 {
+    std::string const origin = originOf(Poco::URI(editorUrl));
+    if (Desktop::isServerEditorNoticeHidden(reason, origin)) {
+        return;
+    }
+    auto const dontShowAgain = [reason, origin] {
+        Desktop::hideServerEditorNotice(reason, origin);
+    };
     std::string const server = Poco::URI(editorUrl).getHost();
     if (reason == EditorFrameScripts::disabledReason) {
         showNotice(
@@ -6102,18 +6155,21 @@ static void showServerEditorNotice(
             server + " does not allow editing in " APP_NAME ", so the document is open in the "
             "server's own editor. To edit documents from " + server + " in " APP_NAME ", ask the "
             "server's administrator to allow that (client_document_loading.enable in "
-            "coolwsd.xml).");
+            "coolwsd.xml).",
+            dontShowAgain);
     } else if (reason == EditorFrameScripts::outdatedReason) {
         showNotice(
             account,
             "This version of " APP_NAME " is too old to edit documents from " + server + ", so the "
             "document is open in the server's own editor. To edit documents from " + server + " in "
-            APP_NAME ", update your copy of " APP_NAME ".");
+            APP_NAME ", update your copy of " APP_NAME ".",
+            dontShowAgain);
     } else {
         showNotice(
             account,
             server + " runs a version of Collabora Online that does not support editing in "
-            APP_NAME ", so the document is open in the server's own editor.");
+            APP_NAME ", so the document is open in the server's own editor.",
+            dontShowAgain);
     }
 }
 

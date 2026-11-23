@@ -45,6 +45,9 @@
 + (NSString *_Nonnull)outdatedReason NS_SWIFT_NAME(outdatedReason());
 + (NSString *_Nonnull)switchReason NS_SWIFT_NAME(switchReason());
 + (bool)isServerEditorReason:(NSString *_Nonnull)reason NS_SWIFT_NAME(isServerEditorReason(_:));
+// The choices in common/SettingsStorage.hpp not to see a notice about the server's own editor again:
++ (bool)isServerEditorNoticeHidden:(NSString *_Nonnull)reason origin:(NSString *_Nonnull)origin NS_SWIFT_NAME(isServerEditorNoticeHidden(reason:origin:));
++ (void)hideServerEditorNotice:(NSString *_Nonnull)reason origin:(NSString *_Nonnull)origin NS_SWIFT_NAME(hideServerEditorNotice(reason:origin:));
 + (void)saveAsWith:(Document *_Nonnull)document url:(NSString *_Nonnull)url format:(NSString *_Nonnull)format filterOptions:(NSString *_Nullable)filterOptions;
 + (bool)isKitDocumentLoaded:(Document *_Nonnull)document NS_SWIFT_NAME(isKitDocumentLoaded(_:));
 // The path on disk of the media file that the document's server side registered under the
