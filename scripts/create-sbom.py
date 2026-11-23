@@ -184,13 +184,30 @@ def parse_make_variables(path, names):
     return values
 
 
+def local_path(path):
+    """A path as the engine's build recorded it, usable here: on Windows the
+    engine is configured in Cygwin and records C:/..., which WSL calls
+    /mnt/c/... and MSYS2 /c/..."""
+    if os.path.exists(path):
+        return path
+    match = re.match(r"^([A-Za-z]):[/\\](.*)$", path)
+    if match:
+        drive = match.group(1).lower()
+        rest = match.group(2).replace("\\", "/")
+        for candidate in (f"/mnt/{drive}/{rest}", f"/cygdrive/{drive}/{rest}",
+                          f"/{drive}/{rest}"):
+            if os.path.exists(candidate):
+                return candidate
+    return path
+
+
 def read_engine_tarballs(engine_builddir, prefixes):
     """Find version and sha256 of engine-built externals via download.lst."""
     config = parse_make_variables(
         os.path.join(engine_builddir, "config_host.mk"), ["SRCDIR"])
     if "SRCDIR" not in config:
         raise Exception(f"no SRCDIR in {engine_builddir}/config_host.mk")
-    engine_srcdir = config["SRCDIR"]
+    engine_srcdir = local_path(config["SRCDIR"])
     names = []
     for prefix in prefixes:
         names.extend([f"{prefix}_TARBALL", f"{prefix}_SHA256SUM"])
@@ -361,6 +378,61 @@ def elf_needed(path):
         return sonames
 
 
+def pe_needed(path, engine_srcdir):
+    """The DLLs a PE binary imports, also delay-loaded, with the engine's
+    copy of pefile."""
+    sys.path.insert(0, os.path.join(engine_srcdir, "external", "pip-wheels",
+                                    "pefile-2024.8.26-py3-none-any.whl"))
+    import pefile
+    pe = pefile.PE(path, fast_load=True)
+    pe.parse_data_directories(directories=[
+        pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_IMPORT"],
+        pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT"],
+    ])
+    result = []
+    for entry in getattr(pe, "DIRECTORY_ENTRY_IMPORT", []) \
+            + getattr(pe, "DIRECTORY_ENTRY_DELAY_IMPORT", []):
+        name = entry.dll.decode("ascii", "replace")
+        if name not in result:
+            result.append(name)
+    pe.close()
+    return result
+
+
+def mach_o_needed(path, engine_srcdir):
+    """The dylibs and frameworks a Mach-O binary loads, with the engine's
+    copy of macholib. Names relative to the bundle are reduced to the file
+    name, system ones are kept whole, as the engine's generator does."""
+    wheels = os.path.join(engine_srcdir, "external", "pip-wheels")
+    sys.path.insert(0, os.path.join(wheels, "altgraph-0.17.5-py2.py3-none-any.whl"))
+    sys.path.insert(0, os.path.join(wheels, "macholib-1.16.4-py2.py3-none-any.whl"))
+    import macholib.MachO
+    result = []
+    for header in macholib.MachO.MachO(path).headers:
+        for (_, _, name) in header.walkRelocatables():
+            if name.startswith("@"):
+                name = name.rsplit("/", 1)[-1]
+            if name not in result:
+                result.append(name)
+    return result
+
+
+def binary_needed(path, engine_srcdir):
+    """The libraries an ELF, PE or Mach-O binary loads, None if the file is
+    none of these."""
+    with open(path, "rb") as f:
+        magic = f.read(4)
+    if magic == b"\x7fELF":
+        return elf_needed(path)
+    if magic[:2] == b"MZ":
+        return pe_needed(path, engine_srcdir)
+    if magic in (b"\xcf\xfa\xed\xfe", b"\xce\xfa\xed\xfe",
+                 b"\xfe\xed\xfa\xcf", b"\xfe\xed\xfa\xce",
+                 b"\xca\xfe\xba\xbe"):
+        return mach_o_needed(path, engine_srcdir)
+    return None
+
+
 def integrity_sha512_hex(integrity):
     """Last sha512 token of an npm integrity value: shrinkpack appends the
     hash of its vendored tarball, which is the artifact the build actually
@@ -489,10 +561,11 @@ def collect_files(srcdir, builddir, enable_mobileapp=False):
     return files
 
 
+SERVER_DIST_PREFIX = "usr/share/coolwsd/browser/dist/"
+
 def file_external(instpath, npm_names, vendored_by_dist_path,
-                  firstparty_by_dist_path):
+                  firstparty_by_dist_path, dist_prefix=SERVER_DIST_PREFIX):
     """Which component other than the root an installed file belongs to."""
-    dist_prefix = "usr/share/coolwsd/browser/dist/"
     if instpath.startswith(dist_prefix):
         rel = instpath[len(dist_prefix):]
         if rel.startswith("node_modules/"):
@@ -872,6 +945,574 @@ def write_brand_package_sbom(args):
     log(f"wrote {output}: {len(graph)} elements, {count} files")
 
 
+# ---------------------------------------------------------------------------
+# Collabora Office desktop apps
+# ---------------------------------------------------------------------------
+
+# The engine's static libraries an app can name on its link line, and the
+# external each belongs to
+ENGINE_LIBRARY_EXTERNALS = {
+    "libpng": "libpng",
+    "liblibpng": "libpng",
+    "zlib": "zlib",
+    "zstd": "zstd",
+    "libzstd": "zstd",
+    "expat": "expat",
+    "libexpat": "expat",
+}
+
+def engine_library_external(name, strict=True):
+    """The external an engine library on a link line belongs to. strict:
+    the link line names engine libraries only, so an unknown one needs an
+    entry here; otherwise it is taken to be the operating system's."""
+    if name.startswith("Poco") or name.startswith("libPoco"):
+        return "poco"
+    if name in ENGINE_LIBRARY_EXTERNALS:
+        return ENGINE_LIBRARY_EXTERNALS[name]
+    if strict:
+        raise Exception(
+            f"engine library with no external in create-sbom.py: {name}")
+    return None
+
+
+def qt_linked_externals(builddir, engine_builddir):
+    """The engine externals coda-qt links statically: those of its link
+    line that come from the engine's build tree. One that the configure of
+    a flatpak, snap or FreeBSD build took from the system (-lz) is loaded
+    dynamically instead."""
+    names = ["POCOLIB", "PNG_LIBS", "ZSTD_LIBS", "ZLIB_LIBS", "OPENSSL_LIBS",
+             "ENABLE_SSL"]
+    values = parse_make_variables(os.path.join(builddir, "qt", "Makefile"),
+                                  names)
+    engine = os.path.realpath(engine_builddir) + os.sep
+
+    def from_engine(value):
+        for token in value.split():
+            path = token[2:] if token.startswith("-L") else token
+            if os.path.isabs(path) \
+                    and os.path.realpath(path).startswith(engine):
+                return True
+        return False
+
+    if not from_engine(values.get("POCOLIB", "")):
+        raise Exception("coda-qt links a POCO from outside the engine: "
+                        + values.get("POCOLIB", ""))
+    result = {"poco"}
+    for variable, external in (("PNG_LIBS", "libpng"), ("ZSTD_LIBS", "zstd"),
+                               ("ZLIB_LIBS", "zlib")):
+        if from_engine(values.get(variable, "")):
+            result.add(external)
+    if values.get("ENABLE_SSL") == "true" \
+            and from_engine(values.get("OPENSSL_LIBS", "")):
+        result.add("openssl")
+    return result
+
+
+def vcxproj_linked_externals(project):
+    """The engine externals an MSBuild project links from $(EngineLibDir)."""
+    with open(project, encoding="utf-8") as f:
+        content = f.read()
+    names = set(re.findall(r"\$\(EngineLibDir\)\\([A-Za-z0-9_]+)\.lib", content))
+    return {engine_library_external(name) for name in names}
+
+
+def nuget_references(project):
+    """(name, version) of the PackageReferences of an MSBuild project."""
+    with open(project, encoding="utf-8") as f:
+        content = f.read()
+    return re.findall(
+        r'<PackageReference\s+Include="([^"]+)"\s+Version="([^"]+)"', content)
+
+
+def nuget_runtime_packages(deps_json):
+    """The NuGet packages a .NET app ships, its transitive ones too, from
+    the .deps.json the build writes next to it: (name, version, the DLLs of
+    each)."""
+    with open(deps_json, encoding="utf-8") as f:
+        deps = json.load(f)
+    result = []
+    for (key, library) in sorted(deps.get("libraries", {}).items()):
+        if library.get("type") != "package":
+            continue
+        (name, version) = key.split("/", 1)
+        dlls = set()
+        for target in deps.get("targets", {}).values():
+            entry = target.get(key, {})
+            for section in ("runtime", "native"):
+                dlls.update(os.path.basename(path)
+                            for path in entry.get(section, {}))
+            for runtime in entry.get("runtimeTargets", {}):
+                dlls.add(os.path.basename(runtime))
+        result.append((name, version, sorted(dlls)))
+    return result
+
+
+def macos_linked_externals(srcdir):
+    """The engine externals the macOS app links, from OTHER_LDFLAGS of the
+    Xcode project; the library directories are the engine's (configure
+    takes POCO, libpng and zstd from its workdir). The system's libraries
+    (-liconv, -lz) are named there too."""
+    path = os.path.join(srcdir, "macos", "coda", "coda.xcodeproj",
+                        "project.pbxproj")
+    with open(path, encoding="utf-8") as f:
+        content = f.read()
+    result = set()
+    for block in re.findall(r"OTHER_LDFLAGS = \((.*?)\);", content, re.DOTALL):
+        for token in re.findall(r'"([^"]+)"', block):
+            if token.startswith("-l"):
+                result.add(engine_library_external(token[2:], strict=False))
+            elif token.endswith("$(LIBPNG_STATIC_LIB)"):
+                result.add("libpng")
+            elif token.endswith(".a"):
+                name = os.path.splitext(os.path.basename(token))[0]
+                result.add(engine_library_external(name))
+    return result - {None}
+
+
+def nuget_component(name, version, provides=(), comment=None):
+    """A NuGet package an app ships or compiles in."""
+    return {
+        "name": name,
+        "version": version,
+        "vendor": None,
+        "url": f"https://www.nuget.org/packages/{name}/{version}",
+        "purl": f"pkg:nuget/{name}@{version}",
+        "with_cpe": False,
+        "declared": "NOASSERTION",
+        "concluded": "NOASSERTION",
+        "provides": list(provides),
+        "comment": comment,
+    }
+
+
+def app_layout(app, srcdir, builddir, engine_builddir):
+    """Where an app's own files are and what its binaries link.
+
+    Returns files, the globs of the app's files in the product (None:
+    everything outside the engine's directory), dist_prefix, the location of
+    browser/dist relative to the product root, binaries, a list of (match, linkinfo) where match is a
+    function of the instpath, and components, the prebuilt third-party
+    components the app ships with their files' match functions."""
+    if app == "qt":
+        static = qt_linked_externals(builddir, engine_builddir)
+        return {
+            # everything outside the engine's directory
+            "files": None,
+            "dist_prefix": "share/coolwsd/browser/dist/",
+            "binaries": [(lambda path: path.endswith("bin/coda-qt"),
+                          {"static": static})],
+            "components": [],
+        }
+    if app == "windows":
+        project_dir = os.path.join(srcdir, "windows", "coda")
+        coda = os.path.join(project_dir, "CODA", "CODA.vcxproj")
+        coconvert = os.path.join(project_dir, "COConvert", "COConvert.vcxproj")
+        printpdf = os.path.join(project_dir, "PrintPDFAndDelete",
+                                "PrintPDFAndDelete.csproj")
+        components = []
+        coda_components = []
+        for (name, version) in nuget_references(coda):
+            if name == "Microsoft.Web.WebView2":
+                component = nuget_component(
+                    name, version, provides=["WebView2Loader.dll"],
+                    comment="The WebView2 SDK: its loader DLL ships next to "
+                            "the executable, the headers are compiled in.")
+                components.append((
+                    lambda path: path.rsplit("/", 1)[-1] == "WebView2Loader.dll",
+                    component))
+            else:
+                component = nuget_component(
+                    name, version, comment="Header-only, compiled into the "
+                                           "executable.")
+                components.append((lambda path: False, component))
+            coda_components.append(name)
+        printpdf_components = []
+        for (name, version) in nuget_references(printpdf):
+            dll = name + ".dll"
+            component = nuget_component(name, version, provides=[dll])
+            components.append((
+                lambda path, dll=dll: path.rsplit("/", 1)[-1] == dll,
+                component))
+            printpdf_components.append(name)
+        return {
+            # CODA.vcxproj's post-build step and the binaries it builds
+            "files": ["cool/*", "templates/*", "program/translations/*",
+                      "program/*.exe", "program/WebView2Loader.dll",
+                      "program/runtimes/*",
+                      "PrintPDFAndDelete*", "program/PrintPDFAndDelete*",
+                      "*.runtimeconfig.json", "*.deps.json"]
+                     + [f"*{name}.dll" for (name, _) in
+                        nuget_references(printpdf)],
+            "dist_prefix": "cool/",
+            "binaries": [
+                # the app's executable, named after the product
+                (lambda path: path.startswith("program/")
+                    and path.count("/") == 1 and path.endswith(".exe")
+                    and path not in ("program/COConvert.exe",
+                                     "program/PrintPDFAndDelete.exe"),
+                 {"static": vcxproj_linked_externals(coda),
+                  "components": coda_components}),
+                (lambda path: path.endswith("COConvert.exe"),
+                 {"static": vcxproj_linked_externals(coconvert)}),
+                (lambda path: path.rsplit("/", 1)[-1] == "PrintPDFAndDelete.exe"
+                    or path.rsplit("/", 1)[-1] == "PrintPDFAndDelete.dll",
+                 {"static": set(), "components": printpdf_components}),
+            ],
+            "components": components,
+        }
+    if app == "macos":
+        dist = os.path.join(builddir, "browser", "dist")
+        return {
+            # the Xcode project's own: the app binary, Info.plist, the
+            # signature, browser/dist and the app's resources at the top of
+            # Resources; the engine's are in directories of its own there
+            "files": ["Contents/MacOS/*", "Contents/Info.plist",
+                      "Contents/PkgInfo", "Contents/_CodeSignature/*",
+                      "Contents/embedded.provisionprofile",
+                      "Contents/Resources/*.lproj/*",
+                      "Contents/Resources/*.car", "Contents/Resources/*.icns",
+                      "Contents/Resources/coolwsd.xml",
+                      "Contents/Resources/discovery.xml",
+                      "Contents/Resources/hello.odt",
+                      "Contents/Resources/TaskWorker.js",
+                      "Contents/Resources/branding*"]
+                     + [f"Contents/Resources/{name}" for name in os.listdir(dist)]
+                     + [f"Contents/Resources/{name}/*" for name in os.listdir(dist)
+                        if os.path.isdir(os.path.join(dist, name))],
+            "dist_prefix": "Contents/Resources/",
+            "binaries": [(lambda path: path.startswith("Contents/MacOS/"),
+                          {"static": macos_linked_externals(srcdir)})],
+            "components": [],
+        }
+    raise Exception(f"unknown app: {app}")
+
+
+def app_document(app, srcdir, builddir, engine_builddir, files, version,
+                 product_names=(), branding_theme=None):
+    """The SPDX document of the online part of a desktop app.
+
+    files are the app's own files in the product, [{"instpath", "abspath"}],
+    with instpaths relative to the product root; the engine's files are
+    described by the engine's own documents and are not among them."""
+    annotations = read_annotations(srcdir)
+    custom_licenses.update(annotations.get("custom_licenses", {}))
+    prefixes = {entry["tarball_var"]
+                for entry in annotations["engine_externals"].values()}
+    tarballs, engine_srcdir = read_engine_tarballs(engine_builddir, prefixes)
+    poco_bundled = poco_bundled_names(engine_srcdir)
+    seeds, npm_runtime = read_npm_runtime(
+        os.path.join(srcdir, "browser"), os.path.join(builddir, "browser"),
+        os.path.join(builddir, "browser", "sbom-shipped-js.txt"))
+    if branding_theme is None:
+        branding_theme = parse_make_variables(
+            os.path.join(builddir, "Makefile"),
+            ["BRANDING_THEME"]).get("BRANDING_THEME", "")
+
+    layout = app_layout(app, srcdir, builddir, engine_builddir)
+    # under the install prefix, which is usr/ in the snap
+    dist_prefix = layout["dist_prefix"]
+    for file in files:
+        index = file["instpath"].find("/" + dist_prefix)
+        if index >= 0 and not file["instpath"].startswith(dist_prefix):
+            dist_prefix = file["instpath"][:index + 1] + dist_prefix
+            break
+    files = [dict(file) for file in files]
+    if app == "windows":
+        # the NuGet packages a .NET app ships, with the versions the build
+        # resolved, in place of the PackageReferences they come from
+        for file in files:
+            if not file["instpath"].endswith(".deps.json"):
+                continue
+            for (name, version, dlls) in nuget_runtime_packages(
+                    file["abspath"]):
+                layout["components"] = [
+                    entry for entry in layout["components"]
+                    if entry[1]["name"] != name]
+                layout["components"].append((
+                    lambda path, dlls=frozenset(dlls):
+                        path.rsplit("/", 1)[-1] in dlls,
+                    nuget_component(name, version, provides=dlls)))
+    for (match, component) in layout["components"]:
+        for file in files:
+            if match(file["instpath"]):
+                file["owner"] = ("component", component["name"])
+
+    executables = {}
+    for file in files:
+        for (match, linkinfo) in layout["binaries"]:
+            if match(file["instpath"]):
+                needed = binary_needed(file["abspath"], engine_srcdir)
+                if needed is None:
+                    break  # a script or data file next to the binaries
+                # what the link line names minus what is loaded dynamically
+                dynamic = {soname_external(name) for name in needed} - {None}
+                executables[file["instpath"]] = {
+                    "static": set(linkinfo["static"]) - dynamic,
+                    "needed": needed,
+                    "components": linkinfo.get("components", ()),
+                }
+                break
+    if not executables:
+        raise Exception(f"no binary of the {app} app among its files")
+
+    # a component is in the product if it owns a file of it, or is linked
+    # into a binary of it
+    present = {file["owner"][1] for file in files if "owner" in file}
+    for linked in executables.values():
+        present.update(linked["components"])
+    extra_components = [component for (_, component) in layout["components"]
+                        if component["name"] in present]
+
+    target_os = {"qt": "LINUX", "windows": "WNT", "macos": "MACOSX"}[app]
+    return build_document(
+        srcdir, builddir, version, branding_theme, files, executables,
+        annotations, tarballs, poco_bundled, npm_runtime, engine_builddir,
+        root_name="CollaboraOffice-app", dist_prefix=dist_prefix,
+        target_os=target_os, extra_components=extra_components,
+        only_linked_externals=True, product_names=product_names)
+
+
+
+def build_document(srcdir, builddir, version, branding_theme, files,
+                   executables, annotations, tarballs, poco_bundled,
+                   npm_runtime, engine_builddir, root_name="CollaboraOnline-coolwsd",
+                   dist_prefix=SERVER_DIST_PREFIX, target_os="LINUX",
+                   extra_components=(), only_linked_externals=False,
+                   product_names=()):
+    """The SPDX document of the online part of a product.
+
+    files are the installed files, [{"instpath", "abspath"}], optionally with
+    an "owner" ("component", name) for a file of an extra component.
+    executables maps the instpath of each binary we build to "static", the
+    engine externals it links statically, "needed", the libraries it loads,
+    and optionally "components", the extra components linked into it.
+    extra_components are prebuilt third-party components the product ships;
+    "provides" lists the library names of theirs that binaries load.
+    product_names are the file names of the whole product, also those other
+    documents describe: a binary that loads one of them loads no system
+    library.
+    """
+    document, root_spdx_id = sbom_skeleton(version, "MPL-2.0", name=root_name)
+    package_version = version
+    graph = document["@graph"]
+    graph.extend(license_cache["MPL-2.0"])
+    emitted_licenses = {"MPL-2.0"}
+
+    def emit_licenses(*license_exprs):
+        for expr in license_exprs:
+            if expr not in emitted_licenses:
+                graph.extend(license_cache[expr])
+                emitted_licenses.add(expr)
+
+    # Engine-built statically linked externals
+    external_ids = {}
+    # The server lists every annotated external; an app only those its
+    # binaries link
+    linked_externals = set().union(
+        *[linked["static"] for linked in executables.values()])
+    for name, entry in sorted(annotations["engine_externals"].items()):
+        if only_linked_externals and name not in linked_externals:
+            continue
+        tarball, sha256 = tarballs[entry["tarball_var"]]
+        version = extract_version_from_filename(tarball)
+        # the build fetches every external from our own mirror, so that is
+        # the download location; an entry can still override it with its
+        # own source_url
+        locator = entry.get(
+            "source_url", "https://gerrit.collaboraoffice.com/src/{tarball}"
+        ).format(tarball=tarball, version=version)
+        external_ids[name] = make_component(
+            graph, f"SPDXRef-{name}", name, entry["vendor"],
+            version, entry["url"], locator, sha256,
+            entry["declared"], entry["concluded"],
+            cpe_name=entry.get("cpe_name"))
+        emit_licenses(entry["declared"], entry["concluded"])
+        add_contains(graph, root_spdx_id, external_ids[name])
+
+    # Sources bundled inside POCO
+    poco_unpacked = os.path.join(engine_builddir, "workdir",
+                                 "UnpackedTarball", "poco")
+    for entry in annotations["bundled"]:
+        name = entry["name"]
+        if name not in poco_bundled:
+            continue
+        if "platforms" in entry and target_os not in entry["platforms"]:
+            continue
+        display = entry.get("display_name", name)
+        bundled_id = make_component(
+            graph, f"SPDXRef-{display}", display, entry["vendor"],
+            probe_poco_bundled_version(name, poco_unpacked), entry["url"],
+            None, None, entry["declared"], entry["concluded"])
+        emit_licenses(entry["declared"], entry["concluded"])
+        add_contains(graph, external_ids[entry["parent"]], bundled_id)
+
+    # Vendored / checked-in third-party sources
+    vendored_ids = {}
+    vendored_compiled = []
+    vendored_by_dist_path = {}
+    for entry in annotations["vendored"]:
+        name = entry["name"]
+        vendored_ids[name] = make_component(
+            graph, f"SPDXRef-{name}", name, entry["vendor"],
+            entry.get("version"), entry["url"], repo_url(entry["source"]),
+            None, entry["declared"], entry["concluded"])
+        emit_licenses(entry["declared"], entry["concluded"])
+        add_contains(graph, root_spdx_id, vendored_ids[name])
+        if entry.get("compiled"):
+            vendored_compiled.append(name)
+        basename = os.path.basename(entry["source"])
+        if entry["source"].startswith("browser/js/"):
+            vendored_by_dist_path[basename] = name
+        elif entry["source"].startswith("browser/admin/"):
+            subdir = entry["source"].split("/")[2]
+            vendored_by_dist_path[f"admin/{subdir}/{basename}"] = name
+
+    # Our own components under a license other than the tree's. The theme is
+    # in dist only when the build applied one; a theme that --with-app-branding
+    # copied in is not ours to declare and stays with the root.
+    firstparty_ids = {}
+    firstparty_by_dist_path = {}
+    for entry in annotations["firstparty"]:
+        if entry["source"] != "browser/branding" or not branding_theme:
+            continue
+        name = entry["name"]
+        firstparty_ids[name] = make_component(
+            graph, f"SPDXRef-{name}", name, None, package_version,
+            entry["url"], repo_url(entry["source"]), None, entry["declared"],
+            entry["concluded"], with_cpe=False)
+        emit_licenses(entry["declared"], entry["concluded"])
+        add_contains(graph, root_spdx_id, firstparty_ids[name])
+        for rel in branding_dist_files(srcdir, builddir):
+            firstparty_by_dist_path[rel] = name
+        log(f"theme {branding_theme}: {len(firstparty_by_dist_path)} "
+            f"files of {name}")
+
+    # Prebuilt third-party components a product ships, which no build of
+    # ours produces: their files are assigned by the caller
+    extra_ids = {}
+    bundled_names = set()
+    for component in extra_components:
+        name = component["name"]
+        extra_ids[name] = make_component(
+            graph, f"SPDXRef-{name}", name, component.get("vendor"),
+            component.get("version"), component.get("url"), None, None,
+            component.get("declared", "NOASSERTION"),
+            component.get("concluded", "NOASSERTION"),
+            purl=component.get("purl"), cpe_name=component.get("cpe_name"),
+            with_cpe=component.get("with_cpe", True),
+            comment=component.get("comment"))
+        emit_licenses(component.get("declared", "NOASSERTION"),
+                      component.get("concluded", "NOASSERTION"))
+        add_contains(graph, root_spdx_id, extra_ids[name])
+        bundled_names.update(component.get("provides", ()))
+
+    # Runtime npm packages
+    npm_ids = {}
+    for name, info in sorted(npm_runtime.items()):
+        if info["resolved"].startswith("file:"):
+            locator = repo_url("browser/" + info["resolved"][len("file:"):])
+        else:
+            basename = name.split("/")[-1]
+            locator = (f"https://registry.npmjs.org/{name}/-/"
+                       f"{basename}-{info['version']}.tgz")
+        license = info["license"] or "NOASSERTION"
+        npm_ids[name] = make_component(
+            graph, f"SPDXRef-npm-{name}", name, None, info["version"],
+            f"https://www.npmjs.com/package/{name}", locator, None,
+            license, license, sha512=info["sha512"],
+            purl=npm_purl(name, info["version"]))
+        emit_licenses(license)
+        add_contains(graph, root_spdx_id, npm_ids[name])
+    # inter-package dependencies
+    for name, info in sorted(npm_runtime.items()):
+        deps = [npm_ids[dep] for dep in info["dependencies"]]
+        if deps:
+            graph.append({
+                "type": "Relationship",
+                "spdxId": next_rel_id(),
+                "creationInfo": "_:creationinfo",
+                "from": npm_ids[name],
+                "relationshipType": "dependsOn",
+                "to": deps,
+                "completeness": "complete",
+            })
+
+    # Installed files
+    seen_instpaths = set()
+    for file in files:
+        if file["instpath"] in seen_instpaths:
+            raise Exception(f"duplicate installed file: {file['instpath']}")
+        seen_instpaths.add(file["instpath"])
+
+    npm_names = set(npm_runtime.keys())
+    sysdep_ids = {}
+    for file in files:
+        instpath = file["instpath"]
+        owner = file.get("owner") or file_external(
+            instpath, npm_names, vendored_by_dist_path,
+            firstparty_by_dist_path, dist_prefix)
+        if owner is None:
+            parent = root_spdx_id
+        elif owner[0] == "npm":
+            parent = npm_ids[owner[1]]
+        elif owner[0] == "firstparty":
+            parent = firstparty_ids[owner[1]]
+        elif owner[0] == "component":
+            parent = extra_ids[owner[1]]
+        else:
+            parent = vendored_ids[owner[1]]
+
+        file_spdx_id = emit_file(graph, parent, instpath, file["abspath"])
+
+        if instpath in executables:
+            linked = executables[instpath]
+            static = sorted(linked["static"])
+            static_ids = [external_ids[external] for external in static]
+            if "poco" in linked["static"]:
+                static_ids.extend(vendored_ids[name]
+                                  for name in vendored_compiled)
+            static_ids.extend(extra_ids[name]
+                              for name in linked.get("components", ()))
+            if static_ids:
+                graph.append({
+                    "type": "Relationship",
+                    "spdxId": next_rel_id(),
+                    "creationInfo": "_:creationinfo",
+                    "from": file_spdx_id,
+                    "relationshipType": "hasStaticLink",
+                    "to": static_ids,
+                    "completeness": "noAssertion",
+                })
+            sysdeps = []
+            for soname in linked["needed"]:
+                if soname in product_names or soname in bundled_names:
+                    continue  # loads a file of the product
+                if soname not in sysdep_ids:
+                    sysdep_ids[soname] = make_spdx_id(f"Sysdep-{soname}")
+                    graph.append({
+                        "type": "software_Package",
+                        "spdxId": sysdep_ids[soname],
+                        "creationInfo": "_:creationinfo",
+                        "name": soname,
+                        "comment": "Supplied by the operating system.",
+                    })
+                sysdeps.append(sysdep_ids[soname])
+            if sysdeps:
+                graph.append({
+                    "type": "Relationship",
+                    "spdxId": next_rel_id(),
+                    "creationInfo": "_:creationinfo",
+                    "from": file_spdx_id,
+                    "relationshipType": "dependsOn",
+                    "to": sysdeps,
+                    "completeness": "noAssertion",
+                })
+
+    log(f"{len(graph)} elements, {len(files)} files, "
+        f"{len(npm_runtime)} npm packages")
+    return document
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Generate the Collabora Online SPDX 3.0.1 SBOM")
@@ -948,204 +1589,30 @@ def main():
             print(f"ERROR: {error}", file=sys.stderr)
         sys.exit(1 if errors else 0)
 
-    document, root_spdx_id = sbom_skeleton(version, "MPL-2.0")
-    package_version = version
-    graph = document["@graph"]
-    graph.extend(license_cache["MPL-2.0"])
-    emitted_licenses = {"MPL-2.0"}
-
-    def emit_licenses(*license_exprs):
-        for expr in license_exprs:
-            if expr not in emitted_licenses:
-                graph.extend(license_cache[expr])
-                emitted_licenses.add(expr)
-
-    # Engine-built statically linked externals
-    external_ids = {}
-    for name, entry in sorted(annotations["engine_externals"].items()):
-        tarball, sha256 = tarballs[entry["tarball_var"]]
-        version = extract_version_from_filename(tarball)
-        # the build fetches every external from our own mirror, so that is
-        # the download location; an entry can still override it with its
-        # own source_url
-        locator = entry.get(
-            "source_url", "https://gerrit.collaboraoffice.com/src/{tarball}"
-        ).format(tarball=tarball, version=version)
-        external_ids[name] = make_component(
-            graph, f"SPDXRef-{name}", name, entry["vendor"],
-            version, entry["url"], locator, sha256,
-            entry["declared"], entry["concluded"],
-            cpe_name=entry.get("cpe_name"))
-        emit_licenses(entry["declared"], entry["concluded"])
-        add_contains(graph, root_spdx_id, external_ids[name])
-
-    # Sources bundled inside POCO
-    poco_unpacked = os.path.join(args.engine_builddir, "workdir",
-                                 "UnpackedTarball", "poco")
-    for entry in annotations["bundled"]:
-        name = entry["name"]
-        if name not in poco_bundled:
-            continue
-        display = entry.get("display_name", name)
-        bundled_id = make_component(
-            graph, f"SPDXRef-{display}", display, entry["vendor"],
-            probe_poco_bundled_version(name, poco_unpacked), entry["url"],
-            None, None, entry["declared"], entry["concluded"])
-        emit_licenses(entry["declared"], entry["concluded"])
-        add_contains(graph, external_ids[entry["parent"]], bundled_id)
-
-    # Vendored / checked-in third-party sources
-    vendored_ids = {}
-    vendored_compiled = []
-    vendored_by_dist_path = {}
-    for entry in annotations["vendored"]:
-        name = entry["name"]
-        vendored_ids[name] = make_component(
-            graph, f"SPDXRef-{name}", name, entry["vendor"],
-            entry.get("version"), entry["url"], repo_url(entry["source"]),
-            None, entry["declared"], entry["concluded"])
-        emit_licenses(entry["declared"], entry["concluded"])
-        add_contains(graph, root_spdx_id, vendored_ids[name])
-        if entry.get("compiled"):
-            vendored_compiled.append(name)
-        basename = os.path.basename(entry["source"])
-        if entry["source"].startswith("browser/js/"):
-            vendored_by_dist_path[basename] = name
-        elif entry["source"].startswith("browser/admin/"):
-            subdir = entry["source"].split("/")[2]
-            vendored_by_dist_path[f"admin/{subdir}/{basename}"] = name
-
-    # Our own components under a license other than the tree's. The theme is
-    # in dist only when the build applied one; a theme that --with-app-branding
-    # copied in is not ours to declare and stays with the root.
-    firstparty_ids = {}
-    firstparty_by_dist_path = {}
-    for entry in annotations["firstparty"]:
-        if entry["source"] != "browser/branding" or not args.branding_theme:
-            continue
-        name = entry["name"]
-        firstparty_ids[name] = make_component(
-            graph, f"SPDXRef-{name}", name, None, package_version,
-            entry["url"], repo_url(entry["source"]), None, entry["declared"],
-            entry["concluded"], with_cpe=False)
-        emit_licenses(entry["declared"], entry["concluded"])
-        add_contains(graph, root_spdx_id, firstparty_ids[name])
-        for rel in branding_dist_files(args.srcdir, args.builddir):
-            firstparty_by_dist_path[rel] = name
-        log(f"theme {args.branding_theme}: {len(firstparty_by_dist_path)} "
-            f"files of {name}")
-
-    # Runtime npm packages
-    npm_ids = {}
-    for name, info in sorted(npm_runtime.items()):
-        if info["resolved"].startswith("file:"):
-            locator = repo_url("browser/" + info["resolved"][len("file:"):])
-        else:
-            basename = name.split("/")[-1]
-            locator = (f"https://registry.npmjs.org/{name}/-/"
-                       f"{basename}-{info['version']}.tgz")
-        license = info["license"] or "NOASSERTION"
-        npm_ids[name] = make_component(
-            graph, f"SPDXRef-npm-{name}", name, None, info["version"],
-            f"https://www.npmjs.com/package/{name}", locator, None,
-            license, license, sha512=info["sha512"],
-            purl=npm_purl(name, info["version"]))
-        emit_licenses(license)
-        add_contains(graph, root_spdx_id, npm_ids[name])
-    # inter-package dependencies
-    for name, info in sorted(npm_runtime.items()):
-        deps = [npm_ids[dep] for dep in info["dependencies"]]
-        if deps:
-            graph.append({
-                "type": "Relationship",
-                "spdxId": next_rel_id(),
-                "creationInfo": "_:creationinfo",
-                "from": npm_ids[name],
-                "relationshipType": "dependsOn",
-                "to": deps,
-                "completeness": "complete",
-            })
-
     # Installed files
     files = collect_files(args.srcdir, args.builddir, args.mobileapp)
-    seen_instpaths = set()
-    for file in files:
-        if file["instpath"] in seen_instpaths:
-            raise Exception(f"duplicate installed file: {file['instpath']}")
-        seen_instpaths.add(file["instpath"])
-
-    binaries_needed = {}
+    executables = {}
     for exe in INSTALLED_EXECUTABLES:
-        binaries_needed[exe] = elf_needed(os.path.join(args.builddir, exe))
+        needed = elf_needed(os.path.join(args.builddir, exe))
+        # Statically linked externals: what gbuild links minus what this
+        # build actually loads dynamically (verified via DT_NEEDED).
+        dynamic = {soname_external(soname) for soname in needed} - {None}
+        executables[f"usr/bin/{exe}"] = {
+            "static": gbuild_externals[exe] - dynamic,
+            "needed": needed,
+        }
 
-    npm_names = set(npm_runtime.keys())
-    sysdep_ids = {}
-    for file in files:
-        instpath = file["instpath"]
-        owner = file_external(instpath, npm_names, vendored_by_dist_path,
-                              firstparty_by_dist_path)
-        if owner is None:
-            parent = root_spdx_id
-        elif owner[0] == "npm":
-            parent = npm_ids[owner[1]]
-        elif owner[0] == "firstparty":
-            parent = firstparty_ids[owner[1]]
-        else:
-            parent = vendored_ids[owner[1]]
-
-        file_spdx_id = emit_file(graph, parent, instpath, file["abspath"])
-
-        exe = instpath[len("usr/bin/"):] if instpath.startswith("usr/bin/") else None
-        if exe in gbuild_externals:
-            # Statically linked externals: what gbuild links minus what this
-            # build actually loads dynamically (verified via DT_NEEDED).
-            dynamic = {soname_external(soname)
-                       for soname in binaries_needed[exe]} - {None}
-            static = sorted(gbuild_externals[exe] - dynamic)
-            static_ids = [external_ids[external] for external in static]
-            if "poco" in gbuild_externals[exe]:
-                static_ids.extend(vendored_ids[name]
-                                  for name in vendored_compiled)
-            if static_ids:
-                graph.append({
-                    "type": "Relationship",
-                    "spdxId": next_rel_id(),
-                    "creationInfo": "_:creationinfo",
-                    "from": file_spdx_id,
-                    "relationshipType": "hasStaticLink",
-                    "to": static_ids,
-                    "completeness": "noAssertion",
-                })
-            sysdeps = []
-            for soname in binaries_needed[exe]:
-                if soname not in sysdep_ids:
-                    sysdep_ids[soname] = make_spdx_id(f"Sysdep-{soname}")
-                    graph.append({
-                        "type": "software_Package",
-                        "spdxId": sysdep_ids[soname],
-                        "creationInfo": "_:creationinfo",
-                        "name": soname,
-                        "comment": "Supplied by the operating system.",
-                    })
-                sysdeps.append(sysdep_ids[soname])
-            if sysdeps:
-                graph.append({
-                    "type": "Relationship",
-                    "spdxId": next_rel_id(),
-                    "creationInfo": "_:creationinfo",
-                    "from": file_spdx_id,
-                    "relationshipType": "dependsOn",
-                    "to": sysdeps,
-                    "completeness": "noAssertion",
-                })
+    document = build_document(
+        args.srcdir, args.builddir, version, args.branding_theme, files,
+        executables, annotations, tarballs, poco_bundled, npm_runtime,
+        engine_builddir=args.engine_builddir)
 
     output = args.output or os.path.join(args.builddir,
                                          "collabora-online-sbom.spdx.json")
     with open(output, "w", encoding="utf-8") as f:
         json.dump(document, f, indent=2)
         f.write("\n")
-    log(f"wrote {output}: {len(graph)} elements, {len(files)} files, "
-        f"{len(npm_runtime)} npm packages")
+    log(f"wrote {output}")
 
 
 if __name__ == "__main__":
