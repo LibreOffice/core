@@ -541,6 +541,16 @@ std::unique_ptr<WebView> TabManager::detachAt(std::vector<Entry>::iterator it)
 
 int TabManager::addStarterTab()
 {
+    // A window has at most one starter tab. Asking for another selects the one that is open.
+    for (const Entry& entry : _tabs)
+    {
+        if (entry.webView && entry.webView->isStarterScreen())
+        {
+            activateTab(entry.id);
+            return entry.id;
+        }
+    }
+
     auto wv = std::make_unique<WebView>(_profile);
     WebView* raw = wv.get();
     int id = registerTab(std::move(wv), -1);
