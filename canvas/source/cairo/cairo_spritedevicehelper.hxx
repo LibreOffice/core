@@ -51,7 +51,6 @@ public:
     const ::cairo::SurfaceSharedPtr& getBufferSurface() const { return mpBufferSurface; }
     ::cairo::SurfaceSharedPtr const& getWindowSurface() const;
     ::cairo::SurfaceSharedPtr createSurface(const ::basegfx::B2ISize& rSize, int aContent);
-    ::cairo::SurfaceSharedPtr createSurface(BitmapSystemData const& rData, const Size& rSize);
     const ::basegfx::B2ISize& getSizePixel() const { return maSize; }
     void flush();
 

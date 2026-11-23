@@ -83,7 +83,6 @@ namespace cairocanvas
         OutputDevice* getOutputDevice() const { return mpRefDevice; }
         const ::cairo::SurfaceSharedPtr& getSurface() const { return mpSurface; }
         ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, int aContent );
-        ::cairo::SurfaceSharedPtr createSurface( BitmapSystemData const & rData, const Size& rSize );
 
     protected:
         void setSize( const ::basegfx::B2ISize& rSize );

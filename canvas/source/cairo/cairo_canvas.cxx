@@ -130,20 +130,7 @@ SurfaceSharedPtr Canvas::createSurface(const ::basegfx::B2ISize& rSize, int aCon
     return maDeviceHelper.createSurface(rSize, aContent);
 }
 
-SurfaceSharedPtr Canvas::createSurface(::Bitmap& rBitmap)
-{
-    SurfaceSharedPtr pSurface;
-
-    BitmapSystemData aData;
-    if (rBitmap.GetSystemData(aData))
-    {
-        const Size aSize = rBitmap.GetSizePixel();
-
-        pSurface = maDeviceHelper.createSurface(aData, aSize);
-    }
-
-    return pSurface;
-}
+SurfaceSharedPtr Canvas::createSurface(::Bitmap&) { return {}; }
 
 SurfaceSharedPtr Canvas::changeSurface()
 {

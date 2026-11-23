@@ -97,11 +97,6 @@ SurfaceSharedPtr SpriteDeviceHelper::createSurface(const ::basegfx::B2ISize& rSi
     return SurfaceSharedPtr();
 }
 
-SurfaceSharedPtr SpriteDeviceHelper::createSurface(BitmapSystemData const&, const Size&)
-{
-    return SurfaceSharedPtr();
-}
-
 /** SpriteDeviceHelper::flush  Flush the platform native window
  *
  * Flushes the window by using the internally stored mpSysData.
