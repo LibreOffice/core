@@ -211,15 +211,44 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 			: this.position[0] + point.pX;
 	}
 
-	// Where the drag has taken the handle, in the document. A snap takes the handle to the grid
-	// or to a line another object lines up with, and everything the drag works out follows from
-	// this one point, so the preview shows what the drop commits.
-	private draggedTo(point: cool.SimplePoint): cool.SimplePoint {
+	// Where the mouse is in the document.
+	private mouseInTheDocument(point: cool.SimplePoint): cool.SimplePoint {
 		const p = point.clone();
 		p.pX = this.mouseToDocX(point);
 		p.pY += this.position[1];
+		return p;
+	}
+
+	// Where the handle itself stands for a mouse point in the document, in core pixels. A drag
+	// that keeps the ratio takes the handle off the mouse on one axis.
+	private handleFor(p: cool.SimplePoint, keepRatio: boolean): number[] {
+		const shapeRecProps = HandleScaling.shapeAfterDrag(
+			p.clone(), this.getOwnShapeRectangleProperties(), this.sectionProperties.ownInfo.kind,
+			keepRatio);
+		const rectangle = cool.SimpleRectangle.fromCorePixels([
+			shapeRecProps.center.pX - shapeRecProps.width * 0.5,
+			shapeRecProps.center.pY - shapeRecProps.height * 0.5,
+			shapeRecProps.width, shapeRecProps.height
+		]);
+		const place = HandleScaling.positionOfHandle(
+			String(Number(this.sectionProperties.ownInfo.kind) - 1), rectangle,
+			shapeRecProps.angleRadian);
+		return [place[0] * app.twipsToPixels, place[1] * app.twipsToPixels];
+	}
+
+	// Where the drag has taken the handle, in the document. A snap takes the handle to the grid
+	// or to a line another object lines up with, and everything the drag works out follows from
+	// this one point, so the preview shows what the drop commits. A drag that keeps the ratio
+	// has one number to give, so the mouse is taken along until the handle meets the line.
+	private draggedTo(point: cool.SimplePoint, keepRatio: boolean): cool.SimplePoint {
+		const p = this.mouseInTheDocument(point);
 
 		const snapped = this.sectionProperties.parentHandlerSection.snappedAt();
+
+		if (keepRatio)
+			return HandleScaling.ontoTheLine(
+				(at: cool.SimplePoint) => this.handleFor(at, true), p, snapped);
+
 		if (snapped[0] !== null && snapped[0] !== undefined) p.pX = snapped[0];
 		if (snapped[1] !== null && snapped[1] !== undefined) p.pY = snapped[1];
 
@@ -240,9 +269,9 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 		*/
 		const handleId = String(Number(ownInfo.kind) - 1);
 
-		const p = this.draggedTo(point);
-
 		const keepRatio = HandleScaling.keepsRatio(e, this.sectionProperties.cropModeEnabled);
+
+		const p = this.draggedTo(point, keepRatio);
 		const shapeRecProps = HandleScaling.shapeAfterDrag(
 			p, this.getOwnShapeRectangleProperties(), ownInfo.kind, keepRatio);
 
@@ -273,6 +302,10 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 			const parentHandlerSection = this.sectionProperties.parentHandlerSection;
 			const drop = this.dropOfDrag(point, e);
 			const committedHandleId = drop.committedHandleId;
+
+			// The drop is worked out, so the lines that marked the snap go with the drag.
+			parentHandlerSection.forgetTheSnap();
+			this.containerObject.requestReDraw();
 			const newPoint = drop.position;
 
 			if (GraphicSelection.inPlaceActive) {
@@ -309,13 +342,13 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 	moveHandlesOnDrag(point: cool.SimplePoint, e: MouseEvent) {
 		Util.ensureValue(app.activeDocument);
 
-		const p = this.draggedTo(point);
+		const keepRatio = HandleScaling.keepsRatio(e, this.sectionProperties.cropModeEnabled);
+		const p = this.draggedTo(point, keepRatio);
 
 		const objectNumber = this.getOwnObjectNumber();
 		const shapeRecProps = HandleScaling.shapeAfterDrag(
 			p, this.getOwnShapeRectangleProperties(),
-			this.sectionProperties.ownInfo.kind,
-			HandleScaling.keepsRatio(e, this.sectionProperties.cropModeEnabled));
+			this.sectionProperties.ownInfo.kind, keepRatio);
 
 		this.sectionProperties.parentHandlerSection.calculateInitialAnglesOfShapeHandlers(shapeRecProps, objectNumber);
 
@@ -377,10 +410,17 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 			const parentSVG = parentProperties.svg;
 			if (!useCorePreview && parentSVG) parentSVG.style.opacity = 0.5;
 
-			// The snap looks from the handle, which the drag has already moved to the mouse. The
-			// size and the distance are both 0, because a handle is a single point.
-			parentHandlerSection.checkHelperLinesAndSnapPoints(
-				[0, 0], [this.mouseToDocX(point), point.pY + this.position[1]], [0, 0]);
+			// The snap looks from the handle, which the drag has already moved to the mouse, or
+			// beside it on one axis where the drag keeps the ratio. The size and the distance are
+			// both 0, because a handle is a single point.
+			const keepRatio = HandleScaling.keepsRatio(e, this.sectionProperties.cropModeEnabled);
+			const mouse = this.mouseInTheDocument(point);
+			const handle = keepRatio ? this.handleFor(mouse, true) : [mouse.pX, mouse.pY];
+			parentHandlerSection.checkHelperLinesAndSnapPoints([0, 0], handle, [0, 0]);
+
+			// The point is measured from where this handle stood when the mouse moved, so the
+			// drop is worked out before the handles, this one with them, move along.
+			const dropPosition = this.dropOfDrag(point, e).position;
 
 			this.moveHandlesOnDrag(point, e);
 
@@ -389,7 +429,6 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 			if (useCorePreview) {
 				// The snap points are ready by now, so this asks core to preview the position a
 				// drop here would give.
-				const dropPosition = this.dropOfDrag(point, e).position;
 				parentHandlerSection.requestShapeDragPreview(
 					this.sectionProperties.ownInfo,
 					new cool.SimplePoint(dropPosition[0], dropPosition[1]));

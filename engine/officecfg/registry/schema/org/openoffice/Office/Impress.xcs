@@ -824,7 +824,7 @@
             <desc>Indicates whether to force frames and drawing elements on grid points.</desc>
             <label>Snap to grid</label>
           </info>
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="VisibleGrid" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options - Impress - Grid - [Section] Options -->

@@ -43,6 +43,14 @@ class ScalingInteraction extends SelectionInteraction {
 	/// turning the object over. A crop does: a window cannot be turned inside out.
 	protected keepsItsFacing: boolean = false;
 
+	/*
+		How far the handle stands inside the outer edge of what it scales, in core pixels, one
+		number per axis. The other objects of the page are lined up with by their outer edges,
+		outline and all, while a handle sits on the edge the outline is drawn round, so the edge
+		this far out from the handle is what snaps.
+	*/
+	private edgeToHandle: number[];
+
 	constructor(
 		selection: SelectionSection,
 		handle: SelectionHandle,
@@ -52,6 +60,41 @@ class ScalingInteraction extends SelectionInteraction {
 
 		this.handle = handle;
 		this.shapeAtStart = shapeAtStart;
+		this.edgeToHandle = ScalingInteraction.insideTheEdge(
+			selection,
+			handle,
+			shapeAtStart,
+		);
+	}
+
+	/*
+		How far the handle stands inside the outer edge of the selection on each axis, in core
+		pixels. A handle in the middle of a side has no edge of its own across that side, and a
+		turned object has no outer edge that follows the handle, so those count nothing.
+	*/
+	private static insideTheEdge(
+		selection: SelectionSection,
+		handle: SelectionHandle,
+		shapeAtStart: any,
+	): number[] {
+		if (!shapeAtStart || shapeAtStart.angleRadian) return [0, 0];
+
+		const corner = selection.selectionCorner();
+		const size = selection.selectionSize();
+		const at = [
+			handle.point.x * app.twipsToPixels,
+			handle.point.y * app.twipsToPixels,
+		];
+
+		return [0, 1].map((axis: number) => {
+			const near = at[axis] - corner[axis];
+			const far = at[axis] - (corner[axis] + size[axis]);
+			const reach = size[axis] / 4;
+
+			if (Math.abs(near) <= Math.abs(far))
+				return Math.abs(near) < reach ? near : 0;
+			return Math.abs(far) < reach ? far : 0;
+		});
 	}
 
 	/*
@@ -140,10 +183,11 @@ class ScalingInteraction extends SelectionInteraction {
 		this.reached = this.shapeFor(led);
 
 		if (!this.exact) {
-			// What may snap to another object of the page is the handle being dragged, taken
-			// where the drag has it now.
+			// What may snap to another object of the page is the outer edge at the handle being
+			// dragged, taken where the drag has it now.
 			const dragged = this.draggedHandle();
-			if (dragged) this.selection.lookForASnap(dragged, event);
+			if (dragged)
+				this.selection.lookForASnap(dragged, event, this.edgeToHandle);
 
 			// The snap is applied while the drag runs, so that what is drawn and where the
 			// handles stand are the one thing, and letting go changes nothing again.
@@ -156,18 +200,36 @@ class ScalingInteraction extends SelectionInteraction {
 	/*
 		Applies the snap: the drag is moved from where the mouse is onto whatever it lined up with
 		on the page. One way can snap while the other does not, so each is taken from the line
-		where it found one and from the mouse where it did not. A drag that keeps the shape of the
-		object snaps to nothing, since it has only one number to give.
+		where it found one and from the mouse where it did not. What lines up is the outer edge, so
+		the handle stays as far inside the line as it stood inside that edge. A drag that keeps the
+		shape of the object has only one number to give, so the handle is taken along the drag
+		until that edge meets the line instead.
 	*/
 	private applyTheSnap(to: cool.SimplePoint, _event: MouseEvent): void {
-		if (this.keepsRatio) return;
-
 		const snapped = this.selection.snappedTo();
 		if (!snapped || (snapped[0] === null && snapped[1] === null)) return;
 
+		if (this.keepsRatio) {
+			// Where the dragged handle stands for a mouse point, in core pixels, with the drag
+			// taken there.
+			const handleAt = (point: cool.SimplePoint): number[] | null => {
+				this.at = point.clone();
+				this.reached = this.shapeFor(point);
+				const dragged = this.draggedHandle();
+				return dragged
+					? [
+							dragged.point.x * app.twipsToPixels - this.edgeToHandle[0],
+							dragged.point.y * app.twipsToPixels - this.edgeToHandle[1],
+						]
+					: null;
+			};
+			handleAt(HandleScaling.ontoTheLine(handleAt, to, snapped));
+			return;
+		}
+
 		const at = cool.SimplePoint.fromCorePixels([
-			snapped[0] ?? to.pX,
-			snapped[1] ?? to.pY,
+			snapped[0] !== null ? snapped[0] + this.edgeToHandle[0] : to.pX,
+			snapped[1] !== null ? snapped[1] + this.edgeToHandle[1] : to.pY,
 		]);
 
 		this.at = at.clone();

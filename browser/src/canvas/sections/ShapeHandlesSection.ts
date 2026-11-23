@@ -1283,6 +1283,10 @@ class ShapeHandlesSection extends CanvasSectionObject {
 			point.x += app.activeDocument.activeLayout.viewedRectangle.x1 - this.sectionProperties.viewedRectangleOnMouseDown.x1;
 			point.y += app.activeDocument.activeLayout.viewedRectangle.y1 - this.sectionProperties.viewedRectangleOnMouseDown.y1;
 			this.sendTransformCommand(point);
+
+			// The lines that marked the snap belong to the drag, so they go once it is dropped.
+			this.forgetTheSnap();
+			this.containerObject.requestReDraw();
 		}
 	}
 

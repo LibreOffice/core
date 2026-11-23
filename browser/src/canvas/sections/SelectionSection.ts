@@ -2967,15 +2967,23 @@ abstract class SelectionSection extends CanvasSectionObject {
 		return inDocument;
 	}
 
-	/// Looks for something on the page that the handle could line up with, and marks it.
-	public lookForASnap(handle: SelectionHandle, event?: MouseEvent): void {
+	/*
+		Looks for something on the page that the handle could line up with, and marks it. What
+		lines up is the point that far from the handle, in core pixels, as the outer edge of an
+		object is for the handle that scales it.
+	*/
+	public lookForASnap(
+		handle: SelectionHandle,
+		event?: MouseEvent,
+		fromTheHandle: number[] = [0, 0],
+	): void {
 		const half = 0.5 * ShapeHandlesSection.handleSize();
 		const at = new cool.SimplePoint(handle.point.x, handle.point.y);
 
 		// A point is asked about, so there is no size to it and no distance left to travel.
 		this.snap.look(
 			[0, 0],
-			[at.pX - half, at.pY - half],
+			[at.pX - fromTheHandle[0] - half, at.pY - fromTheHandle[1] - half],
 			[0, 0],
 			event?.altKey === true,
 		);

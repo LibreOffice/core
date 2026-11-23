@@ -2594,11 +2594,23 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShowAndUseGridCallbacks)
     dispatchCommand(mxComponent, u".uno:GridVisible"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT(std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(), ".uno:GridVisible=false") != aView.m_aStateChanged.end());
 
-    dispatchCommand(mxComponent, u".uno:GridUse"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
-    CPPUNIT_ASSERT(std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(), ".uno:GridUse=false") != aView.m_aStateChanged.end());
-
+    // A presentation starts without the snap to the grid, so the first toggle turns it on.
     dispatchCommand(mxComponent, u".uno:GridUse"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT(std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(), ".uno:GridUse=true") != aView.m_aStateChanged.end());
+
+    dispatchCommand(mxComponent, u".uno:GridUse"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
+    CPPUNIT_ASSERT(std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(), ".uno:GridUse=false") != aView.m_aStateChanged.end());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSnapToGridOfTheDocumentIgnored)
+{
+    // The document was saved with the snap to the grid on, as every presentation saved before the
+    // default changed was.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(!pViewShell->GetDrawView()->IsGridSnap());
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)

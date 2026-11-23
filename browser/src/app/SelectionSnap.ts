@@ -9,11 +9,23 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+/// A place along one axis where a dragged thing would stand as far from its neighbour as other
+/// objects stand from theirs, in core pixels.
+interface EqualSpacing {
+	/// Where the near edge of the dragged thing lands.
+	at: number;
+	/// How wide the gaps are that come out equal.
+	gap: number;
+	/// How far that is from where the drag has taken the thing.
+	distance: number;
+}
+
 /*
 	What a dragged thing can line up with: the edges and the middles of the other objects of the
-	page, or the points of the grid where the document is drawn on one. It is asked on every step
-	of a drag where the thing now stands, it keeps what it found, and it draws the lines that
-	show it. At the end of the drag it says where the thing really lands.
+	page, a place where it stands as far from its neighbour as other objects in its row or column
+	stand from theirs, or the points of the grid where the document is drawn on one. It is asked
+	on every step of a drag where the thing now stands, it keeps what it found, and it draws the
+	lines and the gaps that show it. At the end of the drag it says where the thing really lands.
 
 	It knows nothing of who is dragging. The section that draws a selection from tiles keeps one
 	and so does the one that draws it from objects, and both ask it the same way.
@@ -39,6 +51,25 @@ class SelectionSnap {
 	private snapOffsetX: number = 0;
 	private snapOffsetY: number = 0;
 
+	/// How far the edge or the middle that lined up was from where the drag left it.
+	private distanceX: number = 0;
+	private distanceY: number = 0;
+
+	/// Whether the place found on an axis is one of equal spacing rather than an edge or a
+	/// middle, which has no line across the page.
+	private spacingX: boolean = false;
+	private spacingY: boolean = false;
+
+	/// The gaps that are equal once the dragged thing lands, each drawn as a line with an arrow at
+	/// either end, from x1, y1 to x2, y2 in core pixels.
+	private equalGaps: number[][] = [];
+
+	/// Every edge of another object that an edge of the dragged thing lies on once it lands, in
+	/// core pixels, one list per axis. Empty where the thing lined up only by its middle, or is a
+	/// single point.
+	private edgesX: number[] = [];
+	private edgesY: number[] = [];
+
 	/// Where the drag lines up, in core pixels, for whoever asks the point itself.
 	public at(): (number | null)[] {
 		return [this.closestX, this.closestY];
@@ -58,6 +89,11 @@ class SelectionSnap {
 		this.centerToCenterX = false;
 		this.centerToCenterY = false;
 		this.draggedCenter = null;
+		this.spacingX = false;
+		this.spacingY = false;
+		this.equalGaps = [];
+		this.edgesX = [];
+		this.edgesY = [];
 	}
 
 	/*
@@ -121,6 +157,48 @@ class SelectionSnap {
 			[left, left + size[0] / 2, left + size[0]],
 			[top, top + size[1] / 2, top + size[1]],
 		);
+
+		// A point, as a handle or a new object's first corner is, has no gap to its neighbours.
+		if (size[0] > 0 && size[1] > 0)
+			this.checkEqualSpacing([left, top, size[0], size[1]]);
+
+		if (size[0] > 0 && size[1] > 0) this.findMatchingEdges(size, [left, top]);
+	}
+
+	/*
+		Collects the edges of other objects that the edges of the dragged thing lie on where it
+		lands. Two objects of the same height that line up at the top line up at the bottom as
+		well, so both lines are found. The size is that of the dragged thing and the place is its
+		upper left corner as the drag leaves it, both in core pixels.
+	*/
+	private findMatchingEdges(size: number[], place: number[]): void {
+		if (app.map._docLayer._docType !== 'presentation') return;
+
+		const landed = this.corner(place[0], place[1]);
+		const rectangles = GraphicSelection.snapRectangles();
+
+		for (let axis = 0; axis < 2; axis++) {
+			if (axis === 0 ? this.closestX === null : this.closestY === null)
+				continue;
+
+			const edges: number[] = [];
+			const own = [landed[axis], landed[axis] + size[axis]];
+			for (const other of rectangles) {
+				for (const edge of [other[axis], other[axis] + other[axis + 2]]) {
+					// The engine places objects in twips, so an edge can sit a fraction of a
+					// pixel away from one it lies on.
+					const lies = own.some((point: number) => Math.abs(point - edge) < 1);
+					if (
+						lies &&
+						!edges.some((known: number) => Math.abs(known - edge) < 1)
+					)
+						edges.push(edge);
+				}
+			}
+
+			if (axis === 0) this.edgesX = edges;
+			else this.edgesY = edges;
+		}
 	}
 
 	private findClosestX(xList: number[]) {
@@ -162,6 +240,7 @@ class SelectionSnap {
 
 		if (closest < VectorSettings.snapDistance() * app.dpiScale) {
 			this.closestX = pickX;
+			this.distanceX = closest;
 			this.snapOffsetX = snapOffset;
 			this.centerSnapX = centerSnap;
 			this.centerToCenterX = centerToCenter;
@@ -211,6 +290,7 @@ class SelectionSnap {
 
 		if (closest < VectorSettings.snapDistance() * app.dpiScale) {
 			this.closestY = pickY;
+			this.distanceY = closest;
 			this.snapOffsetY = snapOffset;
 			this.centerSnapY = centerSnap;
 			this.centerToCenterY = centerToCenter;
@@ -347,6 +427,210 @@ class SelectionSnap {
 		}
 	}
 
+	/*
+		Looks along both axes for a place where the dragged thing stands as far from its neighbour
+		as other objects in the same row or column stand from theirs, or exactly halfway between
+		its two neighbours. The box is the dragged thing where the drag has taken it, left, top,
+		width and height in core pixels. A place found here wins on its axis over an edge or a
+		middle only when it is closer, and where both hold the gaps are marked as well.
+	*/
+	private checkEqualSpacing(box: number[]): void {
+		if (app.map._docLayer._docType !== 'presentation') return;
+
+		const rectangles = GraphicSelection.snapRectangles();
+		const reach = VectorSettings.snapDistance() * app.dpiScale;
+		const found: (EqualSpacing | null)[] = [
+			SelectionSnap.findEqualSpacing(rectangles, box, 0, reach),
+			SelectionSnap.findEqualSpacing(rectangles, box, 1, reach),
+		];
+
+		const landed = box.slice();
+
+		if (found[0]) {
+			const corner =
+				this.closestX !== null ? this.closestX - this.snapOffsetX : null;
+			if (this.closestX === null || found[0].distance < this.distanceX - 0.5) {
+				this.closestX = found[0].at;
+				this.snapOffsetX = 0;
+				this.centerSnapX = null;
+				this.centerToCenterX = false;
+				this.spacingX = true;
+			} else if (Math.abs((corner as number) - found[0].at) >= 0.5)
+				found[0] = null;
+		}
+		if (found[1]) {
+			const corner =
+				this.closestY !== null ? this.closestY - this.snapOffsetY : null;
+			if (this.closestY === null || found[1].distance < this.distanceY - 0.5) {
+				this.closestY = found[1].at;
+				this.snapOffsetY = 0;
+				this.centerSnapY = null;
+				this.centerToCenterY = false;
+				this.spacingY = true;
+			} else if (Math.abs((corner as number) - found[1].at) >= 0.5)
+				found[1] = null;
+		}
+
+		if (this.closestX !== null) landed[0] = this.closestX - this.snapOffsetX;
+		if (this.closestY !== null) landed[1] = this.closestY - this.snapOffsetY;
+
+		// The dot on the dragged thing's own middle follows where it lands now.
+		this.draggedCenter =
+			this.centerToCenterX || this.centerToCenterY
+				? [landed[0] + box[2] / 2, landed[1] + box[3] / 2]
+				: null;
+
+		for (let axis = 0; axis < 2; axis++) {
+			const spacing = found[axis];
+			if (spacing)
+				this.equalGaps.push(
+					...SelectionSnap.gapsOf(rectangles, landed, axis, spacing.gap),
+				);
+		}
+	}
+
+	/*
+		The place along one axis, 0 across and 1 down, where the box stands as far from a
+		neighbour as two other objects of its row stand from each other, or halfway between its
+		two neighbours, whichever is closest to where the box is now. The row is every object that
+		shares some of the box's extent on the other axis. Null when nothing lies within reach.
+	*/
+	private static findEqualSpacing(
+		rectangles: number[][],
+		box: number[],
+		axis: number,
+		reach: number,
+	): EqualSpacing | null {
+		const row = SelectionSnap.rowOf(rectangles, box, axis);
+		const start = box[axis];
+		const size = box[axis + 2];
+		const middle = start + size / 2;
+
+		// The nearest neighbour on either side, the one whose near edge is closest.
+		let before: number[] | null = null;
+		let after: number[] | null = null;
+		for (const other of row) {
+			if (other[axis] + other[axis + 2] < middle) {
+				if (
+					!before ||
+					other[axis] + other[axis + 2] > before[axis] + before[axis + 2]
+				)
+					before = other;
+			} else if (other[axis] > middle) {
+				if (!after || other[axis] < after[axis]) after = other;
+			}
+		}
+		if (!before && !after) return null;
+
+		const candidates: EqualSpacing[] = [];
+		const offer = (at: number, gap: number) => {
+			if (gap > 0)
+				candidates.push({ at: at, gap: gap, distance: Math.abs(at - start) });
+		};
+
+		for (const gap of SelectionSnap.gapsBetween(row, axis)) {
+			if (before) offer(before[axis] + before[axis + 2] + gap, gap);
+			if (after) offer(after[axis] - gap - size, gap);
+		}
+
+		if (before && after) {
+			const free = after[axis] - (before[axis] + before[axis + 2]) - size;
+			offer(before[axis] + before[axis + 2] + free / 2, free / 2);
+		}
+
+		let best: EqualSpacing | null = null;
+		for (const candidate of candidates)
+			if (
+				candidate.distance < reach &&
+				(!best || candidate.distance < best.distance)
+			)
+				best = candidate;
+
+		return best;
+	}
+
+	/// The objects that share some of the box's extent on the axis other than the one given.
+	private static rowOf(
+		rectangles: number[][],
+		box: number[],
+		axis: number,
+	): number[][] {
+		const cross = 1 - axis;
+		return rectangles.filter(
+			(other: number[]) =>
+				other[cross] < box[cross] + box[cross + 2] &&
+				other[cross] + other[cross + 2] > box[cross],
+		);
+	}
+
+	/// The gap from each object of the row to the next one along the axis that shares some of
+	/// its extent across, where they do not overlap.
+	private static gapsBetween(row: number[][], axis: number): number[] {
+		return SelectionSnap.neighbourPairs(row, axis).map(
+			(pair: number[][]) => pair[1][axis] - (pair[0][axis] + pair[0][axis + 2]),
+		);
+	}
+
+	/// Each object of the row with the next one along the axis that it does not overlap and that
+	/// shares some of its extent across.
+	private static neighbourPairs(row: number[][], axis: number): number[][][] {
+		const cross = 1 - axis;
+		const pairs: number[][][] = [];
+
+		for (const first of row) {
+			const end = first[axis] + first[axis + 2];
+			let next: number[] | null = null;
+			for (const other of row) {
+				if (other === first || other[axis] <= end) continue;
+				if (
+					other[cross] >= first[cross] + first[cross + 2] ||
+					other[cross] + other[cross + 2] <= first[cross]
+				)
+					continue;
+				if (!next || other[axis] < next[axis]) next = other;
+			}
+			if (next) pairs.push([first, next]);
+		}
+
+		return pairs;
+	}
+
+	/*
+		Every gap of the given size along the axis once the box has landed: those between other
+		objects of its row, and those from the box to its neighbours. Each is a line from one edge
+		to the other, across the middle of what the two sides share.
+	*/
+	private static gapsOf(
+		rectangles: number[][],
+		box: number[],
+		axis: number,
+		gap: number,
+	): number[][] {
+		const row = SelectionSnap.rowOf(rectangles, box, axis);
+		row.push(box);
+
+		const lines: number[][] = [];
+		for (const pair of SelectionSnap.neighbourPairs(row, axis)) {
+			const from = pair[0][axis] + pair[0][axis + 2];
+			const to = pair[1][axis];
+			if (Math.abs(to - from - gap) >= 1) continue;
+
+			const cross = 1 - axis;
+			const low = Math.max(pair[0][cross], pair[1][cross]);
+			const high = Math.min(
+				pair[0][cross] + pair[0][cross + 2],
+				pair[1][cross] + pair[1][cross + 2],
+			);
+			const across = (low + high) / 2;
+
+			lines.push(
+				axis === 0 ? [from, across, to, across] : [across, from, across, to],
+			);
+		}
+
+		return lines;
+	}
+
 	private drawGridHelperLines(section: CanvasSectionObject) {
 		Util.ensureValue(app.activeDocument);
 
@@ -408,23 +692,39 @@ class SelectionSnap {
 
 		section.context.beginPath();
 
-		if (this.closestX !== null)
+		// The edges the dragged thing lies on, or else the one place it lined up with.
+		const across =
+			this.edgesX.length > 0
+				? this.edgesX
+				: this.closestX !== null && !this.spacingX
+					? [this.closestX]
+					: [];
+		for (const x of across)
 			this.drawXAxis(
 				section,
 				section.containerObject.getDocumentAnchor()[0] +
-					this.closestX -
+					x -
 					app.activeDocument.activeLayout.viewedRectangle.pX1,
 			);
 
-		if (this.closestY !== null)
+		const down =
+			this.edgesY.length > 0
+				? this.edgesY
+				: this.closestY !== null && !this.spacingY
+					? [this.closestY]
+					: [];
+		for (const y of down)
 			this.drawYAxis(
 				section,
 				section.containerObject.getDocumentAnchor()[1] +
-					this.closestY -
+					y -
 					app.activeDocument.activeLayout.viewedRectangle.pY1,
 			);
 
 		section.context.closePath();
+
+		section.context.setLineDash([]);
+		for (const gap of this.equalGaps) this.drawGap(section, gap);
 
 		// When snapping to another object's center, mark that center with a red dot.
 		if (this.centerSnapX !== null)
@@ -438,6 +738,48 @@ class SelectionSnap {
 			this.drawCenterSnapDot(section, this.draggedCenter);
 
 		section.context.restore();
+	}
+
+	/// Draws one of the equal gaps as a line with an arrow at either end.
+	private drawGap(section: CanvasSectionObject, gap: number[]) {
+		Util.ensureValue(app.activeDocument);
+
+		const anchor = section.containerObject.getDocumentAnchor();
+		const view = app.activeDocument.activeLayout.viewedRectangle;
+		const x1 = anchor[0] + gap[0] - view.pX1;
+		const y1 = anchor[1] + gap[1] - view.pY1;
+		const x2 = anchor[0] + gap[2] - view.pX1;
+		const y2 = anchor[1] + gap[3] - view.pY1;
+
+		const length = Math.hypot(x2 - x1, y2 - y1);
+		if (length < 1) return;
+
+		// Along the line, and across it, both of length 1.
+		const dx = (x2 - x1) / length;
+		const dy = (y2 - y1) / length;
+		const head = Math.min(5 * app.dpiScale, length / 2);
+
+		section.context.lineWidth = app.dpiScale;
+		section.context.beginPath();
+		section.context.moveTo(x1, y1);
+		section.context.lineTo(x2, y2);
+
+		for (const [x, y, sign] of [
+			[x1, y1, 1],
+			[x2, y2, -1],
+		]) {
+			section.context.moveTo(
+				x + sign * head * dx - head * dy,
+				y + sign * head * dy + head * dx,
+			);
+			section.context.lineTo(x, y);
+			section.context.lineTo(
+				x + sign * head * dx + head * dy,
+				y + sign * head * dy - head * dx,
+			);
+		}
+
+		section.context.stroke();
 	}
 
 	private drawXAxis(section: CanvasSectionObject, x: number) {

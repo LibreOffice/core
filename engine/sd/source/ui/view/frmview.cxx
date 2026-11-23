@@ -38,6 +38,7 @@
 #include <pres.hxx>
 #include <ResourceId.hxx>
 #include <framework/FrameworkHelper.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -722,7 +723,10 @@ void FrameView::ReadUserDataSequence ( const cpo::uno::Sequence < css::beans::Pr
 
         else if ( rValue.Name == sUNO_View_IsSnapToGrid )
         {
-            if( rValue.Value >>= bBool )
+            // Online keeps a presentation to the configured setting. Every presentation saved
+            // while the snap was on by default says so, and while it is on the guides that line
+            // objects up with each other never show.
+            if( ( rValue.Value >>= bBool ) && !( bImpress && comphelper::COKit::isActive() ) )
             {
                 SetGridSnap( bBool );
             }

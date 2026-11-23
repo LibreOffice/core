@@ -87,6 +87,40 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Shape alignment guides.', 
 		});
 	});
 
+	// The guides belong to the drag: once the shape is dropped, the selected shape shows none.
+	it('Drops the guides with the shape.', function() {
+		withSelectedShape(function(section, position, size, other) {
+			cy.getFrameWindow().then(function(win) {
+				// From the middle of the shape to where its top edge lies a pixel off the other
+				// shape's top edge, in CSS pixels on the canvas.
+				var visible = win.app.activeDocument.activeLayout.viewedRectangle;
+				var from = {
+					x: (position[0] + size[0] / 2 - visible.pX1) / win.app.dpiScale,
+					y: (position[1] + size[1] / 2 - visible.pY1) / win.app.dpiScale,
+				};
+				var up = (position[1] - other[1] - 1) / win.app.dpiScale;
+				var drawing = cy.cGet('#document-canvas').trigger('mousedown', from.x, from.y,
+					{ button: 0, buttons: 1 });
+				for (var step = 1; step <= 10; ++step)
+					drawing = drawing.trigger('mousemove', from.x, from.y - step / 10 * up,
+						{ button: 0, buttons: 1 });
+				cy.then(function() {
+					expect(section.sectionProperties.snap.closestY, 'the guide while dragging')
+						.to.be.closeTo(other[1], 1);
+				});
+				cy.cGet('#document-canvas').trigger('mouseup', from.x, from.y - up,
+					{ button: 0, buttons: 0 });
+				cy.then(function() {
+					return helper.processToIdle(win);
+				});
+				cy.wrap(null).should(function() {
+					expect(section.sectionProperties.snap.found(), 'a guide after the drop')
+						.to.equal(false);
+				});
+			});
+		});
+	});
+
 	// Regression test for center-to-center snapping and the red center dots
 	// drawn on both the target shape and the active (dragged) shape.
 	it('Snaps the center to another shape center.', function() {

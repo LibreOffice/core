@@ -65,6 +65,73 @@ class HandleScaling {
 		return sideToCorner[handleId] ?? handleId;
 	}
 
+	/*
+		The mouse point that puts the dragged handle on a line it snapped to, for a drag that keeps
+		the ratio. Such a drag has one number to give, so the handle cannot simply be put on the
+		line: the mouse is moved along until the handle reaches it. The handle moves in a straight
+		line while the mouse moves along one axis, so two places tell how far to go, and a few
+		rounds settle it where the axis that leads the ratio changes on the way. The line is
+		taken on the axis nearer to the handle where both found one.
+
+		handleAt gives where the handle stands for a mouse point, and the snap is the line on
+		each axis, both in core pixels, null on an axis that found none.
+	*/
+	public static ontoTheLine(
+		handleAt: (point: cool.SimplePoint) => number[] | null,
+		from: cool.SimplePoint,
+		snapped: (number | null)[],
+	): cool.SimplePoint {
+		const start = handleAt(from);
+		if (!start) return from;
+
+		const axes = [0, 1].filter(
+			(axis: number) => snapped[axis] !== null && snapped[axis] !== undefined,
+		);
+		if (axes.length === 0) return from;
+		axes.sort(
+			(one: number, other: number) =>
+				Math.abs((snapped[one] as number) - start[one]) -
+				Math.abs((snapped[other] as number) - start[other]),
+		);
+		const axis = axes[0];
+		const line = snapped[axis] as number;
+
+		// How far the mouse goes to find out how fast the handle follows, in core pixels.
+		const step = 10;
+
+		const at = from.clone();
+		for (let round = 0; round < 3; round++) {
+			const now = handleAt(at);
+			if (!now) break;
+
+			const off = line - now[axis];
+			if (Math.abs(off) < 0.5) break;
+
+			// The mouse is moved along the axis of the line first, and along the other one where
+			// that leaves the handle where it is.
+			let moved = false;
+			for (const lead of [axis, 1 - axis]) {
+				const probe = at.clone();
+				if (lead === 0) probe.pX += step;
+				else probe.pY += step;
+
+				const there = handleAt(probe);
+				if (!there) continue;
+
+				const rate = (there[axis] - now[axis]) / step;
+				if (Math.abs(rate) < 0.001) continue;
+
+				if (lead === 0) at.pX += off / rate;
+				else at.pY += off / rate;
+				moved = true;
+				break;
+			}
+			if (!moved) break;
+		}
+
+		return at;
+	}
+
 	/// Where the handle counted as handleId sits on that rectangle, in twips.
 	/// The rectangle covers the shape before the turn, so this method turns the place about
 	/// the middle of the rectangle by the angle the shape stands at.
