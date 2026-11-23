@@ -204,11 +204,19 @@ public:
     /// Handle the poll from the unipoll callback.
     int kitPoll(int timeoutMicroS);
 
+#if DOCS_SHARE_PROCESS
+    // Handle the wake up from the unipoll callback, for every poll:
+    static void kitWakeupAll();
+
+    // Handle the 'has any input?' unipoll callback, for every poll:
+    static bool kitHasAnyInputAll();
+#else
     /// Handle the wake up from the unipoll callback.
     void kitWakeup();
 
     /// Handle the 'has any input?' unipoll callback.
     bool kitHasAnyInput(int mostUrgentPriority);
+#endif
 
     void setDocument(std::shared_ptr<Document> document) { _document = std::move(document); }
     const std::shared_ptr<Document>& getDocument() const { return _document; }

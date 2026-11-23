@@ -4120,18 +4120,23 @@ int pollCallback([[maybe_unused]] void* data, int timeoutUs)
 }
 
 // Do we have any pending input events from coolwsd ?
-bool anyInputCallback(void* data, int mostUrgentPriority)
+bool anyInputCallback(void* data, [[maybe_unused]] int mostUrgentPriority)
 {
     if (!data)
         return false;
 
+#if DOCS_SHARE_PROCESS
+    // The data is only a pointer that is not null here (as one run loop serves every poll):
+    return KitSocketPoll::kitHasAnyInputAll();
+#else
     return static_cast<KitSocketPoll*>(data)->kitHasAnyInput(mostUrgentPriority);
+#endif
 }
 
 } // namespace
 
-bool KitSocketPoll::kitHasAnyInput([[maybe_unused]] int mostUrgentPriority) {
 #if !DOCS_SHARE_PROCESS
+bool KitSocketPoll::kitHasAnyInput([[maybe_unused]] int mostUrgentPriority) {
     const std::shared_ptr<Document>& document = getDocument();
 
     if (document)
@@ -4167,11 +4172,13 @@ bool KitSocketPoll::kitHasAnyInput([[maybe_unused]] int mostUrgentPriority) {
     }
 
     return false;
+}
 #else
+bool KitSocketPoll::kitHasAnyInputAll() {
     // FIXME - should return true only if there is any input in any of the Kits
     return true;
-#endif
 }
+#endif
 
 namespace
 {
@@ -4182,7 +4189,12 @@ void wakeCallback(void* data)
     if (!data)
         return;
 
+#if DOCS_SHARE_PROCESS
+    // The data is only a pointer that is not null here (as one run loop serves every poll):
+    KitSocketPoll::kitWakeupAll();
+#else
     return static_cast<KitSocketPoll*>(data)->kitWakeup();
+#endif
 }
 
 #if !defined(_WIN32)
@@ -4274,17 +4286,19 @@ void downloadAsFileSaveDialogCallback(const char* suggestedURI, char* result, si
 
 } // namespace
 
-void KitSocketPoll::kitWakeup() {
 #if !DOCS_SHARE_PROCESS
+void KitSocketPoll::kitWakeup() {
     wakeup();
+}
 #else
+void KitSocketPoll::kitWakeupAll() {
     // The engine calls this on any of its threads. A poll whose last reference goes meanwhile, on
     // the thread that owns it, waits at the start of its destructor until the loop is done.
     std::lock_guard<std::mutex> lock(KitSocketPoll::KSLivePollsMutex);
     for (KitSocketPoll* poll : KitSocketPoll::KSLivePolls)
         poll->wakeup();
-#endif
 }
+#endif
 
 /**
  * Register the "any input", "poll" and "wake up" callbacks in COKit and start the LOKit's main loop.
