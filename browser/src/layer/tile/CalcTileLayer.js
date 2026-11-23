@@ -1858,7 +1858,8 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			!Object.prototype.hasOwnProperty.call(msgObj, 'relrect') || !Object.prototype.hasOwnProperty.call(msgObj, 'refpoint')) {
 			// 1) non-print-twips messaging mode OR
 			// 2) the edit-cursor belongs to draw/chart objects.
-			return window.L.CanvasTileLayer.prototype._getEditCursorRectangle.call(this, msgObj);
+			var rectangle = window.L.CanvasTileLayer.prototype._getEditCursorRectangle.call(this, msgObj);
+			return this._placedLikeItsObject(rectangle, msgObj.object);
 		}
 
 		if (typeof msgObj !== 'object') {
@@ -1870,6 +1871,23 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		var refpoint = cool.Point.parse(msgObj.refpoint);
 		refpoint = this.sheetGeometry.getTileTwipsPointFromPrint(refpoint);
 		return relrect.add(refpoint);
+	},
+
+	// In a view of vectors an object of the sheet stands where the shown geometry puts its anchor,
+	// and so does the text edited in it. A caret in that text comes in print twips, so it takes
+	// the placing of its object too.
+	_placedLikeItsObject: function (rectangle, objectId) {
+		var calcVectorManager = RenderManager.calcVectorManager();
+		if (!rectangle || !calcVectorManager || objectId === undefined)
+			return rectangle;
+		var placing = calcVectorManager.objectPlacingOf(this._selectedPart, parseInt(objectId));
+		if (!placing)
+			return rectangle;
+		var place = function (point) {
+			return new cool.Point(placing.scaleX * point.x + placing.moveX,
+				placing.scaleY * point.y + placing.moveY);
+		};
+		return new cool.Bounds(place(rectangle.min), place(rectangle.max));
 	},
 
 	_getTextSelectionRectangles: function (textMsg) {
