@@ -231,11 +231,6 @@ namespace
         else
             return cairo::X11SysData(*pSysData, rWindow.ImplGetFrame());
     }
-
-    cairo::X11SysData getSysData( const VirtualDevice& rVirDev )
-    {
-        return cairo::X11SysData( rVirDev.GetSystemGfxData() );
-    }
 }
 
 cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface( const OutputDevice& rRefDevice,
@@ -245,8 +240,12 @@ cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface( const OutputDevice& rRefD
         return std::make_shared<cairo::X11Surface>(getSysData(*rRefDevice.GetOwnerWindow()),
                                                x,y,width,height);
     if( rRefDevice.IsVirtual() )
-        return std::make_shared<cairo::X11Surface>(getSysData(static_cast<const VirtualDevice&>(rRefDevice)),
-                                               x,y,width,height);
+    {
+        const SystemGraphicsData aSystemGraphicsData
+            = static_cast<const VirtualDevice&>(rRefDevice).GetSystemGfxData();
+        return std::make_shared<cairo::X11Surface>(cairo::X11SysData(aSystemGraphicsData), x, y,
+                                                   width, height);
+    }
     return cairo::SurfaceSharedPtr();
 }
 
