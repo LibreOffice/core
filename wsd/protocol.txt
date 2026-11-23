@@ -2921,7 +2921,8 @@ Connection:
     wss://<host><service-root>/cool/collab/ws?WOPISrc=<wopi-url>&protocol=<number>
 
     <wopi-url> is the WOPISrc of the document, as for /cool/ws, without an access token (which
-    the client sends in its first message).
+    the client sends in its first message, and which is what authenticates the connection, so that
+    the server takes the upgrade from any Origin).
     "protocol" is the number of the protocol that the client speaks (see "Protocol numbers"
     below).  The server refuses the upgrade with 400 when WOPISrc is missing, or when
     client_document_loading.enable in coolwsd.xml is off.  The first message from the client is
@@ -3140,9 +3141,8 @@ client -> server messages on /cool/collab/ws
 HTTP byte-stream endpoints under /cool/collab/
 ----------------------------------------------
 
-These endpoints are reached over the same origin that serves the WebSocket.  /cool/collab/fetch and
-/cool/collab/put allow cross-origin reads (Access-Control-Allow-Origin: *, and /cool/collab/put also
-answers the OPTIONS preflight), so a CODA page on a different origin can drive them.  Their
+These endpoints are reached over the same origin that serves the WebSocket, which is also the
+origin of the page of CODA and COWASM, so they answer without CORS headers.  Their
 one-shot token is what authenticates a request.  Each of these addresses that the server hands out
 also carries the WOPISrc of the document without its query (and the server's RouteToken when it has
 one), so that a load balancer that routes by WOPISrc sends it to the server of the document.
