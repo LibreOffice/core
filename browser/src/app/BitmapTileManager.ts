@@ -2395,6 +2395,11 @@ class BitmapTileManager extends RenderManagerBase {
 			return [];
 		if (app.map._docLayer._isZooming) return [];
 
+		// While a zoom animation runs, each frame scales app.twipsToPixels, so the view area
+		// in pixels matches no zoom level. Tiles are requested after the animation, at the
+		// final zoom.
+		if (!checkOnly && app.sectionContainer.isInZoomAnimation()) return [];
+
 		if (!checkOnly) {
 			// zoomFrameBounds and forZoom params were introduced to work only in checkOnly mode.
 			window.app.console.assert(
@@ -2478,20 +2483,18 @@ class BitmapTileManager extends RenderManagerBase {
 				const localX2 = visX2 - partX1;
 				const localY2 = visY2 - partY1;
 
-				const startX =
-					Math.floor(localX1 / app.tile.size.pX) * app.tile.size.pX;
-				const endX =
-					Math.floor((localX2 - 1) / app.tile.size.pX) * app.tile.size.pX;
-				const startY =
-					Math.floor(localY1 / app.tile.size.pY) * app.tile.size.pY;
-				const endY =
-					Math.floor((localY2 - 1) / app.tile.size.pY) * app.tile.size.pY;
+				// A tile covers tileSize pixels at every zoom level.
+				const tileSize = this.tileSize;
+				const startX = Math.floor(localX1 / tileSize) * tileSize;
+				const endX = Math.floor((localX2 - 1) / tileSize) * tileSize;
+				const startY = Math.floor(localY1 / tileSize) * tileSize;
+				const endY = Math.floor((localY2 - 1) / tileSize) * tileSize;
 
 				const part = app.map._docLayer.getPartFromIndex(i);
 				if (!part) continue;
 
-				for (let j = startX; j <= endX; j += app.tile.size.pX) {
-					for (let k = startY; k <= endY; k += app.tile.size.pY) {
+				for (let j = startX; j <= endX; j += tileSize) {
+					for (let k = startY; k <= endY; k += tileSize) {
 						queue.push(new TileCoordData(j, k, zoom, part, mode));
 					}
 				}
