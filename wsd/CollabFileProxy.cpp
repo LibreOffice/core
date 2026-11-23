@@ -20,13 +20,17 @@
 #include <common/SettingsSecrets.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <HttpHelper.hpp>
+#include <JsonUtil.hpp>
 #include <Log.hpp>
 #include <Protocol.hpp>
 #include <wsd/RequestDetails.hpp>
 #include <SigUtil.hpp>
+#include <Util.hpp>
+#include <wsd/wopi/CheckFileInfo.hpp>
 #include <wsd/wopi/StorageConnectionManager.hpp>
 
 #include <Poco/JSON/Parser.h>
+#include <Poco/SHA2Engine.h>
 #include <Poco/URI.h>
 
 namespace {
@@ -286,12 +290,18 @@ void CollabFileProxy::doUpload(const std::shared_ptr<TerminatingPoll>& poll,
     const auto startTime = std::chrono::steady_clock::now();
 
     http::Session::FinishedCallback finishedCallback =
-        [this, startTime, uriAnonym, bodySize = body.size(), keepalive = shared_from_this()](
-            const std::shared_ptr<http::Session>& session)
+        [this, poll, uri, startTime, uriAnonym, bodySize = body.size(),
+         keepalive = shared_from_this()](const std::shared_ptr<http::Session>& session)
     {
         if (SigUtil::getShutdownRequestFlag())
         {
             LOG_DBG("CollabFileProxy: shutdown flagged, aborting upload");
+            return;
+        }
+
+        // A failed connection got its answer from the connect-fail handler, which runs before this
+        // one (as after a failed TLS handshake):
+        if (session->connectionResult() != net::AsyncConnectResult::Connected) {
             return;
         }
 
@@ -315,49 +325,7 @@ void CollabFileProxy::doUpload(const std::shared_ptr<TerminatingPoll>& poll,
 
         if (statusCode == http::StatusCode::OK)
         {
-            // The CheckFileInfo kept for this document's editor form still has the version from
-            // before this upload, and a session that used it would get 409 on every save.
-            ClientRequestDispatcher::DropRequestVettingStations(
-                RequestDetails::getDocKey(_wopiSrc));
-
-            // Update any existing DocumentBroker's stored timestamp
-            // so it matches the new version we just uploaded.  Without
-            // this, a subsequent CheckFileInfo (when another user joins)
-            // would see a timestamp mismatch and trigger a spurious
-            // "Document has been changed" conflict dialog.
-            const std::string& wopiResponse = httpResponse->getBody();
-            try
-            {
-                Poco::JSON::Parser parser;
-                auto json = parser.parse(wopiResponse).extract<Poco::JSON::Object::Ptr>();
-                const std::string lastModifiedTime =
-                    json->optValue<std::string>("LastModifiedTime", std::string());
-                if (!lastModifiedTime.empty())
-                {
-                    const std::string docKey = RequestDetails::getDocKey(_wopiSrc);
-                    std::unique_lock<std::mutex> lock(DocBrokersMutex);
-                    auto it = DocBrokers.find(docKey);
-                    if (it != DocBrokers.end() && it->second)
-                    {
-                        auto broker = it->second;
-                        broker->addCallback(
-                            [broker, lastModifiedTime]()
-                            {
-                                broker->updateLastModifiedTime(lastModifiedTime);
-                            });
-                    }
-                }
-            }
-            catch (const std::exception& ex)
-            {
-                LOG_DBG("CollabFileProxy: failed to parse PutFile response for "
-                        "timestamp update: " << ex.what());
-            }
-
-            // Return the WOPI response (contains LastModifiedTime etc.)
-            http::Response response(http::StatusCode::OK);
-            response.setBody(httpResponse->getBody(), "application/json; charset=utf-8");
-            socket->sendAndShutdown(response);
+            answerUploaded(socket, httpResponse->getBody());
         }
         else if (statusCode == http::StatusCode::Conflict)
         {
@@ -371,6 +339,21 @@ void CollabFileProxy::doUpload(const std::shared_ptr<TerminatingPoll>& poll,
         {
             HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, socket);
         }
+        else if ((httpResponse->statusLine().statusCategory()
+                      == http::StatusLine::StatusCodeClass::Invalid
+                  || http::isTransientStatusCode(statusCode))
+                 && !_uploadRetried)
+        {
+            // The host may or may not have stored the upload (so a forced one is just repeated,
+            // and else storage tells which, as for /cool/ws):
+            _uploadRetried = true;
+            if (_uploadLastModifiedTime.empty()) {
+                LOG_WRN("CollabFileProxy: repeating the forced PutFile after " << statusCode);
+                doUpload(poll, uri, _uploadBody);
+            } else {
+                checkUploadOutcome(poll, uri);
+            }
+        }
         else
         {
             LOG_ERR("CollabFileProxy: PutFile failed with " << statusCode);
@@ -381,6 +364,121 @@ void CollabFileProxy::doUpload(const std::shared_ptr<TerminatingPoll>& poll,
     httpSession->setFinishedHandler(std::move(finishedCallback));
     httpSession->setConnectFailHandler(badGatewayOnConnectFail(_socket, uriAnonym));
     httpSession->asyncRequest(httpRequest, poll);
+}
+
+void CollabFileProxy::answerUploaded(
+    std::shared_ptr<StreamSocket> const & socket, std::string const & wopiResponse)
+{
+    // The CheckFileInfo kept for this document's editor form still has the version from
+    // before this upload, and a session that used it would get 409 on every save.
+    ClientRequestDispatcher::DropRequestVettingStations(
+        RequestDetails::getDocKey(_wopiSrc));
+
+    // Update any existing DocumentBroker's stored timestamp
+    // so it matches the new version we just uploaded.  Without
+    // this, a subsequent CheckFileInfo (when another user joins)
+    // would see a timestamp mismatch and trigger a spurious
+    // "Document has been changed" conflict dialog.
+    try
+    {
+        Poco::JSON::Parser parser;
+        auto json = parser.parse(wopiResponse).extract<Poco::JSON::Object::Ptr>();
+        const std::string lastModifiedTime =
+            json->optValue<std::string>("LastModifiedTime", std::string());
+        if (!lastModifiedTime.empty())
+        {
+            const std::string docKey = RequestDetails::getDocKey(_wopiSrc);
+            std::unique_lock<std::mutex> lock(DocBrokersMutex);
+            auto it = DocBrokers.find(docKey);
+            if (it != DocBrokers.end() && it->second)
+            {
+                auto broker = it->second;
+                broker->addCallback(
+                    [broker, lastModifiedTime]()
+                    {
+                        broker->updateLastModifiedTime(lastModifiedTime);
+                    });
+            }
+        }
+    }
+    catch (const std::exception& ex)
+    {
+        LOG_DBG("CollabFileProxy: failed to parse PutFile response for "
+                "timestamp update: " << ex.what());
+    }
+
+    // Return the WOPI response (contains LastModifiedTime etc.)
+    http::Response response(http::StatusCode::OK);
+    response.setBody(wopiResponse, "application/json; charset=utf-8");
+    socket->sendAndShutdown(response);
+}
+
+void CollabFileProxy::checkUploadOutcome(
+    std::shared_ptr<TerminatingPoll> const & poll, Poco::URI const & uri)
+{
+    // The address of the upload is that of the file with "/contents" appended:
+    Poco::URI fileUri(uri);
+    std::string path = fileUri.getPath();
+    path.erase(path.size() - std::string_view("/contents").size());
+    fileUri.setPath(path);
+
+    LOG_WRN("CollabFileProxy: asking storage whether the PutFile without a clear answer landed");
+    _uploadCheck = std::make_shared<CheckFileInfo>(
+        poll, fileUri,
+        [this, poll, uri, keepalive = shared_from_this()](CheckFileInfo & check) {
+            // The CheckFileInfo stays alive until this callback returns:
+            Poco::JSON::Object::Ptr const info = check.wopiInfo();
+            bool const passed = check.state() == CheckFileInfo::State::Pass && info;
+            _uploadCheck.reset();
+
+            std::shared_ptr<StreamSocket> const socket = _socket.lock();
+            if (!socket) {
+                return;
+            }
+            if (!passed) {
+                LOG_ERR("CollabFileProxy: storage cannot tell whether the PutFile landed");
+                HttpHelper::sendErrorAndShutdown(http::StatusCode::BadGateway, socket);
+                return;
+            }
+
+            std::string lastModifiedTime;
+            JsonUtil::findJSONValue(info, "LastModifiedTime", lastModifiedTime);
+            if (lastModifiedTime == _uploadLastModifiedTime) {
+                LOG_WRN("CollabFileProxy: the PutFile did not land, repeating it");
+                doUpload(poll, uri, _uploadBody);
+                return;
+            }
+
+            // A hash settles whether the document in storage is the uploaded one, else the size
+            // tells, as for /cool/ws:
+            std::string storageHash;
+            JsonUtil::findJSONValue(info, "SHA256", storageHash);
+            bool isUploaded;
+            if (storageHash.empty()) {
+                std::size_t size = 0;
+                JsonUtil::findJSONValue(info, "Size", size);
+                isUploaded = size == _uploadBody.size();
+            } else {
+                Poco::SHA2Engine engine(Poco::SHA2Engine::SHA_256);
+                engine.update(_uploadBody.data(), _uploadBody.size());
+                isUploaded = storageHash == Util::base64Encode(engine.digest());
+            }
+
+            if (isUploaded) {
+                LOG_INF("CollabFileProxy: the PutFile landed, as version [" << lastModifiedTime
+                        << ']');
+                Poco::JSON::Object::Ptr result = new Poco::JSON::Object();
+                result->set("LastModifiedTime", lastModifiedTime);
+                answerUploaded(socket, JsonUtil::jsonToString(result));
+            } else {
+                LOG_WRN("CollabFileProxy: storage has another version [" << lastModifiedTime
+                        << "] than the PutFile");
+                http::Response response(http::StatusCode::Conflict);
+                response.setBody("{}", "application/json; charset=utf-8");
+                socket->sendAndShutdown(response);
+            }
+        });
+    _uploadCheck->checkFileInfo(HTTP_REDIRECTION_LIMIT);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

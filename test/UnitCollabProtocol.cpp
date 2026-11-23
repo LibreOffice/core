@@ -564,6 +564,265 @@ private:
     std::shared_ptr<http::WebSocketSession> collabWs_;
 };
 
+// An upload that the host answers with a temporary error, without storing it, is repeated:
+class UnitCollabUploadRetry: public WopiTestServer {
+public:
+    UnitCollabUploadRetry():
+        WopiTestServer("UnitCollabUploadRetry"), phase_(Phase::Connect), putFiles_(0) {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
+
+    std::unique_ptr<http::Response>
+    assertPutFileRequest(Poco::Net::HTTPRequest const &) override
+    {
+        ++putFiles_;
+        if (putFiles_ > 1) {
+            return nullptr;
+        }
+        // A body keeps the answer from reaching coolwsd as a dropped connection:
+        auto response = std::make_unique<http::Response>(http::StatusCode::ServiceUnavailable);
+        response->setBody("busy", "text/plain");
+        return response;
+    }
+
+    void invokeWSDTest() override {
+        switch (phase_) {
+        case Phase::Connect: {
+            TRANSITION_STATE(phase_, Phase::WaitAuth);
+            Poco::URI const wopiURL(
+                getWopiHostURI()
+                + "/wopi/files/0?access_token=anything&testname=UnitCollabUploadRetry");
+            collabWs_ = startCollabConnection(
+                socketPoll(), Uri::encode(wopiURL.toString()), "anything");
+            break;
+        }
+        case Phase::WaitAuth:
+            if (!pollCollabMessage(collabWs_, "user_list")) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitFetchUrl);
+            collabWs_->sendMessage(R"({"type":"fetch","stream":"contents","requestId":"f1"})");
+            break;
+        case Phase::WaitFetchUrl: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "fetch_url");
+            if (!msg) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitUploadUrl);
+            collabWs_->sendMessage(
+                R"({"type":"upload","stream":"contents","requestId":"r1","lastModifiedTime":")"
+                + msg->getValue<std::string>("lastModifiedTime") + R"("})");
+            break;
+        }
+        case Phase::WaitUploadUrl: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "upload_url");
+            if (!msg) {
+                break;
+            }
+            http::Request request(msg->getValue<std::string>("url"), http::Request::VERB_POST);
+            request.setBody("Uploaded by the collab client", "application/octet-stream");
+            std::shared_ptr<http::Response const> const response
+                = http::Session::create(helpers::getTestServerURI())->syncRequest(request);
+            LOK_ASSERT_EQUAL(http::StatusCode::OK, response->statusLine().statusCode());
+            LOK_ASSERT_EQUAL(std::string("Uploaded by the collab client"), getFileContent());
+            LOK_ASSERT_EQUAL(2, putFiles_);
+            TRANSITION_STATE(phase_, Phase::Done);
+            collabWs_->asyncShutdown();
+            passTest("The upload went through on the second try");
+            break;
+        }
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    STATE_ENUM(Phase, Connect, WaitAuth, WaitFetchUrl, WaitUploadUrl, Done) phase_;
+
+    // The PutFile requests that the host got:
+    int putFiles_;
+
+    std::shared_ptr<http::WebSocketSession> collabWs_;
+};
+
+// An upload that the host stores but answers with a temporary error succeeds with the new version:
+class UnitCollabUploadLanded: public WopiTestServer {
+public:
+    UnitCollabUploadLanded():
+        WopiTestServer("UnitCollabUploadLanded"), phase_(Phase::Connect), putFiles_(0) {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
+
+    std::unique_ptr<http::Response>
+    assertPutFileRequest(Poco::Net::HTTPRequest const &) override
+    {
+        ++putFiles_;
+        setFileContent(getUploadedDocument());
+        // A body keeps the answer from reaching coolwsd as a dropped connection:
+        auto response = std::make_unique<http::Response>(http::StatusCode::ServiceUnavailable);
+        response->setBody("busy", "text/plain");
+        return response;
+    }
+
+    void invokeWSDTest() override {
+        switch (phase_) {
+        case Phase::Connect: {
+            TRANSITION_STATE(phase_, Phase::WaitAuth);
+            Poco::URI const wopiURL(
+                getWopiHostURI()
+                + "/wopi/files/0?access_token=anything&testname=UnitCollabUploadLanded");
+            collabWs_ = startCollabConnection(
+                socketPoll(), Uri::encode(wopiURL.toString()), "anything");
+            break;
+        }
+        case Phase::WaitAuth:
+            if (!pollCollabMessage(collabWs_, "user_list")) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitFetchUrl);
+            collabWs_->sendMessage(R"({"type":"fetch","stream":"contents","requestId":"f1"})");
+            break;
+        case Phase::WaitFetchUrl: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "fetch_url");
+            if (!msg) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitUploadUrl);
+            collabWs_->sendMessage(
+                R"({"type":"upload","stream":"contents","requestId":"r1","lastModifiedTime":")"
+                + msg->getValue<std::string>("lastModifiedTime") + R"("})");
+            break;
+        }
+        case Phase::WaitUploadUrl: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "upload_url");
+            if (!msg) {
+                break;
+            }
+            http::Request request(msg->getValue<std::string>("url"), http::Request::VERB_POST);
+            request.setBody("Uploaded by the collab client", "application/octet-stream");
+            std::shared_ptr<http::Response const> const response
+                = http::Session::create(helpers::getTestServerURI())->syncRequest(request);
+            LOK_ASSERT_EQUAL(http::StatusCode::OK, response->statusLine().statusCode());
+            LOK_ASSERT_EQUAL(1, putFiles_);
+            Poco::JSON::Object::Ptr result;
+            LOK_ASSERT(JsonUtil::parseJSON(response->getBody(), result));
+            LOK_ASSERT_EQUAL(
+                Util::getIso8601FracformatTime(getFileLastModifiedTime()),
+                result->optValue<std::string>("LastModifiedTime", std::string()));
+            TRANSITION_STATE(phase_, Phase::Done);
+            collabWs_->asyncShutdown();
+            passTest("The landed upload was taken as a success");
+            break;
+        }
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    STATE_ENUM(Phase, Connect, WaitAuth, WaitFetchUrl, WaitUploadUrl, Done) phase_;
+
+    // The PutFile requests that the host got:
+    int putFiles_;
+
+    std::shared_ptr<http::WebSocketSession> collabWs_;
+};
+
+// An upload that the host answers with a temporary error, while storage gets another version of the
+// same size, is a conflict:
+class UnitCollabUploadReplaced: public WopiTestServer {
+public:
+    UnitCollabUploadReplaced():
+        WopiTestServer("UnitCollabUploadReplaced"), phase_(Phase::Connect), putFiles_(0) {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
+
+    void configCheckFileInfo(
+        Poco::Net::HTTPRequest const &, Poco::JSON::Object::Ptr & fileInfo) override
+    {
+        fileInfo->set("SHA256", getFileContentSha256Base64());
+    }
+
+    std::unique_ptr<http::Response>
+    assertPutFileRequest(Poco::Net::HTTPRequest const &) override
+    {
+        ++putFiles_;
+        setFileContent("Saved by someone else........");
+        // A body keeps the answer from reaching coolwsd as a dropped connection:
+        auto response = std::make_unique<http::Response>(http::StatusCode::ServiceUnavailable);
+        response->setBody("busy", "text/plain");
+        return response;
+    }
+
+    void invokeWSDTest() override {
+        switch (phase_) {
+        case Phase::Connect: {
+            TRANSITION_STATE(phase_, Phase::WaitAuth);
+            Poco::URI const wopiURL(
+                getWopiHostURI()
+                + "/wopi/files/0?access_token=anything&testname=UnitCollabUploadReplaced");
+            collabWs_ = startCollabConnection(
+                socketPoll(), Uri::encode(wopiURL.toString()), "anything");
+            break;
+        }
+        case Phase::WaitAuth:
+            if (!pollCollabMessage(collabWs_, "user_list")) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitFetchUrl);
+            collabWs_->sendMessage(R"({"type":"fetch","stream":"contents","requestId":"f1"})");
+            break;
+        case Phase::WaitFetchUrl: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "fetch_url");
+            if (!msg) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitUploadUrl);
+            collabWs_->sendMessage(
+                R"({"type":"upload","stream":"contents","requestId":"r1","lastModifiedTime":")"
+                + msg->getValue<std::string>("lastModifiedTime") + R"("})");
+            break;
+        }
+        case Phase::WaitUploadUrl: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "upload_url");
+            if (!msg) {
+                break;
+            }
+            http::Request request(msg->getValue<std::string>("url"), http::Request::VERB_POST);
+            request.setBody("Uploaded by the collab client", "application/octet-stream");
+            std::shared_ptr<http::Response const> const response
+                = http::Session::create(helpers::getTestServerURI())->syncRequest(request);
+            LOK_ASSERT_EQUAL(http::StatusCode::Conflict, response->statusLine().statusCode());
+            LOK_ASSERT_EQUAL(1, putFiles_);
+            LOK_ASSERT_EQUAL(std::string("Saved by someone else........"), getFileContent());
+            TRANSITION_STATE(phase_, Phase::Done);
+            collabWs_->asyncShutdown();
+            passTest("The other version in storage was reported as a conflict");
+            break;
+        }
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    STATE_ENUM(Phase, Connect, WaitAuth, WaitFetchUrl, WaitUploadUrl, Done) phase_;
+
+    // The PutFile requests that the host got:
+    int putFiles_;
+
+    std::shared_ptr<http::WebSocketSession> collabWs_;
+};
+
 /// An upload by a collab client with the version that it got is refused once the document changed
 /// in storage, one without a version is refused unless the client forces it:
 class UnitCollabUploadTimestamp: public WopiTestServer {
@@ -2394,9 +2653,11 @@ private:
 
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [22] { new UnitCollabProtocol(),
+    return new UnitBase* [25] { new UnitCollabProtocol(),
                                 new UnitCollabCheckFileInfoTransient(),
                                 new UnitCollabCheckFileInfoRetry(),
+                                new UnitCollabUploadRetry(), new UnitCollabUploadLanded(),
+                                new UnitCollabUploadReplaced(),
                                 new UnitCollabUploadTimestamp(), new UnitCollabUploadConflict(),
                                 new UnitCollabUploadConflictModified(),
                                 new UnitCollabNoCleanExport(), new UnitCollabSettingsStreams(),

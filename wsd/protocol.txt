@@ -3164,7 +3164,9 @@ Clients use the addresses as they get them, so a later server can change their f
 
     POST.  Accepts modified document body bytes from a peer that requested an upload URL via
     {"type":"upload"}.  Same one-shot token semantics and replies, plus 409 as described for
-    {"type":"upload"}.  On success, the reply is 200 with the integrator's PutFile answer.
+    {"type":"upload"}.  On success, the reply is 200 with the integrator's PutFile answer (or with
+    only the "LastModifiedTime", when the integrator answered with a temporary error, or not at all,
+    but storage has the uploaded version).
 
 /cool/collab/avatar?userId=<user-id>&token=<access-token>&WOPISrc=<wopi-url>
 

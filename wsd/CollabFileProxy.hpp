@@ -22,6 +22,8 @@
 #include <string>
 #include <string_view>
 
+class CheckFileInfo;
+
 /// Proxies file download/upload through the /cool/collab endpoint
 /// using token-based authentication.
 class CollabFileProxy: public std::enable_shared_from_this<CollabFileProxy>
@@ -53,6 +55,9 @@ private:
                     int redirectionLimit, bool hostChecked, int retriesLeft);
     void doUpload(const std::shared_ptr<TerminatingPoll>& poll, const Poco::URI& uri,
                   const std::string& body);
+    void answerUploaded(std::shared_ptr<StreamSocket> const & socket,
+                        std::string const & wopiResponse);
+    void checkUploadOutcome(std::shared_ptr<TerminatingPoll> const & poll, Poco::URI const & uri);
 
     const std::string _id;
     const RequestDetails _requestDetails;
@@ -64,6 +69,11 @@ private:
     std::span<const std::string_view> _secretFields;
     std::string _uploadBody;
     std::string _uploadLastModifiedTime;
+    // Whether the upload was tried again, or checked in storage, after a temporary error or no
+    // answer from the host:
+    bool _uploadRetried = false;
+    // Tells whether an upload without a clear answer from the host is in storage:
+    std::shared_ptr<CheckFileInfo> _uploadCheck;
     int _logFD;
 };
 
