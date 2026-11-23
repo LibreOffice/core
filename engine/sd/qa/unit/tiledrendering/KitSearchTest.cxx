@@ -11,6 +11,14 @@
 
 #include <test/helper/transferable.hxx>
 
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/ShapeCollection.hpp>
+#include <com/sun/star/drawing/XShapeGrouper.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+
+#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <svl/srchitem.hxx>
 #include <vcl/scheduler.hxx>
@@ -188,6 +196,112 @@ CPPUNIT_TEST_FIXTURE(KitSearchTest, DontSearchInMasterPages)
     // the master page)
     lcl_search(u"date"_ustr);
     CPPUNIT_ASSERT_EQUAL(false, m_bFound);
+}
+
+CPPUNIT_TEST_FIXTURE(KitSearchTest, SearchFindsHiddenObjectWithoutSelectingIt)
+{
+    // A match in a shape hidden on screen is reported on the slide of the shape, by Find and by
+    // Find All, but the shape is not selected and its text is not opened for editing, so neither
+    // Replace nor Replace All changes it.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    setupCOKitViewCallback(pViewShell->GetViewShellBase());
+    uno::Reference<drawing::XDrawPage> xDrawPage(
+        pXImpressDocument->getDrawPages()->getDrawPageByIndex(1));
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    xShape->setString(u"Aaa unseen."_ustr);
+    uno::Reference<beans::XPropertySet>(xShape, uno::UNO_QUERY_THROW)
+        ->setPropertyValue(u"Visible"_ustr, uno::Any(false));
+
+    lcl_search(u"unseen"_ustr);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), m_nPart);
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(1, m_aSearchResultPart[0]);
+    SdrView* pView = pViewShell->GetView();
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pView->GetMarkedObjectList().GetMarkCount());
+
+    m_nPart = 0;
+    m_aSearchResultPart.clear();
+    lcl_search(u"unseen"_ustr, /*bFindAll=*/true);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), m_nPart);
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(1, m_aSearchResultPart[0]);
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pView->GetMarkedObjectList().GetMarkCount());
+
+    lcl_replace(u"unseen"_ustr, u"seen"_ustr);
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(u"Aaa unseen."_ustr, xShape->getString());
+
+    lcl_replace(u"unseen"_ustr, u"seen"_ustr, /*bAll=*/true);
+    CPPUNIT_ASSERT_EQUAL(u"Aaa unseen."_ustr, xShape->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(KitSearchTest, SearchAllReportsEachHiddenObject)
+{
+    // Two hidden shapes with a match on the same slide are two results of Find All, the same as
+    // Find steps through them one after the other.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    setupCOKitViewCallback(pViewShell->GetViewShellBase());
+    uno::Reference<drawing::XDrawPage> xDrawPage(
+        pXImpressDocument->getDrawPages()->getDrawPageByIndex(1));
+    uno::Reference<text::XTextRange> xFirst(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    xFirst->setString(u"Aaa unseen."_ustr);
+    uno::Reference<beans::XPropertySet>(xFirst, uno::UNO_QUERY_THROW)
+        ->setPropertyValue(u"Visible"_ustr, uno::Any(false));
+
+    uno::Reference<drawing::XShape> xSecond(
+        pXImpressDocument->createInstance(u"com.sun.star.drawing.TextShape"_ustr),
+        uno::UNO_QUERY_THROW);
+    xDrawPage->add(xSecond);
+    xSecond->setPosition(awt::Point(1000, 1000));
+    xSecond->setSize(awt::Size(5000, 1000));
+    uno::Reference<text::XTextRange>(xSecond, uno::UNO_QUERY_THROW)
+        ->setString(u"Bbb unseen."_ustr);
+    uno::Reference<beans::XPropertySet>(xSecond, uno::UNO_QUERY_THROW)
+        ->setPropertyValue(u"Visible"_ustr, uno::Any(false));
+
+    lcl_search(u"unseen"_ustr, /*bFindAll=*/true);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(1, m_aSearchResultPart[0]);
+    CPPUNIT_ASSERT_EQUAL(1, m_aSearchResultPart[1]);
+    SdrView* pView = pViewShell->GetView();
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pView->GetMarkedObjectList().GetMarkCount());
+}
+
+CPPUNIT_TEST_FIXTURE(KitSearchTest, SearchFindsShapeInHiddenGroupWithoutSelectingIt)
+{
+    // A shape that is shown on its own but sits in a hidden group is hidden too, so a match in it
+    // is reported without selecting the shape or the group.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    setupCOKitViewCallback(pViewShell->GetViewShellBase());
+    uno::Reference<drawing::XDrawPage> xDrawPage(
+        pXImpressDocument->getDrawPages()->getDrawPageByIndex(1));
+    uno::Reference<drawing::XShape> xShape = xDrawPage->getShapeByIndex(0);
+    CPPUNIT_ASSERT(xShape.is());
+    uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)
+        ->setString(u"Aaa unseen."_ustr);
+
+    uno::Reference<drawing::XShapes> xMembers
+        = drawing::ShapeCollection::create(comphelper::getProcessComponentContext());
+    xMembers->add(xShape);
+    uno::Reference<drawing::XShapeGrouper> xGrouper(xDrawPage, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet>(xGrouper->group(xMembers), uno::UNO_QUERY_THROW)
+        ->setPropertyValue(u"Visible"_ustr, uno::Any(false));
+
+    lcl_search(u"unseen"_ustr);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), m_nPart);
+    SdrView* pView = pViewShell->GetView();
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pView->GetMarkedObjectList().GetMarkCount());
 }
 
 CPPUNIT_TEST_FIXTURE(KitSearchTest, SearchInPDFNonExisting)

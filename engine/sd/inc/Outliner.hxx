@@ -21,6 +21,7 @@
 
 #include <svx/svdoutl.hxx>
 #include "pres.hxx"
+#include "sddllapi.h"
 #include "OutlinerIterator.hxx"
 #include <editeng/SpellPortions.hxx>
 #include <memory>
@@ -135,8 +136,8 @@ public:
             <const>OutlinerMode::OutlineView</const> are defined in
             editeng/outliner.hxx.
     */
-    SdOutliner(SdDrawDocument& rDoc, OutlinerMode nMode);
-    virtual ~SdOutliner() override;
+    SD_DLLPUBLIC SdOutliner(SdDrawDocument& rDoc, OutlinerMode nMode);
+    SD_DLLPUBLIC virtual ~SdOutliner() override;
     /// Forbid copy construction and copy assignment
     SdOutliner(const Outliner&) = delete;
     SdOutliner& operator=(const Outliner&) = delete;
@@ -147,12 +148,12 @@ public:
         search mode, may be restored after finishing searching/spell
         checking.
     */
-    void PrepareSpelling();
+    SD_DLLPUBLIC void PrepareSpelling();
 
     /** Initialize a spell check but do not start it yet.  This method
         is a better candidate for the name PrepareSpelling.
     */
-    void StartSpelling();
+    SD_DLLPUBLIC void StartSpelling();
 
     /** Initiate a find and/or replace on the next relevant text object.
         @return
@@ -166,12 +167,12 @@ public:
         next sentence with spelling errors. While doing so the view
         mode may be changed and text shapes are set into edit mode.
     */
-    svx::SpellPortions GetNextSpellSentence();
+    SD_DLLPUBLIC svx::SpellPortions GetNextSpellSentence();
 
     /** Release all resources that have been created during the find&replace
         or spell check.
     */
-    void EndSpelling();
+    SD_DLLPUBLIC void EndSpelling();
 
     /** callback for textconversion */
     DECL_LINK(ConvertNextDocumentHdl, Outliner*, bool);
@@ -257,6 +258,12 @@ private:
         which stops when set to </true>.
     */
     bool mbFoundObject;
+
+    /** Set to <TRUE/> when the current object of a search is hidden on screen and holds a match.
+        The match is reported on the slide of the object, and the object is neither selected nor
+        put into edit mode.
+    */
+    bool mbCurrentIsHidden;
 
     /** This flag indicates whether to search forward or backwards.
     */

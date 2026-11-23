@@ -3350,7 +3350,7 @@ public:
                                        mpModel->getVectorEpoch());
     }
 
-    /// The order array lists every live object id on the page in paint order: the page entry
+    /// The order array lists every painted object id on the page in paint order: the page entry
     /// first, then each object with the objects inside a group right after the group. It is
     /// the authoritative object set and ordering for the part.
     void writeObjectOrder(tools::JsonWriter& rWriter, SdPage* pPage)
@@ -3591,6 +3591,29 @@ private:
         return GetDraftFill(pProperties->GetItemSet());
     }
 
+    /// Appends what the object paints on screen to rContent. An object hidden on screen paints
+    /// nothing, and a group paints its members one by one, so a hidden member is left out too.
+    static void appendShownPrimitives(SdrObject& rObject,
+                                      drawinglayer::primitive2d::Primitive2DContainer& rContent)
+    {
+        if (!rObject.IsVisible())
+            return;
+
+        const SdrObjList* pMembers
+            = rObject.GetObjIdentifier() == SdrObjKind::Group ? rObject.GetSubList() : nullptr;
+        if (!pMembers || pMembers->GetObjCount() == 0)
+        {
+            rObject.GetViewContact().getViewIndependentPrimitive2DContainer(rContent);
+            return;
+        }
+
+        for (size_t i = 0; i < pMembers->GetObjCount(); ++i)
+        {
+            if (SdrObject* pMember = pMembers->GetObj(i))
+                appendShownPrimitives(*pMember, rContent);
+        }
+    }
+
     /// What is the page's own behind its objects, in paint order: the document background of the
     /// view and the fill the page or its master page carries.
     static void pageOwnPrimitives(SdPage* pPage,
@@ -3636,7 +3659,7 @@ private:
                 || !slideShowsPlaceholder(*pPage, pMasterPage->GetPresObjKind(pObject)))
                 continue;
 
-            pObject->GetViewContact().getViewIndependentPrimitive2DContainer(rContent);
+            appendShownPrimitives(*pObject, rContent);
         }
     }
 
@@ -3656,7 +3679,7 @@ private:
         for (size_t i = 0; i < pShown->GetObjCount(); ++i)
         {
             if (SdrObject* pObject = pShown->GetObj(i))
-                pObject->GetViewContact().getViewIndependentPrimitive2DContainer(aPageContent);
+                appendShownPrimitives(*pObject, aPageContent);
         }
         if (aPageContent.empty())
             return aPreview;
@@ -3695,13 +3718,14 @@ private:
     }
 
     /// Every object the list paints, in paint order: each object followed by the objects
-    /// inside it when it is a group, depth first.
+    /// inside it when it is a group, depth first. An object hidden on screen is left out, and
+    /// so is everything inside it.
     static void collectPaintedObjects(const SdrObjList& rList, std::vector<SdrObject*>& rObjects)
     {
         for (size_t i = 0; i < rList.GetObjCount(); ++i)
         {
             SdrObject* pObject = rList.GetObj(i);
-            if (!pObject)
+            if (!pObject || !pObject->IsVisible())
                 continue;
             rObjects.push_back(pObject);
             if (const SdrObjList* pChildren = svx::vector::membersOf(*pObject))
@@ -3721,7 +3745,7 @@ private:
             for (size_t i = 0; pMasterPage && i < pMasterPage->GetObjCount(); ++i)
             {
                 SdrObject* pObject = pMasterPage->GetObj(i);
-                if (!pObject || isHiddenBehindSlide(*pObject)
+                if (!pObject || !pObject->IsVisible() || isHiddenBehindSlide(*pObject)
                     || !isSlideDependent(*pMasterPage, *pObject)
                     || !slideShowsPlaceholder(*pPage, pMasterPage->GetPresObjKind(pObject)))
                     continue;

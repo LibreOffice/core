@@ -13,15 +13,25 @@
 
 #include <COKit/COKit.hxx>
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -41,6 +51,9 @@
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -117,6 +130,7 @@
 #include <drawdoc.hxx>
 #include <stlpool.hxx>
 #include <DrawDocShell.hxx>
+#include <Outliner.hxx>
 #include <SlideSectionManager.hxx>
 #include <DesignTemplates.hxx>
 #include <ViewShell.hxx>
@@ -9343,6 +9357,82 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSceneEmptiedAtOnceComesBackAtItsSize)
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(aBefore, pPage->GetObj(0)->GetSnapRect());
+}
+
+namespace
+{
+/// Adds a text shape holding rText to the first slide, hidden on screen. rLocale is the language
+/// of the text itself, set through the character property named rLocaleProperty.
+uno::Reference<beans::XPropertySet>
+lclAddHiddenTextShape(const uno::Reference<lang::XComponent>& xComponent, const OUString& rText,
+                      const OUString& rLocaleProperty, const lang::Locale& rLocale)
+{
+    uno::Reference<drawing::XDrawPagesSupplier> xPages(xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xPages->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance(u"com.sun.star.drawing.TextShape"_ustr), uno::UNO_QUERY_THROW);
+    xPage->add(xShape);
+    xShape->setPosition(awt::Point(1000, 1000));
+    xShape->setSize(awt::Size(10000, 2000));
+    uno::Reference<text::XText> xText(xShape, uno::UNO_QUERY_THROW);
+    xText->setString(rText);
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xCursor->gotoStart(false);
+    xCursor->gotoEnd(true);
+    uno::Reference<beans::XPropertySet>(xCursor, uno::UNO_QUERY_THROW)
+        ->setPropertyValue(rLocaleProperty, uno::Any(rLocale));
+
+    uno::Reference<beans::XPropertySet> xProperties(xShape, uno::UNO_QUERY_THROW);
+    xProperties->setPropertyValue(u"Visible"_ustr, uno::Any(false));
+    return xProperties;
+}
+
+/// Runs a spell check over the whole document and returns the text of every sentence it stops
+/// at, one after the other.
+OUString lclSpellCheckDocument(SdDrawDocument& rDocument)
+{
+    SdOutliner aOutliner(rDocument, OutlinerMode::TextObject);
+    aOutliner.PrepareSpelling();
+    aOutliner.StartSpelling();
+
+    OUStringBuffer aStopped;
+    for (int nSentence = 0; nSentence < 100; ++nSentence)
+    {
+        const svx::SpellPortions aPortions = aOutliner.GetNextSpellSentence();
+        if (aPortions.empty())
+            break;
+        for (const svx::SpellPortion& rPortion : aPortions)
+            aStopped.append(rPortion.sText);
+        aStopped.append("\n");
+    }
+    aOutliner.EndSpelling();
+    return aStopped.makeStringAndClear();
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSpellCheckPassesByHiddenObjects)
+{
+    // The spell check does not stop at a misspelled word in a shape hidden on screen. Once the
+    // shape is shown, the check stops at the word.
+    uno::Reference<linguistic2::XLinguServiceManager2> xLinguServices
+        = linguistic2::LinguServiceManager::create(comphelper::getProcessComponentContext());
+    uno::Reference<linguistic2::XSpellChecker> xSpellChecker = xLinguServices->getSpellChecker();
+    const lang::Locale aLocale(u"en"_ustr, u"US"_ustr, OUString());
+    if (!xSpellChecker.is() || !xSpellChecker->hasLocale(aLocale))
+        return;
+
+    createSdImpressDoc();
+    uno::Reference<beans::XPropertySet> xShape
+        = lclAddHiddenTextShape(mxComponent, u"Aaa qwertzuiopx."_ustr, u"CharLocale"_ustr, aLocale);
+
+    SdDrawDocument& rDocument = *getSdDocShell()->GetDoc();
+    CPPUNIT_ASSERT(lclSpellCheckDocument(rDocument).indexOf("qwertzuiopx") < 0);
+    CPPUNIT_ASSERT(!getSdDocShell()->GetViewShell()->GetView()->IsTextEdit());
+
+    xShape->setPropertyValue(u"Visible"_ustr, uno::Any(true));
+    CPPUNIT_ASSERT(lclSpellCheckDocument(rDocument).indexOf("qwertzuiopx") >= 0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

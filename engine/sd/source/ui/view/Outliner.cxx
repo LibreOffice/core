@@ -170,6 +170,7 @@ SdOutliner::SdOutliner( SdDrawDocument& rDoc, OutlinerMode nMode )
       mnPageCount(0),
       mbEndOfSearch(false),
       mbFoundObject(false),
+      mbCurrentIsHidden(false),
       mbDirectionIsForward(true),
       mbRestrictSearchToSelection(false),
       mpObj(nullptr),
@@ -768,7 +769,7 @@ void SdOutliner::sendKitSearchResultCallback(const std::shared_ptr<sd::ViewShell
         aSelection = o3tl::convert(aSelection, o3tl::Length::mm100, o3tl::Length::twip);
         aLogicRects.push_back(aSelection);
     }
-    else
+    else if (!mbCurrentIsHidden)
     {
         pOutlinerView->GetSelectionRectangles(aLogicRects);
 
@@ -825,7 +826,10 @@ void SdOutliner::sendKitSearchResultCallback(const std::shared_ptr<sd::ViewShell
     else
     {
         sd::SearchSelection aSelection(maCurrentPosition.mnPageIndex, sRectangles);
-        bool bDuplicate = !pSelections->empty() && pSelections->back() == aSelection;
+        // A hidden object with a match is an entry of its own. Such entries carry no rectangles,
+        // so two hidden objects on one slide give entries that compare equal.
+        bool bDuplicate = !mbCurrentIsHidden && !pSelections->empty()
+                          && pSelections->back() == aSelection;
         if (!bDuplicate)
             pSelections->push_back(aSelection);
     }
@@ -904,14 +908,16 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
                 // indicating a match.  If there is then replace it.  The
                 // following call to StartSearchAndReplace will then search for
                 // the next match.
-                if (meMode == SEARCH && mpSearchItem->GetCommand() == SvxSearchCmd::REPLACE)
+                if (meMode == SEARCH && mpSearchItem->GetCommand() == SvxSearchCmd::REPLACE
+                    && !mbCurrentIsHidden)
                 {
                     if (getOutlinerView()->GetSelection().HasRange())
                         getOutlinerView()->StartSearchAndReplace(*mpSearchItem);
                 }
 
-                // Search for the next match.
-                if (mpSearchItem->GetCommand() != SvxSearchCmd::REPLACE_ALL)
+                // Search for the next match. A hidden object has no edit view to search in, so the
+                // search goes on with the next object.
+                if (mpSearchItem->GetCommand() != SvxSearchCmd::REPLACE_ALL && !mbCurrentIsHidden)
                 {
                     nMatchCount = getOutlinerView()->StartSearchAndReplace(*mpSearchItem);
                     if (nMatchCount && maCurrentPosition.meEditMode == EditMode::Page
@@ -932,7 +938,12 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
             {
                 ProvideNextTextObject ();
 
-                if (!mbEndOfSearch && !rVectorGraphicSearchContext.mbCurrentIsVectorGraphic)
+                if (!mbEndOfSearch && mbCurrentIsHidden)
+                {
+                    // The match in a hidden object is reported where the object is.
+                    maLastValidPosition = maCurrentPosition;
+                }
+                else if (!mbEndOfSearch && !rVectorGraphicSearchContext.mbCurrentIsVectorGraphic)
                 {
                     // Remember the current position as the last one with a
                     // text object.
@@ -1216,6 +1227,18 @@ void SdOutliner::RestoreStartPosition()
 namespace
 {
 
+/// True when the object shows on screen: neither the object nor a group it sits in is hidden.
+bool lclIsShownOnScreen(const SdrObject& rObject)
+{
+    for (const SdrObject* pObject = &rObject; pObject;
+         pObject = pObject->getParentSdrObjectFromSdrObject())
+    {
+        if (!pObject->IsVisible())
+            return false;
+    }
+    return true;
+}
+
 bool lclIsValidTextObject(const sd::outliner::IteratorPosition& rPosition)
 {
     auto* pObject = DynCastSdrTextObj( rPosition.mxObject.get().get() );
@@ -1250,6 +1273,7 @@ void SdOutliner::ProvideNextTextObject()
 {
     mbEndOfSearch = false;
     mbFoundObject = false;
+    mbCurrentIsHidden = false;
 
     // reset the vector search
     auto& rVectorGraphicSearchContext = mpImpl->getVectorGraphicSearchContext();
@@ -1291,8 +1315,11 @@ void SdOutliner::ProvideNextTextObject()
 
             if (!bForbiddenPage)
             {
-                // Switch to the current object only if it is a valid text object.
-                if (lclIsValidTextObject(maCurrentPosition))
+                // Switch to the current object only if it is a valid text object. The spell check
+                // and the text conversion pass by an object hidden on screen.
+                if (lclIsValidTextObject(maCurrentPosition)
+                    && (meMode == SEARCH
+                        || lclIsShownOnScreen(*maCurrentPosition.mxObject.get())))
                 {
                     // Don't set yet in case of searching: the text object may not match.
                     if (meMode != SEARCH)
@@ -1577,11 +1604,27 @@ void SdOutliner::PrepareSearchAndReplace()
     if (!HasText( *mpSearchItem ))
         return;
 
+    // A match in a hidden object is reported on the slide of the object, but nothing in the object
+    // is selected or edited. Replace All changes the matches it selects, so it goes past the
+    // object.
+    const rtl::Reference<SdrObject> pObject = maCurrentPosition.mxObject.get();
+    const bool bHidden = pObject && !lclIsShownOnScreen(*pObject);
+    if (bHidden && mpSearchItem->GetCommand() == SvxSearchCmd::REPLACE_ALL)
+        return;
+
     // Set the object now that we know it matches.
     mpObj = SetObject(maCurrentPosition);
 
     mbStringFound = true;
     mbMatchMayExist = true;
+
+    if (bHidden)
+    {
+        mbCurrentIsHidden = true;
+        mbFoundObject = true;
+        mrDrawDocument.GetDocSh()->SetWaitCursor(false);
+        return;
+    }
 
     EnterEditMode(false);
 

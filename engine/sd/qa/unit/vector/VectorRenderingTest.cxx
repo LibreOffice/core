@@ -1769,6 +1769,58 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesGroupOnMemberChange)
                          aDelta.getInt("/objects/1/id").value_or(-1));
 }
 
+// An object hidden on screen, such as a shape a PPTX file marks hidden, is not painted, so the
+// part neither names nor carries it. Showing it again brings it back in the next delta.
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectHiddenOnScreenIsLeftOut)
+{
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
+    addRectangle(tools::Rectangle(Point(6000, 1000), Size(3000, 2000)), Color(0xc00000), COL_BLACK);
+    SdrObject* pShown = page(1)->GetObj(0);
+    SdrObject* pHidden = page(1)->GetObj(1);
+    pHidden->SetVisible(false);
+
+    auto aFull = getVectorPrimitives(u"testHiddenFull");
+    const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
+    CPPUNIT_ASSERT(carriesObject(aFull, pShown->GetUniqueID()));
+    CPPUNIT_ASSERT(!carriesObject(aFull, pHidden->GetUniqueID()));
+
+    pHidden->SetVisible(true);
+    auto aShownAgain = getVectorPrimitives(u"testHiddenShownAgain", nVersion);
+    const sal_Int64 nShownVersion = aShownAgain.getInt("/version").value_or(-1);
+    CPPUNIT_ASSERT(orderNames(aShownAgain, sal_Int64(pShown->GetUniqueID())));
+    CPPUNIT_ASSERT(orderNames(aShownAgain, sal_Int64(pHidden->GetUniqueID())));
+    CPPUNIT_ASSERT(carriesObject(aShownAgain, pHidden->GetUniqueID()));
+    CPPUNIT_ASSERT(!carriesObject(aShownAgain, pShown->GetUniqueID()));
+
+    pHidden->SetVisible(false);
+    auto aHiddenAgain = getVectorPrimitives(u"testHiddenAgain", nShownVersion);
+    CPPUNIT_ASSERT(orderNames(aHiddenAgain, sal_Int64(pShown->GetUniqueID())));
+    CPPUNIT_ASSERT(!orderNames(aHiddenAgain, sal_Int64(pHidden->GetUniqueID())));
+    CPPUNIT_ASSERT(!carriesObject(aHiddenAgain, pHidden->GetUniqueID()));
+}
+
+// A hidden group hides everything inside it. In a group that is shown, a hidden member is left
+// out and the group keeps its entry.
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testHiddenGroupLeavesOutItsMembers)
+{
+    createBlankDoc();
+    SdrObject* pHiddenGroupMember = addGroupedRectangle(
+        tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4));
+    SdrObject* pHiddenGroup = page(1)->GetObj(0);
+    SdrObject* pHiddenMember = addGroupedRectangle(
+        tools::Rectangle(Point(6000, 1000), Size(3000, 2000)), Color(0xc00000));
+    SdrObject* pShownGroup = page(1)->GetObj(1);
+    pHiddenGroup->SetVisible(false);
+    pHiddenMember->SetVisible(false);
+
+    auto aFull = getVectorPrimitives(u"testHiddenGroupFull");
+    CPPUNIT_ASSERT(!carriesObject(aFull, pHiddenGroup->GetUniqueID()));
+    CPPUNIT_ASSERT(!carriesObject(aFull, pHiddenGroupMember->GetUniqueID()));
+    CPPUNIT_ASSERT(carriesObject(aFull, pShownGroup->GetUniqueID()));
+    CPPUNIT_ASSERT(!carriesObject(aFull, pHiddenMember->GetUniqueID()));
+}
+
 // The first paint order recorded for a part is what the first pull writes, so
 // recording it moves nothing. A part pulled twice with nothing changed between
 // reports the same version, and the delta between them carries no object.
