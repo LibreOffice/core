@@ -56,9 +56,8 @@ std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateX11VirtualDevice(const S
 #if HAVE_FEATURE_SKIA
     if (SkiaHelper::isVCLSkiaEnabled())
         return std::unique_ptr<SalVirtualDevice>(new X11SkiaSalVirtualDevice(rGraphics, nDX, nDY, rData, std::move(pNewGraphics)));
-    else
 #endif
-        return std::unique_ptr<SalVirtualDevice>(new X11SalVirtualDevice(rGraphics, nDX, nDY, eFormat, rData, std::move(pNewGraphics)));
+    return std::unique_ptr<SalVirtualDevice>(new X11SalVirtualDevice(rGraphics, nDX, nDY, eFormat, rData, std::move(pNewGraphics)));
 }
 
 std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateVirtualDevice(SalGraphics& rGraphics,
