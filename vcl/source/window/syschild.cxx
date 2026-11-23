@@ -105,10 +105,10 @@ SystemChildWindow::SystemChildWindow( vcl::Window* pParent, WinBits nStyle ) :
     ImplInitSysChild( pParent, nStyle, nullptr );
 }
 
-SystemChildWindow::SystemChildWindow( vcl::Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow ) :
-    Window( WindowType::SYSTEMCHILDWINDOW )
+SystemChildWindow::SystemChildWindow(vcl::Window* pParent, SystemWindowData* pData, bool bShow)
+    : Window(WindowType::SYSTEMCHILDWINDOW)
 {
-    ImplInitSysChild( pParent, nStyle, pData, bShow );
+    ImplInitSysChild(pParent, 0, pData, bShow);
 }
 
 SystemChildWindow::~SystemChildWindow()
