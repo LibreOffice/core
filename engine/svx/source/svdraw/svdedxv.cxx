@@ -287,6 +287,14 @@ SdrObjGroup* diagramOfShape(const SdrObject& rObject)
     }
     return nullptr;
 }
+
+// A view that draws from the objects it holds places an object where it is, without the grid
+// offset that a painted sheet gives it, so the text edited in the object takes none either.
+bool takesGridOffset(const SdrMarkView& rView)
+{
+    const SfxViewShell* pViewShell = rView.GetSfxViewShell();
+    return !pViewShell || !pViewShell->drawsFromObjects();
+}
 }
 
 namespace
@@ -402,7 +410,8 @@ void SdrObjEditView::ModelHasChanged()
 
             // add possible GridOffset to up-to-now view-independent EditAreas
             basegfx::B2DVector aGridOffset(0.0, 0.0);
-            if (getPossibleGridOffsetForSdrObject(aGridOffset, pTextObj.get(), GetSdrPageView()))
+            if (takesGridOffset(*this)
+                && getPossibleGridOffsetForSdrObject(aGridOffset, pTextObj.get(), GetSdrPageView()))
             {
                 const Point aOffset(basegfx::fround<tools::Long>(aGridOffset.getX()),
                                     basegfx::fround<tools::Long>(aGridOffset.getY()));
@@ -1608,7 +1617,8 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
 
             // add possible GridOffset to up-to-now view-independent EditAreas
             basegfx::B2DVector aGridOffset(0.0, 0.0);
-            if (getPossibleGridOffsetForSdrObject(aGridOffset, pTextObj.get(), pPV))
+            if (takesGridOffset(*this)
+                && getPossibleGridOffsetForSdrObject(aGridOffset, pTextObj.get(), pPV))
             {
                 const Point aOffset(basegfx::fround<tools::Long>(aGridOffset.getX()),
                                     basegfx::fround<tools::Long>(aGridOffset.getY()));

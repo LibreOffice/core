@@ -1752,6 +1752,38 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCreateTextBoxInRectangle)
                          static_cast<sal_Int64>(pClicked->GetLogicRect().Top()));
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testShapeTextEditTakesNoGridOffsetFromObjects)
+{
+    // A view that draws from the objects it holds places a shape where it is, so the text edited
+    // in the shape is laid out where the shape shows its text. The edit took the grid offset of
+    // the painted sheet, so its text and its caret moved away from the shape.
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    pViewData->GetViewShell()->setDrawsFromObjects(true);
+
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { u"X"_ustr, cpo::uno::Any(sal_Int32(1500)) },
+        { u"Y"_ustr, cpo::uno::Any(sal_Int32(5000)) },
+        { u"Width"_ustr, cpo::uno::Any(sal_Int32(4000)) },
+        { u"Height"_ustr, cpo::uno::Any(sal_Int32(2000)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:BasicShapes.rectangle"_ustr, aArgs);
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 'H', 0);
+    pModelObj->postKeyEvent(COKitKeyEventType::UP, 'H', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    ScDrawView* pDrawView = pViewData->GetViewShell()->GetScDrawView();
+    CPPUNIT_ASSERT(pDrawView->IsTextEdit());
+    const tools::Rectangle aShape = pDrawView->GetTextEditObject()->GetLogicRect();
+    const tools::Rectangle aEdit = pDrawView->GetTextEditOutlinerView()->GetOutputArea();
+    // The shape has no text distances, so its single line spans the width of the shape and
+    // stands in its middle. Without the fix the edit was 88 left and 34 above.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aShape.Left()), double(aEdit.Left()), 2.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aShape.Center().Y()), double(aEdit.Center().Y()), 2.0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
