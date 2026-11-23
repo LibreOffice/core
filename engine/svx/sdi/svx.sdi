@@ -7734,7 +7734,9 @@ SfxBoolItem Text SID_ATTR_CHAR
 
 
 SfxBoolItem DrawText SID_DRAW_TEXT
-(SfxBoolItem CreateDirectly FN_PARAM_1)
+(SfxBoolItem CreateDirectly FN_PARAM_1, SfxInt32Item X FN_PARAM_2, SfxInt32Item Y FN_PARAM_3,
+ SfxInt32Item Width FN_PARAM_4, SfxInt32Item Height FN_PARAM_5, SfxBoolItem Grow FN_PARAM_6,
+ SfxUInt32Item Id FN_PARAM_7)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,

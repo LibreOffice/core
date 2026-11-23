@@ -50,6 +50,9 @@
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svdpage.hxx>
+#include <editeng/outliner.hxx>
+#include <svx/sdtagitm.hxx>
+#include <svx/svddef.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
@@ -1696,6 +1699,57 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCreateShapeInRectangle)
     dispatchCommand(mxComponent, u".uno:BasicShapes.rectangle"_ustr, aArgs);
     dispatchCommand(mxComponent, u".uno:BasicShapes.rectangle"_ustr, aArgs);
     CPPUNIT_ASSERT_EQUAL(size_t(2), pDrawPage->GetObjCount());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCreateTextBoxInRectangle)
+{
+    // A text box dragged out in the client is made in its rectangle and its text is edited. A
+    // click makes a text box that grows in width with its text. The text command of Calc did not
+    // take a rectangle, so nothing was made.
+    createDoc("empty.ods");
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScDrawView* pDrawView = pViewData->GetViewShell()->GetScDrawView();
+
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { u"X"_ustr, cpo::uno::Any(sal_Int32(1500)) },
+        { u"Y"_ustr, cpo::uno::Any(sal_Int32(1000)) },
+        { u"Width"_ustr, cpo::uno::Any(sal_Int32(4000)) },
+        { u"Height"_ustr, cpo::uno::Any(sal_Int32(1500)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:DrawText"_ustr, aArgs);
+
+    SdrPage* pDrawPage = pViewData->GetDocument().GetDrawLayer()->GetPage(0);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDrawPage->GetObjCount());
+    SdrObject* pText = pDrawPage->GetObj(0);
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::Text, pText->GetObjIdentifier());
+    const tools::Rectangle aRectangle = pText->GetLogicRect();
+    CPPUNIT_ASSERT_EQUAL(o3tl::convert(1500, o3tl::Length::twip, o3tl::Length::mm100),
+                         static_cast<sal_Int64>(aRectangle.Left()));
+    CPPUNIT_ASSERT_EQUAL(o3tl::convert(1000, o3tl::Length::twip, o3tl::Length::mm100),
+                         static_cast<sal_Int64>(aRectangle.Top()));
+    CPPUNIT_ASSERT_EQUAL(o3tl::convert(4000, o3tl::Length::twip, o3tl::Length::mm100),
+                         static_cast<sal_Int64>(aRectangle.GetWidth()));
+    CPPUNIT_ASSERT(pDrawView->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(pText, static_cast<SdrObject*>(pDrawView->GetTextEditObject()));
+    CPPUNIT_ASSERT(!pText->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH).GetValue());
+
+    // A second text box, clicked, while the text of the first one is edited.
+    pDrawView->GetTextEditOutlinerView()->InsertText(u"Hello"_ustr);
+    cpo::uno::Sequence<beans::PropertyValue> aClickArgs(comphelper::InitPropertySequence({
+        { u"X"_ustr, cpo::uno::Any(sal_Int32(1500)) },
+        { u"Y"_ustr, cpo::uno::Any(sal_Int32(4000)) },
+        { u"Width"_ustr, cpo::uno::Any(sal_Int32(90)) },
+        { u"Height"_ustr, cpo::uno::Any(sal_Int32(90)) },
+        { u"Grow"_ustr, cpo::uno::Any(true) },
+    }));
+    dispatchCommand(mxComponent, u".uno:DrawText"_ustr, aClickArgs);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pDrawPage->GetObjCount());
+    SdrObject* pClicked = pDrawPage->GetObj(1);
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::Text, pClicked->GetObjIdentifier());
+    CPPUNIT_ASSERT(pClicked->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH).GetValue());
+    CPPUNIT_ASSERT_EQUAL(o3tl::convert(4000, o3tl::Length::twip, o3tl::Length::mm100),
+                         static_cast<sal_Int64>(pClicked->GetLogicRect().Top()));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

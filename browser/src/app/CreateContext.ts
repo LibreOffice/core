@@ -1317,6 +1317,13 @@ class ClassicTextCreateContext extends ClassicCreateContext {
 	protected moreArguments(): { [name: string]: { type: string; value: any } } {
 		return { Grow: { type: 'boolean', value: this.grows } };
 	}
+
+	/// Calc makes a text box with its own command.
+	protected command(): string {
+		return app.map._docLayer._docType === 'spreadsheet' ?
+				'.uno:DrawText'
+			:	super.command();
+	}
 }
 
 /*

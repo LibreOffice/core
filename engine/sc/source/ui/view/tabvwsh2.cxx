@@ -52,6 +52,9 @@
 #include <vcl/EnumContext.hxx>
 #include <fuconcustomshape.hxx>
 #include <svx/RequestedRectangle.hxx>
+#include <svx/svdotext.hxx>
+#include <svx/sdtaitm.hxx>
+#include <svx/sdtagitm.hxx>
 
 #include <optional>
 
@@ -247,6 +250,8 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     // whether the object is made in the requested rectangle, instead of the middle of what the
     // client shows
     bool bInRequestedRectangle = false;
+    // whether a text made at once grows in width too
+    bool bTextGrows = false;
 
     switch (nNewId)
     {
@@ -335,6 +340,15 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             if ((nNewId == SID_DRAW_TEXT || nNewId == SID_DRAW_TEXT_VERTICAL) && pArgs
                 && pArgs->HasItem(FN_PARAM_1))
                 bCreateDirectly = static_cast<const SfxBoolItem&>(pArgs->Get(FN_PARAM_1)).GetValue();
+            // A text dragged out in the client comes with its rectangle and is made at once. A
+            // click gives a text that grows in width as well, as in Impress.
+            if (nNewId == SID_DRAW_TEXT && oRequestedRectangle)
+            {
+                bCreateDirectly = true;
+                bInRequestedRectangle = true;
+                if (const SfxBoolItem* pGrow = pArgs->GetItem<SfxBoolItem>(FN_PARAM_6, false))
+                    bTextGrows = pGrow->GetValue();
+            }
             break;
 
         case SID_FM_CREATE_CONTROL:
@@ -448,6 +462,17 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     if(!pObj)
         return;
+
+    if (bTextGrows)
+    {
+        // The text starts where it was clicked and grows to the right.
+        if (SdrTextObj* pText = DynCastSdrTextObj(pObj.get()))
+        {
+            pText->SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
+            pText->SetMergedItem(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT));
+            pText->AdjustTextFrameWidthAndHeight();
+        }
+    }
 
     // insert into page
     pView->InsertObjectAtView(pObj.get(), *pPageView);
