@@ -119,8 +119,8 @@ struct FilenameAndUri
     std::string uri;
 };
 
-// One open document, shown as a tab of the tabbed window. The starter
-// backstage, the welcome slideshow and the presenter console are each the only
+// One open document, shown as a tab of the tabbed window. The starter backstage is a tab too, at
+// most one in each window. The welcome slideshow and the presenter console are each the only
 // document of a window of their own.
 struct DocumentTab
 {
@@ -143,6 +143,8 @@ struct DocumentTab
     std::string docType = "other";
     // The document holds changes that have not reached the file yet.
     bool isModified = false;
+    // The close of the tab is posted, and the tab is not to be shown in the tab strip any more.
+    bool leavingStrip = false;
     // A PNG image of what the document shows, sent by the page, or empty until the page has sent
     // one.
     std::string thumbnailPng;
@@ -369,7 +371,8 @@ static FilenameAndUri fileSaveDialog(HWND hWnd,
                                      const std::vector<COMDLG_FILTERSPEC>& extensions,
                                      size_t defaultTypeIndex = 0);
 
-static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mode);
+static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mode,
+                           WindowState* tabbedTarget);
 
 static HANDLE copyEngineClipboardData(UINT format, const std::string& mimeType);
 
@@ -916,7 +919,8 @@ static void do_welcome_handling_things(DocumentTab& data, [[maybe_unused]] bool 
     if (!Poco::File(welcomeSlideshow).exists())
         return;
 
-    openCOOLWindow({ welcomeSlideshow.getFileName(), Poco::URI(welcomeSlideshow).toString() }, DocumentMode::WELCOME);
+    openCOOLWindow({ welcomeSlideshow.getFileName(), Poco::URI(welcomeSlideshow).toString() },
+                   DocumentMode::WELCOME, nullptr);
 }
 
 static void enter_full_screen(WindowState& data, HMONITOR monitor, bool saveRestoreInfo)
@@ -1796,9 +1800,9 @@ static std::vector<std::wstring> pathsInFileList(HDROP drop)
 // in at the cursor.
 static void handleDroppedFiles(HWND hWnd, HDROP drop, const POINT& dropPoint)
 {
-    // The starter backstage window, the welcome slideshow and the presenter console show no
-    // document to insert into, so everything dropped on them opens as a document. In the tabbed
-    // window the drop goes to the document on show.
+    // The starter backstage, the welcome slideshow and the presenter console show no document to
+    // insert into, so everything dropped on them opens as a document. Otherwise the drop goes to
+    // the document on show.
     WindowState* window = findWindow(hWnd);
     DocumentTab* tab = window ? activeTabOf(*window) : nullptr;
     const bool canInsert = tab && (tab->mode == DocumentMode::EDIT || tab->mode == DocumentMode::NEW)
@@ -2105,7 +2109,7 @@ static LRESULT CALLBACK HiddenOwnerWndProc(HWND hWnd, UINT message, WPARAM wPara
             {
                 auto nextDocument = filenamesAndUrisToOpen.front();
                 filenamesAndUrisToOpen.pop_front();
-                openCOOLWindow(nextDocument, DocumentMode::EDIT);
+                openCOOLWindow(nextDocument, DocumentMode::EDIT, nullptr);
             }
             return 0;
 
@@ -3662,12 +3666,14 @@ static std::string currentTabsJson(const WindowState& window)
     for (int tabId : window.tabIds)
     {
         const DocumentTab* tab = findTab(tabId);
-        if (!tab)
+        if (!tab || tab->leavingStrip)
             continue;
 
         Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
         entry->set("id", tab->tabId);
-        entry->set("title", tab->filenameAndUri.filename);
+        entry->set("title", tab->mode == DocumentMode::STARTER
+                                ? Util::wide_string_to_string(translate("WebView", "Start"))
+                                : tab->filenameAndUri.filename);
         // The full path of the document file. The starter backstage and the welcome slideshow
         // have none.
         if (tab->mode != DocumentMode::STARTER && tab->mode != DocumentMode::WELCOME)
@@ -4697,7 +4703,11 @@ static void showTabContextMenu(HWND hWnd, int tabId, POINT point)
     HMENU menu = CreatePopupMenu();
     AppendMenuW(menu, MF_STRING, CLOSE, translate("TabManager", "Close").c_str());
     AppendMenuW(menu, MF_STRING, CLOSE_OTHERS, translate("TabManager", "Close Others").c_str());
-    AppendMenuW(menu, MF_STRING, MOVE_TO_NEW_WINDOW,
+    // The only tab of a window is already alone in it. A starter backstage tab stays in its window.
+    const WindowState* tabWindow = findWindow(hWnd);
+    const bool mayMove = tabWindow && tabWindow->tabIds.size() > 1 &&
+                         findTab(tabId)->mode != DocumentMode::STARTER;
+    AppendMenuW(menu, MF_STRING | (mayMove ? 0 : MF_GRAYED), MOVE_TO_NEW_WINDOW,
                 translate("TabManager", "Move Tab to New Window").c_str());
 
     ClientToScreen(hWnd, &point);
@@ -4784,7 +4794,7 @@ static void installTabSwitchAccelerator(ICoreWebView2Controller* controller)
         &token);
 }
 
-static void openStarterWindow();
+static void openStarterTab(WindowState& window);
 
 // What the tab strip page asks of the app, as {call, args}.
 static void processStripMessage(WindowState& window, const std::string& message)
@@ -4828,7 +4838,7 @@ static void processStripMessage(WindowState& window, const std::string& message)
     }
     else if (call == "newTabRequested")
     {
-        openStarterWindow();
+        openStarterTab(window);
     }
     else if (call == "debug" && argCount >= 1)
     {
@@ -5472,10 +5482,11 @@ static WindowState& getOrCreateTabbedWindow()
 // document.
 static void moveTabToWindow(int tabId, WindowState& target, int insertAt)
 {
+    // A starter backstage tab stays in its window.
     DocumentTab* tab = findTab(tabId);
     WindowState* source = tab ? findWindow(tab->hWnd) : nullptr;
     if (!source || source == &target || !source->isTabbed || !target.isTabbed ||
-        target.isFullScreen)
+        target.isFullScreen || tab->mode == DocumentMode::STARTER)
         return;
 
     removeTabFromWindow(*source, tabId);
@@ -5505,7 +5516,8 @@ static void moveTabToNewWindow(HWND hWnd, int tabId, const POINT* dropPoint)
 {
     WindowState* source = findWindow(hWnd);
     DocumentTab* tab = findTab(tabId);
-    if (!source || !tab || tab->hWnd != hWnd || source->tabIds.size() < 2)
+    if (!source || !tab || tab->hWnd != hWnd || source->tabIds.size() < 2 ||
+        tab->mode == DocumentMode::STARTER)
         return;
 
     moveTabToWindow(tabId, createTabbedWindow(dropPoint), -1);
@@ -5552,7 +5564,11 @@ static DocumentTab* findOpenDocumentTab(const std::string& uri)
     return nullptr;
 }
 
-static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mode)
+// Open a document, or the welcome slideshow, or the starter backstage. A document and the
+// backstage go to the given tabbed window, or when none is given, to the one that new documents go
+// to.
+static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mode,
+                           WindowState* tabbedTarget)
 {
     // Don't open an already open document in a new tab, switch to its tab instead.
     if (mode == DocumentMode::EDIT)
@@ -5570,23 +5586,16 @@ static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mo
         }
     }
 
-    // The welcome slideshow and the starter backstage each get a window to
-    // themselves: neither is a document the user works in alongside others.
+    // The welcome slideshow gets a window to itself, as it is not a document the user works in
+    // alongside others.
     WindowState* window = nullptr;
     if (mode == DocumentMode::WELCOME)
     {
         window = &createWelcomeWindow();
     }
-    else if (mode == DocumentMode::STARTER)
-    {
-        int width, height;
-        defaultWindowSize(width, height);
-        window = &createAppWindow(Util::string_to_wide_string(APP_NAME), WS_OVERLAPPEDWINDOW,
-                                  CW_USEDEFAULT, CW_USEDEFAULT, width, height);
-    }
     else
     {
-        window = &getOrCreateTabbedWindow();
+        window = tabbedTarget ? tabbedTarget : &getOrCreateTabbedWindow();
         // The document the user just asked for comes to the front.
         SetForegroundWindow(window->hWnd);
     }
@@ -5638,19 +5647,20 @@ static void openSecondaryView(DocumentTab& first)
     createDocumentView(secondary.tabId);
 }
 
-static void openStarterWindow()
+// A window has at most one starter backstage tab. Asking for another selects the one that is open.
+static void openStarterTab(WindowState& window)
 {
-    // One backstage is enough: a second ask brings the open one forward.
-    for (const auto& i : documentTabs)
+    for (int tabId : window.tabIds)
     {
-        if (i.second.mode == DocumentMode::STARTER)
+        const DocumentTab* tab = findTab(tabId);
+        if (tab && tab->mode == DocumentMode::STARTER)
         {
-            SetForegroundWindow(i.second.hWnd);
+            activateTab(window, tabId);
             return;
         }
     }
 
-    openCOOLWindow({}, DocumentMode::STARTER);
+    openCOOLWindow({}, DocumentMode::STARTER, &window);
 }
 
 /// 2 MiB. The form an integrator posts for a document is about 5 KB.
@@ -7730,7 +7740,12 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
                                  (WPARAM)_strdup("window.app?.map?.backstageView?.returnToDocumentView()"),
                                  (LPARAM)data.tabId);
                 else
+                {
+                    // The document opens before the starter closes, and the strip shows the
+                    // document in place of the starter.
+                    data.leavingStrip = true;
                     PostMessageW(data.hWnd, CODA_WM_CLOSETAB, (WPARAM)data.tabId, 0);
+                }
             }
         }
         else if (s == L"uno .uno:SaveAs")
@@ -7817,10 +7832,14 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             // the type parameter.
             COOLProtocol::getTokenString(tokens, "template", templateToken);
             auto newDocument = new_document(type, templateToken, basenameToken);
+            // The document opens before the starter closes, and the strip shows the document in
+            // place of the starter.
+            if (data.mode == DocumentMode::STARTER)
+                data.leavingStrip = true;
             if (newDocument != L"")
             {
                 Poco::Path path = Poco::Path(Util::wide_string_to_string(newDocument));
-                openCOOLWindow({ path.getFileName(), pathToURI(path) }, DocumentMode::NEW);
+                openCOOLWindow({ path.getFileName(), pathToURI(path) }, DocumentMode::NEW, nullptr);
             }
             if (data.mode == DocumentMode::STARTER)
                 PostMessageW(data.hWnd, CODA_WM_CLOSETAB, (WPARAM)data.tabId, 0);
@@ -7865,9 +7884,13 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
 
             filenamesAndUrisToOpen.push_back({ segments.back(), fileToken });
             load_next_document();
-            // Close the starter window
+            // The document opens before the starter closes, and the strip shows the document in
+            // place of the starter.
             if (data.mode == DocumentMode::STARTER)
+            {
+                data.leavingStrip = true;
                 PostMessageW(data.hWnd, CODA_WM_CLOSETAB, (WPARAM)data.tabId, 0);
+            }
         }
         else
         {
@@ -8290,7 +8313,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int showWindowMode)
 
     // Open the first document here, then open the rest one by one once the previous has loaded.
     if (mode == DocumentMode::STARTER)
-        openCOOLWindow({ }, mode);
+        openCOOLWindow({ }, mode, nullptr);
     else
         load_next_document();
 
