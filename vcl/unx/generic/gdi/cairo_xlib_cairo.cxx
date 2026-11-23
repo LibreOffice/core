@@ -60,11 +60,11 @@ namespace cairo
         nScreen(0)
     {}
 
-    X11SysData::X11SysData( const SystemGraphicsData& pSysDat ) :
-        pDisplay(static_cast<_XDisplay*>(pSysDat.pDisplay)),
-        hDrawable(pSysDat.hDrawable),
-        pVisual(static_cast<Visual*>(pSysDat.pVisual)),
-        nScreen(pSysDat.nScreen)
+    X11SysData::X11SysData(const SystemGraphicsData& pSysDat, _XDisplay* pXDisplay)
+        : pDisplay(pXDisplay)
+        , hDrawable(pSysDat.hDrawable)
+        , pVisual(static_cast<Visual*>(pSysDat.pVisual))
+        , nScreen(pSysDat.nScreen)
     {}
 
     X11SysData::X11SysData( const SystemEnvData& pSysDat, const SalFrame* pReference ) :

@@ -35,7 +35,7 @@ namespace cairo {
     struct X11SysData
     {
         X11SysData();
-        explicit X11SysData( const SystemGraphicsData& );
+        explicit X11SysData(const SystemGraphicsData&, _XDisplay* pXDisplay);
         explicit X11SysData( const SystemEnvData&, const SalFrame* pReference );
 
         _XDisplay* pDisplay;       // the relevant display connection
