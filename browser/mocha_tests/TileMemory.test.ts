@@ -252,8 +252,12 @@ describe('BitmapTileManager tile memory', function () {
 					++intervals;
 					return 42;
 				};
-				(globalThis as any).clearInterval = (id: number) =>
-					clearedIntervals.push(id);
+				// The page's animation frames run on a real interval, which can end between the
+				// hooks and the test. Its handle is an object and goes to the real clear.
+				(globalThis as any).clearInterval = (id: any) => {
+					if (typeof id === 'number') clearedIntervals.push(id);
+					else savedClearInterval(id);
+				};
 			});
 
 			afterEach(function () {
@@ -279,6 +283,18 @@ describe('BitmapTileManager tile memory', function () {
 				tileManager.discardAllCache();
 
 				assert.deepStrictEqual(clearedIntervals, [42]);
+			});
+
+			it('clears an interval that was set before the stand-in', function () {
+				const interval = savedSetInterval(() => {}, 60000);
+				try {
+					clearInterval(interval);
+
+					assert.ok(interval._destroyed);
+					assert.deepStrictEqual(clearedIntervals, []);
+				} finally {
+					savedClearInterval(interval);
+				}
 			});
 
 			it('does not pre-fetch ahead of the view after the cache is discarded', function () {
