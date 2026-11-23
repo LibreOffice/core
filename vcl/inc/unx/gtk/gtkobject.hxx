@@ -105,7 +105,7 @@ class GtkSalObjectWidgetClip final : public GtkSalObjectBase
     DECL_LINK(SettingsChangedHdl, VclWindowEvent&, void);
 
 public:
-    GtkSalObjectWidgetClip(GtkSalFrame* pParent, bool bShow);
+    GtkSalObjectWidgetClip(GtkSalFrame* pParent);
     virtual ~GtkSalObjectWidgetClip() override;
 
     // override all pure virtual methods

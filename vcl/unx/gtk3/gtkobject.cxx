@@ -270,7 +270,7 @@ void GtkSalObjectBase::SetForwardKey( bool bEnable )
 #endif
 }
 
-GtkSalObjectWidgetClip::GtkSalObjectWidgetClip(GtkSalFrame* pParent, bool bShow)
+GtkSalObjectWidgetClip::GtkSalObjectWidgetClip(GtkSalFrame* pParent)
     : GtkSalObjectBase(pParent)
     , m_pScrolledWindow(nullptr)
     , m_pViewPort(nullptr)
@@ -320,7 +320,7 @@ GtkSalObjectWidgetClip::GtkSalObjectWidgetClip(GtkSalFrame* pParent, bool bShow)
 #endif
     gtk_widget_set_visible(m_pSocket, true);
 
-    Show(bShow);
+    Show(false);
 
     Init();
 
