@@ -14673,8 +14673,6 @@ vcl/unx/gtk3/a11y/atktext.cxx
 vcl/unx/gtk3/a11y/atktextattributes.cxx
 vcl/unx/gtk3/a11y/atkvalue.cxx
 vcl/unx/gtk3/a11y/atkwrapper.cxx
-vcl/unx/gtk3/gtkcairo.cxx
-vcl/unx/gtk3/gtkcairo.hxx
 vcl/unx/gtk3/fpicker/SalGtkFilePicker.cxx
 vcl/unx/gtk3/fpicker/SalGtkFilePicker.hxx
 vcl/unx/gtk3/fpicker/SalGtkFolderPicker.cxx
