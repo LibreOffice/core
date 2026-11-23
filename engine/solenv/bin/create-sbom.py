@@ -26,8 +26,10 @@ sys.path.insert(0, SRCDIR + "/external/pip-wheels/dnfile-0.18.0-py3-none-any.whl
 sys.path.insert(0, SRCDIR + "/external/pip-wheels/macholib-1.16.4-py2.py3-none-any.whl")
 sys.path.insert(0, SRCDIR + "/external/pip-wheels/pefile-2024.8.26-py3-none-any.whl")
 sys.path.insert(0, SRCDIR + "/external/pip-wheels/pyelftools-0.33-py3-none-any.whl")
-import elftools.elf.elffile
+# elftools is imported where ELF files are read: pyelftools 0.33 needs
+# Python 3.10, and macOS runs this with the system's, 3.9 on older ones
 import dnfile
+import macholib.MachO
 import pefile
 
 
@@ -888,13 +890,23 @@ def read_external_staticlink(path):
         result[e[0]] = result.get(e[0], set()).union({e[1]})
     return result
 
+def top_dir(directory):
+    """The path in instdir of a top directory of the install script: none for
+    the brand root, which is the installation itself; on macOS the top
+    directory is the app bundle, which the installer names after the
+    product without spaces."""
+    assert directory["ParentID"] == "PREDEFINED_PROGDIR"
+    if directory["gid"] == "gid_Dir_Brand_Root":
+        return ""
+    return directory["HostName"].replace("%ONEWORDPRODUCTNAME", productname) + "/"
+
+
 def assign_externals(files_by_package, externals):
     """Find all files that come from externals, and set "external" property on them."""
 
     def simple_get_dir(dirs):
         if len(dirs) == 1:
-            assert dirs[0]["ParentID"] == "PREDEFINED_PROGDIR"
-            return "/"
+            return "/" + top_dir(dirs[0])
         return simple_get_dir(dirs[1:]) + dirs[0]["HostName"] + "/"
 
     def simple_get_path(pathlist):
@@ -989,12 +1001,9 @@ def locate_files(files_by_package, ziplist, product, filelistdirs):
         if len(dirs) == 0: # only in SDK
             return ""
         if len(dirs) == 1:
-            assert dirs[0]["ParentID"] == "PREDEFINED_PROGDIR"
-            name = dirs[0]["HostName"]
             # gid_Dir_Brand_Root has path that doesn't exist
             # in instdir on WNT and unclear if it should be included in output
-            gid = dirs[0]["gid"]
-            return "" if gid == "gid_Dir_Brand_Root" else name + "/"
+            return top_dir(dirs[0])
         if dirs[0]["ismultilingual"] == 1 and f"HostName ({lang})" in dirs[0]:
             name = dirs[0][f"HostName ({lang})"]
         else:
@@ -1118,6 +1127,7 @@ def add_dependencies(files_by_package, files_by_package_extra_deps):
                 return ("JVM", set(deps))
 
     def get_elf_deps(abspath):
+        import elftools.elf.elffile
         with open(abspath, "rb") as f:
             elf = elftools.elf.elffile.ELFFile(f)
             needed = set()
@@ -1160,6 +1170,23 @@ def add_dependencies(files_by_package, files_by_package_extra_deps):
                     if name and name not in result:
                         result.add(name)
         pe.close()
+        return result
+
+    def get_mach_o_deps(abspath):
+        """Install names of the dylibs and frameworks a Mach-O file loads.
+
+        Names relative to the bundle (@rpath, @loader_path, @executable_path)
+        are reduced to their file name, so that they are found among the
+        installed files. Absolute ones, /usr/lib and /System/Library, are kept
+        whole: they are the operating system's, also when a bundled file
+        happens to have the same name."""
+        result = set()
+        for header in macholib.MachO.MachO(abspath).headers:
+            for (_, _, name) in header.walkRelocatables():
+                if name.startswith("@"):
+                    result.add(name.rsplit("/", 1)[-1])
+                else:
+                    result.add(name)
         return result
 
     MACH_O_MAGIC = (
@@ -1213,7 +1240,7 @@ def add_dependencies(files_by_package, files_by_package_extra_deps):
                 if header.startswith(b"\x7fELF"):
                     return (None, get_elf_deps(abspath))
                 # no Universal Binaries are used so only check simple ones
-                elif header in MACH_O_MAGIC:
+                elif header[:4] in MACH_O_MAGIC:
                     return (None, get_mach_o_deps(abspath))
                 elif header.startswith(b"MZ") and len(header) > 0x40 \
                     and f.seek(int.from_bytes(header[0x3C:0x40], "little")) \

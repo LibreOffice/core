@@ -18,7 +18,7 @@ instsetoo_create_SBOM := $(SRCDIR)/solenv/bin/create-sbom.py
 ifneq ($(OS),MACOSX)
 instsetoo_SBOM_DIR := $(INSTDIR)/sbom/
 else
-instsetoo_SBOM_DIR := $(INSTDIR)/Resources/sbom/
+instsetoo_SBOM_DIR := $(INSTROOT)/Resources/sbom/
 endif
 
 # invoke git here as Python is invoked with PATH that doesn't have git on WNT
