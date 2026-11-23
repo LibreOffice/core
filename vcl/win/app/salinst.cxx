@@ -707,9 +707,9 @@ void WinSalInstance::DestroyFrame( SalFrame* pFrame )
     SendComWndMessage(SAL_MSG_DESTROYFRAME, 0, reinterpret_cast<LPARAM>(pFrame));
 }
 
-SalObject* WinSalInstance::CreateObject( SalFrame* pParent,
-                                         SystemWindowData* /*pWindowData*/, // SystemWindowData meaningless on Windows
-                                         bool /*bShow*/ )
+SalObject* WinSalInstance::CreateObject(SalFrame* pParent,
+                                        // SystemWindowData meaningless on Windows
+                                        SystemWindowData* /*pWindowData*/)
 {
     // to switch to Main-Thread
     return reinterpret_cast<SalObject*>(static_cast<sal_IntPtr>(SendComWndMessage( SAL_MSG_CREATEOBJECT, 0, reinterpret_cast<LPARAM>(static_cast<WinSalFrame*>(pParent)) )));

@@ -404,14 +404,14 @@ void QtInstance::DestroyFrame(SalFrame* pFrame)
     }
 }
 
-SalObject* QtInstance::CreateObject(SalFrame* pParent, SystemWindowData*, bool bShow)
+SalObject* QtInstance::CreateObject(SalFrame* pParent, SystemWindowData*)
 {
     SolarMutexGuard aGuard;
 
     assert(!pParent || dynamic_cast<QtFrame*>(pParent));
 
     SalObject* pRet(nullptr);
-    RunInMainThread([&]() { pRet = new QtObject(static_cast<QtFrame*>(pParent), bShow); });
+    RunInMainThread([&]() { pRet = new QtObject(static_cast<QtFrame*>(pParent), false); });
     assert(pRet);
     return pRet;
 }

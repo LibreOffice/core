@@ -301,13 +301,13 @@ SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, SalFrame
     return new GtkSalFrame( pParentData );
 }
 
-SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow )
+SalObject* GtkInstance::CreateObject(SalFrame* pParent, SystemWindowData* pWindowData)
 {
     EnsureInit();
     //FIXME: Missing CreateObject functionality ...
     if (pWindowData && pWindowData->bClipUsingNativeWidget)
-        return new GtkSalObjectWidgetClip(static_cast<GtkSalFrame*>(pParent), bShow);
-    return new GtkSalObject(static_cast<GtkSalFrame*>(pParent), bShow);
+        return new GtkSalObjectWidgetClip(static_cast<GtkSalFrame*>(pParent), false);
+    return new GtkSalObject(static_cast<GtkSalFrame*>(pParent), false);
 }
 
 extern "C"

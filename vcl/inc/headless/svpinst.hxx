@@ -124,7 +124,8 @@ public:
     virtual void            DestroyFrame( SalFrame* pFrame ) override;
 
     // Object (System Child Window)
-    SAL_DLLPRIVATE virtual SalObject* CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow ) override;
+    SAL_DLLPRIVATE virtual SalObject* CreateObject(SalFrame* pParent,
+                                                   SystemWindowData* pWindowData) override;
     virtual void            DestroyObject( SalObject* pObject ) override;
 
     // VirtualDevice

@@ -40,9 +40,9 @@
 
 // SalInstance member to create and destroy a SalObject
 
-SalObject* X11SalInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow )
+SalObject* X11SalInstance::CreateObject(SalFrame* pParent, SystemWindowData* pWindowData)
 {
-    return X11SalObject::CreateObject( pParent, pWindowData, bShow );
+    return X11SalObject::CreateObject(pParent, pWindowData, false);
 }
 
 X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow )

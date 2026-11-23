@@ -171,8 +171,7 @@ public:
                                        SalFrameStyleFlags nStyle) override;
     virtual void DestroyFrame(SalFrame* pFrame) override;
 
-    virtual SalObject* CreateObject(SalFrame* pParent, SystemWindowData* pWindowData,
-                                    bool bShow) override;
+    virtual SalObject* CreateObject(SalFrame* pParent, SystemWindowData* pWindowData) override;
     virtual void DestroyObject(SalObject* pObject) override;
 
     virtual std::unique_ptr<SalMenu> CreateMenu(bool, Menu*) override;
