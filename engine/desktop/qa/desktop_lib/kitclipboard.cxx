@@ -166,4 +166,38 @@ CPPUNIT_TEST_FIXTURE(KitClipboardTest, testClipboardShapeHtmlHasCoolXml)
     CPPUNIT_ASSERT(aHtml.indexOf(" data-coolxml=\"") != -1);
 }
 
+CPPUNIT_TEST_FIXTURE(KitClipboardTest, testClipboardHtmlCoolXmlDecoded)
+{
+    // Given a shape copy whose text/html carries the shape's ODF as a
+    // data-coolxml attribute:
+    auto pDocument = loadImpressWithSelectedShape();
+    pDocument->postUnoCommand(".uno:Copy", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+    const char* pFetchHtml[] = { "text/html", nullptr };
+    const std::vector<COKitClipboardItem> aCopied = pDocument->getClipboard(pFetchHtml);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aCopied.size());
+    const std::vector<char>& rHtmlBytes = aCopied[0].aData;
+    CPPUNIT_ASSERT(!rHtmlBytes.empty());
+
+    // When that HTML is pushed back through setClipboard() as a paste from
+    // the host:
+    const char* pSetMimeTypes[] = { "text/html" };
+    const size_t aSetSizes[] = { rHtmlBytes.size() };
+    const char* pSetStreams[] = { rHtmlBytes.data() };
+    CPPUNIT_ASSERT(pDocument->setClipboard(1, pSetMimeTypes, aSetSizes, pSetStreams));
+
+    // Then the embed-source-xml flavor appears on the clipboard alongside
+    // text/html, so Impress's paste code can take the EMBED_SOURCE path and
+    // rebuild an editable shape:
+    const std::vector<COKitClipboardItem> aAll = pDocument->getClipboard(nullptr);
+    const auto it = std::find_if(aAll.begin(), aAll.end(),
+        [](const COKitClipboardItem& r) {
+            return r.aMimeType.starts_with("application/x-openoffice-embed-source-xml");
+        });
+    // Without the accompanying fix in place, this test would have failed, no
+    // EMBED_SOURCE was synthesised from the data-coolxml attribute.
+    CPPUNIT_ASSERT(it != aAll.end());
+    CPPUNIT_ASSERT(!it->aData.empty());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

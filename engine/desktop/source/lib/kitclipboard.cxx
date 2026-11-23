@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <optional>
+#include <string_view>
 #include <unordered_map>
 #include <comphelper/kit.hxx>
 #include <comphelper/sequence.hxx>
@@ -21,7 +22,22 @@
 #include <COKit/COKit.hxx>
 #include <sal/log.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <sot/exchange.hxx>
+#include <sot/formats.hxx>
+#include <svtools/htmltokn.h>
+#include <svtools/parhtml.hxx>
+#include <tools/ref.hxx>
+#include <tools/stream.hxx>
+#include <unotools/streamwrap.hxx>
+#include <vcl/transfer.hxx>
+#include <comphelper/diagnose_ex.hxx>
+#include <comphelper/base64.hxx>
+#include <comphelper/classids.hxx>
 #include <cpo/uno/XComponentContext.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 #include <desktop/kitclipboard.hxx>
 
 using namespace css;
@@ -412,6 +428,85 @@ void KitClipboard::removeClipboardListener(
     osl::ClearableMutexGuard aGuard(m_aMutex);
     std::erase(m_aListeners, listener);
 }
+
+namespace
+{
+/// Gets the MIME type of the ODF package in rPackage.
+OUString ReadODFPackageMediaType(const cpo::uno::Sequence<sal_Int8>& rPackage)
+{
+    SvMemoryStream aStream(const_cast<sal_Int8*>(rPackage.getConstArray()), rPackage.getLength(),
+                           StreamMode::READ);
+    cpo::uno::Reference<css::io::XInputStream> xInput(
+        new utl::OSeekableInputStreamWrapper(aStream));
+    try
+    {
+        cpo::uno::Reference<css::embed::XStorage> xStorage(
+            comphelper::OStorageHelper::GetStorageFromInputStream(xInput));
+        cpo::uno::Reference<css::beans::XPropertySet> xProps(xStorage, cpo::uno::UNO_QUERY_THROW);
+        OUString aMediaType;
+        xProps->getPropertyValue(u"MediaType"_ustr) >>= aMediaType;
+        return aMediaType;
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("sw.docx", "ReadODFPackageMediaType");
+        return {};
+    }
+}
+
+/// Describes an ODF package: the SvGlobalName / type-name pair.
+struct OdfDocInfo
+{
+    SvGlobalName aClassName;
+    OUString aTypeName;
+};
+
+
+std::optional<OdfDocInfo> OdfMediaTypeToDocInfo(std::u16string_view aMediaType)
+{
+    if (aMediaType == u"application/vnd.oasis.opendocument.presentation")
+        return OdfDocInfo{ SvGlobalName(SO3_SIMPRESS_CLASSID_60), u"StarImpress 8"_ustr };
+    if (aMediaType == u"application/vnd.oasis.opendocument.text")
+        return OdfDocInfo{ SvGlobalName(SO3_SW_CLASSID_60), u"StarWriter 8"_ustr };
+    if (aMediaType == u"application/vnd.oasis.opendocument.spreadsheet")
+        return OdfDocInfo{ SvGlobalName(SO3_SC_CLASSID_60), u"StarCalc 8"_ustr };
+    if (aMediaType == u"application/vnd.oasis.opendocument.graphics")
+        return OdfDocInfo{ SvGlobalName(SO3_SDRAW_CLASSID_60), u"StarDraw 8"_ustr };
+    return std::nullopt;
+}
+
+/// Reads the data-coolxml attribute off the first <img> tag of an HTML input.
+class CoolXmlHtmlReader final : public HTMLParser
+{
+public:
+    CoolXmlHtmlReader(SvStream& rIn)
+        : HTMLParser(rIn)
+    {
+        SetSrcEncoding(RTL_TEXTENCODING_UTF8);
+    }
+
+    const OUString& GetCoolXml() const { return m_aCoolXml; }
+
+    void NextToken(HtmlTokenId nToken) override
+    {
+        if (nToken != HtmlTokenId::IMAGE || !m_aCoolXml.isEmpty())
+            return;
+        for (const HTMLOption& rOpt : GetOptions())
+        {
+            if (rOpt.GetToken() == HtmlOptionId::UNKNOWN
+                && rOpt.GetTokenString().equalsIgnoreAsciiCase(u"data-coolxml"))
+            {
+                m_aCoolXml = rOpt.GetString();
+                return;
+            }
+        }
+    }
+
+private:
+    OUString m_aCoolXml;
+};
+}
+
 KitTransferable::KitTransferable(const OUString& sMimeType,
                                  const cpo::uno::Sequence<sal_Int8>& aSequence)
 {
@@ -455,6 +550,7 @@ KitTransferable::KitTransferable(const size_t nInCount, const char** pInMimeType
     m_aFlavors = cpo::uno::Sequence<css::datatransfer::DataFlavor>(nInCount);
     auto p_aFlavors = m_aFlavors.getArray();
     std::optional<size_t> oPlainIdx;
+    std::optional<size_t> oHtmlIdx;
     bool bHasMarkdown = false;
     for (size_t i = 0; i < nInCount; ++i)
     {
@@ -472,6 +568,8 @@ KitTransferable::KitTransferable(const size_t nInCount, const char** pInMimeType
             oPlainIdx = i;
         else if (m_aFlavors[i].MimeType == "text/markdown")
             bHasMarkdown = true;
+        else if (!oHtmlIdx && m_aFlavors[i].MimeType == "text/html")
+            oHtmlIdx = i;
     }
 
     if (bSynthesizeMarkdown && oPlainIdx && !bHasMarkdown)
@@ -485,6 +583,65 @@ KitTransferable::KitTransferable(const size_t nInCount, const char** pInMimeType
         rFlavors.DataType = cppu::UnoType<OUString>::get();
         m_aContent.push_back(m_aContent[*oPlainIdx]);
     }
+
+    // If we have HTML, see if we also have ODF inside it.
+    if (!oHtmlIdx)
+    {
+        return;
+    }
+
+    SvMemoryStream aStream(const_cast<char*>(pInStreams[*oHtmlIdx]), pInSizes[*oHtmlIdx],
+                            StreamMode::READ);
+    tools::SvRef<CoolXmlHtmlReader> xReader(new CoolXmlHtmlReader(aStream));
+    xReader->CallParser();
+    const OUString aCoolXml = xReader->GetCoolXml();
+    if (aCoolXml.isEmpty())
+    {
+        return;
+    }
+
+    cpo::uno::Sequence<sal_Int8> aDecoded;
+    comphelper::Base64::decode(aDecoded, aCoolXml);
+    if (!aDecoded.hasElements())
+    {
+        return;
+    }
+
+    // We have ODF, offer it as well.
+    const OUString aEmbedMime
+        = SotExchange::GetFormatMimeType(SotClipboardFormatId::EMBED_SOURCE);
+    const sal_Int32 nFlavorsSize = m_aFlavors.getLength();
+    m_aFlavors.realloc(nFlavorsSize + 1);
+    initFlavourFromMime(m_aFlavors.getArray()[nFlavorsSize], aEmbedMime);
+    cpo::uno::Any aAny;
+    aAny <<= aDecoded;
+    m_aContent.push_back(aAny);
+
+
+    // Also generate the matching object descriptor to specifies the component.
+    const OUString aMediaType = ReadODFPackageMediaType(aDecoded);
+    const std::optional<OdfDocInfo> oInfo = OdfMediaTypeToDocInfo(aMediaType);
+    if (!oInfo)
+        return;
+
+    TransferableObjectDescriptor aObjDesc;
+    aObjDesc.maClassName = oInfo->aClassName;
+    aObjDesc.maTypeName = oInfo->aTypeName;
+    SvMemoryStream aObjDescStm(1024, 1024);
+    WriteTransferableObjectDescriptor(aObjDescStm, aObjDesc);
+    cpo::uno::Sequence<sal_Int8> aObjDescBytes(
+        static_cast<const sal_Int8*>(aObjDescStm.GetData()),
+        static_cast<sal_Int32>(aObjDescStm.Tell()));
+    const OUString aObjDescMime
+        = SotExchange::GetFormatMimeType(SotClipboardFormatId::OBJECTDESCRIPTOR)
+          + ";classname=\"" + oInfo->aClassName.GetHexName()
+          + "\";typename=\"" + oInfo->aTypeName + "\"";
+    const sal_Int32 nFlavorsSize2 = m_aFlavors.getLength();
+    m_aFlavors.realloc(nFlavorsSize2 + 1);
+    initFlavourFromMime(m_aFlavors.getArray()[nFlavorsSize2], aObjDescMime);
+    cpo::uno::Any aObjDescAny;
+    aObjDescAny <<= aObjDescBytes;
+    m_aContent.push_back(aObjDescAny);
 }
 
 cpo::uno::Any KitTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
