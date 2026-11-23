@@ -63,6 +63,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <officecfg/Office/Common.hxx>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <docsh.hxx>
 #include <unobookmark.hxx>
@@ -944,8 +945,9 @@ static Color getBookmarkColor(const SwTextNode& rNode, sw::mark::Bookmark* pBook
             }
         }
     }
-    catch (const lang::IllegalArgumentException&)
+    catch (const cpo::uno::Exception&)
     {
+        TOOLS_WARN_EXCEPTION("sw.core", "cannot read the color of a bookmark");
     }
 
     return c;
@@ -984,8 +986,9 @@ static OUString getBookmarkType(const SwTextNode& rNode, sw::mark::Bookmark* pBo
             }
         }
     }
-    catch (const lang::IllegalArgumentException&)
+    catch (const cpo::uno::Exception&)
     {
+        TOOLS_WARN_EXCEPTION("sw.core", "cannot read the type of a bookmark");
     }
 
     return sRet;
