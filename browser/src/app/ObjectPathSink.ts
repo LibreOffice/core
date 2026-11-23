@@ -17,6 +17,7 @@
 */
 class ObjectPathSink implements PathSink {
 	public readonly wholeTwips: boolean = true;
+	public readonly takesPointsAway: boolean = true;
 	private objectId: number;
 	private selection: SelectionSection;
 

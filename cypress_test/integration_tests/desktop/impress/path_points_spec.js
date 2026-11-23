@@ -288,6 +288,45 @@ describe(['tagdesktop'], 'Points of a polygon on a vector slide', function() {
 		helper.waitForMapState('insertpathpoint', 'false');
 	});
 
+	it('With Eliminate Points a point dragged onto the line between its neighbours goes, as one step to undo.', function() {
+		var win = this.win;
+		selectByTab(win, 2);
+		cy.wrap(null).should(function() {
+			expect(pathPoints(win), 'points of the polygon').to.have.length(4);
+		});
+		switchThePoints(win, true);
+		desktopHelper.selectNotebookbarTab('Shape');
+		cy.cGet('#Shape-container #shape-edit-points .arrowbackground:visible').click();
+		desktopHelper.getOpenMenuEntries().eq(1).click();
+		helper.waitForMapState('eliminatepathpoints', 'true');
+
+		// the second corner is dragged onto the middle of the line between its two neighbours
+		cy.then(function() {
+			var points = pathPoints(win);
+			var middle = {
+				x: (points[0].x + points[2].x) / 2,
+				y: (points[0].y + points[2].y) / 2,
+			};
+			dragFrom(win, { x: points[1].x, y: points[1].y }, middle);
+		});
+		cy.wrap(null).should(function() {
+			expect(pathPoints(win), 'points after the drag').to.have.length(3);
+		});
+
+		cy.then(function() {
+			win.app.map.sendUnoCommand('.uno:Undo');
+		});
+		cy.wrap(null).should(function() {
+			expect(pathPoints(win), 'points after the undo').to.have.length(4);
+		});
+
+		// switched off again, so the next drag moves the point as ever
+		cy.then(function() {
+			win.app.dispatcher.dispatch('eliminatepathpoints');
+		});
+		helper.waitForMapState('eliminatepathpoints', 'false');
+	});
+
 	it('A drag on the line of the polygon moves all its points, as one step to undo.', function() {
 		var win = this.win;
 		selectByTab(win, 2);

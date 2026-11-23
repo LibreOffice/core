@@ -27,6 +27,9 @@ interface SelectionHandle {
 	deactivated?: boolean;
 	/// True for a handle that is lit: the point an end being dragged would tie itself to.
 	lit?: boolean;
+	/// True for the handle of a point that goes when the drag lets go of it, as Eliminate Points
+	/// takes it away.
+	goes?: boolean;
 	/** Which way the handle is drawn away from the place it stands on, one step along each of
 	 * the two axes of the selection, with a nought for an axis it does not move along. It is
 	 * only for the drawing and for the hit test: what a drag does goes from the place itself.

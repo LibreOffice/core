@@ -13,6 +13,7 @@ describe('Moving a polygon of a path by its line', function () {
 	// what a sink was told, the points moved among it
 	class RecordingSink implements PathSink {
 		public readonly wholeTwips: boolean = false;
+		public readonly takesPointsAway: boolean = true;
 		public moves: PathPointMove[][] = [];
 		public movePoints(moves: PathPointMove[]): void {
 			this.moves.push(moves);
@@ -113,6 +114,131 @@ describe('Moving a polygon of a path by its line', function () {
 			x: 1500,
 			y: 50,
 		});
+	});
+});
+
+describe('Eliminate Points', function () {
+	// what a sink was told: the points moved and the points deleted
+	class RecordingSink implements PathSink {
+		public readonly wholeTwips: boolean = true;
+		public readonly takesPointsAway: boolean = true;
+		public moves: PathPointMove[][] = [];
+		public deletions: PathPlace[][] = [];
+		public movePoints(moves: PathPointMove[]): void {
+			this.moves.push(moves);
+		}
+		public deletePoints(places: PathPlace[]): void {
+			this.deletions.push(places);
+		}
+		public deleteObject(): void {}
+		public addPoint(): void {}
+		public changeWeights(): void {}
+		public split(): void {}
+		public shownPathChanged(): void {}
+		public setClosed(): void {}
+		public simplify(): void {}
+		public pathChangedHere(): void {}
+	}
+
+	// an open path of three points, the middle one a little above the line of the other two
+	const bent = (curved: boolean): cool.ObjectPathPolygon[] => [
+		{
+			points: [
+				{ x: 0, y: 0 },
+				curved ?
+					{
+						x: 1000,
+						y: 100,
+						behindX: 800,
+						behindY: 100,
+						aheadX: 1200,
+						aheadY: 100,
+					}
+				:	{ x: 1000, y: 100 },
+				{ x: 2000, y: 0 },
+			],
+		},
+	];
+
+	let sink: RecordingSink;
+	let key = 0;
+	const editingOf = (path: cool.ObjectPathPolygon[]): PathEditing =>
+		new PathEditing('eliminate test ' + String(++key), () => path, sink);
+
+	beforeEach(function () {
+		sink = new RecordingSink();
+		PathEditing.eliminatesPoints = true;
+	});
+	afterEach(function () {
+		PathEditing.eliminatesPoints = false;
+	});
+
+	it('a point dragged near the line of its neighbours stands on it where it is nearest and goes as one change', function () {
+		const editing = editingOf(bent(false));
+		const near = new cool.Point(1300, 40);
+		nodeassert.deepStrictEqual(editing.pathFor('9.0.1', near)?.[0].points[1], {
+			x: 1300,
+			y: 0,
+		});
+		nodeassert.strictEqual(editing.moveTo('9.0.1', near), false);
+		nodeassert.deepStrictEqual(sink.deletions, [[{ polygon: 0, point: 1 }]]);
+		nodeassert.deepStrictEqual(sink.moves, []);
+	});
+
+	it('the point that goes when the drag lets go of it is marked so during the drag', function () {
+		const editing = editingOf(bent(false));
+		const known: SelectionHandle[] = [
+			{
+				name: '9.0.1',
+				kind: '9',
+				pointer: '',
+				point: new cool.Point(1000, 100),
+			},
+		];
+		const near = editing.handlesDuring(
+			'9.0.1',
+			new cool.Point(1000, 30),
+			known,
+		);
+		nodeassert.strictEqual(near?.[0].goes, true);
+		const far = editing.handlesDuring(
+			'9.0.1',
+			new cool.Point(1000, 500),
+			known,
+		);
+		nodeassert.strictEqual(far?.[0].goes, undefined);
+	});
+
+	it('a point dragged far off the line moves as ever', function () {
+		const editing = editingOf(bent(false));
+		nodeassert.strictEqual(
+			editing.moveTo('9.0.1', new cool.Point(1000, 500)),
+			true,
+		);
+		nodeassert.deepStrictEqual(sink.deletions, []);
+		nodeassert.strictEqual(sink.moves.length, 1);
+	});
+
+	it('a point stays where Eliminate Points is off, or where an edge of it is curved', function () {
+		PathEditing.eliminatesPoints = false;
+		nodeassert.strictEqual(
+			editingOf(bent(false)).moveTo('9.0.1', new cool.Point(1000, 30)),
+			true,
+		);
+		PathEditing.eliminatesPoints = true;
+		nodeassert.strictEqual(
+			editingOf(bent(true)).moveTo('9.0.1', new cool.Point(1000, 30)),
+			true,
+		);
+		nodeassert.deepStrictEqual(sink.deletions, []);
+	});
+
+	it('an end of an open path stays, as it has no second neighbour', function () {
+		nodeassert.strictEqual(
+			editingOf(bent(false)).moveTo('9.0.0', new cool.Point(-1000, -100)),
+			true,
+		);
+		nodeassert.deepStrictEqual(sink.deletions, []);
 	});
 });
 

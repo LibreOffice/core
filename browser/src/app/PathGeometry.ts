@@ -66,6 +66,67 @@ class PathGeometry {
 		return polygon.closed && count > 1 ? 0 : null;
 	}
 
+	/// The point before that one in the polygon, going round to the last where the polygon is
+	/// closed; nothing at the start of an open one.
+	public static previousOf(
+		polygon: cool.ObjectPathPolygon,
+		point: number,
+	): number | null {
+		const count = (polygon.points ?? []).length;
+		if (point > 0) return point - 1;
+		return polygon.closed && count > 1 ? count - 1 : null;
+	}
+
+	/*
+		Where that point of the polygon would stand if a drag to that place takes it away, as the
+		office's Eliminate Points does: on the line between its two neighbours, where it comes
+		nearest to the place, where the edge from the one before to the place and the edge from the
+		place to the one after turn by no more than that many degrees. Only a point whose two edges
+		are straight lines, which is no end of an open polygon, and whose polygon keeps enough
+		points without it, is taken away. Nothing where the point stays.
+	*/
+	public static whereItWouldGo(
+		polygon: cool.ObjectPathPolygon,
+		point: number,
+		at: cool.Point,
+		degrees: number,
+	): cool.Point | null {
+		const points = polygon.points ?? [];
+		const before = PathGeometry.previousOf(polygon, point);
+		const after = PathGeometry.nextOf(polygon, point);
+		if (before === null || after === null) return null;
+		if (points.length <= (polygon.closed ? 3 : 2)) return null;
+
+		const stands = points[point];
+		const from = points[before];
+		const to = points[after];
+		const curved =
+			stands.behindX !== undefined ||
+			stands.aheadX !== undefined ||
+			from.aheadX !== undefined ||
+			to.behindX !== undefined;
+		if (curved) return null;
+
+		const inward = Math.atan2(at.y - from.y, at.x - from.x);
+		const outward = Math.atan2(to.y - at.y, to.x - at.x);
+		const turn = Math.abs(
+			Math.atan2(Math.sin(outward - inward), Math.cos(outward - inward)),
+		);
+		if (turn > (degrees * Math.PI) / 180) return null;
+
+		const along = new cool.Point(to.x - from.x, to.y - from.y);
+		const length = along.x * along.x + along.y * along.y;
+		if (length === 0) return new cool.Point(from.x, from.y);
+		const share = Math.min(
+			1,
+			Math.max(
+				0,
+				((at.x - from.x) * along.x + (at.y - from.y) * along.y) / length,
+			),
+		);
+		return new cool.Point(from.x + share * along.x, from.y + share * along.y);
+	}
+
 	/// The edge after that point made a curve, its new weights on the line at one third and two
 	/// thirds of it, or made a line, without weights.
 	public static withTheEdgeCurved(

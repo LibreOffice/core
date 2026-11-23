@@ -416,7 +416,7 @@ a curve can move a little when the answer comes.
 
 | Button | What it does |
 |---|---|
-| Edit Points | Shown in place of Convert to Polygon when one path is selected, a straight line among them, which is a path of two points. Shows the points and weights of the path, and hides them again. Its arrow opens: Add Point, Close Path (closes an open path or opens a closed one), Simplify Curves, Simplify All, and the conversions To Curve, To Contour and To Polygon. |
+| Edit Points | Shown in place of Convert to Polygon when one path is selected, a straight line among them, which is a path of two points. Shows the points and weights of the path, and hides them again. Its arrow opens: Add Point, Eliminate Points, Close Path (closes an open path or opens a closed one), Simplify Curves, Simplify All, and the conversions To Curve, To Contour and To Polygon. |
 | Convert to Polygon | Shown for a shape that is not a path. Turns it into a path whose points can be edited: curved edges stay curves, straight ones become lines. Its arrow opens To Curve, To Contour and To Polygon. |
 | Glue Points | Shows the glue points of the selected object in place of its own handles - the eight, the turn handle, the yellow ones and those of its motion paths - and hides them again. The four at the middles of the sides show grey: they cannot be moved, and Ctrl+Tab passes them by. Its arrow opens Show and Add New. |
 
@@ -439,6 +439,13 @@ press; letting go places it, as one step to undo, and a click without a drag lea
 edge. Adding goes on for the next press until Escape, Add Point again, or the points are hidden.
 Escape during the drag takes the new point away again. With Add New the next press adds a glue
 point there; Escape ends it without one.
+
+Eliminate Points is a switch, as in the office, and it holds for every path until it is switched
+off. While it is on, a point dragged to where its two edges turn by no more than 15 degrees stands
+on the line between its two neighbours, where it comes nearest to the mouse, drawn hollow and
+crossed out, and when the drag lets go there the point is taken away, as one step to undo. That
+holds only for a point whose two edges are straight lines and that is no end of an open path, and
+only for the paths of objects, not for motion paths.
 
 A click on a point opens its menu:
 

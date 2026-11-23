@@ -1284,6 +1284,16 @@ class Dispatcher {
 			section?.startAddingAPathPoint();
 		};
 
+		// Eliminate Points switches on and off whether a drag that leaves a point on the line
+		// between its neighbours takes it away, as in the office.
+		this.actionsMap['eliminatepathpoints'] = () => {
+			PathEditing.eliminatesPoints = !PathEditing.eliminatesPoints;
+			app.map.fire('commandstatechanged', {
+				commandName: 'eliminatepathpoints',
+				state: PathEditing.eliminatesPoints ? 'true' : 'false',
+			});
+		};
+
 		// Closes the path of the selected object, or opens it again.
 		this.actionsMap[GraphicSelection.closedPathCommand] = () => {
 			GraphicSelection.selectionSection?.pathGroup()?.switchClosed();

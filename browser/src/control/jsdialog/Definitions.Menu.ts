@@ -2517,6 +2517,12 @@ menuDefinitions.set('EditPointsMenu', [
 		action: 'insertpathpoint',
 		checked: false,
 	},
+	{
+		text: _('Eliminate Points'),
+		img: 'beziereliminatepoints',
+		action: 'eliminatepathpoints',
+		checked: false,
+	},
 	{ type: 'separator' },
 	{
 		text: _('Close Path'),

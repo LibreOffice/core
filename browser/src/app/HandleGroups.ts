@@ -3044,8 +3044,9 @@ class PathHandles extends HandlesMovedOneByOne {
 			return;
 		}
 
-		editing.moveTo(handle.name, to);
-		HeldSteps.hold(this.selection, handle, to);
+		// a point taken away instead has no handle left to hold
+		if (editing.moveTo(handle.name, to))
+			HeldSteps.hold(this.selection, handle, to);
 	}
 
 	/// The point that was taken stands where it was taken, with its weights.
@@ -3100,12 +3101,21 @@ class PathHandles extends HandlesMovedOneByOne {
 			A point of the path is smaller than the eight. A weight that bends the curve at a
 			point is smaller again, since there are two of them for every point of a curve.
 		*/
-		return HandleLook.lay(
+		const color = HandleLook.lay(
 			context,
 			handle.kind === '9' ? 'pathPoint' : 'weight',
 			at,
 			grown,
 		);
+		if (!handle.goes) return color;
+
+		// a point that goes when the drag lets go of it is drawn hollow and crossed out
+		const half = HandleLook.widthOf('pathPoint') / 2 + grown;
+		context.moveTo(at.vX - half, at.vY - half);
+		context.lineTo(at.vX + half, at.vY + half);
+		context.moveTo(at.vX + half, at.vY - half);
+		context.lineTo(at.vX - half, at.vY + half);
+		return '#ffffff';
 	}
 }
 
@@ -3118,6 +3128,8 @@ class MotionPathSink implements PathSink {
 	// The path goes out whole, as offsets from the middle of what moves, and that middle can
 	// lie between two twips.
 	public readonly wholeTwips: boolean = false;
+	// The path goes out whole as it is dragged, Eliminate Points left out.
+	public readonly takesPointsAway: boolean = false;
 	private onPath: ((path: cool.ObjectPathPolygon[]) => void) | null;
 
 	constructor(

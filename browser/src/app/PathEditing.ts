@@ -74,6 +74,9 @@ interface PathSink {
 	/// True where the points and the weights the sink takes are in whole twips, false where
 	/// they can lie at any fraction of a twip.
 	readonly wholeTwips: boolean;
+	/// True where a point that Eliminate Points takes away goes as a deleted point, false where
+	/// the points stay as they are dragged.
+	readonly takesPointsAway: boolean;
 	/// Points or weights moved, by a drag or by keys.
 	movePoints(moves: PathPointMove[]): void;
 	/// Points are deleted, as one step, in the order given. Each is named by its place in the
@@ -158,6 +161,14 @@ class PathEditing implements HandleSource {
 
 	/// How long a path changed here is shown without an answer, in milliseconds.
 	public static readonly longestWait: number = 5000;
+
+	/// Whether a drag that leaves a point on a straight line between its neighbours takes the
+	/// point away, as Eliminate Points in the office. It holds for every path, as the office
+	/// keeps it for the view.
+	public static eliminatesPoints: boolean = false;
+
+	/// How far the two edges of such a point may turn, in degrees: the office's default.
+	private static readonly eliminationTurn: number = 15;
 
 	constructor(
 		key: string,
@@ -551,7 +562,8 @@ class PathEditing implements HandleSource {
 
 	/*
 		Hands the sink where a drag of a point or of a weight ended, or where keys took it, as the
-		one change it is.
+		one change it is, and answers whether the point moved. A point that Eliminate Points takes
+		away goes instead, also as one change.
 
 		The continuity travels because a polygon holds none: whether a point is a corner or is run
 		through smoothly lies in its numbers alone, so the two sides could read the same point
@@ -562,12 +574,18 @@ class PathEditing implements HandleSource {
 		none of them is sent and none of them can come back a little different from the way it
 		went out.
 	*/
-	public moveTo(handleName: string, at: cool.Point): void {
+	public moveTo(handleName: string, at: cool.Point): boolean {
 		const named = PathEditing.named(handleName);
-		if (!named) return;
+		if (!named) return false;
 
 		const point = this.path()?.[named.polygon]?.points?.[named.point];
-		if (!point) return;
+		if (!point) return false;
+
+		// a point the drag left on the line between its neighbours goes, as one change
+		if (this.movedPoint(handleName, at)?.takenAway) {
+			this.deletePoint(handleName);
+			return false;
+		}
 
 		this.sink.movePoints([
 			{
@@ -579,6 +597,7 @@ class PathEditing implements HandleSource {
 				continuity: point.continuity ?? 0,
 			},
 		]);
+		return true;
 	}
 
 	/// What the point a handle stands for offers to be done with it, or nothing for a weight and
@@ -852,14 +871,43 @@ class PathEditing implements HandleSource {
 	private movedPoint(
 		handleName: string,
 		at: cool.Point,
-	): { polygon: number; at: number; point: cool.ObjectPathPoint } | null {
+	): {
+		polygon: number;
+		at: number;
+		point: cool.ObjectPathPoint;
+		takenAway?: boolean;
+	} | null {
 		const named = PathEditing.named(handleName);
 		if (!named) return null;
 
-		const points = this.path()?.[named.polygon]?.points ?? [];
-		if (named.point >= points.length) return null;
+		const polygon = this.path()?.[named.polygon];
+		const points = polygon?.points ?? [];
+		if (!polygon || named.point >= points.length) return null;
 
 		const stands = points[named.point];
+
+		// with Eliminate Points a point the drag leaves near the line between its neighbours
+		// stands on that line, and goes when the drag lets go
+		const middle =
+			(
+				named.part === 0 &&
+				PathEditing.eliminatesPoints &&
+				this.sink.takesPointsAway
+			) ?
+				PathGeometry.whereItWouldGo(
+					polygon,
+					named.point,
+					at,
+					PathEditing.eliminationTurn,
+				)
+			:	null;
+		if (middle)
+			return {
+				polygon: named.polygon,
+				at: named.point,
+				point: { ...stands, x: middle.x, y: middle.y },
+				takenAway: true,
+			};
 
 		if (named.part !== 0)
 			return {
@@ -919,9 +967,15 @@ class PathEditing implements HandleSource {
 				:	new cool.Point(point.aheadX, point.aheadY),
 		};
 
+		// a point that goes when the drag lets go of it is drawn so
+		const goes =
+			moved.takenAway ? PathEditing.pointName(moved.polygon, moved.at) : null;
 		return known.map((handle: SelectionHandle) => {
 			const placed = where[handle.name];
-			return placed ? { ...handle, point: placed } : handle;
+			if (!placed) return handle;
+			return handle.name === goes ?
+					{ ...handle, point: placed, goes: true }
+				:	{ ...handle, point: placed };
 		});
 	}
 
