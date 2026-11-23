@@ -369,6 +369,7 @@ public:
     void testObjectCommandsLeaveAReadOnlyViewAlone();
     void testObjectCommandsKeepTheObjectsProtection();
     void testTurningADiagramCanBeUndone();
+    void testSelectionTextFollowsTheTextEdit();
     void testObjectPathCommands();
     void testLocalCellCursorViewOption();
     void testConvertObjects();
@@ -516,6 +517,7 @@ public:
     CPPUNIT_TEST(testObjectCommandsLeaveAReadOnlyViewAlone);
     CPPUNIT_TEST(testObjectCommandsKeepTheObjectsProtection);
     CPPUNIT_TEST(testTurningADiagramCanBeUndone);
+    CPPUNIT_TEST(testSelectionTextFollowsTheTextEdit);
     CPPUNIT_TEST(testObjectPathCommands);
     CPPUNIT_TEST(testLocalCellCursorViewOption);
     CPPUNIT_TEST(testConvertObjects);
@@ -539,6 +541,9 @@ public:
     osl::Condition m_aStateChangedCondition;
     bool m_bModified;
     int m_nTrackChanges;
+
+    // for testSelectionTextFollowsTheTextEdit, every text of the selection, in the order it came
+    std::vector<OString> m_aSelectionTexts;
 
     // for testContextMenu{Calc, Writer}
     osl::Condition m_aContextMenuCondition;
@@ -700,6 +705,8 @@ void DesktopKitTest::callbackImpl(COKitCallbackType eType, const char* pPayload)
         }
         else if (aPayload.startsWith(".uno:TrackChanges=") && aPayload.endsWith("=true"))
             ++m_nTrackChanges;
+        else if (aPayload.startsWith(".uno:Context="))
+            m_aSelectionTexts.push_back(aPayload.copy(std::string_view(".uno:Context=").size()));
     }
     break;
     case COKitCallbackType::CONTEXT_MENU:
@@ -6793,6 +6800,57 @@ void DesktopKitTest::testTurningADiagramCanBeUndone()
     CPPUNIT_ASSERT_EQUAL(nStepsBefore + 1, pUndoManager->GetUndoActionCount());
     pUndoManager->Undo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), lastMember()->GetRotateAngle().get());
+}
+
+// The text of the selection tells where the caret stands while text is edited, after a key moved
+// the caret as well, and tells of the object again once the edit ends. A view that draws from the
+// objects sends no mouse moves, which the office's own view asks for the text again on.
+void DesktopKitTest::testSelectionTextFollowsTheTextEdit()
+{
+    COKitDocumentImpl* pDocument = loadDoc("blank_presentation.odp");
+    pDocument->initializeForRendering("{}");
+    pDocument->registerCallback(&DesktopKitTest::callback, this);
+    SdrPageView* pPageView = nullptr;
+    SdrObject* pTitle = firstObjectOfThePage(pPageView);
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SdrView* pView = pViewShell->GetDrawView();
+    pView->MarkObj(pTitle, pPageView);
+
+    // the bindings ask for the states again on a timer of their own, which is run here, twice to
+    // reach the states as well as the messages
+    const auto updated = [pViewShell]() {
+        Scheduler::ProcessEventsToIdle();
+        pViewShell->GetViewFrame().GetBindings().GetTimer().Invoke();
+        pViewShell->GetViewFrame().GetBindings().GetTimer().Invoke();
+        Scheduler::ProcessEventsToIdle();
+    };
+    const auto press = [pDocument, &updated](int nCharacter, int nKey) {
+        pDocument->postKeyEvent(COKitKeyEventType::DOWN, nCharacter, nKey);
+        pDocument->postKeyEvent(COKitKeyEventType::UP, nCharacter, nKey);
+        updated();
+    };
+    updated();
+    const auto lastText = [this]() {
+        return m_aSelectionTexts.empty() ? OString() : m_aSelectionTexts.back();
+    };
+    // a debug build adds the level of the paragraph after the column
+    const auto inColumn = [](const OString& rText, int nColumn) {
+        const OString aColumn = "Column " + OString::number(nColumn);
+        return rText.endsWith(aColumn) || rText.indexOf(rtl::Concat2View(aColumn + ",")) >= 0;
+    };
+
+    press(0, KEY_F2);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    for (char c : std::string_view("abc"))
+        press(c, 0);
+    CPPUNIT_ASSERT_MESSAGE(lastText().getStr(), inColumn(lastText(), 4));
+
+    press(0, KEY_HOME);
+    CPPUNIT_ASSERT_MESSAGE(lastText().getStr(), inColumn(lastText(), 1));
+
+    press(0, KEY_ESCAPE);
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+    CPPUNIT_ASSERT_MESSAGE(lastText().getStr(), !lastText().startsWith("TextEdit"));
 }
 
 namespace

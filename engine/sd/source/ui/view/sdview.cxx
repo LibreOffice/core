@@ -51,6 +51,8 @@
 #include <svx/svdetc.hxx>
 #include <editeng/editstat.hxx>
 
+#include <sfx2/bindings.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/xfillit0.hxx>
@@ -693,6 +695,10 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
         if ( mpViewSh )
         {
             mpViewSh->GetViewShellBase().GetDrawController()->FireSelectionChangeListener();
+
+            // the text of the selection told where the caret stood, and tells of the object now
+            if (SfxViewFrame* pFrame = mpViewSh->GetViewFrame())
+                pFrame->GetBindings().Invalidate(SID_CONTEXT);
 
             KitHelper::notifyOtherViews(&mpViewSh->GetViewShellBase(), COKitCallbackType::VIEW_LOCK, "rectangle", "EMPTY"_ostr);
 

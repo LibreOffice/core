@@ -71,6 +71,7 @@ using namespace ::cpo::uno;
 namespace sd {
 
 const sal_uInt16 SidArray[] = {
+    SID_CONTEXT,                      //    5310
     SID_STYLE_FAMILY2,                //    5542
     SID_STYLE_FAMILY5,                //    5545
     SID_REDO,                         //    5700
