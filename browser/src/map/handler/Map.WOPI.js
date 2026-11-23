@@ -765,6 +765,7 @@ window.L.Map.WOPI = window.L.Handler.extend({
 				this._map.options.docParams.access_token = msg.Values.token;
 				this._map.options.docParams.access_token_ttl = ttl;
 				app.socket.resetTokenExpiryTimer();
+				window.collab.renewAccessToken(msg.Values.token);
 			}
 		}
 		else if (msg.MessageId === 'Action_Save') {

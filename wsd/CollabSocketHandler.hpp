@@ -42,6 +42,8 @@ class CollabSocketHandler : public WebSocketHandler
     bool _isAuthenticated = false;
     bool _isValidating = false;
     std::shared_ptr<CheckFileInfo> _checkFileInfo;
+    // The CheckFileInfo that a new access token from the client has to pass:
+    std::shared_ptr<CheckFileInfo> _renewalCheckFileInfo;
     std::weak_ptr<StreamSocket> _socketWeak;
     // Whether the server can speak to the client, given the client's protocol number:
     bool _protocolAccepted;
@@ -140,6 +142,10 @@ private:
 
     /// Handle editing_started notification - broadcast to other users
     void handleEditingStarted();
+
+    void renewAccessToken(std::string const & token);
+    void onRenewalCheckFileInfoFinished(CheckFileInfo & cfi, std::string const & token);
+    void takeRights(CheckFileInfo & cfi);
 
     /// Callback when fetch completes
     static void onFetchComplete(const std::string& requestId, const std::string& stream,

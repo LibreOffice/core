@@ -206,12 +206,7 @@ void CollabSocketHandler::onCheckFileInfoFinished(CheckFileInfo& cfi)
                 _userId = _wopiInfo->optValue<std::string>("UserId", std::string());
                 _username = _wopiInfo->optValue<std::string>("UserFriendlyName", std::string());
 
-                const std::unique_ptr<WopiStorage::WOPIFileInfo> fileInfo =
-                    cfi.wopiFileInfo(cfi.url());
-                _userCanWrite = fileInfo && fileInfo->getUserCanWrite() &&
-                                !fileInfo->getUserCanOnlyComment() &&
-                                !fileInfo->getUserCanOnlyManageRedlines();
-                _allowsCleanExport = fileInfo && fileInfo->allowsCleanExport();
+                takeRights(cfi);
 
                 // WOPI's UserExtraInfo.avatar is a URL to the user's
                 // avatar image, forwarded to collab peers via user
@@ -352,6 +347,55 @@ void CollabSocketHandler::onCheckFileInfoFinished(CheckFileInfo& cfi)
     _checkFileInfo.reset();
 }
 
+void CollabSocketHandler::takeRights(CheckFileInfo & cfi) {
+                const std::unique_ptr<WopiStorage::WOPIFileInfo> fileInfo =
+                    cfi.wopiFileInfo(cfi.url());
+                _userCanWrite = fileInfo && fileInfo->getUserCanWrite() &&
+                                !fileInfo->getUserCanOnlyComment() &&
+                                !fileInfo->getUserCanOnlyManageRedlines();
+                _allowsCleanExport = fileInfo && fileInfo->allowsCleanExport();
+}
+
+void CollabSocketHandler::renewAccessToken(std::string const & token) {
+    if (token.empty()) {
+        sendTextMessage(R"({"type":"access_token","accepted":false})");
+        return;
+    }
+    // The URI-encoded token is decoded as for the first CheckFileInfo:
+    Poco::URI wopiUri(_wopiUri);
+    wopiUri.addQueryParameter("access_token", Uri::decode(token));
+
+    std::weak_ptr<ProtocolHandlerInterface> const handlerWeak = shared_from_this();
+    _renewalCheckFileInfo = std::make_shared<CheckFileInfo>(
+        COOLWSD::getWebServerPoll(), wopiUri, [handlerWeak, token](CheckFileInfo & cfi) {
+            if (auto const handler = handlerWeak.lock()) {
+                static_cast<CollabSocketHandler *>(handler.get())
+                    ->onRenewalCheckFileInfoFinished(cfi, token);
+            }
+        });
+    _renewalCheckFileInfo->checkFileInfo(/* redirectionLimit */ 5);
+}
+
+void CollabSocketHandler::onRenewalCheckFileInfoFinished(
+    CheckFileInfo & cfi, std::string const & token)
+{
+    // A new token takes over only for the same user, together with the rights that it gives:
+    bool const accepted = cfi.state() == CheckFileInfo::State::Pass && cfi.wopiInfo()
+        && cfi.wopiInfo()->optValue<std::string>("UserId", std::string()) == _userId;
+    if (accepted) {
+        _accessToken = token;
+        takeRights(cfi);
+        if (auto const broker = _broker.lock(); broker && !_avatar.empty()) {
+            broker->registerAvatar(_userId, _avatar, _accessToken);
+        }
+    }
+
+    LOG_INF("Collab: a new access token was " << (accepted ? "accepted" : "refused"));
+    sendTextMessage(
+        std::string(R"({"type":"access_token","accepted":)") + (accepted ? "true" : "false")
+        + '}');
+}
+
 void CollabSocketHandler::onDisconnect()
 {
     LOG_INF("Collab: handler disconnected for WOPISrc: " << Anonymizer::anonymizeUrl(_wopiSrc));
@@ -418,6 +462,10 @@ void CollabSocketHandler::handleAuthenticatedMessage(const std::string& msg)
     else if (type == "editing_started")
     {
         handleEditingStarted();
+    }
+    else if (type == "access_token")
+    {
+        renewAccessToken(json->optValue<std::string>("token", std::string()));
     }
     else if (type == "bye")
     {

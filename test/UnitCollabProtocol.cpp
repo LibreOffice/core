@@ -1123,6 +1123,108 @@ private:
     std::string secondConnection_;
 };
 
+// A new access token of the same user replaces the one of the connection for the fetches that
+// follow, and one of another user does not:
+class UnitCollabTokenRenewal: public WopiTestServer {
+public:
+    UnitCollabTokenRenewal(): WopiTestServer("UnitCollabTokenRenewal"), phase_(Phase::Connect) {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
+
+    void configCheckFileInfo(
+        Poco::Net::HTTPRequest const & request, Poco::JSON::Object::Ptr & fileInfo) override
+    {
+        if (accessToken(request) == "other") {
+            fileInfo->set("UserId", "someone-else");
+        }
+    }
+
+    std::unique_ptr<http::Response>
+    assertGetFileRequest(Poco::Net::HTTPRequest const & request) override
+    {
+        getFileToken_ = accessToken(request);
+        return nullptr;
+    }
+
+    void invokeWSDTest() override {
+        switch (phase_) {
+        case Phase::Connect:
+            TRANSITION_STATE(phase_, Phase::WaitAuth);
+            // The WOPISrc, followed by the test name for the request to coolwsd:
+            collabWs_ = startCollabConnection(
+                socketPoll(),
+                Uri::encode(getWopiHostURI() + "/wopi/files/0?testname=UnitCollabTokenRenewal")
+                    + "&testname=UnitCollabTokenRenewal",
+                "first");
+            break;
+        case Phase::WaitAuth:
+            if (!pollCollabMessage(collabWs_, "user_list")) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitOtherRefused);
+            collabWs_->sendMessage(R"({"type":"access_token","token":"other"})");
+            break;
+        case Phase::WaitOtherRefused: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "access_token");
+            if (!msg) {
+                break;
+            }
+            LOK_ASSERT_EQUAL(false, msg->getValue<bool>("accepted"));
+            TRANSITION_STATE(phase_, Phase::WaitRenewedAccepted);
+            collabWs_->sendMessage(R"({"type":"access_token","token":"renewed"})");
+            break;
+        }
+        case Phase::WaitRenewedAccepted: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "access_token");
+            if (!msg) {
+                break;
+            }
+            LOK_ASSERT_EQUAL(true, msg->getValue<bool>("accepted"));
+            TRANSITION_STATE(phase_, Phase::WaitFetchUrl);
+            collabWs_->sendMessage(R"({"type":"fetch","stream":"contents","requestId":"f1"})");
+            break;
+        }
+        case Phase::WaitFetchUrl: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "fetch_url");
+            if (!msg) {
+                break;
+            }
+            std::shared_ptr<http::Response const> const response = http::get(
+                helpers::getTestServerURI(),
+                msg->getValue<std::string>("url") + "&testname=UnitCollabTokenRenewal");
+            LOK_ASSERT_EQUAL(http::StatusCode::OK, response->statusLine().statusCode());
+            LOK_ASSERT_EQUAL(std::string("renewed"), getFileToken_);
+            TRANSITION_STATE(phase_, Phase::Done);
+            collabWs_->asyncShutdown();
+            passTest("The fetch went with the renewed token");
+            break;
+        }
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    static std::string accessToken(Poco::Net::HTTPRequest const & request) {
+        for (auto const & [name, value]: Poco::URI(request.getURI()).getQueryParameters()) {
+            if (name == "access_token") {
+                return value;
+            }
+        }
+        return "";
+    }
+
+    STATE_ENUM(
+        Phase, Connect, WaitAuth, WaitOtherRefused, WaitRenewedAccepted, WaitFetchUrl, Done)
+        phase_;
+
+    std::shared_ptr<http::WebSocketSession> collabWs_;
+    std::string getFileToken_;
+};
+
 // The fetch and upload addresses carry the WOPISrc of the document, without its query:
 class UnitCollabRouting: public WopiTestServer {
 public:
@@ -1438,14 +1540,15 @@ private:
 
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [13] { new UnitCollabProtocol(),
+    return new UnitBase* [14] { new UnitCollabProtocol(),
                                 new UnitCollabCheckFileInfoTransient(),
                                 new UnitCollabUploadTimestamp(), new UnitCollabUploadConflict(),
                                 new UnitCollabUploadConflictModified(),
                                 new UnitCollabNoCleanExport(), new UnitCollabAvatar(),
-                                new UnitCollabConnections(), new UnitCollabRouting(),
-                                new UnitCollabFetchRedirect(), new UnitCollabProtocolNumber(),
-                                new UnitCollabEditorFrame(), nullptr };
+                                new UnitCollabConnections(), new UnitCollabTokenRenewal(),
+                                new UnitCollabRouting(), new UnitCollabFetchRedirect(),
+                                new UnitCollabProtocolNumber(), new UnitCollabEditorFrame(),
+                                nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

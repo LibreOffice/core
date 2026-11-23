@@ -3060,6 +3060,11 @@ server -> client messages on /cool/collab/ws
     contents stream", "The host allows this user no writes", "The upload has neither
     lastModifiedTime nor force", "Session expired", "Server shutting down").
 
+{"type":"access_token","accepted":<bool>}
+
+    Reply to a client-sent {"type":"access_token"}: whether the server took the new token.  When
+    it did not, the connection keeps the token that it had.
+
 {"type":"error","error":"<text>"[,"requestId":"<id>"]}
 
     The client sent a malformed frame ("Invalid JSON", "Invalid JSON object", or "Unknown message
@@ -3110,6 +3115,13 @@ client -> server messages on /cool/collab/ws
     last connection of a document closes without it, the broker keeps its state (such as
     "editingActive") for an idle grace period of 30 seconds in case the client reconnects; "bye"
     lets the broker reclaim itself immediately.
+
+{"type":"access_token","token":"<token>"}
+
+    A new access token for <wopi-url>, URI-encoded as in the first message, such as one that the
+    integrator posts to the editor page with Reset_Access_Token.  The server checks it with a
+    CheckFileInfo and takes it, together with the rights that it gives, for the fetches and uploads
+    that follow, if it is for the same user.  The server answers with {"type":"access_token"}.
 
 HTTP byte-stream endpoints under /cool/collab/
 ----------------------------------------------

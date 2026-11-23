@@ -3159,6 +3159,18 @@ function showWelcomeSVG() {
 		});
 	};
 
+	// A new access token from the integrator replaces the one of the connection, for the uploads
+	// that follow (once the server has checked it) and for a reconnect:
+	global.collab.renewAccessToken = (token) => {
+		if (window._codaRemoteInfo) {
+			window._codaRemoteInfo.accessToken = token;
+		}
+		const ws = global.collab.ws;
+		if (ws && ws.readyState === WebSocket.OPEN) {
+			ws.send(JSON.stringify({type: 'access_token', token: encodeURIComponent(token)}));
+		}
+	};
+
 	// Track other collab users known via the collab WebSocket.
 	// Each entry: {id: string, name: string, connection: string}
 	global.collab.users = [];

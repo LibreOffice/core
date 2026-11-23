@@ -134,6 +134,7 @@
 /// <reference path="./CollabNotices.test.ts" />
 /// <reference path="./CollabProtocol.test.ts" />
 /// <reference path="./CollabUsers.test.ts" />
+/// <reference path="./CollabToken.test.ts" />
 /// <reference path="./prediction/PredictionFixtures.ts" />
 /// <reference path="./prediction/CaretLookup.test.ts" />
 /// <reference path="./prediction/TextEdit.test.ts" />
