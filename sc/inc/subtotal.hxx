@@ -20,6 +20,7 @@
 #pragma once
 
 #include "global.hxx"
+#include "kahan.hxx"
 
 class SubTotal
 {
@@ -43,7 +44,7 @@ public:
     double      getVariancePopulation() const   { return mnCount > 0 ? mfM2 / mnCount : 0.0; }
 
     // The private variables can be abused by ScFunctionData as general
-    // sum/min/max/ave/count/... variables to reduce memory footprint for that
+    // min/max/count/... variables to reduce memory footprint for that
     // ScFunctionData may be a mass object during consolidation.
     // ScFunctionData::update() and getResult() take care that purposes are not
     // mixed.
@@ -70,6 +71,9 @@ public:
 
 private:
     WelfordRunner   maWelford;
+    // tdf#68448 - the status bar sum/average must match SUM() and AVERAGE()
+    // cell functions for values that sum up to exactly 0 in decimal
+    KahanSum        maSum;
     ScSubTotalFunc  meFunc;
     bool            mbError;
 

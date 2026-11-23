@@ -1076,6 +1076,77 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectionFunction)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf68448_SelectionFunctionQuickSumAve)
+{
+    // tdf#68448 - the status bar sum/average must match SUM() and AVERAGE()
+    // cell functions for values that sum up to exactly 0 in decimal
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), -170.87);
+    m_pDoc->SetValue(ScAddress(0, 1, 0), -223.73);
+    m_pDoc->SetValue(ScAddress(0, 2, 0), -12.58);
+    m_pDoc->SetValue(ScAddress(0, 3, 0), 234.98);
+    m_pDoc->SetValue(ScAddress(0, 4, 0), 172.2);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SetMarkArea(ScRange(0, 0, 0, 0, 4, 0));
+
+    // Summation
+    {
+        double fRes = 0.0;
+        bool bRes = m_pDoc->GetSelectionFunction(SUBTOTAL_FUNC_SUM, ScAddress(), aMark, fRes);
+        CPPUNIT_ASSERT_MESSAGE("Failed to fetch selection function result.", bRes);
+        // Without the fix in place, this test would have failed with
+        // - Expected: 0
+        // - Actual  : -2.8421709430404e-14
+        CPPUNIT_ASSERT_EQUAL(0.0, fRes);
+    }
+
+    // Average
+    {
+        double fRes = 0.0;
+        bool bRes = m_pDoc->GetSelectionFunction(SUBTOTAL_FUNC_AVE, ScAddress(), aMark, fRes);
+        CPPUNIT_ASSERT_MESSAGE("Failed to fetch selection function result.", bRes);
+        // Without the fix in place, this test would have failed with
+        // - Expected: 0
+        // - Actual  : -5.6843418860808e-15
+        CPPUNIT_ASSERT_EQUAL(0.0, fRes);
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf68448_SelectionFunctionOverflow)
+{
+    // tdf#68448 - check final result since Kahan summation does not check for overflow
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    const double fDblMax = std::numeric_limits<double>::max();
+    m_pDoc->SetValue(ScAddress(0, 0, 0), fDblMax);
+    m_pDoc->SetValue(ScAddress(0, 1, 0), fDblMax);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SetMarkArea(ScRange(0, 0, 0, 0, 1, 0));
+
+    // Summation
+    {
+        double fRes = 1.0;
+        bool bRes = m_pDoc->GetSelectionFunction(SUBTOTAL_FUNC_SUM, ScAddress(), aMark, fRes);
+        CPPUNIT_ASSERT_MESSAGE("Overflow must be reported as error.", !bRes);
+        CPPUNIT_ASSERT_EQUAL(0.0, fRes);
+    }
+
+    // Average
+    {
+        double fRes = 1.0;
+        bool bRes = m_pDoc->GetSelectionFunction(SUBTOTAL_FUNC_AVE, ScAddress(), aMark, fRes);
+        CPPUNIT_ASSERT_MESSAGE("Overflow must be reported as error.", !bRes);
+        CPPUNIT_ASSERT_EQUAL(0.0, fRes);
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testMarkedCellIteration)
 {
     m_pDoc->InsertTab(0, u"Test"_ustr);

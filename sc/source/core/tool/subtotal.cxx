@@ -72,8 +72,7 @@ void ScFunctionData::update(double fNewVal)
     switch (meFunc)
     {
         case SUBTOTAL_FUNC_SUM:
-            if (!SubTotal::SafePlus(getValueRef(), fNewVal))
-                mbError = true;
+            maSum.add(fNewVal);
             break;
         case SUBTOTAL_FUNC_PROD:
             if (getCountRef() == 0) // copy first value (nVal is initialized to 0)
@@ -92,10 +91,8 @@ void ScFunctionData::update(double fNewVal)
             getCountRef() += fNewVal;
             break;
         case SUBTOTAL_FUNC_AVE:
-            if (!SubTotal::SafePlus(getValueRef(), fNewVal))
-                mbError = true;
-            else
-                ++getCountRef();
+            maSum.add(fNewVal);
+            ++getCountRef();
             break;
         case SUBTOTAL_FUNC_MAX:
             if (getCountRef() == 0) // copy first value (nVal is initialized to 0)
@@ -141,6 +138,11 @@ double ScFunctionData::getResult()
             fRet = getCountRef();
             break;
         case SUBTOTAL_FUNC_SUM:
+            fRet = maSum.get();
+            // tdf#68448 - check final result since Kahan summation does not check for overflow
+            if (!std::isfinite(fRet))
+                mbError = true;
+            break;
         case SUBTOTAL_FUNC_MAX:
         case SUBTOTAL_FUNC_MIN:
             // Note that nVal is 0.0 for MAX and MIN if nCount==0, that's also
@@ -154,7 +156,12 @@ double ScFunctionData::getResult()
             if (getCountRef() == 0)
                 mbError = true;
             else
-                fRet = getValueRef() / getCountRef();
+            {
+                fRet = maSum.get() / getCountRef();
+                // tdf#68448 - check final result since Kahan summation does not check for overflow
+                if (!std::isfinite(fRet))
+                    mbError = true;
+            }
             break;
         case SUBTOTAL_FUNC_VAR:
         case SUBTOTAL_FUNC_STD:
