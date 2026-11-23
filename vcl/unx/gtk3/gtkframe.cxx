@@ -1825,7 +1825,7 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     m_pForeignTopLevel = gdk_x11_window_foreign_new_for_display( getGdkDisplay(), m_aForeignTopLevelWindow );
     gdk_window_set_events( m_pForeignTopLevel, GDK_STRUCTURE_MASK );
 
-    if( pSysData->nSize > sizeof(pSysData->nSize)+sizeof(pSysData->aWindow) && pSysData->bXEmbedSupport )
+    if (pSysData->bXEmbedSupport)
     {
         m_pWindow = gtk_plug_new_for_display( getGdkDisplay(), pSysData->aWindow );
         gtk_widget_set_can_default(m_pWindow, true);

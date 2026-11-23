@@ -358,8 +358,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
 
         nStyle_ |= SalFrameStyleFlags::PLUG;
         Attributes.override_redirect = True;
-        if( pParentData->nSize >= sizeof(SystemParentData) )
-            m_bXEmbed = pParentData->bXEmbedSupport;
+        m_bXEmbed = pParentData->bXEmbedSupport;
 
         int x_ret, y_ret;
         unsigned int bw, d;
@@ -2153,7 +2152,6 @@ void X11SalFrame::createNewWindow( ::Window aNewParent, SalX11Screen nXScreen )
         nXScreen = m_nXScreen;
 
     SystemParentData aParentData;
-    aParentData.nSize = sizeof(SystemParentData);
     aParentData.aWindow = aNewParent;
     aParentData.bXEmbedSupport = (aNewParent != None && m_bXEmbed); // caution: this is guesswork
     if( aNewParent == None )
@@ -2230,8 +2228,7 @@ void X11SalFrame::createNewWindow( ::Window aNewParent, SalX11Screen nXScreen )
 
 void X11SalFrame::SetPluginParent( SystemParentData* pNewParent )
 {
-    if( pNewParent->nSize >= sizeof(SystemParentData) )
-        m_bXEmbed = pNewParent->aWindow != None && pNewParent->bXEmbedSupport;
+    m_bXEmbed = pNewParent->aWindow != None && pNewParent->bXEmbedSupport;
 
     createNewWindow(pNewParent->aWindow);
 }

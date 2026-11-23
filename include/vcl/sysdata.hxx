@@ -107,7 +107,6 @@ public:
 
 struct SystemParentData
 {
-    sal_uInt32      nSize;            // size in bytes of this structure
 #if defined(_WIN32)
     HWND            hWnd;             // the window hwnd
 #elif defined( MACOSX )
@@ -118,8 +117,8 @@ struct SystemParentData
     // Nothing
 #elif defined( UNX )
     sal_uIntPtr     aWindow;          // the window of the object
-    bool            bXEmbedSupport:1; // decides whether the object in question
-                                      // should support the XEmbed protocol
+    // decides whether the object in question should support the XEmbed protocol
+    bool bXEmbedSupport : 1 = false;
 #endif
 };
 

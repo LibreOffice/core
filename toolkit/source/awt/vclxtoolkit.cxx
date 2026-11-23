@@ -1670,7 +1670,6 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
                                 if( bUseParentData )
                                 {
                                     SystemParentData aParentData;
-                                    aParentData.nSize   = sizeof( aParentData );
                                     #if defined MACOSX
                                     aParentData.pView   = reinterpret_cast<NSView*>(nWindowHandle);
                                     #elif defined ANDROID
@@ -1915,7 +1914,6 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( con
         if( bUseParentData )
         {
             SystemParentData aParentData;
-            aParentData.nSize   = sizeof( aParentData );
             #if defined MACOSX
             aParentData.pView   = reinterpret_cast<NSView*>(nWindowHandle);
             #elif defined ANDROID

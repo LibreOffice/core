@@ -69,7 +69,6 @@ void VCLXWindow::SetSystemParent_Impl(const css::uno::Any& rHandle)
     }
     // create system parent data
     SystemParentData aSysParentData;
-    aSysParentData.nSize = sizeof(SystemParentData);
 #if defined(_WIN32)
     aSysParentData.hWnd = reinterpret_cast<HWND>(nHandle);
 #elif defined(MACOSX)
