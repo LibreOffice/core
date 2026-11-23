@@ -114,6 +114,11 @@ public:
     void DistributeColumns( sal_Int32 nFirstColumn, sal_Int32 nLastColumn, const bool bOptimize, const bool bMinimize );
     void DistributeRows( sal_Int32 nFirstRow, sal_Int32 nLastRow, const bool bOptimize, const bool bMinimize );
 
+    /** Multiplies the column widths, the row heights, the font sizes and the space between the
+        text and the cell borders by fScale, so the table keeps its layout at the new size.
+    */
+    void ScaleTable(double fScale);
+
     cpo::uno::Reference< css::table::XTable > getTable() const;
     /// Get the concrete UNO class for the table
     const rtl::Reference< sdr::table::TableModel > & getUnoTable() const;

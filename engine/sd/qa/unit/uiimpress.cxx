@@ -38,6 +38,7 @@
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -124,6 +125,7 @@
 #include <app.hrc>
 #include <sdpage.hxx>
 #include <vcl/bitmap.hxx>
+#include <sot/formats.hxx>
 #include <vcl/transfer.hxx>
 #include <unomodel.hxx>
 #include <osl/thread.hxx>
@@ -2304,6 +2306,67 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteTextboxBackgroundCrossProcess)
 
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE,
                          pDstShape->GetMergedItem(XATTR_FILLSTYLE).GetValue());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteSpreadsheetRangeFitsOnSlide)
+{
+    // Given a clipboard with a cell range as a spreadsheet copies it into RTF: 12 columns of 4 cm
+    // and 40 rows of 10pt text, much wider and taller than a slide.
+    OStringBuffer aRtf("{\\rtf\\ansi{\\fonttbl{\\f0\\fswiss Liberation Sans;}}{\n");
+    for (int nRow = 0; nRow < 40; ++nRow)
+    {
+        aRtf.append("\\trowd\\trgaph30\\trleft-30\\trrh256");
+        for (int nColumn = 1; nColumn <= 12; ++nColumn)
+            aRtf.append("\\clvertalb\\cellx" + OString::number(nColumn * 2268));
+        aRtf.append("\\pard\\plain\\intbl\n");
+        for (int nColumn = 0; nColumn < 12; ++nColumn)
+            aRtf.append("\\f0\\fs20\\ql Cell " + OString::number(nRow * 12 + nColumn) + "\\cell");
+        aRtf.append("\\row\n");
+    }
+    aRtf.append("}\n}");
+    rtl::Reference<TransferDataContainer> xTransferable(new TransferDataContainer);
+    xTransferable->CopyByteString(SotClipboardFormatId::RTF, aRtf.makeStringAndClear());
+
+    createSdImpressDoc();
+    sd::ViewShell* pViewShell = getSdDocShell()->GetViewShell();
+    if (comphelper::COKit::isActive())
+        pViewShell->GetActiveWindow()->SetClipboard(GetSystemClipboard());
+    xTransferable->CopyToClipboard(pViewShell->GetActiveWindow()->GetClipboard());
+    SdPage* pPage = pViewShell->GetActualPage();
+    const size_t nObjectsBefore = pPage->GetObjCount();
+
+    // When the range is pasted onto the slide:
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    // Then it becomes a table that lies entirely on the slide.
+    CPPUNIT_ASSERT_EQUAL(nObjectsBefore + 1, pPage->GetObjCount());
+    auto pTable = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(nObjectsBefore));
+    CPPUNIT_ASSERT(pTable);
+    const tools::Rectangle aSlide(Point(0, 0), pPage->GetSize());
+    const tools::Rectangle aTable = pTable->GetSnapRect();
+    CPPUNIT_ASSERT_MESSAGE(
+        OString("table " + aTable.toString() + " is outside the slide " + aSlide.toString())
+            .getStr(),
+        aSlide.Contains(aTable));
+
+    // The columns keep their equal widths, and the text shrinks with the table.
+    uno::Reference<table::XColumnRowRange> xTable(pTable->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xFirstColumn(xTable->getColumns()->getByIndex(0),
+                                                     uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xLastColumn(xTable->getColumns()->getByIndex(11),
+                                                    uno::UNO_QUERY_THROW);
+    const sal_Int32 nFirstWidth = xFirstColumn->getPropertyValue(u"Width"_ustr).get<sal_Int32>();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        double(nFirstWidth), xLastColumn->getPropertyValue(u"Width"_ustr).get<sal_Int32>(), 2.0);
+    uno::Reference<text::XTextRange> xCell(pTable->getTable()->getCellByPosition(0, 0),
+                                           uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumerationAccess> xParagraphs(xCell->getText(),
+                                                              uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumerationAccess> xPortions(
+        xParagraphs->createEnumeration()->nextElement(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPortion(xPortions->createEnumeration()->nextElement(),
+                                                 uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_LESS(10.0f, xPortion->getPropertyValue(u"CharHeight"_ustr).get<float>());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteFromOtherDocumentKeepsSlidePosition)

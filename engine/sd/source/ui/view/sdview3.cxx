@@ -31,6 +31,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/mieclip.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/svdotable.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdundo.hxx>
 #include <svl/itempool.hxx>
@@ -143,6 +144,44 @@ static void ImpCheckInsertPos(Point& rPos, const Size& rSize, const ::tools::Rec
     {
         rPos.AdjustY( -(aMarkRect.Bottom() - rWorkArea.Bottom()) );
     }
+}
+
+/// Shrinks the table of rTableModel to fit on rPage and returns the center for it on the page.
+static Point ImpFitTableToPage(const SdDrawDocument& rTableModel, const SdrPage& rPage,
+                               const Point& rDropPos)
+{
+    const SdrPage* pTablePage = rTableModel.GetPage(0);
+    auto pTable = pTablePage && pTablePage->GetObjCount()
+                      ? dynamic_cast<sdr::table::SdrTableObj*>(pTablePage->GetObj(0))
+                      : nullptr;
+    if (!pTable)
+        return rDropPos;
+
+    const ::tools::Rectangle aPageArea(
+        Point(rPage.GetLeftBorder(), rPage.GetUpperBorder()),
+        Size(rPage.GetWidth() - rPage.GetLeftBorder() - rPage.GetRightBorder(),
+             rPage.GetHeight() - rPage.GetUpperBorder() - rPage.GetLowerBorder()));
+    if (aPageArea.IsEmpty())
+        return rDropPos;
+
+    // Smaller text can wrap differently, so the fit is checked again after each step.
+    for (int nStep = 0; nStep < 3; ++nStep)
+    {
+        const Size aTableSize = pTable->GetSnapRect().GetSize();
+        if (aTableSize.IsEmpty())
+            break;
+        const double fScale
+            = std::min(double(aPageArea.GetWidth()) / aTableSize.Width(),
+                       double(aPageArea.GetHeight()) / aTableSize.Height());
+        if (fScale >= 1.0)
+            break;
+        pTable->ScaleTable(fScale);
+    }
+
+    // The pasted objects are centered on the returned point.
+    Point aCenter(rDropPos);
+    ImpCheckInsertPos(aCenter, pTable->GetSnapRect().GetSize(), aPageArea);
+    return aCenter;
 }
 
 bool View::InsertMetaFile( const TransferableDataHelper& rDataHelper, const Point& rPos, ImageMap const * pImageMap, bool bOptimize )
@@ -1726,7 +1765,11 @@ bool View::PasteRTFTable( SvStream& rStm, SdrPage* pPage, SdrInsertFlags nPasteO
     pModel->InsertPage(pModel->AllocPage(false).get());
 
     CreateTableFromRTF(rStm, pModel);
-    bool bRet = Paste(*pModel, maDropPos, pPage, nPasteOptions);
+    Point aCenter(maDropPos);
+    SdrPageView* pPageView = GetSdrPageView();
+    if (SdrPage* pTargetPage = pPage ? pPage : (pPageView ? pPageView->GetPage() : nullptr))
+        aCenter = ImpFitTableToPage(*pModel, *pTargetPage, maDropPos);
+    bool bRet = Paste(*pModel, aCenter, pPage, nPasteOptions);
 
     xShell->DoClose();
 
@@ -1743,7 +1786,11 @@ bool View::PasteHTMLTable( SvStream& rStm, SdrPage* pPage, SdrInsertFlags nPaste
     pModel->InsertPage(pModel->AllocPage(false).get());
 
     CreateTableFromHTML(rStm, pModel);
-    bool bRet = Paste(*pModel, maDropPos, pPage, nPasteOptions);
+    Point aCenter(maDropPos);
+    SdrPageView* pPageView = GetSdrPageView();
+    if (SdrPage* pTargetPage = pPage ? pPage : (pPageView ? pPageView->GetPage() : nullptr))
+        aCenter = ImpFitTableToPage(*pModel, *pTargetPage, maDropPos);
+    bool bRet = Paste(*pModel, aCenter, pPage, nPasteOptions);
 
     xShell->DoClose();
 

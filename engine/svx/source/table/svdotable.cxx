@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 #include <memory>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -31,7 +32,10 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svl/style.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <editeng/editeng.hxx>
 #include <editeng/editstat.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/outlobj.hxx>
 #include <sdr/properties/textproperties.hxx>
 #include <svx/svdetc.hxx>
@@ -66,6 +70,7 @@ using ::cpo::uno::Any;
 using ::cpo::uno::Reference;
 using ::cpo::uno::UNO_QUERY;
 using ::cpo::uno::UNO_QUERY_THROW;
+using ::cpo::uno::UNO_SET_THROW;
 using ::cpo::uno::Exception;
 using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::style::XStyle;
@@ -2461,6 +2466,148 @@ void SdrTableObj::DistributeRows( sal_Int32 nFirstRow, sal_Int32 nLastRow, const
         mpImpl->mpLayouter->DistributeRows(aRectangle, nFirstRow, nLastRow, bOptimize, bMinimize);
         setRectangle(aRectangle);
     }
+}
+
+namespace
+{
+/// The font sizes of a paragraph and of each run of text in it with its own size.
+struct ParagraphFontHeights
+{
+    std::vector<std::unique_ptr<SfxPoolItem>> maParagraphItems;
+    std::vector<std::pair<ESelection, std::unique_ptr<SfxPoolItem>>> maRunItems;
+};
+
+constexpr sal_uInt16 aFontHeightIds[] = { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL };
+
+std::unique_ptr<SfxPoolItem> scaledItem(const SfxPoolItem& rItem, double fScale)
+{
+    std::unique_ptr<SfxPoolItem> pItem(rItem.Clone());
+    pItem->ScaleMetrics(fScale);
+    return pItem;
+}
+}
+
+void SdrTableObj::ScaleTable(double fScale)
+{
+    if (!mpImpl.is() || !mpImpl->mxTable.is() || fScale <= 0.0 || fScale == 1.0)
+        return;
+
+    rtl::Reference<TableModel> xTable(mpImpl->mxTable);
+    SdrOutliner& rOutliner = ImpGetDrawOutliner();
+    const sal_Int32 nColumnCount = xTable->getColumnCount();
+    const sal_Int32 nRowCount = xTable->getRowCount();
+    // The table is laid out once, when the lock is released.
+    uno_lock();
+    try
+    {
+        for (sal_Int32 nRow = 0; nRow < nRowCount; ++nRow)
+        {
+            for (sal_Int32 nColumn = 0; nColumn < nColumnCount; ++nColumn)
+            {
+                CellRef xCell(xTable->getCell(nColumn, nRow));
+                if (!xCell.is() || xCell->isMerged())
+                    continue;
+
+                // The font size of the whole cell is written into every paragraph, so the sizes of
+                // the paragraphs and of the runs in them are read first and written back after it.
+                std::vector<ParagraphFontHeights> aParagraphs;
+                if (const OutlinerParaObject* pParaObject = xCell->GetOutlinerParaObject())
+                {
+                    rOutliner.SetText(*pParaObject);
+                    const EditEngine& rEditEngine = rOutliner.GetEditEngine();
+                    aParagraphs.resize(rOutliner.GetParagraphCount());
+                    for (sal_Int32 nPara = 0; nPara < rOutliner.GetParagraphCount(); ++nPara)
+                    {
+                        const SfxItemSet& rParaAttribs = rOutliner.GetParaAttribs(nPara);
+                        for (sal_uInt16 nWhich : aFontHeightIds)
+                            aParagraphs[nPara].maParagraphItems.push_back(
+                                scaledItem(rParaAttribs.Get(nWhich), fScale));
+
+                        std::vector<EECharAttrib> aCharAttribs;
+                        rEditEngine.GetCharAttribs(nPara, aCharAttribs);
+                        for (const EECharAttrib& rAttrib : aCharAttribs)
+                        {
+                            if (std::find(std::begin(aFontHeightIds), std::end(aFontHeightIds),
+                                          rAttrib.pAttr->Which())
+                                == std::end(aFontHeightIds))
+                                continue;
+                            aParagraphs[nPara].maRunItems.emplace_back(
+                                ESelection(nPara, rAttrib.nStart, nPara, rAttrib.nEnd),
+                                scaledItem(*rAttrib.pAttr, fScale));
+                        }
+                    }
+                    rOutliner.Clear();
+                }
+
+                const SfxItemSet& rCellItems = xCell->GetItemSet();
+                SfxItemSet aCellItems(*rCellItems.GetPool(), rCellItems.GetRanges());
+                for (sal_uInt16 nWhich : std::initializer_list<sal_uInt16>{
+                         EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL,
+                         SDRATTR_TEXT_LEFTDIST, SDRATTR_TEXT_RIGHTDIST, SDRATTR_TEXT_UPPERDIST,
+                         SDRATTR_TEXT_LOWERDIST })
+                    aCellItems.Put(*scaledItem(rCellItems.Get(nWhich), fScale));
+                xCell->SetMergedItemSetAndBroadcast(aCellItems, false);
+
+                if (aParagraphs.empty() || !xCell->GetOutlinerParaObject())
+                    continue;
+
+                rOutliner.SetText(*xCell->GetOutlinerParaObject());
+                for (size_t nPara = 0; nPara < aParagraphs.size(); ++nPara)
+                {
+                    SfxItemSet aParaAttribs(rOutliner.GetParaAttribs(nPara));
+                    for (const auto& pItem : aParagraphs[nPara].maParagraphItems)
+                        aParaAttribs.Put(*pItem);
+                    rOutliner.SetParaAttribs(nPara, aParaAttribs);
+
+                    for (const auto& [rSelection, pItem] : aParagraphs[nPara].maRunItems)
+                    {
+                        SfxItemSet aRunAttribs(rOutliner.GetEmptyItemSet());
+                        aRunAttribs.Put(*pItem);
+                        rOutliner.QuickSetAttribs(aRunAttribs, rSelection);
+                    }
+                }
+                xCell->SetOutlinerParaObject(rOutliner.CreateParaObject());
+                rOutliner.Clear();
+            }
+        }
+
+        Reference<XTableColumns> xColumns(xTable->getColumns(), UNO_SET_THROW);
+        sal_Int32 nTableWidth = 0;
+        for (sal_Int32 nColumn = 0; nColumn < nColumnCount; ++nColumn)
+        {
+            Reference<XPropertySet> xColumn(xColumns->getByIndex(nColumn), UNO_QUERY_THROW);
+            sal_Int32 nWidth = 0;
+            xColumn->getPropertyValue(u"Width"_ustr) >>= nWidth;
+            nWidth = basegfx::fround(nWidth * fScale);
+            xColumn->setPropertyValue(u"Width"_ustr, Any(nWidth));
+            nTableWidth += nWidth;
+        }
+
+        Reference<XTableRows> xRows(xTable->getRows(), UNO_SET_THROW);
+        for (sal_Int32 nRow = 0; nRow < nRowCount; ++nRow)
+        {
+            Reference<XPropertySet> xRow(xRows->getByIndex(nRow), UNO_QUERY_THROW);
+            sal_Int32 nHeight = 0;
+            xRow->getPropertyValue(u"Height"_ustr) >>= nHeight;
+            xRow->setPropertyValue(u"Height"_ustr, Any(sal_Int32(basegfx::fround(nHeight * fScale))));
+        }
+
+        tools::Rectangle aRectangle(getRectangle());
+        aRectangle.setWidth(nTableWidth);
+        aRectangle.setHeight(basegfx::fround(aRectangle.GetHeight() * fScale));
+        maLogicRect = aRectangle;
+        setRectangle(aRectangle);
+    }
+    catch (const Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("svx.table", "SdrTableObj::ScaleTable");
+    }
+    uno_unlock();
+
+    // The rows get the height their scaled text needs.
+    NbcReformatText();
+    maLogicRect = getRectangle();
+    SetBoundAndSnapRectsDirty();
 }
 
 
