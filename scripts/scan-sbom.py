@@ -32,10 +32,31 @@
 #               the SBOM is fixed - an SBOM problem, not a vulnerability
 #   STALE-VEX   a VEX statement no finding refers to any more (informational:
 #               expected after a bump, and a candidate for clean-up)
+#   PLATFORM    a finding on a component the product does not ship but runs
+#               on (a desktop product's runtime, base snap, FreeBSD package,
+#               the operating system): fixed by updating the platform, or by
+#               requiring a newer version of it
+#
+# One VEX covers all products. A statement whose reasoning holds for some of
+# them only (a patch to a bundled library that another product takes from
+# the system) names them in a collabora:platforms property: server for
+# Collabora Online, windows, macos, flatpak, snap, freebsd for Collabora
+# Office. A statement with "affects" applies only where one of its refs is
+# the bom-ref or purl of the product or of a component of the scanned SBOM.
 #
 # Usage:
 #   scripts/scan-sbom.py --vex <cool.vex.json> --out-dir <dir>
 #       [--product-version V] [--require-trivy] <sbom.spdx.json>...
+#   scripts/scan-sbom.py --vex <cool.vex.json> --out-dir <dir>
+#       [--probe] --cdx <collabora-office.cdx.json>
+#   scripts/scan-sbom.py --vex <cool.vex.json> --out-dir <dir>
+#       [--probe] --installed
+#
+# --cdx scans the SBOM of a desktop product (Windows, macOS, flatpak, snap,
+# FreeBSD) as it is, --installed finds that of the Collabora Office installed
+# on this machine. --probe first replaces the versions of the platform
+# components, which the SBOM records as the product was built, with those
+# installed here, where they can be found out.
 #
 # grype uses its database as it is ('grype db update' first, as for
 # 'make sbom-audit'); trivy refreshes its own. Exits 1 if any finding is NEW
@@ -227,17 +248,34 @@ def merge(findings):
     return merged
 
 
-def classify(merged, vex):
+def applies(statement, platform, scope):
+    """Whether a VEX statement is about the product scanned."""
+    for prop in statement.get("properties", []):
+        if prop.get("name") == "collabora:platforms" and platform not in \
+                [value.strip() for value in prop.get("value", "").split(",")]:
+            return False
+    affects = statement.get("affects")
+    return not affects \
+        or any(target.get("ref") in scope for target in affects)
+
+
+def classify(merged, vex, platform, scope, platform_components):
     statements = {}
     for statement in vex.get("vulnerabilities", []):
-        if statement.get("id"):
+        if statement.get("id") and applies(statement, platform, scope):
             statements.setdefault(statement["id"], statement)
     referenced = set()
     for entry in merged:
         matching = [statements[i] for i in entry["ids"] if i in statements]
         referenced.update(s["id"] for s in matching)
         if not matching:
-            entry["class"] = "UNVERSIONED" if entry["unversioned"] else "NEW"
+            if entry["components"] and all(
+                    name in platform_components
+                    for name in entry["components"]):
+                entry["class"] = "PLATFORM"
+            else:
+                entry["class"] = ("UNVERSIONED" if entry["unversioned"]
+                                  else "NEW")
             entry["vex"] = None
             continue
         # if the CVE and its GHSA disagree, the open statement wins
@@ -284,6 +322,20 @@ def write_report(out_dir, merged, stale, header, components):
             "+".join(entry["scanners"])))
         if note:
             lines.append("{:<10} {}".format("", note))
+    platform = [e for e in merged if e["class"] == "PLATFORM"]
+    platform.sort(key=lambda e: (SEVERITIES.index(e["severity"]), e["id"]))
+    if platform:
+        lines.append("")
+        lines.append("Vulnerabilities in what the product runs on but does not "
+                     "ship; fixed by updating")
+        lines.append("the platform, or by requiring a version of it that has "
+                     "the fix:")
+        for entry in platform:
+            fix = ("fixed in " + ", ".join(entry["fixed"])
+                   if entry["fixed"] else "no fixed version known")
+            lines.append("{:<10} {:<20} {:<10} {} - {}".format(
+                "PLATFORM", entry["id"], entry["severity"].capitalize(),
+                ", ".join(entry["components"]), fix))
     unversioned = {}
     for entry in merged:
         if entry["class"] == "UNVERSIONED":
@@ -312,9 +364,10 @@ def write_report(out_dir, merged, stale, header, components):
     open_ = sum(1 for e in merged if e["class"] == "OPEN")
     lines.append("")
     lines.append("{} components scanned, {} vulnerabilities: {} new, {} open, "
+                 "{} in the platform, "
                  "{} on {} unversioned component(s), "
                  "{} suppressed by the VEX ({}), {} stale VEX statement(s)"
-                 .format(components, len(merged), new, open_,
+                 .format(components, len(merged), new, open_, len(platform),
                          sum(unversioned.values()), len(unversioned),
                          sum(suppressed.values()),
                          ", ".join("{} {}".format(n, s) for s, n
@@ -333,6 +386,119 @@ def write_report(out_dir, merged, stale, header, components):
     return new + open_
 
 
+# ---------------------------------------------------------------------------
+# A desktop product installed on this machine
+# ---------------------------------------------------------------------------
+
+SBOM_NAME = "collabora-office.cdx.json"
+
+
+def output(command):
+    try:
+        return subprocess.run(command, stdout=subprocess.PIPE,
+                              stderr=subprocess.DEVNULL,
+                              universal_newlines=True, check=True).stdout
+    except (OSError, subprocess.CalledProcessError):
+        return None
+
+
+def installed_sbom():
+    """Where the SBOM of the installed Collabora Office is: inside the
+    product, where its packaging put it."""
+    candidates = []
+    location = output(["flatpak", "info", "--show-location",
+                       "com.collaboraoffice.Office"])
+    if location:
+        candidates.append(os.path.join(location.strip(), "files", "share",
+                                       "sbom", SBOM_NAME))
+    candidates.append(os.path.join("/snap", "collabora-office", "current",
+                                   "usr", "share", "sbom", SBOM_NAME))
+    candidates.append(os.path.join("/usr", "local", "share",
+                                   "collabora-office", "sbom", SBOM_NAME))
+    for app in ("/Applications/Collabora Office.app",
+                os.path.expanduser("~/Applications/Collabora Office.app")):
+        candidates.append(os.path.join(app, "Contents", "Resources", "sbom",
+                                       SBOM_NAME))
+    if sys.platform == "win32":
+        location = output(["powershell", "-NoProfile", "-Command",
+                           "(Get-AppxPackage -Name "
+                           "CollaboraProductivityLtd.CollaboraOffice*)"
+                           ".InstallLocation"])
+        for line in (location or "").splitlines():
+            if line.strip():
+                candidates.append(os.path.join(line.strip(), "sbom",
+                                               SBOM_NAME))
+    for path in candidates:
+        if os.path.isfile(path):
+            return path
+    return None
+
+
+def platform_version(component, platform):
+    """The version of a platform component installed here, None if it
+    cannot be found out."""
+    name = component["name"]
+    if platform == "freebsd":
+        if component.get("type") == "operating-system":
+            return (output(["freebsd-version", "-u"]) or "").strip() or None
+        return (output(["pkg", "query", "%v", name]) or "").strip() or None
+    if platform == "snap":
+        for line in (output(["snap", "list", name]) or "").splitlines()[1:]:
+            fields = line.split()
+            if fields and fields[0] == name:
+                return fields[1]
+        return None
+    if platform == "flatpak" and component.get("type") == "platform":
+        info = output(["flatpak", "info", name + "//" + component["version"]])
+        match = re.search(r"^\s*Version:\s*(\S+)", info or "", re.M)
+        return match.group(1) if match else None
+    if platform == "macos" and component.get("type") == "operating-system":
+        return (output(["sw_vers", "-productVersion"]) or "").strip() or None
+    if platform == "windows":
+        if component.get("type") == "operating-system":
+            return (output(["powershell", "-NoProfile", "-Command",
+                            "[Environment]::OSVersion.Version.ToString()"])
+                    or "").strip() or None
+        if name == "Microsoft Edge WebView2 Runtime":
+            key = ("HKLM:\\SOFTWARE\\WOW6432Node\\Microsoft\\EdgeUpdate\\"
+                   "Clients\\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}")
+            return (output(["powershell", "-NoProfile", "-Command",
+                            "(Get-ItemProperty '" + key + "').pv"])
+                    or "").strip() or None
+        return (output(["powershell", "-NoProfile", "-Command",
+                        "(Get-AppxPackage -Name " + name + " | Sort-Object "
+                        "Version | Select-Object -Last 1).Version"])
+                or "").strip() or None
+    return None
+
+
+def probe_platform(document):
+    """Replace the build-time versions of the platform components with the
+    ones installed here; a CPE carries the version too."""
+    product = document["metadata"]["component"]
+    platform = next((p["value"] for p in product.get("properties", [])
+                     if p["name"] == "collabora:platform"), None)
+    for c in document.get("components", []):
+        if not any(p["name"] == "collabora:layer" and p["value"] == "platform"
+                   for p in c.get("properties", [])):
+            continue
+        version = platform_version(c, platform)
+        if not version or version == c.get("version"):
+            continue
+        print("{}: {} here, {} at build time".format(
+            c["name"], version, c.get("version")))
+        if c.get("cpe") and c.get("version"):
+            parts = c["cpe"].split(":")
+            if len(parts) > 5 and parts[5] == c["version"]:
+                parts[5] = version
+                c["cpe"] = ":".join(parts)
+        c["version"] = version
+        for p in c["properties"]:
+            if p["name"] == "collabora:version-basis":
+                p["value"] = "installed"
+
+
+
 def scan(args):
     os.makedirs(args.out_dir, exist_ok=True)
     for name in ("sbom.cdx.json", "grype.json", "trivy.json", "report.txt",
@@ -344,21 +510,49 @@ def scan(args):
     try:
         with open(args.vex, encoding="utf-8") as f:
             vex = json.load(f)
-        for path in args.sboms:
-            if not os.path.isfile(path):
-                raise ToolError("no such SBOM: {}".format(path))
-        lift = load_image_sbom_module().lift_embedded_components
-        components = lift(embedded_documents(args.sboms))
+        if args.cdx:
+            # a desktop product's SBOM, scanned as it is
+            with open(args.cdx, encoding="utf-8") as f:
+                document = json.load(f)
+            if document.get("bomFormat") != "CycloneDX":
+                raise ToolError("not a CycloneDX document: " + args.cdx)
+            if args.probe:
+                probe_platform(document)
+            sboms = [args.cdx]
+        else:
+            for path in args.sboms:
+                if not os.path.isfile(path):
+                    raise ToolError("no such SBOM: {}".format(path))
+            lift = load_image_sbom_module().lift_embedded_components
+            document = cyclonedx(lift(embedded_documents(args.sboms)),
+                                 args.product_version)
+            sboms = args.sboms
     except (OSError, ValueError) as error:
         raise ToolError(str(error))
+    components = document.get("components", [])
     if not components:
         raise ToolError("no components with a CPE or purl in the input SBOMs")
     cdx_path = os.path.join(args.out_dir, "sbom.cdx.json")
     with open(cdx_path, "w", encoding="utf-8") as f:
-        json.dump(cyclonedx(components, args.product_version), f, indent=2)
+        json.dump(document, f, indent=2)
         f.write("\n")
 
-    names = [os.path.basename(p) for p in args.sboms]
+    # what VEX statements with "affects" are matched against
+    product = document["metadata"]["component"]
+    platform = "server"
+    for prop in product.get("properties", []):
+        if prop["name"] == "collabora:platform":
+            platform = prop["value"]
+    scope = {product.get("bom-ref"), product.get("purl")}
+    platform_components = set()
+    for c in components:
+        scope.update((c.get("bom-ref"), c.get("purl")))
+        if any(p["name"] == "collabora:layer" and p["value"] == "platform"
+               for p in c.get("properties", [])):
+            platform_components.add(component(c.get("name"), c.get("version")))
+    scope.discard(None)
+
+    names = [os.path.basename(p) for p in sboms]
     header = ["SBOM scan of {} ({} components: {} with a CPE, {} with a purl)"
               .format(", ".join(names) if len(names) <= 3
                       else "{} SBOM documents".format(len(names)),
@@ -406,14 +600,22 @@ def scan(args):
         header.append("trivy: skipped, not installed (grype-only scan)")
 
     merged = merge(findings)
-    stale = classify(merged, vex)
+    stale = classify(merged, vex, platform, scope, platform_components)
     return write_report(args.out_dir, merged, stale, header, len(components))
 
 
 def main():
     parser = argparse.ArgumentParser(
         description="Scan the SBOMs and read the findings against the VEX")
-    parser.add_argument("sboms", nargs="+")
+    parser.add_argument("sboms", nargs="*")
+    parser.add_argument("--cdx",
+                        help="scan this CycloneDX SBOM of a desktop product")
+    parser.add_argument("--installed", action="store_true",
+                        help="scan the SBOM of the Collabora Office installed "
+                             "on this machine")
+    parser.add_argument("--probe", action="store_true",
+                        help="with --cdx or --installed: use the versions of "
+                             "the platform components installed here")
     parser.add_argument("--vex", required=True,
                         help="CycloneDX VEX document "
                              "(docker/from-packages/vex/cool.vex.json)")
@@ -427,6 +629,15 @@ def main():
                         help="fail instead of scanning with grype alone "
                              "when trivy is not installed")
     args = parser.parse_args()
+    if args.installed:
+        args.cdx = installed_sbom()
+        if args.cdx is None:
+            print("scan-sbom: no installed Collabora Office with an SBOM found",
+                  file=sys.stderr)
+            sys.exit(2)
+        print("scanning " + args.cdx)
+    if bool(args.cdx) == bool(args.sboms):
+        parser.error("give either SPDX documents, or --cdx, or --installed")
 
     try:
         attention = scan(args)
