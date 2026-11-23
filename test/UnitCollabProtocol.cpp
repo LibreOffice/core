@@ -1024,6 +1024,91 @@ private:
     std::shared_ptr<http::WebSocketSession> second_;
 };
 
+// Two connections of one user are told apart by their connection IDs, also when one of them
+// leaves:
+class UnitCollabConnections: public WopiTestServer {
+public:
+    UnitCollabConnections(): WopiTestServer("UnitCollabConnections"), phase_(Phase::ConnectFirst) {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
+
+    void invokeWSDTest() override {
+        switch (phase_) {
+        case Phase::ConnectFirst:
+            TRANSITION_STATE(phase_, Phase::WaitFirstAuth);
+            first_ = startCollabConnection(socketPoll(), wopiSrc(), "anything");
+            break;
+        case Phase::WaitFirstAuth:
+            if (!pollCollabMessage(first_, "user_list")) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitSecondAuth);
+            second_ = startCollabConnection(socketPoll(), wopiSrc(), "anything");
+            break;
+        case Phase::WaitSecondAuth: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(second_, "user_list");
+            if (!msg) {
+                break;
+            }
+            Poco::JSON::Array::Ptr const users = msg->getArray("users");
+            LOK_ASSERT_EQUAL(std::size_t(1), users->size());
+            firstConnection_ = users->getObject(0)->getValue<std::string>("connection");
+            TRANSITION_STATE(phase_, Phase::WaitJoined);
+            break;
+        }
+        case Phase::WaitJoined: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(first_, "user_joined");
+            if (!msg) {
+                break;
+            }
+            Poco::JSON::Object::Ptr const user = msg->getObject("user");
+            LOK_ASSERT_EQUAL(std::string("tuser"), user->getValue<std::string>("id"));
+            secondConnection_ = user->getValue<std::string>("connection");
+            LOK_ASSERT_MESSAGE(
+                "The connections are " + firstConnection_ + " and " + secondConnection_,
+                !secondConnection_.empty() && secondConnection_ != firstConnection_);
+            TRANSITION_STATE(phase_, Phase::WaitLeft);
+            second_->sendMessage(R"({"type":"bye"})");
+            second_->asyncShutdown();
+            break;
+        }
+        case Phase::WaitLeft: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(first_, "user_left");
+            if (!msg) {
+                break;
+            }
+            LOK_ASSERT_EQUAL(
+                secondConnection_,
+                msg->getObject("user")->getValue<std::string>("connection"));
+            TRANSITION_STATE(phase_, Phase::Done);
+            first_->asyncShutdown();
+            passTest("The connection that left was the second one");
+            break;
+        }
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    // The WOPISrc, followed by the test name for the request to coolwsd:
+    std::string wopiSrc() const {
+        return Uri::encode(getWopiHostURI() + "/wopi/files/2?testname=UnitCollabConnections")
+            + "&testname=UnitCollabConnections";
+    }
+
+    STATE_ENUM(
+        Phase, ConnectFirst, WaitFirstAuth, WaitSecondAuth, WaitJoined, WaitLeft, Done) phase_;
+
+    std::shared_ptr<http::WebSocketSession> first_;
+    std::shared_ptr<http::WebSocketSession> second_;
+    std::string firstConnection_;
+    std::string secondConnection_;
+};
+
 // The fetch and upload addresses carry the WOPISrc of the document, without its query:
 class UnitCollabRouting: public WopiTestServer {
 public:
@@ -1338,14 +1423,14 @@ private:
 
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [12] { new UnitCollabProtocol(),
+    return new UnitBase* [13] { new UnitCollabProtocol(),
                                 new UnitCollabCheckFileInfoTransient(),
                                 new UnitCollabUploadTimestamp(), new UnitCollabUploadConflict(),
                                 new UnitCollabUploadConflictModified(),
                                 new UnitCollabNoCleanExport(), new UnitCollabAvatar(),
-                                new UnitCollabRouting(), new UnitCollabFetchRedirect(),
-                                new UnitCollabProtocolNumber(), new UnitCollabEditorFrame(),
-                                nullptr };
+                                new UnitCollabConnections(), new UnitCollabRouting(),
+                                new UnitCollabFetchRedirect(), new UnitCollabProtocolNumber(),
+                                new UnitCollabEditorFrame(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

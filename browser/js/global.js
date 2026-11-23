@@ -3080,9 +3080,7 @@ function showWelcomeSVG() {
 	// Reuses the existing main collab socket (global.collab.ws) rather than
 	// opening a transient one.  A short-lived socket gets added to the
 	// broker's handler list on connect and removed on close, producing
-	// spurious user_joined/user_left notifications that confuse peers -
-	// e.g., a peer's collab.users filter (by userId) would drop the main
-	// socket's entry too, making them think all users left.
+	// spurious user_joined/user_left notifications that confuse peers.
 	global.collab.uploadFile = function(fileBytes, force) {
 		return new Promise(function(resolve, reject) {
 			var ws = global.collab.ws;
@@ -3159,7 +3157,7 @@ function showWelcomeSVG() {
 	};
 
 	// Track other collab users known via the collab WebSocket.
-	// Each entry: {id: string, name: string}
+	// Each entry: {id: string, name: string, connection: string}
 	global.collab.users = [];
 
 	// Handler for ongoing collab WebSocket notifications.
@@ -3204,7 +3202,7 @@ function showWelcomeSVG() {
 			global.collab.users.push(msg.user);
 		} else if (msg.type === 'user_left' && msg.user) {
 			global.collab.users = global.collab.users.filter(function(u) {
-				return u.id !== msg.user.id;
+				return u.connection !== msg.user.connection;
 			});
 		}
 

@@ -3006,7 +3006,9 @@ server -> client messages on /cool/collab/ws
     avatar registered with the
     broker, the object also carries "avatar":"<path>" pointing at the /cool/collab/avatar endpoint
     described below.  "editingActive" is true once any peer has sent {"type":"editing_started"}, or
-    a /cool/ws session that can write has joined.
+    a /cool/ws session that can write has joined.  Each <user> object also carries "connection",
+    the ID of its /cool/collab connection or /cool/ws session, which is unique within the server and
+    tells apart several connections of one user.
 
 {"type":"user_joined","user":<user>}
 {"type":"user_left","user":<user>}

@@ -237,7 +237,8 @@ void appendUserJson(std::ostringstream& oss,
                     const std::shared_ptr<CollabSocketHandler>& h)
 {
     oss << "{\"id\":\"" << JsonUtil::escapeJSONValue(h->getUserId()) << "\""
-           ",\"name\":\"" << JsonUtil::escapeJSONValue(h->getUsername()) << "\"";
+           ",\"name\":\"" << JsonUtil::escapeJSONValue(h->getUsername()) << "\""
+           ",\"connection\":\"" << JsonUtil::escapeJSONValue(h->getHandlerId()) << "\"";
     if (!h->getAvatar().empty())
     {
         std::string proxy = "/cool/collab/avatar?userId="
@@ -253,11 +254,13 @@ void appendUserJson(std::ostringstream& oss,
 /// field: we don't carry the WOPI token from the /cool/ws session
 /// over, so the cool.html renderer falls back to the default icon.
 std::string externalUserJson(const std::string& userId,
-                             const std::string& username)
+                             const std::string& username,
+                             std::string const & connection)
 {
     std::ostringstream oss;
     oss << "{\"id\":\"" << JsonUtil::escapeJSONValue(userId) << "\""
-           ",\"name\":\"" << JsonUtil::escapeJSONValue(username) << "\"";
+           ",\"name\":\"" << JsonUtil::escapeJSONValue(username) << "\""
+           ",\"connection\":\"" << JsonUtil::escapeJSONValue(connection) << "\"";
     oss << '}';
     return oss.str();
 }
@@ -290,7 +293,7 @@ std::string CollabBroker::getUserListJson(const std::shared_ptr<CollabSocketHand
             oss << ',';
         first = false;
         oss << externalUserJson(
-            ext.userId, ext.username);
+            ext.userId, ext.username, ext.connection);
     }
 
     oss << "],\"editingActive\":" << (_editingStarted ? "true" : "false")
@@ -440,8 +443,9 @@ void CollabBroker::addExternalSession(const std::string& sessionId,
                                       const std::string& username,
                                       bool canWrite)
 {
+    std::string const connection = generateHandlerId();
     const std::string userJson = externalUserJson(
-        userId, username);
+        userId, username, connection);
     const std::string joined =
         "{\"type\":\"user_joined\",\"user\":" + userJson + "}";
     const std::string editStarted = canWrite
@@ -450,7 +454,7 @@ void CollabBroker::addExternalSession(const std::string& sessionId,
 
     std::lock_guard<std::mutex> lock(_mutex);
     auto [it, inserted] = _externalSessions.emplace(
-        sessionId, ExternalSession{userId, username, canWrite});
+        sessionId, ExternalSession{userId, username, canWrite, connection});
     if (!inserted)
         return;
 
@@ -479,7 +483,7 @@ void CollabBroker::removeExternalSession(const std::string& sessionId)
         return;
 
     const std::string userJson = externalUserJson(
-        it->second.userId, it->second.username);
+        it->second.userId, it->second.username, it->second.connection);
     _externalSessions.erase(it);
 
     LOG_INF("CollabBroker [" << _docKey << "]: external session ["

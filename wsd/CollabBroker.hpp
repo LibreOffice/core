@@ -131,6 +131,7 @@ class CollabBroker : public std::enable_shared_from_this<CollabBroker>
         std::string userId;
         std::string username;
         bool canWrite;
+        std::string connection;
     };
     std::map<std::string, ExternalSession> _externalSessions;
 
