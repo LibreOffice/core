@@ -451,8 +451,6 @@ canvas/source/cairo/cairo_repainttarget.hxx
 canvas/source/cairo/cairo_sprite.hxx
 canvas/source/cairo/cairo_spritecanvashelper.cxx
 canvas/source/cairo/cairo_spritecanvashelper.hxx
-canvas/source/cairo/cairo_spritedevicehelper.cxx
-canvas/source/cairo/cairo_spritedevicehelper.hxx
 canvas/source/cairo/cairo_spritehelper.cxx
 canvas/source/cairo/cairo_spritehelper.hxx
 canvas/source/cairo/cairo_surfaceprovider.hxx

@@ -30,42 +30,40 @@
 
 namespace cairocanvas
 {
-    class SpriteCanvas;
+class SpriteCanvas;
 
-    class SpriteDeviceHelper : public DeviceHelper
-    {
-    public:
-        SpriteDeviceHelper();
+class SpriteDeviceHelper : public DeviceHelper
+{
+public:
+    SpriteDeviceHelper();
 
-        void init( vcl::Window&                   rOutputWindow,
-                   SpriteCanvas&             rSpriteCanvas,
-                   const ::basegfx::B2ISize& rSize,
-                   bool                      bFullscreen );
+    void init(vcl::Window& rOutputWindow, SpriteCanvas& rSpriteCanvas,
+              const ::basegfx::B2ISize& rSize, bool bFullscreen);
 
-        /// Dispose all internal references
-        void disposing();
+    /// Dispose all internal references
+    void disposing();
 
-        css::uno::Any isAccelerated() const;
+    css::uno::Any isAccelerated() const;
 
-        void notifySizeUpdate( const css::awt::Rectangle& rBounds );
-        void setSize( const ::basegfx::B2ISize& rSize );
+    void notifySizeUpdate(const css::awt::Rectangle& rBounds);
+    void setSize(const ::basegfx::B2ISize& rSize);
 
-        const ::cairo::SurfaceSharedPtr& getBufferSurface() const { return mpBufferSurface; }
-        ::cairo::SurfaceSharedPtr const & getWindowSurface() const;
-        ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, int aContent );
-        ::cairo::SurfaceSharedPtr createSurface( BitmapSystemData const & rData, const Size& rSize );
-        const ::basegfx::B2ISize& getSizePixel() const { return maSize; }
-        void flush();
+    const ::cairo::SurfaceSharedPtr& getBufferSurface() const { return mpBufferSurface; }
+    ::cairo::SurfaceSharedPtr const& getWindowSurface() const;
+    ::cairo::SurfaceSharedPtr createSurface(const ::basegfx::B2ISize& rSize, int aContent);
+    ::cairo::SurfaceSharedPtr createSurface(BitmapSystemData const& rData, const Size& rSize);
+    const ::basegfx::B2ISize& getSizePixel() const { return maSize; }
+    void flush();
 
-    private:
-        /// Pointer to sprite canvas (owner of this helper), needed to create bitmaps
-        SpriteCanvas*             mpSpriteCanvas;
+private:
+    /// Pointer to sprite canvas (owner of this helper), needed to create bitmaps
+    SpriteCanvas* mpSpriteCanvas;
 
-        ::cairo::SurfaceSharedPtr mpBufferSurface;
+    ::cairo::SurfaceSharedPtr mpBufferSurface;
 
-        ::basegfx::B2ISize        maSize;
-        bool                      mbFullScreen;
-    };
+    ::basegfx::B2ISize maSize;
+    bool mbFullScreen;
+};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

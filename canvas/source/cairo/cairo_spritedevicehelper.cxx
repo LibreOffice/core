@@ -32,97 +32,87 @@ using namespace ::com::sun::star;
 
 namespace cairocanvas
 {
+SpriteDeviceHelper::SpriteDeviceHelper()
+    : mpSpriteCanvas(nullptr)
+    , mbFullScreen(false)
+{
+}
 
-    SpriteDeviceHelper::SpriteDeviceHelper() :
-        mpSpriteCanvas( nullptr ),
-        mbFullScreen( false )
-    {}
+void SpriteDeviceHelper::init(vcl::Window& rOutputWindow, SpriteCanvas& rSpriteCanvas,
+                              const ::basegfx::B2ISize& rSize, bool bFullscreen)
+{
+    DeviceHelper::init(rSpriteCanvas, *rOutputWindow.GetOutDev());
 
-    void SpriteDeviceHelper::init( vcl::Window&                   rOutputWindow,
-                                   SpriteCanvas&             rSpriteCanvas,
-                                   const ::basegfx::B2ISize& rSize,
-                                   bool                      bFullscreen )
-    {
-        DeviceHelper::init(rSpriteCanvas,
-                           *rOutputWindow.GetOutDev());
+    mpSpriteCanvas = &rSpriteCanvas;
+    mbFullScreen = bFullscreen;
 
-        mpSpriteCanvas = &rSpriteCanvas;
-        mbFullScreen = bFullscreen;
+    setSize(rSize);
+}
 
-        setSize( rSize );
-    }
+void SpriteDeviceHelper::disposing()
+{
+    // release all references
+    mpBufferSurface.reset();
+    mpSpriteCanvas = nullptr;
+}
 
-    void SpriteDeviceHelper::disposing()
-    {
-        // release all references
+uno::Any SpriteDeviceHelper::isAccelerated() const { return css::uno::Any(true); }
+
+void SpriteDeviceHelper::setSize(const ::basegfx::B2ISize& rSize)
+{
+    SAL_INFO("canvas.cairo", "device size " << rSize.getWidth() << " x " << rSize.getHeight());
+
+    if (!mpSpriteCanvas)
+        return; // disposed
+
+    DeviceHelper::setSize(rSize);
+
+    if (mpBufferSurface && maSize != rSize)
         mpBufferSurface.reset();
-        mpSpriteCanvas = nullptr;
-    }
+    if (!mpBufferSurface)
+        mpBufferSurface = getWindowSurface()->getSimilar(CAIRO_CONTENT_COLOR, rSize.getWidth(),
+                                                         rSize.getHeight());
 
-    uno::Any SpriteDeviceHelper::isAccelerated() const
-    {
-        return css::uno::Any(true);
-    }
+    if (maSize != rSize)
+        maSize = rSize;
 
-    void SpriteDeviceHelper::setSize( const ::basegfx::B2ISize& rSize )
-    {
-        SAL_INFO(
-            "canvas.cairo",
-            "device size " << rSize.getWidth() << " x " << rSize.getHeight());
+    mpSpriteCanvas->setSizePixel(maSize);
+}
 
-        if( !mpSpriteCanvas )
-            return; // disposed
+void SpriteDeviceHelper::notifySizeUpdate(const awt::Rectangle& rBounds)
+{
+    setSize(::basegfx::B2ISize(rBounds.Width, rBounds.Height));
+}
 
-        DeviceHelper::setSize(rSize);
+SurfaceSharedPtr const& SpriteDeviceHelper::getWindowSurface() const
+{
+    return DeviceHelper::getSurface();
+}
 
-        if( mpBufferSurface && maSize != rSize )
-            mpBufferSurface.reset();
-        if( !mpBufferSurface )
-            mpBufferSurface = getWindowSurface()->getSimilar(
-                CAIRO_CONTENT_COLOR,
-                rSize.getWidth(), rSize.getHeight() );
+SurfaceSharedPtr SpriteDeviceHelper::createSurface(const ::basegfx::B2ISize& rSize, int aContent)
+{
+    if (mpBufferSurface)
+        return mpBufferSurface->getSimilar(aContent, rSize.getWidth(), rSize.getHeight());
 
-        if( maSize != rSize )
-            maSize = rSize;
+    return SurfaceSharedPtr();
+}
 
-        mpSpriteCanvas->setSizePixel( maSize );
-    }
+SurfaceSharedPtr SpriteDeviceHelper::createSurface(BitmapSystemData const&, const Size&)
+{
+    return SurfaceSharedPtr();
+}
 
-
-    void SpriteDeviceHelper::notifySizeUpdate( const awt::Rectangle& rBounds )
-    {
-        setSize( ::basegfx::B2ISize(rBounds.Width, rBounds.Height) );
-    }
-
-    SurfaceSharedPtr const & SpriteDeviceHelper::getWindowSurface() const
-    {
-        return DeviceHelper::getSurface();
-    }
-
-    SurfaceSharedPtr SpriteDeviceHelper::createSurface( const ::basegfx::B2ISize& rSize, int aContent )
-    {
-        if( mpBufferSurface )
-            return mpBufferSurface->getSimilar( aContent, rSize.getWidth(), rSize.getHeight() );
-
-        return SurfaceSharedPtr();
-    }
-
-    SurfaceSharedPtr SpriteDeviceHelper::createSurface(BitmapSystemData const&, const Size&)
-    {
-        return SurfaceSharedPtr();
-    }
-
-    /** SpriteDeviceHelper::flush  Flush the platform native window
-     *
-     * Flushes the window by using the internally stored mpSysData.
-     *
-     **/
-    void SpriteDeviceHelper::flush()
-    {
-        SurfaceSharedPtr pWinSurface=getWindowSurface();
-        if( pWinSurface )
-            pWinSurface->flush();
-    }
+/** SpriteDeviceHelper::flush  Flush the platform native window
+ *
+ * Flushes the window by using the internally stored mpSysData.
+ *
+ **/
+void SpriteDeviceHelper::flush()
+{
+    SurfaceSharedPtr pWinSurface = getWindowSurface();
+    if (pWinSurface)
+        pWinSurface->flush();
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
