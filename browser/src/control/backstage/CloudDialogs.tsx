@@ -123,7 +123,13 @@ namespace BackstageTemplates {
 
     const submit = (e: Event) => {
       e.preventDefault();
-      const domain = domainInput.value.trim();
+      let domain = domainInput.value.trim();
+      // An address without a scheme, such as "localhost:8080", gets https:// in front:
+      if (domain && !/^[a-z][a-z0-9+.-]*:\/\//i.test(domain)) {
+        domain = 'https://' + domain;
+        domainInput.value = domain;
+      }
+
       const name = nameInput.value.trim();
       if (!domain) {
         domainInput.focus();

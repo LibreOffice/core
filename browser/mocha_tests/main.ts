@@ -146,4 +146,5 @@
 /// <reference path="./NotebookbarTitleCase.test.ts" />
 /// <reference path="./DocPartChanged.test.ts" />
 /// <reference path="./AdminVersionInfo.test.ts" />
+/// <reference path="./CloudDialogs.test.ts" />
 // NOTE: reference new tests here ...
