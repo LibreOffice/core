@@ -440,7 +440,7 @@ std::unique_ptr<SalMenu> QtInstance::CreateMenu(bool bMenuBar, Menu* pVCLMenu)
 
 std::unique_ptr<SalMenuItem> QtInstance::CreateMenuItem(const SalItemParams& rItemData)
 {
-    return std::unique_ptr<SalMenuItem>(new QtMenuItem(&rItemData));
+    return std::unique_ptr<SalMenuItem>(new QtMenuItem(rItemData));
 }
 
 SalTimer* QtInstance::CreateSalTimer()

@@ -128,7 +128,7 @@ private slots:
 class QtMenuItem : public SalMenuItem
 {
 public:
-    QtMenuItem(const SalItemParams*);
+    QtMenuItem(const SalItemParams& rItemData);
 
     QAction* getAction() const;
 

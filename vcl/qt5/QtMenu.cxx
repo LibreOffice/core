@@ -1022,14 +1022,14 @@ QtMenu::~QtMenu()
     GetQtInstance().RunInMainThread([&] { mpOwnedQMenu.reset(); });
 }
 
-QtMenuItem::QtMenuItem(const SalItemParams* pItemData)
+QtMenuItem::QtMenuItem(const SalItemParams& rItemData)
     : mpParentMenu(nullptr)
     , mpSubMenu(nullptr)
-    , mnId(pItemData->nId)
-    , mnType(pItemData->eType)
+    , mnId(rItemData.nId)
+    , mnType(rItemData.eType)
     , mbVisible(true)
     , mbEnabled(true)
-    , maImage(pItemData->aImage)
+    , maImage(rItemData.aImage)
 {
 }
 
