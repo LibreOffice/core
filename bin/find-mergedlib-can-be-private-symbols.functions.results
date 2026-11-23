@@ -1787,7 +1787,6 @@ OutlinerView::Indent(short)
 OutputDevice::AddFontSubstitute(rtl::OUString const&, rtl::OUString const&, AddFontSubstituteFlags)
 OutputDevice::AddHatchActions(tools::PolyPolygon const&, Hatch const&, GDIMetaFile&)
 OutputDevice::BeginFontSubstitution()
-OutputDevice::CreateBitmapSurface(BitmapSystemData const&, Size const&) const
 OutputDevice::CreateSurface(int, int, int, int) const
 OutputDevice::CreateSurface(std::shared_ptr<_cairo_surface> const&) const
 OutputDevice::CreateUnoGraphicsList()

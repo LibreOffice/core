@@ -289,14 +289,6 @@ cairo::SurfaceSharedPtr OutputDevice::CreateSurface(int x, int y, int width, int
     return mpGraphics->CreateSurface(*this, x, y, width, height);
 }
 
-cairo::SurfaceSharedPtr OutputDevice::CreateBitmapSurface(const BitmapSystemData& rData, const Size& rSize) const
-{
-    if (!mpGraphics && !AcquireGraphics())
-        return cairo::SurfaceSharedPtr();
-    assert(mpGraphics);
-    return mpGraphics->CreateBitmapSurface(*this, rData, rSize);
-}
-
 css::uno::Any OutputDevice::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const
 {
     if (!mpGraphics && !AcquireGraphics())

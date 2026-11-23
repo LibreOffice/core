@@ -880,12 +880,6 @@ cairo::SurfaceSharedPtr SalGraphics::CreateSurface(const OutputDevice&, int, int
     return {};
 }
 
-cairo::SurfaceSharedPtr SalGraphics::CreateBitmapSurface(const OutputDevice&,
-                                                         const BitmapSystemData&, const Size&) const
-{
-    return {};
-}
-
 css::uno::Any SalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr&,
                                                   const basegfx::B2ISize&) const
 {

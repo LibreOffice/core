@@ -405,10 +405,6 @@ public:
     /// Create surface with given dimensions
     virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y,
                                                   int width, int height) const;
-    /// Create Surface for given bitmap data
-    virtual cairo::SurfaceSharedPtr CreateBitmapSurface(const OutputDevice& rRefDevice,
-                                                        const BitmapSystemData& rData,
-                                                        const Size& rSize) const;
     virtual css::uno::Any GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface,
                                                  const basegfx::B2ISize& rSize) const;
 
