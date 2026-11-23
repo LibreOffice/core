@@ -34,20 +34,6 @@
 #endif
 #include <cairo-xlib.h>
 
-std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateX11VirtualDevice(const SalGraphics& rGraphics,
-        tools::Long nDX, tools::Long nDY, DeviceFormat eFormat,
-        std::unique_ptr<X11SalGraphics> pNewGraphics, bool bAlphaMaskTransparent)
-{
-    assert(!bAlphaMaskTransparent && "TODO"); (void)bAlphaMaskTransparent;
-    assert(pNewGraphics);
-#if HAVE_FEATURE_SKIA
-    if (SkiaHelper::isVCLSkiaEnabled())
-        return std::unique_ptr<SalVirtualDevice>(new X11SkiaSalVirtualDevice(rGraphics, nDX, nDY, std::move(pNewGraphics)));
-    else
-#endif
-        return std::unique_ptr<SalVirtualDevice>(new X11SalVirtualDevice(rGraphics, nDX, nDY, eFormat, std::move(pNewGraphics)));
-}
-
 std::unique_ptr<SalVirtualDevice>
 X11SalInstance::CreateX11VirtualDevice(const SalGraphics& rGraphics, tools::Long& nDX,
                                        tools::Long& nDY, const SystemGraphicsData& rData,
@@ -65,7 +51,13 @@ X11SalInstance::CreateX11VirtualDevice(const SalGraphics& rGraphics, tools::Long
 std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateVirtualDevice(SalGraphics& rGraphics,
         tools::Long nDX, tools::Long nDY, DeviceFormat eFormat, bool bAlphaMaskTransparent)
 {
-    return CreateX11VirtualDevice(rGraphics, nDX, nDY, eFormat, std::make_unique<X11SalGraphics>(), bAlphaMaskTransparent);
+    assert(!bAlphaMaskTransparent && "TODO"); (void)bAlphaMaskTransparent;
+    std::unique_ptr<X11SalGraphics> pNewGraphics = std::make_unique<X11SalGraphics>();
+#if HAVE_FEATURE_SKIA
+    if (SkiaHelper::isVCLSkiaEnabled())
+        return std::unique_ptr<SalVirtualDevice>(new X11SkiaSalVirtualDevice(rGraphics, nDX, nDY, std::move(pNewGraphics)));
+#endif
+    return std::unique_ptr<SalVirtualDevice>(new X11SalVirtualDevice(rGraphics, nDX, nDY, eFormat, std::move(pNewGraphics)));
 }
 
 std::unique_ptr<SalVirtualDevice>
