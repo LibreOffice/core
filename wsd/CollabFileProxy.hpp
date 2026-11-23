@@ -59,7 +59,6 @@ private:
     const std::weak_ptr<StreamSocket> _socket;
     const std::string _wopiSrc;
     const std::string _accessToken;
-    std::shared_ptr<http::Session> _httpSession;
     /// The fields of the downloaded body that hold a stored secret. The lists have static
     /// storage duration.
     std::span<const std::string_view> _secretFields;
