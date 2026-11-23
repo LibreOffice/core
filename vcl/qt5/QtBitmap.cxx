@@ -166,6 +166,4 @@ void QtBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
         InvalidateChecksum();
 }
 
-bool QtBitmap::GetSystemData(BitmapSystemData& /*rData*/) { return false; }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

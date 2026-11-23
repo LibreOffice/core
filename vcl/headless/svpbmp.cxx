@@ -230,9 +230,4 @@ void SvpSalBitmap::ReleaseBuffer(BitmapBuffer*, BitmapAccessMode nMode)
         InvalidateChecksum();
 }
 
-bool SvpSalBitmap::GetSystemData( BitmapSystemData& )
-{
-    return false;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

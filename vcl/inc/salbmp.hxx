@@ -75,7 +75,7 @@ public:
 
     virtual BitmapBuffer*   AcquireBuffer( BitmapAccessMode nMode ) = 0;
     virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) = 0;
-    virtual bool            GetSystemData( BitmapSystemData& rData ) = 0;
+    virtual bool GetSystemData(BitmapSystemData& rData);
 
     virtual bool ScalingSupported() const;
     virtual bool Scale(const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag);

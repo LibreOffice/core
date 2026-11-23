@@ -56,7 +56,6 @@ public:
 
     SAL_DLLPRIVATE virtual BitmapBuffer*   AcquireBuffer( BitmapAccessMode nMode ) override;
     SAL_DLLPRIVATE virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) override;
-    SAL_DLLPRIVATE virtual bool            GetSystemData( BitmapSystemData& rData ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

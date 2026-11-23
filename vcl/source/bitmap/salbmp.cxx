@@ -97,6 +97,8 @@ bool SalBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>&
     return false;
 }
 
+bool SalBitmap::GetSystemData(BitmapSystemData&) { return false; }
+
 bool SalBitmap::ScalingSupported() const { return false; }
 
 bool SalBitmap::Scale(const double&, const double&, BmpScaleFlag) { return false; }

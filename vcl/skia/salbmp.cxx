@@ -344,14 +344,6 @@ void SkiaSalBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
     delete pBuffer;
 }
 
-bool SkiaSalBitmap::GetSystemData(BitmapSystemData&)
-{
-#ifdef DBG_UTIL
-    assert(mWriteAccessCount == 0);
-#endif
-    return false;
-}
-
 bool SkiaSalBitmap::ScalingSupported() const { return true; }
 
 bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag)
