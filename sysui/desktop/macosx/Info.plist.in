@@ -2008,6 +2008,11 @@
     <array>
         <string>MacOSX</string>
     </array>
+    <key>LSEnvironment</key>
+    <dict>
+        <key>PYTHONDONTWRITEBYTECODE</key>
+        <string>1</string>
+    </dict>
 </dict>
 </plist>
 <!-- vim:set shiftwidth=4 softtabstop=4 expandtab: -->

@@ -299,12 +299,16 @@ sub copy_one_file
     if ( -l $source ) {
         $copyreturn = symlink(readlink("$source"), "$dest");
     }
-    elsif (-d $source && is_empty_dir($source)) {
-        my $mode = (stat($source))[2] & 07777;
+    elsif (-d _ && is_empty_dir($source)) {
+        my $mode = (stat _)[2] & 07777;
         $copyreturn = mkdir($dest, $mode);
     }
     else {
         $copyreturn = copy($source, $dest);
+        # tdf#174182 preserve mtime (use it for atime as well) so that e.g. pyc files don't get
+        # invalidated – using the extra utime call is faster than forking a system("cp -p", ...)
+        my $mtime = (stat _)[9];
+        utime($mtime,$mtime,$dest);
     }
 
     if ($copyreturn)
@@ -325,8 +329,9 @@ sub copy_one_file
     }
 
     # taking care of file attributes
-    if ($installer::globals::iswin && -f $dest) {
-        my $mode = -x $source ? 0775 : 0664;
+    if ($installer::globals::iswin) {
+        my $mode = -x _ ? 0775 : 0664;
+        return $returnvalue unless -f $dest;
         my $mode_str = sprintf("%o", $mode);
         my $chmodreturn = chmod($mode, $dest);
         if ($chmodreturn)

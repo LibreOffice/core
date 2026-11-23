@@ -375,7 +375,7 @@ install-strip:
 	@$(call gb_Top_InstallFinished,Installation,$(INSTALLDIR))
 endif # !MACOSX
 
-test-install: build
+test-install: build | $(call gb_Helper_optional,PYTHON,python_compileall)
 	@rm -rf $(TESTINSTALLDIR)
 	@mkdir -p $(TESTINSTALLDIR)
 ifeq ($(OS_FOR_BUILD),WNT)
