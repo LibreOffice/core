@@ -55,8 +55,10 @@ public:
     static std::unique_ptr<SalVirtualDevice> CreateX11VirtualDevice(const SalGraphics& rGraphics, tools::Long nDX, tools::Long nDY,
             DeviceFormat eFormat, std::unique_ptr<X11SalGraphics> pNewGraphics,
             bool bAlphaMaskTransparent);
-    static std::unique_ptr<SalVirtualDevice> CreateX11VirtualDevice(const SalGraphics& rGraphics, tools::Long &nDX, tools::Long &nDY,
-            DeviceFormat eFormat, const SystemGraphicsData& rData, std::unique_ptr<X11SalGraphics> pNewGraphics);
+    static std::unique_ptr<SalVirtualDevice>
+    CreateX11VirtualDevice(const SalGraphics& rGraphics, tools::Long& nDX, tools::Long& nDY,
+                           const SystemGraphicsData& rData,
+                           std::unique_ptr<X11SalGraphics> pNewGraphics);
 
     virtual std::unique_ptr<SalVirtualDevice>
                                 CreateVirtualDevice( SalGraphics& rGraphics,

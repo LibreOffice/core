@@ -48,9 +48,10 @@ std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateX11VirtualDevice(const S
         return std::unique_ptr<SalVirtualDevice>(new X11SalVirtualDevice(rGraphics, nDX, nDY, eFormat, std::move(pNewGraphics)));
 }
 
-std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateX11VirtualDevice(
-    const SalGraphics& rGraphics, tools::Long& nDX, tools::Long& nDY, DeviceFormat,
-    const SystemGraphicsData& rData, std::unique_ptr<X11SalGraphics> pNewGraphics)
+std::unique_ptr<SalVirtualDevice>
+X11SalInstance::CreateX11VirtualDevice(const SalGraphics& rGraphics, tools::Long& nDX,
+                                       tools::Long& nDY, const SystemGraphicsData& rData,
+                                       std::unique_ptr<X11SalGraphics> pNewGraphics)
 {
     assert(pNewGraphics);
 #if HAVE_FEATURE_SKIA
@@ -67,10 +68,11 @@ std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateVirtualDevice(SalGraphic
     return CreateX11VirtualDevice(rGraphics, nDX, nDY, eFormat, std::make_unique<X11SalGraphics>(), bAlphaMaskTransparent);
 }
 
-std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateVirtualDevice(SalGraphics& rGraphics,
-        tools::Long &nDX, tools::Long &nDY, DeviceFormat eFormat, const SystemGraphicsData& rData)
+std::unique_ptr<SalVirtualDevice>
+X11SalInstance::CreateVirtualDevice(SalGraphics& rGraphics, tools::Long& nDX, tools::Long& nDY,
+                                    DeviceFormat, const SystemGraphicsData& rData)
 {
-    return CreateX11VirtualDevice(rGraphics, nDX, nDY, eFormat, rData, std::make_unique<X11SalGraphics>());
+    return CreateX11VirtualDevice(rGraphics, nDX, nDY, rData, std::make_unique<X11SalGraphics>());
 }
 
 void X11SalGraphics::Init(X11SalVirtualDevice *pDevice, SalColormap* pColormap, bool bDeleteColormap, bool bAlphaMaskTransparent)
