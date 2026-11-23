@@ -19,6 +19,7 @@
 #include <common/DraftStore.hpp>
 #include <qt/RemoteOpen.hpp>
 #include <qt/DocumentOperations.hpp>
+#include <qt/QtFilePicker.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <net/FakeSocket.hpp>
 #include <common/FailurePage.hpp>
@@ -677,8 +678,8 @@ void Bridge::promptSaveLocation(std::function<void(const std::string&, const std
     // Build file filter string with all available formats
     QStringList nameFilters;
     for (const auto& fmt : formats)
-        nameFilters << fmt.displayName + QStringLiteral(" (*.") + fmt.extension +
-                           QStringLiteral(")");
+        nameFilters << caseInsensitiveNameFilter(fmt.displayName + QStringLiteral(" (*.") +
+                                                 fmt.extension + QStringLiteral(")"));
 
     // Under flatpak the file picker is the xdg-desktop-portal FileChooser,
     // which exports the chosen file to the document portal under the exact
@@ -706,6 +707,7 @@ void Bridge::promptSaveLocation(std::function<void(const std::string&, const std
 
     dialog->setAcceptMode(QFileDialog::AcceptSave);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->setOption(QFileDialog::HideNameFilterDetails);
 
     // setDirectory passes the folder to the portal as it is, and the portal opens it even when
     // the sandbox cannot see it.
@@ -1430,8 +1432,9 @@ QVariant Bridge::cool(const QString& messageStr)
             patterns << QStringLiteral("*.") + QString::fromStdString(extension);
 
         QFileDialog dialog(_webView, QObject::tr("Add Template"), QString(),
-                           QObject::tr("Templates and documents") + " (" + patterns.join(' ') +
-                               ")");
+                           caseInsensitiveNameFilter(QObject::tr("Templates and documents") + " (" +
+                                                     patterns.join(' ') + ")"));
+        dialog.setOption(QFileDialog::HideNameFilterDetails);
         dialog.setFileMode(QFileDialog::ExistingFile);
         if (dialog.exec() != QDialog::Accepted || dialog.selectedFiles().isEmpty())
             return {};
@@ -1519,14 +1522,19 @@ QVariant Bridge::cool(const QString& messageStr)
     }
     else if (message == "uno .uno:Open")
     {
-        QFileDialog* dialog =
-            new QFileDialog(_webView, QObject::tr("Open File"), QString(),
-                            QObject::tr("All Files (*);;"
-                                        "Text Documents (*.odt *.ott *.doc *.docx *.rtf *.txt);;"
-                                        "Spreadsheets (*.ods *.ots *.xls *.xlsx *.csv);;"
-                                        "Presentations (*.odp *.otp *.ppt *.pptx);;"
-                                        "PDF Documents (*.pdf)"));
+        QStringList nameFilters;
+        for (const QString& filter :
+             QObject::tr("All Files (*);;"
+                         "Text Documents (*.odt *.ott *.doc *.docx *.rtf *.txt);;"
+                         "Spreadsheets (*.ods *.ots *.xls *.xlsx *.csv);;"
+                         "Presentations (*.odp *.otp *.ppt *.pptx);;"
+                         "PDF Documents (*.pdf)")
+                 .split(QStringLiteral(";;")))
+            nameFilters << caseInsensitiveNameFilter(filter);
 
+        QFileDialog* dialog = new QFileDialog(_webView, QObject::tr("Open File"));
+        dialog->setNameFilters(nameFilters);
+        dialog->setOption(QFileDialog::HideNameFilterDetails);
         dialog->setFileMode(QFileDialog::ExistingFiles);
         dialog->setAttribute(Qt::WA_DeleteOnClose);
 

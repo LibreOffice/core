@@ -7,7 +7,14 @@
 
 #pragma once
 
+#include <QString>
+
 struct COKit;
+
+// The name filter for a file dialog with each letter in its patterns matching both cases, so
+// "Text Documents (*.odt)" becomes "Text Documents (*.[oO][dD][tT])". The native file dialogs on
+// Linux compare file names with the patterns case-sensitively.
+QString caseInsensitiveNameFilter(const QString& filter);
 
 // Install the process-global file picker provider, so a command that needs the user to
 // pick a file opens a QFileDialog instead of the engine's file dialog. Called once,

@@ -18,6 +18,37 @@
 #include <QStringList>
 #include <QUrl>
 
+QString caseInsensitiveNameFilter(const QString& filter)
+{
+    const qsizetype open = filter.lastIndexOf(QLatin1Char('('));
+    if (open < 0 || !filter.endsWith(QLatin1Char(')')))
+        return filter;
+
+    QString result = filter.left(open + 1);
+    bool inBrackets = false;
+    for (qsizetype i = open + 1; i < filter.size() - 1; ++i)
+    {
+        const QChar c = filter[i];
+        // A bracket expression that the pattern already has stays as it is.
+        if (c == QLatin1Char('['))
+            inBrackets = true;
+        else if (c == QLatin1Char(']'))
+            inBrackets = false;
+
+        if (!inBrackets && c.toLower() != c.toUpper())
+        {
+            result += QLatin1Char('[');
+            result += c.toLower();
+            result += c.toUpper();
+            result += QLatin1Char(']');
+        }
+        else
+            result += c;
+    }
+    result += QLatin1Char(')');
+    return result;
+}
+
 // "Name (*.png *.jpg)" is the QFileDialog form of one name filter.
 static QStringList toNameFilters(const COKitFilePickerFilter* pFilters, size_t nFilters)
 {
@@ -35,7 +66,7 @@ static QStringList toNameFilters(const COKitFilePickerFilter* pFilters, size_t n
         if (name.isEmpty())
             name = QObject::tr("Supported files");
 
-        nameFilters << name + " (" + wildcards + ")";
+        nameFilters << caseInsensitiveNameFilter(name + " (" + wildcards + ")");
     }
     return nameFilters;
 }
