@@ -1191,7 +1191,7 @@ sbom-check:
 # the build or 'make check'.
 sbom-audit: collabora-online-sbom.spdx.json
 	$(PYTHON) $(abs_top_srcdir)/scripts/audit-sbom-cpes.py \
-		$(ENGINE_BUILDDIR)/workdir/CustomTarget/instsetoo_native/sbom/*.json \
+		$(ENGINE_BUILDDIR)/workdir/CustomTarget/instsetoo_native/sbom/*-sbom.spdx.json \
 		$(abs_top_builddir)/collabora-online-sbom.spdx.json
 
 # Report bundled components that are behind their latest upstream release.
@@ -1200,7 +1200,7 @@ sbom-audit: collabora-online-sbom.spdx.json
 # network access.
 sbom-freshness: collabora-online-sbom.spdx.json
 	$(PYTHON) $(abs_top_srcdir)/scripts/check-external-freshness.py \
-		$(ENGINE_BUILDDIR)/workdir/CustomTarget/instsetoo_native/sbom/*.json \
+		$(ENGINE_BUILDDIR)/workdir/CustomTarget/instsetoo_native/sbom/*-sbom.spdx.json \
 		$(abs_top_builddir)/collabora-online-sbom.spdx.json
 
 # Scan the SBOMs with grype (and trivy, if installed) and read the findings
@@ -1213,7 +1213,7 @@ sbom-scan: collabora-online-sbom.spdx.json
 		--out-dir $(abs_top_builddir)/sbom-scan \
 		--product-version $(PACKAGE_VERSION) \
 		$(if $(filter 1,$(SBOM_SCAN_REQUIRE_TRIVY)),--require-trivy) \
-		$(ENGINE_BUILDDIR)/workdir/CustomTarget/instsetoo_native/sbom/*.json \
+		$(ENGINE_BUILDDIR)/workdir/CustomTarget/instsetoo_native/sbom/*-sbom.spdx.json \
 		$(abs_top_builddir)/collabora-online-sbom.spdx.json
 
 .PHONY: cleanup setup-wsd systemplate sbom-check sbom-audit sbom-freshness sbom-scan

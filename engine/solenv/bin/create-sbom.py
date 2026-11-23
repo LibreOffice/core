@@ -1678,12 +1678,13 @@ def gen_product(ziplist, packinfos, install_script, languages, externalsfile,
     externalpackagestaticlink = read_external_staticlink(externalpackagestaticfile)
     assign_externals(files_by_package, externalfiles)
     files = locate_files(files_by_package, ziplist, product, filelistdirs)
+    installed = {file["instpath"]: gid for gid in files for file in files[gid]}
     externals_by_package = filter_files(files)
     add_dependencies(files, files_extra_deps)
     add_static_dependencies(files, externalstaticlink, False)
     add_static_dependencies(files, externalpackagestaticlink, True)
     add_merge_module(files, externals_by_package, install_script)
-    return (files, externals_by_package)
+    return (files, externals_by_package, installed)
 
 
 if __name__ == "__main__":
@@ -1709,7 +1710,7 @@ if __name__ == "__main__":
         externalstaticfile = sys.argv[12]
         externalpackagestaticfile = sys.argv[13]
 
-        (files_product, externals_product) = gen_product(
+        (files_product, externals_product, installed_product) = gen_product(
             ziplist, packinfos, install_script, languages,
             externalsfile, externalstaticfile, externalpackagestaticfile,
             productname, filelistdirs)
@@ -1725,5 +1726,16 @@ if __name__ == "__main__":
             filepath = os.path.join(sbom_path, filename)
             with open(filepath, "w", encoding="utf-8") as file:
                 json.dump(data[3], file, indent=2)
+
+        # Every installed file, also those the documents leave out (only
+        # executables and archives are listed), with the package it is in:
+        # products that ship instdir by other means than the installer
+        # check against it that their SBOM describes all of their files
+        package_by_gid = {data[0]: package for package, data in sbom_data.items()}
+        with open(os.path.join(sbom_path, "installed-files.json"), "w",
+                  encoding="utf-8") as file:
+            json.dump({instpath: package_by_gid[gid]
+                       for instpath, gid in sorted(installed_product.items())},
+                      file, indent=1)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
