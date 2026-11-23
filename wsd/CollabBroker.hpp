@@ -267,10 +267,10 @@ std::string createCollabFetchRequest(const std::string& streamUrl,
 /// Find an existing CollabBroker by docKey (returns nullptr if not found or empty)
 std::shared_ptr<CollabBroker> findCollabBroker(const std::string& docKey);
 
-/// Find an existing CollabBroker by its WOPI source URL.
-/// Returns nullptr if none exists for the URL.
-std::shared_ptr<CollabBroker>
-findCollabBrokerByWopiSrc(const std::string& wopiSrc);
+// The query parameters, each starting with "&", that a /cool/collab address of the document with
+// that WOPISrc carries, so that a load balancer that routes by WOPISrc sends it to the server of
+// the document (the WOPISrc without its own query, as for the clipboard address):
+std::string collabRoutingParameters(std::string const & wopiSrc);
 
 /// Look up and consume a fetch request by token.
 /// Returns true if found and valid, fills in the request details.

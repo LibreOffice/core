@@ -953,6 +953,147 @@ private:
     std::shared_ptr<http::WebSocketSession> collabWs_;
 };
 
+// The avatar of a user who joins reaches the other users as an address under /cool/collab/avatar
+// that carries the WOPISrc of the document, and that address answers with the avatar:
+class UnitCollabAvatar: public WopiTestServer {
+public:
+    UnitCollabAvatar(): WopiTestServer("UnitCollabAvatar"), phase_(Phase::ConnectFirst) {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
+
+    void configCheckFileInfo(
+        Poco::Net::HTTPRequest const &, Poco::JSON::Object::Ptr & fileInfo) override
+    {
+        Poco::JSON::Object::Ptr extra = new Poco::JSON::Object();
+        extra->set("avatar", getWopiHostURI() + "/wopi/files/0/contents?testname=UnitCollabAvatar");
+        fileInfo->set("UserExtraInfo", extra);
+    }
+
+    void invokeWSDTest() override {
+        switch (phase_) {
+        case Phase::ConnectFirst:
+            TRANSITION_STATE(phase_, Phase::WaitFirstAuth);
+            first_ = startCollabConnection(socketPoll(), wopiSrc(), "anything");
+            break;
+        case Phase::WaitFirstAuth:
+            if (!pollCollabMessage(first_, "user_list")) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitJoined);
+            second_ = startCollabConnection(socketPoll(), wopiSrc(), "anything");
+            break;
+        case Phase::WaitJoined: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(first_, "user_joined");
+            if (!msg) {
+                break;
+            }
+            std::string const avatar
+                = msg->getObject("user")->getValue<std::string>("avatar");
+            LOK_ASSERT_MESSAGE(
+                "The avatar is at " + avatar,
+                avatar.starts_with("/cool/collab/avatar?")
+                    && avatar.ends_with(
+                        "&WOPISrc=" + Uri::encode(getWopiHostURI() + "/wopi/files/0")));
+            std::shared_ptr<http::Response const> const response
+                = http::get(helpers::getTestServerURI(), avatar + "&testname=UnitCollabAvatar");
+            LOK_ASSERT_EQUAL(http::StatusCode::OK, response->statusLine().statusCode());
+            LOK_ASSERT_EQUAL(getFileContent(), response->getBody());
+            TRANSITION_STATE(phase_, Phase::Done);
+            first_->asyncShutdown();
+            second_->asyncShutdown();
+            passTest("The avatar of a user who joined loaded from its address");
+            break;
+        }
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    std::string wopiSrc() const {
+        return Uri::encode(
+            getWopiHostURI() + "/wopi/files/0?access_token=anything&testname=UnitCollabAvatar");
+    }
+
+    STATE_ENUM(Phase, ConnectFirst, WaitFirstAuth, WaitJoined, Done) phase_;
+
+    std::shared_ptr<http::WebSocketSession> first_;
+    std::shared_ptr<http::WebSocketSession> second_;
+};
+
+// The fetch and upload addresses carry the WOPISrc of the document, without its query:
+class UnitCollabRouting: public WopiTestServer {
+public:
+    UnitCollabRouting(): WopiTestServer("UnitCollabRouting"), phase_(Phase::Connect) {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
+
+    void invokeWSDTest() override {
+        switch (phase_) {
+        case Phase::Connect:
+            TRANSITION_STATE(phase_, Phase::WaitAuth);
+            collabWs_ = startCollabConnection(
+                socketPoll(),
+                Uri::encode(
+                    getWopiHostURI()
+                    + "/wopi/files/0?access_token=anything&testname=UnitCollabRouting"),
+                "anything");
+            break;
+        case Phase::WaitAuth:
+            if (!pollCollabMessage(collabWs_, "user_list")) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitFetchUrl);
+            collabWs_->sendMessage(R"({"type":"fetch","stream":"contents","requestId":"f1"})");
+            break;
+        case Phase::WaitFetchUrl: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "fetch_url");
+            if (!msg) {
+                break;
+            }
+            std::string const url = msg->getValue<std::string>("url");
+            LOK_ASSERT_MESSAGE(
+                "The fetch address is " + url,
+                url.starts_with("/cool/collab/fetch?")
+                    && url.ends_with(
+                        "&WOPISrc=" + Uri::encode(getWopiHostURI() + "/wopi/files/0")));
+            TRANSITION_STATE(phase_, Phase::WaitUploadUrl);
+            collabWs_->sendMessage(R"({"type":"upload","stream":"contents","requestId":"u1"})");
+            break;
+        }
+        case Phase::WaitUploadUrl: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "upload_url");
+            if (!msg) {
+                break;
+            }
+            std::string const url = msg->getValue<std::string>("url");
+            LOK_ASSERT_MESSAGE(
+                "The upload address is " + url,
+                url.starts_with("/cool/collab/put?")
+                    && url.ends_with(
+                        "&WOPISrc=" + Uri::encode(getWopiHostURI() + "/wopi/files/0")));
+            TRANSITION_STATE(phase_, Phase::Done);
+            collabWs_->asyncShutdown();
+            passTest("The fetch and upload addresses carry the WOPISrc of the document");
+            break;
+        }
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    STATE_ENUM(Phase, Connect, WaitAuth, WaitFetchUrl, WaitUploadUrl, Done) phase_;
+
+    std::shared_ptr<http::WebSocketSession> collabWs_;
+};
+
 // A fetch of the document from a FileUrl that the host redirects delivers the document:
 class UnitCollabFetchRedirect: public WopiTestServer {
 public:
@@ -1197,11 +1338,12 @@ private:
 
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [10] { new UnitCollabProtocol(),
+    return new UnitBase* [12] { new UnitCollabProtocol(),
                                 new UnitCollabCheckFileInfoTransient(),
                                 new UnitCollabUploadTimestamp(), new UnitCollabUploadConflict(),
                                 new UnitCollabUploadConflictModified(),
-                                new UnitCollabNoCleanExport(), new UnitCollabFetchRedirect(),
+                                new UnitCollabNoCleanExport(), new UnitCollabAvatar(),
+                                new UnitCollabRouting(), new UnitCollabFetchRedirect(),
                                 new UnitCollabProtocolNumber(), new UnitCollabEditorFrame(),
                                 nullptr };
 }

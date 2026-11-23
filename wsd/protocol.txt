@@ -3029,7 +3029,8 @@ server -> client messages on /cool/collab/ws
 {"type":"fetch_url","stream":"<name>","requestId":"<id>","url":"<url>",...}
 
     Reply to a client-sent {"type":"fetch"}: the one-shot URL that the client can GET to download
-    the bytes of the stream, as a path (/cool/collab/fetch?token=<one-shot-token>, without host and
+    the bytes of the stream, as a path
+    (/cool/collab/fetch?token=<one-shot-token>&WOPISrc=<wopi-url>, without host and
     without service root).  For the "contents" stream, the reply also carries "filename":"<name>"
     with the document filename and "lastModifiedTime":"<time>" with the version in storage, when
     known, both as of the CheckFileInfo when the connection signed in.
@@ -3045,7 +3046,8 @@ server -> client messages on /cool/collab/ws
 {"type":"upload_url","stream":"contents","requestId":"<id>","url":"<url>"}
 
     Reply to a client-sent {"type":"upload"}: the one-shot URL that the client can POST the
-    modified document bytes to, as a path (/cool/collab/put?token=<one-shot-token>, without host and
+    modified document bytes to, as a path
+    (/cool/collab/put?token=<one-shot-token>&WOPISrc=<wopi-url>, without host and
     without service root).
 
 {"type":"upload_error","stream":"<name>","requestId":"<id>","error":"<text>"}
@@ -3108,7 +3110,9 @@ HTTP byte-stream endpoints under /cool/collab/
 These endpoints are reached over the same origin that serves the WebSocket.  /cool/collab/fetch and
 /cool/collab/put allow cross-origin reads (Access-Control-Allow-Origin: *, and /cool/collab/put also
 answers the OPTIONS preflight), so a CODA page on a different origin can drive them.  Their
-one-shot token is what authenticates a request.
+one-shot token is what authenticates a request.  Each of these addresses that the server hands out
+also carries the WOPISrc of the document without its query (and the server's RouteToken when it has
+one), so that a load balancer that routes by WOPISrc sends it to the server of the document.
 
 /cool/collab/fetch?token=<one-shot-token>
 
@@ -3124,7 +3128,7 @@ one-shot token is what authenticates a request.
     {"type":"upload"}.  Same one-shot token semantics and replies, plus 409 as described for
     {"type":"upload"}.  On success, the reply is 200 with the integrator's PutFile answer.
 
-/cool/collab/avatar?WOPISrc=<wopi-url>&userId=<user-id>&token=<access-token>
+/cool/collab/avatar?userId=<user-id>&token=<access-token>&WOPISrc=<wopi-url>
 
     GET.  Returns the avatar bytes for the user, fetched by the server from the URL the integrator
     supplied in WOPI's UserExtraInfo.avatar so the client never sees integrator-internal URLs.

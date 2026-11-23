@@ -226,7 +226,7 @@ void CollabSocketHandler::onCheckFileInfoFinished(CheckFileInfo& cfi)
             }
 
             // Find or create the CollabBroker for this document
-            auto broker = findOrCreateCollabBroker(_docKey, _wopiSrc);
+            auto broker = findOrCreateCollabBroker(_docKey, _wopiUri.toString());
             if (broker)
             {
                 _broker = broker;
@@ -552,7 +552,8 @@ void CollabSocketHandler::handleFetch(const std::string& stream, const std::stri
 
     // Build the download URL
     std::ostringstream downloadUrl;
-    downloadUrl << "/cool/collab/fetch?token=" << token;
+    downloadUrl << "/cool/collab/fetch?token=" << token
+                << collabRoutingParameters(_wopiUri.toString());
 
     // Send the download URL to the client
     std::ostringstream oss;
@@ -648,7 +649,10 @@ void CollabSocketHandler::handleUpload(const std::string& stream, const std::str
     oss << ",\"stream\":\"" << JsonUtil::escapeJSONValue(stream) << "\"";
     if (!requestId.empty())
         oss << ",\"requestId\":\"" << JsonUtil::escapeJSONValue(requestId) << "\"";
-    oss << ",\"url\":\"/cool/collab/put?token=" << token << "\"";
+    oss << ",\"url\":\""
+        << JsonUtil::escapeJSONValue(
+               "/cool/collab/put?token=" + token + collabRoutingParameters(_wopiUri.toString()))
+        << "\"";
     oss << "}";
 
     sendTextMessage(oss.str());

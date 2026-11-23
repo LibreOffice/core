@@ -26,6 +26,8 @@
 #include <atomic>
 #include <sstream>
 
+#include <Poco/URI.h>
+
 /// Global CollabBrokers map - keyed by docKey
 std::map<std::string, std::shared_ptr<CollabBroker>> CollabBrokers;
 std::mutex CollabBrokersMutex;
@@ -238,10 +240,9 @@ void appendUserJson(std::ostringstream& oss,
            ",\"name\":\"" << JsonUtil::escapeJSONValue(h->getUsername()) << "\"";
     if (!h->getAvatar().empty())
     {
-        std::string proxy = "/cool/collab/avatar?WOPISrc="
-            + Uri::encode(wopiSrc)
-            + "&userId=" + Uri::encode(h->getUserId())
-            + "&token=" + brokerTag;
+        std::string proxy = "/cool/collab/avatar?userId="
+            + Uri::encode(h->getUserId())
+            + "&token=" + brokerTag + collabRoutingParameters(wopiSrc);
         oss << ",\"avatar\":\""
             << JsonUtil::escapeJSONValue(proxy) << "\"";
     }
@@ -596,17 +597,15 @@ std::shared_ptr<CollabBroker> findCollabBroker(const std::string& docKey)
     return nullptr;
 }
 
-std::shared_ptr<CollabBroker>
-findCollabBrokerByWopiSrc(const std::string& wopiSrc)
-{
-    std::lock_guard<std::mutex> lock(CollabBrokersMutex);
-    for (const auto& [docKey, broker] : CollabBrokers)
-    {
-        if (broker && !broker->isEmpty()
-            && broker->getWopiSrc() == wopiSrc)
-            return broker;
+std::string collabRoutingParameters(std::string const & wopiSrc) {
+    Poco::URI uri(wopiSrc);
+    uri.setQueryParameters(Poco::URI::QueryParameters());
+    std::string parameters = "&WOPISrc=" + Uri::encode(uri.toString());
+    std::string const routeToken = COOLWSD::getRouteToken();
+    if (!routeToken.empty()) {
+        parameters += "&RouteToken=" + routeToken;
     }
-    return nullptr;
+    return parameters;
 }
 
 bool consumeCollabFetchRequest(const std::string& token, CollabFetchRequest& request)
