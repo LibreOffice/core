@@ -22,8 +22,8 @@ class Tdf148551(UITestCase):
                 select_pos(xTab, "0")
 
                 xDoc = xDialog.getChild("type-doc")
-                xDoc.getChild('7').executeAction("SELECT", tuple())
-                self.assertEqual("Statistics", get_state_as_dict(xDoc)['SelectEntryText'])
+                xDoc.getChild('1').executeAction("SELECT", tuple())
+                self.assertEqual("Count", get_state_as_dict(xDoc)['SelectEntryText'])
 
                 xSelect = xDialog.getChild("select-doc")
                 self.assertEqual("Pages", get_state_as_dict(xSelect)['SelectEntryText'])

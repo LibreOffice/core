@@ -135,10 +135,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf45048SubtypeDescription)
     pWrtShell->SttEndDoc(true);
 
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: Statistics: Pages
-    // - Actual  : Statistics
+    // - Expected: Count: Pages (previously Statistics, after tdf#108786 Count)
+    // - Actual  : Count
     // i.e. the description of the subtype ("Pages") was not included
-    CPPUNIT_ASSERT_EQUAL(u"Statistics: Pages"_ustr, aFieldMgr.GetCurField()->GetFieldName());
+    CPPUNIT_ASSERT_EQUAL(u"Count: Pages"_ustr, aFieldMgr.GetCurField()->GetFieldName());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf56126InsertConditionalFieldWithVerticalSeparator)
