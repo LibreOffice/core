@@ -666,9 +666,8 @@ SnapshotResult snapshotSync(const std::string& docPath, bool bypassMergeWindow)
     std::string fileName = stamp + '.' + extension;
     const auto exists = [&entry](const std::string& name)
     {
-        return std::any_of(entry.versions.begin(), entry.versions.end(),
-                           [&name](const VersionInfo& version)
-                           { return version.fileName == name; });
+        return std::ranges::find(entry.versions, name, &VersionInfo::fileName)
+               != entry.versions.end();
     };
     for (int counter = 1; exists(fileName) ||
                           FileUtil::Stat(versionPath(dirName, fileName)).exists();
