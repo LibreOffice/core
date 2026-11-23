@@ -134,7 +134,6 @@ struct SystemMenuData
 
 struct SystemGraphicsData
 {
-    sal_uInt32      nSize;          // size in bytes of this structure
 #if defined(_WIN32)
     HDC             hDC;            // handle to a device context
     HWND            hWnd;           // optional handle to a window
@@ -150,26 +149,22 @@ struct SystemGraphicsData
     int             nScreen;        // the current screen of the drawable
 #endif
 #if USE_HEADLESS_CODE
-    void*           pSurface;       // the cairo surface when using svp-based backends, which includes gtk[3|4]
+    void* pSurface = nullptr; // the cairo surface when using svp-based backends, which includes gtk[3|4]
 #endif
     SystemGraphicsData()
-        : nSize( sizeof( SystemGraphicsData ) )
 #if defined(_WIN32)
-        , hDC( nullptr )
+        : hDC(nullptr)
         , hWnd( nullptr )
 #elif defined( MACOSX )
-        , rCGContext( nullptr )
+        : rCGContext(nullptr)
 #elif defined( ANDROID )
     // Nothing
 #elif defined( IOS )
-        , rCGContext( NULL )
+        : rCGContext(NULL)
 #elif defined( UNX )
-        , hDrawable( 0 )
+        : hDrawable(0)
         , pVisual( nullptr )
         , nScreen( 0 )
-#endif
-#if USE_HEADLESS_CODE
-        , pSurface( nullptr )
 #endif
     { }
 };

@@ -77,7 +77,7 @@ void Canvas::initialize()
 
     const SystemGraphicsData* pSysData
         = reinterpret_cast<const SystemGraphicsData*>(aSeq.getConstArray());
-    if (!pSysData || !pSysData->nSize)
+    if (!pSysData)
         throw lang::NoSupportException(u"Passed SystemGraphicsData invalid!"_ustr);
 
     bool bHasCairo = pOutDev->SupportsCairo();

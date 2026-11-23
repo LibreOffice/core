@@ -302,8 +302,8 @@ css::uno::Any OutputDevice::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSur
 css::uno::Any OutputDevice::GetSystemGfxDataAny() const
 {
     const SystemGraphicsData aSysData = GetSystemGfxData();
-    css::uno::Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(&aSysData),
-                                                      aSysData.nSize );
+    css::uno::Sequence<sal_Int8> aSeq(reinterpret_cast<sal_Int8 const*>(&aSysData),
+                                      sizeof(SystemGraphicsData));
 
     return css::uno::Any(aSeq);
 }

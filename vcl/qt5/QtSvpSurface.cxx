@@ -60,8 +60,6 @@ void QtSvpSurface::flush() const
 VclPtr<VirtualDevice> QtSvpSurface::createVirtualDevice() const
 {
     SystemGraphicsData aSystemGraphicsData;
-
-    aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
     aSystemGraphicsData.pSurface = m_pSurface.get();
 
     return VclPtr<VirtualDevice>::Create(aSystemGraphicsData,

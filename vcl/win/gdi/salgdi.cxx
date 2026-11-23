@@ -716,7 +716,6 @@ bool WinSalGraphics::drawEPS( tools::Long nX, tools::Long nY, tools::Long nWidth
 SystemGraphicsData WinSalGraphics::GetGraphicsData() const
 {
     SystemGraphicsData aRes;
-    aRes.nSize = sizeof(aRes);
     aRes.hDC = getHDC();
     return aRes;
 }

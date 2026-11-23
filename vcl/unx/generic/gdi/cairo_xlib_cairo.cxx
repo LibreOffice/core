@@ -207,7 +207,6 @@ namespace cairo
 
         cairo_surface_t* pSurface = mpSurface.get();
 
-        aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.hDrawable = mpPixmap ? mpPixmap->mhDrawable : maSysData.hDrawable;
         aSystemGraphicsData.pSurface = pSurface;
 

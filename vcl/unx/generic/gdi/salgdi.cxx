@@ -194,7 +194,6 @@ SystemGraphicsData X11SalGraphics::GetGraphicsData() const
 {
     SystemGraphicsData aRes;
 
-    aRes.nSize = sizeof(aRes);
     aRes.hDrawable = maX11Common.m_hDrawable;
     aRes.pVisual   = GetVisual().visual;
     aRes.nScreen   = m_nXScreen.getXScreen();

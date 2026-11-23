@@ -93,8 +93,6 @@ void GtkSurface::flush() const
 VclPtr<VirtualDevice> GtkSurface::createVirtualDevice() const
 {
     SystemGraphicsData aSystemGraphicsData;
-
-    aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
     aSystemGraphicsData.pSurface = mpSurface.get();
 
     return VclPtr<VirtualDevice>::Create(aSystemGraphicsData,

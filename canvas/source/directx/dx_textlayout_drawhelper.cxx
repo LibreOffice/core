@@ -83,7 +83,6 @@ namespace dxcanvas
             [&rGraphics, &hdc]() mutable { rGraphics->ReleaseHDC(hdc); } );
 
         SystemGraphicsData aSystemGraphicsData;
-        aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.hDC = reinterpret_cast< ::HDC >(hdc);
         ScopedVclPtrInstance<VirtualDevice> xVirtualDevice(aSystemGraphicsData, Size(1, 1), DeviceFormat::WITHOUT_ALPHA);
 
@@ -243,7 +242,6 @@ namespace dxcanvas
         // TODO(F1): Fetching default screen DC here, will yield wrong
         // metrics when e.g. formatting for a printer!
         SystemGraphicsData aSystemGraphicsData;
-        aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.hDC = reinterpret_cast< ::HDC >(GetDC( nullptr ));
         ScopedVclPtrInstance<VirtualDevice> xVirtualDevice(aSystemGraphicsData, Size(1, 1), DeviceFormat::WITHOUT_ALPHA);
 

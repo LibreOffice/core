@@ -62,7 +62,6 @@ void AquaSalGraphics::copyResolution( AquaSalGraphics& rGraphics )
 SystemGraphicsData AquaSalGraphics::GetGraphicsData() const
 {
     SystemGraphicsData aRes;
-    aRes.nSize = sizeof(aRes);
     aRes.rCGContext = maShared.maContextHolder.get();
     return aRes;
 }
