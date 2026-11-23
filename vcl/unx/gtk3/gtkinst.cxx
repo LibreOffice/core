@@ -307,7 +307,7 @@ SalObject* GtkInstance::CreateObject(SalFrame* pParent, SystemWindowData* pWindo
     //FIXME: Missing CreateObject functionality ...
     if (pWindowData && pWindowData->bClipUsingNativeWidget)
         return new GtkSalObjectWidgetClip(static_cast<GtkSalFrame*>(pParent));
-    return new GtkSalObject(static_cast<GtkSalFrame*>(pParent), false);
+    return new GtkSalObject(static_cast<GtkSalFrame*>(pParent));
 }
 
 extern "C"
