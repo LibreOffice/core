@@ -205,6 +205,18 @@ next_priority:
     rSchedCtx.mnTimerPeriod        = InfiniteTimeoutMs;
 }
 
+void Scheduler::Halt()
+{
+    DBG_TESTSOLARMUTEX();
+
+    SchedulerGuard aSchedulerGuard;
+    ImplSchedulerContext& rSchedCtx = ImplGetSVData()->maSchedCtx;
+    rSchedCtx.mbActive = false;
+    if (rSchedCtx.mpSalTimer)
+        rSchedCtx.mpSalTimer->Stop();
+    rSchedCtx.mnTimerPeriod = InfiniteTimeoutMs;
+}
+
 void Scheduler::Lock()
 {
     ImplSVData* pSVData = ImplGetSVData();

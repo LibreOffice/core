@@ -46,6 +46,20 @@ public:
     static void       ImplDeInitScheduler();
 
     /**
+     * Stop invoking tasks for the rest of the process lifetime
+     *
+     * Like the start of ImplDeInitScheduler, but the tasks stay registered, so
+     * their owners can still stop, restart or delete them, which then does
+     * nothing. Meant for a process that only has to finish its I/O and exit,
+     * after its documents are released.
+     *
+     * A task started before keeps reporting IsActive() but is never invoked,
+     * so a loop that yields until a task has run would spin forever. User
+     * events are still dispatched, as they are not scheduler tasks.
+     **/
+    static void       Halt();
+
+    /**
      * System timer callback function, which processes one LO task
      *
      * Will restart the system timer, so it will process further tasks at the right time.

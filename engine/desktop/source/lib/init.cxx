@@ -1393,6 +1393,10 @@ COKitDocumentImpl::~COKitDocumentImpl()
             if (pObjectShell)
                 pObjectShell->InternalCloseAndRemoveFiles();
         }
+        // The document is left without a medium, so a model method or a layout
+        // idle reading from it would throw or crash. The child only finishes
+        // sending its result and exits.
+        Scheduler::Halt();
         return;
     }
 
