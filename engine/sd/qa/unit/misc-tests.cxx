@@ -514,7 +514,7 @@ void SdMiscTest::testTdf44774()
 
 void SdMiscTest::testTdf38225()
 {
-    createSdImpressDoc();
+    createSdDrawDoc();
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     sd::DrawDocShell* pDocShell = pXImpressDocument->GetDocShell();
@@ -553,7 +553,7 @@ void SdMiscTest::testTdf38225()
 
 void SdMiscTest::testTdf120527()
 {
-    createSdImpressDoc();
+    createSdDrawDoc();
 
     // Load a bitmap into the bitmap table.
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
@@ -876,6 +876,14 @@ void SdMiscTest::testTdf67248()
     SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
     SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(6), rLayerAdmin.GetLayerCount());
+
+    // The shape that the file puts on the user layer "Background" is on that layer
+    const SdrLayer* pUserLayer = rLayerAdmin.GetLayer(u"Background"_ustr);
+    CPPUNIT_ASSERT(pUserLayer);
+    const SdrObject* pShape = pDoc->GetSdPage(0, PageKind::Standard)->GetObj(0);
+    CPPUNIT_ASSERT_EQUAL(u"OnBackground"_ustr, pShape->GetName());
+    CPPUNIT_ASSERT_EQUAL(pUserLayer->GetID().get(), pShape->GetLayer().get());
+    CPPUNIT_ASSERT(pShape->GetLayer() != rLayerAdmin.GetLayerID(u"background"_ustr));
 }
 
 void SdMiscTest::testTdf119956()
@@ -1324,6 +1332,12 @@ void SdMiscTest::testPageBackgroundImages()
     // Check none of the graphic names is empty
     for (OUString const& rName : aGraphicNames)
         CPPUNIT_ASSERT(!rName.isEmpty());
+
+    // The saved document holds a fill image for each of the four page backgrounds.
+    save(TestFilter::ODG);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
+    assertXPath(pXmlDoc, "/office:document-styles/office:styles/draw:fill-image", 4);
 }
 
 void SdMiscTest::testCanvasSlideExportODP()
