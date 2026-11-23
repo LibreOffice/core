@@ -5261,7 +5261,7 @@ void SwHTMLParser::InsertLineBreak()
                     }
                     else if( rClear.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_right ) )
                     {
-                        eClear = SwLineBreakClear::LEFT;
+                        eClear = SwLineBreakClear::RIGHT;
                     }
                 }
                 break;

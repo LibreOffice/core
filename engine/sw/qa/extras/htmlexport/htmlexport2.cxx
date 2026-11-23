@@ -503,6 +503,46 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testClearingBreak)
     verify();
 }
 
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testClearingBreakRight)
+{
+    auto verify = [this]() {
+        uno::Reference<container::XEnumerationAccess> xParagraph(getParagraph(1), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+        uno::Reference<beans::XPropertySet> xPortion;
+        OUString aPortionType;
+        while (true)
+        {
+            // Ignore leading comments.
+            xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+            xPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
+            if (aPortionType != "Annotation")
+            {
+                break;
+            }
+        }
+        // Skip "foo".
+        xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+
+        xPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
+        CPPUNIT_ASSERT_EQUAL(u"LineBreak"_ustr, aPortionType);
+        uno::Reference<text::XTextContent> xLineBreak;
+        xPortion->getPropertyValue(u"LineBreak"_ustr) >>= xLineBreak;
+        sal_Int16 eClear{};
+        uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
+        xLineBreakProps->getPropertyValue(u"Clear"_ustr) >>= eClear;
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(SwLineBreakClear::RIGHT), eClear);
+    };
+
+    // Given a document with an at-para anchored image + a clearing break:
+    // When loading that file:
+    createSwWebDoc("clearing-break-right.html");
+    // Then make sure that the clear property of the break is not ignored:
+    verify();
+    saveAndReload(TestFilter::HTML_WRITER);
+    // Make sure that the clear property of the break is not lost during export:
+    verify();
+}
+
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTableBackground)
 {
     // Given a document with two tables: first stable has a background, second table has a
