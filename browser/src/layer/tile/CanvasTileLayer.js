@@ -2572,7 +2572,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			}
 		}
 		else if (textMsg.startsWith('.uno:Context=') && this.isImpress()) {
-			this._selectionContextChanged(textMsg.replace('.uno:Context=', ''));
+			var selectionContext = textMsg.replace('.uno:Context=', '');
+			this._selectionContextChanged(selectionContext);
+			// the status bar shows it as the text of the selection
+			this._map.fire('commandstatechanged', {commandName: '.uno:Context', state: selectionContext});
 		}
 		else if (textMsg.startsWith('headerfooterboundary=')) {
 			textMsg = textMsg.substring('headerfooterboundary='.length);
