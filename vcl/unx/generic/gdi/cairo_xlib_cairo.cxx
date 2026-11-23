@@ -142,29 +142,6 @@ namespace cairo
     }
 
     /**
-     * Surface::Surface:   Create platform native Canvas surface from BitmapSystemData
-     * @param pSysData Platform native system environment data (struct SystemEnvData in vcl/inc/sysdata.hxx)
-     * @param pBmpData Platform native image data (struct BitmapSystemData in vcl/inc/bitmap.hxx)
-     * @param width width of the new surface
-     * @param height height of the new surface
-     *
-     * The pBmpData provides the imagedata that the created surface should contain.
-     *
-     * Set the mpSurface to the new surface or NULL
-     **/
-    X11Surface::X11Surface( const X11SysData&       rSysData,
-                            const BitmapSystemData& rData ) :
-        maSysData( rSysData ),
-        mpSurface(
-            cairo_xlib_surface_create( rSysData.pDisplay,
-                                       reinterpret_cast<Drawable>(nullptr),
-                                       rSysData.pVisual,
-                                       rData.mnWidth, rData.mnHeight ),
-            &cairo_surface_destroy)
-    {
-    }
-
-    /**
      * Surface::getCairo:  Create Cairo (drawing object) for the Canvas surface
      *
      * @return new Cairo or NULL

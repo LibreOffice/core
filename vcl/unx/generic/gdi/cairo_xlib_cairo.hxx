@@ -74,8 +74,6 @@ namespace cairo {
         explicit X11Surface( CairoSurfaceSharedPtr pSurface );
         /// create surface on subarea of given drawable
         X11Surface( const X11SysData& rSysData, int x, int y, int width, int height );
-        /// create surface for given bitmap data
-        X11Surface( const X11SysData& rSysData, const BitmapSystemData& rBmpData );
 
         // Surface interface
         virtual CairoSharedPtr getCairo() const override;

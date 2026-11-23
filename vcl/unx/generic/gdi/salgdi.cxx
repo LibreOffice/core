@@ -250,24 +250,6 @@ cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface( const OutputDevice& rRefD
     return cairo::SurfaceSharedPtr();
 }
 
-cairo::SurfaceSharedPtr X11SalGraphics::CreateBitmapSurface( const OutputDevice&     rRefDevice,
-                                      const BitmapSystemData& rData,
-                                      const Size&             rSize ) const
-{
-    SAL_INFO("vcl", "requested size: " << rSize.Width() << " x " << rSize.Height()
-              << " available size: " << rData.mnWidth << " x "
-              << rData.mnHeight);
-    if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
-    {
-        if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
-            return std::make_shared<cairo::X11Surface>(getSysData(*rRefDevice.GetOwnerWindow()), rData );
-        else if( rRefDevice.IsVirtual() )
-            return std::make_shared<cairo::X11Surface>(getSysData(static_cast<const VirtualDevice&>(rRefDevice)), rData );
-    }
-
-    return cairo::SurfaceSharedPtr();
-}
-
 css::uno::Any X11SalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& /*rSize*/) const
 {
     cairo::X11Surface& rXlibSurface=dynamic_cast<cairo::X11Surface&>(*rSurface);
