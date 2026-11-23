@@ -1481,6 +1481,147 @@ private:
     std::shared_ptr<http::WebSocketSession> collabWs_;
 };
 
+// A fetch of the document that the host answers with a temporary error once delivers the document:
+class UnitCollabFetchRetry: public WopiTestServer {
+public:
+    UnitCollabFetchRetry():
+        WopiTestServer("UnitCollabFetchRetry"), phase_(Phase::Connect), getFiles_(0) {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
+
+    std::unique_ptr<http::Response>
+    assertGetFileRequest(Poco::Net::HTTPRequest const &) override
+    {
+        ++getFiles_;
+        if (getFiles_ > 1) {
+            return nullptr;
+        }
+        // A body keeps the answer from reaching coolwsd as a dropped connection:
+        auto response = std::make_unique<http::Response>(http::StatusCode::ServiceUnavailable);
+        response->setBody("busy", "text/plain");
+        return response;
+    }
+
+    void invokeWSDTest() override {
+        switch (phase_) {
+        case Phase::Connect:
+            TRANSITION_STATE(phase_, Phase::WaitAuth);
+            // The WOPISrc, followed by the test name for the request to coolwsd:
+            collabWs_ = startCollabConnection(
+                socketPoll(),
+                Uri::encode(getWopiHostURI() + "/wopi/files/0?testname=UnitCollabFetchRetry")
+                    + "&testname=UnitCollabFetchRetry",
+                "anything");
+            break;
+        case Phase::WaitAuth:
+            if (!pollCollabMessage(collabWs_, "user_list")) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitFetchUrl);
+            collabWs_->sendMessage(R"({"type":"fetch","stream":"contents","requestId":"f1"})");
+            break;
+        case Phase::WaitFetchUrl: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "fetch_url");
+            if (!msg) {
+                break;
+            }
+            std::shared_ptr<http::Response const> const response = http::get(
+                helpers::getTestServerURI(),
+                msg->getValue<std::string>("url") + "&testname=UnitCollabFetchRetry");
+            LOK_ASSERT_EQUAL(http::StatusCode::OK, response->statusLine().statusCode());
+            LOK_ASSERT_EQUAL(getFileContent(), response->getBody());
+            LOK_ASSERT_EQUAL(2, getFiles_);
+            TRANSITION_STATE(phase_, Phase::Done);
+            collabWs_->asyncShutdown();
+            passTest("The document arrived on the second try");
+            break;
+        }
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    STATE_ENUM(Phase, Connect, WaitAuth, WaitFetchUrl, Done) phase_;
+
+    // The GetFile requests that the host got:
+    int getFiles_;
+
+    std::shared_ptr<http::WebSocketSession> collabWs_;
+};
+
+// A fetch of the document that the host always answers with a temporary error answers 502 after
+// three tries:
+class UnitCollabFetchRetryLimit: public WopiTestServer {
+public:
+    UnitCollabFetchRetryLimit():
+        WopiTestServer("UnitCollabFetchRetryLimit"), phase_(Phase::Connect), getFiles_(0) {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
+
+    std::unique_ptr<http::Response>
+    assertGetFileRequest(Poco::Net::HTTPRequest const &) override
+    {
+        ++getFiles_;
+        // A body keeps the answer from reaching coolwsd as a dropped connection:
+        auto response = std::make_unique<http::Response>(http::StatusCode::ServiceUnavailable);
+        response->setBody("busy", "text/plain");
+        return response;
+    }
+
+    void invokeWSDTest() override {
+        switch (phase_) {
+        case Phase::Connect:
+            TRANSITION_STATE(phase_, Phase::WaitAuth);
+            // The WOPISrc, followed by the test name for the request to coolwsd:
+            collabWs_ = startCollabConnection(
+                socketPoll(),
+                Uri::encode(getWopiHostURI() + "/wopi/files/0?testname=UnitCollabFetchRetryLimit")
+                    + "&testname=UnitCollabFetchRetryLimit",
+                "anything");
+            break;
+        case Phase::WaitAuth:
+            if (!pollCollabMessage(collabWs_, "user_list")) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitFetchUrl);
+            collabWs_->sendMessage(R"({"type":"fetch","stream":"contents","requestId":"f1"})");
+            break;
+        case Phase::WaitFetchUrl: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "fetch_url");
+            if (!msg) {
+                break;
+            }
+            std::shared_ptr<http::Response const> const response = http::get(
+                helpers::getTestServerURI(),
+                msg->getValue<std::string>("url") + "&testname=UnitCollabFetchRetryLimit");
+            LOK_ASSERT_EQUAL(http::StatusCode::BadGateway, response->statusLine().statusCode());
+            LOK_ASSERT_EQUAL(3, getFiles_);
+            TRANSITION_STATE(phase_, Phase::Done);
+            collabWs_->asyncShutdown();
+            passTest("The fetch gave up after three tries");
+            break;
+        }
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    STATE_ENUM(Phase, Connect, WaitAuth, WaitFetchUrl, Done) phase_;
+
+    // The GetFile requests that the host got:
+    int getFiles_;
+
+    std::shared_ptr<http::WebSocketSession> collabWs_;
+};
+
 // A fetch of the document from a FileUrl whose host cannot be reached answers 502:
 class UnitCollabFetchNoConnection: public WopiTestServer {
 public:
@@ -2192,7 +2333,7 @@ private:
 
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [19] { new UnitCollabProtocol(),
+    return new UnitBase* [21] { new UnitCollabProtocol(),
                                 new UnitCollabCheckFileInfoTransient(),
                                 new UnitCollabUploadTimestamp(), new UnitCollabUploadConflict(),
                                 new UnitCollabUploadConflictModified(),
@@ -2202,7 +2343,8 @@ UnitBase** unit_create_wsd_multi(void)
                                 new UnitCollabAvatar(),
                                 new UnitCollabConnections(), new UnitCollabTokenRenewal(),
                                 new UnitCollabMethods(), new UnitCollabRouting(),
-                                new UnitCollabFetchRedirect(), new UnitCollabFetchNoConnection(),
+                                new UnitCollabFetchRedirect(), new UnitCollabFetchRetry(),
+                                new UnitCollabFetchRetryLimit(), new UnitCollabFetchNoConnection(),
                                 new UnitCollabProtocolNumber(), new UnitCollabEditorFrame(),
                                 nullptr };
 }
