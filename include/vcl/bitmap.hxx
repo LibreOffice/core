@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sal/config.h>
+#include <config_vclplug.h>
 
 #include <vcl/BitmapColor.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -30,7 +31,9 @@
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
 #include <vcl/bitmap/BitmapTypes.hxx>
-#include <config_vclplug.h>
+#if USE_HEADLESS_CODE
+#include <vcl/cairo.hxx>
+#endif
 
 #include <o3tl/typed_flags_set.hxx>
 
@@ -101,13 +104,6 @@ class   OutputDevice;
 class   SalBitmap;
 
 namespace basegfx { class SystemDependentDataHolder; }
-
-#if USE_HEADLESS_CODE
-typedef struct _cairo_surface cairo_surface_t;
-namespace cairo {
-    typedef std::shared_ptr<cairo_surface_t> CairoSurfaceSharedPtr;
-}
-#endif
 
 struct BitmapSystemData
 {
