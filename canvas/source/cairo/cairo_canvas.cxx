@@ -130,8 +130,6 @@ SurfaceSharedPtr Canvas::createSurface(const ::basegfx::B2ISize& rSize, int aCon
     return maDeviceHelper.createSurface(rSize, aContent);
 }
 
-SurfaceSharedPtr Canvas::createSurface(::Bitmap&) { return {}; }
-
 SurfaceSharedPtr Canvas::changeSurface()
 {
     // non-modifiable surface here

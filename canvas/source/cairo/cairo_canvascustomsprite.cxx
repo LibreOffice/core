@@ -112,11 +112,6 @@ namespace cairocanvas
         return mpSpriteCanvas->createSurface(rSize,aContent);
     }
 
-    SurfaceSharedPtr CanvasCustomSprite::createSurface( ::Bitmap& rBitmap )
-    {
-        return mpSpriteCanvas->createSurface(rBitmap);
-    }
-
     SurfaceSharedPtr CanvasCustomSprite::changeSurface()
     {
         SAL_INFO( "canvas.cairo", "replacing sprite background surface");

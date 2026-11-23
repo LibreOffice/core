@@ -81,11 +81,6 @@ namespace cairocanvas
         return mpSurfaceProvider->createSurface(rSize,aContent);
     }
 
-    SurfaceSharedPtr CanvasBitmap::createSurface( ::Bitmap& rBitmap )
-    {
-        return mpSurfaceProvider->createSurface(rBitmap);
-    }
-
     SurfaceSharedPtr CanvasBitmap::changeSurface()
     {
         // non-modifiable surface here

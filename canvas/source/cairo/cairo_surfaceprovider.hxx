@@ -51,8 +51,6 @@ namespace cairocanvas
         /// create new surface in given size
         virtual ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize,
                                                          int aContent ) = 0;
-        /// create new surface from given bitmap
-        virtual ::cairo::SurfaceSharedPtr createSurface( ::Bitmap& rBitmap ) = 0;
 
         /** convert surface from alpha to non-alpha, does not copy content
             channel. returns new surface on success, NULL otherwise

@@ -122,7 +122,6 @@ public:
     virtual ::cairo::SurfaceSharedPtr getSurface() override;
     virtual ::cairo::SurfaceSharedPtr createSurface(const ::basegfx::B2ISize& rSize,
                                                     int aContent) override;
-    virtual ::cairo::SurfaceSharedPtr createSurface(::Bitmap& rBitmap) override;
     virtual ::cairo::SurfaceSharedPtr changeSurface() override;
     virtual OutputDevice* getOutputDevice() override;
 
