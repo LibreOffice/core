@@ -33,6 +33,29 @@ import macholib.MachO
 import pefile
 
 
+def target_platform():
+    """The platform the build is for: "win32", "darwin" or "unix" (ELF).
+
+    Taken from gbuild's OS rather than from sys.platform, which is the
+    platform the script runs on. Linux and FreeBSD lay out an installation
+    the same way and both use ELF, so they are handled alike."""
+    target = os.environ.get("OS")
+    if target == "WNT":
+        return "win32"
+    if target == "MACOSX":
+        return "darwin"
+    if target in ("LINUX", "FREEBSD", "NETBSD", "OPENBSD", "DRAGONFLY", "HAIKU"):
+        return "unix"
+    if not target:
+        if sys.platform in ("win32", "darwin"):
+            return sys.platform
+        return "unix"
+    return target.lower()
+
+
+PLATFORM = target_platform()
+
+
 sbom_data = {}
 sbom_externals = {}
 filelistdirs = []
@@ -746,10 +769,10 @@ def gen_packages(packinfos, ziplist, languages, product):
     for package in packinfos:
         gid = package["module"]
         # only Linux gets fully split packages
-        if sys.platform == "win32":
+        if PLATFORM == "win32":
             if gid not in ("gid_Module_Root", "gid_Module_Helppack_Help"):
                 continue
-        if sys.platform == "darwin":
+        if PLATFORM == "darwin":
             if gid not in ("gid_Module_Root", "gid_Module_Langpack_Basis"):
                 continue
         name_pi = package["packagename"]
@@ -758,7 +781,7 @@ def gen_packages(packinfos, ziplist, languages, product):
             for lang in languages:
                 gen_package(name.replace("%LANGUAGESTRING", lang), gid + "_" + lang.replace("-", "_"), {lang})
         else:
-            if sys.platform == "win32" and gid == "gid_Module_Root":
+            if PLATFORM == "win32" and gid == "gid_Module_Root":
                 gen_package(name, gid, languages)
             else:
                 gen_package(name, gid, {"en-US"})
@@ -971,7 +994,7 @@ def locate_files(files_by_package, ziplist, product, filelistdirs):
         # there are both shell scripts and ELF executables without suffix
         elif ext in executables or perms == "755" \
             or ("FILELIST" in styles and "USE_INTERNAL_RIGHTS" in styles \
-                and sys.platform != "win32" and os.access(abspath, os.X_OK)) \
+                and PLATFORM != "win32" and os.access(abspath, os.X_OK)) \
             or os.path.splitext(basename)[1] in (".so", ".dylib"): # .so.N
                 return FileFlags.EXECUTABLE
         elif ext in archives:
@@ -1070,7 +1093,7 @@ def add_dependencies(files_by_package, files_by_package_extra_deps):
     """Add required checksum and dependencies to files."""
 
     def dep_key(name):
-        return name if sys.platform != "win32" else name.lower()
+        return name if PLATFORM != "win32" else name.lower()
 
     def get_files_by_name(files_by_package):
         """Map each file name to the list of files with that name."""
@@ -1204,25 +1227,25 @@ def add_dependencies(files_by_package, files_by_package_extra_deps):
         elif ext in (".class", ".java", ".bsh", ".js"):
             return ("JVM", set())
         elif ext in (".py", ".pyi"):
-            if sys.platform == "win32":
+            if PLATFORM == "win32":
                 return ("program/python.exe", set())
-            elif sys.platform == "linux":
+            elif PLATFORM == "unix":
                 return ("program/python.bin", set())
-            elif sys.platform == "darwin":
+            elif PLATFORM == "darwin":
                 return ("Contents/Resources/python", set())
             else:
                 raise Exception("unexpected Python file on mobile platform")
         elif ext in (".xba", ".xdl"):
-            if sys.platform == "win32" or sys.platform == "linux":
+            if PLATFORM == "win32" or PLATFORM == "unix":
                 return ("program/soffice.bin", set())
-            elif sys.platform == "darwin":
+            elif PLATFORM == "darwin":
                 return ("Contents/MacOS/soffice", set())
             else:
                 raise Exception("unexpected Basic file on mobile platform")
         elif ext == ".xsl":
-            if sys.platform == "win32" or sys.platform == "linux":
+            if PLATFORM == "win32" or PLATFORM == "unix":
                 return ("program/soffice.bin", set())
-            elif sys.platform == "darwin":
+            elif PLATFORM == "darwin":
                 return ("Contents/MacOS/soffice", set())
             else:
                 raise Exception("TODO mobile platform")
@@ -1432,19 +1455,19 @@ def check_externals(allexternaldeps, *externalses):
     for external in sbom_externals:
         if external.startswith("dict-"):
             # hack: assign to its dict package
-            if sys.platform == "win32" or sys.platform == "darwin":
+            if PLATFORM == "win32" or PLATFORM == "darwin":
                 externalses[0]["gid_Module_Root"].add(external)
             else:
                 gid = "gid_Module_Root_Extension_Dictionary_" + external.replace("dict-","").replace("-spell","").replace("-hyph","").replace("-thes","").replace("-grammar","").replace("-","_").title().replace("Gug", "Gu")
                 externalses[0][gid].add(external)
         # this is hidden in an extension
         if external == "xsltml":
-            if sys.platform == "win32" or sys.platform == "darwin":
+            if PLATFORM == "win32" or PLATFORM == "darwin":
                 externalses[0]["gid_Module_Root"].add(external)
             else:
                 externalses[0]["gid_Module_Optional_Extensions_MEDIAWIKI"].add(external)
         if external == "nlpsolver":
-            if sys.platform == "win32" or sys.platform == "darwin":
+            if PLATFORM == "win32" or PLATFORM == "darwin":
                 externalses[0]["gid_Module_Root"].add(external)
             else:
                 externalses[0]["gid_Module_Optional_Extensions_NLPSolver"].add(external)
