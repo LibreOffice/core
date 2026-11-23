@@ -457,7 +457,7 @@ void X11OpenGLContext::initWindow()
     {
         if( !m_pChildWindow )
         {
-            m_pChildWindow = VclPtr<SystemChildWindow>::Create(mpWindow, &winData, false);
+            m_pChildWindow = VclPtr<SystemChildWindow>::Create(mpWindow, &winData);
         }
         pChildSysData = m_pChildWindow->GetSystemData();
     }

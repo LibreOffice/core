@@ -137,7 +137,7 @@ void WinOpenGLContext::initWindow()
     if( !m_pChildWindow )
     {
         SystemWindowData winData = generateWinData(mpWindow, false);
-        m_pChildWindow = VclPtr<SystemChildWindow>::Create(mpWindow, &winData, false);
+        m_pChildWindow = VclPtr<SystemChildWindow>::Create(mpWindow, &winData);
     }
 
     InitChildWindow(m_pChildWindow.get());

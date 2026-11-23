@@ -1772,7 +1772,7 @@ public:
         if( !m_pChildWindow )
         {
             SystemWindowData winData = generateWinData(mpWindow, mbRequestLegacyContext);
-            m_pChildWindow = VclPtr<SystemChildWindow>::Create(mpWindow, &winData, false);
+            m_pChildWindow = VclPtr<SystemChildWindow>::Create(mpWindow, &winData);
         }
 
         if (m_pChildWindow)
@@ -24285,7 +24285,7 @@ std::unique_ptr<weld::Builder> GtkInstance::CreateInterimBuilder(vcl::Window* pP
     // support GtkWidgets within a vcl::Window
     SystemWindowData winData = {};
     winData.bClipUsingNativeWidget = true;
-    auto xEmbedWindow = VclPtr<SystemChildWindow>::Create(pParent, &winData, false);
+    auto xEmbedWindow = VclPtr<SystemChildWindow>::Create(pParent, &winData);
     xEmbedWindow->Show(true, ShowFlags::NoActivate);
     xEmbedWindow->set_expand(true);
 

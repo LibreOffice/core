@@ -152,7 +152,7 @@ void QtOpenGLContext::initWindow()
     if (!m_pChildWindow)
     {
         SystemWindowData winData = generateWinData(mpWindow, mbRequestLegacyContext);
-        m_pChildWindow = VclPtr<SystemChildWindow>::Create(mpWindow, &winData, false);
+        m_pChildWindow = VclPtr<SystemChildWindow>::Create(mpWindow, &winData);
     }
     assert(m_pChildWindow);
 
