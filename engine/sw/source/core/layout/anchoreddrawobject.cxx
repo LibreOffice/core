@@ -406,9 +406,14 @@ void SwAnchoredDrawObject::MakeObjPosAnchoredAtPara()
 
     // Format of anchor is needed for (vertical) fly offsets, otherwise the
     // lack of fly portions will result in an incorrect 0 offset.
-    bool bAddVerticalFlyOffsets = GetFrameFormat()->getIDocumentSettingAccess().get(
+    const bool bAddVerticalFlyOffsets = GetFrameFormat()->getIDocumentSettingAccess().get(
         DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS);
-    bool bFormatAnchorOnce = !bJoinLocked && bAddVerticalFlyOffsets;
+    const bool bAddFlyOffsets = GetFrameFormat()->getIDocumentSettingAccess().get(
+        DocumentSettingId::ADD_FLY_OFFSETS);
+    // CalcBaseOfstForFly() returns early when fly offsets are disabled, so
+    // formatting the anchor cannot affect the vertical fly offset.
+    const bool bFormatAnchorOnce
+        = !bJoinLocked && bAddVerticalFlyOffsets && bAddFlyOffsets;
 
     if (bFormatAnchor || bFormatAnchorOnce)
     {
