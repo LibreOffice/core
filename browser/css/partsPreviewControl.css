@@ -503,7 +503,7 @@
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 	align-content: start;
-	--slide-sorter-grid-gap: 12px;
+	--slide-sorter-grid-gap: var(--spacing-l);
 	gap: var(--slide-sorter-grid-gap);
 	--preview-outline: 3px;
 	padding: calc(20px + 1em) calc(16px + var(--preview-outline)) 12px;
