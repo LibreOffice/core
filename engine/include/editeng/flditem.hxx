@@ -145,10 +145,10 @@ enum class SvxURLFormat {
 class EDITENG_DLLPUBLIC SvxURLField final : public SvxFieldData
 {
 private:
-    SvxURLFormat            eFormat;
-    OUString                aURL;               // URL-Address
-    OUString                aRepresentation;    // Text shown in document
-    OUString                aTargetFrame;       // Frame to open in
+    SvxURLFormat            m_eFormat;
+    OUString                m_aURL;               // URL-Address
+    OUString                m_aRepresentation;    // Text shown in document
+    OUString                m_aTargetFrame;       // Frame to open in
     OUString                m_Name;             // Name from the Hyperlink dialog (ODF office:name)
     OUString                m_Title;            // Accessible description (ODF office:title)
     /// The link was laid out as a placeholder field, before hyperlinks were stored as text.
@@ -161,11 +161,11 @@ public:
                             SvxURLField();
                             SvxURLField( OUString aURL, OUString aRepres, SvxURLFormat eFmt = SvxURLFormat::Url );
 
-    const OUString&         GetURL() const { return aURL; }
-    void                    SetURL( const OUString& rURL ) { aURL = rURL; }
+    const OUString&         GetURL() const { return m_aURL; }
+    void                    SetURL( const OUString& rURL ) { m_aURL = rURL; }
 
-    const OUString&         GetRepresentation() const { return aRepresentation; }
-    void                    SetRepresentation( const OUString& rRep ) { aRepresentation= rRep; }
+    const OUString&         GetRepresentation() const { return m_aRepresentation; }
+    void                    SetRepresentation( const OUString& rRep ) { m_aRepresentation= rRep; }
 
     OUString const&         GetName() const { return m_Name; }
     void                    SetName(OUString const& rName) { m_Name = rName; }
@@ -173,11 +173,11 @@ public:
     OUString const&         GetTitle() const { return m_Title; }
     void                    SetTitle(OUString const& rTitle) { m_Title = rTitle; }
 
-    const OUString&         GetTargetFrame() const { return aTargetFrame; }
-    void                    SetTargetFrame( const OUString& rFrm ) { aTargetFrame = rFrm; }
+    const OUString&         GetTargetFrame() const { return m_aTargetFrame; }
+    void                    SetTargetFrame( const OUString& rFrm ) { m_aTargetFrame = rFrm; }
 
-    SvxURLFormat            GetFormat() const { return eFormat; }
-    void                    SetFormat( SvxURLFormat eFmt ) { eFormat = eFmt; }
+    SvxURLFormat            GetFormat() const { return m_eFormat; }
+    void                    SetFormat( SvxURLFormat eFmt ) { m_eFormat = eFmt; }
 
     bool IsLegacyWrap() const { return mbLegacyWrap; }
     void SetLegacyWrap(bool bLegacyWrap) { mbLegacyWrap = bLegacyWrap; }

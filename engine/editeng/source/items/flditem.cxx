@@ -465,14 +465,14 @@ OUString SvxDateField::GetFormatted( Date const & aDate, SvxDateFormat eFormat, 
 
 SvxURLField::SvxURLField()
 {
-    eFormat = SvxURLFormat::Url;
+    m_eFormat = SvxURLFormat::Url;
 }
 
 
 SvxURLField::SvxURLField( OUString _aURL, OUString aRepres, SvxURLFormat eFmt )
-    : aURL(std::move( _aURL )), aRepresentation(std::move( aRepres ))
+    : m_aURL(std::move( _aURL )), m_aRepresentation(std::move( aRepres ))
 {
-    eFormat = eFmt;
+    m_eFormat = eFmt;
 }
 
 
@@ -488,20 +488,20 @@ bool SvxURLField::operator==( const SvxFieldData& rOther ) const
         return false;
 
     const SvxURLField& rOtherFld = static_cast<const SvxURLField&>(rOther);
-    return ( ( eFormat == rOtherFld.eFormat ) &&
-                ( aURL == rOtherFld.aURL ) &&
-                ( aRepresentation == rOtherFld.aRepresentation ) &&
-                ( aTargetFrame == rOtherFld.aTargetFrame ) &&
+    return ( ( m_eFormat == rOtherFld.m_eFormat ) &&
+                ( m_aURL == rOtherFld.m_aURL ) &&
+                ( m_aRepresentation == rOtherFld.m_aRepresentation ) &&
+                ( m_aTargetFrame == rOtherFld.m_aTargetFrame ) &&
                 ( mbLegacyWrap == rOtherFld.mbLegacyWrap ) );
 }
 
 size_t SvxURLField::hashCode() const
 {
     std::size_t seed(0);
-    o3tl::hash_combine(seed, eFormat);
-    o3tl::hash_combine(seed, aURL);
-    o3tl::hash_combine(seed, aRepresentation);
-    o3tl::hash_combine(seed, aTargetFrame);
+    o3tl::hash_combine(seed, m_eFormat);
+    o3tl::hash_combine(seed, m_aURL);
+    o3tl::hash_combine(seed, m_aRepresentation);
+    o3tl::hash_combine(seed, m_aTargetFrame);
     o3tl::hash_combine(seed, mbLegacyWrap);
     return seed;
 }
@@ -510,10 +510,10 @@ void SvxURLField::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxURLField"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("classId"), BAD_CAST(OString::number(GetClassId()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("format"), BAD_CAST(OString::number(static_cast<int>(eFormat)).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("url"), BAD_CAST(aURL.toUtf8().getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("representation"), BAD_CAST(aRepresentation.toUtf8().getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("targetFrame"), BAD_CAST(aTargetFrame.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("format"), BAD_CAST(OString::number(static_cast<int>(m_eFormat)).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("url"), BAD_CAST(m_aURL.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("representation"), BAD_CAST(m_aRepresentation.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("targetFrame"), BAD_CAST(m_aTargetFrame.toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("legacyWrap"), BAD_CAST(OString::boolean(mbLegacyWrap).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 }
