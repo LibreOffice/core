@@ -145,7 +145,6 @@ struct SystemGraphicsData
     CGContextRef    rCGContext;     // CoreGraphics graphic context
 #elif defined( UNX )
     sal_uIntPtr     hDrawable;      // a drawable
-    int             nScreen;        // the current screen of the drawable
 #endif
 #if USE_HEADLESS_CODE
     void* pSurface = nullptr; // the cairo surface when using svp-based backends, which includes gtk[3|4]
@@ -162,7 +161,6 @@ struct SystemGraphicsData
         : rCGContext(NULL)
 #elif defined( UNX )
         : hDrawable(0)
-        , nScreen( 0 )
 #endif
     { }
 };

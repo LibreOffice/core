@@ -195,7 +195,6 @@ SystemGraphicsData X11SalGraphics::GetGraphicsData() const
     SystemGraphicsData aRes;
 
     aRes.hDrawable = maX11Common.m_hDrawable;
-    aRes.nScreen   = m_nXScreen.getXScreen();
     return aRes;
 }
 
@@ -240,7 +239,8 @@ cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface( const OutputDevice& rRefD
     {
         const SystemGraphicsData aSystemGraphicsData
             = static_cast<const VirtualDevice&>(rRefDevice).GetSystemGfxData();
-        const cairo::X11SysData aSysData(aSystemGraphicsData, GetXDisplay(), GetVisual().visual);
+        const cairo::X11SysData aSysData(aSystemGraphicsData, GetXDisplay(), GetVisual().visual,
+                                         m_nXScreen.getXScreen());
         return std::make_shared<cairo::X11Surface>(aSysData, x, y, width, height);
     }
     return cairo::SurfaceSharedPtr();
