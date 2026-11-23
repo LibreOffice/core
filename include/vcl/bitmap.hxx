@@ -110,8 +110,6 @@ struct BitmapSystemData
     #if defined(_WIN32)
     void* pDIB; // device independent byte buffer
     #endif
-    int mnWidth;
-    int mnHeight;
 };
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC Bitmap final

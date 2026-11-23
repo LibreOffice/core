@@ -523,9 +523,6 @@ bool WinSalBitmap::GetSystemData( BitmapSystemData& rData )
     {
         bRet = true;
         rData.pDIB = mpDIB;
-        const Size& rSize = GetSize ();
-        rData.mnWidth = rSize.Width();
-        rData.mnHeight = rSize.Height();
     }
     return bRet;
 }

@@ -584,7 +584,7 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
  *  @param rData struct BitmapSystemData, defined in vcl/inc/bitmap.hxx
  *  @return true if successful
 **/
-bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
+bool QuartzSalBitmap::GetSystemData( BitmapSystemData&)
 {
     bool bRet = false;
 
@@ -631,9 +631,6 @@ bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
             CGImageRelease( xImage );
             maGraphicContext = aGraphicContextNew;
         }
-
-        rData.mnWidth = mnWidth;
-        rData.mnHeight = mnHeight;
     }
 
     return bRet;
