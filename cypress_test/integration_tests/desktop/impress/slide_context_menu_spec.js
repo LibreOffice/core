@@ -104,6 +104,84 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide pane context menu', 
 		}.bind(this));
 	});
 
+	// The slide pane shows the masters as soon as the view reports the master view context, so
+	// this returns then, before the state of the master view command arrives.
+	function enterMasterView(win) {
+		cy.then(function() {
+			win.app.map.sendUnoCommand('.uno:SlideMasterPage');
+		});
+		cy.window().should(function() {
+			expect(win.app.map.context.context).to.equal('MasterPage');
+		});
+	}
+
+	it('Master view offers the master slide menu on every right-click', function() {
+		// Right after the switch, the way a user right-clicks a master straight away.
+		enterMasterView(this.win);
+
+		for (var i = 0; i < 2; i++) {
+			openSlideContextMenu(0);
+			cy.cGet('#slide-img-menu-dropdown .ui-combobox-entry').then(function(items) {
+				var texts = Array.from(items).map(function(item) { return item.textContent.trim(); });
+				expect(texts).to.include.members(['New Master', 'Rename Master', 'Close Master View']);
+				expect(texts).not.to.include('New Slide');
+			});
+			cy.then(function() {
+				this.win.JSDialog.CloseAllDropdowns();
+			}.bind(this));
+			cy.cGet('#slide-img-menu-dropdown').should('not.exist');
+		}
+	});
+
+	it('Master view menu adds a master with New Master', function() {
+		enterMasterView(this.win);
+		helper.processToIdle(this.win);
+		impressHelper.assertSlidePreviewCountAfterIdle(this.win, 1);
+
+		openSlideContextMenu(0);
+		clickContextMenuItem('New Master');
+		impressHelper.assertSlidePreviewCountAfterIdle(this.win, 2);
+	});
+
+	it('Master view menu pastes a master below the clicked master', function() {
+		helper.setDummyClipboardForCopy();
+		enterMasterView(this.win);
+		helper.processToIdle(this.win);
+		openSlideContextMenu(0);
+		clickContextMenuItem('New Master');
+		impressHelper.assertSlidePreviewCountAfterIdle(this.win, 2);
+		var secondMaster;
+		cy.then(function() {
+			secondMaster = this.win.app.impress.partList[1].name;
+			expect(secondMaster).to.be.a('string').and.not.be.empty;
+		}.bind(this));
+
+		openSlideContextMenu(0);
+		clickContextMenuItem('Copy');
+		// The copy lands on the dummy clipboard, and the paste reads it back from there.
+		cy.cGet('#copy-paste-container').should(function(container) {
+			expect(container[0].innerHTML).to.contain('meta-origin');
+		}).then(function(container) {
+			helper.setDummyClipboardForPaste(container[0].innerHTML, '');
+		});
+
+		openSlideContextMenu(0);
+		clickContextMenuItem('Paste');
+		impressHelper.assertSlidePreviewCountAfterIdle(this.win, 3);
+		cy.window().should(function() {
+			expect(this.win.app.impress.partList[2].name).to.equal(secondMaster);
+		}.bind(this));
+
+		// The paste added a master and no slide.
+		cy.then(function() {
+			this.win.app.map.sendUnoCommand('.uno:CloseMasterView');
+		}.bind(this));
+		cy.window().should(function() {
+			expect(this.win.app.map.context.context).to.equal('DrawPage');
+		}.bind(this));
+		impressHelper.assertSlidePreviewCountAfterIdle(this.win, 1);
+	});
+
 	it('Start Slideshow from This Slide presents from the clicked slide', function() {
 		openSlideContextMenu(0);
 		clickContextMenuItem('New Slide');

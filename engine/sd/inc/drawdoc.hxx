@@ -196,13 +196,16 @@ struct InsertBookmarkOptions
     // the source whose name here holds another look comes over under a new name, with what the
     // source resolves it to, and the objects that used it point to that copy.
     bool bKeepSourceObjectStyles;
+    // The position in the list of master pages where the inserted masters go, each followed by its
+    // notes master. SDRPAGE_NOTFOUND puts them at the end of the list.
+    sal_uInt16 nMasterInsertPos;
 
     InsertBookmarkOptions()
         : bLink(false), bReplace(false), bNoDialogs(false),
           bCopy(true), bMergeMasterPages(true), bMergeMasterPagesOnly(false),
           bPreservePageNames(false),
           bIsFileDocument(false), bAdoptTargetDesign(false),
-          bKeepSourceObjectStyles(false)
+          bKeepSourceObjectStyles(false), nMasterInsertPos(SDRPAGE_NOTFOUND)
     {}
 
     // Preset for paste operation
@@ -755,6 +758,8 @@ public:
      * @param pBookmarkDocSh Source document shell
      * @param bMergeMasterPages Whether to merge master pages from source
      * @param bMergeMasterPagesOnly Whether to only merge master pages (not content pages)
+     * @param nMasterInsertPos Position in the list of master pages where the masters go when
+     *                         only master pages are merged; SDRPAGE_NOTFOUND puts them at the end
      * @return true if operation was successful
      */
     bool PasteBookmarkAsPage(
@@ -762,7 +767,8 @@ public:
         sal_uInt16 nInsertPos,
         ::sd::DrawDocShell* pBookmarkDocSh,
         bool bMergeMasterPages,
-        bool bMergeMasterPagesOnly = false);
+        bool bMergeMasterPagesOnly = false,
+        sal_uInt16 nMasterInsertPos = SDRPAGE_NOTFOUND);
 
     /**
      * Insert pages from external files
@@ -1337,13 +1343,16 @@ public:
      *  @param pBookmarkDoc The document containing the source master page. If null, assumes this document.
      *  @param bUndo Whether to support undo for this operation.
      *  @param sNewName Optional new name for the master page. If empty, a new name will be generated.
+     *  @param nInsertPos Position in the list of master pages for the new master, with its notes
+     *                    master after it. SDRPAGE_NOTFOUND puts them at the end of the list.
      *  @return The newly created master page.
      */
     SdPage* AddNewMasterPageFromExisting(
         const SdPage* pSourceMasterPage,
         SdDrawDocument* pBookmarkDoc = nullptr,
         bool bUndo = true,
-        const OUString& sNewName = OUString());
+        const OUString& sNewName = OUString(),
+        sal_uInt16 nInsertPos = SDRPAGE_NOTFOUND);
 
     void StoreCanvasPage(SdPage* pPage) { mpCanvasPage = pPage; }
 

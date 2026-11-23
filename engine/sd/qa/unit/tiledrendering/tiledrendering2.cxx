@@ -3206,6 +3206,29 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlidePropertiesInMasterViewKeepsA
     CPPUNIT_ASSERT_EQUAL(pFirstSlide, pViewShell->GetActualPage());
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNewMasterInMasterViewNotifiesPartCount)
+{
+    // Given a presentation with one master, shown in master view:
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    setupCOKitViewCallback(pViewShell->GetViewShellBase());
+    dispatchCommand(mxComponent, u".uno:SlideMasterPage"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(1, pXImpressDocument->getEditMode());
+    CPPUNIT_ASSERT_EQUAL(1, pXImpressDocument->getParts());
+
+    // When a new master is added:
+    m_aDocumentSizeCondition.reset();
+    dispatchCommand(mxComponent, u".uno:InsertMasterPage"_ustr, {});
+
+    // Then the view hears that the size of the document changed, so the client asks for the new
+    // count of parts, which is the count of masters in master view. Without the accompanying fix
+    // in place, this test would have failed: nothing was sent, and the slide pane kept showing one
+    // master.
+    CPPUNIT_ASSERT_EQUAL(2, pXImpressDocument->getParts());
+    CPPUNIT_ASSERT_EQUAL(osl::Condition::result_ok,
+                         m_aDocumentSizeCondition.wait(std::chrono::seconds(2)));
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testA11yNumberedParagraphPrefix)
 {
     // Given a text box whose first paragraph is "1. plain BOLD end", with screen reader support on:

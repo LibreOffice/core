@@ -67,10 +67,13 @@ protected:
         @param nInsertPosition
             The pages of the transferable will be inserted behind the page
             with this index.
+        @param bMasterPagesOnly
+            When true, a paste adds the masters of the pages and no slides.
         @return
             Returns the number of inserted slides.
     */
-    sal_uInt16 InsertSlides(const SdTransferable& rTransferable, sal_uInt16 nInsertPosition);
+    sal_uInt16 InsertSlides(const SdTransferable& rTransferable, sal_uInt16 nInsertPosition,
+                            bool bMasterPagesOnly = false);
 };
 
 } // end of namespace ::sd

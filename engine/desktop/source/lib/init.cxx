@@ -8334,6 +8334,8 @@ static bool getFromTransferable(
     const cpo::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
     std::string_view aInMimeType, OString &aRet);
 
+static bool holdsSlides(const cpo::uno::Reference<css::datatransfer::XTransferable>& xTransferable);
+
 static bool encodeImageAsHTML(
     const cpo::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
     std::string_view aMimeType, OString &aRet)
@@ -8440,6 +8442,18 @@ static bool getFromTransferable(
             // If html is not supported, might be a graphic-selection,
             if (encodeImageAsHTML(xTransferable, "image/png"_ostr, aRet))
                 return true;
+            // Copied masters come without a picture. The HTML is still where the origin of the
+            // copy is recorded, and a paste into another document fetches the masters from
+            // there.
+            if (holdsSlides(xTransferable))
+            {
+                aRet = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n"
+                       "<html><head>"
+                       "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"/><meta "
+                       "name=\"generator\" content=\""
+                       + getGenerator().toUtf8() + "\"/></head><body></body></html>";
+                return true;
+            }
         }
 
         SetLastExceptionMsg("Flavor " + aFlavor.MimeType + " is not supported");

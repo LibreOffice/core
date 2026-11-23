@@ -3892,6 +3892,82 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_CopiedPage)
     OUString aNewMasterPageName4 = pNewMasterPage4->GetName();
     CPPUNIT_ASSERT_EQUAL(u"4_Master3"_ustr, aNewMasterPageName4);
 }
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteMasterFromOtherPresentation)
+{
+    // Given a presentation in master view, with its master copied:
+    createSdImpressDoc("odp/4-3.odp");
+    sd::slidesorter::controller::SlideSorterController& rSrcCtl
+        = getSlideSorterViewShell()->GetSlideSorter().GetController();
+    rSrcCtl.ChangeEditMode(EditMode::MasterPage);
+    auto pSrcImpress = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdPage* pSrcMaster = pSrcImpress->GetDoc()->GetMasterSdPage(0, PageKind::Standard);
+    rSrcCtl.GetPageSelector().DeselectAllPages();
+    rSrcCtl.GetPageSelector().SelectPage(pSrcMaster);
+    rSrcCtl.GetClipboard().DoCopy(true);
+    // The other presentation reads the copy from the clipboard.
+    SdModule::get()->pTransferClip = nullptr;
+
+    // When pasting into another presentation with two masters, which shows its first master:
+    mxComponent2 = loadFromDesktop(createFileURL(u"odp/16-9.odp"),
+                                   u"com.sun.star.presentation.PresentationDocument"_ustr);
+    auto* pDstImpress = dynamic_cast<SdXImpressDocument*>(mxComponent2.get());
+    SdDrawDocument* pDstDoc = pDstImpress->GetDoc();
+    uno::Reference<drawing::XMasterPagesSupplier> xDstMasters(mxComponent2, uno::UNO_QUERY_THROW);
+    xDstMasters->getMasterPages()->insertNewByIndex(1);
+    SdPage* pDstFirstMaster = pDstDoc->GetMasterSdPage(0, PageKind::Standard);
+    SdPage* pDstSecondMaster = pDstDoc->GetMasterSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDstDoc->GetMasterSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pDstDoc->GetSdPageCount(PageKind::Standard));
+    dispatchCommand(mxComponent2, u".uno:SlideMasterPage"_ustr, {});
+    sd::slidesorter::controller::SlideSorterController& rDstCtl
+        = getSlideSorterViewShell(mxComponent2)->GetSlideSorter().GetController();
+    rDstCtl.ChangeEditMode(EditMode::MasterPage);
+    {
+        // The pages of the two presentations differ in size, and the kit pastes without asking
+        // whether to scale the objects.
+        comphelper::COKit::setActive(true);
+        comphelper::ScopeGuard aKitGuard([] { comphelper::COKit::setActive(false); });
+        CPPUNIT_ASSERT(rDstCtl.GetClipboard().PasteSlidesFromSystemClipboard());
+    }
+
+    // Then the copied master is added below the shown master, and no slide is added. Without the
+    // accompanying fix in place, this test would have failed: the paste added no master.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pDstDoc->GetMasterSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pDstDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(pDstFirstMaster, pDstDoc->GetMasterSdPage(0, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(pDstSecondMaster, pDstDoc->GetMasterSdPage(2, PageKind::Standard));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteMasterInMasterView)
+{
+    // Given a presentation with two masters in master view, which shows the first master, with
+    // that master copied the way the kit copies it:
+    createSdImpressDoc("odp/4-3.odp");
+    uno::Reference<drawing::XMasterPagesSupplier> xMasters(mxComponent, uno::UNO_QUERY_THROW);
+    xMasters->getMasterPages()->insertNewByIndex(1);
+    dispatchCommand(mxComponent, u".uno:SlideMasterPage"_ustr, {});
+    sd::slidesorter::controller::SlideSorterController& rCtl
+        = getSlideSorterViewShell()->GetSlideSorter().GetController();
+    rCtl.ChangeEditMode(EditMode::MasterPage);
+    SdDrawDocument* pDoc = dynamic_cast<SdXImpressDocument*>(mxComponent.get())->GetDoc();
+    SdPage* pFirstMaster = pDoc->GetMasterSdPage(0, PageKind::Standard);
+    SdPage* pSecondMaster = pDoc->GetMasterSdPage(1, PageKind::Standard);
+    rCtl.GetPageSelector().DeselectAllPages();
+    rCtl.GetPageSelector().SelectPage(pFirstMaster);
+    dispatchCommand(mxComponent, u".uno:CopySlide"_ustr, {});
+
+    // When pasting into the same master view:
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    // Then the copy of the master is added below it, and no slide is added. Without the
+    // accompanying fix in place, this test would have failed: the paste added a slide and no
+    // master.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pDoc->GetMasterSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(pFirstMaster, pDoc->GetMasterSdPage(0, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(pSecondMaster, pDoc->GetMasterSdPage(2, PageKind::Standard));
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testUndoMergeMasterPage)
 {
     // Test undo for merging master pages only

@@ -141,6 +141,12 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		if (viewMode) this._handleViewModeState(viewMode.mode);
 	},
 
+	// Whether the view shows the masters. The context that names the view mode arrives before the
+	// state of the master view command, and the slide pane changes to the masters with it.
+	isMasterView: function () {
+		return this._lastViewModeContext === 'MasterPage';
+	},
+
 	// Restore the remembered view mode on first load, then report later user
 	// switches so they are persisted per user per document. We key off the
 	// first authoritative view context change ('normal'|'notes'|'master'),

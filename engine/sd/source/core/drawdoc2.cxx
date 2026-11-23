@@ -882,6 +882,11 @@ void SdDrawDocument::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos )
         SdStyleSheetPool* pStylePool = static_cast<SdStyleSheetPool*>( GetStyleSheetPool() );
         if( pStylePool )
             pStylePool->AddStyleFamily( static_cast<SdPage*>(pPage) );
+
+        // In master view the parts are the master pages, so their count has changed.
+        if (comphelper::COKit::isActive())
+            KitHelper::notifyDocumentSizeChangedAllViews(getUnoModel(),
+                                                         /*bInvalidateAllParts=*/false);
     }
 }
 

@@ -53,10 +53,12 @@ void ViewClipboard::HandlePageDrop (const SdTransferable& rTransferable)
     // page to a master page
     sd::DrawViewShell* pDrawViewShell = dynamic_cast<::sd::DrawViewShell*>(mrView.GetViewShell());
     SdPage* pMasterPage = (pDrawViewShell && pDrawViewShell->GetEditMode() == EditMode::Page) ? GetFirstMasterPage(rTransferable) : nullptr;
+    // A view that shows the masters adds the masters of the pages and no slides.
+    const bool bMasterView = pDrawViewShell && pDrawViewShell->GetEditMode() == EditMode::MasterPage;
     if (pMasterPage)
         AssignMasterPage (rTransferable, pMasterPage);
     else
-        InsertSlides (rTransferable, DetermineInsertPosition ());
+        InsertSlides (rTransferable, DetermineInsertPosition (), bMasterView);
 }
 
 SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
@@ -183,12 +185,14 @@ sal_uInt16 ViewClipboard::DetermineInsertPosition  ()
 
 sal_uInt16 ViewClipboard::InsertSlides (
     const SdTransferable& rTransferable,
-    sal_uInt16 nInsertPosition)
+    sal_uInt16 nInsertPosition,
+    bool bMasterPagesOnly)
 {
     SdDrawDocument& rDoc = mrView.GetDoc();
 
     sal_uInt16 nInsertPgCnt = 0;
-    bool bMergeMasterPages = !rTransferable.HasSourceDoc( &rDoc );
+    // Masters copied from this document are added as copies of their own.
+    bool bMergeMasterPages = bMasterPagesOnly || !rTransferable.HasSourceDoc( &rDoc );
 
     // Prepare the insertion.
     const std::vector<OUString> *pBookmarkList = nullptr;
@@ -233,11 +237,22 @@ sal_uInt16 ViewClipboard::InsertSlides (
         else
         {
             // This is a regular paste operation
+            // Masters go below the master that the view shows, which is followed by its notes
+            // master.
+            sal_uInt16 nMasterInsertPos = SDRPAGE_NOTFOUND;
+            if (bMasterPagesOnly)
+            {
+                SdPage* pShownPage = mrView.GetViewShell()->getCurrentPage();
+                if (pShownPage && pShownPage->IsMasterPage())
+                    nMasterInsertPos = pShownPage->GetPageNum() + 2;
+            }
             rDoc.PasteBookmarkAsPage(
                 pBookmarkList ? *pBookmarkList : std::vector<OUString>(),
                 nInsertPosition,
                 pDataDocSh,
-                bMergeMasterPages);
+                bMergeMasterPages,
+                bMasterPagesOnly,
+                nMasterInsertPos);
         }
 
         if( bWait )

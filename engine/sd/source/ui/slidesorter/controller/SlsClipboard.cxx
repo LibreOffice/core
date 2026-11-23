@@ -990,11 +990,31 @@ bool Clipboard::PasteSlidesFromSystemClipboard()
         if (!IsSlideSorterPaste(*xDocShRef))
             return false;
 
+        const auto insertPos = mrSlideSorter.GetModel().GetCoreIndex(
+            mrSlideSorter.GetController().GetClipboard().GetInsertionPosition());
+
+        // The slide sorter that shows the masters adds the masters of the pasted document and no
+        // slides, the way a paste of masters copied from this document does.
+        if (mrSlideSorter.GetModel().GetEditMode() == EditMode::MasterPage)
+        {
+            view::SlideSorterView::DrawLock aLock(mrSlideSorter);
+            SelectionObserver::Context aContext(mrSlideSorter);
+            // The masters go below the master that the view shows, which is followed by its notes
+            // master.
+            SdPage* pShownPage = pDrawViewShell->getCurrentPage();
+            const sal_uInt16 nMasterInsertPos = pShownPage && pShownPage->IsMasterPage()
+                                                    ? pShownPage->GetPageNum() + 2
+                                                    : SDRPAGE_NOTFOUND;
+            pDocument->PasteBookmarkAsPage(std::vector<OUString>(), insertPos, xDocShRef.get(),
+                                           /*bMergeMasterPages=*/true,
+                                           /*bMergeMasterPagesOnly=*/true, nMasterInsertPos);
+            mrController.HandleModelChange();
+            return true;
+        }
+
         std::vector<OUString> aBookmarkList;
         std::vector<OUString> aExchangeList;
 
-        auto insertPos = mrSlideSorter.GetModel().GetCoreIndex(
-            mrSlideSorter.GetController().GetClipboard().GetInsertionPosition());
         // Slide sorter paste: scale objects instead of asking.
         pDocument->InsertFileAsPage(aBookmarkList, &aExchangeList, false /*bLink*/,
                                     insertPos /*nPos*/, xDocShRef.get(),

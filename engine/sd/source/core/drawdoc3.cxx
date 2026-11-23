@@ -728,6 +728,7 @@ void SdDrawDocument::insertAllPages(PageInsertionParams& rParams,
         sal_uInt16 nStart = (nMPageCount % 2) + 2;
         if (nStart == nMPageCount)
             nStart = 1;
+        sal_uInt16 nMasterInsertPos = rOptions.nMasterInsertPos;
         // Process all master pages.
         for (sal_uInt16 nMPage = nStart; nMPage < nMPageCount; nMPage++)
         {
@@ -742,7 +743,11 @@ void SdDrawDocument::insertAllPages(PageInsertionParams& rParams,
                     // Default page -> use default name
                     aLayoutName = OUString();
                 }
-                AddNewMasterPageFromExisting(pSBMPage, rParams.pBookmarkDoc, rParams.bUndo, aLayoutName);
+                AddNewMasterPageFromExisting(pSBMPage, rParams.pBookmarkDoc, rParams.bUndo,
+                                             aLayoutName, nMasterInsertPos);
+                // The next master goes after this one and its notes master.
+                if (nMasterInsertPos != SDRPAGE_NOTFOUND)
+                    nMasterInsertPos += 2;
             }
 
         }
@@ -2377,7 +2382,8 @@ SdPage* SdDrawDocument::AddNewMasterPageFromExisting(
     const SdPage* pSourceMasterPage,
     SdDrawDocument* pBookmarkDoc,
     bool bUndo,
-    const OUString& sNewName)
+    const OUString& sNewName,
+    sal_uInt16 nInsertPos)
 {
     // Check if the source master page is valid and a master page
     assert(pSourceMasterPage && pSourceMasterPage->IsMasterPage() &&
@@ -2436,7 +2442,10 @@ SdPage* SdDrawDocument::AddNewMasterPageFromExisting(
 
     pMaster->SetName(aName);
     pMaster->SetLayoutName(aPageLayoutName);
-    InsertMasterPage(pMaster.get());
+    // A position past the end of the list appends.
+    if (nInsertPos > GetMasterPageCount())
+        nInsertPos = SDRPAGE_NOTFOUND;
+    InsertMasterPage(pMaster.get(), nInsertPos);
 
     if(bUndo && pUndoMgr)
         AddUndo(SdrUndoFactory::CreateUndoNewPage(*pMaster));
@@ -2462,7 +2471,8 @@ SdPage* SdDrawDocument::AddNewMasterPageFromExisting(
 
         pNotesMaster->SetName(aName);
         pNotesMaster->SetLayoutName(aPageLayoutName);
-        InsertMasterPage(pNotesMaster.get());
+        InsertMasterPage(pNotesMaster.get(),
+                         nInsertPos == SDRPAGE_NOTFOUND ? nInsertPos : nInsertPos + 1);
 
         if(bUndo && pUndoMgr)
             AddUndo(SdrUndoFactory::CreateUndoNewPage(*pNotesMaster));
@@ -2483,10 +2493,12 @@ bool SdDrawDocument::PasteBookmarkAsPage(
     sal_uInt16 nInsertPos,
     ::sd::DrawDocShell* pBookmarkDocSh,
     bool bMergeMasterPages,
-    bool bMergeMasterPagesOnly)
+    bool bMergeMasterPagesOnly,
+    sal_uInt16 nMasterInsertPos)
 {
     // Use predefined options for paste operation
     InsertBookmarkOptions options = InsertBookmarkOptions::ForPaste(bMergeMasterPages, bMergeMasterPagesOnly);
+    options.nMasterInsertPos = nMasterInsertPos;
     KeepPageLinks aKeepLinks(*this);
 
     // Create insertion parameters

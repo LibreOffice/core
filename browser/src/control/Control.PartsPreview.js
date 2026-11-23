@@ -668,10 +668,11 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 		var that = this;
 		window.L.DomEvent.on(frame, 'contextmenu', function(e) {
-			var isMasterView = this._map['stateChangeHandler'].getItemValue('.uno:SlideMasterPage');
-			if (isMasterView === 'true')
-				return;
 			e.preventDefault();
+			if (this._isMasterView()) {
+				this._openMasterContextMenu(e, img, false);
+				return;
+			}
 			// The frame area only offers Paste and Insert, both of which need
 			// edit access, so in read-only mode just suppress the system menu.
 			if (app.map.isReadOnlyMode())
@@ -746,10 +747,11 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 		window.L.DomEvent.on(img, 'contextmenu', function(e) {
 			e.stopPropagation();
-			var isMasterView = this._map['stateChangeHandler'].getItemValue('.uno:SlideMasterPage');
-			if (isMasterView === 'true')
-				return;
 			e.preventDefault();
+			if (this._isMasterView()) {
+				this._openMasterContextMenu(e, img, true);
+				return;
+			}
 
 			if (!that._isSelected(e))
 				that._setPart(e);
@@ -1145,6 +1147,125 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					_('preview of page %1, linked to %2'),
 					_('%1, linked to %2'),
 				];
+	},
+
+	_isMasterView: function () {
+		return this._map._docLayer.isMasterView();
+	},
+
+	// The context menu of the slide pane in master view. Its entries act on the masters. A right
+	// click on a master offers the entries for that master, and one beside a master offers only
+	// the entries for the whole list. Copied masters can be pasted into this presentation or into
+	// another one that shows its masters.
+	_openMasterContextMenu: function (e, img, onSlide) {
+		if (app.map.isReadOnlyMode())
+			return;
+
+		if (onSlide && !this._isSelected(e))
+			this._setPart(e);
+		img.focus();
+
+		const entries = [];
+		if (onSlide) {
+			entries.push({
+				id: 'copy',
+				type: 'comboboxentry',
+				text: _('Copy'),
+				img: 'Copy',
+				class: 'unoCopy',
+				pos: 0,
+			});
+		}
+		// Beside a master, Paste is offered only where the clipboard can be read, as for slides.
+		if (onSlide || window.L.Browser.clipboardApiAvailable || window.ThisIsTheMacOSApp) {
+			entries.push({
+				id: 'paste',
+				type: 'comboboxentry',
+				text: _('Paste'),
+				img: 'Paste',
+				class: 'unoPaste',
+				pos: 0,
+			});
+		}
+		entries.push({
+			id: 'newmaster',
+			type: 'comboboxentry',
+			text: _('New Master'),
+			img: 'InsertPage',
+			class: 'unoInsertMasterPage',
+			pos: 0,
+		});
+		if (onSlide) {
+			entries.push({
+				id: 'renamemaster',
+				type: 'comboboxentry',
+				text: _UNO('.uno:RenameMasterPage', 'presentation'),
+				img: 'renamemasterpage',
+				class: 'unoRenameMasterPage',
+				pos: 0,
+			});
+			entries.push({
+				id: 'slideproperties',
+				type: 'comboboxentry',
+				text: _UNO('.uno:SlideSetup', 'presentation'),
+				img: 'PageSetup',
+				class: 'slideproperties',
+				pos: 0,
+			});
+		}
+		entries.push({
+			id: 'closemasterview',
+			type: 'comboboxentry',
+			text: _UNO('.uno:CloseMasterView', 'presentation'),
+			img: 'closemasterview',
+			class: 'unoCloseMasterView',
+			pos: 0,
+		});
+
+		const menuPosEl = this._getMenuPosEl();
+		const rect = this._container.getBoundingClientRect();
+		menuPosEl.style.left = e.clientX - rect.left + 'px';
+		menuPosEl.style.top = e.clientY - rect.top + 'px';
+
+		const callback = (objectType, eventType, object, data, entry) => {
+			if (eventType !== 'selected')
+				return false;
+			switch (entry.id) {
+			case 'copy':
+				this._map._clip.clearSelection();
+				this._map._clip.setTextSelectionType('slide');
+				this._map._clip._execCopyCutPaste('copy', '.uno:CopySlide');
+				break;
+			case 'paste':
+				this._pasteSlide();
+				break;
+			case 'newmaster':
+				app.socket.sendMessage('uno .uno:InsertMasterPage');
+				break;
+			case 'renamemaster':
+				app.socket.sendMessage('uno .uno:RenameMasterPage');
+				break;
+			case 'slideproperties':
+				app.socket.sendMessage('uno .uno:PageSetup');
+				break;
+			case 'closemasterview':
+				app.socket.sendMessage('uno .uno:CloseMasterView');
+				break;
+			}
+			JSDialog.CloseAllDropdowns();
+			return true;
+		};
+
+		JSDialog.OpenDropdown(
+			onSlide ? 'slide-img-menu' : 'slide-frame-menu',
+			menuPosEl,
+			entries,
+			callback,
+			'',
+			false,
+			false,
+			true,
+		);
 	},
 
 	// The link of a slide, naming the source document and the slide of it the
