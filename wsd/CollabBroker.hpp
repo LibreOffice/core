@@ -114,11 +114,10 @@ class CollabBroker : public std::enable_shared_from_this<CollabBroker>
     /// authenticate.  The broker rewrites `avatar` URLs in
     /// outgoing user messages to a /cool/collab/avatar proxy URL,
     /// which proxies the fetch on-demand using the stored
-    /// upstream URL and access_token.
+    /// upstream URL.
     struct UserAvatar
     {
         std::string url;          ///< WOPI avatar URL
-        std::string accessToken;  ///< token for the integrator
     };
     std::map<std::string, UserAvatar> _avatars;
 
@@ -208,14 +207,13 @@ public:
     /// Check if a tag matches either the current or previous access token
     bool matchesAccessToken(const std::string& tag) const;
 
-    /// Register a user's avatar URL + access_token for later
+    /// Register a user's avatar URL for later
     /// proxying via /cool/collab/avatar.
     void registerAvatar(const std::string& userId,
-                        const std::string& url,
-                        const std::string& accessToken);
+                        const std::string& url);
 
     /// Look up registered avatar for a user.  Returns
-    /// (url, accessToken) or empty if not registered.
+    /// its url or empty if not registered.
     UserAvatar lookupAvatar(const std::string& userId) const;
 
     /// Surface a plain-COOL (/cool/ws) session as a peer in the

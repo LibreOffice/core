@@ -251,12 +251,12 @@ void CollabSocketHandler::onCheckFileInfoFinished(CheckFileInfo& cfi)
                     // Notify other users that this user joined
                     broker->notifyUserJoined(self);
 
-                    // Register the user's avatar URL + token on
+                    // Register the user's avatar URL on
                     // the broker, so /cool/collab/avatar can proxy
                     // it for peers.
                     if (!_avatar.empty())
                         broker->registerAvatar(
-                            _userId, _avatar, _accessToken);
+                            _userId, _avatar);
 
                     // If a plain-COOL DocBroker is already editing
                     // the same docKey, surface its sessions as
@@ -405,9 +405,6 @@ void CollabSocketHandler::onRenewalCheckFileInfoFinished(
     if (accepted) {
         _accessToken = token;
         takeRights(cfi);
-        if (auto const broker = _broker.lock(); broker && !_avatar.empty()) {
-            broker->registerAvatar(_userId, _avatar, _accessToken);
-        }
     }
 
     LOG_INF("Collab: a new access token was " << (accepted ? "accepted" : "refused"));

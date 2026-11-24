@@ -1656,8 +1656,7 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
         {
             // /cool/collab/avatar?userId=...&token=...&WOPISrc=...
             // Proxies the per-user avatar image from the
-            // integrator (authenticated with the user's
-            // access_token) so peers can load it without
+            // integrator so peers can load it without
             // needing the integrator's cookies.
             LOG_INF("CollabAvatar request: " << request.getURI());
 
@@ -1707,7 +1706,7 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
             // Proxy the download via CollabFileProxy.
             auto proxy = std::make_shared<CollabFileProxy>(
                 _id, requestDetails, socket, broker->getWopiSrc(),
-                avatar.accessToken);
+                "");
             proxy->handleFetchRequest(avatar.url, false,
                 COOLWSD::getWebServerPoll(), disposition);
         }

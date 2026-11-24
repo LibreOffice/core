@@ -421,11 +421,10 @@ bool CollabBroker::matchesAccessToken(const std::string& tag) const
 }
 
 void CollabBroker::registerAvatar(const std::string& userId,
-                                  const std::string& url,
-                                  const std::string& accessToken)
+                                  const std::string& url)
 {
     std::lock_guard<std::mutex> lock(_mutex);
-    _avatars[userId] = UserAvatar{url, accessToken};
+    _avatars[userId] = UserAvatar{url};
 }
 
 CollabBroker::UserAvatar

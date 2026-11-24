@@ -1417,8 +1417,28 @@ public:
         Poco::Net::HTTPRequest const &, Poco::JSON::Object::Ptr & fileInfo) override
     {
         Poco::JSON::Object::Ptr extra = new Poco::JSON::Object();
-        extra->set("avatar", getWopiHostURI() + "/wopi/files/0/contents?testname=UnitCollabAvatar");
+        extra->set("avatar", getWopiHostURI() + "/wopi/avatar/user.png?testname=UnitCollabAvatar");
         fileInfo->set("UserExtraInfo", extra);
+    }
+
+    bool handleHttpGetRequest(
+        Poco::Net::HTTPRequest const & request, std::shared_ptr<StreamSocket> const & socket)
+        override
+    {
+        Poco::URI const uri(request.getURI());
+        if (uri.getPath() != "/wopi/avatar/user.png") {
+            return WopiTestServer::handleHttpGetRequest(request, socket);
+        }
+        for (auto const & param: uri.getQueryParameters()) {
+            LOK_ASSERT_MESSAGE(
+                "The avatar request has no access token", param.first != "access_token");
+        }
+        LOK_ASSERT_MESSAGE(
+            "The avatar request has no Authorization", !request.has("Authorization"));
+        http::Response response(http::StatusCode::OK);
+        response.setBody(AvatarBytes, "image/png");
+        socket->sendAndShutdown(response);
+        return true;
     }
 
     void invokeWSDTest() override {
@@ -1449,7 +1469,7 @@ public:
             std::shared_ptr<http::Response const> const response
                 = http::get(helpers::getTestServerURI(), avatar + "&testname=UnitCollabAvatar");
             LOK_ASSERT_EQUAL(http::StatusCode::OK, response->statusLine().statusCode());
-            LOK_ASSERT_EQUAL(getFileContent(), response->getBody());
+            LOK_ASSERT_EQUAL(AvatarBytes, response->getBody());
             TRANSITION_STATE(phase_, Phase::Done);
             first_->asyncShutdown();
             second_->asyncShutdown();
@@ -1466,6 +1486,8 @@ private:
         return Uri::encode(
             getWopiHostURI() + "/wopi/files/0?access_token=anything&testname=UnitCollabAvatar");
     }
+
+    static inline std::string const AvatarBytes = "avatar bytes";
 
     STATE_ENUM(Phase, ConnectFirst, WaitFirstAuth, WaitJoined, Done) phase_;
 
