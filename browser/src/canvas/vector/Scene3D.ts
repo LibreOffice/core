@@ -149,6 +149,45 @@ namespace cool {
 			return outline;
 		}
 
+		/// The 3D objects of the scene, those of the scenes inside it included, in the order the
+		/// page draws them, from the back to the front.
+		static objectsOf(data: VectorPrimitivesData, sceneId: number): number[] {
+			return (Scene3D.membersOf(data, sceneId) ?? []).map(
+				(member: Scene3DMember) => member.id,
+			);
+		}
+
+		/// The faces of a 3D scene, or of one 3D object or scene inside one, as one sees them on
+		/// the page, in twips, each by its outer polygon. Nothing for an object that is no part
+		/// of a scene the client works out from its 3D objects.
+		static facesOnThePage(
+			data: VectorPrimitivesData,
+			objectId: number,
+		): Polygon2D[] | undefined {
+			const sceneId = Scene3D.sceneOf(data, objectId);
+			if (sceneId === undefined || !Scene3D.takes(data, sceneId))
+				return undefined;
+			const placement = Matrix2D.fromArray(
+				data.objects.get(sceneId)?.scene3D?.placement,
+			);
+			if (!placement) return undefined;
+
+			const faces: Polygon2D[] = [];
+			for (const member of Scene3D.membersOf(data, sceneId) ?? []) {
+				if (!Scene3D.liesIn(data, member.id, objectId)) continue;
+				Scene3D.forEachFace(member.primitive, (face: PolyPolygon3D) => {
+					faces.push(
+						face.polygons[0]
+							.transformed(member.toView)
+							.flattened()
+							.transformed(placement),
+					);
+					return true;
+				});
+			}
+			return faces;
+		}
+
 		/// The 3D scene, sitting in no other scene, that object is or lies in. Nothing for an
 		/// object that is no part of a 3D scene.
 		static sceneOf(

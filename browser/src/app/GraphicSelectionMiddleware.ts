@@ -1062,13 +1062,16 @@ class GraphicSelection {
 
 	/*
 		The buttons beside the band of that group or diagram, from the top down. A diagram takes
-		the one that opens it and Ungroup. A group takes Enter, Leave and Ungroup, and the one
-		that opens a diagram above them where it holds a diagram at any depth, so that its column
-		keeps one shape however the selection moves inside it.
+		the one that opens it and Ungroup. A 3D scene takes Enter and Leave: it is never taken
+		apart, and Enter stays for the scenes it may hold. A group takes Enter, Leave and Ungroup,
+		and the one that opens a diagram above them where it holds a diagram at any depth, so that
+		its column keeps one shape however the selection moves inside it.
 	*/
 	private static buttonsBeside(objectId: number): GroupButtonRole[] {
-		if (RenderGeometrySection.objectOf(objectId)?.isDiagram)
-			return ['diagram', 'ungroup'];
+		const object = RenderGeometrySection.objectOf(objectId);
+		if (object?.isDiagram) return ['diagram', 'ungroup'];
+		if (object?.objectKind === cool.Scene3D.sceneKind)
+			return ['enter', 'leave'];
 
 		const roles: GroupButtonRole[] = ['enter', 'leave', 'ungroup'];
 		return GraphicSelection.holdsADiagram(objectId) ?

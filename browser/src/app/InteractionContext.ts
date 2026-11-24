@@ -34,6 +34,8 @@ type InteractionPlace =
 	| { kind: 'page' }
 	| { kind: 'group'; group: number }
 	| { kind: 'diagram'; group: number; diagram: number }
+	// a 3D object of a 3D scene selected, in the scene sitting in no other scene
+	| { kind: 'scene'; group: number; scene: number }
 	| { kind: 'inPlace'; object: number }
 	// one table selected, standing on the page or in that group
 	| { kind: 'table'; table: number; group: number | undefined };
@@ -269,6 +271,11 @@ class Interaction {
 			return { kind: 'table', table: first, group: parent || undefined };
 
 		if (!parent) return { kind: 'page' };
+
+		const data = RenderGeometrySection.currentPart();
+		const scene = data ? cool.Scene3D.sceneOf(data, parent) : undefined;
+		if (scene !== undefined)
+			return { kind: 'scene', group: parent, scene: scene };
 
 		for (
 			let above: number | undefined = parent, guard = 0;

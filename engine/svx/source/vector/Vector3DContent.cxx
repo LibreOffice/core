@@ -371,6 +371,16 @@ void describeIn3D(const E3dObject& rObject, ObjectContent& rContent)
         return;
     }
 
+    // the 2D mapping the vector view sends is no way to change a 3D object inside a scene, it
+    // changes in 3D
+    rContent.mbCanBeMoved = false;
+    rContent.mbCanBeResized = false;
+    rContent.mbCanBeTurned = false;
+    rContent.mbCanBeSheared = false;
+    rContent.mbCanBeMirrored = false;
+    rContent.mbCanBeFlipped = false;
+    rContent.mbCanBeChangedToCurves = false;
+
     rContent.mo3DMapping = rObject.GetTransform();
     if (const auto* pContact
         = dynamic_cast<const sdr::contact::ViewContactOfE3d*>(&rObject.GetViewContact()))

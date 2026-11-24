@@ -171,6 +171,7 @@ namespace cool {
 			const edited =
 				place.kind === 'group' || place.kind === 'diagram' ?
 					{ objectId: place.group, paleOutside: true }
+				: place.kind === 'scene' ? { objectId: place.scene, paleOutside: true }
 				: place.kind === 'table' && place.group ?
 					{ objectId: place.group, paleOutside: true }
 				: place.kind === 'inPlace' ?

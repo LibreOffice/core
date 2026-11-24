@@ -22,6 +22,14 @@ abstract class ClassicContext implements InteractionContext {
 		this.groupStoodIn = groupStoodIn;
 	}
 
+	/// The 3D objects of that scene, where it is one whose 3D objects the client works out, so
+	/// it can be entered; nothing for any other object.
+	protected static objectsToEnter(objectId: number): number[] | undefined {
+		const data = RenderGeometrySection.currentPart();
+		if (!data || !cool.Scene3D.takes(data, objectId)) return undefined;
+		return cool.Scene3D.objectsOf(data, objectId);
+	}
+
 	/// A change of Shift, Alt or Ctrl belongs to a drag of the selection that runs.
 	public keyEvent(event: KeyboardEvent, modifier: number): boolean {
 		return (
@@ -137,6 +145,13 @@ abstract class ClassicContext implements InteractionContext {
 		const objectId = RenderGeometrySection.outermostOf(hit, this.groupStoodIn);
 		if (objectId === hit) return false;
 		if (RenderGeometrySection.objectOf(objectId)?.isDiagram) return false;
+
+		// a 3D scene is entered at the 3D object hit, the one in front
+		if (ClassicContext.objectsToEnter(objectId)?.includes(hit)) {
+			GraphicSelection.selectObjects([hit]);
+			GraphicSelection.updateSelectionSection();
+			return true;
+		}
 		// a chart that is not active holds no objects to enter, even where its parts are still
 		// here until the engine sends it as one again; the engine activates it
 		if (!RenderGeometrySection.holdsObjects(objectId)) return false;
@@ -157,7 +172,9 @@ abstract class ClassicContext implements InteractionContext {
 		if (selected.length !== 1) return false;
 		if (RenderGeometrySection.objectOf(selected[0])?.isDiagram) return false;
 
-		const held = RenderGeometrySection.heldBy(selected[0]);
+		const held =
+			ClassicContext.objectsToEnter(selected[0]) ??
+			RenderGeometrySection.heldBy(selected[0]);
 		if (!held.length) return false;
 
 		GraphicSelection.selectAndShow([held[0]]);
@@ -191,8 +208,9 @@ abstract class ClassicContext implements InteractionContext {
 		const single = count === 1 ? selected[0] : undefined;
 		const aGroup =
 			single !== undefined &&
-			RenderGeometrySection.holdsObjects(single) &&
-			!RenderGeometrySection.objectOf(single)?.isDiagram;
+			((RenderGeometrySection.holdsObjects(single) &&
+				!RenderGeometrySection.objectOf(single)?.isDiagram) ||
+				!!ClassicContext.objectsToEnter(single)?.length);
 		// The kinds of the parts of a 3D scene, which sit between the scene's and the polygon's.
 		const inAScene = selected.some((objectId: number) => {
 			const kind = RenderGeometrySection.objectOf(objectId)?.objectKind ?? 0;
@@ -379,14 +397,19 @@ abstract class ClassicContext implements InteractionContext {
 		lasso: cool.Point[],
 		extending: boolean,
 	): number[] | undefined {
+		const data = RenderGeometrySection.currentPart();
 		return this.selectsHeld((objectId: number) => {
 			const drawing = RenderGeometrySection.theOnesThatDraw([objectId]);
-			const inside = drawing.map((one: number) =>
-				cool.VectorOutline.liesInside(
-					RenderGeometrySection.objectOf(one)?.primitives,
-					lasso,
-				),
-			);
+			// a 3D scene, or a 3D object of one, lies inside by its faces as one sees them
+			const inside = drawing.map((one: number) => {
+				const faces = data && cool.Scene3D.facesOnThePage(data, one);
+				return faces ?
+						cool.VectorOutline.holds(lasso, faces)
+					:	cool.VectorOutline.liesInside(
+							RenderGeometrySection.objectOf(one)?.primitives,
+							lasso,
+						);
+			});
 			if (inside.some((each: boolean | undefined) => each === false))
 				return false;
 			if (inside.some((each: boolean | undefined) => each === true))
@@ -584,7 +607,9 @@ abstract class ClassicContext implements InteractionContext {
 		const selected = GraphicSelection.selectedObjectIDs;
 		if (selected.length !== 1) return;
 
-		const held = RenderGeometrySection.heldBy(selected[0]);
+		const held =
+			ClassicContext.objectsToEnter(selected[0]) ??
+			RenderGeometrySection.heldBy(selected[0]);
 		if (!held.length) return;
 
 		GraphicSelection.selectAndShow([held[0]]);
@@ -849,6 +874,122 @@ class ClassicDiagramContext extends ClassicGroupContext {
 		const next =
 			(place + (forwards ? 1 : -1) + outside.length) % outside.length;
 		return this.selectOnly(outside[next], !forwards);
+	}
+}
+
+/*
+	A 3D scene one stands in, with one of its 3D objects selected. Its 3D objects are one list,
+	the scenes inside it left out, in the order the page draws them, which Tab goes round as in
+	a group. What a 3D object allows is
+	a 3D change, so it is selected and shown here and changed by the engine. Leaving the scene
+	selects it, as an object of the place around it.
+*/
+class ClassicSceneContext extends ClassicGroupContext {
+	private readonly scene: number;
+
+	constructor(scene: number) {
+		super(scene);
+		this.scene = scene;
+	}
+
+	/// The 3D objects of the scene, one list without its scenes inside.
+	protected objectsOfTheLevel(): number[] {
+		const data = RenderGeometrySection.currentPart();
+		return data ? cool.Scene3D.objectsOf(data, this.scene) : [];
+	}
+
+	/// The context of the place the scene stands at.
+	private around(): InteractionContext {
+		return Interaction.contextAt(Interaction.placeOf([this.scene]));
+	}
+
+	/// Leaves the scene, selecting it.
+	private leave(): boolean {
+		GraphicSelection.selectAndShow([this.scene]);
+		return true;
+	}
+
+	/*
+		A press on a 3D object of the scene selects it, the one in front where several lie under
+		the press; with Shift or Ctrl it joins the 3D objects selected or leaves them. A press
+		anywhere else leaves the scene and is answered as the place around it answers it.
+	*/
+	public press(hit: number | undefined, modifier: number): boolean {
+		const extending =
+			modifier === app.UNOModifier.SHIFT || modifier === app.UNOModifier.CTRL;
+		if (modifier !== 0 && !extending) return false;
+
+		if (hit !== undefined && this.objectsOfTheLevel().includes(hit)) {
+			const selected = GraphicSelection.selectedObjectIDs;
+			GraphicSelection.selectObjects(
+				!extending ? [hit]
+				: selected.includes(hit) ?
+					selected.filter((objectId: number) => objectId !== hit)
+				:	selected.concat(hit),
+			);
+			return true;
+		}
+
+		return this.around().press(hit, modifier);
+	}
+
+	/*
+		Alt with a press goes through the 3D objects of the scene under it, from the front to the
+		back, Shift with it the other way round; past the last it comes round to the first.
+	*/
+	public altPress(hits: number[], backwards: boolean): boolean {
+		const objects = this.objectsOfTheLevel();
+		const order = hits.filter((hit: number) => objects.includes(hit));
+		if (!order.length) return this.around().altPress(hits, backwards);
+
+		const at = order.indexOf(GraphicSelection.selectedObjectIDs[0]);
+		const next =
+			at < 0 ? 0 : (at + (backwards ? -1 : 1) + order.length) % order.length;
+		GraphicSelection.selectObjects([order[next]]);
+		GraphicSelection.updateSelectionSection();
+		return true;
+	}
+
+	/// A double press is answered as a press, the engine has nothing more inside a scene.
+	public doublePress(hit: number | undefined): boolean {
+		return this.press(hit, 0);
+	}
+
+	/// Escape leaves the scene, selecting it.
+	public escape(): boolean {
+		return this.leave();
+	}
+
+	/// Leave Group, and Ctrl+F3, leave the scene, selecting it.
+	public leaveKey(): boolean {
+		return this.leave();
+	}
+
+	/// Enter and F3 go no deeper than the 3D objects.
+	public enterKey(): boolean {
+		return true;
+	}
+
+	/// No drag takes hold of a 3D object, which changes in 3D.
+	public takesHoldFor(_hit: number, _modifier: number): number | undefined {
+		return undefined;
+	}
+
+	/*
+		Leave Group is offered, Enter Group and the commands that group, take apart, move or
+		arrange are not, as the 3D objects change in 3D. Naming one and its area and line are.
+	*/
+	public commandStates(): { [command: string]: boolean } {
+		const states = super.commandStates();
+		states['.uno:EnterGroup'] = false;
+		states['.uno:LeaveGroup'] = true;
+		states['.uno:FormatUngroup'] = false;
+		states['.uno:FormatGroup'] = false;
+		for (const command of Interaction.commandsForOneOrMore)
+			states[command] = false;
+		for (const command of Interaction.commandsForThreeOrMore)
+			states[command] = false;
+		return states;
 	}
 }
 
@@ -1331,6 +1472,8 @@ class ClassicInteractionSet implements InteractionSet {
 				return new ClassicTableContext(place.table, place.group);
 			case 'diagram':
 				return new ClassicDiagramContext(place.diagram);
+			case 'scene':
+				return new ClassicSceneContext(place.scene);
 			default:
 				return new ClassicPageContext();
 		}

@@ -3052,6 +3052,10 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testSceneSendsItsObjectsIn3D)
         CPPUNIT_ASSERT_EQUAL(size_t(0), rInside.getSize("primitives").value_or(0));
         CPPUNIT_ASSERT(!rInside.has("scene3D"));
         CPPUNIT_ASSERT_EQUAL(size_t(16), rInside.getSize("transform3D").value_or(0));
+        // and takes no change of its 2D mapping, it changes in 3D
+        CPPUNIT_ASSERT(rInside.getBool("cannotBeMoved").value_or(false));
+        CPPUNIT_ASSERT(rInside.getBool("cannotBeResized").value_or(false));
+        CPPUNIT_ASSERT(rInside.getBool("cannotBeTurned").value_or(false));
     }
     CPPUNIT_ASSERT_EQUAL(nScene, oInnerScene->getInt("parent").value_or(-1));
     // the move of 4 cm across, in the last column of the first row

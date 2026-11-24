@@ -609,9 +609,9 @@ its own column.
 | Button | For | What it does |
 |---|---|---|
 | Diagram | a diagram; a group holding one | Opens the diagram dialog. |
-| Enter | a group | Enters the group. |
-| Leave | a group | Leaves the group you stand in. |
-| Ungroup | a group or a diagram | Takes it apart. |
+| Enter | a group; a 3D scene | Enters the group. Inside a 3D scene it stays pale, as no scene can be made inside one. |
+| Leave | a group; a 3D scene | Leaves the group you stand in. |
+| Ungroup | a group or a diagram | Takes it apart. A 3D scene has no Ungroup button, as it is never taken apart. |
 
 - When the group or diagram itself is selected, its buttons act on it alone: it is selected on
   its own and entered, opened or taken apart.
@@ -814,7 +814,7 @@ in the sections above.
 | Formula | As in the office | Edit in place in the drawn formula (see Formulas) | - |
 | Table | As in the office | Eight handles; the table markers (see Tables below) | Light lines between cells come and go with the zoom, in the office too |
 | Form control | Drawn in Online's look (see below) | In design mode select, move, scale, undo, as any object; out of it they work | Not every kind works yet out of design mode |
-| 3D scene | As one picture | Select, move, scale | Hit and hovered where its 3D objects are, as on the desktop: a press beside them goes to what lies behind. The hover draws the 3D object under the mouse by lines that read for its kind: a cube, an extrusion or a 3D polygon by its outline and the edges where its faces meet at an angle, a sphere by eight meridians and five rings, a body of rotation by a profile for each eighth of a turn and the rings of its open ends. Nothing inside can be selected yet; no 3D turn |
+| 3D scene | As one picture | Select, move, scale | Hit and hovered where its 3D objects are, as on the desktop: a press beside them goes to what lies behind. The hover draws the 3D object under the mouse by lines that read for its kind: a cube, an extrusion or a 3D polygon by its outline and the edges where its faces meet at an angle, a sphere by eight meridians and five rings, a body of rotation by a profile for each eighth of a turn and the rings of its open ends. A double click enters the scene at the 3D object under the mouse, as do Enter and F3 on a selected scene at its first one; inside, a click selects a 3D object, Alt and a click goes through the ones under the mouse from the front to the back, Shift with it the other way, Tab and Shift+Tab go through them and round, as in a group, Escape and Ctrl+F3 leave it. Deleting all 3D objects of a scene deletes the scene too; undo brings it back at the size it had. A 3D object is selected and shown, not yet moved, scaled or turned, as these are 3D changes; no 3D turn of the scene |
 | Video, audio | Filled black | Select, move, scale | The desktop application on Qt 6.10 may crash when a video is selected |
 
 ### Tables
@@ -998,8 +998,9 @@ What is still missing, or only partly there:
   slide by default; they are to be created by drags of their own. Tables keep their own insert
   dialog.
 
-- 3D objects and 3D charts: they are shown as one picture. Selecting single objects inside a
-  scene, and turning a scene in 3D as the office does, are planned.
+- 3D objects and 3D charts: they are shown as one picture. A scene is entered and its 3D
+  objects selected, but moving, scaling and turning a 3D object, turning a scene in 3D as the
+  office does, and the 3D parts of a chart are planned.
 - Thin lines: a hairline running across or down can land between two pixels and look pale or
   vanish at some zooms. Placing such lines on whole pixels, as the office does, is planned, and
   drawing the cells of a table without the light seams between them.
