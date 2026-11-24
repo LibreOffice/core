@@ -66,14 +66,12 @@ class StylesSidebar(UITestCase):
 
                 xFlatView = xWriterEdit.getChild("flatview")
 
-                # A pending refresh of the style list resets its selection, so let it run first.
+                # A pending refresh of the style list refills it, so let it run first.
                 xToolkit.processEventsToIdle()
 
                 self.assertEqual(1, len(xFlatView.getChildren()))
 
-                xFlatView.getChild('0').executeAction("SELECT", tuple())
-                self.ui_test.wait_until_property_is_updated(xFlatView, "SelectEntryText", expectedResults[i])
-                self.assertEqual(expectedResults[i], get_state_as_dict(xFlatView)['SelectEntryText'])
+                self.assertEqual(expectedResults[i], get_state_as_dict(xFlatView.getChild('0'))['Text'])
 
                 self.xUITest.executeCommand(".uno:Sidebar")
 
