@@ -23,7 +23,7 @@
 
 #include <cassert>
 
-#include <com/sun/star/reflection/ProxyFactory.hpp>
+#include <cpo/reflection/ProxyFactory.hpp>
 
 
 namespace accessibility
@@ -33,7 +33,7 @@ namespace accessibility
     using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::reflection;
+    using namespace ::cpo::reflection;
 
     OProxyAggregation::OProxyAggregation( const Reference< XComponentContext >& _rxContext )
         :m_xContext( _rxContext )

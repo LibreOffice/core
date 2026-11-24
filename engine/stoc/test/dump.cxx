@@ -10,7 +10,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <com/sun/star/reflection/Dump.hpp>
+#include <cpo/reflection/Dump.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Reference.hxx>
 #include <cpo/uno/TypeClass.hpp>
@@ -31,7 +31,7 @@ class Dump : public CppUnit::TestFixture
 public:
     void setUp() override
     {
-        dump_ = css::reflection::Dump::get(cppu::defaultBootstrap_InitialComponentContext());
+        dump_ = cpo::reflection::Dump::get(cppu::defaultBootstrap_InitialComponentContext());
     }
 
     void testSequence()
@@ -141,7 +141,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    cpo::uno::Reference<css::reflection::XDump> dump_;
+    cpo::uno::Reference<cpo::reflection::XDump> dump_;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Dump);

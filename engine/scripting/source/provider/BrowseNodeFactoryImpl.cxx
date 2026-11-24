@@ -24,7 +24,7 @@
 
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/reflection/ProxyFactory.hpp>
+#include <cpo/reflection/ProxyFactory.hpp>
 
 #include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>

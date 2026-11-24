@@ -55,9 +55,9 @@ namespace com::sun::star::beans { class XIntrospection; }
 namespace com::sun::star::container { class XEnumeration; }
 namespace com::sun::star::container { class XHierarchicalNameAccess; }
 namespace com::sun::star::lang { class XSingleServiceFactory; }
-namespace com::sun::star::reflection { class XIdlReflection; }
-namespace com::sun::star::reflection { class XServiceConstructorDescription; }
-namespace com::sun::star::reflection { class XServiceTypeDescription2; }
+namespace cpo::reflection { class XIdlReflection; }
+namespace cpo::reflection { class XServiceConstructorDescription; }
+namespace cpo::reflection { class XServiceTypeDescription2; }
 namespace com::sun::star::script { class XInvocation2; }
 namespace com::sun::star::script { class XInvocationAdapterFactory; }
 namespace com::sun::star::script { class XTypeConverter; }
@@ -173,7 +173,7 @@ PyRef ustring2PyUnicode( const OUString &source );
 PyRef ustring2PyString( std::u16string_view source );
 OUString pyString2ustring( PyObject *str );
 
-/// @throws css::reflection::InvocationTargetException
+/// @throws cpo::reflection::InvocationTargetException
 /// @throws cpo::uno::RuntimeException
 void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime );
 
@@ -182,8 +182,8 @@ PyRef PyUNO_callable_new (
     const OUString &methodName );
 
 PyRef PyUNO_service_constructor_new(
-    const cpo::uno::Reference<css::reflection::XServiceTypeDescription2>& xService,
-    const cpo::uno::Reference<css::reflection::XServiceConstructorDescription>& xConstructor);
+    const cpo::uno::Reference<cpo::reflection::XServiceTypeDescription2>& xService,
+    const cpo::uno::Reference<cpo::reflection::XServiceConstructorDescription>& xConstructor);
 
 PyObject* PyUNO_Type_new (const char *typeName , cpo::uno::TypeClass t , const Runtime &r );
 PyObject* PyUNO_Enum_new( const char *enumBase, const char *enumValue, const Runtime &r );
@@ -221,7 +221,7 @@ struct RuntimeCargo
     cpo::uno::Reference< css::lang::XSingleServiceFactory > xInvocation;
     cpo::uno::Reference< css::script::XTypeConverter> xTypeConverter;
     cpo::uno::Reference< cpo::uno::XComponentContext > xContext;
-    cpo::uno::Reference< css::reflection::XIdlReflection > xCoreReflection;
+    cpo::uno::Reference< cpo::reflection::XIdlReflection > xCoreReflection;
     cpo::uno::Reference< css::container::XHierarchicalNameAccess > xTdMgr;
     cpo::uno::Reference< css::script::XInvocationAdapterFactory > xAdapterFactory;
     cpo::uno::Reference< css::beans::XIntrospection > xIntrospection;

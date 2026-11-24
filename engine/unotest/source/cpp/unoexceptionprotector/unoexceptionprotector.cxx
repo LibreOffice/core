@@ -24,9 +24,9 @@
 #include <ostream>
 #include <sstream>
 
-#include <com/sun/star/reflection/XIdlReflection.hpp>
-#include <com/sun/star/reflection/XIdlClass.hpp>
-#include <com/sun/star/reflection/theCoreReflection.hpp>
+#include <cpo/reflection/XIdlReflection.hpp>
+#include <cpo/reflection/XIdlClass.hpp>
+#include <cpo/reflection/theCoreReflection.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
 #include <cpo/uno/Reference.hxx>
@@ -45,12 +45,12 @@
 
 namespace {
 
-cpo::uno::Type translateType(cpo::uno::Reference<css::reflection::XIdlClass> const & type) {
+cpo::uno::Type translateType(cpo::uno::Reference<cpo::reflection::XIdlClass> const & type) {
     return cpo::uno::Type(type->getTypeClass(), type->getName());
 }
 
 void printUnoValue(
-    std::ostream & out, cpo::uno::Reference<css::reflection::XIdlReflection> const & reflections,
+    std::ostream & out, cpo::uno::Reference<cpo::reflection::XIdlReflection> const & reflections,
     cpo::uno::Type const & type, cpo::uno::Any const & value)
 {
     switch (type.getTypeClass()) {
@@ -115,7 +115,7 @@ void printUnoValue(
         break;
     case cpo::uno::TypeClass_SEQUENCE:
         {
-            cpo::uno::Reference<css::reflection::XIdlClass> const refl(
+            cpo::uno::Reference<cpo::reflection::XIdlClass> const refl(
                 reflections->forName(type.getTypeName()), cpo::uno::UNO_SET_THROW);
             auto const t = translateType(refl->getComponentType());
             auto const array = refl->getArray();
@@ -138,7 +138,7 @@ void printUnoValue(
         {
             out << '{';
             auto first = true;
-            for (auto const & f: cpo::uno::Reference<css::reflection::XIdlClass>(
+            for (auto const & f: cpo::uno::Reference<cpo::reflection::XIdlClass>(
                      reflections->forName(type.getTypeName()),
                      cpo::uno::UNO_SET_THROW)->getFields())
             {
@@ -185,7 +185,7 @@ bool Prot::protect(
         try {
             printUnoValue(
                 s,
-                css::reflection::theCoreReflection::get(comphelper::getProcessComponentContext()),
+                cpo::reflection::theCoreReflection::get(comphelper::getProcessComponentContext()),
                 cppu::UnoType<cpo::uno::Any>::get(), a);
         } catch (cpo::uno::Exception &) {
             // Best effort to print full details above; if that fails for whatever reason, print as

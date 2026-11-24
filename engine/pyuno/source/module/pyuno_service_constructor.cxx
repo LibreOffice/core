@@ -22,8 +22,8 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <typelib/typedescription.hxx>
-#include <com/sun/star/reflection/XServiceConstructorDescription.hpp>
-#include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
+#include <cpo/reflection/XServiceConstructorDescription.hpp>
+#include <cpo/reflection/XServiceTypeDescription2.hpp>
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <cpo/uno/XComponentContext.hpp>
@@ -34,8 +34,8 @@ namespace
 {
 struct PyUNO_service_constructor_Internals
 {
-    cpo::uno::Reference<css::reflection::XServiceTypeDescription2> xService;
-    cpo::uno::Reference<css::reflection::XServiceConstructorDescription> xConstructor;
+    cpo::uno::Reference<cpo::reflection::XServiceTypeDescription2> xService;
+    cpo::uno::Reference<cpo::reflection::XServiceConstructorDescription> xConstructor;
     // The parameter types are lazily converted to TypeDescriptions when the constructor is first
     // called.
     bool bTypesInitialized = false;
@@ -51,7 +51,7 @@ void PyUNO_service_constructor_Internals::ensureParamTypes()
     if (bTypesInitialized)
         return;
 
-    cpo::uno::Sequence<cpo::uno::Reference<css::reflection::XParameter>> aParams
+    cpo::uno::Sequence<cpo::uno::Reference<cpo::reflection::XParameter>> aParams
         = xConstructor->getParameters();
 
     for (const auto& xParameter : aParams)
@@ -163,7 +163,7 @@ PyObject* PyUNO_service_constructor_call(PyObject* self, PyObject* args,
                 me->members.xService->getName(), aParams, xContext);
         return runtime.any2PyObject(cpo::uno::Any(std::move(xInterface))).getAcquired();
     }
-    catch (const css::reflection::InvocationTargetException& e)
+    catch (const cpo::reflection::InvocationTargetException& e)
     {
         raisePyExceptionWithAny(e.TargetException);
     }
@@ -265,8 +265,8 @@ PyTypeObject PyUNO_service_constructor_Type = {
 }
 
 PyRef PyUNO_service_constructor_new(
-    const cpo::uno::Reference<css::reflection::XServiceTypeDescription2>& xService,
-    const cpo::uno::Reference<css::reflection::XServiceConstructorDescription>& xConstructor)
+    const cpo::uno::Reference<cpo::reflection::XServiceTypeDescription2>& xService,
+    const cpo::uno::Reference<cpo::reflection::XServiceConstructorDescription>& xConstructor)
 {
     OSL_ENSURE(xService.is(), "xService must be valid");
     OSL_ENSURE(xConstructor.is(), "xConstructor must be valid");

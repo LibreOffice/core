@@ -20,8 +20,8 @@
 
 #include <typelib/typedescription.hxx>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
-#include <com/sun/star/reflection/XSingletonTypeDescription.hpp>
+#include <cpo/reflection/XServiceTypeDescription2.hpp>
+#include <cpo/reflection/XSingletonTypeDescription.hpp>
 #include <com/sun/star/script/CannotConvertException.hpp>
 
 
@@ -180,7 +180,7 @@ static PyRef createClassFromTypeDescription(
 }
 
 static PyRef createEmptyPyTypeForTypeDescription(
-    const cpo::uno::Reference<css::reflection::XTypeDescription>& xType)
+    const cpo::uno::Reference<cpo::reflection::XTypeDescription>& xType)
 {
     PyRef ret(
         PyObject_CallFunctionObjArgs(
@@ -195,7 +195,7 @@ static PyRef createEmptyPyTypeForTypeDescription(
 }
 
 static PyRef createClassForService(
-    const cpo::uno::Reference<css::reflection::XServiceTypeDescription2>& xService)
+    const cpo::uno::Reference<cpo::reflection::XServiceTypeDescription2>& xService)
 {
     PyRef ret = createEmptyPyTypeForTypeDescription(xService);
 
@@ -223,7 +223,7 @@ static PyRef createClassForService(
 }
 
 static PyRef createClassForSingleton(
-    const cpo::uno::Reference<css::reflection::XSingletonTypeDescription>& xSingleton,
+    const cpo::uno::Reference<cpo::reflection::XSingletonTypeDescription>& xSingleton,
     const Runtime& runtime)
 {
     PyRef ret = createEmptyPyTypeForTypeDescription(xSingleton);
@@ -263,12 +263,12 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
 
     if (xType.hasValue())
     {
-        cpo::uno::Reference<css::reflection::XServiceTypeDescription2> xService;
+        cpo::uno::Reference<cpo::reflection::XServiceTypeDescription2> xService;
 
         if ((xType >>= xService) && xService.is())
             return createClassForService(xService);
 
-        cpo::uno::Reference<css::reflection::XSingletonTypeDescription> xSingleton;
+        cpo::uno::Reference<cpo::reflection::XSingletonTypeDescription> xSingleton;
 
         if ((xType >>= xSingleton) && xSingleton.is())
             return createClassForSingleton(xSingleton, runtime);

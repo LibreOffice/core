@@ -56,7 +56,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,cpo/loader,\
 	Java2 \
 	SharedLibrary \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/reflection,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,cpo/reflection,\
 	CoreReflection \
 	TypeDescriptionManager \
 	TypeDescriptionProvider \
@@ -93,7 +93,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/io,\
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/java,\
 	JavaVirtualMachine \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/reflection,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,cpo/reflection,\
 	theCoreReflection \
 	Dump \
 	ProxyFactory \
@@ -350,7 +350,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,cpo/loader,\
 	CannotActivateFactoryException \
 	XImplementationLoader \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/reflection,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,cpo/reflection,\
 	Annotation \
 	FieldAccessMode \
 	InvalidTypeNameException \

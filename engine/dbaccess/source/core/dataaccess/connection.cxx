@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/tools/ConnectionTools.hpp>
-#include <com/sun/star/reflection/ProxyFactory.hpp>
+#include <cpo/reflection/ProxyFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbmetadata.hxx>
@@ -51,7 +51,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::reflection;
+using namespace ::cpo::reflection;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::graphic;
 using namespace ::osl;

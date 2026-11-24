@@ -35,23 +35,23 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/reflection/XAnnotations.hpp>
-#include <com/sun/star/reflection/XTypeDescription.hpp>
-#include <com/sun/star/reflection/XEnumTypeDescription.hpp>
-#include <com/sun/star/reflection/XIndirectTypeDescription.hpp>
-#include <com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp>
-#include <com/sun/star/reflection/XInterfaceAttributeTypeDescription2.hpp>
-#include <com/sun/star/reflection/XMethodParameter.hpp>
-#include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
-#include <com/sun/star/reflection/XInterfaceTypeDescription2.hpp>
-#include <com/sun/star/reflection/XCompoundTypeDescription.hpp>
-#include <com/sun/star/reflection/XStructTypeDescription.hpp>
+#include <cpo/reflection/XAnnotations.hpp>
+#include <cpo/reflection/XTypeDescription.hpp>
+#include <cpo/reflection/XEnumTypeDescription.hpp>
+#include <cpo/reflection/XIndirectTypeDescription.hpp>
+#include <cpo/reflection/XInterfaceMemberTypeDescription.hpp>
+#include <cpo/reflection/XInterfaceAttributeTypeDescription2.hpp>
+#include <cpo/reflection/XMethodParameter.hpp>
+#include <cpo/reflection/XInterfaceMethodTypeDescription.hpp>
+#include <cpo/reflection/XInterfaceTypeDescription2.hpp>
+#include <cpo/reflection/XCompoundTypeDescription.hpp>
+#include <cpo/reflection/XStructTypeDescription.hpp>
 
 #include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::cpo::uno;
-using namespace ::com::sun::star::reflection;
+using namespace ::cpo::reflection;
 using namespace ::cpo::uno;
 
 namespace cppu
@@ -549,7 +549,7 @@ static typelib_TypeDescription * createCTD(
     }
 
     if (pRet != nullptr) {
-        if (auto const ann = Reference<reflection::XAnnotations>(xType, UNO_QUERY)) {
+        if (auto const ann = Reference<cpo::reflection::XAnnotations>(xType, UNO_QUERY)) {
             auto const anns = ann->getAnnotations();
             std::vector<OUString> owners;
             owners.reserve(anns.getLength()); // for guaranteed-stable ptrs

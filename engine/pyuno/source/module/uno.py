@@ -478,8 +478,8 @@ def _impl_getConstantGroupByName(module, group):
     """Gets UNOIDL constant group by name."""
 
     constants = Enum('cpo.uno.TypeClass', 'CONSTANTS')
-    one = Enum('com.sun.star.reflection.TypeDescriptionSearchDepth', 'ONE')
-    type_desc_mgr = _component_context.getValueByName('/singletons/com.sun.star.reflection.theTypeDescriptionManager')
+    one = Enum('cpo.reflection.TypeDescriptionSearchDepth', 'ONE')
+    type_desc_mgr = _component_context.getValueByName('/singletons/cpo.reflection.theTypeDescriptionManager')
     type_descs = type_desc_mgr.createTypeDescriptionEnumeration(module, (constants,), one)
     qualified_name = module + '.' + group
 

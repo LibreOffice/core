@@ -390,7 +390,7 @@ public abstract class ScriptProvider implements
                          short[][] aOutParamIndex, Object[][] aOutParam) throws
         com.sun.star.lang.IllegalArgumentException,
         com.sun.star.script.CannotConvertException,
-        com.sun.star.reflection.InvocationTargetException {
+        cpo.reflection.InvocationTargetException {
 
         return m_xInvocationProxy.invoke(
                    aFunctionName, aParams, aOutParamIndex, aOutParam);
@@ -399,7 +399,7 @@ public abstract class ScriptProvider implements
     public void setValue(String aPropertyName, Object aValue) throws
         com.sun.star.beans.UnknownPropertyException,
         com.sun.star.script.CannotConvertException,
-        com.sun.star.reflection.InvocationTargetException {
+        cpo.reflection.InvocationTargetException {
 
         m_xInvocationProxy.setValue(aPropertyName, aValue);
     }

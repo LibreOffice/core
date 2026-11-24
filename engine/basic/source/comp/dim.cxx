@@ -24,7 +24,7 @@
 #include <parser.hxx>
 #include <sb.hxx>
 #include <osl/diagnose.h>
-#include <com/sun/star/reflection/theCoreReflection.hpp>
+#include <cpo/reflection/theCoreReflection.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cpo/uno/Exception.hpp>
 #include <basic/codecompletecache.hxx>
@@ -1351,7 +1351,7 @@ bool SbiParser::IsUnoInterface(const OUString& sTypeName)
 {
     try
     {
-        return css::reflection::theCoreReflection::get(
+        return cpo::reflection::theCoreReflection::get(
             comphelper::getProcessComponentContext())->forName(sTypeName).is();
     }
     catch(const cpo::uno::Exception&)

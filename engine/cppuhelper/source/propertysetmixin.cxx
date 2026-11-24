@@ -48,16 +48,16 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/reflection/XCompoundTypeDescription.hpp>
-#include <com/sun/star/reflection/XIdlClass.hpp>
-#include <com/sun/star/reflection/XIdlField2.hpp>
-#include <com/sun/star/reflection/XIndirectTypeDescription.hpp>
-#include <com/sun/star/reflection/XInterfaceAttributeTypeDescription2.hpp>
-#include <com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp>
-#include <com/sun/star/reflection/XInterfaceTypeDescription2.hpp>
-#include <com/sun/star/reflection/XStructTypeDescription.hpp>
-#include <com/sun/star/reflection/XTypeDescription.hpp>
-#include <com/sun/star/reflection/theCoreReflection.hpp>
+#include <cpo/reflection/XCompoundTypeDescription.hpp>
+#include <cpo/reflection/XIdlClass.hpp>
+#include <cpo/reflection/XIdlField2.hpp>
+#include <cpo/reflection/XIndirectTypeDescription.hpp>
+#include <cpo/reflection/XInterfaceAttributeTypeDescription2.hpp>
+#include <cpo/reflection/XInterfaceMemberTypeDescription.hpp>
+#include <cpo/reflection/XInterfaceTypeDescription2.hpp>
+#include <cpo/reflection/XStructTypeDescription.hpp>
+#include <cpo/reflection/XTypeDescription.hpp>
+#include <cpo/reflection/theCoreReflection.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
@@ -100,7 +100,7 @@ struct Data: public salhelper::SimpleReferenceObject {
 
 protected:
     void initProperties(
-        cpo::uno::Reference< css::reflection::XTypeDescription > const & type,
+        cpo::uno::Reference< cpo::reflection::XTypeDescription > const & type,
         cpo::uno::Sequence< OUString > const & absentOptional,
         std::vector< OUString > * handleNames)
     {
@@ -110,13 +110,13 @@ protected:
 
 private:
     void initProperties(
-        cpo::uno::Reference< css::reflection::XTypeDescription > const & type,
+        cpo::uno::Reference< cpo::reflection::XTypeDescription > const & type,
         cpo::uno::Sequence< OUString > const & absentOptional,
         std::vector< OUString > * handleNames, std::set<OUString> * seen);
 
-    static cpo::uno::Reference< css::reflection::XTypeDescription >
+    static cpo::uno::Reference< cpo::reflection::XTypeDescription >
     resolveTypedefs(
-        cpo::uno::Reference< css::reflection::XTypeDescription > const & type);
+        cpo::uno::Reference< cpo::reflection::XTypeDescription > const & type);
 };
 
 Data::PropertyMap::const_iterator Data::get(
@@ -131,31 +131,31 @@ Data::PropertyMap::const_iterator Data::get(
 }
 
 void Data::initProperties(
-    cpo::uno::Reference< css::reflection::XTypeDescription > const & type,
+    cpo::uno::Reference< cpo::reflection::XTypeDescription > const & type,
     cpo::uno::Sequence< OUString > const & absentOptional,
     std::vector< OUString > * handleNames, std::set<OUString> * seen)
 {
-    cpo::uno::Reference< css::reflection::XInterfaceTypeDescription2 > ifc(
+    cpo::uno::Reference< cpo::reflection::XInterfaceTypeDescription2 > ifc(
         resolveTypedefs(type), cpo::uno::UNO_QUERY_THROW);
     if (!seen->insert(ifc->getName()).second)
         return;
 
     const cpo::uno::Sequence<
-        cpo::uno::Reference< css::reflection::XTypeDescription > > bases(
+        cpo::uno::Reference< cpo::reflection::XTypeDescription > > bases(
         ifc->getBaseTypes());
     for (const auto & i : bases) {
         initProperties(i, absentOptional, handleNames, seen);
     }
     const cpo::uno::Sequence<
         cpo::uno::Reference<
-            css::reflection::XInterfaceMemberTypeDescription > > members(
+            cpo::reflection::XInterfaceMemberTypeDescription > > members(
         ifc->getMembers());
     for (const auto & m : members) {
         if (m->getTypeClass()
             == cpo::uno::TypeClass_INTERFACE_ATTRIBUTE)
         {
             cpo::uno::Reference<
-            css::reflection::XInterfaceAttributeTypeDescription2 > attr(
+            cpo::reflection::XInterfaceAttributeTypeDescription2 > attr(
                 m, cpo::uno::UNO_QUERY_THROW);
             sal_Int16 attrAttribs = 0;
             if (attr->isBound()) {
@@ -168,7 +168,7 @@ void Data::initProperties(
             }
             cpo::uno::Sequence<
             cpo::uno::Reference<
-            css::reflection::XCompoundTypeDescription > > excs(
+            cpo::reflection::XCompoundTypeDescription > > excs(
                 attr->getGetExceptions());
             bool bGetUnknown = false;
             //XXX  Special interpretation of getter/setter exceptions only
@@ -195,7 +195,7 @@ void Data::initProperties(
             if (bGetUnknown && bSetUnknown) {
                 attrAttribs |= css::beans::PropertyAttribute::OPTIONAL;
             }
-            cpo::uno::Reference< css::reflection::XTypeDescription > t(
+            cpo::uno::Reference< cpo::reflection::XTypeDescription > t(
                 attr->getType());
             for (;;)
             {
@@ -221,10 +221,10 @@ void Data::initProperties(
                 }
                 attrAttribs |= n;
                 const cpo::uno::Sequence<
-                cpo::uno::Reference< css::reflection::XTypeDescription > >
+                cpo::uno::Reference< cpo::reflection::XTypeDescription > >
                     args(
                         cpo::uno::Reference<
-                        css::reflection::XStructTypeDescription >(
+                        cpo::reflection::XStructTypeDescription >(
                             t, cpo::uno::UNO_QUERY_THROW)->
                         getTypeArguments());
                 if (args.getLength() != 1) {
@@ -261,12 +261,12 @@ void Data::initProperties(
     }
 }
 
-cpo::uno::Reference< css::reflection::XTypeDescription > Data::resolveTypedefs(
-    cpo::uno::Reference< css::reflection::XTypeDescription > const & type)
+cpo::uno::Reference< cpo::reflection::XTypeDescription > Data::resolveTypedefs(
+    cpo::uno::Reference< cpo::reflection::XTypeDescription > const & type)
 {
-    cpo::uno::Reference< css::reflection::XTypeDescription > t(type);
+    cpo::uno::Reference< cpo::reflection::XTypeDescription > t(type);
     while (t->getTypeClass() == cpo::uno::TypeClass_TYPEDEF) {
-        t = cpo::uno::Reference< css::reflection::XIndirectTypeDescription >(
+        t = cpo::uno::Reference< cpo::reflection::XIndirectTypeDescription >(
             t, cpo::uno::UNO_QUERY_THROW)->getReferencedType();
     }
     return t;
@@ -389,19 +389,19 @@ public:
     bool disposed;
 
 private:
-    cpo::uno::Reference< css::reflection::XIdlClass > getReflection(
+    cpo::uno::Reference< cpo::reflection::XIdlClass > getReflection(
         OUString const & typeName) const;
 
     static cpo::uno::Any wrapValue(
         cpo::uno::Reference< cpo::uno::XInterface > const & object,
         cpo::uno::Any const & value,
-        cpo::uno::Reference< css::reflection::XIdlClass > const & type,
+        cpo::uno::Reference< cpo::reflection::XIdlClass > const & type,
         bool wrapAmbiguous, bool isAmbiguous, bool wrapDefaulted,
         bool isDefaulted, bool wrapOptional);
 
     cpo::uno::Reference< cpo::uno::XComponentContext > const & m_context;
     cpo::uno::Type m_type;
-    cpo::uno::Reference< css::reflection::XIdlClass > m_idlClass;
+    cpo::uno::Reference< cpo::reflection::XIdlClass > m_idlClass;
 };
 
 PropertySetMixinImpl::Impl::Impl(
@@ -419,12 +419,12 @@ PropertySetMixinImpl::Impl::Impl(
              | IMPLEMENTS_PROPERTY_ACCESS))
         == 0);
     m_idlClass = getReflection(m_type.getTypeName());
-    cpo::uno::Reference< css::reflection::XTypeDescription > ifc;
+    cpo::uno::Reference< cpo::reflection::XTypeDescription > ifc;
     try {
         ifc.set(
             cpo::uno::Reference< css::container::XHierarchicalNameAccess >(
                 m_context->getValueByName(
-                    u"/singletons/com.sun.star.reflection."
+                    u"/singletons/cpo.reflection."
                     "theTypeDescriptionManager"_ustr),
                 cpo::uno::UNO_QUERY_THROW)->getByHierarchicalName(
                     m_type.getTypeName()),
@@ -478,13 +478,13 @@ void PropertySetMixinImpl::Impl::setProperty(
              + name),
             object, illegalArgumentPosition);
     }
-    cpo::uno::Reference< css::reflection::XIdlField2 > f(
+    cpo::uno::Reference< cpo::reflection::XIdlField2 > f(
         m_idlClass->getField(name), cpo::uno::UNO_QUERY_THROW);
     cpo::uno::Any o(object->queryInterface(m_type));
     cpo::uno::Any v(
         wrapValue(
             object, value,
-            (cpo::uno::Reference< css::reflection::XIdlField2 >(
+            (cpo::uno::Reference< cpo::reflection::XIdlField2 >(
                 m_idlClass->getField(name), cpo::uno::UNO_QUERY_THROW)->
              getType()),
             ((i->second.property.Attributes
@@ -555,7 +555,7 @@ cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
     if (i == properties.end()) {
         throw css::beans::UnknownPropertyException(name, object);
     }
-    cpo::uno::Reference< css::reflection::XIdlField2 > field(
+    cpo::uno::Reference< cpo::reflection::XIdlField2 > field(
         m_idlClass->getField(name), cpo::uno::UNO_QUERY_THROW);
     cpo::uno::Any value;
     try {
@@ -602,10 +602,10 @@ cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
             && value.getValueTypeName().startsWith(
                 "com.sun.star.beans.Ambiguous<"))
         {
-            cpo::uno::Reference< css::reflection::XIdlClass > ambiguous(
+            cpo::uno::Reference< cpo::reflection::XIdlClass > ambiguous(
                 getReflection(value.getValueTypeName()));
             try {
-                if (!(cpo::uno::Reference< css::reflection::XIdlField2 >(
+                if (!(cpo::uno::Reference< cpo::reflection::XIdlField2 >(
                           ambiguous->getField(u"IsAmbiguous"_ustr),
                           cpo::uno::UNO_QUERY_THROW)->get(value)
                       >>= isAmbiguous))
@@ -615,7 +615,7 @@ cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
                          " IsAmbiguous member"_ustr),
                         object);
                 }
-                value = cpo::uno::Reference< css::reflection::XIdlField2 >(
+                value = cpo::uno::Reference< cpo::reflection::XIdlField2 >(
                     ambiguous->getField(u"Value"_ustr), cpo::uno::UNO_QUERY_THROW)->
                     get(value);
             } catch (css::lang::IllegalArgumentException & e) {
@@ -630,11 +630,11 @@ cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
                    && value.getValueTypeName().startsWith(
                        "com.sun.star.beans.Defaulted<"))
         {
-            cpo::uno::Reference< css::reflection::XIdlClass > defaulted(
+            cpo::uno::Reference< cpo::reflection::XIdlClass > defaulted(
                 getReflection(value.getValueTypeName()));
             try {
 
-                if (!(cpo::uno::Reference< css::reflection::XIdlField2 >(
+                if (!(cpo::uno::Reference< cpo::reflection::XIdlField2 >(
                           defaulted->getField(u"IsDefaulted"_ustr),
                           cpo::uno::UNO_QUERY_THROW)->get(value)
                       >>= isDefaulted))
@@ -644,7 +644,7 @@ cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
                          " IsDefaulted member"_ustr),
                         object);
                 }
-                value = cpo::uno::Reference< css::reflection::XIdlField2 >(
+                value = cpo::uno::Reference< cpo::reflection::XIdlField2 >(
                     defaulted->getField(u"Value"_ustr), cpo::uno::UNO_QUERY_THROW)->
                     get(value);
             } catch (css::lang::IllegalArgumentException & e) {
@@ -659,11 +659,11 @@ cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
                    && value.getValueTypeName().startsWith(
                        "com.sun.star.beans.Optional<"))
         {
-            cpo::uno::Reference< css::reflection::XIdlClass > optional(
+            cpo::uno::Reference< cpo::reflection::XIdlClass > optional(
                 getReflection(value.getValueTypeName()));
             try {
                 bool present = false;
-                if (!(cpo::uno::Reference< css::reflection::XIdlField2 >(
+                if (!(cpo::uno::Reference< cpo::reflection::XIdlField2 >(
                           optional->getField(u"IsPresent"_ustr),
                           cpo::uno::UNO_QUERY_THROW)->get(value)
                       >>= present))
@@ -677,7 +677,7 @@ cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
                     value.clear();
                     break;
                 }
-                value = cpo::uno::Reference< css::reflection::XIdlField2 >(
+                value = cpo::uno::Reference< cpo::reflection::XIdlField2 >(
                     optional->getField(u"Value"_ustr), cpo::uno::UNO_QUERY_THROW)->
                     get(value);
             } catch (css::lang::IllegalArgumentException & e) {
@@ -705,18 +705,18 @@ cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
     return value;
 }
 
-cpo::uno::Reference< css::reflection::XIdlClass >
+cpo::uno::Reference< cpo::reflection::XIdlClass >
 PropertySetMixinImpl::Impl::getReflection(OUString const & typeName) const
 {
-    return cpo::uno::Reference< css::reflection::XIdlClass >(
-        css::reflection::theCoreReflection::get(m_context)->forName(typeName),
+    return cpo::uno::Reference< cpo::reflection::XIdlClass >(
+        cpo::reflection::theCoreReflection::get(m_context)->forName(typeName),
         cpo::uno::UNO_SET_THROW);
 }
 
 cpo::uno::Any PropertySetMixinImpl::Impl::wrapValue(
     cpo::uno::Reference< cpo::uno::XInterface > const & object,
     cpo::uno::Any const & value,
-    cpo::uno::Reference< css::reflection::XIdlClass > const & type,
+    cpo::uno::Reference< cpo::reflection::XIdlClass > const & type,
     bool wrapAmbiguous, bool isAmbiguous, bool wrapDefaulted, bool isDefaulted,
     bool wrapOptional)
 {
@@ -728,14 +728,14 @@ cpo::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         cpo::uno::Any strct;
         type->createObject(strct);
         try {
-            cpo::uno::Reference< css::reflection::XIdlField2 > field(
+            cpo::uno::Reference< cpo::reflection::XIdlField2 > field(
                 type->getField(u"Value"_ustr), cpo::uno::UNO_QUERY_THROW);
             field->set(
                 strct,
                 wrapValue(
                     object, value, field->getType(), false, false,
                     wrapDefaulted, isDefaulted, wrapOptional));
-            cpo::uno::Reference< css::reflection::XIdlField2 >(
+            cpo::uno::Reference< cpo::reflection::XIdlField2 >(
                 type->getField(u"IsAmbiguous"_ustr), cpo::uno::UNO_QUERY_THROW)->set(
                     strct, cpo::uno::Any(isAmbiguous));
         } catch (css::lang::IllegalArgumentException & e) {
@@ -759,14 +759,14 @@ cpo::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         cpo::uno::Any strct;
         type->createObject(strct);
         try {
-            cpo::uno::Reference< css::reflection::XIdlField2 > field(
+            cpo::uno::Reference< cpo::reflection::XIdlField2 > field(
                 type->getField(u"Value"_ustr), cpo::uno::UNO_QUERY_THROW);
             field->set(
                 strct,
                 wrapValue(
                     object, value, field->getType(), wrapAmbiguous, isAmbiguous,
                     false, false, wrapOptional));
-            cpo::uno::Reference< css::reflection::XIdlField2 >(
+            cpo::uno::Reference< cpo::reflection::XIdlField2 >(
                 type->getField(u"IsDefaulted"_ustr), cpo::uno::UNO_QUERY_THROW)->set(
                     strct, cpo::uno::Any(isDefaulted));
         } catch (css::lang::IllegalArgumentException & e) {
@@ -791,11 +791,11 @@ cpo::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         type->createObject(strct);
         bool present = value.hasValue();
         try {
-            cpo::uno::Reference< css::reflection::XIdlField2 >(
+            cpo::uno::Reference< cpo::reflection::XIdlField2 >(
                 type->getField(u"IsPresent"_ustr), cpo::uno::UNO_QUERY_THROW)->set(
                     strct, cpo::uno::Any(present));
             if (present) {
-                cpo::uno::Reference< css::reflection::XIdlField2 > field(
+                cpo::uno::Reference< cpo::reflection::XIdlField2 > field(
                     type->getField(u"Value"_ustr), cpo::uno::UNO_QUERY_THROW);
                 field->set(
                     strct,

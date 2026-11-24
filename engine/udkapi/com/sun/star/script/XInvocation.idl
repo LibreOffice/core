@@ -57,7 +57,7 @@ published interface XInvocation: cpo::uno::XInterface
              [out] sequence<any> aOutParam )
             raises( com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::script::CannotConvertException,
-                    com::sun::star::reflection::InvocationTargetException );
+                    cpo::reflection::InvocationTargetException );
 
     /** sets a value to the property with the specified name.
 
@@ -72,7 +72,7 @@ published interface XInvocation: cpo::uno::XInterface
              [in] any aValue )
             raises( com::sun::star::beans::UnknownPropertyException,
                     com::sun::star::script::CannotConvertException,
-                    com::sun::star::reflection::InvocationTargetException );
+                    cpo::reflection::InvocationTargetException );
 
     /** returns the value of the property with the specified name.
 

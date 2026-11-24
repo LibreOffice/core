@@ -43,12 +43,12 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
-#include <com/sun/star/reflection/XIdlReflection.hpp>
+#include <cpo/reflection/XIdlReflection.hpp>
 
 namespace cpo::uno { class XComponentContext; }
-namespace com::sun::star::reflection { class XIdlClass; }
-namespace com::sun::star::reflection { class XIdlField; }
-namespace com::sun::star::reflection { class XIdlMethod; }
+namespace cpo::reflection { class XIdlClass; }
+namespace cpo::reflection { class XIdlField; }
+namespace cpo::reflection { class XIdlMethod; }
 
 namespace stoc_corefl
 {
@@ -68,13 +68,13 @@ inline bool td_equals( typelib_TypeDescription * pTD, typelib_TypeDescriptionRef
              rtl_ustr_compare( pTD->pTypeName->buffer, pType->pTypeName->buffer ) == 0));
 }
 
-typedef std::unordered_map< OUString, cpo::uno::WeakReference< css::reflection::XIdlField > > OUString2Field;
-typedef std::unordered_map< OUString, cpo::uno::WeakReference< css::reflection::XIdlMethod > > OUString2Method;
+typedef std::unordered_map< OUString, cpo::uno::WeakReference< cpo::reflection::XIdlField > > OUString2Field;
+typedef std::unordered_map< OUString, cpo::uno::WeakReference< cpo::reflection::XIdlMethod > > OUString2Method;
 
 
 class IdlReflectionServiceImpl
     : public ::cppu::WeakComponentImplHelper<
-          css::reflection::XIdlReflection,
+          cpo::reflection::XIdlReflection,
           css::container::XHierarchicalNameAccess,
           css::lang::XServiceInfo>
 {
@@ -87,7 +87,7 @@ class IdlReflectionServiceImpl
     cpo::uno::Mapping                     _aCpp2Uno;
     cpo::uno::Mapping                     _aUno2Cpp;
 
-    inline cpo::uno::Reference< css::reflection::XIdlClass > constructClass( typelib_TypeDescription * pTypeDescr );
+    inline cpo::uno::Reference< cpo::reflection::XIdlClass > constructClass( typelib_TypeDescription * pTypeDescr );
 
 public:
     /// @throws cpo::uno::RuntimeException
@@ -110,22 +110,22 @@ public:
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XIdlReflection
-    virtual cpo::uno::Reference< css::reflection::XIdlClass > forName( const OUString & rTypeName ) override;
-    virtual cpo::uno::Reference< css::reflection::XIdlClass > getType( const cpo::uno::Any & rObj ) override;
+    virtual cpo::uno::Reference< cpo::reflection::XIdlClass > forName( const OUString & rTypeName ) override;
+    virtual cpo::uno::Reference< cpo::reflection::XIdlClass > getType( const cpo::uno::Any & rObj ) override;
 
     // XHierarchicalNameAccess
     virtual cpo::uno::Any getByHierarchicalName( const OUString & rName ) override;
     virtual bool hasByHierarchicalName( const OUString & rName ) override;
 
     /// @throws cpo::uno::RuntimeException
-    cpo::uno::Reference< css::reflection::XIdlClass > forType( typelib_TypeDescription * pTypeDescr );
+    cpo::uno::Reference< cpo::reflection::XIdlClass > forType( typelib_TypeDescription * pTypeDescr );
     /// @throws cpo::uno::RuntimeException
-    cpo::uno::Reference< css::reflection::XIdlClass > forType( typelib_TypeDescriptionReference * pRef );
+    cpo::uno::Reference< cpo::reflection::XIdlClass > forType( typelib_TypeDescriptionReference * pRef );
 };
 
 
 class IdlClassImpl
-    : public ::cppu::WeakImplHelper< css::reflection::XIdlClass >
+    : public ::cppu::WeakImplHelper< cpo::reflection::XIdlClass >
 {
     rtl::Reference<IdlReflectionServiceImpl>
                                  m_xReflection;
@@ -150,27 +150,27 @@ public:
     // XIdlClassImpl default implementation
     virtual cpo::uno::TypeClass getTypeClass() override;
     virtual OUString getName() override;
-    virtual bool equals( const cpo::uno::Reference< css::reflection::XIdlClass >& xType ) override;
+    virtual bool equals( const cpo::uno::Reference< cpo::reflection::XIdlClass >& xType ) override;
 
-    virtual bool isAssignableFrom( const cpo::uno::Reference< css::reflection::XIdlClass > & xType ) override;
+    virtual bool isAssignableFrom( const cpo::uno::Reference< cpo::reflection::XIdlClass > & xType ) override;
     virtual void createObject( cpo::uno::Any & rObj ) override;
 
     // def impl ????
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlClass > > getClasses() override;
-    virtual cpo::uno::Reference< css::reflection::XIdlClass > getClass( const OUString & rName ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlClass > > getInterfaces() override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< cpo::reflection::XIdlClass > > getClasses() override;
+    virtual cpo::uno::Reference< cpo::reflection::XIdlClass > getClass( const OUString & rName ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< cpo::reflection::XIdlClass > > getInterfaces() override;
 
     // structs, interfaces
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlClass > > getSuperclasses() override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< cpo::reflection::XIdlClass > > getSuperclasses() override;
     // structs
-    virtual cpo::uno::Reference< css::reflection::XIdlField > getField( const OUString & rName ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlField > > getFields() override;
+    virtual cpo::uno::Reference< cpo::reflection::XIdlField > getField( const OUString & rName ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< cpo::reflection::XIdlField > > getFields() override;
     // interfaces
-    virtual cpo::uno::Reference< css::reflection::XIdlMethod > getMethod( const OUString & rName ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlMethod > > getMethods() override;
+    virtual cpo::uno::Reference< cpo::reflection::XIdlMethod > getMethod( const OUString & rName ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< cpo::reflection::XIdlMethod > > getMethods() override;
     // array
-    virtual cpo::uno::Reference< css::reflection::XIdlClass > getComponentType() override;
-    virtual cpo::uno::Reference< css::reflection::XIdlArray > getArray() override;
+    virtual cpo::uno::Reference< cpo::reflection::XIdlClass > getComponentType() override;
+    virtual cpo::uno::Reference< cpo::reflection::XIdlArray > getArray() override;
 };
 
 
@@ -179,7 +179,7 @@ class InterfaceIdlClassImpl
 {
     typedef std::pair< OUString, typelib_TypeDescription * > MemberInit;
 
-    cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlClass > >      _xSuperClasses;
+    cpo::uno::Sequence< cpo::uno::Reference< cpo::reflection::XIdlClass > >      _xSuperClasses;
 
     std::unique_ptr<MemberInit[]>           _pSortedMemberInit; // first methods, then attributes
     OUString2Field                          _aName2Field;
@@ -204,12 +204,12 @@ public:
     virtual ~InterfaceIdlClassImpl() override;
 
     // IdlClassImpl modifications
-    virtual bool isAssignableFrom( const cpo::uno::Reference< css::reflection::XIdlClass > & xType ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlClass > > getSuperclasses() override;
-    virtual cpo::uno::Reference< css::reflection::XIdlMethod > getMethod( const OUString & rName ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlMethod > > getMethods() override;
-    virtual cpo::uno::Reference< css::reflection::XIdlField > getField( const OUString & rName ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlField > > getFields() override;
+    virtual bool isAssignableFrom( const cpo::uno::Reference< cpo::reflection::XIdlClass > & xType ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< cpo::reflection::XIdlClass > > getSuperclasses() override;
+    virtual cpo::uno::Reference< cpo::reflection::XIdlMethod > getMethod( const OUString & rName ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< cpo::reflection::XIdlMethod > > getMethods() override;
+    virtual cpo::uno::Reference< cpo::reflection::XIdlField > getField( const OUString & rName ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< cpo::reflection::XIdlField > > getFields() override;
     virtual void createObject( cpo::uno::Any & rObj ) override;
 };
 
@@ -217,9 +217,9 @@ public:
 class CompoundIdlClassImpl
     : public IdlClassImpl
 {
-    cpo::uno::Reference< css::reflection::XIdlClass >
+    cpo::uno::Reference< cpo::reflection::XIdlClass >
                                              _xSuperClass;
-    std::optional< cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlField > > >
+    std::optional< cpo::uno::Sequence< cpo::uno::Reference< cpo::reflection::XIdlField > > >
                                             m_xFields;
     OUString2Field                          _aName2Field;
 
@@ -236,14 +236,14 @@ public:
     virtual ~CompoundIdlClassImpl() override;
 
     // IdlClassImpl modifications
-    virtual bool isAssignableFrom( const cpo::uno::Reference< css::reflection::XIdlClass > & xType ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlClass > > getSuperclasses() override;
-    virtual cpo::uno::Reference< css::reflection::XIdlField > getField( const OUString & rName ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlField > > getFields() override;
+    virtual bool isAssignableFrom( const cpo::uno::Reference< cpo::reflection::XIdlClass > & xType ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< cpo::reflection::XIdlClass > > getSuperclasses() override;
+    virtual cpo::uno::Reference< cpo::reflection::XIdlField > getField( const OUString & rName ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< cpo::reflection::XIdlField > > getFields() override;
 };
 
 
-typedef cppu::ImplInheritanceHelper<IdlClassImpl, css::reflection::XIdlArray> ArrayIdlClassImpl_Base;
+typedef cppu::ImplInheritanceHelper<IdlClassImpl, cpo::reflection::XIdlArray> ArrayIdlClassImpl_Base;
 class ArrayIdlClassImpl : public ArrayIdlClassImpl_Base
 {
 public:
@@ -258,9 +258,9 @@ public:
         {}
 
     // IdlClassImpl modifications
-    virtual bool isAssignableFrom( const cpo::uno::Reference< css::reflection::XIdlClass > & xType ) override;
-    virtual cpo::uno::Reference< css::reflection::XIdlClass > getComponentType() override;
-    virtual cpo::uno::Reference< css::reflection::XIdlArray > getArray() override;
+    virtual bool isAssignableFrom( const cpo::uno::Reference< cpo::reflection::XIdlClass > & xType ) override;
+    virtual cpo::uno::Reference< cpo::reflection::XIdlClass > getComponentType() override;
+    virtual cpo::uno::Reference< cpo::reflection::XIdlArray > getArray() override;
 
     // XIdlArray
     virtual void realloc( cpo::uno::Any & rArray, sal_Int32 nLen ) override;
@@ -273,7 +273,7 @@ public:
 class EnumIdlClassImpl
     : public IdlClassImpl
 {
-    std::optional< cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlField > > > m_xFields;
+    std::optional< cpo::uno::Sequence< cpo::uno::Reference< cpo::reflection::XIdlField > > > m_xFields;
     OUString2Field                       _aName2Field;
 
 public:
@@ -289,14 +289,14 @@ public:
     virtual ~EnumIdlClassImpl() override;
 
     // IdlClassImpl modifications
-    virtual cpo::uno::Reference< css::reflection::XIdlField > getField( const OUString & rName ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlField > > getFields() override;
+    virtual cpo::uno::Reference< cpo::reflection::XIdlField > getField( const OUString & rName ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< cpo::reflection::XIdlField > > getFields() override;
     virtual void createObject( cpo::uno::Any & rObj ) override;
 };
 
 
 class IdlMemberImpl
-    : public ::cppu::WeakImplHelper< css::reflection::XIdlMember >
+    : public ::cppu::WeakImplHelper< cpo::reflection::XIdlMember >
 {
     rtl::Reference<IdlReflectionServiceImpl>
                                 m_xReflection;
@@ -306,7 +306,7 @@ class IdlMemberImpl
     typelib_TypeDescription *   _pDeclTypeDescr;
 
 protected:
-    cpo::uno::Reference< css::reflection::XIdlClass >      _xDeclClass;
+    cpo::uno::Reference< cpo::reflection::XIdlClass >      _xDeclClass;
 
 public:
     IdlReflectionServiceImpl *  getReflection() const
@@ -322,7 +322,7 @@ public:
     virtual ~IdlMemberImpl() override;
 
     // XIdlMember
-    virtual cpo::uno::Reference< css::reflection::XIdlClass > getDeclaringClass() override;
+    virtual cpo::uno::Reference< cpo::reflection::XIdlClass > getDeclaringClass() override;
     virtual OUString getName() override;
 };
 

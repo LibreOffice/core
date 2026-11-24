@@ -63,7 +63,7 @@ published struct InvocationInfo
     /** Mode of method parameters (IN, OUT, INOUT),
         for properties this sequence is empty.
      */
-    sequence< com::sun::star::reflection::ParamMode > aParamModes;
+    sequence< cpo::reflection::ParamMode > aParamModes;
 };
 
 

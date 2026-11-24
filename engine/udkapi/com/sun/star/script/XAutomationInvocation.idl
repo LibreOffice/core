@@ -21,8 +21,8 @@ module com {  module sun {  module star {  module script {
 
 interface XAutomationInvocation: com::sun::star::script::XInvocation
 {
-    any invokeGetProperty(  [in] string aFunctionName, [in] sequence<any> aParams, [out] sequence<short> aOutParamIndex, [out] sequence<any> aOutParam ) raises( com::sun::star::lang::IllegalArgumentException, com::sun::star::script::CannotConvertException, com::sun::star::reflection::InvocationTargetException );
-    any invokePutProperty(  [in] string aFunctionName, [in] sequence<any> aParams, [out] sequence<short> aOutParamIndex, [out] sequence<any> aOutParam ) raises( com::sun::star::lang::IllegalArgumentException, com::sun::star::script::CannotConvertException, com::sun::star::reflection::InvocationTargetException );
+    any invokeGetProperty(  [in] string aFunctionName, [in] sequence<any> aParams, [out] sequence<short> aOutParamIndex, [out] sequence<any> aOutParam ) raises( com::sun::star::lang::IllegalArgumentException, com::sun::star::script::CannotConvertException, cpo::reflection::InvocationTargetException );
+    any invokePutProperty(  [in] string aFunctionName, [in] sequence<any> aParams, [out] sequence<short> aOutParamIndex, [out] sequence<any> aOutParam ) raises( com::sun::star::lang::IllegalArgumentException, com::sun::star::script::CannotConvertException, cpo::reflection::InvocationTargetException );
 
 };
 

@@ -30,7 +30,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/reflection/ProxyFactory.hpp>
+#include <cpo/reflection/ProxyFactory.hpp>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <comphelper/processfactory.hxx>
@@ -58,7 +58,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::reflection;
+using namespace ::cpo::reflection;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::container;
 
@@ -163,7 +163,7 @@ void AccessibleControlShape::Init()
         // of the inner object, which we do not have at all.
         // Bad, too.
 
-        // But there is a solution: com.sun.star.reflection.ProxyFactory. This service is able to create a proxy
+        // But there is a solution: cpo.reflection.ProxyFactory. This service is able to create a proxy
         // for any component, which supports _exactly_ the same interfaces as the component. In addition, it can
         // be aggregated, as by definition the proxy's ref count is exactly 1 when returned from the factory.
         // Sounds better. Though this yields the problem of slightly degraded performance, it's the only solution

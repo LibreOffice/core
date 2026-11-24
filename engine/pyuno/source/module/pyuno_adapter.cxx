@@ -43,9 +43,9 @@ using com::sun::star::lang::XUnoTunnel;
 using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::beans::UnknownPropertyException;
 using com::sun::star::script::CannotConvertException;
-using com::sun::star::reflection::InvocationTargetException;
-using com::sun::star::reflection::XIdlMethod;
-using com::sun::star::reflection::ParamInfo;
+using cpo::reflection::InvocationTargetException;
+using cpo::reflection::XIdlMethod;
+using cpo::reflection::ParamInfo;
 
 #define TO_ASCII(x) OUStringToOString( x , RTL_TEXTENCODING_ASCII_US).getStr()
 
@@ -139,8 +139,8 @@ Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
             std::vector<sal_Int16> retVec;
             for( sal_Int32 i = 0; i < seqInfo.getLength(); ++i )
             {
-                if( seqInfo[i].aMode == css::reflection::ParamMode_OUT ||
-                    seqInfo[i].aMode == css::reflection::ParamMode_INOUT )
+                if( seqInfo[i].aMode == cpo::reflection::ParamMode_OUT ||
+                    seqInfo[i].aMode == cpo::reflection::ParamMode_INOUT )
                 {
                     retVec.push_back(static_cast<sal_Int16>(i));
                 }

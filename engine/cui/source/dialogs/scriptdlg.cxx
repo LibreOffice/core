@@ -57,7 +57,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::cpo::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
 using namespace css::script;
 using namespace css::frame;
 using namespace css::document;

@@ -28,8 +28,8 @@
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/XInvocation2.hpp>
-#include <com/sun/star/reflection/XIdlReflection.hpp>
-#include <com/sun/star/reflection/theCoreReflection.hpp>
+#include <cpo/reflection/XIdlReflection.hpp>
+#include <cpo/reflection/theCoreReflection.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -51,7 +51,7 @@ using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::script;
-using namespace css::reflection;
+using namespace cpo::reflection;
 using namespace css::beans;
 using namespace css::container;
 using namespace cppu;
@@ -1008,7 +1008,7 @@ private:
 InvocationService::InvocationService( const Reference<XComponentContext> & xCtx )
     : mxCtx( xCtx )
     , mxSMgr( xCtx->getServiceManager() )
-    , xCoreReflection( css::reflection::theCoreReflection::get(mxCtx) )
+    , xCoreReflection( cpo::reflection::theCoreReflection::get(mxCtx) )
 {
     xTypeConverter.set(
         mxSMgr->createInstanceWithContext( u"com.sun.star.script.Converter"_ustr, xCtx ),

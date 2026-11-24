@@ -34,7 +34,7 @@
 #include <cpo/loader/XImplementationLoader.hpp>
 #include <cpo/registry/XImplementationRegistration2.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/reflection/XServiceTypeDescription.hpp>
+#include <cpo/reflection/XServiceTypeDescription.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
@@ -818,7 +818,7 @@ void insert_singletons(
                 {
                     Reference< container::XHierarchicalNameAccess > xTDMgr;
                     OUString the_tdmgr =
-                        u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr;
+                        u"/singletons/cpo.reflection.theTypeDescriptionManager"_ustr;
                     xContext->getValueByName( the_tdmgr ) >>= xTDMgr;
                     if (! xTDMgr.is())
                     {

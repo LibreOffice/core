@@ -404,7 +404,7 @@ void ComponentContext::disposing(std::unique_lock<std::mutex>& rGuard)
             rEntry.value >>= xComp;
             if (xComp.is())
             {
-                if ( rName == u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr )
+                if ( rName == u"/singletons/cpo.reflection.theTypeDescriptionManager"_ustr )
                 {
                     xTDMgr = std::move(xComp);
                 }

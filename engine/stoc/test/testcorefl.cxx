@@ -34,8 +34,8 @@
 
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/reflection/XIdlReflection.hpp>
-#include <com/sun/star/reflection/XIdlField2.hpp>
+#include <cpo/reflection/XIdlReflection.hpp>
+#include <cpo/reflection/XIdlField2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cpo/registry/XSimpleRegistry.hpp>
 #include <cpo/registry/XImplementationRegistration.hpp>
@@ -56,7 +56,7 @@ using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::beans;
 using namespace cpo::registry;
-using namespace css::reflection;
+using namespace cpo::reflection;
 using namespace css::container;
 
 
@@ -357,7 +357,7 @@ SAL_IMPLEMENT_MAIN()
 
         Reference< XIdlReflection > xRefl;
         xContext->getValueByName(
-            OUString( "/singletons/com.sun.star.reflection.theCoreReflection") )
+            OUString( "/singletons/cpo.reflection.theCoreReflection") )
                         >>= xRefl;
         OSL_ENSURE(
             xRefl.is(), "### CoreReflection singleton not accessible!?" );

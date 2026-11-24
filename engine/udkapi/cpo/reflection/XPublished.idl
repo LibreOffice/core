@@ -1,0 +1,94 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module cpo { module reflection {
+
+/**
+   Reflects the “published” status of a UNOIDL entity.
+
+   <p>This interface is intended to be supported by objects that also support
+   cpo::reflection::XTypeDescription.
+   (This interface could have been made an optional sub-interface of
+   cpo::reflection::XTypeDescription, but is
+   instead kept independent for reasons of backwards compatibility.)</p>
+
+   <p>For the various kinds of UNOIDL entities that are represented by objects
+   supporting cpo::reflection::XTypeDescription
+   and its subtypes, this optional interface should be supported as follows:</p>
+   <ul>
+       <li>Enum types
+       (cpo::reflection::XEnumTypeDescription),
+       plain struct types
+       (cpo::reflection::XStructTypeDescription),
+       polymorphic struct type templates
+       (cpo::reflection::XStructTypeDescription),
+       exception types (cpo::reflection::XCompoundTypeDescription),
+       interface types (cpo::reflection::XInterfaceTypeDescription2),
+       typedefs (cpo::reflection::XIndirectTypeDescription),
+       individual constants
+       (cpo::reflection::XConstantTypeDescription),
+       constant groups (cpo::reflection::XConstantsTypeDescription),
+       single-interface&ndash;based services
+       (cpo::reflection::XServiceTypeDescription2),
+       accumulation-based services
+       (cpo::reflection::XServiceTypeDescription2),
+       interface-based singletons
+       (cpo::reflection::XSingletonTypeDescription2),
+       and service-based singletons
+       (cpo::reflection::XSingletonTypeDescription2)
+       support the notion of being published.  Therefore, for an object that
+       represents any such entity,
+       cpo::reflection::XPublished should be
+       supported.</li>
+
+       <li>Sequence types
+       (cpo::reflection::XIndirectTypeDescription),
+       type parameters of polymorphic struct type templates
+       (cpo::reflection::XTypeDescription),
+       instantiated polymorphic struct types
+       (cpo::reflection::XStructTypeDescription),
+       attributes of interface types
+       (cpo::reflection::XInterfaceAttributeTypeDescription2),
+       methods of interface types
+       (cpo::reflection::XInterfaceMethodTypeDescription),
+       properties of accumulation-based services
+       (cpo::reflection::XPropertyTypeDescription),
+       deprecated
+       cpo::reflection::XArrayTypeDescriptions,
+       and deprecated
+       cpo::reflection::XUnionTypeDescriptions do
+       not support the notion of being published.
+       Therefore, for an object that represents any such entity,
+       cpo::reflection::XPublished should not be
+       supported.</li>
+   </ul>
+*/
+interface XPublished {
+    /**
+       Returns the “published” status of a UNOIDL entity.
+
+       @return `TRUE` if the UNOIDL entity represented by this object is
+       published
+     */
+    boolean isPublished();
+};
+
+}; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,7 +22,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/sdbc/XPooledConnection.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <cpo/reflection/XProxyFactory.hpp>
 
 #include "ZConnectionWrapper.hxx"
 
@@ -41,13 +41,13 @@ namespace connectivity
     {
         cpo::uno::Reference< css::sdbc::XConnection >             m_xRealConnection;  // the connection from driver
         rtl::Reference< OConnectionWeakWrapper >                  m_xComponent;       // the connection which wraps the real connection
-        cpo::uno::Reference< css::reflection::XProxyFactory >     m_xProxyFactory;
+        cpo::uno::Reference< cpo::reflection::XProxyFactory >     m_xProxyFactory;
     public:
         // OComponentHelper
         virtual void disposing() override;
 
         OPooledConnection(const cpo::uno::Reference< css::sdbc::XConnection >& _xConnection,
-                          const cpo::uno::Reference< css::reflection::XProxyFactory >& _rxProxyFactory);
+                          const cpo::uno::Reference< cpo::reflection::XProxyFactory >& _rxProxyFactory);
 
         //XPooledConnection
         virtual cpo::uno::Reference< css::sdbc::XConnection > getConnection(  ) override;

@@ -45,13 +45,13 @@
 #include <cppuhelper/bootstrap.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/reflection/XConstantTypeDescription.hpp>
-#include <com/sun/star/reflection/XIdlClass.hpp>
+#include <cpo/reflection/XConstantTypeDescription.hpp>
+#include <cpo/reflection/XIdlClass.hpp>
 #include <cpo/registry/InvalidRegistryException.hpp>
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/script/XInvocation2.hpp>
-#include <com/sun/star/reflection/XIdlReflection.hpp>
+#include <cpo/reflection/XIdlReflection.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
 using osl::Module;
@@ -64,7 +64,7 @@ using cpo::uno::RuntimeException;
 using cpo::uno::TypeDescription;
 using cpo::uno::XComponentContext;
 using com::sun::star::container::NoSuchElementException;
-using com::sun::star::reflection::XIdlClass;
+using cpo::reflection::XIdlClass;
 using com::sun::star::script::XInvocation2;
 
 using namespace pyuno;
@@ -586,7 +586,7 @@ static PyObject *getConstantByName(
                 SAL_INFO("pyuno.legacyapi", "legacy UNO API " << typeName << " at " << getOrigin());
             }
             Runtime runtime;
-            cpo::uno::Reference< css::reflection::XConstantTypeDescription > td;
+            cpo::uno::Reference< cpo::reflection::XConstantTypeDescription > td;
             if (!(runtime.getImpl()->cargo->xTdMgr->getByHierarchicalName(
                       typeName)
                   >>= td))

@@ -1411,7 +1411,7 @@ static PyObject* PyUNO_getattr (PyObject* self, char* name)
         //or else...
         PyErr_SetString (PyExc_AttributeError, name);
     }
-    catch( const css::reflection::InvocationTargetException & e )
+    catch( const cpo::reflection::InvocationTargetException & e )
     {
         raisePyExceptionWithAny( e.TargetException );
     }
@@ -1455,7 +1455,7 @@ static int PyUNO_setattr (PyObject* self, char* name, PyObject* value)
             }
         }
     }
-    catch( const css::reflection::InvocationTargetException & e )
+    catch( const cpo::reflection::InvocationTargetException & e )
     {
         raisePyExceptionWithAny( e.TargetException );
         return -1;

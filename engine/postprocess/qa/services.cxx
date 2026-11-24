@@ -36,8 +36,8 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/reflection/XServiceConstructorDescription.hpp>
-#include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
+#include <cpo/reflection/XServiceConstructorDescription.hpp>
+#include <cpo/reflection/XServiceTypeDescription2.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <comphelper/kit.hxx>
 #include <comphelper/sequence.hxx>
@@ -94,8 +94,8 @@ bool contains(
 }
 
 void addService(
-    cpo::uno::Reference<css::reflection::XServiceTypeDescription> const & service,
-    std::set<cpo::uno::Reference<css::reflection::XServiceTypeDescription>> * allServices)
+    cpo::uno::Reference<cpo::reflection::XServiceTypeDescription> const & service,
+    std::set<cpo::uno::Reference<cpo::reflection::XServiceTypeDescription>> * allServices)
 {
     assert(allServices != nullptr);
     if (!allServices->insert(service).second) {
@@ -135,7 +135,7 @@ void Test::test() {
         m_xContext->getServiceManager(), cpo::uno::UNO_QUERY_THROW);
     cpo::uno::Reference<css::container::XHierarchicalNameAccess> typeMgr(
         m_xContext->getValueByName(
-            u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
+            u"/singletons/cpo.reflection.theTypeDescriptionManager"_ustr),
         cpo::uno::UNO_QUERY_THROW);
     const cpo::uno::Sequence<OUString> serviceNames(
         m_xContext->getServiceManager()->getAvailableServiceNames());
@@ -170,7 +170,7 @@ void Test::test() {
             serviceImpls2.emplace_back(
                     serviceImpls1->nextElement(), cpo::uno::UNO_QUERY_THROW);
         }
-        cpo::uno::Reference<css::reflection::XServiceTypeDescription2> desc;
+        cpo::uno::Reference<cpo::reflection::XServiceTypeDescription2> desc;
         if (typeMgr->hasByHierarchicalName(rServiceName)) {
             desc.set(
                 typeMgr->getByHierarchicalName(rServiceName),
@@ -228,7 +228,7 @@ void Test::test() {
                         if (serviceImpls2.size() == 1) {
                             const cpo::uno::Sequence<
                                 cpo::uno::Reference<
-                                    css::reflection::XServiceConstructorDescription>>
+                                    cpo::reflection::XServiceConstructorDescription>>
                                         ctors(desc->getConstructors());
                             auto pCtor = std::find_if(ctors.begin(), ctors.end(),
                                 [](const auto& rCtor) { return !rCtor->getParameters().hasElements(); });
@@ -385,7 +385,7 @@ void Test::createInstance(
             + msg(expServs))
          .getStr()),
         contains(servs, expServs));
-    std::set<cpo::uno::Reference<css::reflection::XServiceTypeDescription>> allservs;
+    std::set<cpo::uno::Reference<cpo::reflection::XServiceTypeDescription>> allservs;
     for (auto const & serv: servs) {
         if (!typeManager->hasByHierarchicalName(serv)) {
             std::cout
@@ -394,7 +394,7 @@ void Test::createInstance(
             continue;
         }
         addService(
-            cpo::uno::Reference<css::reflection::XServiceTypeDescription>(
+            cpo::uno::Reference<cpo::reflection::XServiceTypeDescription>(
                 typeManager->getByHierarchicalName(serv), cpo::uno::UNO_QUERY_THROW),
             &allservs);
     }

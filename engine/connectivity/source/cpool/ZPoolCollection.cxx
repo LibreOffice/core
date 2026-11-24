@@ -25,7 +25,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/reflection/ProxyFactory.hpp>
+#include <cpo/reflection/ProxyFactory.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -39,7 +39,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::reflection;
+using namespace ::cpo::reflection;
 using namespace ::osl;
 using namespace connectivity;
 

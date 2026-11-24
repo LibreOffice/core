@@ -23,7 +23,7 @@
 
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
-#include <com/sun/star/reflection/XEnumTypeDescription.hpp>
+#include <cpo/reflection/XEnumTypeDescription.hpp>
 #include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/XHyperlinkControl.hpp>
@@ -56,7 +56,7 @@ using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::container;
-    using namespace ::com::sun::star::reflection;
+    using namespace ::cpo::reflection;
     using namespace ::com::sun::star::inspection;
     using ::com::sun::star::awt::XActionListener;
     using ::com::sun::star::awt::ActionEvent;
@@ -94,7 +94,7 @@ using namespace cpo::uno;
             if ( _rxContext.is() )
             {
                 Reference< XHierarchicalNameAccess > xTypeDescProv(
-                    _rxContext->getValueByName(u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
+                    _rxContext->getValueByName(u"/singletons/cpo.reflection.theTypeDescriptionManager"_ustr),
                     UNO_QUERY_THROW );
 
                 m_xTypeDescription.set( xTypeDescProv->getByHierarchicalName( m_aEnumType.getTypeName() ), UNO_QUERY_THROW );

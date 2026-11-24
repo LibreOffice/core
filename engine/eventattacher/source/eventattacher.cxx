@@ -28,8 +28,8 @@
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/XAllListener.hpp>
 #include <com/sun/star/script/InvocationAdapterFactory.hpp>
-#include <com/sun/star/reflection/theCoreReflection.hpp>
-#include <com/sun/star/reflection/XIdlReflection.hpp>
+#include <cpo/reflection/theCoreReflection.hpp>
+#include <cpo/reflection/XIdlReflection.hpp>
 
 // InvocationToAllListenerMapper
 #include <com/sun/star/script/XInvocation.hpp>
@@ -47,7 +47,7 @@ using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::script;
-using namespace com::sun::star::reflection;
+using namespace ::cpo::reflection;
 using namespace cppu;
 
 

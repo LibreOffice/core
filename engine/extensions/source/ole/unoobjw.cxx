@@ -62,8 +62,8 @@
 #include <com/sun/star/lang/NoSuchMethodException.hpp>
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/FailReason.hpp>
-#include <com/sun/star/reflection/theCoreReflection.hpp>
-#include <com/sun/star/reflection/ParamInfo.hpp>
+#include <cpo/reflection/theCoreReflection.hpp>
+#include <cpo/reflection/ParamInfo.hpp>
 #include <com/sun/star/beans/XExactName.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -72,7 +72,7 @@
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/script/XInvocation2.hpp>
 #include <com/sun/star/script/MemberType.hpp>
-#include <com/sun/star/reflection/XIdlReflection.hpp>
+#include <cpo/reflection/XIdlReflection.hpp>
 #include <ooo/vba/XCollection.hpp>
 #include <ooo/vba/XConnectable.hpp>
 #include <ooo/vba/XConnectionPoint.hpp>
@@ -105,7 +105,7 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::script;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge::ModelDependent;
-using namespace com::sun::star::reflection;
+using namespace ::cpo::reflection;
 
 std::unordered_map<sal_uIntPtr, WeakReference<XInterface> > UnoObjToWrapperMap;
 static bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource);

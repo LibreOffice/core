@@ -133,7 +133,7 @@ public:
     // UNO binding
     //  SMART_UNO_DECLARATION(FmXUndoEnvironment, ::cppu::OWeakObject);
     //  virtual bool queryInterface(UsrUik, cpo::uno::Reference< cpo::uno::XInterface>&);
-    //  virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlClass>>    getIdlClasses();
+    //  virtual cpo::uno::Sequence< cpo::uno::Reference< cpo::reflection::XIdlClass>>    getIdlClasses();
 
     void Lock() { osl_atomic_increment( &m_Locks ); }
     void UnLock() { osl_atomic_decrement( &m_Locks ); }

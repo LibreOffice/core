@@ -22,12 +22,12 @@
   <implementation name="com.sun.star.comp.stoc.CoreReflection"
       constructor="com_sun_star_comp_stoc_CoreReflection_get_implementation"
       single-instance="true">
-    <service name="com.sun.star.reflection.CoreReflection"/>
-    <singleton name="com.sun.star.reflection.theCoreReflection"/>
+    <service name="cpo.reflection.CoreReflection"/>
+    <singleton name="cpo.reflection.theCoreReflection"/>
   </implementation>
   <implementation name="com.sun.star.comp.stoc.Dump"
       constructor="com_sun_star_comp_stoc_Dump_get_implementation"
       single-instance="true">
-    <singleton name="com.sun.star.reflection.Dump"/>
+    <singleton name="cpo.reflection.Dump"/>
   </implementation>
 </component>

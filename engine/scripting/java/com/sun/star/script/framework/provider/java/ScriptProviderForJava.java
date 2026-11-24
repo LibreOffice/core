@@ -163,7 +163,7 @@ class ScriptImpl implements XScript {
      * @param aOutParam         Out parameters
      * @return                  The value returned from the function being invoked
      * @throws IllegalArgumentException If there is no matching script name
-     * @throws com.sun.star.reflection.InvocationTargetException If the running script throws an exception
+     * @throws cpo.reflection.InvocationTargetException If the running script throws an exception
      *              this information is captured and rethrown as this exception type.
      */
     public Object invoke(
@@ -171,7 +171,7 @@ class ScriptImpl implements XScript {
         /*OUT*/short[][]  aOutParamIndex,
         /*OUT*/Object[][]  aOutParam) throws
         ScriptFrameworkErrorException,
-        com.sun.star.reflection.InvocationTargetException {
+        cpo.reflection.InvocationTargetException {
 
         LogUtils.DEBUG("** ScriptProviderForJava::invoke: Starting...");
 
@@ -279,7 +279,7 @@ class ScriptImpl implements XScript {
             se.language = "Java";
             se.exceptionType = targetException.getClass().getName();
 
-            throw new com.sun.star.reflection.InvocationTargetException(
+            throw new cpo.reflection.InvocationTargetException(
                 "Scripting Framework error executing script ", null, se);
 
         } catch (Exception unknown) {
@@ -289,7 +289,7 @@ class ScriptImpl implements XScript {
             se.scriptName = metaData.getLanguageName();
             se.language = "Java";
             se.exceptionType = unknown.getClass().getName();
-            throw new com.sun.star.reflection.InvocationTargetException(
+            throw new cpo.reflection.InvocationTargetException(
                 "Scripting Framework error executing script ", null, se);
         }
 

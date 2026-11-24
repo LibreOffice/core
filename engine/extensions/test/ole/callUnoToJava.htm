@@ -237,7 +237,7 @@ function XCallback_Impl_outLong( outVal)
 function XCallback_Impl_outStruct( outVal)
 {
 	var factory= new ActiveXObject("com.sun.star.ServiceManager");
-    var starCoreReflection = factory.createInstance("com.sun.star.reflection.CoreReflection");
+    var starCoreReflection = factory.createInstance("cpo.reflection.CoreReflection");
     var structClass = starCoreReflection.forName("oletest.SimpleStruct");
 	var outParam= new Array();
 	structClass.createObject(outParam);

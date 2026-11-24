@@ -23,7 +23,7 @@
 
 #include "base.hxx"
 
-using namespace css::reflection;
+using namespace cpo::reflection;
 using namespace ::cpo::uno;
 using namespace cpo::uno;
 

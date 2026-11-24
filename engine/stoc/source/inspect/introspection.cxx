@@ -43,10 +43,10 @@
 #include <com/sun/star/lang/NoSuchMethodException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/reflection/XIdlReflection.hpp>
-#include <com/sun/star/reflection/XIdlClass.hpp>
-#include <com/sun/star/reflection/XIdlField2.hpp>
-#include <com/sun/star/reflection/theCoreReflection.hpp>
+#include <cpo/reflection/XIdlReflection.hpp>
+#include <cpo/reflection/XIdlClass.hpp>
+#include <cpo/reflection/XIdlField2.hpp>
+#include <cpo/reflection/theCoreReflection.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -70,7 +70,7 @@
 using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::lang;
-using namespace css::reflection;
+using namespace cpo::reflection;
 using namespace css::container;
 using namespace css::beans;
 using namespace css::beans::PropertyAttribute;
@@ -1491,7 +1491,7 @@ public:
     explicit Implementation(
         cpo::uno::Reference<cpo::uno::XComponentContext> const & context):
         Implementation_Base(m_aMutex),
-        reflection_(css::reflection::theCoreReflection::get(context))
+        reflection_(cpo::reflection::theCoreReflection::get(context))
     {}
 
 private:
@@ -1517,14 +1517,14 @@ private:
     virtual cpo::uno::Reference<css::beans::XIntrospectionAccess>
     inspect(cpo::uno::Any const & aObject) override;
 
-    cpo::uno::Reference<css::reflection::XIdlReflection> reflection_;
+    cpo::uno::Reference<cpo::reflection::XIdlReflection> reflection_;
     Cache<TypeKey, TypeKeyLess> typeCache_;
 };
 
 cpo::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     cpo::uno::Any const & aObject)
 {
-    cpo::uno::Reference<css::reflection::XIdlReflection> reflection;
+    cpo::uno::Reference<cpo::reflection::XIdlReflection> reflection;
     {
         osl::MutexGuard g(m_aMutex);
         if (rBHelper.bDisposed || rBHelper.bInDispose) {
@@ -1536,7 +1536,7 @@ cpo::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     cpo::uno::Any aToInspectObj;
     cpo::uno::Type t;
     if (aObject >>= t) {
-        cpo::uno::Reference<css::reflection::XIdlClass> c(
+        cpo::uno::Reference<cpo::reflection::XIdlClass> c(
             reflection->forName(t.getTypeName()));
         if (!c.is()) {
             SAL_WARN("stoc", "cannot reflect type " << t.getTypeName());
@@ -1897,7 +1897,7 @@ cpo::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             pAccess->mbEnumerationAccess = true;
                             pAccess->mbElementAccess = true;
                         } else if (className
-                                   == "com.sun.star.reflection.XIdlArray")
+                                   == "cpo.reflection.XIdlArray")
                         {
                             pAccess->mbIdlArray = true;
                         } else if (className
@@ -2229,7 +2229,7 @@ cpo::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             const Reference<XIdlMethod>& rxMethod = methods[i];
 
                             // Enter void as default class
-                            cpo::uno::Reference<css::reflection::XIdlClass>
+                            cpo::uno::Reference<cpo::reflection::XIdlClass>
                                 xListenerClass(
                                     reflection->forName(
                                         cppu::UnoType<void>::get()
@@ -2240,7 +2240,7 @@ cpo::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             // Disadvantage: Superclasses should be searched recursively
                             const Sequence< Reference<XIdlClass> > aParams = rxMethod->getParameterTypes();
 
-                            cpo::uno::Reference<css::reflection::XIdlClass>
+                            cpo::uno::Reference<cpo::reflection::XIdlClass>
                                 xEventListenerClass(
                                     reflection->forName(
                                         cppu::UnoType<
@@ -2309,7 +2309,7 @@ cpo::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     {
         // Is it an interface or a struct?
         //Reference<XIdlClass> xClassRef = aToInspectObj.getReflection()->getIdlClass();
-        cpo::uno::Reference<css::reflection::XIdlClass> xClassRef(
+        cpo::uno::Reference<cpo::reflection::XIdlClass> xClassRef(
             reflection->forName(aToInspectObj.getValueTypeName()));
         if( !xClassRef.is() )
         {

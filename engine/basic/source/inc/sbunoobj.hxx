@@ -28,8 +28,8 @@
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
-#include <com/sun/star/reflection/XIdlClass.hpp>
-#include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
+#include <cpo/reflection/XIdlClass.hpp>
+#include <cpo/reflection/XServiceTypeDescription2.hpp>
 #include <rtl/ustring.hxx>
 #include <o3tl/string_view.hxx>
 
@@ -156,8 +156,8 @@ class SbUnoMethod final : public SbxMethod
     friend void clearUnoMethods();
     friend void clearUnoMethodsForBasic( StarBASIC const * pBasic );
 
-    cpo::uno::Reference< css::reflection::XIdlMethod > m_xUnoMethod;
-    std::unique_ptr<cpo::uno::Sequence< css::reflection::ParamInfo >> pParamInfoSeq;
+    cpo::uno::Reference< cpo::reflection::XIdlMethod > m_xUnoMethod;
+    std::unique_ptr<cpo::uno::Sequence< cpo::reflection::ParamInfo >> pParamInfoSeq;
 
     // #67781 reference to the previous and the next method in the method list
     SbUnoMethod* pPrev;
@@ -167,12 +167,12 @@ class SbUnoMethod final : public SbxMethod
 
 public:
 
-    SbUnoMethod( const OUString& aName_, SbxDataType eSbxType, cpo::uno::Reference< css::reflection::XIdlMethod > const & xUnoMethod_,
+    SbUnoMethod( const OUString& aName_, SbxDataType eSbxType, cpo::uno::Reference< cpo::reflection::XIdlMethod > const & xUnoMethod_,
         bool bInvocation );
     virtual ~SbUnoMethod() override;
     virtual SbxInfo* GetInfo() override;
 
-    const cpo::uno::Sequence< css::reflection::ParamInfo >& getParamInfos();
+    const cpo::uno::Sequence< cpo::reflection::ParamInfo >& getParamInfos();
 
     bool isInvocationBased() const
         { return mbInvocation; }
@@ -216,13 +216,13 @@ public:
 // wrapper for a uno-class
 class SbUnoClass final : public SbxObject
 {
-    const cpo::uno::Reference< css::reflection::XIdlClass >   m_xClass;
+    const cpo::uno::Reference< cpo::reflection::XIdlClass >   m_xClass;
 
 public:
     SbUnoClass( const OUString& aName_ )
         : SbxObject( aName_ )
     {}
-    SbUnoClass( const OUString& aName_, cpo::uno::Reference< css::reflection::XIdlClass > xClass_ )
+    SbUnoClass( const OUString& aName_, cpo::uno::Reference< cpo::reflection::XIdlClass > xClass_ )
         : SbxObject( aName_ )
         , m_xClass(std::move( xClass_ ))
     {}
@@ -231,7 +231,7 @@ public:
     virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
 
 
-    const cpo::uno::Reference< css::reflection::XIdlClass >& getUnoClass() const { return m_xClass; }
+    const cpo::uno::Reference< cpo::reflection::XIdlClass >& getUnoClass() const { return m_xClass; }
 
 };
 
@@ -244,12 +244,12 @@ SbUnoClass* findUnoClass( const OUString& rName );
 // Wrapper for UNO Service
 class SbUnoService final : public SbxObject
 {
-    const cpo::uno::Reference< css::reflection::XServiceTypeDescription2 > m_xServiceTypeDesc;
+    const cpo::uno::Reference< cpo::reflection::XServiceTypeDescription2 > m_xServiceTypeDesc;
     bool m_bNeedsInit;
 
 public:
     SbUnoService( const OUString& aName_,
-        cpo::uno::Reference< css::reflection::XServiceTypeDescription2 >  xServiceTypeDesc )
+        cpo::uno::Reference< cpo::reflection::XServiceTypeDescription2 >  xServiceTypeDesc )
             : SbxObject( aName_ )
             , m_xServiceTypeDesc(std::move( xServiceTypeDesc ))
             , m_bNeedsInit( true )
@@ -267,15 +267,15 @@ class SbUnoServiceCtor final : public SbxMethod
 {
     friend class SbUnoService;
 
-    cpo::uno::Reference< css::reflection::XServiceConstructorDescription > m_xServiceCtorDesc;
+    cpo::uno::Reference< cpo::reflection::XServiceConstructorDescription > m_xServiceCtorDesc;
 
 public:
 
-    SbUnoServiceCtor( const OUString& aName_, cpo::uno::Reference< css::reflection::XServiceConstructorDescription > const & xServiceCtorDesc );
+    SbUnoServiceCtor( const OUString& aName_, cpo::uno::Reference< cpo::reflection::XServiceConstructorDescription > const & xServiceCtorDesc );
     virtual ~SbUnoServiceCtor() override;
     virtual SbxInfo* GetInfo() override;
 
-    const cpo::uno::Reference< css::reflection::XServiceConstructorDescription >& getServiceCtorDesc() const
+    const cpo::uno::Reference< cpo::reflection::XServiceConstructorDescription >& getServiceCtorDesc() const
         { return m_xServiceCtorDesc; }
 };
 

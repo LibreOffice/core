@@ -33,7 +33,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <cpo/reflection/XProxyFactory.hpp>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <utility>
@@ -48,7 +48,7 @@ namespace
 {
 
 struct FactoryImpl : public ::cppu::WeakImplHelper< lang::XServiceInfo,
-                                                     reflection::XProxyFactory >
+                                                     cpo::reflection::XProxyFactory >
 {
     Environment m_uno_env;
     Environment m_cpp_env;
@@ -396,7 +396,7 @@ bool FactoryImpl::supportsService( const OUString & rServiceName )
 
 Sequence< OUString > FactoryImpl::getSupportedServiceNames()
 {
-    return { u"com.sun.star.reflection.ProxyFactory"_ustr };
+    return { u"cpo.reflection.ProxyFactory"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*

@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
-#include <com/sun/star/reflection/FieldAccessMode.hpp>
+#include <cpo/reflection/FieldAccessMode.hpp>
 #include <cpo/registry/XImplementationRegistration.hpp>
 
 #include <cmath>
@@ -40,7 +40,7 @@ using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::script;
-using namespace css::reflection;
+using namespace cpo::reflection;
 using namespace cpo::registry;
 
 

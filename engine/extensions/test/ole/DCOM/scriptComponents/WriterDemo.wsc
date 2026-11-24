@@ -36,13 +36,13 @@ function run()
 var objServiceManager= new ActiveXObject("com.sun.star.ServiceManager","\\jl-1036");
 
 //Create the CoreReflection service that is later used to create structs
-var objCoreReflection= objServiceManager.createInstance("com.sun.star.reflection.CoreReflection");
+var objCoreReflection= objServiceManager.createInstance("cpo.reflection.CoreReflection");
 
 //Create the Desktop
 var objDesktop= objServiceManager.createInstance("com.sun.star.frame.Desktop");
 
 //Open a new empty writer document
-var objCoreReflection= objServiceManager.createInstance("com.sun.star.reflection.CoreReflection");
+var objCoreReflection= objServiceManager.createInstance("cpo.reflection.CoreReflection");
 
 //get a type description class for Size
 //var propClass = objCoreReflection.forName( "com.sun.star.beans.PropertyValue" );

@@ -159,7 +159,7 @@ public class ProviderBrowseNode extends PropertySet implements
                          short[][] aOutParamIndex, Object[][] aOutParam) throws
         com.sun.star.lang.IllegalArgumentException,
         com.sun.star.script.CannotConvertException,
-        com.sun.star.reflection.InvocationTargetException {
+        cpo.reflection.InvocationTargetException {
 
         // Initialise the out parameters - not used but prevents error in
         // UNO bridge
@@ -230,7 +230,7 @@ public class ProviderBrowseNode extends PropertySet implements
     public void setValue(String aPropertyName, Object aValue) throws
         com.sun.star.beans.UnknownPropertyException,
         com.sun.star.script.CannotConvertException,
-        com.sun.star.reflection.InvocationTargetException {
+        cpo.reflection.InvocationTargetException {
     }
 
     public Object getValue(String aPropertyName) throws

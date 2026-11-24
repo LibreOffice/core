@@ -46,10 +46,10 @@ public class Bootstrap_Test {
 
             if (AnyConverter.isVoid(
                     xContext.getValueByName(
-                        "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ) ))
+                        "/singletons/cpo.reflection.theTypeDescriptionManager" ) ))
             {
                 throw new Exception(
-                    "no /singletons/com.sun.star.reflection.theTypeDescriptionManager!" );
+                    "no /singletons/cpo.reflection.theTypeDescriptionManager!" );
             }
 
             XMultiServiceFactory msf = UnoRuntime.queryInterface(

@@ -347,8 +347,8 @@ protected:
 
        @param context  the component context used by this class template; must
        not be null, and must supply the
-       <code>com.sun.star.reflection.theCoreReflection</code> and
-       <code>com.sun.star.reflection.theTypeDescriptionManager</code> singletons
+       <code>cpo.reflection.theCoreReflection</code> and
+       <code>cpo.reflection.theTypeDescriptionManager</code> singletons
 
        @param implements  a combination of zero or more flags specifying what
        UNO interface types shall be supported

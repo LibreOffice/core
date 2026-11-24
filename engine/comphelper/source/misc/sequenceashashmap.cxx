@@ -24,8 +24,8 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/reflection/XIdlField.hpp>
-#include <com/sun/star/reflection/theCoreReflection.hpp>
+#include <cpo/reflection/XIdlField.hpp>
+#include <cpo/reflection/theCoreReflection.hpp>
 #include <comphelper/JsonToPropertyValues_with_boost.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/processfactory.hxx>
@@ -50,7 +50,7 @@ cpo::uno::Any jsonToUnoAny(const boost::property_tree::ptree& aTree)
     const std::string aValueStr = aTree.get<std::string>("value", "");
     cpo::uno::Sequence<uno::Reference<reflection::XIdlField>> aFields;
     uno::Reference<reflection::XIdlClass> xIdlClass
-        = css::reflection::theCoreReflection::get(comphelper::getProcessComponentContext())
+        = cpo::reflection::theCoreReflection::get(comphelper::getProcessComponentContext())
               ->forName(OUString::fromUtf8(aType));
     if (xIdlClass.is())
     {

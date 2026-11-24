@@ -26,7 +26,7 @@
 #include <cpo/registry/XRegistryKey.hpp>
 #include <com/sun/star/bridge/XBridgeSupplier2.hpp>
 #include <com/sun/star/bridge/ModelDependent.hpp>
-#include <com/sun/star/reflection/InvocationTargetException.hpp>
+#include <cpo/reflection/InvocationTargetException.hpp>
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <cppuhelper/typeprovider.hxx>

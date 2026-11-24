@@ -56,7 +56,7 @@ public class ComponentContext implements XComponentContext, XComponent
 {
     private static final boolean DEBUG = false;
     private static final String SMGR_NAME = "/singletons/com.sun.star.lang.theServiceManager";
-    private static final String TDMGR_NAME = "/singletons/com.sun.star.reflection.theTypeDescriptionManager";
+    private static final String TDMGR_NAME = "/singletons/cpo.reflection.theTypeDescriptionManager";
 
     private Map<String,Object> m_table;
     private XComponentContext m_xDelegate;

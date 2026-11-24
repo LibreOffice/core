@@ -18162,7 +18162,7 @@ cppu::PropertySetMixinImpl::Impl::getProperty(cpo::uno::Reference<cpo::uno::XInt
 cppu::PropertySetMixinImpl::Impl::getReflection(rtl::OUString const&) const
 cppu::PropertySetMixinImpl::Impl::setProperty(cpo::uno::Reference<cpo::uno::XInterface> const&, rtl::OUString const&, cpo::uno::Any const&, bool, bool, short) const
 cppu::PropertySetMixinImpl::Impl::translateHandle(cpo::uno::Reference<cpo::uno::XInterface> const&, int) const
-cppu::PropertySetMixinImpl::Impl::wrapValue(cpo::uno::Reference<cpo::uno::XInterface> const&, cpo::uno::Any const&, cpo::uno::Reference<com::sun::star::reflection::XIdlClass> const&, bool, bool, bool, bool, bool)
+cppu::PropertySetMixinImpl::Impl::wrapValue(cpo::uno::Reference<cpo::uno::XInterface> const&, cpo::uno::Any const&, cpo::uno::Reference<cpo::reflection::XIdlClass> const&, bool, bool, bool, bool, bool)
 cppu::PropertySetMixinImpl::checkUnknown(rtl::OUString const&)
 cppu::UnoUrl::UnoUrl(cppu::UnoUrl const&)
 cppu::UnoUrl::operator=(cppu::UnoUrl const&)
@@ -18180,7 +18180,7 @@ cppu::createOneInstanceFactory(cpo::uno::Reference<com::sun::star::lang::XMultiS
 cppu::createOneInstanceRegistryFactory(cpo::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, rtl::OUString const&, cpo::uno::Reference<cpo::registry::XRegistryKey> const&)
 cppu::createRegistryServiceFactory(rtl::OUString const&, rtl::OUString const&, unsigned char, rtl::OUString const&)
 cppu::createSimpleRegistry(rtl::OUString const&)
-cppu::createStandardClassWithSequence(cpo::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, rtl::OUString const&, cpo::uno::Reference<com::sun::star::reflection::XIdlClass> const&, cpo::uno::Sequence<rtl::OUString> const&)
+cppu::createStandardClassWithSequence(cpo::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, rtl::OUString const&, cpo::uno::Reference<cpo::reflection::XIdlClass> const&, cpo::uno::Sequence<rtl::OUString> const&)
 cppu::installTypeDescriptionManager(cpo::uno::Reference<com::sun::star::container::XHierarchicalNameAccess> const&)
 cppu::invokeStaticComponentFactory(void (*)(), rtl::OUString const&, cpo::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, cpo::uno::Reference<cpo::registry::XRegistryKey> const&, rtl::OUString const&)
 cppu::loadSharedLibComponentFactory(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, cpo::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, cpo::uno::Reference<cpo::registry::XRegistryKey> const&, rtl::OUString const&)

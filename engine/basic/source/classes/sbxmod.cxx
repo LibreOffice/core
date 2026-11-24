@@ -63,7 +63,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/asyncquithandler.hxx>
 #include <map>
-#include <com/sun/star/reflection/ProxyFactory.hpp>
+#include <cpo/reflection/ProxyFactory.hpp>
 #include <cpo/uno/XAggregation.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 
@@ -79,7 +79,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::reflection;
+using namespace ::cpo::reflection;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::script;
 using namespace ::cpo;

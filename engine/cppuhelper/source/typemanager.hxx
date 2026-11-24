@@ -16,7 +16,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
+#include <cpo/reflection/XTypeDescriptionEnumerationAccess.hpp>
 #include <cpo/uno/Reference.hxx>
 #include <compbase2.hxx>
 #include <rtl/ref.hxx>
@@ -36,7 +36,7 @@ namespace cppuhelper {
 
 typedef WeakComponentImplHelper2<
     css::lang::XServiceInfo, css::container::XHierarchicalNameAccess,
-    css::container::XSet, css::reflection::XTypeDescriptionEnumerationAccess >
+    css::container::XSet, cpo::reflection::XTypeDescriptionEnumerationAccess >
 TypeManager_Base;
 
 class TypeManager: public TypeManager_Base {
@@ -50,7 +50,7 @@ public:
 
     cpo::uno::Any find(OUString const & name);
 
-    cpo::uno::Reference< css::reflection::XTypeDescription > resolve(
+    cpo::uno::Reference< cpo::reflection::XTypeDescription > resolve(
         OUString const & name);
 
 private:
@@ -81,11 +81,11 @@ private:
 
     virtual void remove(cpo::uno::Any const & aElement) override;
 
-    virtual cpo::uno::Reference< css::reflection::XTypeDescriptionEnumeration >
+    virtual cpo::uno::Reference< cpo::reflection::XTypeDescriptionEnumeration >
     createTypeDescriptionEnumeration(
         OUString const & moduleName,
         cpo::uno::Sequence< cpo::uno::TypeClass > const & types,
-        css::reflection::TypeDescriptionSearchDepth depth) override;
+        cpo::reflection::TypeDescriptionSearchDepth depth) override;
 
     void readRdbDirectory(std::u16string_view uri, bool optional);
 

@@ -28,14 +28,14 @@ Dim objServiceManager As Object
 Set objServiceManager = CreateObject("com.sun.star.ServiceManager")
 
 'Create the CoreReflection service that is later used to create structs
-Set objCoreReflection = objServiceManager.createInstance("com.sun.star.reflection.CoreReflection")
+Set objCoreReflection = objServiceManager.createInstance("cpo.reflection.CoreReflection")
 
 'Create the Desktop
 Set objDesktop = objServiceManager.createInstance("com.sun.star.frame.Desktop")
 
 'Open a new empty writer document
 
-Set objCoreReflection = objServiceManager.createInstance("com.sun.star.reflection.CoreReflection")
+Set objCoreReflection = objServiceManager.createInstance("cpo.reflection.CoreReflection")
 'get a type description class for Size
 Set propClass = objCoreReflection.forName("com.sun.star.beans.PropertyValue")
 

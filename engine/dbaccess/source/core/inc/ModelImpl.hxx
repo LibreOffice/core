@@ -29,7 +29,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <cpo/reflection/XProxyFactory.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -127,7 +127,7 @@ class OSharedConnectionManager : public ::cppu::WeakImplHelper< css::lang::XEven
     ::osl::Mutex                m_aMutex;
     TConnectionMap              m_aConnections;         // remember the master connection in conjunction with the digest
     TSharedConnectionMap        m_aSharedConnection;    // the shared connections with conjunction with an iterator into the connections map
-    cpo::uno::Reference< css::reflection::XProxyFactory >  m_xProxyFactory;
+    cpo::uno::Reference< cpo::reflection::XProxyFactory >  m_xProxyFactory;
 
 protected:
     virtual ~OSharedConnectionManager() override;

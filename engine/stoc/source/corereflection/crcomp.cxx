@@ -20,14 +20,14 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-#include <com/sun/star/reflection/XIdlField.hpp>
-#include <com/sun/star/reflection/XIdlField2.hpp>
+#include <cpo/reflection/XIdlField.hpp>
+#include <cpo/reflection/XIdlField2.hpp>
 #include <cpo/uno/TypeClass.hpp>
 
 #include "base.hxx"
 
 using namespace css::lang;
-using namespace css::reflection;
+using namespace cpo::reflection;
 using namespace ::cpo::uno;
 using namespace cpo::uno;
 

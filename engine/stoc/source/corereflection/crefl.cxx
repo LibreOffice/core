@@ -22,8 +22,8 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <sal/log.hxx>
 
-#include <com/sun/star/reflection/XConstantTypeDescription.hpp>
-#include <com/sun/star/reflection/XTypeDescription.hpp>
+#include <cpo/reflection/XConstantTypeDescription.hpp>
+#include <cpo/reflection/XTypeDescription.hpp>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <o3tl/any.hxx>
@@ -34,7 +34,7 @@ using namespace css;
 using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::lang;
-using namespace css::reflection;
+using namespace cpo::reflection;
 using namespace cppu;
 using namespace osl;
 
@@ -46,7 +46,7 @@ IdlReflectionServiceImpl::IdlReflectionServiceImpl(
     : WeakComponentImplHelper( _aComponentMutex )
 {
     xContext->getValueByName(
-        u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr ) >>= _xTDMgr;
+        u"/singletons/cpo.reflection.theTypeDescriptionManager"_ustr ) >>= _xTDMgr;
     OSL_ENSURE( _xTDMgr.is(), "### cannot get singleton \"TypeDescriptionManager\" from context!" );
 }
 
@@ -81,7 +81,7 @@ bool IdlReflectionServiceImpl::supportsService( const OUString & rServiceName )
 
 Sequence< OUString > IdlReflectionServiceImpl::getSupportedServiceNames()
 {
-    Sequence< OUString > seqNames { u"com.sun.star.reflection.CoreReflection"_ustr };
+    Sequence< OUString > seqNames { u"cpo.reflection.CoreReflection"_ustr };
     return seqNames;
 }
 
@@ -178,7 +178,7 @@ Any IdlReflectionServiceImpl::getByHierarchicalName( const OUString & rName )
             OSL_ASSERT( (*o3tl::forceAccess<Reference<XInterface>>(aRet))->queryInterface(
                 cppu::UnoType<XTypeDescription>::get()).hasValue() );
 
-            cpo::uno::Reference< css::reflection::XConstantTypeDescription >
+            cpo::uno::Reference< cpo::reflection::XConstantTypeDescription >
                 ctd;
             if (aRet >>= ctd)
             {

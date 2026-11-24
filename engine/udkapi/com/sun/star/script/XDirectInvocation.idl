@@ -34,7 +34,7 @@ published interface XDirectInvocation: cpo::uno::XInterface
              [in] sequence<any> aParams )
             raises( com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::script::CannotConvertException,
-                    com::sun::star::reflection::InvocationTargetException );
+                    cpo::reflection::InvocationTargetException );
 
     /** returns `TRUE` if the method or property with the specified name exists, else `FALSE`.
      */

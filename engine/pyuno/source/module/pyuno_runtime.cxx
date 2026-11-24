@@ -40,7 +40,7 @@
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/InvocationAdapterFactory.hpp>
 #include <com/sun/star/script/XInvocation2.hpp>
-#include <com/sun/star/reflection/theCoreReflection.hpp>
+#include <cpo/reflection/theCoreReflection.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -61,8 +61,8 @@ using cpo::uno::XComponentContext;
 using com::sun::star::lang::WrappedTargetRuntimeException;
 using com::sun::star::lang::XSingleServiceFactory;
 using com::sun::star::lang::XUnoTunnel;
-using com::sun::star::reflection::theCoreReflection;
-using com::sun::star::reflection::InvocationTargetException;
+using cpo::reflection::theCoreReflection;
+using cpo::reflection::InvocationTargetException;
 using com::sun::star::script::Converter;
 using com::sun::star::script::XTypeConverter;
 using com::sun::star::script::XInvocation;
@@ -304,7 +304,7 @@ PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
 
     c->xIntrospection = theIntrospection::get(ctx);
 
-    Any a = ctx->getValueByName(u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr);
+    Any a = ctx->getValueByName(u"/singletons/cpo.reflection.theTypeDescriptionManager"_ustr);
     a >>= c->xTdMgr;
     if( ! c->xTdMgr.is() )
         throw RuntimeException( u"pyuno: couldn't retrieve typedescriptionmanager"_ustr );

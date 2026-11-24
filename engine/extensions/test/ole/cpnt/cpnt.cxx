@@ -34,8 +34,8 @@
 #define OPTIONAL OPTIONAL
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
-#include <com/sun/star/reflection/theCoreReflection.hpp>
-#include <com/sun/star/reflection/XIdlReflection.hpp>
+#include <cpo/reflection/theCoreReflection.hpp>
+#include <cpo/reflection/XIdlReflection.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 
 #include <cppuhelper/implbase.hxx>
@@ -61,7 +61,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace ::cpo::registry;
 using namespace com::sun::star::script;
-using namespace com::sun::star::reflection;
+using namespace ::cpo::reflection;
 
 
 #define IMPL_NAME L"oletest.OleTestImpl"  // oletest.OleTestImpl in applicat.rdb
@@ -1595,7 +1595,7 @@ void OComponent::testInterface(  const Reference< XCallback >& xCallback, sal_In
         Reference<XSimple> aXSimple= static_cast<XSimple*>(this);
 
         SimpleStruct aStruct;
-        Reference<XIdlReflection> xRefl( m_rFactory->createInstance(L"com.sun.star.reflection.CoreReflection"), UNO_QUERY);
+        Reference<XIdlReflection> xRefl( m_rFactory->createInstance(L"cpo.reflection.CoreReflection"), UNO_QUERY);
         if( xRefl.is())
         {
             Reference<XIdlClass> xClass= xRefl->forName(L"oletest.SimpleStruct");
@@ -1751,7 +1751,7 @@ void OComponent::testInterface(  const Reference< XCallback >& xCallback, sal_In
 
             arAny[0] <<=  xSimple;
             SimpleStruct aStruct;
-            Reference<XIdlReflection> xRefl( m_rFactory->createInstance(L"com.sun.star.reflection.CoreReflection"), UNO_QUERY);
+            Reference<XIdlReflection> xRefl( m_rFactory->createInstance(L"cpo.reflection.CoreReflection"), UNO_QUERY);
             if( xRefl.is())
             {
                 Reference<XIdlClass> xClass= xRefl->forName(L"oletest.SimpleStruct");

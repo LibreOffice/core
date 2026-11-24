@@ -85,8 +85,8 @@ published constants PropertyAttribute
         implementations. It's needed for property specifications inside
         service specifications in UNOIDL.</p>
 
-        @see com::sun::star::reflection::XPropertyTypeDescription
-        @see com::sun::star::reflection::XServiceTypeDescription
+        @see cpo::reflection::XPropertyTypeDescription
+        @see cpo::reflection::XServiceTypeDescription
      */
     const short OPTIONAL = 256;
 };

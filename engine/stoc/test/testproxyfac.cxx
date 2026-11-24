@@ -33,7 +33,7 @@
 #include <cpo/registry/XSimpleRegistry.hpp>
 #include <cpo/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <cpo/reflection/XProxyFactory.hpp>
 
 #include <stdio.h>
 
@@ -264,7 +264,7 @@ SAL_IMPLEMENT_MAIN()
                 aLibName, Reference< registry::XSimpleRegistry >() );
 
             Reference< reflection::XProxyFactory > xProxyFac(
-                xMgr->createInstance("com.sun.star.reflection.ProxyFactory"),
+                xMgr->createInstance("cpo.reflection.ProxyFactory"),
                 UNO_QUERY_THROW );
 
             Reference< XAggregation > x(

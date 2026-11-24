@@ -23,11 +23,11 @@
 #include <com/sun/star/lang/XMain.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/reflection/XIndirectTypeDescription.hpp>
-#include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
-#include <com/sun/star/reflection/XPublished.hpp>
-#include <com/sun/star/reflection/XStructTypeDescription.hpp>
-#include <com/sun/star/reflection/XTypeDescription.hpp>
+#include <cpo/reflection/XIndirectTypeDescription.hpp>
+#include <cpo/reflection/XInterfaceMethodTypeDescription.hpp>
+#include <cpo/reflection/XPublished.hpp>
+#include <cpo/reflection/XStructTypeDescription.hpp>
+#include <cpo/reflection/XTypeDescription.hpp>
 #include <cpo/registry/InvalidRegistryException.hpp>
 #include <cpo/registry/XRegistryKey.hpp>
 #include <cpo/registry/XSimpleRegistry.hpp>
@@ -123,7 +123,7 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const & arguments)
         m_context->getValueByName(
             OUString(
                     "/singletons/"
-                    "com.sun.star.reflection.theTypeDescriptionManager")),
+                    "cpo.reflection.theTypeDescriptionManager")),
         cpo::uno::UNO_QUERY_THROW);
 
 
@@ -167,7 +167,7 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const & arguments)
 
     /
 
-    cpo::uno::Reference< css::reflection::XIndirectTypeDescription > sequence(
+    cpo::uno::Reference< cpo::reflection::XIndirectTypeDescription > sequence(
         manager->getByHierarchicalName(
             OUString("[][]boolean")),
         cpo::uno::UNO_QUERY_THROW);
@@ -179,7 +179,7 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const & arguments)
         OUString("[]boolean"),
         sequence->getReferencedType()->getName());
 
-    cpo::uno::Reference< css::reflection::XStructTypeDescription > structure(
+    cpo::uno::Reference< cpo::reflection::XStructTypeDescription > structure(
         manager->getByHierarchicalName(
             OUString( "test.tdmanager.Struct<boolean,test.tdmanager.Struct<"
                     "any,cpo.uno.XInterface>>")),
@@ -207,7 +207,7 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const & arguments)
         OUString( "test.tdmanager.Struct<any,cpo.uno.XInterface>"),
         structure->getTypeArguments()[1]->getName());
 
-    cpo::uno::Reference< css::reflection::XInterfaceMethodTypeDescription >
+    cpo::uno::Reference< cpo::reflection::XInterfaceMethodTypeDescription >
         method(
             manager->getByHierarchicalName(
                 OUString( "cpo.uno.XComponentContext::getValueByName")),
@@ -237,22 +237,22 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const & arguments)
     assertEqual< sal_Int32 >(0, method->getExceptions().getLength());
 
     assertFalse(
-        cpo::uno::Reference< css::reflection::XPublished >(
-            cpo::uno::Reference< css::reflection::XTypeDescription >(
+        cpo::uno::Reference< cpo::reflection::XPublished >(
+            cpo::uno::Reference< cpo::reflection::XTypeDescription >(
                 manager->getByHierarchicalName(
                     OUString("[]boolean")),
                 cpo::uno::UNO_QUERY_THROW),
             cpo::uno::UNO_QUERY).is());
     assertFalse(
-        cpo::uno::Reference< css::reflection::XPublished >(
-            cpo::uno::Reference< css::reflection::XTypeDescription >(
+        cpo::uno::Reference< cpo::reflection::XPublished >(
+            cpo::uno::Reference< cpo::reflection::XTypeDescription >(
                 manager->getByHierarchicalName(
                     OUString( "com.sun.star.beans.XIntroTest::ObjectName")),
                 cpo::uno::UNO_QUERY_THROW),
             cpo::uno::UNO_QUERY).is());
     assertFalse(
-        cpo::uno::Reference< css::reflection::XPublished >(
-            cpo::uno::Reference< css::reflection::XTypeDescription >(
+        cpo::uno::Reference< cpo::reflection::XPublished >(
+            cpo::uno::Reference< cpo::reflection::XTypeDescription >(
                 manager->getByHierarchicalName(
                     OUString( "com.sun.star.beans.XIntroTest::writeln")),
                 cpo::uno::UNO_QUERY_THROW),

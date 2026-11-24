@@ -27,7 +27,7 @@
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <cpo/reflection/XProxyFactory.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <salhelper/timer.hxx>
 #include <rtl/ref.hxx>
@@ -110,7 +110,7 @@ namespace connectivity
 
         cpo::uno::Reference< css::sdbc::XDriver >             m_xDriver;      // the one and only driver for this connectionpool
         cpo::uno::Reference< cpo::uno::XInterface >           m_xDriverNode;  // config node entry
-        cpo::uno::Reference< css::reflection::XProxyFactory > m_xProxyFactory;
+        cpo::uno::Reference< cpo::reflection::XProxyFactory > m_xProxyFactory;
         sal_Int32               m_nTimeOut;
         sal_Int32               m_nALiveCount;
 
@@ -127,7 +127,7 @@ namespace connectivity
     public:
         OConnectionPool(const cpo::uno::Reference< css::sdbc::XDriver >& _xDriver,
                         const cpo::uno::Reference< cpo::uno::XInterface >& _xDriverNode,
-                        const cpo::uno::Reference< css::reflection::XProxyFactory >& _rxProxyFactory);
+                        const cpo::uno::Reference< cpo::reflection::XProxyFactory >& _rxProxyFactory);
 
         // delete all refs
         void clear(bool _bDispose);

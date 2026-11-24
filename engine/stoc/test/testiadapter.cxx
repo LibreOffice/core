@@ -47,7 +47,7 @@ using namespace cpo::uno;
 using namespace css::script;
 using namespace css::beans;
 using namespace css::lang;
-using namespace css::reflection;
+using namespace cpo::reflection;
 using namespace cpo::registry;
 
 
@@ -294,8 +294,8 @@ public:
     virtual Any invoke( const OUString & rFunctionName,
                                  const Sequence< Any > & rParams,
                                  Sequence< sal_Int16 > & rOutParamIndex,
-                                 Sequence< Any > & rOutParam ) throw(css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, cpo::uno::RuntimeException);
-    virtual void setValue( const OUString & rPropertyName, const Any & rValue ) throw(css::beans::UnknownPropertyException, css::script::CannotConvertException, css::reflection::InvocationTargetException, cpo::uno::RuntimeException);
+                                 Sequence< Any > & rOutParam ) throw(css::lang::IllegalArgumentException, css::script::CannotConvertException, cpo::reflection::InvocationTargetException, cpo::uno::RuntimeException);
+    virtual void setValue( const OUString & rPropertyName, const Any & rValue ) throw(css::beans::UnknownPropertyException, css::script::CannotConvertException, cpo::reflection::InvocationTargetException, cpo::uno::RuntimeException);
     virtual Any getValue( const OUString & rPropertyName ) throw(css::beans::UnknownPropertyException, cpo::uno::RuntimeException);
     virtual bool hasMethod( const OUString & rName ) throw(cpo::uno::RuntimeException);
     virtual bool hasProperty( const OUString & rName ) throw(cpo::uno::RuntimeException);
@@ -305,7 +305,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
                             const Sequence< Any > & rParams,
                             Sequence< sal_Int16 > & rOutParamIndex,
                             Sequence< Any > & rOutParam )
-    throw(css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, cpo::uno::RuntimeException)
+    throw(css::lang::IllegalArgumentException, css::script::CannotConvertException, cpo::reflection::InvocationTargetException, cpo::uno::RuntimeException)
 {
     bool bImplementedMethod = true;
 
@@ -541,7 +541,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
 }
 
 void XLB_Invocation::setValue( const OUString & rName, const Any & rValue )
-    throw(css::beans::UnknownPropertyException, css::script::CannotConvertException, css::reflection::InvocationTargetException, cpo::uno::RuntimeException)
+    throw(css::beans::UnknownPropertyException, css::script::CannotConvertException, cpo::reflection::InvocationTargetException, cpo::uno::RuntimeException)
 {
     if ( rName == "Bool" )
         _xLBT->setBool( *(const bool *)rValue.getValue() );

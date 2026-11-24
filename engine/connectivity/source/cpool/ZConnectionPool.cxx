@@ -45,7 +45,7 @@ constexpr OUString TIMEOUT_NODENAME = u"Timeout"_ustr;
 
 OConnectionPool::OConnectionPool(const Reference< XDriver >& _xDriver,
                                  const Reference< XInterface >& _xDriverNode,
-                                 const Reference< css::reflection::XProxyFactory >& _rxProxyFactory)
+                                 const Reference< cpo::reflection::XProxyFactory >& _rxProxyFactory)
     :m_xDriver(_xDriver)
     ,m_xDriverNode(_xDriverNode)
     ,m_xProxyFactory(_rxProxyFactory)

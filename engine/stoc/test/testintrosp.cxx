@@ -34,7 +34,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/reflection/XIdlReflection.hpp>
+#include <cpo/reflection/XIdlReflection.hpp>
 #include <cpo/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
@@ -49,7 +49,7 @@ using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::beans;
 using namespace cpo::registry;
-using namespace css::reflection;
+using namespace cpo::reflection;
 using namespace css::container;
 using namespace css::beans::PropertyAttribute;
 
@@ -71,7 +71,7 @@ Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XMultiS
         OUString sOWName( pTD->pTypeName );
         if( !xRefl.is() )
         {
-            xRefl.set( xMgr->createInstance( "com.sun.star.reflection.CoreReflection" ), UNO_QUERY );
+            xRefl.set( xMgr->createInstance( "cpo.reflection.CoreReflection" ), UNO_QUERY );
             OSL_ENSURE( xRefl.is(), "### no corereflection!" );
         }
         xRetClass = xRefl->forName( sOWName );
@@ -1174,7 +1174,7 @@ SAL_IMPLEMENT_MAIN()
         xImplReg->registerImplementation(OUString("cpo.loader.SharedLibrary"),
                                          libName, Reference< XSimpleRegistry >() );
         fprintf(stderr, "2\n" );
-        Reference< XIdlReflection > xRefl( xMgr->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY );
+        Reference< XIdlReflection > xRefl( xMgr->createInstance("cpo.reflection.CoreReflection"), UNO_QUERY );
         OSL_ENSURE( xRefl.is(), "### no corereflection!" );
 
         // Introspection

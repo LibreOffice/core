@@ -62,11 +62,11 @@
 #include <com/sun/star/script/XDirectInvocation.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/reflection/XIdlArray.hpp>
-#include <com/sun/star/reflection/XIdlReflection.hpp>
-#include <com/sun/star/reflection/XServiceConstructorDescription.hpp>
-#include <com/sun/star/reflection/XSingletonTypeDescription.hpp>
-#include <com/sun/star/reflection/theCoreReflection.hpp>
+#include <cpo/reflection/XIdlArray.hpp>
+#include <cpo/reflection/XIdlReflection.hpp>
+#include <cpo/reflection/XServiceConstructorDescription.hpp>
+#include <cpo/reflection/XSingletonTypeDescription.hpp>
+#include <cpo/reflection/theCoreReflection.hpp>
 #include <com/sun/star/bridge/oleautomation/NamedArgument.hpp>
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
@@ -88,14 +88,14 @@
 #include <memory>
 #include <string_view>
 #include <unordered_map>
-#include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
-#include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
+#include <cpo/reflection/XTypeDescriptionEnumerationAccess.hpp>
+#include <cpo/reflection/XConstantsTypeDescription.hpp>
 
 using cpo::uno::Reference;
 using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::reflection;
+using namespace ::cpo::reflection;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::script;
 using namespace com::sun::star::container;
@@ -163,7 +163,7 @@ void SetSbUnoObjectDfltPropName( SbxObject* pObj )
 // save CoreReflection statically
 static Reference< XIdlReflection > getCoreReflection_Impl()
 {
-    return css::reflection::theCoreReflection::get(
+    return cpo::reflection::theCoreReflection::get(
         comphelper::getProcessComponentContext());
 }
 
@@ -197,14 +197,14 @@ static Reference< XHierarchicalNameAccess > const & getTypeProvider_Impl()
         if( xContext.is() )
         {
             xContext->getValueByName(
-                u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr )
+                u"/singletons/cpo.reflection.theTypeDescriptionManager"_ustr )
                     >>= xAccess;
             OSL_ENSURE( xAccess.is(), "### TypeDescriptionManager singleton not accessible!?" );
         }
         if( !xAccess.is() )
         {
             throw DeploymentException(
-                    u"/singletons/com.sun.star.reflection.theTypeDescriptionManager singleton not accessible"_ustr );
+                    u"/singletons/cpo.reflection.theTypeDescriptionManager singleton not accessible"_ustr );
         }
     }
     return xAccess;
@@ -1641,7 +1641,7 @@ OUString getBasicObjectTypeName( SbxObject* pObj )
 namespace {
 
 bool matchesBasicTypeName(
-    cpo::uno::Reference<css::reflection::XIdlClass> const & unoType, OUString const & basicTypeName)
+    cpo::uno::Reference<cpo::reflection::XIdlClass> const & unoType, OUString const & basicTypeName)
 {
     if (unoType->getName().endsWithIgnoreAsciiCase(basicTypeName)) {
         return true;

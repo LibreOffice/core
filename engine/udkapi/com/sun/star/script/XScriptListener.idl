@@ -34,7 +34,7 @@ published interface XScriptListener: com::sun::star::lang::XEventListener
     /** gets called when a "vetoable event" occurs at the object.
      */
     any approveFiring( [in] com::sun::star::script::ScriptEvent aEvent )
-            raises( com::sun::star::reflection::InvocationTargetException );
+            raises( cpo::reflection::InvocationTargetException );
 
 };
 

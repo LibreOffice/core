@@ -71,11 +71,11 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/reflection/XIndirectTypeDescription.hpp>
-#include <com/sun/star/reflection/XInterfaceAttributeTypeDescription2.hpp>
-#include <com/sun/star/reflection/XInterfaceTypeDescription2.hpp>
-#include <com/sun/star/reflection/XStructTypeDescription.hpp>
-#include <com/sun/star/reflection/XTypeDescription.hpp>
+#include <cpo/reflection/XIndirectTypeDescription.hpp>
+#include <cpo/reflection/XInterfaceAttributeTypeDescription2.hpp>
+#include <cpo/reflection/XInterfaceTypeDescription2.hpp>
+#include <cpo/reflection/XStructTypeDescription.hpp>
+#include <cpo/reflection/XTypeDescription.hpp>
 #include <cpo/uno/DeploymentException.hpp>
 #include <cpo/uno/Reference.h>
 #include <cpo/uno/Reference.hxx>

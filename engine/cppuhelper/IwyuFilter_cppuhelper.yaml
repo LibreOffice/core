@@ -6,7 +6,7 @@ excludelist:
     - com/sun/star/container/XHierarchicalNameAccess.hpp
     - com/sun/star/container/XSet.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp
+    - cpo/reflection/XTypeDescriptionEnumerationAccess.hpp
     cppuhelper/source/access_control.cxx:
     # Needed for UnoType
     - com/sun/star/security/RuntimePermission.hpp
@@ -51,7 +51,7 @@ excludelist:
     - cppuhelper/bootstrap.hxx
     cppuhelper/source/typemanager.cxx:
     # Actually used
-    - com/sun/star/reflection/TypeDescriptionSearchDepth.hpp
+    - cpo/reflection/TypeDescriptionSearchDepth.hpp
     - cpo/uno/TypeClass.hpp
     cppuhelper/source/servicemanager.cxx:
     # Actually used

@@ -28,7 +28,7 @@
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
+#include <cpo/reflection/XConstantsTypeDescription.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
@@ -219,9 +219,9 @@ namespace {
 // unequal values that are all of UNO SHORT or LONG type:
 struct CompareConstants {
     bool operator ()(
-        cpo::uno::Reference< css::reflection::XConstantTypeDescription > const &
+        cpo::uno::Reference< cpo::reflection::XConstantTypeDescription > const &
             c1,
-        cpo::uno::Reference< css::reflection::XConstantTypeDescription > const &
+        cpo::uno::Reference< cpo::reflection::XConstantTypeDescription > const &
             c2) const
     {
         return c1->getConstantValue().get<sal_Int32>()
@@ -250,7 +250,7 @@ void StringRepresentation::initialize(const cpo::uno::Sequence< cpo::uno::Any > 
         return;
 
     uno::Reference< container::XHierarchicalNameAccess > xTypeDescProv(
-        m_xContext->getValueByName(u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
+        m_xContext->getValueByName(u"/singletons/cpo.reflection.theTypeDescriptionManager"_ustr),
         uno::UNO_QUERY_THROW );
 
     m_xTypeDescription.set( xTypeDescProv->getByHierarchicalName( sConstantName ), uno::UNO_QUERY_THROW );

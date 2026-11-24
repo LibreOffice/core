@@ -39,7 +39,7 @@ published interface XAllListener: com::sun::star::lang::XEventListener
         or has a return value declared.</p>
      */
     any approveFiring( [in] com::sun::star::script::AllEventObject aEvent )
-            raises( com::sun::star::reflection::InvocationTargetException );
+            raises( cpo::reflection::InvocationTargetException );
 };
 
 

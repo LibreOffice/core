@@ -36,7 +36,7 @@
 #include <vector>
 #include <unordered_map>
 
-namespace com::sun::star::reflection { class XIdlMethod; }
+namespace cpo::reflection { class XIdlMethod; }
 namespace com::sun::star::sheet { class XVolatileResult; }
 namespace cpo::uno { class XInterface; }
 
@@ -91,7 +91,7 @@ private:
     OUString            aUpperLocal;        ///< for entering formulas
     OUString            aUpperEnglish;      ///< for Function Wizard and tooltips
     OUString            aDescription;
-    cpo::uno::Reference< css::reflection::XIdlMethod> xFunction;
+    cpo::uno::Reference< cpo::reflection::XIdlMethod> xFunction;
     cpo::uno::Any       aObject;
     sal_Int32           nArgCount;
     std::unique_ptr<ScAddInArgDesc[]>
@@ -106,7 +106,7 @@ public:
                 ScUnoAddInFuncData( const OUString& rNam, const OUString& rLoc,
                                     OUString aDesc,
                                     sal_uInt16 nCat, OUString ,
-                                    cpo::uno::Reference< css::reflection::XIdlMethod> aFunc,
+                                    cpo::uno::Reference< cpo::reflection::XIdlMethod> aFunc,
                                     cpo::uno::Any aO,
                                     sal_Int32 nAC, const ScAddInArgDesc* pAD,
                                     sal_Int32 nCP );
@@ -117,7 +117,7 @@ public:
     const OUString&  GetUpperName() const        { return aUpperName; }
     const OUString&  GetUpperLocal() const       { return aUpperLocal; }
     const OUString&  GetUpperEnglish() const     { return aUpperEnglish; }
-    const cpo::uno::Reference< css::reflection::XIdlMethod>&   GetFunction() const
+    const cpo::uno::Reference< cpo::reflection::XIdlMethod>&   GetFunction() const
                                                         { return xFunction; }
     const cpo::uno::Any& GetObject() const   { return aObject; }
     sal_Int32               GetArgumentCount() const    { return nArgCount; }
@@ -131,7 +131,7 @@ public:
     bool                    GetExcelName( const LanguageTag& rDestLang, OUString& rRetExcelName,
                                           bool bFallbackToAny = true ) const;
 
-    void    SetFunction( const cpo::uno::Reference< css::reflection::XIdlMethod>& rNewFunc,
+    void    SetFunction( const cpo::uno::Reference< cpo::reflection::XIdlMethod>& rNewFunc,
                          const cpo::uno::Any& rNewObj );
     void    SetArguments( sal_Int32 nNewCount, const ScAddInArgDesc* pNewDescs );
     void    SetCallerPos( sal_Int32 nNewPos );

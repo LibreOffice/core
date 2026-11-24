@@ -118,7 +118,7 @@ STDMETHODIMP CCallback::outStruct(IDispatch **outStruct)
     if( SUCCEEDED(hr= _dispMgr.CoCreateInstance(L"com.sun.star.ServiceManager")))
     {
         CComDispatchDriver manager( _dispMgr);
-        CComVariant param1(L"com.sun.star.reflection.CoreReflection");
+        CComVariant param1(L"cpo.reflection.CoreReflection");
         CComVariant varRet;
         hr= manager.Invoke1( L"createInstance", &param1, &varRet);
 

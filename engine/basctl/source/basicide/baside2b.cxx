@@ -66,7 +66,7 @@
 #include <vcl/help.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vector>
-#include <com/sun/star/reflection/theCoreReflection.hpp>
+#include <cpo/reflection/theCoreReflection.hpp>
 #include <unotools/charclass.hxx>
 #include "textwindowaccessibility.hxx"
 #include "uiobject.hxx"
@@ -79,7 +79,7 @@ namespace basctl
 
 using namespace ::com::sun::star;
 using namespace ::cpo::uno;
-using namespace ::cpo::uno;
+using namespace ::cpo;
 
 namespace
 {
@@ -2958,7 +2958,7 @@ UnoTypeCodeCompletetor::UnoTypeCodeCompletetor( const std::vector< OUString >& a
     try
     {
         // Get the base class for reflection:
-        xClass = css::reflection::theCoreReflection::get(
+        xClass = cpo::reflection::theCoreReflection::get(
             comphelper::getProcessComponentContext())->forName(sVarType);
     }
     catch( const Exception& )

@@ -224,7 +224,7 @@ protected:
     */
     bool  m_bOriginalDispatch;
     DispIdMap           m_dispIdMap;
-    cpo::uno::Reference<css::reflection::XIdlClass>*       m_pxIdlClass;
+    cpo::uno::Reference<cpo::reflection::XIdlClass>*       m_pxIdlClass;
 
 
     // used by isJScriptObject

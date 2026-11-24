@@ -20,7 +20,7 @@ package integration.extensions;
 
 import com.sun.star.uno.*;
 import com.sun.star.beans.*;
-import com.sun.star.reflection.*;
+import cpo.reflection.*;
 import com.sun.star.inspection.*;
 
 public class MethodHandler implements XPropertyHandler

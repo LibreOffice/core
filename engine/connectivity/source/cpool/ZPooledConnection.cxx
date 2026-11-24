@@ -25,12 +25,12 @@ using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::reflection;
+using namespace ::cpo::reflection;
 using namespace connectivity;
 using namespace ::osl;
 
 OPooledConnection::OPooledConnection(const Reference< XConnection >& _xConnection,
-                                    const Reference< css::reflection::XProxyFactory >& _rxProxyFactory)
+                                    const Reference< cpo::reflection::XProxyFactory >& _rxProxyFactory)
     : OPooledConnection_Base(m_aMutex)
     ,m_xRealConnection(_xConnection)
     ,m_xProxyFactory(_rxProxyFactory)

@@ -34,16 +34,16 @@ import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.WrappedTargetRuntimeException;
-import com.sun.star.reflection.XCompoundTypeDescription;
-import com.sun.star.reflection.XIdlClass;
-import com.sun.star.reflection.XIdlField2;
-import com.sun.star.reflection.XIndirectTypeDescription;
-import com.sun.star.reflection.XInterfaceAttributeTypeDescription2;
-import com.sun.star.reflection.XInterfaceMemberTypeDescription;
-import com.sun.star.reflection.XInterfaceTypeDescription2;
-import com.sun.star.reflection.XStructTypeDescription;
-import com.sun.star.reflection.XTypeDescription;
-import com.sun.star.reflection.theCoreReflection;
+import cpo.reflection.XCompoundTypeDescription;
+import cpo.reflection.XIdlClass;
+import cpo.reflection.XIdlField2;
+import cpo.reflection.XIndirectTypeDescription;
+import cpo.reflection.XInterfaceAttributeTypeDescription2;
+import cpo.reflection.XInterfaceMemberTypeDescription;
+import cpo.reflection.XInterfaceTypeDescription2;
+import cpo.reflection.XStructTypeDescription;
+import cpo.reflection.XTypeDescription;
+import cpo.reflection.theCoreReflection;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import cpo.uno.Type;
@@ -76,8 +76,8 @@ public final class PropertySetMixin {
 
        @param context the component context used by this instance; must not be
        null, and must supply the
-       <code>com.sun.star.reflection.theCoreReflection</code> and
-       <code>com.sun.star.reflection.theTypeDescriptionManager</code> singletons
+       <code>cpo.reflection.theCoreReflection</code> and
+       <code>cpo.reflection.theTypeDescriptionManager</code> singletons
 
        @param object the client UNO object into which this instance is mixed in;
        must not be null, and must support the given <code>type</code>
@@ -127,7 +127,7 @@ public final class PropertySetMixin {
             XHierarchicalNameAccess xhna = UnoRuntime.queryInterface(
                     XHierarchicalNameAccess.class,
                     context.getValueByName(
-                        "/singletons/com.sun.star.reflection."
+                        "/singletons/cpo.reflection."
                         + "theTypeDescriptionManager"));
             ifc = UnoRuntime.queryInterface(
                 XTypeDescription.class,

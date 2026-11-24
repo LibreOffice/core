@@ -27,7 +27,7 @@ from cpo.uno import XCurrentContext
 from com.sun.star.beans.MethodConcept import ALL as METHOD_CONCEPT_ALL
 from com.sun.star.beans.PropertyConcept import ALL as PROPERTY_CONCEPT_ALL
 
-from com.sun.star.reflection.ParamMode import \
+from cpo.reflection.ParamMode import \
      IN as PARAM_MODE_IN, \
      OUT as PARAM_MODE_OUT, \
      INOUT as PARAM_MODE_INOUT

@@ -15,9 +15,9 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/reflection/XConstantTypeDescription.hpp>
-#include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
-#include <com/sun/star/reflection/XDump.hpp>
+#include <cpo/reflection/XConstantTypeDescription.hpp>
+#include <cpo/reflection/XConstantsTypeDescription.hpp>
+#include <cpo/reflection/XDump.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/DeploymentException.hpp>
 #include <cpo/uno/Reference.hxx>
@@ -62,7 +62,7 @@ cpo::uno::TypeDescription getTypeDescription(cpo::uno::Type const& type)
 }
 
 OUString
-getIdentifier(cpo::uno::Reference<css::reflection::XConstantTypeDescription> const& constant)
+getIdentifier(cpo::uno::Reference<cpo::reflection::XConstantTypeDescription> const& constant)
 {
     auto const n = constant->getName();
     auto const i = n.lastIndexOf('.');
@@ -74,7 +74,7 @@ getIdentifier(cpo::uno::Reference<css::reflection::XConstantTypeDescription> con
 }
 
 OUString
-dumpBitset(cpo::uno::Sequence<cpo::uno::Reference<css::reflection::XConstantTypeDescription>> const&
+dumpBitset(cpo::uno::Sequence<cpo::uno::Reference<cpo::reflection::XConstantTypeDescription>> const&
                constants,
            sal_uInt64 value)
 {
@@ -96,13 +96,13 @@ dumpBitset(cpo::uno::Sequence<cpo::uno::Reference<css::reflection::XConstantType
     return a == 0 && !buf.isEmpty() ? buf.makeStringAndClear() : OUString::number(value);
 }
 
-class Dump : public cppu::BaseMutex, public cppu::WeakComponentImplHelper<css::reflection::XDump>
+class Dump : public cppu::BaseMutex, public cppu::WeakComponentImplHelper<cpo::reflection::XDump>
 {
 public:
     explicit Dump(cpo::uno::Reference<cpo::uno::XComponentContext> const& context)
         : WeakComponentImplHelper(m_aMutex)
         , manager_(context->getValueByName(
-                       u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
+                       u"/singletons/cpo.reflection.theTypeDescriptionManager"_ustr),
                    cpo::uno::UNO_QUERY_THROW)
     {
     }
@@ -242,7 +242,7 @@ public:
             }
             manager = manager_;
         }
-        cpo::uno::Reference<css::reflection::XConstantsTypeDescription> g;
+        cpo::uno::Reference<cpo::reflection::XConstantsTypeDescription> g;
         try
         {
             manager_->getByHierarchicalName(constantsGroup) >>= g;

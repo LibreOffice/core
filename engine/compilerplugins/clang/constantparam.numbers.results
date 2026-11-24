@@ -3,8 +3,8 @@ basctl/source/inc/dlged.hxx:76
     enum basctl::DlgEdHint::Kind 
     2
 basic/source/classes/sbunoobj.cxx:3225
-    class cpo::uno::Reference<class com::sun::star::reflection::XTypeDescriptionEnumeration> getTypeDescriptorEnumeration(const class rtl::OUString &,const class cpo::uno::Sequence<enum cpo::uno::TypeClass> &,enum com::sun::star::reflection::TypeDescriptionSearchDepth)
-    enum com::sun::star::reflection::TypeDescriptionSearchDepth depth
+    class cpo::uno::Reference<class cpo::reflection::XTypeDescriptionEnumeration> getTypeDescriptorEnumeration(const class rtl::OUString &,const class cpo::uno::Sequence<enum cpo::uno::TypeClass> &,enum cpo::reflection::TypeDescriptionSearchDepth)
+    enum cpo::reflection::TypeDescriptionSearchDepth depth
     -1
 basic/source/inc/expr.hxx:196
     void SbiExpression::SbiExpression(class SbiParser *,double,enum SbxDataType)

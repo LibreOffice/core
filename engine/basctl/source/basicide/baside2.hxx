@@ -41,7 +41,7 @@
 
 #include <vcl/textdata.hxx>
 #include <basic/codecompletecache.hxx>
-#include <com/sun/star/reflection/XIdlClass.hpp>
+#include <cpo/reflection/XIdlClass.hpp>
 #include <comphelper/syntaxhighlight.hxx>
 
 class ExtTextEngine;
@@ -525,7 +525,7 @@ public:
 class UnoTypeCodeCompletetor
 {
 private:
-    cpo::uno::Reference< css::reflection::XIdlClass > xClass;
+    cpo::uno::Reference< cpo::reflection::XIdlClass > xClass;
     bool bCanComplete;
 
     bool CheckField( const OUString& sFieldName );

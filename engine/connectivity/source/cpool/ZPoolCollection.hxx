@@ -33,7 +33,7 @@
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <cpo/reflection/XProxyFactory.hpp>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 
@@ -67,7 +67,7 @@ namespace connectivity
         OConnectionPools                                          m_aPools;          // the driver pools
         cpo::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
         cpo::uno::Reference< css::sdbc::XDriverManager2 >         m_xManager;
-        cpo::uno::Reference< css::reflection::XProxyFactory >     m_xProxyFactory;
+        cpo::uno::Reference< cpo::reflection::XProxyFactory >     m_xProxyFactory;
         cpo::uno::Reference< cpo::uno::XInterface >               m_xConfigNode;      // config node for general connection pooling
         cpo::uno::Reference< css::frame::XDesktop>                m_xDesktop;
 

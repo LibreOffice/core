@@ -27,7 +27,7 @@
     <p>Applications should throw instances of this class to indicate
     other illegal uses of the `NULL` object.  </p>
 
-    @see com::sun::star::reflection::XIdlReflection::forName
+    @see cpo::reflection::XIdlReflection::forName
  */
 published exception NullPointerException: cpo::uno::Exception
 {

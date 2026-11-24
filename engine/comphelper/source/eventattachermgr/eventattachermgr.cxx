@@ -31,10 +31,10 @@
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/reflection/theCoreReflection.hpp>
-#include <com/sun/star/reflection/XIdlClass.hpp>
-#include <com/sun/star/reflection/XIdlReflection.hpp>
-#include <com/sun/star/reflection/XIdlMethod.hpp>
+#include <cpo/reflection/theCoreReflection.hpp>
+#include <cpo/reflection/XIdlClass.hpp>
+#include <cpo/reflection/XIdlReflection.hpp>
+#include <cpo/reflection/XIdlMethod.hpp>
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/XEventAttacher2.hpp>
@@ -57,7 +57,7 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::script;
-using namespace com::sun::star::reflection;
+using namespace ::cpo::reflection;
 using namespace cppu;
 
 

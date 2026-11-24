@@ -134,7 +134,7 @@ static PyObject* PyUNO_callable_call(
             ret = std::move(temp);
         }
     }
-    catch( const css::reflection::InvocationTargetException & e )
+    catch( const cpo::reflection::InvocationTargetException & e )
     {
 
         if( isLog( cargo, LogLevel::CALL ) )

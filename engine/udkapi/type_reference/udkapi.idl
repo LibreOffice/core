@@ -58,6 +58,9 @@ module cpo {
     published interface XAggregation;
     published interface XComponentContext;
    };
+   module reflection {
+    published interface XIdlMethod;
+   };
 };
 module com {
  module sun {
@@ -276,9 +279,6 @@ module com {
     published exception NoSuchMethodException: ::cpo::uno::Exception {
     };
    };
-   module reflection {
-    published interface XIdlMethod;
-   };
    module beans {
     published interface XIntrospectionAccess {
      interface ::cpo::uno::XInterface;
@@ -287,9 +287,9 @@ module com {
      ::com::sun::star::beans::Property getProperty([in] string aName, [in] long nPropertyConcepts) raises (::com::sun::star::container::NoSuchElementException);
      boolean hasProperty([in] string aName, [in] long nPropertyConcepts);
      sequence< ::com::sun::star::beans::Property > getProperties([in] long nPropertyConcepts);
-     ::com::sun::star::reflection::XIdlMethod getMethod([in] string aName, [in] long nMethodConcepts) raises (::com::sun::star::lang::NoSuchMethodException);
+     ::cpo::reflection::XIdlMethod getMethod([in] string aName, [in] long nMethodConcepts) raises (::com::sun::star::lang::NoSuchMethodException);
      boolean hasMethod([in] string aName, [in] long nMethodConcepts);
-     sequence< ::com::sun::star::reflection::XIdlMethod > getMethods([in] long nMethodConcepts);
+     sequence< ::cpo::reflection::XIdlMethod > getMethods([in] long nMethodConcepts);
      sequence< type > getSupportedListeners();
      ::cpo::uno::XInterface queryAdapter([in] type aInterfaceType) raises (::com::sun::star::beans::IllegalTypeException);
     };
@@ -1203,19 +1203,15 @@ module cpo {
     };
     published service SharedLibrary: ::cpo::loader::XImplementationLoader;
    };
-};
-module com {
- module sun {
-  module star {
    module reflection {
     published interface XIdlClass;
     published interface XIdlReflection {
      interface ::cpo::uno::XInterface;
-     ::com::sun::star::reflection::XIdlClass forName([in] string aTypeName);
-     ::com::sun::star::reflection::XIdlClass getType([in] any aObj);
+     ::cpo::reflection::XIdlClass forName([in] string aTypeName);
+     ::cpo::reflection::XIdlClass getType([in] any aObj);
     };
     /** @deprecated */ published service CoreReflection {
-     interface ::com::sun::star::reflection::XIdlReflection;
+     interface ::cpo::reflection::XIdlReflection;
      [optional] interface ::com::sun::star::lang::XComponent;
     };
     published enum FieldAccessMode {
@@ -1241,37 +1237,33 @@ module com {
     };
     published struct ParamInfo {
      string aName;
-     ::com::sun::star::reflection::ParamMode aMode;
-     ::com::sun::star::reflection::XIdlClass aType;
+     ::cpo::reflection::ParamMode aMode;
+     ::cpo::reflection::XIdlClass aType;
     };
-   };
-   module reflection {
     /** @deprecated */ published interface XProxyFactory {
      interface ::cpo::uno::XInterface;
      ::cpo::uno::XAggregation createProxy([in] ::cpo::uno::XInterface xTarget);
     };
-    /** @deprecated */ published service ProxyFactory: ::com::sun::star::reflection::XProxyFactory;
+    /** @deprecated */ published service ProxyFactory: ::cpo::reflection::XProxyFactory;
     published enum TypeDescriptionSearchDepth {
      INFINITE = -1,
      ONE = 1
     };
-   };
-   module reflection {
     published interface XTypeDescriptionEnumeration;
     published interface XTypeDescriptionEnumerationAccess {
      interface ::cpo::uno::XInterface;
-     ::com::sun::star::reflection::XTypeDescriptionEnumeration createTypeDescriptionEnumeration([in] string moduleName, [in] sequence< ::cpo::uno::TypeClass > types, [in] ::com::sun::star::reflection::TypeDescriptionSearchDepth depth) raises (::com::sun::star::reflection::NoSuchTypeNameException, ::com::sun::star::reflection::InvalidTypeNameException);
+     ::cpo::reflection::XTypeDescriptionEnumeration createTypeDescriptionEnumeration([in] string moduleName, [in] sequence< ::cpo::uno::TypeClass > types, [in] ::cpo::reflection::TypeDescriptionSearchDepth depth) raises (::cpo::reflection::NoSuchTypeNameException, ::cpo::reflection::InvalidTypeNameException);
     };
     published service TypeDescriptionManager {
      interface ::com::sun::star::container::XHierarchicalNameAccess;
      interface ::com::sun::star::container::XSet;
      [optional] interface ::com::sun::star::lang::XComponent;
-     [optional] interface ::com::sun::star::reflection::XTypeDescriptionEnumerationAccess;
+     [optional] interface ::cpo::reflection::XTypeDescriptionEnumerationAccess;
     };
     published service TypeDescriptionProvider {
      interface ::com::sun::star::container::XHierarchicalNameAccess;
      interface ::com::sun::star::lang::XComponent;
-     [optional] interface ::com::sun::star::reflection::XTypeDescriptionEnumerationAccess;
+     [optional] interface ::cpo::reflection::XTypeDescriptionEnumerationAccess;
     };
     published interface XTypeDescription {
      interface ::cpo::uno::XInterface;
@@ -1279,27 +1271,27 @@ module com {
      string getName();
     };
     /** @deprecated */ published interface XArrayTypeDescription {
-     interface ::com::sun::star::reflection::XTypeDescription;
-     ::com::sun::star::reflection::XTypeDescription getType();
+     interface ::cpo::reflection::XTypeDescription;
+     ::cpo::reflection::XTypeDescription getType();
      long getNumberOfDimensions();
      sequence< long > getDimensions();
     };
     published interface XCompoundTypeDescription {
-     interface ::com::sun::star::reflection::XTypeDescription;
-     ::com::sun::star::reflection::XTypeDescription getBaseType();
-     sequence< ::com::sun::star::reflection::XTypeDescription > getMemberTypes();
+     interface ::cpo::reflection::XTypeDescription;
+     ::cpo::reflection::XTypeDescription getBaseType();
+     sequence< ::cpo::reflection::XTypeDescription > getMemberTypes();
      sequence< string > getMemberNames();
     };
     published interface XConstantTypeDescription {
-     interface ::com::sun::star::reflection::XTypeDescription;
+     interface ::cpo::reflection::XTypeDescription;
      any getConstantValue();
     };
     published interface XConstantsTypeDescription {
-     interface ::com::sun::star::reflection::XTypeDescription;
-     sequence< ::com::sun::star::reflection::XConstantTypeDescription > getConstants();
+     interface ::cpo::reflection::XTypeDescription;
+     sequence< ::cpo::reflection::XConstantTypeDescription > getConstants();
     };
     published interface XEnumTypeDescription {
-     interface ::com::sun::star::reflection::XTypeDescription;
+     interface ::cpo::reflection::XTypeDescription;
      long getDefaultEnumValue();
      sequence< string > getEnumNames();
      sequence< long > getEnumValues();
@@ -1314,124 +1306,128 @@ module com {
     published interface XIdlField;
     published interface XIdlClass {
      interface ::cpo::uno::XInterface;
-     /** @deprecated */ sequence< ::com::sun::star::reflection::XIdlClass > getClasses();
-     /** @deprecated */ ::com::sun::star::reflection::XIdlClass getClass([in] string aName);
-     boolean equals([in] ::com::sun::star::reflection::XIdlClass Type);
-     boolean isAssignableFrom([in] ::com::sun::star::reflection::XIdlClass xType);
+     /** @deprecated */ sequence< ::cpo::reflection::XIdlClass > getClasses();
+     /** @deprecated */ ::cpo::reflection::XIdlClass getClass([in] string aName);
+     boolean equals([in] ::cpo::reflection::XIdlClass Type);
+     boolean isAssignableFrom([in] ::cpo::reflection::XIdlClass xType);
      ::cpo::uno::TypeClass getTypeClass();
      string getName();
-     sequence< ::com::sun::star::reflection::XIdlClass > getSuperclasses();
-     /** @deprecated */ sequence< ::com::sun::star::reflection::XIdlClass > getInterfaces();
-     ::com::sun::star::reflection::XIdlClass getComponentType();
-     ::com::sun::star::reflection::XIdlField getField([in] string aName);
-     sequence< ::com::sun::star::reflection::XIdlField > getFields();
-     ::com::sun::star::reflection::XIdlMethod getMethod([in] string aName);
-     sequence< ::com::sun::star::reflection::XIdlMethod > getMethods();
-     ::com::sun::star::reflection::XIdlArray getArray();
+     sequence< ::cpo::reflection::XIdlClass > getSuperclasses();
+     /** @deprecated */ sequence< ::cpo::reflection::XIdlClass > getInterfaces();
+     ::cpo::reflection::XIdlClass getComponentType();
+     ::cpo::reflection::XIdlField getField([in] string aName);
+     sequence< ::cpo::reflection::XIdlField > getFields();
+     ::cpo::reflection::XIdlMethod getMethod([in] string aName);
+     sequence< ::cpo::reflection::XIdlMethod > getMethods();
+     ::cpo::reflection::XIdlArray getArray();
      void createObject([out] any obj);
     };
     /** @deprecated */ published interface XIdlClassProvider {
      interface ::cpo::uno::XInterface;
-     sequence< ::com::sun::star::reflection::XIdlClass > getIdlClasses();
+     sequence< ::cpo::reflection::XIdlClass > getIdlClasses();
     };
     published interface XIdlMember {
      interface ::cpo::uno::XInterface;
-     ::com::sun::star::reflection::XIdlClass getDeclaringClass();
+     ::cpo::reflection::XIdlClass getDeclaringClass();
      string getName();
     };
     /** @deprecated */ published interface XIdlField {
-     interface ::com::sun::star::reflection::XIdlMember;
-     ::com::sun::star::reflection::XIdlClass getType();
-     ::com::sun::star::reflection::FieldAccessMode getAccessMode();
+     interface ::cpo::reflection::XIdlMember;
+     ::cpo::reflection::XIdlClass getType();
+     ::cpo::reflection::FieldAccessMode getAccessMode();
      any get([in] any obj) raises (::com::sun::star::lang::IllegalArgumentException);
      void set([in] any obj, [in] any value) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException);
     };
     published interface XIdlField2 {
-     interface ::com::sun::star::reflection::XIdlMember;
-     ::com::sun::star::reflection::XIdlClass getType();
-     ::com::sun::star::reflection::FieldAccessMode getAccessMode();
+     interface ::cpo::reflection::XIdlMember;
+     ::cpo::reflection::XIdlClass getType();
+     ::cpo::reflection::FieldAccessMode getAccessMode();
      any get([in] any obj) raises (::com::sun::star::lang::IllegalArgumentException);
      void set([inout] any obj, [in] any value) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException);
     };
     published interface XIdlMethod {
-     interface ::com::sun::star::reflection::XIdlMember;
-     ::com::sun::star::reflection::XIdlClass getReturnType();
-     sequence< ::com::sun::star::reflection::XIdlClass > getParameterTypes();
-     sequence< ::com::sun::star::reflection::ParamInfo > getParameterInfos();
-     sequence< ::com::sun::star::reflection::XIdlClass > getExceptionTypes();
-     ::com::sun::star::reflection::MethodMode getMode();
-     any invoke([in] any obj, [inout] sequence< any > args) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::reflection::InvocationTargetException);
+     interface ::cpo::reflection::XIdlMember;
+     ::cpo::reflection::XIdlClass getReturnType();
+     sequence< ::cpo::reflection::XIdlClass > getParameterTypes();
+     sequence< ::cpo::reflection::ParamInfo > getParameterInfos();
+     sequence< ::cpo::reflection::XIdlClass > getExceptionTypes();
+     ::cpo::reflection::MethodMode getMode();
+     any invoke([in] any obj, [inout] sequence< any > args) raises (::com::sun::star::lang::IllegalArgumentException, ::cpo::reflection::InvocationTargetException);
     };
     published interface XIndirectTypeDescription {
-     interface ::com::sun::star::reflection::XTypeDescription;
-     ::com::sun::star::reflection::XTypeDescription getReferencedType();
+     interface ::cpo::reflection::XTypeDescription;
+     ::cpo::reflection::XTypeDescription getReferencedType();
     };
     published interface XInterfaceMemberTypeDescription {
-     interface ::com::sun::star::reflection::XTypeDescription;
+     interface ::cpo::reflection::XTypeDescription;
      string getMemberName();
      long getPosition();
     };
     published interface XInterfaceAttributeTypeDescription {
-     interface ::com::sun::star::reflection::XInterfaceMemberTypeDescription;
+     interface ::cpo::reflection::XInterfaceMemberTypeDescription;
      boolean isReadOnly();
-     ::com::sun::star::reflection::XTypeDescription getType();
+     ::cpo::reflection::XTypeDescription getType();
     };
     published interface XMethodParameter;
     published interface XInterfaceMethodTypeDescription {
-     interface ::com::sun::star::reflection::XInterfaceMemberTypeDescription;
-     ::com::sun::star::reflection::XTypeDescription getReturnType();
+     interface ::cpo::reflection::XInterfaceMemberTypeDescription;
+     ::cpo::reflection::XTypeDescription getReturnType();
      boolean isOneway();
-     sequence< ::com::sun::star::reflection::XMethodParameter > getParameters();
-     sequence< ::com::sun::star::reflection::XTypeDescription > getExceptions();
+     sequence< ::cpo::reflection::XMethodParameter > getParameters();
+     sequence< ::cpo::reflection::XTypeDescription > getExceptions();
     };
     published interface XInterfaceTypeDescription {
-     interface ::com::sun::star::reflection::XTypeDescription;
-     /** @deprecated */ ::com::sun::star::reflection::XTypeDescription getBaseType();
-     sequence< ::com::sun::star::reflection::XInterfaceMemberTypeDescription > getMembers();
+     interface ::cpo::reflection::XTypeDescription;
+     /** @deprecated */ ::cpo::reflection::XTypeDescription getBaseType();
+     sequence< ::cpo::reflection::XInterfaceMemberTypeDescription > getMembers();
     };
     published interface XMethodParameter {
      interface ::cpo::uno::XInterface;
      string getName();
-     ::com::sun::star::reflection::XTypeDescription getType();
+     ::cpo::reflection::XTypeDescription getType();
      boolean isIn();
      boolean isOut();
      long getPosition();
     };
     published interface XModuleTypeDescription {
-     interface ::com::sun::star::reflection::XTypeDescription;
-     sequence< ::com::sun::star::reflection::XTypeDescription > getMembers();
+     interface ::cpo::reflection::XTypeDescription;
+     sequence< ::cpo::reflection::XTypeDescription > getMembers();
     };
     published interface XPropertyTypeDescription {
-     interface ::com::sun::star::reflection::XTypeDescription;
+     interface ::cpo::reflection::XTypeDescription;
      short getPropertyFlags();
-     ::com::sun::star::reflection::XTypeDescription getPropertyTypeDescription();
+     ::cpo::reflection::XTypeDescription getPropertyTypeDescription();
     };
     published interface XServiceTypeDescription {
-     interface ::com::sun::star::reflection::XTypeDescription;
-     sequence< ::com::sun::star::reflection::XServiceTypeDescription > getMandatoryServices();
-     sequence< ::com::sun::star::reflection::XServiceTypeDescription > getOptionalServices();
-     sequence< ::com::sun::star::reflection::XInterfaceTypeDescription > getMandatoryInterfaces();
-     sequence< ::com::sun::star::reflection::XInterfaceTypeDescription > getOptionalInterfaces();
-     sequence< ::com::sun::star::reflection::XPropertyTypeDescription > getProperties();
+     interface ::cpo::reflection::XTypeDescription;
+     sequence< ::cpo::reflection::XServiceTypeDescription > getMandatoryServices();
+     sequence< ::cpo::reflection::XServiceTypeDescription > getOptionalServices();
+     sequence< ::cpo::reflection::XInterfaceTypeDescription > getMandatoryInterfaces();
+     sequence< ::cpo::reflection::XInterfaceTypeDescription > getOptionalInterfaces();
+     sequence< ::cpo::reflection::XPropertyTypeDescription > getProperties();
     };
     published interface XSingletonTypeDescription {
-     interface ::com::sun::star::reflection::XTypeDescription;
-     ::com::sun::star::reflection::XServiceTypeDescription getService();
+     interface ::cpo::reflection::XTypeDescription;
+     ::cpo::reflection::XServiceTypeDescription getService();
     };
     published interface XTypeDescriptionEnumeration {
      interface ::com::sun::star::container::XEnumeration;
-     ::com::sun::star::reflection::XTypeDescription nextTypeDescription() raises (::com::sun::star::container::NoSuchElementException);
+     ::cpo::reflection::XTypeDescription nextTypeDescription() raises (::com::sun::star::container::NoSuchElementException);
     };
     /** @deprecated */ published interface XUnionTypeDescription {
-     interface ::com::sun::star::reflection::XTypeDescription;
-     ::com::sun::star::reflection::XTypeDescription getDiscriminantType();
+     interface ::cpo::reflection::XTypeDescription;
+     ::cpo::reflection::XTypeDescription getDiscriminantType();
      any getDefaultDiscriminant();
-     ::com::sun::star::reflection::XTypeDescription getDefaultMemberType();
+     ::cpo::reflection::XTypeDescription getDefaultMemberType();
      sequence< any > getDiscriminants();
-     sequence< ::com::sun::star::reflection::XTypeDescription > getMemberTypes();
+     sequence< ::cpo::reflection::XTypeDescription > getMemberTypes();
      sequence< string > getMemberNames();
     };
    };
+};
+module com {
+ module sun {
+  module star {
    module script {
     published struct AllEventObject: ::com::sun::star::lang::EventObject {
      any Helper;
@@ -1492,7 +1488,7 @@ module com {
      short PropertyAttribute;
      type aType;
      sequence< type > aParamTypes;
-     sequence< ::com::sun::star::reflection::ParamMode > aParamModes;
+     sequence< ::cpo::reflection::ParamMode > aParamModes;
     };
     published struct ScriptEvent: ::com::sun::star::script::AllEventObject {
      string ScriptType;
@@ -1508,20 +1504,20 @@ module com {
     published interface XAllListener {
      interface ::com::sun::star::lang::XEventListener;
      void firing([in] ::com::sun::star::script::AllEventObject iaEvent);
-     any approveFiring([in] ::com::sun::star::script::AllEventObject aEvent) raises (::com::sun::star::reflection::InvocationTargetException);
+     any approveFiring([in] ::com::sun::star::script::AllEventObject aEvent) raises (::cpo::reflection::InvocationTargetException);
     };
     published interface XInvocation {
      interface ::cpo::uno::XInterface;
      ::com::sun::star::beans::XIntrospectionAccess getIntrospection();
-     any invoke([in] string aFunctionName, [in] sequence< any > aParams, [out] sequence< short > aOutParamIndex, [out] sequence< any > aOutParam) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException);
-     void setValue([in] string aPropertyName, [in] any aValue) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException);
+     any invoke([in] string aFunctionName, [in] sequence< any > aParams, [out] sequence< short > aOutParamIndex, [out] sequence< any > aOutParam) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::cpo::reflection::InvocationTargetException);
+     void setValue([in] string aPropertyName, [in] any aValue) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::script::CannotConvertException, ::cpo::reflection::InvocationTargetException);
      any getValue([in] string aPropertyName) raises (::com::sun::star::beans::UnknownPropertyException);
      boolean hasMethod([in] string aName);
      boolean hasProperty([in] string aName);
     };
     published interface XDirectInvocation {
      interface ::cpo::uno::XInterface;
-     any directInvoke([in] string aName, [in] sequence< any > aParams) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException);
+     any directInvoke([in] string aName, [in] sequence< any > aParams) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::cpo::reflection::InvocationTargetException);
      boolean hasMember([in] string aName);
     };
     published interface XEventAttacher {
@@ -1562,7 +1558,7 @@ module com {
     published interface XScriptListener {
      interface ::com::sun::star::lang::XEventListener;
      void firing([in] ::com::sun::star::script::ScriptEvent aEvent);
-     any approveFiring([in] ::com::sun::star::script::ScriptEvent aEvent) raises (::com::sun::star::reflection::InvocationTargetException);
+     any approveFiring([in] ::com::sun::star::script::ScriptEvent aEvent) raises (::cpo::reflection::InvocationTargetException);
     };
     /** @deprecated */ published interface XStarBasicAccess {
      interface ::cpo::uno::XInterface;

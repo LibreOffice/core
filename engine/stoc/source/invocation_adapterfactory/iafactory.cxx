@@ -37,7 +37,7 @@
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/reflection/InvocationTargetException.hpp>
+#include <cpo/reflection/InvocationTargetException.hpp>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 
@@ -310,11 +310,11 @@ static void handleInvokExc( uno_Any * pDest, uno_Any * pSource )
     OUString const & name =
         OUString::unacquired( &pSource->pType->pTypeName );
 
-    if ( name == "com.sun.star.reflection.InvocationTargetException" )
+    if ( name == "cpo.reflection.InvocationTargetException" )
     {
         // unwrap invocation target exception
         uno_Any * target_exc =
-            &static_cast< reflection::InvocationTargetException * >(
+            &static_cast< cpo::reflection::InvocationTargetException * >(
                 pSource->pData )->TargetException;
         ::uno_type_any_construct(
             pDest, target_exc->pData, target_exc->pType, nullptr );

@@ -16,7 +16,7 @@ excludelist:
     - cpo/registry/XRegistryKey.hpp
     stoc/source/corereflection/crefl.cxx:
     # Safer to keep for use in cppu::UnoType template
-    - com/sun/star/reflection/XTypeDescription.hpp
+    - cpo/reflection/XTypeDescription.hpp
     stoc/source/corereflection/criface.cxx:
     # Keep for platform-independent alloca.h abstraction
     - sal/alloca.h

@@ -19,9 +19,9 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/reflection/XTypeDescriptionEnumeration.hpp>
-#include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
-#include <com/sun/star/reflection/theCoreReflection.hpp>
+#include <cpo/reflection/XTypeDescriptionEnumeration.hpp>
+#include <cpo/reflection/XTypeDescriptionEnumerationAccess.hpp>
+#include <cpo/reflection/theCoreReflection.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 
 namespace basctl
@@ -32,7 +32,7 @@ namespace css = ::com::sun::star;
 using namespace css::container;
 using namespace ::cpo::uno;
 using namespace css::lang;
-using namespace css::reflection;
+using namespace cpo::reflection;
 using namespace cpo::uno;
 
 namespace
@@ -111,7 +111,7 @@ void ImplGetMembersOfUnoType(SymbolInfoList& rMembers, const IdeSymbolInfo& rNod
     try
     {
         Reference<XIdlReflection> xReflection
-            = css::reflection::theCoreReflection::get(comphelper::getProcessComponentContext());
+            = cpo::reflection::theCoreReflection::get(comphelper::getProcessComponentContext());
         if (!xReflection.is())
         {
             return;
@@ -155,10 +155,10 @@ void ImplGetMembersOfUnoType(SymbolInfoList& rMembers, const IdeSymbolInfo& rNod
                 IdeParamInfo aParam;
                 aParam.sName = rParam.aName;
                 aParam.sTypeName = helper_getTypeName(rParam.aType);
-                aParam.bIsIn = (rParam.aMode == css::reflection::ParamMode_IN
-                                || rParam.aMode == css::reflection::ParamMode_INOUT);
-                aParam.bIsOut = (rParam.aMode == css::reflection::ParamMode_OUT
-                                 || rParam.aMode == css::reflection::ParamMode_INOUT);
+                aParam.bIsIn = (rParam.aMode == cpo::reflection::ParamMode_IN
+                                || rParam.aMode == cpo::reflection::ParamMode_INOUT);
+                aParam.bIsOut = (rParam.aMode == cpo::reflection::ParamMode_OUT
+                                 || rParam.aMode == cpo::reflection::ParamMode_INOUT);
                 pNode->aParameters.push_back(std::move(aParam));
             }
 
@@ -482,7 +482,7 @@ void IdeDataProvider::performFullUnoScan()
     {
         Reference<XHierarchicalNameAccess> xTypeManager;
         comphelper::getProcessComponentContext()->getValueByName(
-            u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr)
+            u"/singletons/cpo.reflection.theTypeDescriptionManager"_ustr)
             >>= xTypeManager;
 
         if (xTypeManager.is())

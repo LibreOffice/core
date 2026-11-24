@@ -25,7 +25,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/hash.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/reflection/ProxyFactory.hpp>
+#include <cpo/reflection/ProxyFactory.hpp>
 #include <algorithm>
 
 using namespace connectivity;
@@ -35,7 +35,7 @@ using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
-using namespace ::com::sun::star::reflection;
+using namespace ::cpo::reflection;
 
 OConnectionWrapper::OConnectionWrapper()
     : OConnection_BASE(m_aMutex)

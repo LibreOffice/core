@@ -23,11 +23,11 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
 
-#include <com/sun/star/reflection/theCoreReflection.hpp>
-#include <com/sun/star/reflection/XIdlReflection.hpp>
-#include <com/sun/star/reflection/XIdlMethod.hpp>
-#include <com/sun/star/reflection/XIdlArray.hpp>
-#include <com/sun/star/reflection/XEnumTypeDescription.hpp>
+#include <cpo/reflection/theCoreReflection.hpp>
+#include <cpo/reflection/XIdlReflection.hpp>
+#include <cpo/reflection/XIdlMethod.hpp>
+#include <cpo/reflection/XIdlArray.hpp>
+#include <cpo/reflection/XEnumTypeDescription.hpp>
 
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -62,7 +62,7 @@ OUString enumValueToEnumName(cpo::uno::Any const& aValue,
 
     uno::Reference<container::XHierarchicalNameAccess> xManager;
     xManager.set(xContext->getValueByName(
-                     u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
+                     u"/singletons/cpo.reflection.theTypeDescriptionManager"_ustr),
                  uno::UNO_QUERY);
 
     uno::Reference<reflection::XEnumTypeDescription> xTypeDescription;

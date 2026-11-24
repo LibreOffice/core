@@ -144,10 +144,10 @@ published interface XIntrospectionAccess: cpo::uno::XInterface
     /** returns information about a method if a method with
         the demanded name exists and if it accords to one of
         the demanded MethodConcepts. The information is
-        provided as com::sun::star::reflection::XIdlMethod.
+        provided as cpo::reflection::XIdlMethod.
 
         @returns
-            A com::sun::star::reflection::XIdlMethod providing
+            A cpo::reflection::XIdlMethod providing
             information about and
             access to the demanded method if a corresponding
             method exists.
@@ -164,7 +164,7 @@ published interface XIntrospectionAccess: cpo::uno::XInterface
             when a method with the demanded name doesn't exist
             or if it accords to a wrong MethodConcept.
      */
-    com::sun::star::reflection::XIdlMethod getMethod( [in] string aName,
+    cpo::reflection::XIdlMethod getMethod( [in] string aName,
              [in] long nMethodConcepts )
             raises( com::sun::star::lang::NoSuchMethodException );
 
@@ -198,7 +198,7 @@ published interface XIntrospectionAccess: cpo::uno::XInterface
             constants group combined by an arithmetical
             or-operation.
      */
-    sequence<com::sun::star::reflection::XIdlMethod> getMethods(
+    sequence<cpo::reflection::XIdlMethod> getMethods(
             [in] long nMethodConcepts );
 
     /** returns the listener types supported by the introspected
@@ -239,7 +239,7 @@ published interface XIntrospectionAccess: cpo::uno::XInterface
         com::sun::star::container::XEnumerationAccess interface.</p>
 
         <p>If the introspected object implements the
-        com::sun::star::reflection::XIdlArray interface,
+        cpo::reflection::XIdlArray interface,
         the introspection should return this.</p>
 
         <p>To implement inaccurate name access, at all objects,

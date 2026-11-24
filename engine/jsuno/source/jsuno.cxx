@@ -36,14 +36,14 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/reflection/InvocationTargetException.hpp>
-#include <com/sun/star/reflection/XCompoundTypeDescription.hpp>
-#include <com/sun/star/reflection/XConstantTypeDescription.hpp>
-#include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
-#include <com/sun/star/reflection/XServiceConstructorDescription.hpp>
-#include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
-#include <com/sun/star/reflection/XStructTypeDescription.hpp>
-#include <com/sun/star/reflection/XTypeDescription.hpp>
+#include <cpo/reflection/InvocationTargetException.hpp>
+#include <cpo/reflection/XCompoundTypeDescription.hpp>
+#include <cpo/reflection/XConstantTypeDescription.hpp>
+#include <cpo/reflection/XConstantsTypeDescription.hpp>
+#include <cpo/reflection/XServiceConstructorDescription.hpp>
+#include <cpo/reflection/XServiceTypeDescription2.hpp>
+#include <cpo/reflection/XStructTypeDescription.hpp>
+#include <cpo/reflection/XTypeDescription.hpp>
 #include <com/sun/star/script/Invocation.hpp>
 #include <com/sun/star/script/InvocationAdapterFactory.hpp>
 #include <com/sun/star/script/InvocationInfo.hpp>
@@ -646,11 +646,11 @@ bool isCompoundOfType(JSContext * ctx, JSValueConst val, cpo::uno::Type const & 
 enum class ArgumentFit { None, Loose, Exact };
 
 ArgumentFit argumentFit(
-    JSContext * ctx, css::reflection::ParamMode mode, cpo::uno::Type const & type, JSValueConst val)
+    JSContext * ctx, cpo::reflection::ParamMode mode, cpo::uno::Type const & type, JSValueConst val)
 {
     // An out or inout parameter takes a holder object, which is orthogonal to type; treat every
     // candidate as loose so the tie-break falls to any in parameters alongside it:
-    if (mode != css::reflection::ParamMode_IN) {
+    if (mode != cpo::reflection::ParamMode_IN) {
         return ArgumentFit::Loose;
     }
     switch (type.getTypeClass()) {
@@ -1202,7 +1202,7 @@ JSValue unoTypeStruct(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv
             JS_ThrowTypeError(ctx, "TODO: BAD UNO TYPE VALUE");
             throw JsException();
         }
-        cpo::uno::Reference td(static_cast<css::reflection::XStructTypeDescription*>(
+        cpo::uno::Reference td(static_cast<cpo::reflection::XStructTypeDescription*>(
             JS_GetOpaque(data, getRuntimeData(ctx)->structClassId)));
         OUStringBuffer buf(td->getName());
         auto const params = td->getTypeParameters();
@@ -1341,7 +1341,7 @@ void structFinalizer(JSRuntime* rt, JSValueConst val)
 #if defined DBG_UTIL
     getRuntimeData(rt)->toFinalize.dec();
 #endif
-    static_cast<css::reflection::XStructTypeDescription*>(
+    static_cast<cpo::reflection::XStructTypeDescription*>(
         JS_GetOpaque(val, getRuntimeData(rt)->structClassId))
         ->release();
 }
@@ -1354,7 +1354,7 @@ JSValue structCtor(JSContext* ctx, JSValueConst new_target, int argc, JSValueCon
         {
             throw JsException();
         }
-        cpo::uno::Reference td(static_cast<css::reflection::XStructTypeDescription*>(
+        cpo::uno::Reference td(static_cast<cpo::reflection::XStructTypeDescription*>(
             JS_GetOpaque(data, getRuntimeData(ctx)->structClassId)));
         int argIdx = 0;
         auto const params = td->getTypeParameters();
@@ -1441,7 +1441,7 @@ JSValue structCtor(JSContext* ctx, JSValueConst new_target, int argc, JSValueCon
 #if defined DBG_UTIL
         getRuntimeData(ctx)->toFinalize.inc();
 #endif
-        for (cpo::uno::Reference<css::reflection::XCompoundTypeDescription> ctd(
+        for (cpo::uno::Reference<cpo::reflection::XCompoundTypeDescription> ctd(
                  td, cpo::uno::UNO_QUERY_THROW);
              ;)
         {
@@ -1597,7 +1597,7 @@ void interfaceFinalizer(JSRuntime* rt, JSValueConst val)
 struct CtorData
 {
     OUString service;
-    cpo::uno::Reference<css::reflection::XServiceConstructorDescription> ctor;
+    cpo::uno::Reference<cpo::reflection::XServiceConstructorDescription> ctor;
 };
 
 void ctorFinalizer(JSRuntime* rt, JSValueConst val)
@@ -1719,7 +1719,7 @@ JSValue moduleGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValue
     }
     cpo::uno::Reference<css::container::XHierarchicalNameAccess> mgr(
         comphelper::getProcessComponentContext()->getValueByName(
-            u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
+            u"/singletons/cpo.reflection.theTypeDescriptionManager"_ustr),
         cpo::uno::UNO_QUERY_THROW);
     if (!mgr->hasByHierarchicalName(id))
     {
@@ -1734,7 +1734,7 @@ JSValue moduleGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValue
         }
         id = newId;
     }
-    cpo::uno::Reference<css::reflection::XTypeDescription> td(mgr->getByHierarchicalName(id),
+    cpo::uno::Reference<cpo::reflection::XTypeDescription> td(mgr->getByHierarchicalName(id),
                                                               cpo::uno::UNO_QUERY_THROW);
     auto const tc = td->getTypeClass();
     ValueRef val(ctx);
@@ -1769,7 +1769,7 @@ JSValue moduleGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValue
         }
         case cpo::uno::TypeClass_STRUCT:
         {
-            cpo::uno::Reference<css::reflection::XStructTypeDescription> std(
+            cpo::uno::Reference<cpo::reflection::XStructTypeDescription> std(
                 td, cpo::uno::UNO_QUERY_THROW);
             assert(!std->getTypeArguments().hasElements());
             ValueRef proto(ctx, JS_NewObject(ctx));
@@ -1833,7 +1833,7 @@ JSValue moduleGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValue
             {
                 throw JsException();
             }
-            cpo::uno::Reference<css::reflection::XConstantsTypeDescription> cstd(
+            cpo::uno::Reference<cpo::reflection::XConstantsTypeDescription> cstd(
                 td, cpo::uno::UNO_QUERY_THROW);
             for (auto const& ctd : cstd->getConstants())
             {
@@ -1850,7 +1850,7 @@ JSValue moduleGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValue
         }
         case cpo::uno::TypeClass_SERVICE:
         {
-            cpo::uno::Reference<css::reflection::XServiceTypeDescription2> std(
+            cpo::uno::Reference<cpo::reflection::XServiceTypeDescription2> std(
                 td, cpo::uno::UNO_QUERY_THROW);
             if (!std->isSingleInterfaceBased())
             {
@@ -1998,14 +1998,14 @@ ValueRef createDefaultValue(JSContext* ctx, cpo::uno::Type const& type)
                 ++n;
                 cpo::uno::Reference<css::container::XHierarchicalNameAccess> mgr(
                     comphelper::getProcessComponentContext()->getValueByName(
-                        u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
+                        u"/singletons/cpo.reflection.theTypeDescriptionManager"_ustr),
                     cpo::uno::UNO_QUERY_THROW);
                 for (sal_Int32 i = n;; ++i)
                 {
                     if (i == id.getLength() - 1 || (nest == 0 && id[i] == ','))
                     {
                         assert(nest == 0);
-                        cpo::uno::Reference<css::reflection::XTypeDescription> td(
+                        cpo::uno::Reference<cpo::reflection::XTypeDescription> td(
                             mgr->getByHierarchicalName(id.copy(n, i - n)),
                             cpo::uno::UNO_QUERY_THROW);
                         if (JS_SetPropertyUint32(
@@ -2874,14 +2874,14 @@ ValueRef toJs(JSContext* ctx, cpo::uno::Type const& type, void const* value)
                 ++n;
                 cpo::uno::Reference<css::container::XHierarchicalNameAccess> mgr(
                     comphelper::getProcessComponentContext()->getValueByName(
-                        u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
+                        u"/singletons/cpo.reflection.theTypeDescriptionManager"_ustr),
                     cpo::uno::UNO_QUERY_THROW);
                 for (sal_Int32 i = n;; ++i)
                 {
                     if (i == id.getLength() - 1 || (nest == 0 && id[i] == ','))
                     {
                         assert(nest == 0);
-                        cpo::uno::Reference<css::reflection::XTypeDescription> td(
+                        cpo::uno::Reference<cpo::reflection::XTypeDescription> td(
                             mgr->getByHierarchicalName(id.copy(n, i - n)),
                             cpo::uno::UNO_QUERY_THROW);
                         if (JS_SetPropertyUint32(
@@ -3290,12 +3290,12 @@ JSValue invokeUno(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst*
         cpo::uno::Sequence<cpo::uno::Any> args(info->aParamTypes.getLength());
         for (int i = 0; i != argc; ++i)
         {
-            if (info->aParamModes[i] == css::reflection::ParamMode_OUT)
+            if (info->aParamModes[i] == cpo::reflection::ParamMode_OUT)
             {
                 continue;
             }
             ValueRef arg(ctx);
-            if (info->aParamModes[i] == css::reflection::ParamMode_IN)
+            if (info->aParamModes[i] == cpo::reflection::ParamMode_IN)
             {
                 arg = JS_DupValue(ctx, argv[i]);
             }
@@ -3336,7 +3336,7 @@ JSValue invokeUno(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst*
                     cpo::uno::UNO_QUERY_THROW)
                     ->invoke(info->aName, args, outParamIndex, outParam));
         }
-        catch (css::reflection::InvocationTargetException e)
+        catch (cpo::reflection::InvocationTargetException e)
         {
             cppu::throwException(e.TargetException);
         }
