@@ -88,20 +88,23 @@ public:
     }
 
     /// Rotate if the rotation interval has elapsed.
+    /// @param now Current time (for testing or efficiency when called repeatedly)
     /// @return true if rotation was performed
-    bool rotateIfNeeded()
+    bool rotateIfNeeded(
+        std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now())
     {
         if (_rotationInterval.count() <= 0)
             return false;
 
-        const auto now = std::chrono::steady_clock::now();
-
         std::lock_guard<std::mutex> lock(_mutex);
         if ((now - _lastRotation) >= _rotationInterval)
         {
-            _tokens[1] = _tokens[0];
+            // A value stays valid for at most two intervals from the start of the interval in which
+            // it became current:
+            auto const intervals = (now - _lastRotation) / _rotationInterval;
+            _tokens[1] = intervals == 1 ? _tokens[0] : Util::rng::getHexString(_tokenLengthBytes);
             _tokens[0] = Util::rng::getHexString(_tokenLengthBytes);
-            _lastRotation = now;
+            _lastRotation += intervals * _rotationInterval;
             return true;
         }
         return false;

@@ -268,7 +268,7 @@ std::string externalUserJson(const std::string& userId,
 
 std::string CollabBroker::getUserListJson(const std::shared_ptr<CollabSocketHandler>& exclude) const
 {
-    const std::string tag = _accessToken.getCurrent();
+    const std::string tag = getCurrentAccessToken();
     std::lock_guard<std::mutex> lock(_mutex);
 
     std::ostringstream oss;
@@ -305,7 +305,7 @@ void CollabBroker::notifyUserJoined(const std::shared_ptr<CollabSocketHandler>& 
 {
     std::ostringstream oss;
     oss << "{\"type\":\"user_joined\",\"user\":";
-    appendUserJson(oss, _wopiSrc, _accessToken.getCurrent(), handler);
+    appendUserJson(oss, _wopiSrc, getCurrentAccessToken(), handler);
     oss << "}";
     const std::string message = oss.str();
 
@@ -328,7 +328,7 @@ void CollabBroker::notifyUserLeft(const std::shared_ptr<CollabSocketHandler>& ha
 {
     std::ostringstream oss;
     oss << "{\"type\":\"user_left\",\"user\":";
-    appendUserJson(oss, _wopiSrc, _accessToken.getCurrent(), handler);
+    appendUserJson(oss, _wopiSrc, getCurrentAccessToken(), handler);
     oss << "}";
     const std::string message = oss.str();
 
@@ -351,7 +351,7 @@ void CollabBroker::notifyEditingStarted(const std::shared_ptr<CollabSocketHandle
 {
     std::ostringstream oss;
     oss << "{\"type\":\"editing_started\",\"user\":";
-    appendUserJson(oss, _wopiSrc, _accessToken.getCurrent(), handler);
+    appendUserJson(oss, _wopiSrc, getCurrentAccessToken(), handler);
     oss << "}";
     const std::string message = oss.str();
 
