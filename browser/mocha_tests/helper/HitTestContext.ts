@@ -10,8 +10,9 @@
  */
 
 /// A drawing context for hit tests, as Node has none. It answers from what a Path2DRecorder
-/// holds: rectangles, and paths added through a transform. A point on no stroke is the answer
-/// for every stroke. Text measures 10 for each character, as on CanvasRecorder.
+/// holds: rectangles, paths added through a transform, and polygons drawn with moveTo and
+/// lineTo, which count by the even-odd rule. A point on no stroke is the answer for every
+/// stroke. Text measures 10 for each character, as on CanvasRecorder.
 class HitTestContext {
 	public font: string = '';
 	public lineWidth: number = 1;
@@ -19,6 +20,7 @@ class HitTestContext {
 	public lineCap: string = 'butt';
 
 	isPointInPath(path: any, x: number, y: number): boolean {
+		if (this.insideThePolygons(path, x, y)) return true;
 		return path.calls.some((call: any) => {
 			if (call.method === 'rect') {
 				const [left, top, width, height] = call.args;
@@ -33,6 +35,29 @@ class HitTestContext {
 			}
 			return false;
 		});
+	}
+
+	/// Whether the point lies inside the polygons of the path by the even-odd rule.
+	private insideThePolygons(path: any, x: number, y: number): boolean {
+		const polygons: number[][][] = [];
+		for (const call of path.calls) {
+			if (call.method === 'moveTo') polygons.push([call.args]);
+			else if (call.method === 'lineTo' && polygons.length)
+				polygons[polygons.length - 1].push(call.args);
+		}
+		let crossings = 0;
+		for (const polygon of polygons)
+			for (
+				let at = 0, before = polygon.length - 1;
+				at < polygon.length;
+				before = at++
+			) {
+				const [x1, y1] = polygon[at];
+				const [x0, y0] = polygon[before];
+				if (y1 > y !== y0 > y && x < ((x0 - x1) * (y - y1)) / (y0 - y1) + x1)
+					++crossings;
+			}
+		return crossings % 2 === 1;
 	}
 
 	isPointInStroke(): boolean {

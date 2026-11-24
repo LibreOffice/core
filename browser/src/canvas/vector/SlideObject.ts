@@ -282,6 +282,52 @@ namespace cool {
 		| 'shape';
 
 	/// One drawable object on a slide, carrying its primitive tree.
+	/// What a 3D scene that sits in no other scene is seen through. Matrices are 4x4, sixteen
+	/// values row by row.
+	export interface Scene3DView {
+		/// The mapping of the unit square the scene is seen on onto the page, in twips, in
+		/// canvas order.
+		placement: number[];
+		/// The steps from the space of the scene to that unit square, taken in this order. The
+		/// depth runs from 0 at the front to 1 at the back.
+		transformation: number[];
+		orientation: number[];
+		projection: number[];
+		deviceToView: number[];
+		perspective: boolean;
+		shadeMode: number;
+		twoSidedLighting?: boolean;
+		ambientLight: string;
+		lights: { color: string; direction: number[]; specular?: boolean }[];
+	}
+
+	/// One polygon of a 3D primitive: its points as x, y and z one after another, and where
+	/// given its normals and texture coordinates the same way.
+	export interface Primitive3DPolygon {
+		closed: boolean;
+		points: number[];
+		normals?: number[];
+		textureCoordinates?: number[];
+	}
+
+	/// The one 3D primitive of a 3D object, in its own space. "transform" maps the unit
+	/// geometry of the kind into the space of the object: the unit cube from 0 to 1, the unit
+	/// sphere from -1 to 1 brought into 0 to 1, or the points of a polyPolygon as they are.
+	export interface Primitive3D {
+		type: string;
+		transform?: number[];
+		horizontalSegments?: number;
+		verticalSegments?: number;
+		polygons?: Primitive3DPolygon[];
+		outline?: { closed: boolean; points: number[] }[];
+		depth?: number;
+		rotation?: number;
+		diagonal?: number;
+		backScale?: number;
+		fill?: { color: string; transparence?: number; kind?: string };
+		line?: { color: string; width: number; transparence?: number };
+	}
+
 	export interface SlideObject {
 		/// Stable identity of the object: the engine's SdrObject unique
 		/// id, unchanged across edits to the same object.
@@ -423,6 +469,13 @@ namespace cool {
 		/// True where the object, selected on its own, is shaped by its own handles alone and has
 		/// no frame of eight around it, a measurement for one.
 		handlesOfItsOwnOnly?: boolean;
+		/// On a 3D scene that sits in no other scene: what it is seen through.
+		scene3D?: Scene3DView;
+		/// On a 3D object or a scene inside a scene: the mapping of its own space into the
+		/// space of the scene holding it.
+		transform3D?: number[];
+		/// On a 3D object inside a scene: what it is made of, its one 3D primitive.
+		primitives3D?: Primitive3D[];
 		/// What shapes a measurement beyond its two points. Absent for any other object.
 		measurement?: ObjectMeasurement;
 		/// What lays out the tail of a caption. Absent for any other object.

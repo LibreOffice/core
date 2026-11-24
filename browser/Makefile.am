@@ -530,6 +530,8 @@ COOL_JS_LST =\
 	src/geometry/Transformation.ts \
 	src/geometry/Matrix2D.ts \
 	src/geometry/Range2D.ts \
+	src/geometry/Point3D.ts \
+	src/geometry/Matrix3D.ts \
 	src/app/dom/DomUtil.ts \
 	src/app/InternUtil.ts \
 	src/control/IFrameDialog.js \
@@ -643,6 +645,7 @@ COOL_JS_LST =\
 	src/canvas/vector/VectorHitTest.ts \
 	src/canvas/vector/VectorLineGeometryExtractor.ts \
 	src/canvas/vector/VectorOutline.ts \
+	src/canvas/vector/Scene3D.ts \
 	src/canvas/vector/MotionPaths.ts \
 	src/canvas/vector/CaptionTail.ts \
 	src/canvas/vector/VectorRenderingConfig.ts \

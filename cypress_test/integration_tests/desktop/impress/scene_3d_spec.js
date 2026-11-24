@@ -83,6 +83,25 @@ describe(['tagdesktop'], 'A 3D scene on a vector slide', function() {
 			expect(win.eval('GraphicSelection').selectedObjectIDs).to.deep.equal([scene.id]);
 		});
 
+		// a click into an empty corner of the picture meets no 3D object, and so nothing
+		cy.then(function() {
+			win.eval('GraphicSelection').selectObjects([]);
+		});
+		cy.then(function() {
+			var corner = onCanvas(win, scene.x + scene.width - 200, scene.y + 200);
+			cy.cGet('#document-canvas').click(corner.x, corner.y);
+		});
+		cy.wrap(null).should(function() {
+			expect(win.eval('GraphicSelection').selectedObjectIDs).to.deep.equal([]);
+		});
+		cy.then(function() {
+			var middle = onCanvas(win, scene.x + scene.width / 2, scene.y + scene.height / 2);
+			cy.cGet('#document-canvas').click(middle.x, middle.y);
+		});
+		cy.wrap(null).should(function() {
+			expect(win.eval('GraphicSelection').selectedObjectIDs).to.deep.equal([scene.id]);
+		});
+
 		// a move by key moves the scene, and the engine moves what it holds along
 		var sphereBefore;
 		cy.then(function() {

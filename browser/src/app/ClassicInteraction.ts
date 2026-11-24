@@ -472,6 +472,12 @@ abstract class ClassicContext implements InteractionContext {
 				objectId && guard < 100;
 				objectId = RenderGeometrySection.parentOf(objectId), ++guard
 			) {
+				// a 3D scene is taken as one object, the way ends at it
+				if (RenderGeometrySection.objectOf(objectId)?.objectKind === 202) {
+					way.length = 0;
+					way.unshift(objectId);
+					continue;
+				}
 				if (RenderGeometrySection.objectOf(objectId)?.isDiagram) {
 					way.length = 0;
 					way.push(hit);

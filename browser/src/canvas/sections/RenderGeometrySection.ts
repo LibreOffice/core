@@ -581,6 +581,24 @@ class RenderGeometrySection extends CanvasSectionObject {
 				)
 					return false;
 
+				// a 3D scene is hit where its 3D objects are, as the engine finds them, not
+				// all over its picture; each 3D object met takes the scene's place, the one in
+				// front first
+				if (cool.Scene3D.takes(data, at.id)) {
+					const inThe3D = cool.Scene3D.hitsAt(data, at.id, x, y);
+					if (!inThe3D.length) return false;
+					for (const one of everyOne ? inThe3D : inThe3D.slice(0, 1))
+						hits.push({
+							id: one.id,
+							hit: RenderGeometrySection.hitOfA3DObject(
+								data,
+								one.id,
+								hits.length,
+							),
+						});
+					return !everyOne;
+				}
+
 				// The first object of a diagram covers the whole diagram. A point anywhere
 				// inside it hits the object, also where nothing is drawn.
 				const hit =
@@ -609,6 +627,24 @@ class RenderGeometrySection extends CanvasSectionObject {
 		);
 
 		return hits;
+	}
+
+	/// What the hit of a 3D object is: a fill, outlined by the shape of the object. Only the
+	/// first hit of a walk carries the outline, the others are not shown.
+	private static hitOfA3DObject(
+		data: cool.VectorPrimitivesData,
+		objectId: number,
+		hitsBefore: number,
+	): cool.HitResult {
+		return {
+			kind: 'fill',
+			hidden: false,
+			editView: false,
+			edge: false,
+			link: false,
+			field: false,
+			path: hitsBefore ? undefined : cool.Scene3D.outlineOf(data, objectId),
+		};
 	}
 
 	/// Whether that object is the first a diagram holds, the shape spanning the whole diagram.
@@ -1273,9 +1309,13 @@ class RenderGeometrySection extends CanvasSectionObject {
 
 		let drawn: Path2D | undefined;
 		for (const objectId of RenderGeometrySection.theOnesThatDraw([taken])) {
-			const own = cool.VectorHitTest.outlineOf(
-				RenderGeometrySection.objectOf(objectId)?.primitives,
-			);
+			// a 3D scene is outlined by the shape of its 3D objects, not by its picture
+			const own =
+				cool.Scene3D.takes(data, objectId) ?
+					cool.Scene3D.outlineOf(data, objectId)
+				:	cool.VectorHitTest.outlineOf(
+						RenderGeometrySection.objectOf(objectId)?.primitives,
+					);
 			if (!own) continue;
 			drawn = drawn ?? new Path2D();
 			drawn.addPath(own);
