@@ -103,33 +103,40 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 	}
 
 	/*
-		Opens the menu of the glue points button on the Shape tab. Its entries are Show and Add New.
-		The button runs a command of the client, not a uno command, so it keeps the id it was
-		declared with and carries no modelId.
+		Clicks the glue points button on the Shape tab, which shows the points of the selected
+		object or hides them again. The button runs a command of the client, not a uno command, so
+		it keeps the id it was declared with and carries no modelId.
 	*/
-	function openGluePointsMenu() {
+	function clickGluePointsButton(win) {
 		desktopHelper.selectNotebookbarTab('Shape');
 		cy.cGet('#Shape-container #shape-gluepoints-button:visible').click();
-		desktopHelper.getOpenMenuEntries().should('have.length', 2);
+		cy.then(function() {
+			return helper.processToIdle(win);
+		});
 	}
 
 	function showGluePoints(win) {
-		openGluePointsMenu();
-		desktopHelper.getOpenMenuEntries().eq(0).click();
-		cy.then(function() {
-			return helper.processToIdle(win);
-		});
+		clickGluePointsButton(win);
 		helper.waitForMapState('showgluepoints', 'true');
 	}
 
-	function startAddingAPoint(win) {
-		openGluePointsMenu();
-		desktopHelper.getOpenMenuEntries().eq(1).should('not.have.attr', 'disabled');
-		desktopHelper.getOpenMenuEntries().eq(1).click();
+	// The one entry of the menu a right click opens while the points are shown, Add Point.
+	var addPointEntry = '#tie-point-add-menu-entry-0';
+
+	// A right click at a place on the selected object, and Add Point in the menu it opens. The
+	// menu closes and the point is added at that place.
+	function addAPointAt(win, x, y) {
+		cy.then(function() {
+			var place = onCanvas(win, x, y);
+			cy.cGet('#document-canvas').rightclick(place.x, place.y);
+		});
+		desktopHelper.getOpenMenuEntries().should('have.length', 1);
+		cy.cGet(addPointEntry).should('not.have.attr', 'disabled');
+		cy.cGet(addPointEntry).click();
+		cy.cGet(addPointEntry).should('not.exist');
 		cy.then(function() {
 			return helper.processToIdle(win);
 		});
-		helper.waitForMapState('insertgluepoint', 'true');
 	}
 
 	/*
@@ -194,74 +201,40 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 		});
 	}
 
-	it('A point is added with one press, its menu changes it and Delete takes it away.', function() {
+	it('A point is added from the right click menu, its menu changes it and Delete takes it away.', function() {
 		var win = this.win;
 		selectByTab(win, 1);
 		cy.wrap(null).should(function() {
 			expect(gluePoints(win), 'points of the rectangle').to.have.length(0);
 		});
 
-		// Add New waits until the points are shown.
-		openGluePointsMenu();
-		desktopHelper.getOpenMenuEntries().eq(1).should('have.attr', 'disabled');
-		desktopHelper.getOpenMenuEntries().eq(0).click();
-		cy.then(function() {
-			return helper.processToIdle(win);
-		});
-		helper.waitForMapState('showgluepoints', 'true');
-
-		// Over the object the pointer is a cross while a point is being added. Escape stops
-		// adding, the pointer is the object's again at once, and the points stay shown.
-		// The canvas follows the mouse only once the mouse has entered it, so the move is a real
-		// one, which the browser starts with an enter.
-		startAddingAPoint(win);
-		cy.then(function() {
-			var place = onCanvas(win, 0.5, 0.5);
-			cy.cGet('#document-canvas').realMouseMove(place.x, place.y);
-		});
-		cy.cGet('#document-canvas').should(function($canvas) {
-			expect($canvas[0].style.cursor).to.equal('crosshair');
-		});
-		helper.typeIntoDocument('{esc}');
-		helper.waitForMapState('insertgluepoint', 'false');
-		cy.cGet('#document-canvas').should(function($canvas) {
-			expect($canvas[0].style.cursor).to.not.equal('crosshair');
-		});
-		helper.waitForMapState('showgluepoints', 'true');
-
-		// Once adding has stopped, a press on the object adds nothing: it is a click on the
-		// object, which hides the points again.
-		clickOnTheObject(win, 0.5, 0.5);
-		cy.then(function() {
-			return helper.waitForTimers(win, 'selectionClick');
-		});
+		// The button shows the points and hides them again.
+		showGluePoints(win);
+		clickGluePointsButton(win);
 		helper.waitForMapState('showgluepoints', 'false');
-		cy.wrap(null).should(function() {
-			expect(gluePoints(win), 'points after Escape').to.have.length(0);
-		});
 		showGluePoints(win);
 
-		// A press adds one point where it lands, and adding ends with it.
-		startAddingAPoint(win);
-		clickOnTheObject(win, 0.25, 0.25);
+		// A right click opens a menu with Add Point only, and Add Point gives the object one
+		// point where the right click landed.
+		addAPointAt(win, 0.25, 0.25);
 		cy.wrap(null).should(function() {
 			var points = gluePoints(win);
-			expect(points, 'points after the press').to.have.length(1);
+			expect(points, 'points after Add Point').to.have.length(1);
 			expect(points[0].x, 'across the object').to.be.closeTo(0.25, 0.01);
 			expect(points[0].y, 'down the object').to.be.closeTo(0.25, 0.01);
 			expect(points[0].fromTheShape, 'added by the user').to.not.equal(true);
 			expect(points[0].wayOut, 'way out').to.be.undefined;
 		});
-		helper.waitForMapState('insertgluepoint', 'false');
+		helper.waitForMapState('showgluepoints', 'true');
 
-		// The next press adds nothing more, and hides the points again.
+		// A press on the object adds nothing more, and hides the points again.
 		clickOnTheObject(win, 0.75, 0.75);
 		cy.then(function() {
 			return helper.waitForTimers(win, 'selectionClick');
 		});
 		helper.waitForMapState('showgluepoints', 'false');
 		cy.wrap(null).should(function() {
-			expect(gluePoints(win), 'points after the second press').to.have.length(1);
+			expect(gluePoints(win), 'points after the press').to.have.length(1);
 		});
 		showGluePoints(win);
 
@@ -340,8 +313,7 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 
 		// A click on a point puts the keyboard on it. Once its menu is closed, the Delete key
 		// takes the point away and the rectangle stays.
-		startAddingAPoint(win);
-		clickOnTheObject(win, 0.5, 0.5);
+		addAPointAt(win, 0.5, 0.5);
 		cy.wrap(null).should(function() {
 			expect(gluePoints(win), 'points after the second add').to.have.length(1);
 		});
@@ -373,7 +345,26 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 
 		openMenuOfPoint(win, 0);
 		cy.cGet('#tie-point-menu-from-the-shape')
-			.should('contain.text', 'Default gluepoints cannot be edited.');
+			.should('contain.text', 'Default connector entry points cannot be edited.');
 		cy.cGet('[id^="tie-point-menu-entry-"]').should('not.exist');
+
+		// A right click on a point does what a click does: the keyboard goes to the point and the
+		// same menu opens, not the menu that adds a point. The keyboard starts on no handle, so
+		// the test sees it arrive.
+		cy.realPress('Escape');
+		cy.cGet('#tie-point-menu-from-the-shape').should('not.exist');
+		cy.then(function() {
+			selectionSection(win).travel.leave();
+			var point = gluePoints(win)[1];
+			var place = onCanvas(win, point.x, point.y);
+			cy.cGet('#document-canvas').rightclick(place.x, place.y);
+		});
+		cy.cGet('#tie-point-menu-from-the-shape').should('be.visible');
+		cy.cGet(addPointEntry).should('not.exist');
+		cy.wrap(null).should(function() {
+			var active = selectionSection(win).travel.activeHandle();
+			expect(active && active.name, 'the point the keyboard is on')
+				.to.equal('GluePoint.' + gluePoints(win)[1].id);
+		});
 	});
 });

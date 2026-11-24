@@ -3012,9 +3012,9 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 					'accessibility': { focusBack: true, combination: 'EP', de: null }
 				},
 				{
-					'id': 'shape-gluepoints:GluePointsMenu',
-					'type': 'menubutton',
-					'text': _UNO('.uno:GlueEditMode', 'presentation'),
+					'id': 'shape-gluepoints',
+					'type': 'bigcustomtoolitem',
+					'text': _('Connector Entry Points'),
 					'command': 'showgluepoints',
 					'icon': 'lc_glueeditmode.svg',
 					'accessibility': { focusBack: true, combination: 'GP', de: null }

@@ -202,7 +202,6 @@ abstract class SelectionSection extends CanvasSectionObject {
 	/// The points to tie a connector to, shown for one selected object at a time.
 	private static readonly tiePoints: ShownPoints = new ShownPoints(
 		'showgluepoints',
-		'insertgluepoint',
 	);
 
 	/// The points of the path of the selected object, shown while they are edited.
@@ -215,17 +214,13 @@ abstract class SelectionSection extends CanvasSectionObject {
 	public static readonly tiePointsCommand: string =
 		SelectionSection.tiePoints.showCommand;
 
-	/// The command whose state says whether a press on the object gives it a new point.
-	public static readonly addTiePointCommand: string =
-		SelectionSection.tiePoints.addCommand;
-
 	/// The command whose state is whether the points of the path are shown for editing.
 	public static readonly pathPointsCommand: string =
 		SelectionSection.pathPoints.showCommand;
 
 	/// The command whose state is whether a press on the object adds a point to its path.
-	public static readonly addPathPointCommand: string =
-		SelectionSection.pathPoints.addCommand;
+	public static readonly addPathPointCommand: string = SelectionSection
+		.pathPoints.addCommand as string;
 
 	/// Whether the points to tie a connector to are shown for this selection.
 	public tiePointsAreShown(): boolean {
@@ -355,23 +350,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 		SelectionSection.tellThePoints();
 	}
 
-	/// Whether a press on the object gives it a new point to tie a connector to.
-	public isAddingATiePoint(): boolean {
-		return SelectionSection.tiePoints.areAddedFor(this.keyOfTheSelection());
-	}
-
 	/// Whether a press on the object adds a point to its path.
 	public isAddingAPathPoint(): boolean {
 		return SelectionSection.pathPoints.areAddedFor(this.keyOfTheSelection());
-	}
-
-	/*
-		Starts adding a point to tie a connector to: the next press on the object, off its
-		handles, gives it a new point there. The pointer over the object becomes a cross. Adding
-		ends with that point, with Escape, or when the points are hidden.
-	*/
-	public startAddingATiePoint(): void {
-		this.startAddingAPoint(SelectionSection.tiePoints);
 	}
 
 	/*
@@ -380,10 +361,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		Adding ends on Escape, with Insert Points again, or when the points are hidden.
 	*/
 	public startAddingAPathPoint(): void {
-		this.startAddingAPoint(SelectionSection.pathPoints);
-	}
-
-	private startAddingAPoint(points: ShownPoints): void {
+		const points = SelectionSection.pathPoints;
 		if (!points.areShownFor(this.keyOfTheSelection())) return;
 
 		points.startAdding();
@@ -392,12 +370,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 		SelectionSection.tellThePoints();
 	}
 
-	/// Stops adding a point of either kind and sets the pointer for where the mouse is. Returns
+	/// Stops adding a point to the path and sets the pointer for where the mouse is. Returns
 	/// whether a point was being added.
 	public static stopAddingAPoint(): boolean {
-		const stoppedATiePoint = SelectionSection.tiePoints.stopAdding();
-		const stoppedAPathPoint = SelectionSection.pathPoints.stopAdding();
-		if (!stoppedATiePoint && !stoppedAPathPoint) return false;
+		if (!SelectionSection.pathPoints.stopAdding()) return false;
 
 		GraphicSelection.selectionSection?.pointAtTheMouse();
 		SelectionSection.tellThePoints();
@@ -410,7 +386,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		const section = GraphicSelection.selectionSection;
 		SelectionSection.tiePoints.tell(
 			section?.tiePointsAreShown() ?? false,
-			section?.isAddingATiePoint() ?? false,
+			false,
 		);
 		SelectionSection.pathPoints.tell(
 			section?.pathPointsAreShown() ?? false,
@@ -3606,25 +3582,6 @@ abstract class SelectionSection extends CanvasSectionObject {
 			return;
 		}
 
-		/*
-			While a point to tie a connector to is being added, a press on the object off its
-			handles gives the object a new point there, and adding ends. The press is taken like a
-			press on a handle, so the click that follows goes nowhere else.
-		*/
-		if (
-			!handle &&
-			this.isAddingATiePoint() &&
-			this.tiePointGroup()?.addAt(at)
-		) {
-			SelectionSection.stopAddingAPoint();
-			this.pressedAHandle = true;
-			this.pressedGroup = null;
-			this.interaction = null;
-			this.stopPropagating();
-			e.stopPropagation();
-			return;
-		}
-
 		// a press on a grey handle is taken and begins nothing, as in the office
 		if (!handle && this.handleAt(onCanvas[0], onCanvas[1], true)) {
 			this.pressedAHandle = true;
@@ -3728,8 +3685,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		this.context.canvas.style.cursor =
 			over ? this.pointerOver(over)
 			: this.handleAt(onCanvas[0], onCanvas[1], true) ? 'not-allowed'
-			: onTheObject && (this.isAddingATiePoint() || this.isAddingAPathPoint()) ?
-				'crosshair'
+			: onTheObject && this.isAddingAPathPoint() ? 'crosshair'
 			: this.partMarkedAt(inTheDocument) !== undefined ? 'pointer'
 			: !onTheObject ? 'default'
 			: overText ? this.textPointerAt(inTheDocument)
@@ -4110,8 +4066,29 @@ abstract class SelectionSection extends CanvasSectionObject {
 		A press of the right button, which asks for the menu of what is selected. The section
 		covers the objects while the client draws the selection, so the press would otherwise
 		stop here and no menu would open.
+
+		While the points to tie a connector to are shown, the menu is the client's own. On a point
+		the press does what a click on the point does: the keyboard goes to the point and the menu
+		of the point opens. Anywhere else the only entry of the menu adds a point where the press
+		landed.
 	*/
 	onContextMenu(point: cool.SimplePoint, e: MouseEvent): void {
+		const tiePoints =
+			this.tiePointsAreShown() ? this.tiePointGroup() : undefined;
+		if (tiePoints) {
+			e.preventDefault();
+			e.stopPropagation();
+			const handle = this.handleAt(
+				this.myTopLeft[0] + point.pX,
+				this.myTopLeft[1] + point.pY,
+			);
+			if (handle?.kind === 'GluePoint') {
+				this.travel.goTo(handle.name);
+				tiePoints.letGoWhereItWasPressed(handle);
+			} else tiePoints.openTheAddMenuAt(this.inTheDocument(point));
+			return;
+		}
+
 		MouseControl.contextMenuFrom(this, point, e);
 	}
 

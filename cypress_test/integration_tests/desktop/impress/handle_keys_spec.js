@@ -151,21 +151,20 @@ describe(['tagdesktop'], 'Keys on the handle the keyboard is on', function() {
 				objectId = selectionSection(win).selectedObjects()[0];
 			});
 
-			// the glue points are shown by the button, and Add New adds one by a press
+			// the glue points are shown by the button, and Add Point in the menu of a right click
+			// adds one there
 			desktopHelper.selectNotebookbarTab('Shape');
 			cy.cGet('#Shape-container #shape-gluepoints-button:visible').click();
-			desktopHelper.getOpenMenuEntries().eq(0).click();
 			helper.waitForMapState('showgluepoints', 'true');
-			cy.cGet('#Shape-container #shape-gluepoints-button:visible').click();
-			desktopHelper.getOpenMenuEntries().eq(1).click();
 			cy.then(function() {
 				var box = geometry(win).boxOf(objectId);
 				var visible = win.app.activeDocument.activeLayout.viewedRectangle;
 				var scale = win.app.twipsToPixels / win.app.dpiScale;
-				cy.cGet('#document-canvas').click(
+				cy.cGet('#document-canvas').rightclick(
 					(box.minX + box.maxX) / 2 * scale - visible.pX1 / win.app.dpiScale,
 					(box.minY + box.maxY) / 2 * scale - visible.pY1 / win.app.dpiScale);
 			});
+			cy.cGet('#tie-point-add-menu-entry-0').click();
 			cy.wrap(null).should(function() {
 				expect(geometry(win).objectOf(objectId).gluePoints, 'the point added').to.have.length(1);
 			});

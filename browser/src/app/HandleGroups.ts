@@ -12,7 +12,8 @@
 /*
 	Whether the points of one kind are shown, and whether the next press on the object adds one.
 	The points are shown for one selection, named by the key of its objects. A new selection
-	starts with them hidden. Each of the two states is also the state of a command.
+	starts with them hidden. Whether they are shown is the state of a command, and so is whether
+	one is being added, for the kinds of points that have an adding command.
 */
 class ShownPoints {
 	/// The key of the selection whose points are shown, or null when they are hidden.
@@ -27,11 +28,11 @@ class ShownPoints {
 	private addingToldAs: boolean = false;
 
 	/// The command whose state is whether the points are shown, and the command whose state is
-	/// whether the next press adds a point.
+	/// whether the next press adds a point, or null for points that are added another way.
 	public readonly showCommand: string;
-	public readonly addCommand: string;
+	public readonly addCommand: string | null;
 
-	constructor(showCommand: string, addCommand: string) {
+	constructor(showCommand: string, addCommand: string | null = null) {
 		this.showCommand = showCommand;
 		this.addCommand = addCommand;
 	}
@@ -76,7 +77,7 @@ class ShownPoints {
 			});
 		}
 
-		if (adding !== this.addingToldAs) {
+		if (this.addCommand !== null && adding !== this.addingToldAs) {
 			this.addingToldAs = adding;
 			app.map.fire('commandstatechanged', {
 				commandName: this.addCommand,
@@ -146,6 +147,24 @@ abstract class HandleGroup {
 		entries: MenuDefinition[],
 		chosen?: (id: string) => boolean | void,
 	): void {
+		HandleGroup.openAMenuAt(
+			HandleLook.drawnAt(handle),
+			below,
+			menuId,
+			entries,
+			chosen,
+		);
+	}
+
+	/// Opens a menu as openAMenuBelow does, the given number of core pixels below that place on
+	/// the page.
+	protected static openAMenuAt(
+		place: cool.SimplePoint,
+		below: number,
+		menuId: string,
+		entries: MenuDefinition[],
+		chosen?: (id: string) => boolean | void,
+	): void {
 		const container = document.getElementById('canvas-container');
 		if (!container) return;
 
@@ -157,10 +176,9 @@ abstract class HandleGroup {
 		}
 
 		// The canvas fills the container, so a place on the canvas is a place in the container.
-		const drawnAt = HandleLook.drawnAt(handle);
 		const anchor = HandleGroup.menuAnchor;
-		anchor.style.left = drawnAt.vX / app.dpiScale + 'px';
-		anchor.style.top = (drawnAt.vY + below) / app.dpiScale + 'px';
+		anchor.style.left = place.vX / app.dpiScale + 'px';
+		anchor.style.top = (place.vY + below) / app.dpiScale + 'px';
 
 		JSDialog.OpenDropdown(
 			menuId,
@@ -2029,7 +2047,11 @@ class TiePointHandles extends HandleGroup {
 
 	/// The line above the entries of the menu of a point.
 	private static header(): MenuDefinition {
-		return { id: 'gluepoint', type: 'header', text: _('Gluepoint') };
+		return {
+			id: 'gluepoint',
+			type: 'header',
+			text: _('Connector Entry Point'),
+		};
 	}
 
 	/// The Anchor submenu for a point with that anchor: None, then the grid of the nine places.
@@ -2123,7 +2145,7 @@ class TiePointHandles extends HandleGroup {
 						content: {
 							id: TiePointHandles.menuId + '-from-the-shape',
 							type: 'fixedtext',
-							text: _('Default gluepoints cannot be edited.'),
+							text: _('Default connector entry points cannot be edited.'),
 						},
 					},
 				],
@@ -2350,14 +2372,8 @@ class TiePointHandles extends HandleGroup {
 	*/
 	public addAt(at: cool.SimplePoint): boolean {
 		const objects = this.selection.selectedObjects();
-		if (objects.length !== 1) return false;
-
-		const transform = RenderGeometrySection.transformOf(objects[0]);
-		const onTheObject = transform?.invert()?.apply(at.x, at.y);
+		const onTheObject = this.shareOfTheObjectAt(at);
 		if (!onTheObject) return false;
-
-		const inside = (value: number) => value >= 0 && value <= 1;
-		if (!inside(onTheObject.x) || !inside(onTheObject.y)) return false;
 
 		// The new point takes the glue id after the highest one the object has or was last sent
 		// from here, so two points added before the engine answers get two ids.
@@ -2380,6 +2396,53 @@ class TiePointHandles extends HandleGroup {
 				onTheObject.y.toFixed(4),
 		);
 		return true;
+	}
+
+	/// That place as a share of the width and of the height of the one selected object, or null
+	/// when one object is not selected or the place is off it.
+	private shareOfTheObjectAt(
+		at: cool.SimplePoint,
+	): { x: number; y: number } | null {
+		const objects = this.selection.selectedObjects();
+		if (objects.length !== 1) return null;
+
+		const transform = RenderGeometrySection.transformOf(objects[0]);
+		const onTheObject = transform?.invert()?.apply(at.x, at.y);
+		if (!onTheObject) return null;
+
+		const inside = (value: number) => value >= 0 && value <= 1;
+		if (!inside(onTheObject.x) || !inside(onTheObject.y)) return null;
+
+		return onTheObject;
+	}
+
+	/// The id of the menu a right click opens while the points are shown.
+	private static readonly addMenuId: string = 'tie-point-add-menu';
+
+	/*
+		Opens the menu of a right click while the points are shown, at the place of the click.
+		Its one entry, Add Point, gives the selected object a new point at that place. The entry
+		is disabled when the place is off the object.
+	*/
+	public openTheAddMenuAt(at: cool.SimplePoint): void {
+		const onTheObject = this.shareOfTheObjectAt(at) !== null;
+		HandleGroup.openAMenuAt(
+			at,
+			0,
+			TiePointHandles.addMenuId,
+			[
+				{
+					id: 'add',
+					type: 'action',
+					text: _('Add Point'),
+					img: 'bezierinsert',
+					isEnabled: () => onTheObject,
+				},
+			],
+			(chosen: string) => {
+				if (chosen === 'add') this.addAt(at);
+			},
+		);
 	}
 
 	/// the connectors tied to a point keys took, or a drag let go of, as they will run

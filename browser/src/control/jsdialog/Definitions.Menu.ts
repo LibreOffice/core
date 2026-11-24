@@ -2464,21 +2464,6 @@ menuDefinitions.set('PictureColorMode', [
 	},
 ] as Array<MenuDefinition>);
 
-menuDefinitions.set('GluePointsMenu', [
-	{
-		text: _('Show'),
-		action: 'showgluepoints',
-		checked: false,
-	},
-	{
-		text: _('Add New'),
-		action: 'insertgluepoint',
-		checked: false,
-		isEnabled: () =>
-			GraphicSelection.selectionSection?.tiePointsAreShown() ?? false,
-	},
-] as Array<MenuDefinition>);
-
 /*
 	The ways to convert the selected shape: to a curve, to the outline of its line, or to a
 	polygon. They work on any shape, with a path or without. Each menu gets its own array.

@@ -1261,11 +1261,6 @@ class Dispatcher {
 			GraphicSelection.selectionSection?.switchTheTiePoints();
 		};
 
-		// The next press on the selected shape gives it a new point to tie a connector to.
-		this.actionsMap[SelectionSection.addTiePointCommand] = () => {
-			GraphicSelection.selectionSection?.startAddingATiePoint();
-		};
-
 		// Shows the points of the path of the selected object for editing, or hides them again.
 		this.actionsMap[SelectionSection.pathPointsCommand] = () => {
 			GraphicSelection.selectionSection?.switchThePathPoints();
