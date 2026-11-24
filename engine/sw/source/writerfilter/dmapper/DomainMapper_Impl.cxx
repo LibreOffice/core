@@ -1256,6 +1256,13 @@ void DomainMapper_Impl::PopSdt()
                     comphelper::makePropertyValue(u"DisplayText"_ustr, rDisplayTexts[i]),
                     comphelper::makePropertyValue(u"Value"_ustr, rValues[i])
                 };
+
+                // Did data binding provide the value? Then replace with display text
+                if (oData.has_value() && *oData == rValues[i])
+                {
+                    xCursor->setString(rDisplayTexts[i]);
+                    oData.reset();
+                }
             }
             xContentControl->setPropertyValue(u"ListItems"_ustr, cpo::uno::Any(aItems));
             if (GetSdtHelper().getControlType() == SdtControlType::dropDown)
