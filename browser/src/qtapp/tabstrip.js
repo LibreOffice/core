@@ -55,6 +55,15 @@
 	// A tab of this strip is being dragged.
 	let dragInProgress = false;
 	const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+	// An animated change of the strip has begun, and the strip still shows the old tabs.
+	let transitionUpdatePending = false;
+	// The animated change of the strip that runs now, or null.
+	let runningTransition = null;
+	// The tabs changed while the animated change ran, and the strip draws them when it ends.
+	let renderAfterTransition = false;
+	// The longest time in milliseconds that an animated change of the strip takes. It is several
+	// times the length of the animation in qtapp-tabstrip.css.
+	const TRANSITION_TIMEOUT_MS = 1000;
 
 	function el(tag, props) {
 		const e = document.createElement(tag);
@@ -394,12 +403,23 @@
 
 	// When tabs open, close or change places, every tab slides from its old place and width to its
 	// new ones. A change that leaves the order of the tabs as it is shows at once, and so does every
-	// change during a drag, in a strip that scrolls, and for a user who asks for less motion.
+	// change during a drag, in a strip that scrolls, and for a user who asks for less motion. The
+	// browser takes the picture of the old strip at the next frame, and a change that comes before
+	// that waits for the animated change, which then shows the latest tabs. The animation follows
+	// the tab elements that the animated change drew, so a change that keeps the order of the tabs
+	// waits until the animation ends. The browser takes pictures and animates only while it draws
+	// the strip, and a strip in a window that is not drawn may get no frames. So an animated change
+	// that is still there after TRANSITION_TIMEOUT_MS ends, and the strip shows the latest tabs.
 	function renderAnimated() {
 		const idOrder = tabs.map((t) => t.id).join(',');
 		// The first tabs of a new strip show at once too.
 		const orderChanged = shownIdOrder !== '' && idOrder !== shownIdOrder;
 		shownIdOrder = idOrder;
+		if (transitionUpdatePending) return;
+		if (runningTransition && !orderChanged) {
+			renderAfterTransition = true;
+			return;
+		}
 
 		const strip = document.getElementById('strip');
 		if (
@@ -413,12 +433,36 @@
 			return;
 		}
 
+		transitionUpdatePending = true;
 		const transition = document.startViewTransition(() => {
+			if (runningTransition === transition) transitionUpdatePending = false;
 			render();
 			// Tabs that slide outside the visible part of a strip that scrolls would be drawn
 			// over the edges of the strip.
 			if (strip.scrollWidth > strip.clientWidth) transition.skipTransition();
 		});
+		runningTransition = transition;
+		renderAfterTransition = false;
+		const timeout = setTimeout(() => {
+			if (runningTransition !== transition) return;
+			transition.skipTransition();
+			endTransition(transition);
+		}, TRANSITION_TIMEOUT_MS);
+		transition.finished.finally(() => {
+			clearTimeout(timeout);
+			endTransition(transition);
+		});
+	}
+
+	// The animated change is over, so the strip shows the tabs that changed while it ran.
+	function endTransition(transition) {
+		if (runningTransition !== transition) return;
+		runningTransition = null;
+		if (transitionUpdatePending || renderAfterTransition) {
+			transitionUpdatePending = false;
+			renderAfterTransition = false;
+			render();
+		}
 	}
 
 	function onTabsChanged(json) {
