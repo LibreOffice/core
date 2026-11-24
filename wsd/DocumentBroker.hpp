@@ -603,6 +603,10 @@ public:
     /// this document.
     bool isKnownAccessToken(const std::string& accessToken) const;
 
+    /// Returns the session that is not removed and whose view in the Kit has the given id, or null
+    /// when there is none.
+    std::shared_ptr<ClientSession> findSessionByViewId(int viewId) const;
+
 #if !MOBILEAPP
     /// Records the public part of a remote link, the same for every view
     void setRemoteDocumentSource(const RemoteLink& link);

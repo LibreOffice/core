@@ -1987,13 +1987,29 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     }
     else if (tokens.equals(0, "removesession"))
     {
-        if (tokens.size() > 1 && (isDocumentOwner() || !isReadOnly()))
+        int viewId = -1;
+        if (tokens.size() < 2 || !COOLProtocol::stringToInteger(tokens[1], viewId) ||
+            viewId < 0)
         {
+            LOG_WRN("Session [" << getId() << "] asked to remove a view without its id");
+        }
+        else if (!isDocumentOwner() && isReadOnly())
+        {
+            LOG_WRN("Readonly session [" << getId() << "] trying to kill another view");
+        }
+        else if (const std::shared_ptr<ClientSession> session =
+                     docBroker->findSessionByViewId(viewId))
+        {
+            // The browser of the view closes itself on the message, and the broker removes the
+            // session of that view.
             docBroker->broadcastMessage(firstLine);
-            docBroker->removeSession(client_from_this());
+            docBroker->removeSession(session);
         }
         else
-            LOG_WRN("Readonly session '" << getId() << "' trying to kill another view");
+        {
+            LOG_WRN("Session [" << getId() << "] asked to remove view " << viewId
+                                << ", which has no session");
+        }
     }
     else if (tokens.equals(0, "renamefile"))
     {

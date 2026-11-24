@@ -6674,6 +6674,19 @@ void DocumentBroker::shutdownPythonCompute()
 }
 #endif // ENABLE_PYTHON_COMPUTE && !MOBILEAPP
 
+std::shared_ptr<ClientSession> DocumentBroker::findSessionByViewId(int viewId) const
+{
+    ASSERT_CORRECT_THREAD();
+
+    for (const auto& pair : _sessions)
+    {
+        if (pair.second->getKitViewId() == viewId && !pair.second->isRemoved())
+            return pair.second;
+    }
+
+    return nullptr;
+}
+
 #if !MOBILEAPP
 void DocumentBroker::setRemoteDocumentSource(const RemoteLink& link)
 {

@@ -586,11 +586,99 @@ public:
     }
 };
 
+/// A view that asks to remove another view removes that view, not itself.
+class UnitRemoveView : public WopiTestServer
+{
+    STATE_ENUM(Phase, LoadFirst, WaitFirstLoaded, LoadSecond, WaitSecondLoaded, WaitRemoved, Done)
+    _phase;
+
+    /// The number of views loaded. Touched on the broker's thread only.
+    std::size_t _viewCount;
+
+    /// The session of the second view. Touched on the broker's thread only.
+    std::string _secondSessionId;
+
+public:
+    UnitRemoveView()
+        : WopiTestServer("UnitRemoveView")
+        , _phase(Phase::LoadFirst)
+        , _viewCount(0)
+    {
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        fileInfo->set("UserCanWrite", "true");
+    }
+
+    void onDocBrokerViewLoaded(const std::string& /*docKey*/,
+                               const std::shared_ptr<ClientSession>& session) override
+    {
+        ++_viewCount;
+        TST_LOG("View #" << _viewCount << " [" << session->getId() << "] loaded with view id "
+                         << session->getKitViewId());
+
+        if (_viewCount == 1 && _phase == Phase::WaitFirstLoaded)
+        {
+            TRANSITION_STATE(_phase, Phase::LoadSecond);
+        }
+        else if (_viewCount == 2 && _phase == Phase::WaitSecondLoaded)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitRemoved);
+            _secondSessionId = session->getId();
+            WSD_CMD_BY_CONNECTION_INDEX(0, "removesession " +
+                                               std::to_string(session->getKitViewId()));
+        }
+    }
+
+    void onDocBrokerRemovingSession(const std::string& /*docKey*/,
+                                    const std::shared_ptr<ClientSession>& session) override
+    {
+        TST_LOG("Removing session [" << session->getId() << ']');
+        if (_phase == Phase::WaitRemoved)
+        {
+            LOK_ASSERT_EQUAL_MESSAGE("Expected the named view to be removed", _secondSessionId,
+                                     session->getId());
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("The named view was removed");
+        }
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::LoadFirst:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitFirstLoaded);
+
+                initWebsocket("/wopi/files/0?access_token=anything");
+                WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::LoadSecond:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitSecondLoaded);
+
+                addWebSocket();
+                WSD_CMD_BY_CONNECTION_INDEX(1, "load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitFirstLoaded:
+            case Phase::WaitSecondLoaded:
+            case Phase::WaitRemoved:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[6]{ new SecondJoinQuitNormal(), new SecondJoinQuitEarly(),
+    return new UnitBase*[7]{ new SecondJoinQuitNormal(), new SecondJoinQuitEarly(),
                              new SecondJoinWhileFirstQuit(), new UnitRemoveSessionOnce(),
-                             new UnitSendQueueFullSaves(), nullptr };
+                             new UnitSendQueueFullSaves(), new UnitRemoveView(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
