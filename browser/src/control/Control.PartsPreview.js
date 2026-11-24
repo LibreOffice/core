@@ -3091,7 +3091,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	},
 
 	_isMasterView: function () {
-		return this._map['stateChangeHandler'].getItemValue('.uno:SlideMasterPage') === 'true';
+		return this._map._docLayer.isMasterView();
 	},
 
 	_isOverviewPart: function (part) {
