@@ -325,6 +325,9 @@ public:
     /// the app's own thread as well as the polling thread.
     bool isLoaded() const { return _docState.hadLoaded(); }
 
+    /// Notes that the batch request of this broker was answered with its result.
+    void setBatchSucceeded() { _batchSucceeded = true; }
+
     /// Where a view was looking when it went away. An empty part, a zoom of zero and an
     /// empty visible area each mean that value was never recorded.
     struct ViewPosition
@@ -2051,6 +2054,8 @@ protected:
     std::string _uriOrig;
     /// Seconds to live for, or 0 forever
     std::chrono::seconds _limitLifeSeconds;
+    /// True once a batch request, such as a conversion, was answered with its result.
+    bool _batchSucceeded = false;
 
 private:
     /// The state of the document.

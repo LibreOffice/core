@@ -87,6 +87,7 @@ all_la_unit_tests = \
 	unit-collab-protocol.la \
 	unit-collab-disabled.la \
 	unit-quarantine.la \
+	unit-quarantine-convert-to.la \
 	unit-remote-document.la \
 	unit-linked-files.la \
 	unit-link-post-disabled.la \
@@ -511,6 +512,8 @@ unit_hosting_la_SOURCES = UnitHosting.cpp
 unit_hosting_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_quarantine_la_SOURCES = UnitQuarantine.cpp
 unit_quarantine_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_quarantine_convert_to_la_SOURCES = UnitQuarantineConvertTo.cpp
+unit_quarantine_convert_to_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_multi_tenant_la_SOURCES = UnitMultiTenant.cpp
 unit_multi_tenant_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_user_presets_la_SOURCES = UnitUserPresets.cpp

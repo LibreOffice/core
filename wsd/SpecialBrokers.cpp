@@ -446,6 +446,8 @@ bool RenderSearchResultBroker::handleInput(const std::shared_ptr<Message>& messa
                 else
                     LOG_ERR("Invalid socket while sending rendersearchresult response");
 
+                setBatchSucceeded();
+
                 removeSession(_clientSession);
                 stop("Finished RenderSearchResult handler.");
             }

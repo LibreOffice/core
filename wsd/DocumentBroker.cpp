@@ -1016,10 +1016,21 @@ void DocumentBroker::pollThread()
     }
 
 #if !MOBILEAPP
+    // A batch request, such as a conversion, has a document of its own, which was quarantined
+    // when it was opened. It is kept only when the request went wrong.
+    const bool batchSucceeded =
+        _type == ChildType::Batch && _batchSucceeded &&
+        _docState.kitDisconnected() != DocumentState::KitDisconnected::Unexpected;
+
     // Quarantine as soon as the polling ends, before anything that takes time and before the kit
     // is asked to exit: once the kit is gone, the forkit removes its jail, and the files of the
     // document in it.
-    if (dataLoss || _docState.kitDisconnected() == DocumentState::KitDisconnected::Unexpected)
+    if (batchSucceeded)
+    {
+        if (_quarantine)
+            _quarantine->removeQuarantinedFiles();
+    }
+    else if (dataLoss || _docState.kitDisconnected() == DocumentState::KitDisconnected::Unexpected)
     {
         // Quarantine the last copy, if different.
         LOG_WRN((dataLoss ? "Data loss " : "Crash ")

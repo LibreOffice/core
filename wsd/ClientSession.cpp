@@ -4597,6 +4597,16 @@ void ClientSession::recordSlideLinkSources(const std::shared_ptr<Message>& paylo
 }
 #endif // !MOBILEAPP
 
+namespace
+{
+/// True when an extraction result is a JSON object with something in it.
+bool hasExtractedData(const std::string& json)
+{
+    Poco::JSON::Object::Ptr object;
+    return JsonUtil::parseJSON(json, object) && object && object->size() > 0;
+}
+} // namespace
+
 bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& payload)
 {
     LOG_TRC("handling kit-to-client [" << payload->abbr() << ']');
@@ -5507,6 +5517,11 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
             saveAsSocket->sendAndShutdown(httpResponse);
         }
 
+        // The engine produced the result, also when its client is gone by now. It answers with an
+        // empty object when it could not read the document.
+        if (hasExtractedData(payload->jsonString()))
+            docBroker->setBatchSucceeded();
+
         // Now terminate.
         docBroker->closeDocument("extractedlinktargets");
         return true;
@@ -5535,6 +5550,11 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
             httpResponse.setBody(payload->jsonString(), "application/json");
             saveAsSocket->sendAndShutdown(httpResponse);
         }
+
+        // The engine produced the result, also when its client is gone by now. It answers with an
+        // empty object when it could not read the document.
+        if (hasExtractedData(payload->jsonString()))
+            docBroker->setBatchSucceeded();
 
         // Now terminate.
         docBroker->closeDocument("extracteddocumentstructure");
@@ -5621,6 +5641,20 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
             saveAsSocket->sendAndShutdown(httpResponse);
         }
 
+        // The request went well when the engine applied the transform, in whole or in part, also
+        // when its client is gone by now.
+        Poco::JSON::Object::Ptr transformResult;
+        if (JsonUtil::parseJSON(payload->jsonString(), transformResult))
+        {
+            bool applied = false;
+            JsonUtil::findJSONValue(transformResult, "success", applied);
+            const std::string message =
+                transformResult->optValue<std::string>("message", std::string());
+            const std::string error = transformResult->optValue<std::string>("error", std::string());
+            if (applied || (!message.empty() && error.empty()))
+                docBroker->setBatchSucceeded();
+        }
+
         // Now terminate.
         docBroker->closeDocument("transformeddocumentstructure");
         return true;
@@ -5628,15 +5662,16 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
     else if (tokens.equals(0, "sendthumbnail:"))
     {
         LOG_TRC("Sending get-thumbnail response.");
+        const bool error = firstLine.find("error") != std::string::npos;
+
+        // The engine produced the thumbnail, also when its client is gone by now.
+        if (!error)
+            docBroker->setBatchSucceeded();
+
         if (!saveAsSocket)
             LOG_ERR("Error in sendthumbnail: not in isConvertTo mode");
         else
         {
-            bool error = false;
-
-            if (firstLine.find("error") != std::string::npos)
-                error = true;
-
             if (!error)
             {
                 int firstLineSize = firstLine.size() + 1;
@@ -5732,6 +5767,11 @@ void ClientSession::abortConversion(const std::shared_ptr<DocumentBroker>& docBr
     assert(_isConvertTo && "Expected convert-to context");
 
     LOG_DBG("Conversion request of [" << docBroker->getDocKey() << "] failed: " << errorKind);
+
+    // A document with a password is answered as intended, with its icon or with the note that it
+    // has one, also when the client is gone.
+    if (errorKind == "passwordrequired:to-view" || errorKind == "passwordrequired:to-modify")
+        docBroker->setBatchSucceeded();
 
     // When an extract responder is installed, the failure is passed to it as the outcome of the
     // request.
@@ -5948,6 +5988,7 @@ bool ClientSession::handleSaveAs(const std::shared_ptr<Message>& payload,
             {
                 responder(true, resultPath, Poco::Path(resultPath).getFileName(),
                           _convertResponders->transformNote);
+                docBroker->setBatchSucceeded();
             }
 
             LOG_TRC("Removing save-as ClientSession after conversion.");
@@ -5967,6 +6008,9 @@ bool ClientSession::handleSaveAs(const std::shared_ptr<Message>& payload,
                 response.set("Content-Disposition",
                              FileServerRequestHandler::attachmentDisposition(fileName));
             response.setContentType("application/octet-stream");
+
+            // The conversion worked, also when its client is gone by now.
+            docBroker->setBatchSucceeded();
 
             if (!saveAsSocket)
                 LOG_WRN("Conversion of [" << docBroker->getDocKey()

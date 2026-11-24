@@ -514,6 +514,24 @@ bool Quarantine::renewVersion(const std::string& docKey, const std::string& path
     return true;
 }
 
+void Quarantine::removeQuarantinedFiles()
+{
+    if (!isEnabled())
+        return;
+
+    std::lock_guard<std::mutex> lock(Mutex);
+
+    for (const Entry& entry : QuarantineMap[_docKey])
+        FileUtil::removeFile(entry.fullPath());
+    QuarantineMap.erase(_docKey);
+
+    const std::string docKeyPath = Poco::Path(QuarantinePath, _docKey).toString();
+    if (FileUtil::isEmptyDirectory(docKeyPath))
+        FileUtil::removeFile(docKeyPath, /*recursive=*/true);
+
+    LOG_DBG("Removed the quarantined versions of [" << _docKey << ']');
+}
+
 std::string Quarantine::lastQuarantinedFilePath() const
 {
     if (!isEnabled())

@@ -69,6 +69,10 @@ public:
     /// has more than one link in place, which would change the quarantined version too.
     bool quarantineFile(const std::string& docPath, bool copy = false);
 
+    /// Removes every quarantined version of the document, for a document that ended well and
+    /// whose versions are not worth keeping.
+    void removeQuarantinedFiles();
+
     /// Returns the last quarantined file's path.
     std::string lastQuarantinedFilePath() const;
 
