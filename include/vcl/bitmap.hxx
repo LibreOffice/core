@@ -105,12 +105,12 @@ class   SalBitmap;
 
 namespace basegfx { class SystemDependentDataHolder; }
 
+#if defined(_WIN32)
 struct BitmapSystemData
 {
-    #if defined(_WIN32)
     void* pDIB; // device independent byte buffer
-    #endif
 };
+#endif
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC Bitmap final
 {
@@ -155,6 +155,7 @@ public:
     /** return the color data, copied into a new Bitmap. If this Bitmap does not have alpha, will return a copy of itself. */
     Bitmap                  CreateColorBitmap() const;
 
+#if defined(_WIN32)
     /** get system dependent bitmap data
 
         @param rData
@@ -163,6 +164,7 @@ public:
         @return true if the bitmap has a valid system object (e.g. not empty)
     */
     bool                    GetSystemData( BitmapSystemData& rData ) const;
+#endif
 
     BitmapChecksum          GetChecksum() const;
 

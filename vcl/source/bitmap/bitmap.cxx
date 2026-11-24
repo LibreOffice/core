@@ -887,11 +887,12 @@ Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay ) const
     return aDispBmp;
 }
 
+#if defined(_WIN32)
 bool Bitmap::GetSystemData( BitmapSystemData& rData ) const
 {
     return mxSalBmp && mxSalBmp->GetSystemData(rData);
 }
-
+#endif
 
 bool Bitmap::Convert( BmpConversion eConversion )
 {
