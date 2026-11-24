@@ -144,7 +144,7 @@ void SdPage::onParagraphInserted( sal_Int32 nParaPos, SdrObject* pObj )
     if( mxAnimationNode.is() )
     {
         ParagraphTarget aTarget;
-        aTarget.Shape.set( pObj->getUnoShape(), UNO_QUERY );
+        aTarget.Shape = pObj->getUnoShape();
         /* FIXME: Paragraph should be sal_Int32, though more than 64k
          * paragraphs at a shape are unlikely... */
         aTarget.Paragraph = static_cast<sal_Int16>(nParaPos);
@@ -159,7 +159,7 @@ void SdPage::onParagraphRemoving( const ::Outliner* pOutliner, sal_Int32 nParaPo
     if( mxAnimationNode.is() )
     {
         ParagraphTarget aTarget;
-        aTarget.Shape.set( pObj->getUnoShape(), UNO_QUERY );
+        aTarget.Shape = pObj->getUnoShape();
         /* FIXME: Paragraph should be sal_Int32, though more than 64k
          * paragraphs at a shape are unlikely... */
         aTarget.Paragraph = static_cast<sal_Int16>( nParaPos );

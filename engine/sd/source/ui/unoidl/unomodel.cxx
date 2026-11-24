@@ -3914,7 +3914,7 @@ private:
         const basegfx::B2DHomMatrix aInTwips(basegfx::utils::createScaleB2DHomMatrix(
             o3tl::convert(1.0, o3tl::Length::mm100, o3tl::Length::twip),
             o3tl::convert(1.0, o3tl::Length::mm100, o3tl::Length::twip)));
-        const Reference<drawing::XShape> xShape(rObject.getUnoShape(), UNO_QUERY);
+        const Reference<drawing::XShape> xShape(rObject.getUnoShape());
         for (const sd::CustomAnimationEffectPtr& pEffect :
              pPage->getMainSequence()->getMotionPathsOf(xShape))
         {

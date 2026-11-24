@@ -158,7 +158,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143476LockedCanvas_position)
     // Error was, that the imported shape had wrong position.
     createSwDoc("tdf143476_lockedCanvas_position.docx");
     // The group shape corresponds to the lockedCanvas.
-    uno::Reference<drawing::XShape> xGroupShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xGroupShape(getShape(1));
     // Without fix in place the test failed with position 185|947.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2351), xGroupShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(26), xGroupShape->getPosition().Y);

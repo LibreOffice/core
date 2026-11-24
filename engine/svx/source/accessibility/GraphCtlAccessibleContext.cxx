@@ -102,7 +102,7 @@ Reference< XAccessible > SvxGraphCtrlAccessibleContext::getAccessible( const Sdr
         else
         {
             // create a new one and remember in our internal map
-            Reference< XShape > xShape( Reference< XShape >::query( const_cast<SdrObject*>(pObj)->getUnoShape() ) );
+            Reference< XShape > xShape( const_cast<SdrObject*>(pObj)->getUnoShape() );
 
             cpo::uno::Reference<css::accessibility::XAccessible> xParent(getAccessibleParent());
             AccessibleShapeInfo aShapeInfo (xShape,xParent);

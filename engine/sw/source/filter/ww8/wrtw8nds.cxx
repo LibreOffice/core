@@ -762,7 +762,7 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
         ww8::Frame aFrame = *linkedTextboxesIter;
         const SdrObject* pSdrObj = aFrame.GetFrameFormat().FindRealSdrObject();
         if( pSdrObj )
-            xShape.set(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY);
+            xShape = const_cast<SdrObject*>(pSdrObj)->getUnoShape();
         uno::Reference< beans::XPropertySet > xPropertySet(xShape, uno::UNO_QUERY);
         uno::Reference< beans::XPropertySetInfo > xPropertySetInfo;
         if( xPropertySet.is() )

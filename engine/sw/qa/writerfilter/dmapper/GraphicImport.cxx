@@ -169,7 +169,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141540GroupLinePosSize)
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
 
     // Test line
-    uno::Reference<drawing::XShape> xLineShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xLineShape(xDrawPage->getShapeByIndex(0));
     awt::Point aPosition = xLineShape->getPosition();
     awt::Size aSize = xLineShape->getSize();
     // Without fix in place, you had got Position = (19|6498), Size = 5001 x 2
@@ -180,7 +180,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141540GroupLinePosSize)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7071), aSize.Height);
 
     // Test group
-    uno::Reference<drawing::XShape> xGroupShape(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xGroupShape(xDrawPage->getShapeByIndex(1));
     aPosition = xGroupShape->getPosition();
     aSize = xGroupShape->getSize();
     // Without fix in place, you had got Position = (11511|3480), Size = 4022 x 4022

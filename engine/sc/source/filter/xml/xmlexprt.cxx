@@ -522,7 +522,7 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
         sal_Int32 nShapes = xDrawPage->getCount();
         for (sal_Int32 nShape = 0; nShape < nShapes; ++nShape)
         {
-            uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(nShape), uno::UNO_QUERY);
+            uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(nShape));
             if (!xShape.is())
                 continue;
 
@@ -3833,7 +3833,7 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
     //is it still useful, as this call back is only called from ScXMLExport::WriteAnnotation
     // and should be in sync with pCurrentCell
     SdrCaptionObj* pNoteCaption = pNote->GetOrCreateCaption(pCurrentCell->maCellAddress);
-    uno::Reference<drawing::XShape> xCurrentShape( pNoteCaption->getUnoShape(), uno::UNO_QUERY );
+    uno::Reference<drawing::XShape> xCurrentShape( pNoteCaption->getUnoShape() );
     if (xCurrentShape.get()!=xShape.get())
         return;
 
@@ -3943,7 +3943,7 @@ void ScXMLExport::WriteAnnotation(ScDocument& rDoc, const ScMyCell& rMyCell)
     SdrCaptionObj* pNoteCaption = pNote->GetOrCreateCaption(rMyCell.maCellAddress);
     if (pNoteCaption)
     {
-        uno::Reference<drawing::XShape> xShape( pNoteCaption->getUnoShape(), uno::UNO_QUERY );
+        uno::Reference<drawing::XShape> xShape( pNoteCaption->getUnoShape() );
         if (xShape.is())
             GetShapeExport()->exportShape(xShape, SEF_DEFAULT|XMLShapeExportFlags::ANNOTATION);
     }

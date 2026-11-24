@@ -482,7 +482,7 @@ DECLARE_OOXMLEXPORT_TEST(testTDF91260, "tdf91260.docx")
     //Check the textbox doesn't get shrunk
     CPPUNIT_ASSERT_GREATER(sal_Int32(10900), getProperty<sal_Int32>(xFrame, u"Height"_ustr));
 
-    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(getShape(1));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5450), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(21946), xShape->getPosition().Y);
 }
@@ -658,13 +658,13 @@ DECLARE_OOXMLEXPORT_TEST(testN792778, "n792778.docx")
     uno::Reference<drawing::XShapes> xInnerGroupShape(xGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xInnerGroupShape->getCount());
 
-    uno::Reference<drawing::XShape> xInnerShape(xInnerGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xInnerShape(xInnerGroupShape->getShapeByIndex(0));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11684), xInnerShape->getPosition().Y);
 
     xInnerGroupShape.set(xGroupShape->getShapeByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xInnerGroupShape->getCount());
 
-    xInnerShape.set(xInnerGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
+    xInnerShape.set(xInnerGroupShape->getShapeByIndex(0));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11684), xInnerShape->getPosition().Y);
 }
 
@@ -1196,7 +1196,7 @@ DECLARE_OOXMLEXPORT_TEST(testVmlTextVerticalAdjust, "vml-text-vertical-adjust.do
 {
     uno::Reference<drawing::XShapes> xOuterGroupShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShapes> xInnerGroupShape(xOuterGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(xInnerGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xInnerGroupShape->getShapeByIndex(0));
     // Was CENTER.
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP, getProperty<drawing::TextVerticalAdjust>(xShape, u"TextVerticalAdjust"_ustr));
 }

@@ -1925,7 +1925,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testSmartartRotation2)
     // NOTE: Now we have a slot (comphelper::dispatchCommand(u".uno:DiagramToGroup"_ustr, {})) and method
     //       at DiagramHelper_svx to do that, adapted removal of Diagram/SmartArt functionality
     uno::Reference<drawing::XDrawPage> xPage(getPage(0));
-    uno::Reference<drawing::XShape> xShape(xPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xPage->getShapeByIndex(0));
     SdrObjGroup* pSdrObjGroup
         = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(xShape));
     pSdrObjGroup->getDiagramHelper()->disconnectFromSdrObjGroup(false);

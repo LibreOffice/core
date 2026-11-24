@@ -650,7 +650,7 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAlign)
         getProperty<text::TextContentAnchorType>(xPropertySet2, u"AnchorType"_ustr));
 
     // Also check position and size
-    uno::Reference<drawing::XShape> xShape(xControlShape, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xControlShape);
     CPPUNIT_ASSERT(xShape.is());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4470), xShape->getSize().Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1427), xShape->getSize().Height);
@@ -677,7 +677,7 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAlign)
                          getProperty<sal_Int32>(xPropertySet2, u"VertOrient"_ustr));
 
     // Also check position and size
-    xShape.set(xControlShape, uno::UNO_QUERY);
+    xShape = xControlShape;
     CPPUNIT_ASSERT(xShape.is());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4410), xShape->getSize().Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1083), xShape->getSize().Height);
@@ -730,11 +730,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf111964)
 
 DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark-shapetype.docx")
 {
-    uno::Reference<drawing::XShape> xShape1(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape1(getShape(1));
     CPPUNIT_ASSERT(xShape1.is());
     uno::Reference<beans::XPropertySet> xPropertySet1(xShape1, uno::UNO_QUERY);
 
-    uno::Reference<drawing::XShape> xShape2(getShape(2), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape2(getShape(2));
     CPPUNIT_ASSERT(xShape2.is());
     uno::Reference<beans::XPropertySet> xPropertySet2(xShape2, uno::UNO_QUERY);
 

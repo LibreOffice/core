@@ -543,7 +543,7 @@ void SlidePersist::createConnectorShapeConnection(const oox::drawingml::ShapePtr
 {
     oox::drawingml::ConnectorShapePropertiesList aConnectorShapeProperties
         = pConnector->getConnectorShapeProperties();
-    uno::Reference<drawing::XShape> xConnector(pConnector->getXShape(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xConnector(pConnector->getXShape());
     uno::Reference<beans::XPropertySet> xPropertySet(xConnector, uno::UNO_QUERY);
 
     if (xConnector.is())
@@ -555,7 +555,7 @@ void SlidePersist::createConnectorShapeConnection(const oox::drawingml::ShapePtr
             const auto pShape = maShapeMap.find(aDestShapeId);
             if (pShape == maShapeMap.end())
                 continue;
-            uno::Reference<drawing::XShape> xShape(pShape->second->getXShape(), uno::UNO_QUERY);
+            uno::Reference<drawing::XShape> xShape(pShape->second->getXShape());
             if (xShape.is())
             {
                 uno::Reference<drawing::XGluePointsSupplier> xSupplier(xShape, uno::UNO_QUERY);

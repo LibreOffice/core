@@ -699,7 +699,7 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
             if ( pNewObj )
             {
                 // set position
-                Reference< drawing::XShape > xShape( pNewObj->getUnoShape(), uno::UNO_QUERY );
+                Reference< drawing::XShape > xShape( pNewObj->getUnoShape() );
                 if ( xShape.is() )
                 {
                     xShape->setPosition( awt::Point( 0, 0 ) );

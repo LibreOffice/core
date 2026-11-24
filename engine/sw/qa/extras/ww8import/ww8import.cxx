@@ -254,7 +254,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf120761_zOrder)
 {
     createSwDoc("tdf120761_zOrder.dot");
     //The blue shape was covering everything (highest zorder = 2) instead of the lowest(0)
-    uno::Reference<drawing::XShape> xShape(getShapeByName(u"Picture 2"), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(getShapeByName(u"Picture 2"));
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), getProperty<sal_uInt32>(xShape, u"ZOrder"_ustr));
 }
 

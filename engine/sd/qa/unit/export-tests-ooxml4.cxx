@@ -415,7 +415,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125551)
     saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShapeBg(xGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShapeBg(xGroupShape->getShapeByIndex(0));
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1024), xShapeBg->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(576), xShapeBg->getPosition().Y);
@@ -432,15 +432,15 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf136830)
     // Without the fix in place, the X position of the shapes would have been 0
     uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
 
-    uno::Reference<drawing::XShape> xShape1(xGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape1(xGroupShape->getShapeByIndex(0));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(14134), xShape1->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-5321), xShape1->getPosition().Y);
 
-    uno::Reference<drawing::XShape> xShape2(xGroupShape->getShapeByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape2(xGroupShape->getShapeByIndex(1));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8085), xShape2->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8085), xShape2->getPosition().Y);
 
-    uno::Reference<drawing::XShape> xShape3(xGroupShape->getShapeByIndex(2), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape3(xGroupShape->getShapeByIndex(2));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8283), xShape3->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4620), xShape3->getPosition().Y);
 }

@@ -650,7 +650,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWordArtResizing)
        The test-case ensures the original height and width of the word-art is not changed while importing*/
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(getShape(1));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(10105), xShape->getSize().Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4755), xShape->getSize().Height);
 }
@@ -671,14 +671,14 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupshapeLine)
      */
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
-    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(getShape(1));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2656), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(339), xShape->getPosition().Y);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3270), xShape->getSize().Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1392), xShape->getSize().Height);
 
     uno::Reference<drawing::XShapes> xGroupShape(getShape(2), uno::UNO_QUERY);
-    xShape.set(xGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
+    xShape.set(xGroupShape->getShapeByIndex(0));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1272), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2286), xShape->getPosition().Y);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(10160), xShape->getSize().Width);
@@ -692,12 +692,12 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupshapeChildRotation)
     // groupshapes), the first child wasn't in the top left corner of an inline
     // groupshape.
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(xGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xGroupShape->getShapeByIndex(0));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-5741), xShape->getPosition().Y);
 
 #if HAVE_MORE_FONTS
-    xShape.set(xGroupShape->getShapeByIndex(4), uno::UNO_QUERY);
+    xShape.set(xGroupShape->getShapeByIndex(4));
     // This was true, a VML textbox without <v:textbox style="mso-fit-shape-to-text:t"> had
     // auto-grow on.
     CPPUNIT_ASSERT(!getProperty<bool>(xShape, u"TextAutoGrowHeight"_ustr));
@@ -1413,7 +1413,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf85232)
 {
     createSwDoc("tdf85232.docx");
     uno::Reference<drawing::XShapes> xShapes(getShapeByName(u"Group 219"), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(xShapes->getShapeByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xShapes->getShapeByIndex(1));
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor = xShape;
     // Make sure we're not testing the ellipse child.
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.LineShape"_ustr, xShapeDescriptor->getShapeType());

@@ -992,7 +992,7 @@ void ScShapeChildren::FillShapes(const tools::Rectangle& aPixelPaintRect, const 
     maShapeRanges[nRangeId].maViewForwarder = ScIAccessibleViewForwarder(mpViewShell, mpAccDoc, aMapMode);
     for (const rtl::Reference<SdrObject>& pObj : *pPage)
     {
-        uno::Reference< drawing::XShape > xShape(pObj->getUnoShape(), uno::UNO_QUERY);
+        uno::Reference< drawing::XShape > xShape(pObj->getUnoShape());
         if (xShape.is())
         {
             tools::Rectangle aRect(pWin->LogicToPixel(

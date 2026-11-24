@@ -852,7 +852,7 @@ void Test::verifyComboBoxExport(bool aComboBoxAsDropDown)
     {
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-        uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0));
         uno::Reference<drawing::XControlShape> xControl(xShape, uno::UNO_QUERY);
 
         CPPUNIT_ASSERT_EQUAL(u"Manolo"_ustr, getProperty<OUString>(xControl->getControl(), u"Text"_ustr));

@@ -45,7 +45,7 @@ public:
         // remove all shapes - Impress has two default shapes in a new doc; just get rid of them
         Reference<XShapes> firstPageShapes = getFirstPageShapes();
         while (firstPageShapes->getCount() > 0)
-            firstPageShapes->remove(Reference<XShape>(firstPageShapes->getShapeByIndex(0), UNO_QUERY));
+            firstPageShapes->remove(firstPageShapes->getShapeByIndex(0));
     }
 
     virtual void doSingleModification() override

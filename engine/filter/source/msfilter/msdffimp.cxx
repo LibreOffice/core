@@ -478,8 +478,8 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                 if ( pO )
                 {
                     SdrGluePoint aGluePoint;
-                    Reference< XShape > aXShape( pO->getUnoShape(), UNO_QUERY );
-                    Reference< XShape > aXConnector( pPtr->pCObj->getUnoShape(), UNO_QUERY );
+                    Reference< XShape > aXShape( pO->getUnoShape() );
+                    Reference< XShape > aXConnector( pPtr->pCObj->getUnoShape() );
                     SdrGluePointList* pList = pO->ForceGluePointList();
 
                     sal_Int32 nId = nC;

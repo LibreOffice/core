@@ -244,7 +244,7 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper 
             //maybe an additional shape was hit
             if ( pNewObj )
             {
-                m_aSelectedOID = ObjectIdentifier( uno::Reference< drawing::XShape >( pNewObj->getUnoShape(), uno::UNO_QUERY ) );
+                m_aSelectedOID = ObjectIdentifier( pNewObj->getUnoShape() );
             }
             else
             {

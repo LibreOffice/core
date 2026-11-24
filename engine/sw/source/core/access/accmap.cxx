@@ -209,7 +209,7 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
     if (pSdrHint->GetKind() == SdrHintKind::ObjectChange)
     {
         auto pSdrObject = const_cast<SdrObject*>(pSdrHint->GetObject());
-        uno::Reference<drawing::XShape> xShape(pSdrObject->getUnoShape(), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(pSdrObject->getUnoShape());
         std::unique_lock aGuard(maListenerMutex);
         auto [itBegin, itEnd] = maShapeListeners.equal_range(xShape);
         for (auto it = itBegin; it != itEnd; ++it)
@@ -1804,8 +1804,7 @@ SwAccessibleMap::GetContextImpl(const SdrObject* pObj, SwAccessibleContext* pPar
     if( !xAcc.is() && bCreate )
     {
         uno::Reference < drawing::XShape > xShape(
-            const_cast< SdrObject * >( pObj )->getUnoShape(),
-            uno::UNO_QUERY );
+            const_cast< SdrObject * >( pObj )->getUnoShape() );
         if( xShape.is() )
         {
             ::accessibility::ShapeTypeHandler& rShapeTypeHandler =
@@ -2089,8 +2088,7 @@ void SwAccessibleMap::A11yDispose( const SwFrame *pFrame,
         // Keep a reference to the XShape to avoid that it
         // is deleted with a SwFrameFormat::SwClientNotify.
         uno::Reference < drawing::XShape > xShape(
-            const_cast< SdrObject * >( pObj )->getUnoShape(),
-            uno::UNO_QUERY );
+            const_cast< SdrObject * >( pObj )->getUnoShape() );
         if( xShape.is() )
         {
             mvShapes.push_back( xShape );

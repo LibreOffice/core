@@ -494,7 +494,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testtdf138951)
     createSwDoc("tdf138951.odt");
 
     // Get the only shape
-    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(getShape(1));
     CPPUNIT_ASSERT(xShape);
 
     // Gather its formats: the shape and textbox

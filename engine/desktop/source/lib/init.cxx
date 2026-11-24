@@ -5509,8 +5509,7 @@ void COKitDocumentImpl::selectObjects(const char* pObjectIds)
             if (xSelection.is() && !aName.isEmpty())
                 xSelection->select(cpo::uno::Any(aName));
             else if (xSelection.is())
-                xSelection->select(cpo::uno::Any(cpo::uno::Reference<css::drawing::XShape>(
-                    pPart->getUnoShape(), cpo::uno::UNO_QUERY)));
+                xSelection->select(cpo::uno::Any(pPart->getUnoShape()));
             return;
         }
 

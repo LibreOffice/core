@@ -360,7 +360,7 @@ void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< bea
     {
         SdrPageView* pPageView = pDrawViewWrapper->GetSdrPageView();
         if (pDrawViewWrapper->InsertObjectAtView(pObj.get(), *pPageView))
-            m_pChartController->SetAndApplySelection(Reference<drawing::XShape>(pObj->getUnoShape(), uno::UNO_QUERY));
+            m_pChartController->SetAndApplySelection(pObj->getUnoShape());
         if ( nFeatureId == ChartCommandID::DrawText )
         {
             m_pChartController->StartTextEdit();

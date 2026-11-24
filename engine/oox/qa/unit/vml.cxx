@@ -64,7 +64,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf112450_vml_polyline)
         CPPUNIT_ASSERT_EQUAL(drawing::PolygonKind_PLIN, ePolygonKind);
     }
     {
-        uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(1));
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         // Without fix in place, Geometry had 2 points, both 0|0.
         drawing::PointSequenceSequence aGeometry;
@@ -82,7 +82,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf112450_vml_polyline)
     }
     {
         // This tests a filled shape where v:polyline does not have attribute coordsize
-        uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(2), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(2));
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         // Without fix in place, Geometry had 2 points, both 0|0.
         drawing::PointSequenceSequence aGeometry;
@@ -246,8 +246,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testVMLDetectWordArtOnImport)
     loadFromFile(u"tdf153258_VML_import_WordArt_detection.docx");
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(xDrawPageSupplier->getDrawPage()->getShapeByIndex(0),
-                                           uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPageSupplier->getDrawPage()->getShapeByIndex(0));
 
     // Make sure the shape width and height is not changed.
     awt::Size aSize = xShape->getSize();

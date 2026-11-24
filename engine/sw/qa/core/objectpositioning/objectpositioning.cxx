@@ -76,7 +76,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOverlapCrash)
 CPPUNIT_TEST_FIXTURE(Test, testImgMoveCrash)
 {
     createSwDoc("tdf154863-img-move-crash.docx");
-    uno::Reference<drawing::XShape> xShape(getShapeByName(u"Image26"), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(getShapeByName(u"Image26"));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     xShapeProps->setPropertyValue(u"VertOrient"_ustr, cpo::uno::Any(static_cast<sal_Int32>(0)));
     xShapeProps->setPropertyValue(u"VertOrientPosition"_ustr,

@@ -705,7 +705,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testSvgImageSupport)
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xDrawPage.is());
 
         // Get the image
-        uno::Reference<drawing::XShape> xImage(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xImage(xDrawPage->getShapeByIndex(0));
         uno::Reference<beans::XPropertySet> xPropertySet(xImage, uno::UNO_QUERY_THROW);
 
         // Convert to a XGraphic

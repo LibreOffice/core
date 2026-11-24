@@ -4124,8 +4124,7 @@ cpo::uno::Sequence< OUString > SvxShapeRect::getSupportedServiceNames()
 /** returns a StarOffice API wrapper for the given SdrObject */
 uno::Reference< drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) noexcept
 {
-    uno::Reference< drawing::XShape > xShape( pObj->getUnoShape(), uno::UNO_QUERY );
-    return xShape;
+    return pObj->getUnoShape();
 }
 
 

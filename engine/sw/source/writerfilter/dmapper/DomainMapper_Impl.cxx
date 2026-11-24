@@ -6508,8 +6508,7 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(const cpo::uno::Reference<cs
     // If this is a group go inside
     if (xGroup)
         for (sal_Int32 i = 0; i < xGroup->getCount(); ++i)
-            AttachTextBoxContentToShape(
-                uno::Reference<drawing::XShape>(xGroup->getShapeByIndex(i), uno::UNO_QUERY));
+            AttachTextBoxContentToShape(xGroup->getShapeByIndex(i));
 
     // if this shape has to be a textbox, attach the frame
     if (!xProps->getPropertyValue(u"TextBox"_ustr).get<bool>())

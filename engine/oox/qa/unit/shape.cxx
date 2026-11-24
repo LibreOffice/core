@@ -108,7 +108,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testConnectorConnection)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
-    uno::Reference<drawing::XShape> xConnector(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xConnector(xDrawPage->getShapeByIndex(0));
     uno::Reference<beans::XPropertySet> xConnectorProps(xConnector, uno::UNO_QUERY);
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -136,12 +136,12 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testElbowConnectors)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
-    uno::Reference<drawing::XShape> xShape1(xDrawPage->getShapeByIndex(2), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape1(xDrawPage->getShapeByIndex(2));
     uno::Reference<beans::XPropertySet> xShapeProps1(xShape1, uno::UNO_QUERY);
     xShapeProps1->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-2756), nEdgeLineDelta);
 
-    uno::Reference<drawing::XShape> xShape2(xDrawPage->getShapeByIndex(5), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape2(xDrawPage->getShapeByIndex(5));
     uno::Reference<beans::XPropertySet> xShapeProps2(xShape2, uno::UNO_QUERY);
     xShapeProps2->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-805), nEdgeLineDelta);
@@ -166,8 +166,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf154074FreeConnector)
     // authored connector ends, the inner points are the bends.
     auto assertTrack = [&xDrawPage](sal_Int32 nShapeIndex,
                                     const std::vector<basegfx::B2DPoint>& rExpected) {
-        uno::Reference<drawing::XShape> xConnector(xDrawPage->getShapeByIndex(nShapeIndex),
-                                                   uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xConnector(xDrawPage->getShapeByIndex(nShapeIndex));
         auto* pEdgeObj = dynamic_cast<SdrEdgeObj*>(SdrObject::getSdrObjectFromXShape(xConnector));
         CPPUNIT_ASSERT(pEdgeObj);
         const basegfx::B2DPolyPolygon aTrack(pEdgeObj->GetEdgeTrackPath());
@@ -203,7 +202,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testCurvedConnectors)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
 
-    uno::Reference<drawing::XShape> xShape1(xDrawPage->getShapeByIndex(2), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape1(xDrawPage->getShapeByIndex(2));
     uno::Reference<beans::XPropertySet> xShapeProps1(xShape1, uno::UNO_QUERY);
     xShapeProps1->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-2364), nEdgeLineDelta);
@@ -212,7 +211,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testCurvedConnectors)
     xShapeProps1->getPropertyValue(UNO_NAME_EDGELINE3DELTA) >>= nEdgeLineDelta;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2051), nEdgeLineDelta);
 
-    uno::Reference<drawing::XShape> xShape2(xDrawPage->getShapeByIndex(5), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape2(xDrawPage->getShapeByIndex(5));
     uno::Reference<beans::XPropertySet> xShapeProps2(xShape2, uno::UNO_QUERY);
     xShapeProps2->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3019), nEdgeLineDelta);
@@ -240,7 +239,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf165180_standardConnectorsECMA)
     sal_Int32 nEdgeLineDelta;
     for (size_t i = 0; i < 10; i++)
     {
-        uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(i), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(i));
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         bool bConnector = xShapeProps->getPropertySetInfo()->hasPropertyByName(u"EdgeKind"_ustr);
         if (bConnector)
@@ -278,7 +277,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf165180_standardConnectorsISO29500)
     sal_Int32 nEdgeLineDelta;
     for (size_t i = 0; i < 10; i++)
     {
-        uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(i), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(i));
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         bool bConnector = xShapeProps->getPropertySetInfo()->hasPropertyByName(u"EdgeKind"_ustr);
         if (bConnector)
@@ -342,8 +341,8 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testGroupTransform)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShape> xGroup(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(getChildShape(xGroup, 0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xGroup(xDrawPage->getShapeByIndex(0));
+    uno::Reference<drawing::XShape> xShape(getChildShape(xGroup, 0));
     uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed in several properties.
 
@@ -411,7 +410,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf125582_TextOnCircle)
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0));
     uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
 
     // BoundRect of Fontwork shape depends on dpi.
@@ -1048,7 +1047,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testDigitGuideName_funnel)
 
     // Test prstGeom object. Error was in oox-drawingml-cs-presets.
     // Mark object and convert it to Bézier curve. Ungroup result of conversion gives two shapes.
-    uno::Reference<drawing::XShape> xShapePrst(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShapePrst(xDrawPage->getShapeByIndex(0));
     SdrObject* pSdrShapePrst(SdrObject::getSdrObjectFromXShape(xShapePrst));
     pSdrView->MarkObj(pSdrShapePrst, pSdrView->GetSdrPageView());
     dispatchCommand(mxComponent, u".uno:ChangeBezier"_ustr, {});
@@ -1066,7 +1065,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testDigitGuideName_funnel)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(10000), aPointPrst.X);
 
     // Test custGeom object. Error was in customshapegeometry.cxx
-    uno::Reference<drawing::XShape> xShapeCust(xDrawPage->getShapeByIndex(2), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShapeCust(xDrawPage->getShapeByIndex(2));
     SdrObject* pSdrShapeCust(SdrObject::getSdrObjectFromXShape(xShapeCust));
     pSdrView->MarkObj(pSdrShapeCust, pSdrView->GetSdrPageView());
     dispatchCommand(mxComponent, u".uno:ChangeBezier"_ustr, {});
@@ -1095,13 +1094,13 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testDigitGuideName_mathEqual)
     // The values of the bounding rectangle vary slightly depending on the device.
     // Thus test with tolerance.
     {
-        uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(0));
         SdrObject* pSdrShape(SdrObject::getSdrObjectFromXShape(xShape));
         double fBoundRectHeight = pSdrShape->GetCurrentBoundRect().GetHeight();
         CPPUNIT_ASSERT_DOUBLES_EQUAL(10000.0, fBoundRectHeight, 5);
     }
     {
-        uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(1));
         SdrObject* pSdrShape(SdrObject::getSdrObjectFromXShape(xShape));
         double fBoundRectHeight = pSdrShape->GetCurrentBoundRect().GetHeight();
         CPPUNIT_ASSERT_DOUBLES_EQUAL(10000.0, fBoundRectHeight, 5);

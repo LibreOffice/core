@@ -5946,8 +5946,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     cpo::uno::Reference<css::beans::XPropertySet> xShapePropSet;
     if (pSdrObj)
     {
-        cpo::uno::Reference<css::drawing::XShape> xShape(
-            const_cast<SdrObject*>(pSdrObj)->getUnoShape(), cpo::uno::UNO_QUERY);
+        cpo::uno::Reference<css::drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObj)->getUnoShape());
         xShapePropSet.set(xShape, cpo::uno::UNO_QUERY);
         assert(xShapePropSet);
     }
@@ -6141,7 +6140,7 @@ void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rOL
 
 bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat )
 {
-    uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY );
+    uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(pSdrObj)->getUnoShape() );
     if (!xShape.is())
         return false;
 
@@ -6174,7 +6173,7 @@ void DocxAttributeOutput::WritePostponedChart()
     for (const PostponedChart& rChart : m_aPostponedCharts)
     {
         uno::Reference< chart2::XChartDocument > xChartDoc;
-        uno::Reference< drawing::XShape > xShape(const_cast<SdrObject*>(rChart.object)->getUnoShape(), uno::UNO_QUERY );
+        uno::Reference< drawing::XShape > xShape(const_cast<SdrObject*>(rChart.object)->getUnoShape());
         if( xShape.is() )
         {
             uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
@@ -6422,7 +6421,7 @@ void DocxAttributeOutput::WriteActiveXControl(const SdrObject* pObject, const Sw
         m_pSerializer->startElementNS(XML_w, XML_pict);
 
     // write ActiveX fragment and ActiveX binary
-    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObject)->getUnoShape(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObject)->getUnoShape());
     std::pair<OString,OString> sRelIdAndName = m_rExport.WriteActiveXObject(xShape, xControlModel);
 
     // VML shape definition
@@ -10914,7 +10913,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
                 const SdrObject* pSdrObj = m_rExport.m_pParentFrame->GetFrameFormat().FindRealSdrObject();
                 if (pSdrObj)
                 {
-                    uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY );
+                    uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(pSdrObj)->getUnoShape() );
                     uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY );
                     m_rDrawingML.SetFS(m_pSerializer);
                     m_rDrawingML.WriteBlipFill(xPropertySet, u"BackGraphic"_ustr);

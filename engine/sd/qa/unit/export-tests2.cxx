@@ -125,7 +125,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testSwappedOutImageExport)
         uno::Reference<drawing::XDrawPage> xDrawPage(
             xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), uno::UNO_SET_THROW);
 
-        uno::Reference<drawing::XShape> xImage(xDrawPage->getShapeByIndex(2), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xImage(xDrawPage->getShapeByIndex(2));
         uno::Reference<beans::XPropertySet> XPropSet(xImage, uno::UNO_QUERY_THROW);
 
         // Check Graphic, Size
@@ -145,7 +145,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testSwappedOutImageExport)
 
         // Second Image
         xDrawPage.set(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(1), uno::UNO_SET_THROW);
-        xImage.set(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
+        xImage.set(xDrawPage->getShapeByIndex(1));
         XPropSet.set(xImage, uno::UNO_QUERY_THROW);
 
         // Check Graphic, Size
@@ -490,7 +490,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testImageWithSpecialID)
         uno::Reference<drawing::XDrawPage> xDrawPage(
             xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(0), uno::UNO_SET_THROW);
 
-        uno::Reference<drawing::XShape> xImage(xDrawPage->getShapeByIndex(2), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xImage(xDrawPage->getShapeByIndex(2));
         uno::Reference<beans::XPropertySet> XPropSet(xImage, uno::UNO_QUERY_THROW);
 
         // Check Graphic, Size
@@ -510,7 +510,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testImageWithSpecialID)
 
         // Second Image
         xDrawPage.set(xDrawPagesSupplier->getDrawPages()->getDrawPageByIndex(1), uno::UNO_SET_THROW);
-        xImage.set(xDrawPage->getShapeByIndex(1), uno::UNO_QUERY);
+        xImage.set(xDrawPage->getShapeByIndex(1));
         XPropSet.set(xImage, uno::UNO_QUERY_THROW);
 
         // Check Graphic, Size

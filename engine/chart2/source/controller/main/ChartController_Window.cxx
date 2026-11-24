@@ -770,7 +770,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                     SdrObject* pObj = pDrawViewWrapper->getSelectedObject();
                     if ( pObj )
                     {
-                        uno::Reference< drawing::XShape > xShape( pObj->getUnoShape(), uno::UNO_QUERY );
+                        uno::Reference< drawing::XShape > xShape( pObj->getUnoShape() );
                         if ( xShape.is() )
                         {
                             m_aSelection.setSelection( xShape );

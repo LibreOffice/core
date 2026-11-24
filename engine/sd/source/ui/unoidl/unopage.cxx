@@ -2570,7 +2570,7 @@ SdNavigationOrderAccess::SdNavigationOrderAccess( SdrPage const * pPage )
         {
             sal_uInt32 nNavPos = pObj->GetNavigationPosition();
             DBG_ASSERT( !maShapes[nNavPos].is(), "sd::SdNavigationOrderAccess::SdNavigationOrderAccess(), duplicate navigation positions from core!" );
-            maShapes[nNavPos].set( pObj->getUnoShape(), UNO_QUERY );
+            maShapes[nNavPos] = pObj->getUnoShape();
         }
     }
 }

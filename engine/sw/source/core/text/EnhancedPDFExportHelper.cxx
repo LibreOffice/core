@@ -3020,7 +3020,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(
                     if (aScreenPageNums.empty())
                         continue;
 
-                    uno::Reference<drawing::XShape> xShape(pObject->getUnoShape(), uno::UNO_QUERY);
+                    uno::Reference<drawing::XShape> xShape(pObject->getUnoShape());
                     if (xShape->getShapeType() == "com.sun.star.drawing.MediaShape")
                     {
                         uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);

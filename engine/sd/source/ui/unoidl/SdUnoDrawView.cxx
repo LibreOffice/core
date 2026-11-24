@@ -258,7 +258,7 @@ Any SdUnoDrawView::getSelection()
                 if(!xPage.is())
                     continue;
 
-                Reference< drawing::XShape > xShape( pObj->getUnoShape(), UNO_QUERY );
+                Reference< drawing::XShape > xShape( pObj->getUnoShape() );
 
                 if(xShape.is())
                     xShapes->add(xShape);

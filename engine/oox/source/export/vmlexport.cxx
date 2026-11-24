@@ -1559,7 +1559,7 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
 
     if (m_pTextExport && lcl_isTextBox(m_pSdrObject))
     {
-        uno::Reference<drawing::XShape> xShape {const_cast<SdrObject*>(m_pSdrObject)->getUnoShape(), uno::UNO_QUERY};
+        uno::Reference<drawing::XShape> xShape {const_cast<SdrObject*>(m_pSdrObject)->getUnoShape()};
         uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
         uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
         bool bBottomToTop = false;

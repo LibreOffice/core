@@ -367,7 +367,7 @@ uno::Reference<drawing::XShape> SwModelTestBase::getShape(int number)
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(number - 1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getShapeByIndex(number - 1));
     return xShape;
 }
 

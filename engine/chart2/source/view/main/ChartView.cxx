@@ -1860,7 +1860,7 @@ OUString ChartView::dump(OUString const & kind)
         }
         else
         {
-            uno::Reference< drawing::XShape > xSingleShape(m_xDrawPage->getShapeByIndex(i), uno::UNO_QUERY);
+            uno::Reference< drawing::XShape > xSingleShape(m_xDrawPage->getShapeByIndex(i));
             if(!xSingleShape.is())
                 continue;
             OUString aString = XShapeDumper::dump(xSingleShape);

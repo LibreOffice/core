@@ -199,11 +199,6 @@ bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
     if (templateParamRD->getName() == "XInterface")
         return true;
 
-    // XShape is used in UNO aggregates in very "entertaining" ways, which means an UNO_QUERY
-    // can return a completely different object, e.g. see SwXShape::queryInterface
-    if (templateParamRD->getName() == "XShape")
-        return true;
-
     if (cce->getNumArgs() == 2)
         if (auto declRefExpr = dyn_cast<DeclRefExpr>(cce->getArg(1)))
         {
@@ -322,11 +317,6 @@ bool ReferenceCasting::VisitCXXMemberCallExpr(const CXXMemberCallExpr* mce)
     if (templateParamRD->getName() == "XInterface")
         return true;
 
-    // XShape is used in UNO aggregates in very "entertaining" ways, which means an UNO_QUERY
-    // can return a completely different object, e.g. see SwXShape::queryInterface
-    if (templateParamRD->getName() == "XShape")
-        return true;
-
     if (mce->getNumArgs() == 2)
         if (auto declRefExpr = dyn_cast<DeclRefExpr>(mce->getArg(1)))
         {
@@ -435,11 +425,6 @@ bool ReferenceCasting::VisitCallExpr(const CallExpr* ce)
     // querying for XInterface (instead of doing an upcast) has special semantics,
     // to check for UNO object equivalence.
     if (templateParamRD->getName() == "XInterface")
-        return true;
-
-    // XShape is used in UNO aggregates in very "entertaining" ways, which means an UNO_QUERY
-    // can return a completely different object, e.g. see SwXShape::queryInterface
-    if (templateParamRD->getName() == "XShape")
         return true;
 
     if (methodArgRD->Equals(templateParamRD) || isDerivedFrom(methodArgRD, templateParamRD))

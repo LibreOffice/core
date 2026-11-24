@@ -301,7 +301,7 @@ uno::Reference<drawing::XShape> SwFmDrawPage::GetShape(SdrObject* pObj)
     // "make page bookkeep the SwXShapes" [-loplugin:crosscast]:
     SwFmDrawPage* pPage = dynamic_cast<SwFmDrawPage*>(pFormat);
     if(!pPage || pPage->m_vShapes.empty())
-        return uno::Reference<drawing::XShape>(pObj->getUnoShape(), uno::UNO_QUERY);
+        return pObj->getUnoShape();
     for(const auto & pSvxShape : pPage->m_vShapes)
     {
         if (pSvxShape->GetSdrObject() == pObj)
@@ -1963,8 +1963,7 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
             cpo::uno::Any aPos;
             aPos <<= xTextRange;
             setPropertyValue(u"TextRange"_ustr, aPos);
-            uno::Reference< drawing::XShape > xTemp( static_cast<cppu::OWeakObject*>(m_pSvxShape), uno::UNO_QUERY );
-            xDP->add( xTemp );
+            xDP->add( m_pSvxShape );
         }
     }
 }
@@ -2082,7 +2081,7 @@ awt::Point SwXShape::getPosition()
     {
         // #i34750# - get attribute position of top group
         // shape and add offset between top group object and group member
-        uno::Reference< drawing::XShape > xGroupShape( pTopGroupObj->getUnoShape(), uno::UNO_QUERY );
+        uno::Reference< drawing::XShape > xGroupShape( pTopGroupObj->getUnoShape() );
         aPos = xGroupShape->getPosition();
         // add offset between top group object and group member
         // to the determined attribute position
@@ -2154,7 +2153,7 @@ void SwXShape::setPosition( const awt::Point& aPosition )
         }
         // Convert given absolute position in horizontal left-to-right
         // layout into relative position in horizontal left-to-right layout.
-        uno::Reference< drawing::XShape > xGroupShape( pTopGroupObj->getUnoShape(), uno::UNO_QUERY );
+        uno::Reference< drawing::XShape > xGroupShape( pTopGroupObj->getUnoShape() );
         {
             // #i34750#
             // use method <xGroupShape->getPosition()> to get the correct

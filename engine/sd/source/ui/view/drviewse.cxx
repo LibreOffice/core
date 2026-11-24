@@ -1593,8 +1593,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 break;
 
             // the effects whose path the client got, as it counts them
-            const cpo::uno::Reference<css::drawing::XShape> xShape(pObject->getUnoShape(),
-                                                                   cpo::uno::UNO_QUERY);
+            const cpo::uno::Reference<css::drawing::XShape> xShape(pObject->getUnoShape());
             std::vector<CustomAnimationEffectPtr> aEffects;
             for (const CustomAnimationEffectPtr& pEffect :
                  pPage->getMainSequence()->getMotionPathsOf(xShape))
@@ -1664,8 +1663,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                     if (!pObject || (pPage && pTargetPage != pPage))
                         continue;
                     pPage = pTargetPage;
-                    const cpo::uno::Reference<css::drawing::XShape> xShape(
-                        pObject->getUnoShape(), cpo::uno::UNO_QUERY);
+                    const cpo::uno::Reference<css::drawing::XShape> xShape(pObject->getUnoShape());
                     const boost::optional<sal_Int32> oParagraph
                         = rTargetNode.second.get_optional<sal_Int32>("paragraph");
                     if (oParagraph)

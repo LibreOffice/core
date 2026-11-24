@@ -276,7 +276,7 @@ void SwTextBoxHelper::set(SwFrameFormat* pShapeFormat, SdrObject* pObj,
     assert(!xNamed->getName().isEmpty());
     (void)xNamed;
     // And sync. properties.
-    uno::Reference<drawing::XShape> xShape(pObj->getUnoShape(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(pObj->getUnoShape());
     syncProperty(pShapeFormat, RES_FRM_SIZE, MID_FRMSIZE_SIZE, cpo::uno::Any(xShape->getSize()),
                  pObj);
     uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
@@ -1254,7 +1254,7 @@ void SwTextBoxHelper::updateTextBoxMargin(SdrObject* pObj)
 {
     if (!pObj)
         return;
-    uno::Reference<drawing::XShape> xShape(pObj->getUnoShape(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(pObj->getUnoShape());
     if (!xShape)
         return;
     uno::Reference<beans::XPropertySet> const xPropertySet(xShape, uno::UNO_QUERY);

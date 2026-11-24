@@ -10572,8 +10572,7 @@ void DrawingML::WriteDiagram(const cpo::uno::Reference<css::drawing::XShape>& rX
         cpo::uno::Reference<css::drawing::XShapes> xShapes(rXShape, uno::UNO_QUERY);
         if (xShapes.is() && xShapes->hasElements())
         {
-            cpo::uno::Reference<css::drawing::XShape> xShapeBg(xShapes->getShapeByIndex(0),
-                                                               uno::UNO_QUERY);
+            cpo::uno::Reference<css::drawing::XShape> xShapeBg(xShapes->getShapeByIndex(0));
             awt::Point aPos = xShapeBg->getPosition();
             awt::Size aSize = xShapeBg->getSize();
             WriteTransformation(

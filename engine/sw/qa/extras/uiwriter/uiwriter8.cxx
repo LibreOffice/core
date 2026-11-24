@@ -3674,7 +3674,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf135661)
     createSwDoc("tdf135661.odt");
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
-    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(getShape(1));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3424), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1545), xShape->getPosition().Y);
 
@@ -3687,7 +3687,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf135661)
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    xShape.set(getShape(1), uno::UNO_QUERY);
+    xShape.set(getShape(1));
 
     //Without the fix in place, the shape position would have been 0,0
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3424), xShape->getPosition().X);
@@ -3732,7 +3732,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf137964)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
-    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(getShape(1));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3579), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4090), xShape->getPosition().Y);
 

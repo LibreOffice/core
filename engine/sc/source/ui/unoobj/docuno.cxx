@@ -2512,7 +2512,7 @@ bool ScModelObj::FillRenderMarkData( const cpo::uno::Any& aSelection,
         {
             //print a selected ole object
             // multi selection isn't supported yet
-            uno::Reference< drawing::XShape > xShape( xShapes->getShapeByIndex(0), uno::UNO_QUERY );
+            uno::Reference< drawing::XShape > xShape( xShapes->getShapeByIndex(0) );
             SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape( xShape );
             if( pSdrObj && pDocShell )
             {
@@ -3248,7 +3248,7 @@ static void lcl_PDFExportMediaShapeScreen(const OutputDevice* pDev, const std::u
                 SdrObject* pObj = aIter.Next();
                 while (pObj && pObj->IsVisible())
                 {
-                    uno::Reference<drawing::XShape> xShape(pObj->getUnoShape(), uno::UNO_QUERY);
+                    uno::Reference<drawing::XShape> xShape(pObj->getUnoShape());
                     if (xShape->getShapeType() == "com.sun.star.drawing.MediaShape")
                     {
                         SCCOL nX1, nX2;
@@ -3324,7 +3324,7 @@ static void lcl_PDFExportMediaShapeScreen(const OutputDevice* pDev, const std::u
                     SdrObject* pObj = aIter.Next();
                     while (pObj && pObj->IsVisible())
                     {
-                        uno::Reference<drawing::XShape> xShape(pObj->getUnoShape(), uno::UNO_QUERY);
+                        uno::Reference<drawing::XShape> xShape(pObj->getUnoShape());
                         if (xShape->getShapeType() == "com.sun.star.drawing.MediaShape")
                         {
                             tools::Rectangle aRect(pObj->GetCurrentBoundRect());

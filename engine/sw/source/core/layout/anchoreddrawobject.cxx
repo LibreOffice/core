@@ -841,7 +841,7 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
                 if (SwTextBoxHelper::isTextBox(pFrameFormat, RES_DRAWFRMFMT))
                 {
                     // Shape has relative size and also a textbox, update its text area as well.
-                    uno::Reference<drawing::XShape> xShape(pObject->getUnoShape(), uno::UNO_QUERY);
+                    uno::Reference<drawing::XShape> xShape(pObject->getUnoShape());
                     SwTextBoxHelper::syncProperty(pFrameFormat, RES_FRM_SIZE, MID_FRMSIZE_SIZE,
                                                   cpo::uno::Any(xShape->getSize()));
                 }

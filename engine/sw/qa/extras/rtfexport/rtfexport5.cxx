@@ -380,7 +380,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo66040)
                                             ->getString());
 
         // Make sure the second shape has the correct position and size.
-        uno::Reference<drawing::XShape> xShape(getShape(2), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(getShape(2));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(14420),
                              getProperty<sal_Int32>(xShape, u"HoriOrientPosition"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1032),

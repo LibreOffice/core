@@ -378,7 +378,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDMLGroupShapeChildPosition)
         // which specify the position must be also applied for children of the group.
 
         uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
-        uno::Reference<drawing::XShape> xChildGroup(xGroup->getShapeByIndex(1), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xChildGroup(xGroup->getShapeByIndex(1));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-2123), xChildGroup->getPosition().X);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(11331), xChildGroup->getPosition().Y);
 
@@ -387,7 +387,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDMLGroupShapeChildPosition)
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1859), xChildGroup->getPosition().X);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(11331), xChildGroup->getPosition().Y);
 
-        xChildGroup.set(xGroup->getShapeByIndex(1), uno::UNO_QUERY);
+        xChildGroup.set(xGroup->getShapeByIndex(1));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-2123), xChildGroup->getPosition().X);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(bIsExport ? 14023 : 14021), xChildGroup->getPosition().Y);
     };

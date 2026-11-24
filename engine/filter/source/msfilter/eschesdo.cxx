@@ -1005,7 +1005,7 @@ ImplEESdrObject::ImplEESdrObject( ImplEESdrWriter& rEx,
     {
         // why not declare a const parameter if the object will
         // not be modified?
-        mXShape.set( const_cast<SdrObject*>(&rObj)->getUnoShape(), UNO_QUERY );
+        mXShape = const_cast<SdrObject*>(&rObj)->getUnoShape();
         Init();
     }
 }

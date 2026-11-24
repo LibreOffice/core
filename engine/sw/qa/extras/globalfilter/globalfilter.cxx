@@ -133,7 +133,7 @@ void Test::testEmbeddedGraphicRoundtrip()
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 2, getShapes());
 
         // First image
-        uno::Reference<drawing::XShape> xImage(getShape(1), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xImage(getShape(1));
         uno::Reference< beans::XPropertySet > XPropSet( xImage, uno::UNO_QUERY_THROW );
 
         // Check graphic, size
@@ -149,7 +149,7 @@ void Test::testEmbeddedGraphicRoundtrip()
         }
 
         // Second Image
-        xImage.set(getShape(2), uno::UNO_QUERY);
+        xImage.set(getShape(2));
         XPropSet.set( xImage, uno::UNO_QUERY_THROW );
 
         // Check graphic, size
@@ -289,7 +289,7 @@ void Test::testImageWithSpecialID()
         }
 
         // Second Image
-        xImage.set(getShape(2), uno::UNO_QUERY);
+        xImage.set(getShape(2));
         XPropSet.set( xImage, uno::UNO_QUERY_THROW );
 
         // Check graphic, size
@@ -2299,7 +2299,7 @@ void Test::testSvgImageSupport()
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 1, getShapes());
 
         // Get the image
-        uno::Reference<drawing::XShape> xImage(getShape(1), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xImage(getShape(1));
         uno::Reference<beans::XPropertySet> xPropertySet(xImage, uno::UNO_QUERY_THROW);
 
         // Convert to a XGraphic

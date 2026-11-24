@@ -336,7 +336,7 @@ void ConnectorHelper::applyConnections(const oox::drawingml::ShapePtr& pConnecto
         if (pItem == rShapeMap.end())
             continue;
 
-        uno::Reference<drawing::XShape> xShape(pItem->second->getXShape(), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(pItem->second->getXShape());
         if (xShape.is())
         {
             // Connect to the found shape.
@@ -391,7 +391,7 @@ void ConnectorHelper::applyConnections(const oox::drawingml::ShapePtr& pConnecto
 
 void ConnectorHelper::applyBentHandleAdjustments(oox::drawingml::ShapePtr pConnector)
 {
-    uno::Reference<drawing::XShape> xConnector(pConnector->getXShape(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xConnector(pConnector->getXShape());
     if (!xConnector.is())
         return;
     uno::Reference<beans::XPropertySet> xPropSet(xConnector, uno::UNO_QUERY);
@@ -464,7 +464,7 @@ void ConnectorHelper::applyBentHandleAdjustments(oox::drawingml::ShapePtr pConne
 
 void ConnectorHelper::applyCurvedHandleAdjustments(oox::drawingml::ShapePtr pConnector)
 {
-    uno::Reference<drawing::XShape> xConnector(pConnector->getXShape(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xConnector(pConnector->getXShape());
     if (!xConnector.is())
         return;
     uno::Reference<beans::XPropertySet> xPropSet(xConnector, uno::UNO_QUERY);

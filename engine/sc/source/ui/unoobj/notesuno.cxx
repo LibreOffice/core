@@ -210,7 +210,7 @@ uno::Reference < drawing::XShape > ScAnnotationObj::getAnnotationShape()
     uno::Reference < drawing::XShape > xShape;
     if( const ScPostIt* pNote = ImplGetNote() )
         if( SdrObject* pCaption = pNote->GetOrCreateCaption( aCellPos ) )
-            xShape.set( pCaption->getUnoShape(), uno::UNO_QUERY );
+            xShape = pCaption->getUnoShape();
     return xShape;
 }
 

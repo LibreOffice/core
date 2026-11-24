@@ -211,7 +211,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testTdf165261HorzAnchor)
     saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(xGroupShape->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xGroupShape->getShapeByIndex(0));
 
     uno::Reference<beans::XPropertySet> xProp(xShape, uno::UNO_QUERY);
     drawing::TextHorizontalAdjust eHori;

@@ -2061,7 +2061,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testEmbeddedDrawingLoadsLinkedImageOnceOuter
     uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(
         xChildSupplier->getEmbeddedObject(), uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getDrawPageByIndex(0));
-    uno::Reference<drawing::XShape> xShape(xPage->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xPage->getShapeByIndex(0));
     auto pImage = dynamic_cast<SdrGrafObj*>(SdrObject::getSdrObjectFromXShape(xShape));
     CPPUNIT_ASSERT(pImage);
     CPPUNIT_ASSERT(pImage->IsLinkedGraphic());

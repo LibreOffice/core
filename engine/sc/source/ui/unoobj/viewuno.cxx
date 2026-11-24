@@ -789,7 +789,7 @@ bool ScTabViewObj::select( const cpo::uno::Any& aSelection )
                     bool bAllMarked(true);
                     for ( tools::Long i = 0; i < nCount; i++ )
                     {
-                        uno::Reference<drawing::XShape> xShapeInt(xShapeColl->getShapeByIndex(i), uno::UNO_QUERY);
+                        uno::Reference<drawing::XShape> xShapeInt(xShapeColl->getShapeByIndex(i));
                         if (xShapeInt.is())
                         {
                             SdrObject* pObj = SdrObject::getSdrObjectFromXShape( xShapeInt );
@@ -853,7 +853,7 @@ uno::Reference<drawing::XShapes> ScTabViewShell::getSelectedXShapes()
                 SdrObject* pDrawObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
                 if (pDrawObj)
                 {
-                    uno::Reference<drawing::XShape> xShape( pDrawObj->getUnoShape(), uno::UNO_QUERY );
+                    uno::Reference<drawing::XShape> xShape( pDrawObj->getUnoShape() );
                     if (xShape.is())
                         xShapes->add(xShape);
                 }

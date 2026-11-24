@@ -563,7 +563,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testLostPlaceholders)
     CPPUNIT_ASSERT(pPage);
     auto pObj = pPage->GetObj(1);
     CPPUNIT_ASSERT(pObj);
-    uno::Reference<drawing::XShape> xShp(pObj->getUnoShape(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShp(pObj->getUnoShape());
     CPPUNIT_ASSERT(xShp);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -602,7 +602,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testPlaceholderFillAndOutlineExport)
         auto pObj = pPage->GetObj(1);
         CPPUNIT_ASSERT(pObj);
 
-        uno::Reference<drawing::XShape> xShp(pObj->getUnoShape(), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShp(pObj->getUnoShape());
         CPPUNIT_ASSERT(xShp);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong ShapeType!",

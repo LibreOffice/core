@@ -74,8 +74,7 @@ lclGetProperty(const uno::Reference<drawing::XShape>& rShape, const OUString& rP
 OUString lclGetAnchorIdFromGrabBag(const SdrObject* pObj)
 {
     OUString aResult;
-    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObj)->getUnoShape(),
-                                           uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObj)->getUnoShape());
     OUString aGrabBagName;
     uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY);
     if (xServiceInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr))
@@ -873,8 +872,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         bool bLclInTabCell = true;
         if (pObj)
         {
-            uno::Reference<drawing::XShape> xShape((const_cast<SdrObject*>(pObj)->getUnoShape()),
-                                                   uno::UNO_QUERY);
+            uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObj)->getUnoShape());
             uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
             if (xShapeProps.is())
                 xShapeProps->getPropertyValue(u"IsFollowingTextFlow"_ustr) >>= bLclInTabCell;
@@ -1729,8 +1727,7 @@ void DocxSdrExport::writeDMLEffectLst(const SwFrameFormat& rFrameFormat)
 
 void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat& rFrameFormat)
 {
-    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(sdrObject)->getUnoShape(),
-                                           uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(sdrObject)->getUnoShape());
 
     // write necessary tags to document.xml
     Size aSize(sdrObject->GetSnapRect().getOpenWidth(), sdrObject->GetSnapRect().getOpenHeight());
@@ -1830,7 +1827,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, bool bText
     uno::Reference<drawing::XShape> xShape;
     const SdrObject* pSdrObj = rFrameFormat.FindRealSdrObject();
     if (pSdrObj)
-        xShape.set(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY);
+        xShape = const_cast<SdrObject*>(pSdrObj)->getUnoShape();
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySetInfo> xPropSetInfo;
     if (xPropertySet.is())
@@ -2155,8 +2152,7 @@ void DocxSdrExport::writeVMLTextFrame(ww8::Frame const* pParentFrame, bool bText
         if (!sAnchorId.isEmpty())
             m_pImpl->getFlyAttrList()->addNS(XML_w14, XML_anchorId, sAnchorId);
 
-        uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObject)->getUnoShape(),
-                                               uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObject)->getUnoShape());
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         OUString sHyperlink;
         if (xShapeProps.is())

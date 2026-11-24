@@ -719,14 +719,14 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testVerticalBoxList)
 
     uno::Reference<drawing::XShapes> xFirstChild(xShapeGroup->getShapeByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xFirstChild.is());
-    uno::Reference<drawing::XShape> xParentText(xFirstChild->getShapeByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xParentText(xFirstChild->getShapeByIndex(1));
     CPPUNIT_ASSERT(xParentText.is());
     // Without the accompanying fix in place, this test would have failed with
     // 'actual: 7361', i.e. the width was not the 70% of the parent as the
     // constraint wanted.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11852), xParentText->getSize().Width);
 
-    uno::Reference<drawing::XShape> xChildText(xShapeGroup->getShapeByIndex(2), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xChildText(xShapeGroup->getShapeByIndex(2));
     CPPUNIT_ASSERT(xChildText.is());
     // Without the accompanying fix in place, this test would have failed with
     // 'actual: 7361' (and with the fix: 'actual: 16932', i.e. the width of the
@@ -1217,7 +1217,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testBackground)
 
     // background should fill whole diagram
     uno::Reference<drawing::XShape> xShapeGroup(xGroup, uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(xGroup->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xGroup->getShapeByIndex(0));
     CPPUNIT_ASSERT_EQUAL(xShape->getPosition().X, xShapeGroup->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(xShape->getPosition().Y, xShapeGroup->getPosition().Y);
     CPPUNIT_ASSERT_EQUAL(xShape->getSize().Width, xShapeGroup->getSize().Width);
@@ -1251,7 +1251,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testBackgroundDrawingmlFallback)
 
     // background should fill whole diagram
     uno::Reference<drawing::XShape> xShapeGroup(xGroup, uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(xGroup->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xGroup->getShapeByIndex(0));
     CPPUNIT_ASSERT_EQUAL(xShape->getPosition().X, xShapeGroup->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(xShape->getPosition().Y, xShapeGroup->getPosition().Y);
     CPPUNIT_ASSERT_EQUAL(xShape->getSize().Width, xShapeGroup->getSize().Width);
@@ -1284,10 +1284,10 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testCenterCycle)
     uno::Reference<drawing::XShapes> xGroupNested(xGroup->getShapeByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroupNested.is());
 
-    uno::Reference<drawing::XShape> xShapeCenter(xGroupNested->getShapeByIndex(0), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShapeA(xGroupNested->getShapeByIndex(1), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShapeB(xGroupNested->getShapeByIndex(2), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShapeC(xGroupNested->getShapeByIndex(3), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShapeCenter(xGroupNested->getShapeByIndex(0));
+    uno::Reference<drawing::XShape> xShapeA(xGroupNested->getShapeByIndex(1));
+    uno::Reference<drawing::XShape> xShapeB(xGroupNested->getShapeByIndex(2));
+    uno::Reference<drawing::XShape> xShapeC(xGroupNested->getShapeByIndex(3));
 
     uno::Reference<text::XText> xTextCenter(xShapeCenter, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xTextCenter.is());
@@ -1335,8 +1335,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testVerticalBlockList)
 
     uno::Reference<drawing::XShapes> xGroup1(xGroup->getShapeByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xGroup1->getCount());
-    uno::Reference<drawing::XShape> xShapeA(xGroup1->getShapeByIndex(1), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShapeBC(xGroup1->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShapeA(xGroup1->getShapeByIndex(1));
+    uno::Reference<drawing::XShape> xShapeBC(xGroup1->getShapeByIndex(0));
     uno::Reference<text::XText> xTextA(xShapeA, uno::UNO_QUERY);
     uno::Reference<text::XText> xTextBC(xShapeBC, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"a"_ustr, xTextA->getString());
@@ -1354,7 +1354,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testVerticalBlockList)
 
     uno::Reference<drawing::XShapes> xGroup3(xGroup->getShapeByIndex(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xGroup3->getCount());
-    uno::Reference<drawing::XShape> xShapeEmpty(xGroup3->getShapeByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShapeEmpty(xGroup3->getShapeByIndex(0));
     uno::Reference<text::XText> xTextEmpty(xShapeEmpty, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"empty"_ustr, xTextEmpty->getString());
 
@@ -1447,7 +1447,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRecursion)
     uno::Reference<text::XText> xTextB1(xGroupB1a->getShapeByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"B1"_ustr, xTextB1->getString());
 
-    uno::Reference<drawing::XShape> xGroupC12(xGroupB1->getShapeByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xGroupC12(xGroupB1->getShapeByIndex(1));
     uno::Reference<text::XText> xTextC1(
         getChildShape(getChildShape(getChildShape(xGroupC12, 1), 0), 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"C1"_ustr, xTextC1->getString());
@@ -1461,7 +1461,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRecursion)
     uno::Reference<text::XText> xTextB2(xGroupB2a->getShapeByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"B2"_ustr, xTextB2->getString());
 
-    uno::Reference<drawing::XShape> xGroupC3(xGroupB2->getShapeByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xGroupC3(xGroupB2->getShapeByIndex(1));
     uno::Reference<text::XText> xTextC3(
         getChildShape(getChildShape(getChildShape(xGroupC3, 1), 0), 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"C3"_ustr, xTextC3->getString());
@@ -1478,7 +1478,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testDataFollow)
     uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
 
     uno::Reference<drawing::XShapes> xGroupLeft(xGroup->getShapeByIndex(1), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xGroupB(xGroupLeft->getShapeByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xGroupB(xGroupLeft->getShapeByIndex(1));
     uno::Reference<drawing::XShape> xShapeB1
         = getChildShape(getChildShape(getChildShape(xGroupB, 1), 0), 0);
     uno::Reference<text::XText> xTextB1(xShapeB1, uno::UNO_QUERY);
@@ -1493,7 +1493,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testDataFollow)
                                 xShapeB2->getPosition().X);
 
     uno::Reference<drawing::XShapes> xGroupRight(xGroup->getShapeByIndex(2), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xGroupC(xGroupRight->getShapeByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xGroupC(xGroupRight->getShapeByIndex(1));
     uno::Reference<drawing::XShape> xShapeC1
         = getChildShape(getChildShape(getChildShape(xGroupC, 1), 0), 0);
     uno::Reference<text::XText> xTextC1(xShapeC1, uno::UNO_QUERY);
@@ -1780,7 +1780,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testSnakeRows)
     std::set<sal_Int32> aYPositions;
     for (sal_Int32 nChild = 1; nChild < xDiagram->getCount(); ++nChild)
     {
-        uno::Reference<drawing::XShape> xChild(xDiagram->getShapeByIndex(nChild), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xChild(xDiagram->getShapeByIndex(nChild));
         aYPositions.insert(xChild->getPosition().Y);
     }
 

@@ -3239,7 +3239,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformKeepsCanvasP
     CPPUNIT_ASSERT(!bNotesApplied);
     CPPUNIT_ASSERT(!bNameApplied);
     CPPUNIT_ASSERT_EQUAL(int(eCanvasLayout), int(pCanvasPage->GetAutoLayout()));
-    CPPUNIT_ASSERT_EQUAL(nCanvasObjects, size_t(pCanvasPage->GetObjCount()));
+    CPPUNIT_ASSERT_EQUAL(nCanvasObjects, pCanvasPage->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(pCanvasPreview, const_cast<const SdrObject*>(pCanvasPage->GetObj(0)));
     CPPUNIT_ASSERT_EQUAL(aCanvasName, pCanvasPage->GetName());
 

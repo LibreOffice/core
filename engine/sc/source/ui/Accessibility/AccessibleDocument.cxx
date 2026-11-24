@@ -379,7 +379,7 @@ void ScChildrenShapes::Notify(SfxBroadcaster&, const SfxHint& rHint)
     {
         case SdrHintKind::ObjectChange :         // object changed
         {
-            uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
+            uno::Reference<drawing::XShape> xShape (pObj->getUnoShape());
             if (xShape.is())
             {
                 mbShapesNeedSorting = true; // sort, because the z index or layer could be changed
@@ -391,14 +391,14 @@ void ScChildrenShapes::Notify(SfxBroadcaster&, const SfxHint& rHint)
         break;
         case SdrHintKind::ObjectInserted :    // new drawing object inserted
         {
-            uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
+            uno::Reference<drawing::XShape> xShape (pObj->getUnoShape());
             if (xShape.is())
                 AddShape(xShape, true);
         }
         break;
         case SdrHintKind::ObjectRemoved :     // Removed drawing object from list
         {
-            uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
+            uno::Reference<drawing::XShape> xShape (pObj->getUnoShape());
             if (xShape.is())
                 RemoveShape(xShape);
         }
@@ -492,7 +492,7 @@ sal_Int32 ScChildrenShapes::GetCount() const
         maZOrderedShapes.reserve(nSdrObjCount + 1); // the table is always in
         for (const rtl::Reference<SdrObject>& pObj : *pDrawPage)
         {
-            uno::Reference< drawing::XShape > xShape (pObj->getUnoShape(), uno::UNO_QUERY);
+            uno::Reference< drawing::XShape > xShape (pObj->getUnoShape());
             AddShape(xShape, false); //inserts in the correct order
         }
     }
@@ -1003,7 +1003,7 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
             if( pMarkList->GetMarkCount() == 1 )
             {
                 pMarkedObj = pMarkList->GetMark(0)->GetMarkedSdrObj();
-                uno::Reference< drawing::XShape > xMarkedXShape (pMarkedObj->getUnoShape(), uno::UNO_QUERY);
+                uno::Reference< drawing::XShape > xMarkedXShape (pMarkedObj->getUnoShape());
                 if( aFocusedItr != aDataEndItr &&
                     (*aFocusedItr)->xShape.is() &&
                     xMarkedXShape.is() &&
@@ -1021,12 +1021,12 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
     {
         if( pMarkedObj )
         {
-            uno::Reference< drawing::XShape > xMarkedXShape (pMarkedObj->getUnoShape(), uno::UNO_QUERY);
+            uno::Reference< drawing::XShape > xMarkedXShape (pMarkedObj->getUnoShape());
             SdrObject* pUpObj = pMarkedObj->getParentSdrObjectFromSdrObject();
 
             if( pMarkedObj == pFocusedObj && pUpObj )
             {
-                uno::Reference< drawing::XShape > xUpGroupXShape (pUpObj->getUnoShape(), uno::UNO_QUERY);
+                uno::Reference< drawing::XShape > xUpGroupXShape (pUpObj->getUnoShape());
                 ::accessibility::AccessibleShape* pAccGroupShape =
                     const_cast<ScChildrenShapes*>(this)->GetAccessibleCaption( xUpGroupXShape );
                 if( pAccGroupShape )
