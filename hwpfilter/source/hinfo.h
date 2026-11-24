@@ -282,7 +282,9 @@ struct ParaShape
     int       index;                              /* 스타일의 인덱스를 저장 */
     hunit     left_margin;
     hunit     right_margin;
-    hunit     indent;
+    // signed unit, so it must be taken into account when read
+    // in ParaShape::Read
+    shunit    indent;
     hunit     lspacing;
     hunit     pspacing_prev;
     hunit     pspacing_next;

@@ -35,6 +35,8 @@
  */
 typedef char16_t  hchar;
 typedef int     hunit;
+// same inner type than hunit but it's to indicate visually that it's a signed number
+typedef int     shunit;
 typedef unsigned char       kchar;
 
 typedef unsigned char   uchar;

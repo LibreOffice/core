@@ -223,6 +223,9 @@ void ParaShape::Read(HWPFile & hwpf)
     if (!hwpf.Read2b(tmp16))
         return;
     indent = tmp16;
+    // indent can be negative (it's a "shunit" not "hunit")
+    if (indent & 0x8000)
+        indent -= 0x10000;
     if (!hwpf.Read2b(tmp16))
         return;
     lspacing = tmp16;
