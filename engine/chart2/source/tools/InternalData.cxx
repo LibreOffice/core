@@ -307,8 +307,7 @@ bool InternalData::enlargeData( sal_Int32 nColumnCount, sal_Int32 nRowCount )
         tDataType aNewData( std::numeric_limits<double>::quiet_NaN(), nNewSize );
         // copy old data
         for( int nCol=0; nCol<m_nColumnCount; ++nCol )
-            static_cast< tDataType >(
-                aNewData[ std::slice( nCol, m_nRowCount, nNewColumnCount ) ] ) =
+            aNewData[ std::slice( nCol, m_nRowCount, nNewColumnCount ) ] =
                 m_aData[ std::slice( nCol, m_nRowCount, m_nColumnCount ) ];
 
         m_aData = std::move(aNewData);

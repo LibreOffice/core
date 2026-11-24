@@ -657,6 +657,30 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDOCXChartValuesSize)
             CPPUNIT_ASSERT_DOUBLES_EQUAL( aExpected[nRowIdx][nColIdx], aData[nRowIdx][nColIdx], 1e-1 );
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDOCXChartSeriesOfDifferentLengths)
+{
+    // The chart has 10 categories, a first series with 8 values and a second with 9.
+    // Every series must keep its values, and the categories without a value must be empty.
+    loadFromFile(u"docx/chart-series-different-lengths.docx");
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, 0);
+    std::vector<std::vector<double>> aValues = getDataSeriesYValuesFromChartType(xChartType);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aValues.size());
+    for (const std::vector<double>& rSeries : aValues)
+        CPPUNIT_ASSERT_EQUAL(size_t(10), rSeries.size());
+
+    for (size_t nPoint = 0; nPoint < 8; ++nPoint)
+        CPPUNIT_ASSERT_EQUAL(double(nPoint + 1), aValues[0][nPoint]);
+    CPPUNIT_ASSERT(std::isnan(aValues[0][8]));
+    CPPUNIT_ASSERT(std::isnan(aValues[0][9]));
+
+    for (size_t nPoint = 0; nPoint < 9; ++nPoint)
+        CPPUNIT_ASSERT_EQUAL(double((nPoint + 1) * 10), aValues[1][nPoint]);
+    CPPUNIT_ASSERT(std::isnan(aValues[1][9]));
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTChartSeries)
 {
     //test chart series names for ppt
