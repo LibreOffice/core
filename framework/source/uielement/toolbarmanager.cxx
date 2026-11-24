@@ -858,11 +858,8 @@ void SAL_CALL ToolBarManager::dispose()
         }
         m_xModuleImageManager.clear();
 
-        if ( m_aOverflowManager.is() )
-        {
-            m_aOverflowManager->dispose();
-            m_aOverflowManager.clear();
-        }
+        if (auto xOverflowManager = std::exchange(m_aOverflowManager, {}))
+            xOverflowManager->dispose();
 
         // We have to destroy our toolbar instance now.
         Destroy();
@@ -2064,11 +2061,8 @@ IMPL_LINK( ToolBarManager, OverflowEventListener, VclWindowEvent&, rWindowEvent,
     if ( rWindowEvent.GetId() != VclEventId::WindowEndPopupMode )
         return;
 
-    if ( m_aOverflowManager.is() )
-    {
-        m_aOverflowManager->dispose();
-        m_aOverflowManager.clear();
-    }
+    if (auto xOverflowManager = std::exchange(m_aOverflowManager, {}))
+        xOverflowManager->dispose();
 }
 
 IMPL_LINK( ToolBarManager, MenuPreExecute, ToolBox*, pToolBar, void )
