@@ -1532,7 +1532,7 @@ QVariant Bridge::cool(const QString& messageStr)
                                      coda::hostDisplayUriForPath(filePath));
 
                              openInPlaceOfStarter(_owner,
-                                                  [&]()
+                                                  [&, filePaths]()
                                                   {
                                                       coda::openFiles(filePaths, displayUris);
                                                       return true;
