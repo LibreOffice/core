@@ -143,8 +143,10 @@ class URLPopUpSection extends HTMLObjectSection {
 	public static openLink(url: string) {
 		if (!url.startsWith('#'))
 			app.map.fire('warn', {url: url, map: app.map, cmd: 'openlink'});
-		else
+		else {
+			app.map._docLayer.followNextCursorJump();
 			app.map.sendUnoCommand('.uno:JumpToMark?Bookmark:string=' + encodeURIComponent(url.substring(1)));
+		}
 	}
 
 	// in a spreadsheet the link commands take the tap position inside the cell

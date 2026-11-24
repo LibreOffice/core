@@ -64,6 +64,8 @@ interface DocLayerInterface {
 		modifier: number,
 	): void;
 	postKeyboardEvent(typ: string, charCode: number, unoKeyCode: number): void;
+	// Marks the next caret update of this view as the result of following a link.
+	followNextCursorJump(): void;
 
 	filterSlurpedMessage(e: SlurpMessageEvent): boolean;
 	_documentInfo?: string;

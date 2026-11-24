@@ -978,6 +978,15 @@ class MouseControl extends CanvasSectionObject {
 	}
 
 	private sendClick(clickInfo: any, count: number) {
+		// Ctrl+click follows the link under the mouse, if there is one.
+		const followsLink = app.UNOModifier.CTRL | app.UNOModifier.CTRLMAC;
+		if (
+			clickInfo.buttons === app.LOButtons.left &&
+			count === 1 &&
+			clickInfo.modifier & followsLink
+		)
+			app.map._docLayer.followNextCursorJump();
+
 		this.postCoreMouseEvent(
 			'buttondown',
 			clickInfo.sendingPosition,

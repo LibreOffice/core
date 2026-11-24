@@ -253,6 +253,8 @@ class ContextMenuControl extends JSControl {
 				app.map._clip === undefined ||
 				!app.map._clip.filterExecCopyPaste(uno)
 			) {
+				if (uno === '.uno:OpenHyperlinkOnCursor')
+					app.map._docLayer.followNextCursorJump();
 				app.map.sendUnoCommand(uno);
 				// For spelling context menu we need to remove selection
 				if (this._spellingContextMenu) app.map._docLayer._clearSelections();

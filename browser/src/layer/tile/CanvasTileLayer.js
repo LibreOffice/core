@@ -2011,6 +2011,17 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		textMsg = textMsg.substring('invalidatecursor:'.length + 1);
 		var obj = JSON.parse(textMsg);
 
+		const editorViewId = obj.editorViewId !== undefined ? parseInt(obj.editorViewId) : null;
+		var modifierViewId = editorViewId !== null && editorViewId !== -1 ? editorViewId : parseInt(obj.viewId);
+		var weAreModifier = (modifierViewId === this._viewId);
+
+		// A followed link lands where the caret may already be, so its update moves nothing, but
+		// the view still has to go to the target. The first caret update of this view after the
+		// link uses up the mark, and a mark that no update took within two seconds lapses.
+		const followJump = weAreModifier && this._followCursorJumpUntil > performance.now();
+		if (weAreModifier)
+			this._followCursorJumpUntil = 0;
+
 		// While a selection is dragged over the document, the cursor marks where it would land,
 		// and the caret of the view stays where it is, so this update is none of its own. A drop
 		// position without a rectangle means that the selection would land nowhere there.
@@ -2047,10 +2058,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			this.persistCursorPositionInWriter = false;
 			return;
 		}
-
-		const editorViewId = obj.editorViewId !== undefined ? parseInt(obj.editorViewId) : null;
-		var modifierViewId = editorViewId !== null && editorViewId !== -1 ? editorViewId : parseInt(obj.viewId);
-		var weAreModifier = (modifierViewId === this._viewId);
 
 		this._cursorAtMispelledWord = obj.mispelledWord ? Boolean(parseInt(obj.mispelledWord)).valueOf() : false;
 
@@ -2124,7 +2131,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// Removing a comment puts the caret where the comment was. The view stays with the comments
 		// and does not scroll to the caret.
 		const commentList = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
-		const followCaret = updateCursor && weAreModifier &&
+		const followCaret = (updateCursor || followJump) && weAreModifier &&
 			!this._mousePressedDuringCellEdit &&
 			!(commentList && commentList.cursorMovedByRemove);
 
@@ -3515,6 +3522,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		} else {
 			this._cursorMarker.setRectangle(app.file.textCursor.rectangle.clone());
 		}
+	},
+
+	// The next caret update of this view, within two seconds, comes from a followed link, and the
+	// view scrolls to the caret even when the caret is already at the target.
+	followNextCursorJump: function() {
+		this._followCursorJumpUntil = performance.now() + 2000;
 	},
 
 	goToTarget: function(target) {
