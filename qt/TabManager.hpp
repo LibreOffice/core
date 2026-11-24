@@ -71,7 +71,9 @@ public:
 
     // Runs the document's save-if-dirty round-trip first (see Bridge::
     // saveAndClose); the tab goes away once the page-JS confirms with
-    // CLOSE_WINDOW. Emits requestWindowClose if this was the last tab.
+    // CLOSE_WINDOW. A start page takes the place of the last document of the window. Emits
+    // requestWindowClose if this was the last tab and a start page, or the end of a close of
+    // every tab.
     void closeTab(int tabId);
 
     // Close every tab in order (each with its save round-trip), then emit

@@ -674,6 +674,19 @@ void TabManager::closeTab(int tabId)
     // local-only docs) before the WebView is destroyed, so it can reach the
     // bridge's _document while it is still alive.
     wv->sendCollabBye();
+
+    // The last document of a window gives its place to a start page, and the window stays. The
+    // document leaves the strip in the same change that brings the start page there. A window
+    // whose tabs all close at once goes away, and so does a window whose last tab is the start
+    // page.
+    if (_tabs.size() == 1 && !_closingAll && !wv->isStarterScreen())
+    {
+        setTabLeavingStrip(wv, true);
+        addStarterTab();
+        detachAt(findTab(tabId));
+        return;
+    }
+
     detachAt(it);
     if (_tabs.empty())
         emit requestWindowClose();

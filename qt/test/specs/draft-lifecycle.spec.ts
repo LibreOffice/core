@@ -72,6 +72,26 @@ async function onStripTab(
 	);
 }
 
+/**
+ * Close the window that shows a Start page in place of its last document.
+ * CODA-Q keeps such a window open. Where no tab strip shows a Start page,
+ * nothing happens.
+ */
+async function closeStartPageWindow(): Promise<void> {
+	try {
+		await switchToStripWith('Start');
+	} catch {
+		return;
+	}
+	const handlesBefore = (await browser.webEngine.getWindowHandles()).length;
+	await onStripTab('Start', 'close');
+	await browser.webEngine.waitUntil(
+		async () =>
+			(await browser.webEngine.getWindowHandles()).length < handlesBefore,
+		{ timeout: 15000, timeoutMsg: 'the Start page window did not close' },
+	);
+}
+
 describe('Draft lifecycle', () => {
 	// A regular (non-draft) document that keeps the window alive while
 	// draft tabs come and go, and makes the tab strip visible.
@@ -364,6 +384,9 @@ describe('Draft lifecycle', () => {
 		await draft.requestClose(browser.webEngine);
 		await draft.answerClosePrompt(browser.webEngine, 'discard');
 		await draft.waitGone(browser.webEngine, handle);
+		// The window of the draft keeps a Start page. The later tests expect
+		// the windows that were there before this test.
+		await closeStartPageWindow();
 		await browser.webEngine.switchToWindow(anchorHandle);
 	});
 
