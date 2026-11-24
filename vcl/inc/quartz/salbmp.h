@@ -69,8 +69,6 @@ public:
     BitmapBuffer   *AcquireBuffer( BitmapAccessMode nMode ) override;
     void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) override;
 
-    bool            GetSystemData( BitmapSystemData& rData ) override;
-
 private:
     // quartz helper
     bool            CreateContext();
