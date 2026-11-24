@@ -1079,6 +1079,7 @@ window.L.Map.WOPI = window.L.Handler.extend({
 		this._map.uiManager.showInputModal('save-as-modal', '', _('Enter a file name'), defaultValue, _('OK'), () => {
 			let value = document.getElementById('save-as-modal').querySelectorAll('#input-modal-input')[0].value;
 			if (!value) {
+				this._map._saveImageToWopi = false;
 				return;
 			} else if (saveAsFormat && (value.substring(value.lastIndexOf('.') + 1) !== saveAsFormat)) {
 				value += '.' + saveAsFormat;

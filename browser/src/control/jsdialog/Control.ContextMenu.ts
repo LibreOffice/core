@@ -220,8 +220,7 @@ class ContextMenuControl extends JSControl {
 
 			if (key === 'saveimagetowopi') {
 				const ext = GraphicSelection.graphicExtension() ?? 'png';
-				map._saveImageToWopi = true;
-				map.openSaveAs(ext);
+				map.openSaveAs(ext, true);
 				return false;
 			}
 

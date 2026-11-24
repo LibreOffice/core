@@ -246,7 +246,7 @@ interface MapInterface extends Evented {
 	openRevisionHistory(): void;
 	openShare(): void;
 	showHelp(id: string): void;
-	openSaveAs(format?: string): void;
+	openSaveAs(format?: string, saveImageToWopi?: boolean): void;
 	downloadAs(
 		name: string,
 		format?: string,

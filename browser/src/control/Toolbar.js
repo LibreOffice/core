@@ -957,8 +957,9 @@ window.L.Map.include({
 		}
 		map.fire('postMessage', {msgId: 'UI_Share'});
 	},
-	openSaveAs: function (format) {
+	openSaveAs: function (format, saveImageToWopi = false) {
 		let map = this;
+		map._saveImageToWopi = saveImageToWopi;
 		let wopi = map.wopi;
 		if (wopi.WopiHostIsSharePoint) {
 			// request filename. SharePoint doesn't support `UI_SaveAs`
