@@ -485,6 +485,8 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
     }
 
     BitmapScopedWriteAccess& pWriteAccess = pAccess ? *pAccess : pWriteAccessInstance;
+    // A broken file keeps the rows decoded before the error, and the rest stays this color
+    pWriteAccess->Erase(colorType == PNG_COLOR_TYPE_RGB_ALPHA ? COL_TRANSPARENT : COL_BLACK);
 
     if (setjmp(png_jmpbuf(pPng)))
     {

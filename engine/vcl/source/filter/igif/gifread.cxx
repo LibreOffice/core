@@ -224,13 +224,11 @@ void GIFReader::CreateBitmaps(tools::Long nWidth, tools::Long nHeight, BitmapPal
 
         aBmp1 = Bitmap(aSize, vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
 
-        if (!aAnimation.Count())
-            aBmp1.Erase(aBlack);
-
         pAcc1 = aBmp1;
 
         if (pAcc1)
         {
+            pAcc1->Erase(aBlack);
             // We have to make an AlphaMask from it, that needs to be inverted from transparency.
             // It is faster to invert it here.
             // So Non-Transparent color should be 0xff , and Transparent should be 0.

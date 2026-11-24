@@ -321,6 +321,7 @@ ReadState XBMReader::ReadXBM(Bitmap& rBitmap)
 
                         if (mpWriteAccess)
                         {
+                            mpWriteAccess->Erase(COL_WHITE);
                             maWhite = mpWriteAccess->GetBestMatchingColor(COL_WHITE);
                             maBlack = mpWriteAccess->GetBestMatchingColor(COL_BLACK);
                             ParseData(&mrStream, aLine, eFormat);

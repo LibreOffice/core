@@ -184,11 +184,14 @@ ReadState XPMReader::ReadXPM(Bitmap& rBitmap)
                 {
                     maMaskBitmap = Bitmap(Size(mnWidth, mnHeight), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
                     mpMaskWriterAccess = maMaskBitmap;
-                    if (!mpMaskWriterAccess)
+                    if (mpMaskWriterAccess)
+                        mpMaskWriterAccess->Erase(COL_WHITE);
+                    else
                         mbStatus = false;
                 }
                 if (mpWriterAccess && mbStatus)
                 {
+                    mpWriterAccess->Erase(COL_BLACK);
                     if (mnColors <= 256)  // palette is only needed by using less than 257
                     {                     // colors
                         sal_uInt8 i = 0;

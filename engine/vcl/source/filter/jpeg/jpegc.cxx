@@ -256,6 +256,8 @@ static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputS
 
         if (pAccess)
         {
+            // A broken file keeps the rows decoded before the error, and the rest stays black
+            pAccess->Erase(COL_BLACK);
             int nPixelSize = 3;
             J_COLOR_SPACE best_out_color_space = JCS_RGB;
             ScanlineFormat eScanlineFormat = ScanlineFormat::N24BitTcRgb;
