@@ -2848,7 +2848,7 @@ void ExceptionType::dumpHppFile(
     // default constructor
     out << "\ninline " << id_ << "::" << id_ << "(\n";
     out << "#if defined LIBO_USE_SOURCE_LOCATION\n";
-    out << "    o3tl::source_location location\n";
+    out << "    o3tl::source_location sourceLocation\n";
     out << "#endif\n";
     out << ")\n";
     inc();
@@ -2858,7 +2858,7 @@ void ExceptionType::dumpHppFile(
         out << indent() << ": " << codemaker::cpp::scopedCppName(u2b(base))
             << "(\n";
         out << "#if defined LIBO_USE_SOURCE_LOCATION\n";
-        out << "    location\n";
+        out << "    sourceLocation\n";
         out << "#endif\n";
         out << ")\n";
         bFirst = false;
@@ -2885,7 +2885,7 @@ void ExceptionType::dumpHppFile(
         out << "\n#if defined LIBO_USE_SOURCE_LOCATION\n";
         out << "    if (!Message.isEmpty())\n";
         out << "        Message += \" \";\n";
-        out << "    Message += \"at \" + o3tl::runtimeToOUString(location.file_name()) + \":\" + OUString::number(location.line());\n";
+        out << "    Message += \"at \" + o3tl::runtimeToOUString(sourceLocation.file_name()) + \":\" + OUString::number(sourceLocation.line());\n";
         out << "#endif\n";
     }
     out << "}\n\n";
@@ -2903,7 +2903,7 @@ void ExceptionType::dumpHppFile(
             bFirst = false;
         }
         out << "\n#if defined LIBO_USE_SOURCE_LOCATION\n";
-        out << "    " << (bFirst ? "" : ", ") << "o3tl::source_location location\n";
+        out << "    " << (bFirst ? "" : ", ") << "o3tl::source_location sourceLocation\n";
         out << "#endif\n";
         out << ")\n";
         inc();
@@ -2913,7 +2913,7 @@ void ExceptionType::dumpHppFile(
                 << "(";
             dumpBaseMembers(out, base, false, false);
             out << "\n#if defined LIBO_USE_SOURCE_LOCATION\n";
-            out << "    , location\n";
+            out << "    , sourceLocation\n";
             out << "#endif\n";
             out << ")\n";
             bFirst = false;
@@ -2938,7 +2938,7 @@ void ExceptionType::dumpHppFile(
             out << "\n#if defined LIBO_USE_SOURCE_LOCATION\n";
             out << "    if (!Message.isEmpty())\n";
             out << "        Message += \" \";\n";
-            out << "    Message += \"at \" + o3tl::runtimeToOUString(location.file_name()) + \":\" + OUString::number(location.line());\n";
+            out << "    Message += \"at \" + o3tl::runtimeToOUString(sourceLocation.file_name()) + \":\" + OUString::number(sourceLocation.line());\n";
             out << "#endif\n";
         }
         out << "}\n\n";
@@ -3163,7 +3163,7 @@ void ExceptionType::dumpDeclaration(FileStream & out)
     // default constructor
     out << indent() << "inline CPPU_GCC_DLLPRIVATE " << id_ << "(\n";
     out << "#if defined LIBO_USE_SOURCE_LOCATION\n";
-    out << "        o3tl::source_location location = o3tl::source_location::current()\n";
+    out << "        o3tl::source_location sourceLocation = o3tl::source_location::current()\n";
     out << "#endif\n";
     out << "    );\n\n";
 
@@ -3181,7 +3181,7 @@ void ExceptionType::dumpDeclaration(FileStream & out)
             bFirst = false;
         }
         out << "\n#if defined LIBO_USE_SOURCE_LOCATION\n";
-        out << "        , o3tl::source_location location = o3tl::source_location::current()\n";
+        out << "        , o3tl::source_location sourceLocation = o3tl::source_location::current()\n";
         out << "#endif\n";
         out << "    );\n\n";
     }

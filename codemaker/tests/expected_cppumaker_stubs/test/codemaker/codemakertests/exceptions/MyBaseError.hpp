@@ -14,12 +14,12 @@ namespace test { namespace codemaker { namespace codemakertests { namespace exce
 
 inline MyBaseError::MyBaseError(
 #if defined LIBO_USE_SOURCE_LOCATION
-    o3tl::source_location location
+    o3tl::source_location sourceLocation
 #endif
 )
     : ::css::uno::Exception(
 #if defined LIBO_USE_SOURCE_LOCATION
-    location
+    sourceLocation
 #endif
 )
     , ErrorCode(0)
@@ -28,12 +28,12 @@ inline MyBaseError::MyBaseError(
 
 inline MyBaseError::MyBaseError(const ::rtl::OUString& Message_, const ::css::uno::Reference< ::css::uno::XInterface >& Context_, const ::sal_Int32& ErrorCode_, const ::rtl::OUString& Details_
 #if defined LIBO_USE_SOURCE_LOCATION
-    , o3tl::source_location location
+    , o3tl::source_location sourceLocation
 #endif
 )
     : ::css::uno::Exception(Message_, Context_
 #if defined LIBO_USE_SOURCE_LOCATION
-    , location
+    , sourceLocation
 #endif
 )
     , ErrorCode(ErrorCode_)
