@@ -185,16 +185,6 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, [[maybe_unused]] SalGraphic
     return true;
 }
 
-void SkiaSalBitmap::Destroy()
-{
-    SAL_INFO("vcl.skia.trace", "destroy(" << this << ")");
-#ifdef DBG_UTIL
-    assert(mWriteAccessCount == 0);
-#endif
-    assert(mReadAccessCount == 0);
-    ResetAllData();
-}
-
 Size SkiaSalBitmap::GetSize() const { return mSize; }
 
 ScanlineFormat SkiaSalBitmap::GetScanlineFormat() const

@@ -42,8 +42,6 @@ public:
     virtual bool Create(const SalBitmap& rSalBmp) override;
     virtual bool Create(const SalBitmap& rSalBmp, SalGraphics& rGraphics) override;
 
-    virtual void Destroy() final override;
-
     virtual Size GetSize() const override;
     virtual ScanlineFormat GetScanlineFormat() const override;
 

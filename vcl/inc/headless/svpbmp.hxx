@@ -50,12 +50,14 @@ public:
     {
         return moDIB ? &*moDIB : nullptr;
     }
-    SAL_DLLPRIVATE virtual void            Destroy() final override;
     SAL_DLLPRIVATE virtual Size            GetSize() const override;
     SAL_DLLPRIVATE virtual ScanlineFormat  GetScanlineFormat() const override;
 
     SAL_DLLPRIVATE virtual BitmapBuffer*   AcquireBuffer( BitmapAccessMode nMode ) override;
     SAL_DLLPRIVATE virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) override;
+
+private:
+    void Destroy();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

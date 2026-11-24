@@ -70,7 +70,6 @@ public:
                                     SalGraphics& rGraphics ) = 0;
     virtual bool Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& rBitmapCanvas,
                         Size& rSize);
-    virtual void            Destroy() = 0;
     virtual Size            GetSize() const = 0;
     sal_uInt16              GetBitCount() const;
     virtual ScanlineFormat  GetScanlineFormat() const = 0;

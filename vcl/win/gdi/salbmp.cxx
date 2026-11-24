@@ -54,11 +54,6 @@ WinSalBitmap::WinSalBitmap()
 
 WinSalBitmap::~WinSalBitmap()
 {
-    Destroy();
-}
-
-void WinSalBitmap::Destroy()
-{
     if( mpDIB )
         free( mpDIB );
     else if( mhDDB )

@@ -76,8 +76,6 @@ bool QtBitmap::Create(const SalBitmap& rSalBmp, SalGraphics& rSalGraphics)
     return true;
 }
 
-void QtBitmap::Destroy() { m_pImage.reset(); }
-
 Size QtBitmap::GetSize() const
 {
     if (m_pImage)

@@ -73,8 +73,6 @@ public:
     virtual bool                Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
                                            Size& rSize ) override;
 
-    virtual void                Destroy() override;
-
     virtual Size                GetSize() const override { return maSize; }
     virtual ScanlineFormat      GetScanlineFormat() const override;
 

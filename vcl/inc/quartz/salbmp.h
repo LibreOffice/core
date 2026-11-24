@@ -61,8 +61,6 @@ public:
     bool            Create( const SalBitmap& rSalBmp ) override;
     bool            Create( const SalBitmap& rSalBmp, SalGraphics& rGraphics ) override;
 
-    void            Destroy() override;
-
     Size            GetSize() const override;
     ScanlineFormat  GetScanlineFormat() const override;
 

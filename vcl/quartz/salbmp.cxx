@@ -117,11 +117,6 @@ bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics& rGraphics )
     return false;
 }
 
-void QuartzSalBitmap::Destroy()
-{
-    doDestroy();
-}
-
 void QuartzSalBitmap::doDestroy()
 {
     DestroyContext();
@@ -211,7 +206,7 @@ bool QuartzSalBitmap::CreateContext()
 
 bool QuartzSalBitmap::AllocateUserData()
 {
-    Destroy();
+    doDestroy();
 
     if( mnWidth && mnHeight )
     {
