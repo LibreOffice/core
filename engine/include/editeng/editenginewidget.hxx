@@ -89,7 +89,8 @@ protected:
     /// it, or -1 when no other view does. Written as "lockedBy" when it is a view.
     virtual sal_Int32 GetLockingViewId() { return -1; }
 
-    /// Whether the text stands for empty text. Written as "placeholder".
+    /// Whether the text stands for empty text. Written as "placeholder", and then no spelling
+    /// errors are written.
     virtual bool IsShowingPlaceholder() { return false; }
 
     /// The keystroke the edit engine gets for a keystroke from the client. The default is the

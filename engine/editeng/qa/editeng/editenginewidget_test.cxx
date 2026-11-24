@@ -15,6 +15,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/misspellrange.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <sfx2/app.hxx>
 #include <tools/gen.hxx>
@@ -164,6 +165,17 @@ protected:
     bool IsShowingPlaceholder() override { return true; }
 };
 
+/// The model rController writes for the client.
+boost::property_tree::ptree dumpWidget(EditEngineWidgetController& rController)
+{
+    tools::JsonWriter aWriter;
+    rController.DumpWidgetData(aWriter);
+    std::stringstream aStream(std::string(aWriter.finishAndGetAsOString()));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    return aTree;
+}
+
 CPPUNIT_TEST_FIXTURE(EditEngineWidgetTest, testPlaceholderIsMarked)
 {
     // Given one widget that shows ordinary text and one that shows a placeholder.
@@ -175,30 +187,69 @@ CPPUNIT_TEST_FIXTURE(EditEngineWidgetTest, testPlaceholderIsMarked)
     EditView aEditView(aEditEngine, xWin.get());
     aEditEngine.InsertView(&aEditView);
 
-    const auto aDump = [](EditEngineWidgetController& rController) {
-        tools::JsonWriter aWriter;
-        rController.DumpWidgetData(aWriter);
-        std::stringstream aStream(std::string(aWriter.finishAndGetAsOString()));
-        boost::property_tree::ptree aTree;
-        boost::property_tree::read_json(aStream, aTree);
-        return aTree;
-    };
-
     // When each widget writes its model for the client.
     boost::property_tree::ptree aText;
     {
         EditEngineWidgetController aController(aEditView);
-        aText = aDump(aController);
+        aText = dumpWidget(aController);
     }
     boost::property_tree::ptree aPlaceholder;
     {
         PlaceholderWidgetController aController(aEditView);
-        aPlaceholder = aDump(aController);
+        aPlaceholder = dumpWidget(aController);
     }
 
     // Then only the placeholder is marked. Without the accompanying fix in place, neither was.
     CPPUNIT_ASSERT(!aText.get_optional<bool>("placeholder").has_value());
     CPPUNIT_ASSERT(aPlaceholder.get<bool>("placeholder", false));
+
+    aEditEngine.RemoveView(&aEditView);
+}
+
+/// Whether any run of any paragraph in rTree is marked as a spelling error.
+bool hasSpellError(const boost::property_tree::ptree& rTree)
+{
+    for (const auto& rParagraph : rTree.get_child("paragraphs"))
+    {
+        for (const auto& rRun : rParagraph.second.get_child("runs"))
+        {
+            if (rRun.second.get<bool>("spellError", false))
+                return true;
+        }
+    }
+    return false;
+}
+
+CPPUNIT_TEST_FIXTURE(EditEngineWidgetTest, testPlaceholderHasNoSpellErrors)
+{
+    // Given a text with a misspelled word, shown once as text and once as a placeholder.
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetPaperSize(Size(5000, 5000));
+    aEditEngine.SetText(u"Notizen durch Klicken hinzufuegen"_ustr);
+    std::vector<editeng::MisspellRanges> aRanges;
+    aRanges.emplace_back(0, std::vector<editeng::MisspellRange>{ editeng::MisspellRange(0, 7) });
+    aEditEngine.SetAllMisspellRanges(aRanges);
+
+    ScopedVclPtrInstance<WorkWindow> xWin(nullptr, WB_APP | WB_STDWORK);
+    EditView aEditView(aEditEngine, xWin.get());
+    aEditEngine.InsertView(&aEditView);
+
+    // When each widget writes its model for the client.
+    boost::property_tree::ptree aText;
+    {
+        EditEngineWidgetController aController(aEditView);
+        aText = dumpWidget(aController);
+    }
+    boost::property_tree::ptree aPlaceholder;
+    {
+        PlaceholderWidgetController aController(aEditView);
+        aPlaceholder = dumpWidget(aController);
+    }
+
+    // Then only the text has the spelling error. Without the accompanying fix in place, the
+    // placeholder had it too.
+    CPPUNIT_ASSERT(hasSpellError(aText));
+    CPPUNIT_ASSERT(!hasSpellError(aPlaceholder));
 
     aEditEngine.RemoveView(&aEditView);
 }

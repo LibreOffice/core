@@ -229,8 +229,11 @@ void EditEngineWidgetController::DumpRuns(tools::JsonWriter& rWriter, sal_Int32 
     std::vector<EECharAttrib> aAttribs;
     m_rEditEngine.GetCharAttribs(nPara, aAttribs);
 
+    // A placeholder stands for empty text, so it has no spelling to check. Its text is in the UI
+    // language, which can differ from the language of the document.
     std::vector<editeng::MisspellRanges> aMisspellRanges;
-    m_rEditEngine.GetAllMisspellRanges(aMisspellRanges);
+    if (!IsShowingPlaceholder())
+        m_rEditEngine.GetAllMisspellRanges(aMisspellRanges);
     const std::vector<editeng::MisspellRange>* pMisspells = nullptr;
     for (const editeng::MisspellRanges& rRanges : aMisspellRanges)
     {

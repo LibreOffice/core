@@ -10,13 +10,14 @@
 #ifndef INCLUDED_EDITENG_MISSPELLRANGE_HXX
 #define INCLUDED_EDITENG_MISSPELLRANGE_HXX
 
+#include <editeng/editengdllapi.h>
 #include <sal/types.h>
 
 #include <vector>
 
 namespace editeng
 {
-struct MisspellRange
+struct EDITENG_DLLPUBLIC MisspellRange
 {
     size_t mnStart;
     size_t mnEnd;
@@ -24,7 +25,7 @@ struct MisspellRange
     MisspellRange(size_t nStart, size_t nEnd);
 };
 
-struct MisspellRanges
+struct EDITENG_DLLPUBLIC MisspellRanges
 {
     sal_Int32 mnParagraph;
     std::vector<MisspellRange> maRanges;
