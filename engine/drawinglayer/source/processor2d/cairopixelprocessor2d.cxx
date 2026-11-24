@@ -728,8 +728,8 @@ sal_Int64 SystemDependentData_CairoSurface::estimateUsageInBytes() const
         const tools::Long nStride(cairo_image_surface_get_stride(pSurface.get()));
         const tools::Long nHeight(cairo_image_surface_get_height(pSurface.get()));
 
-        // w * h * 4 bytesPerPixel
-        nRetval = nStride * nHeight * 4;
+        // the stride already counts the bytes of each pixel
+        nRetval = nStride * nHeight;
 
         // if we do downscale, size will grow by 1/4 + 1/16 + 1/32 + ...,
         // rough estimation just multiplies by 1.25 .. 1.33, should be good enough
