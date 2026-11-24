@@ -540,7 +540,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 						{
 							'id': 'online-help',
 							'type': 'bigtoolitem',
-							'text': _('Online Help'),
+							'text': _('User Manual'),
 							'command': '.uno:OnlineHelp',
 							'accessibility': { focusBack: false, combination: 'H', de: null }
 						}
