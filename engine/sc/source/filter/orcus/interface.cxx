@@ -775,158 +775,6 @@ void ScOrcusSheetProperties::set_merge_cell_range(const orcus::spreadsheet::rang
                          range.last.row);
 }
 
-ScOrcusConditionalFormat::ScOrcusConditionalFormat(SCTAB nTab, ScDocument& rDoc)
-    : mnTab(nTab)
-    , mrDoc(rDoc)
-    , mpCurrentFormat(new ScConditionalFormat(0, mrDoc))
-    , meEntryType(ScFormatEntry::Type::Condition)
-{
-}
-
-ScOrcusConditionalFormat::~ScOrcusConditionalFormat() {}
-
-void ScOrcusConditionalFormat::set_color(os::color_elem_t /*alpha*/, os::color_elem_t /*red*/,
-                                         os::color_elem_t /*green*/, os::color_elem_t /*blue*/)
-{
-    SAL_INFO("sc.orcus.condformat", "set_color");
-}
-
-void ScOrcusConditionalFormat::set_condition_type(os::condition_type_t /*type*/)
-{
-    assert(meEntryType == ScFormatEntry::Type::Condition);
-    SAL_INFO("sc.orcus.condformat", "set_condition_type");
-}
-
-void ScOrcusConditionalFormat::set_formula(std::string_view /*formula*/)
-{
-    SAL_INFO("sc.orcus.condformat", "set_formula");
-}
-
-void ScOrcusConditionalFormat::set_date(os::condition_date_t /*date*/)
-{
-    assert(meEntryType == ScFormatEntry::Type::Date);
-    SAL_INFO("sc.orcus.condformat", "set_date");
-}
-
-void ScOrcusConditionalFormat::commit_condition()
-{
-    SAL_INFO("sc.orcus.condformat", "commit_condition");
-}
-
-void ScOrcusConditionalFormat::set_icon_name(std::string_view /*name*/)
-{
-    assert(meEntryType == ScFormatEntry::Type::Iconset);
-    SAL_INFO("sc.orcus.condformat", "set_icon_name");
-}
-
-void ScOrcusConditionalFormat::set_databar_gradient(bool /*gradient*/)
-{
-    assert(meEntryType == ScFormatEntry::Type::Databar);
-    SAL_INFO("sc.orcus.condformat", "set_databar_gradient");
-}
-
-void ScOrcusConditionalFormat::set_databar_axis(os::databar_axis_t /*axis*/)
-{
-    assert(meEntryType == ScFormatEntry::Type::Databar);
-    SAL_INFO("sc.orcus.condformat", "set_databar_axis");
-}
-
-void ScOrcusConditionalFormat::set_databar_color_positive(os::color_elem_t /*alpha*/,
-                                                          os::color_elem_t /*red*/,
-                                                          os::color_elem_t /*green*/,
-                                                          os::color_elem_t /*blue*/)
-{
-    assert(meEntryType == ScFormatEntry::Type::Databar);
-    SAL_INFO("sc.orcus.condformat", "set_databar_color_positive");
-}
-
-void ScOrcusConditionalFormat::set_databar_color_negative(os::color_elem_t /*alpha*/,
-                                                          os::color_elem_t /*red*/,
-                                                          os::color_elem_t /*green*/,
-                                                          os::color_elem_t /*blue*/)
-{
-    assert(meEntryType == ScFormatEntry::Type::Databar);
-    SAL_INFO("sc.orcus.condformat", "set_databar_color_negative");
-}
-
-void ScOrcusConditionalFormat::set_min_databar_length(double /*length*/)
-{
-    assert(meEntryType == ScFormatEntry::Type::Databar);
-    SAL_INFO("sc.orcus.condformat", "set_min_databar_length");
-}
-
-void ScOrcusConditionalFormat::set_max_databar_length(double /*length*/)
-{
-    assert(meEntryType == ScFormatEntry::Type::Databar);
-    SAL_INFO("sc.orcus.condformat", "set_max_databar_length");
-}
-
-void ScOrcusConditionalFormat::set_show_value(bool /*show*/)
-{
-    SAL_INFO("sc.orcus.condformat", "set_show_value");
-}
-
-void ScOrcusConditionalFormat::set_iconset_reverse(bool /*reverse*/)
-{
-    assert(meEntryType == ScFormatEntry::Type::Iconset);
-    SAL_INFO("sc.orcus.condformat", "set_iconset_reverse");
-}
-
-void ScOrcusConditionalFormat::set_xf_id(size_t /*xf*/)
-{
-    SAL_INFO("sc.orcus.condformat", "set_xf_id");
-}
-
-void ScOrcusConditionalFormat::set_operator(os::condition_operator_t /*condition_type*/)
-{
-    SAL_INFO("sc.orcus.condformat", "set_operator");
-}
-
-void ScOrcusConditionalFormat::set_type(os::conditional_format_t type)
-{
-    switch (type)
-    {
-        case os::conditional_format_t::condition:
-        case os::conditional_format_t::formula:
-            meEntryType = ScFormatEntry::Type::Condition;
-            // mpCurrentEntry.reset(new ScCondFormatEntry());
-            break;
-        case os::conditional_format_t::date:
-            break;
-        case os::conditional_format_t::colorscale:
-            break;
-        case os::conditional_format_t::databar:
-            break;
-        case os::conditional_format_t::iconset:
-            break;
-        default:
-            SAL_INFO("sc.orcus.condformat", "unknown conditional_format_t value");
-            break;
-    }
-    SAL_INFO("sc.orcus.condformat", "set_type");
-}
-
-void ScOrcusConditionalFormat::commit_entry() { SAL_INFO("sc.orcus.condformat", "commit_entry"); }
-
-void ScOrcusConditionalFormat::set_range(std::string_view /*range*/)
-{
-    SAL_INFO("sc.orcus.condformat", "set_range");
-}
-
-void ScOrcusConditionalFormat::set_range(os::row_t row_start, os::col_t col_start,
-                                         os::row_t row_end, os::col_t col_end)
-{
-    SAL_INFO("sc.orcus.condformat", "set_range");
-    ScRange aRange(col_start, row_start, mnTab, col_end, row_end, mnTab);
-    mpCurrentFormat->SetRange(aRange);
-}
-
-void ScOrcusConditionalFormat::commit_format()
-{
-    SAL_INFO("sc.orcus.condformat", "commit_format");
-    mpCurrentFormat.reset(new ScConditionalFormat(0, mrDoc));
-}
-
 ScOrcusSheet::ScOrcusSheet(ScDocumentImport& rDoc, const ScOrcusGlobalSettings& rGS, SCTAB nTab,
                            ScOrcusFactory& rFactory)
     : mrDoc(rDoc)
@@ -934,7 +782,6 @@ ScOrcusSheet::ScOrcusSheet(ScDocumentImport& rDoc, const ScOrcusGlobalSettings& 
     , mrFactory(rFactory)
     , mrStyles(static_cast<ScOrcusStyles&>(*mrFactory.get_styles()))
     , maProperties(mnTab, mrDoc)
-    , maConditionalFormat(mnTab, rDoc.getDoc())
     , maNamedExpressions(rDoc, rFactory.getGlobalSettings(), nTab)
     , maFormula(*this)
     , maArrayFormula(*this)
@@ -1142,11 +989,6 @@ void ScOrcusSheet::cellInserted()
 ScDocumentImport& ScOrcusSheet::getDoc() { return mrDoc; }
 
 os::iface::import_sheet_properties* ScOrcusSheet::get_sheet_properties() { return &maProperties; }
-
-os::iface::import_conditional_format* ScOrcusSheet::get_conditional_format()
-{
-    return &maConditionalFormat;
-}
 
 os::iface::import_named_expression* ScOrcusSheet::get_named_expression()
 {

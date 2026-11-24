@@ -40,7 +40,7 @@ BUILD_DEPENDS=	${LOCALBASE}/include/glm/glm.hpp:math/glm \
 		gpatch:devel/patch \
 		gperf>=3.1:devel/gperf \
 		libtool>0:devel/libtool \
-		mdds>=3.0:devel/mdds \
+		mdds>=4.0:devel/mdds \
 		nasm:devel/nasm \
 		node:www/node \
 		npm:www/npm \
@@ -89,7 +89,7 @@ LIB_DEPENDS=	libabsl_bad_optional_access.so:devel/abseil \
 		libodfgen-0.1.so:textproc/libodfgen01 \
 		libopenblas.so:math/openblas \
 		libopenjp2.so:graphics/openjpeg \
-		liborcus-0.21.so:devel/liborcus \
+		liborcus-0.22.so:devel/liborcus \
 		libOsi.so:math/osi \
 		libOsiClp.so:math/clp \
 		libpagemaker-0.0.so:print/libpagemaker \

@@ -58,6 +58,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/debug_utils \
 	UnpackedTarball/liborcus/src/liborcus/detection_result \
 	UnpackedTarball/liborcus/src/liborcus/dom_tree \
+	UnpackedTarball/liborcus/src/liborcus/dom_tree_dump \
+	UnpackedTarball/liborcus/src/liborcus/dom_tree_impl \
 	UnpackedTarball/liborcus/src/liborcus/format_detection \
 	UnpackedTarball/liborcus/src/liborcus/formula_result \
 	UnpackedTarball/liborcus/src/liborcus/gnumeric_cell_context \
@@ -90,6 +92,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/odf_style_context \
 	UnpackedTarball/liborcus/src/liborcus/odf_styles \
 	UnpackedTarball/liborcus/src/liborcus/odf_styles_context \
+	UnpackedTarball/liborcus/src/liborcus/odf_text_para \
 	UnpackedTarball/liborcus/src/liborcus/odf_tokens \
 	UnpackedTarball/liborcus/src/liborcus/ods_content_xml_context \
 	UnpackedTarball/liborcus/src/liborcus/ods_database_ranges_context \

@@ -1,0 +1,812 @@
+From b538b9c2ecc6d58520d2c9f34a1c170e3c20570c Mon Sep 17 00:00:00 2001
+From: Kohei Yoshida <kohei.yoshida@collabora.com>
+Date: Mon, 23 Nov 2026 20:41:06 -0500
+Subject: [PATCH] Make it buildable without the <format> header (#242)
+
+---
+ src/include/format.hpp                        | 44 +++++++++++++++++++
+ src/liborcus/dom_tree.cpp                     |  4 +-
+ src/liborcus/gnumeric_types.cpp               |  4 +-
+ src/liborcus/gnumeric_value_format_parser.cpp |  6 +--
+ src/liborcus/json_document_tree.cpp           |  4 +-
+ src/liborcus/json_map_tree.cpp                |  8 ++--
+ src/liborcus/json_path.cpp                    |  8 ++--
+ src/liborcus/measurement.cpp                  |  4 +-
+ src/liborcus/spreadsheet_types.cpp            |  6 +--
+ src/orcus_xml_main.cpp                        |  4 +-
+ src/parser/exception.cpp                      | 11 +++--
+ src/parser/json_global.cpp                    |  4 +-
+ src/parser/sax_parser_base.cpp                |  6 +--
+ src/parser/sax_token_parser_test.cpp          |  6 +--
+ src/parser/stream.cpp                         |  8 ++--
+ src/parser/types.cpp                          |  8 ++--
+ src/parser/utf8_test.cpp                      | 10 +++--
+ src/parser/xml_namespace.cpp                  |  8 ++--
+ src/parser/zip_archive.cpp                    | 10 ++---
+ src/parser/zip_archive_stream.cpp             |  8 ++--
+ src/spreadsheet/factory.cpp                   |  6 +--
+ src/version_test.cpp                          |  6 +--
+ 22 files changed, 114 insertions(+), 69 deletions(-)
+ create mode 100644 src/include/format.hpp
+
+diff --git a/src/include/format.hpp b/src/include/format.hpp
+new file mode 100644
+index 00000000..6c34b051
+--- /dev/null
++++ b/src/include/format.hpp
+@@ -0,0 +1,44 @@
++/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
++/*
++ * This Source Code Form is subject to the terms of the Mozilla Public
++ * License, v. 2.0. If a copy of the MPL was not distributed with this
++ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
++ */
++
++#pragma once
++
++#include <cstddef>
++#include <sstream>
++#include <string>
++#include <string_view>
++
++namespace orcus { namespace detail {
++
++/**
++ * Temporary replacement for std::format, until the <format> header is usable
++ * in all build environments.
++ */
++template<typename... Args>
++std::string format(std::string_view fmt, const Args&... args)
++{
++    std::ostringstream os;
++
++    auto write_next = [&os, &fmt](const auto& value)
++    {
++        std::size_t pos = fmt.find("{}");
++        if (pos == fmt.npos)
++            // no more placeholders
++            return;
++
++        os << fmt.substr(0, pos) << value;
++        fmt.remove_prefix(pos + 2);
++    };
++
++    (write_next(args), ...);
++    os << fmt;
++    return os.str();
++}
++
++}}
++
++/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+diff --git a/src/liborcus/dom_tree.cpp b/src/liborcus/dom_tree.cpp
+index ee9c96a5..a5ad6454 100644
+--- a/src/liborcus/dom_tree.cpp
++++ b/src/liborcus/dom_tree.cpp
+@@ -6,10 +6,10 @@
+  */
+ 
+ #include "dom_tree_impl.hpp"
++#include "format.hpp"
+ #include <orcus/exception.hpp>
+ 
+ #include <cassert>
+-#include <format>
+ #include <algorithm>
+ #include <stdexcept>
+ #include <variant>
+@@ -65,7 +65,7 @@ struct const_node::impl
+     detail::element& require_element(std::string_view op)
+     {
+         if (type != node_t::element)
+-            throw std::invalid_argument(std::format("{}: node is not an element", op));
++            throw std::invalid_argument(orcus::detail::format("{}: node is not an element", op));
+ 
+         return *std::get<detail::element*>(value);
+     }
+diff --git a/src/liborcus/gnumeric_types.cpp b/src/liborcus/gnumeric_types.cpp
+index f567977c..89210ddb 100644
+--- a/src/liborcus/gnumeric_types.cpp
++++ b/src/liborcus/gnumeric_types.cpp
+@@ -7,8 +7,8 @@
+ 
+ #include "gnumeric_types.hpp"
+ #include "number_utils.hpp"
++#include "format.hpp"
+ 
+-#include <format>
+ 
+ #include <orcus/spreadsheet/import_interface_underline.hpp>
+ 
+@@ -261,7 +261,7 @@ std::string push_underline(long v, ss::iface::import_underline* ul)
+         }
+         default:
+         {
+-            return std::format("unhandled underline enum value: {}", v);
++            return orcus::detail::format("unhandled underline enum value: {}", v);
+         }
+     }
+ 
+diff --git a/src/liborcus/gnumeric_value_format_parser.cpp b/src/liborcus/gnumeric_value_format_parser.cpp
+index 47f540b0..0565752c 100644
+--- a/src/liborcus/gnumeric_value_format_parser.cpp
++++ b/src/liborcus/gnumeric_value_format_parser.cpp
+@@ -7,13 +7,13 @@
+ 
+ #include "gnumeric_value_format_parser.hpp"
+ #include "debug_utils.hpp"
++#include "format.hpp"
+ 
+ #include <orcus/config.hpp>
+ #include <orcus/exception.hpp>
+ #include <orcus/measurement.hpp>
+ 
+ #include <cassert>
+-#include <format>
+ #include <optional>
+ 
+ #include <boost/numeric/conversion/cast.hpp>
+@@ -62,7 +62,7 @@ void gnumeric_value_format_parser::segment()
+                 else
+                 {
+                     n = std::distance(p_start, m_cur);
+-                    warn(m_config, std::format("skipping invalid segment '{}'",
++                    warn(m_config, orcus::detail::format("skipping invalid segment '{}'",
+                         std::string_view{p_start, numeric_cast<std::size_t>(n)}));
+                 }
+ 
+@@ -75,7 +75,7 @@ void gnumeric_value_format_parser::segment()
+                 seg.type = to_gnumeric_value_format_type(s);
+                 if (seg.type == gnumeric_value_format_type::unknown)
+                 {
+-                    throw parse_error(std::format("invalid value format type '{}'", s), get_pos());
++                    throw parse_error(orcus::detail::format("invalid value format type '{}'", s), get_pos());
+                 }
+ 
+                 p0 = nullptr;
+diff --git a/src/liborcus/json_document_tree.cpp b/src/liborcus/json_document_tree.cpp
+index bf0e0a53..87ccc2c1 100644
+--- a/src/liborcus/json_document_tree.cpp
++++ b/src/liborcus/json_document_tree.cpp
+@@ -22,7 +22,7 @@
+ #include <limits>
+ #include <iostream>
+ #include <deque>
+-#include <format>
++#include <iomanip>
+ #include <filesystem>
+ #include <ranges>
+ 
+@@ -335,7 +335,7 @@ void dump_string_xml(std::ostringstream& os, std::string_view s)
+             {
+                 if (std::iscntrl(c))
+                 {
+-                    os << std::format("&#x{:04x};", short(c));
++                    os << "&#x" << std::setw(4) << std::setfill('0') << std::hex << short(c) << ';';
+                     break;
+                 }
+ 
+diff --git a/src/liborcus/json_map_tree.cpp b/src/liborcus/json_map_tree.cpp
+index 78a62579..343b0775 100644
+--- a/src/liborcus/json_map_tree.cpp
++++ b/src/liborcus/json_map_tree.cpp
+@@ -7,9 +7,9 @@
+ 
+ #include "json_map_tree.hpp"
+ #include "orcus/measurement.hpp"
++#include "format.hpp"
+ 
+ #include <iostream>
+-#include <format>
+ 
+ namespace orcus {
+ 
+@@ -19,7 +19,7 @@ namespace {
+ 
+ void throw_path_error(const char* file, int line, std::string_view path)
+ {
+-    throw json_map_tree::path_error(std::format("{}#{}: failed to link this path '{}'", file, line, path));
++    throw json_map_tree::path_error(orcus::detail::format("{}#{}: failed to link this path '{}'", file, line, path));
+ }
+ 
+ enum class json_path_token_t { unknown, array_pos, object_key, end };
+@@ -392,7 +392,7 @@ void json_map_tree::set_cell_link(std::string_view path, const cell_position_t&
+     node* p = stack.node_stack.back();
+     if (p->type != map_node_type::unknown)
+     {
+-        throw path_error(std::format("this path is not linkable: '{}'", path));
++        throw path_error(orcus::detail::format("this path is not linkable: '{}'", path));
+     }
+ 
+     p->type = map_node_type::cell_ref;
+@@ -463,7 +463,7 @@ void json_map_tree::commit_range()
+         {
+             // This field is probably associated with an array.
+             p->value.range_field_ref->label =
+-                m_str_pool.intern(std::format("field {}", unlabeled_field_count++)).first;
++                m_str_pool.intern(orcus::detail::format("field {}", unlabeled_field_count++)).first;
+         }
+         else
+             // This field is associated with an object key.  Use its key as the label.
+diff --git a/src/liborcus/json_path.cpp b/src/liborcus/json_path.cpp
+index 4fcc0e46..826fd865 100644
+--- a/src/liborcus/json_path.cpp
++++ b/src/liborcus/json_path.cpp
+@@ -6,11 +6,11 @@
+  */
+ 
+ #include "json_path.hpp"
++#include "format.hpp"
+ #include <orcus/exception.hpp>
+ #include <orcus/measurement.hpp>
+ 
+ #include <cassert>
+-#include <format>
+ #include <iostream>
+ 
+ namespace orcus {
+@@ -163,12 +163,12 @@ void json_path_parser::bracket()
+                     auto v = to_long_checked(s);
+                     if (!v)
+                     {
+-                        throw invalid_arg_error(std::format("failed to convert to integer: '{}'", s));
++                        throw invalid_arg_error(orcus::detail::format("failed to convert to integer: '{}'", s));
+                     }
+ 
+                     if (*v < 0)
+                     {
+-                        throw invalid_arg_error(std::format("array index must be positive ({})", *v));
++                        throw invalid_arg_error(orcus::detail::format("array index must be positive ({})", *v));
+                     }
+ 
+                     m_parts.emplace_back(std::size_t(*v));
+@@ -229,7 +229,7 @@ void json_path_parser::parse(std::string_view expression)
+             }
+             default:
+             {
+-                throw invalid_arg_error(std::format("unexpected character '{}'", *mp));
++                throw invalid_arg_error(orcus::detail::format("unexpected character '{}'", *mp));
+             }
+         }
+     }
+diff --git a/src/liborcus/measurement.cpp b/src/liborcus/measurement.cpp
+index 3e3e98f9..ff1bf639 100644
+--- a/src/liborcus/measurement.cpp
++++ b/src/liborcus/measurement.cpp
+@@ -8,11 +8,11 @@
+ #include <orcus/measurement.hpp>
+ #include <orcus/exception.hpp>
+ #include <orcus/parser_global.hpp>
++#include "format.hpp"
+ 
+ #include <mdds/sorted_string_map.hpp>
+ #include <mdds/global.hpp>
+ 
+-#include <format>
+ 
+ namespace orcus {
+ 
+@@ -223,7 +223,7 @@ double convert(double value, length_unit_t unit_from, length_unit_t unit_to)
+             ;
+     }
+ 
+-    throw general_error(std::format(
++    throw general_error(orcus::detail::format(
+         "convert: unsupported unit of measurement (from {} to {}) (value={})",
+         static_cast<int>(unit_from), static_cast<int>(unit_to), value));
+ }
+diff --git a/src/liborcus/spreadsheet_types.cpp b/src/liborcus/spreadsheet_types.cpp
+index 106709ef..24ee6199 100644
+--- a/src/liborcus/spreadsheet_types.cpp
++++ b/src/liborcus/spreadsheet_types.cpp
+@@ -7,9 +7,9 @@
+ 
+ #include <orcus/spreadsheet/types.hpp>
+ #include <orcus/exception.hpp>
++#include "format.hpp"
+ 
+ #include <limits>
+-#include <format>
+ #include <ostream>
+ 
+ #include <mdds/sorted_string_map.hpp>
+@@ -500,7 +500,7 @@ color_rgb_t to_color_rgb(std::string_view s)
+ 
+     if (n != 6)
+     {
+-        throw value_error(std::format("'{}' is not a valid RGB color string.", std::string_view(p0, n0)));
++        throw value_error(orcus::detail::format("'{}' is not a valid RGB color string.", std::string_view(p0, n0)));
+     }
+ 
+     color_rgb_t ret;
+@@ -522,7 +522,7 @@ color_rgb_t to_color_rgb(std::string_view s)
+             this_val = 10 + c - 'A';
+         else
+         {
+-            throw value_error(std::format("'{}' is not a valid RGB color string.", std::string_view(p0, n0)));
++            throw value_error(orcus::detail::format("'{}' is not a valid RGB color string.", std::string_view(p0, n0)));
+         }
+ 
+         converted += this_val;
+diff --git a/src/orcus_xml_main.cpp b/src/orcus_xml_main.cpp
+index e5cad785..06513643 100644
+--- a/src/orcus_xml_main.cpp
++++ b/src/orcus_xml_main.cpp
+@@ -16,8 +16,8 @@
+ 
+ #include "orcus_filter_global.hpp"
+ #include "cli_global.hpp"
++#include "format.hpp"
+ 
+-#include <format>
+ #include <cstdlib>
+ #include <cstring>
+ #include <iostream>
+@@ -101,7 +101,7 @@ std::string build_mode_help_text()
+ 
+ std::string build_map_help_text()
+ {
+-    return std::format(
++    return orcus::detail::format(
+         "Path to the map file. A map file is required for all modes except for the {} mode.",
+         to_string(output_mode::type::structure));
+ }
+diff --git a/src/parser/exception.cpp b/src/parser/exception.cpp
+index e3fe025e..f51b488e 100644
+--- a/src/parser/exception.cpp
++++ b/src/parser/exception.cpp
+@@ -6,8 +6,7 @@
+  */
+ 
+ #include "orcus/exception.hpp"
+-
+-#include <format>
++#include "format.hpp"
+ 
+ namespace orcus {
+ 
+@@ -18,7 +17,7 @@ general_error::general_error(std::string msg) :
+ 
+ general_error::general_error(std::string_view cls, std::string_view msg)
+ {
+-    m_msg = std::format("{}: {}", cls, msg);
++    m_msg = orcus::detail::format("{}: {}", cls, msg);
+ }
+ 
+ general_error::~general_error() noexcept = default;
+@@ -70,18 +69,18 @@ namespace {
+ 
+ std::string build_offset_msg(std::ptrdiff_t offset)
+ {
+-    return std::format(" (offset={})", offset);
++    return orcus::detail::format(" (offset={})", offset);
+ }
+ 
+ std::string build_message(std::string_view msg_before, char c, std::string_view msg_after)
+ {
+-    return std::format("{}{}{}", msg_before, c, msg_after);
++    return orcus::detail::format("{}{}{}", msg_before, c, msg_after);
+ }
+ 
+ std::string build_message(
+     std::string_view msg_before, std::string_view msg, std::string_view msg_after)
+ {
+-    return std::format("{}{}{}", msg_before, msg, msg_after);
++    return orcus::detail::format("{}{}{}", msg_before, msg, msg_after);
+ }
+ 
+ }
+diff --git a/src/parser/json_global.cpp b/src/parser/json_global.cpp
+index 0b1575c4..9e310cff 100644
+--- a/src/parser/json_global.cpp
++++ b/src/parser/json_global.cpp
+@@ -9,8 +9,8 @@
+ #include <orcus/parser_global.hpp>
+ 
+ #include "utf8.hpp"
++#include "format.hpp"
+ 
+-#include <format>
+ #include <sstream>
+ #include <iomanip>
+ #include <cassert>
+@@ -39,7 +39,7 @@ std::string escape_string(std::string_view input)
+             // utf-8 character
+             if (std::next(p, n) > p_end)
+             {
+-                throw std::runtime_error(std::format(
++                throw std::runtime_error(orcus::detail::format(
+                     "{}:{}: utf-8 bytes of length {} was expected, but the string does not have enough bytes left",
+                     __FILE__, __LINE__, n));
+             }
+diff --git a/src/parser/sax_parser_base.cpp b/src/parser/sax_parser_base.cpp
+index b8241833..92d72045 100644
+--- a/src/parser/sax_parser_base.cpp
++++ b/src/parser/sax_parser_base.cpp
+@@ -9,9 +9,9 @@
+ 
+ #include "utf8.hpp"
+ #include "cpu_features.hpp"
++#include "format.hpp"
+ 
+ #include <charconv>
+-#include <format>
+ #include <cstring>
+ #include <deque>
+ #include <memory>
+@@ -202,7 +202,7 @@ void parser_base::expects_next(const char* p, size_t n)
+             continue;
+ 
+         throw malformed_xml_error(
+-            std::format("'{}' was expected, but not found.", std::string_view(p0, n)), offset());
++            orcus::detail::format("'{}' was expected, but not found.", std::string_view(p0, n)), offset());
+     }
+ }
+ 
+@@ -326,7 +326,7 @@ void parser_base::name(std::string_view& str)
+     if (mp_char == p0)
+     {
+         throw malformed_xml_error(
+-            std::format("name must begin with an alphabet, but got this instead '{}'", cur_char()), offset());
++            orcus::detail::format("name must begin with an alphabet, but got this instead '{}'", cur_char()), offset());
+     }
+ 
+ #if defined(__ORCUS_CPU_FEATURES) && defined(__SSE4_2__)
+diff --git a/src/parser/sax_token_parser_test.cpp b/src/parser/sax_token_parser_test.cpp
+index 97d59c78..5b0d3e02 100644
+--- a/src/parser/sax_token_parser_test.cpp
++++ b/src/parser/sax_token_parser_test.cpp
+@@ -11,7 +11,7 @@
+ #include "orcus/xml_namespace.hpp"
+ 
+ #include <cstring>
+-#include <format>
++#include <iomanip>
+ 
+ std::string_view sv_from_u8(std::u8string_view s) noexcept
+ {
+@@ -22,8 +22,8 @@ void print_with_bytes(std::string_view label, std::string_view s)
+ {
+     std::cout << label << ": '" << s << "' (bytes:";
+     for (uint8_t c : s)
+-        std::cout << std::format(" {:02x}", c);
+-    std::cout << ")" << '\n';
++        std::cout << ' ' << std::hex << std::setw(2) << std::setfill('0') << (int)c;
++    std::cout << ")" << std::dec << '\n';
+ }
+ 
+ using namespace orcus;
+diff --git a/src/parser/stream.cpp b/src/parser/stream.cpp
+index 3bd3a9b9..7e78c735 100644
+--- a/src/parser/stream.cpp
++++ b/src/parser/stream.cpp
+@@ -9,8 +9,8 @@
+ #include <orcus/exception.hpp>
+ 
+ #include "utf8.hpp"
++#include "format.hpp"
+ 
+-#include <format>
+ #include <sstream>
+ #include <fstream>
+ #include <tuple>
+@@ -114,7 +114,7 @@ std::tuple<std::string_view, size_t, size_t> find_line_with_offset(std::string_v
+     if (p_offset >= p_end)
+     {
+         throw std::invalid_argument(
+-            std::format("offset value of {} is out-of-bound for a stream of length {}", offset, strm.size()));
++            orcus::detail::format("offset value of {} is out-of-bound for a stream of length {}", offset, strm.size()));
+     }
+ 
+     // Determine the line number.
+@@ -429,7 +429,7 @@ std::size_t calc_logical_string_length(std::string_view s)
+         if (!n_bytes || n_bytes > 4)
+         {
+             throw std::invalid_argument(
+-                std::format("'{}' contains invalid character at position {}", s, std::distance(s.data(), p)));
++                orcus::detail::format("'{}' contains invalid character at position {}", s, std::distance(s.data(), p)));
+         }
+ 
+         p += n_bytes;
+@@ -437,7 +437,7 @@ std::size_t calc_logical_string_length(std::string_view s)
+ 
+     if (p != p_end)
+     {
+-        throw std::invalid_argument(std::format("last character of '{}' ended prematurely", s));
++        throw std::invalid_argument(orcus::detail::format("last character of '{}' ended prematurely", s));
+     }
+ 
+     return length;
+diff --git a/src/parser/types.cpp b/src/parser/types.cpp
+index 57252f87..c4389571 100644
+--- a/src/parser/types.cpp
++++ b/src/parser/types.cpp
+@@ -9,7 +9,6 @@
+ #include <orcus/parser_global.hpp>
+ #include <orcus/xml_namespace.hpp>
+ 
+-#include <format>
+ #include <limits>
+ #include <sstream>
+ #include <string_view>
+@@ -17,6 +16,7 @@
+ #include <mdds/sorted_string_map.hpp>
+ 
+ #include "ostream_utils.hpp"
++#include "format.hpp"
+ 
+ namespace orcus {
+ 
+@@ -76,7 +76,7 @@ std::string xml_name_t::to_string(const xmlns_context& cxt, to_string_type type)
+ 
+         }
+         if (!ns_str.empty())
+-            return std::format("{}:{}", ns_str, name);
++            return orcus::detail::format("{}:{}", ns_str, name);
+     }
+     return std::string{name};
+ }
+@@ -87,7 +87,7 @@ std::string xml_name_t::to_string(const xmlns_repository& repo) const
+     {
+         std::string ns_str = repo.get_short_name(ns);
+         if (!ns_str.empty())
+-            return std::format("{}:{}", ns_str, name);
++            return orcus::detail::format("{}:{}", ns_str, name);
+     }
+     return std::string{name};
+ }
+@@ -185,7 +185,7 @@ std::string length_t::to_string() const
+         default:
+             ;
+     }
+-    return std::format("{}{}", value, suffix);
++    return orcus::detail::format("{}{}", value, suffix);
+ }
+ 
+ bool length_t::operator== (const length_t& other) const noexcept
+diff --git a/src/parser/utf8_test.cpp b/src/parser/utf8_test.cpp
+index e26e869f..ab7e1e7b 100644
+--- a/src/parser/utf8_test.cpp
++++ b/src/parser/utf8_test.cpp
+@@ -13,7 +13,7 @@
+ #include <string>
+ #include <cassert>
+ #include <functional>
+-#include <format>
++#include <iomanip>
+ #include <limits>
+ 
+ using namespace orcus;
+@@ -43,7 +43,8 @@ bool check_cp_ranges(parse_func_t parse, std::vector<cp_range_t> ranges)
+             }
+             catch (const std::exception& e)
+             {
+-                cout << std::format("failed to encode 0x{:X} as utf-8: {}", cp, e.what()) << endl;
++                cout << "failed to encode 0x" << std::hex << std::uppercase << cp
++                     << " as utf-8: " << e.what() << endl;
+                 return false;
+             }
+ 
+@@ -53,10 +54,11 @@ bool check_cp_ranges(parse_func_t parse, std::vector<cp_range_t> ranges)
+ 
+             if ((ret == p_end) != range.valid)
+             {
+-                cout << std::format("failed to parse 0x{:X} (utf-8:", cp);
++                cout << "failed to parse 0x" << std::hex << std::uppercase << cp
++                    << " (utf-8:";
+ 
+                 for (char b : buf)
+-                    cout << std::format(" {:X}", 0xFF & b);
++                    cout << ' ' << short(0xFF & b);
+                 cout << ")" << endl;
+                 cout << "expected to be " << (range.valid ? "valid" : "invalid")
+                      << ", but was " << (range.valid ? "invalid" : "valid") << endl;
+diff --git a/src/parser/xml_namespace.cpp b/src/parser/xml_namespace.cpp
+index 583c3161..90d0cef4 100644
+--- a/src/parser/xml_namespace.cpp
++++ b/src/parser/xml_namespace.cpp
+@@ -8,11 +8,11 @@
+ #include <orcus/xml_namespace.hpp>
+ #include <orcus/exception.hpp>
+ #include <orcus/string_pool.hpp>
++#include "format.hpp"
+ 
+ #include <unordered_map>
+ #include <vector>
+ #include <limits>
+-#include <format>
+ #include <algorithm>
+ #include <cassert>
+ 
+@@ -122,7 +122,7 @@ std::string xmlns_repository::get_short_name(xmlns_id_t ns_id) const
+     if (index == INDEX_NOT_FOUND)
+         return std::string("???");
+ 
+-    return std::format("ns{}", index);
++    return orcus::detail::format("ns{}", index);
+ }
+ 
+ size_t xmlns_repository::get_index(xmlns_id_t ns_id) const
+@@ -190,7 +190,7 @@ xmlns_id_t xmlns_context::push(std::string_view alias, std::string_view uri)
+             return XML_BUILTIN_NS_URI;
+ 
+         throw std::invalid_argument(
+-            std::format("builtin namespace '{}' cannot be explicitly declared", XML_BUILTIN_NS_ALIAS));
++            orcus::detail::format("builtin namespace '{}' cannot be explicitly declared", XML_BUILTIN_NS_ALIAS));
+     }
+ 
+     mp_impl->m_trim_all_ns = true;
+@@ -248,7 +248,7 @@ void xmlns_context::pop(std::string_view alias)
+     if (it == mp_impl->m_map.end())
+     {
+         throw general_error(
+-            std::format("alias named '{}' was attempted to be popped, but was not found in the stack", alias));
++            orcus::detail::format("alias named '{}' was attempted to be popped, but was not found in the stack", alias));
+     }
+ 
+     xmlns_list_type& nslist = it->second;
+diff --git a/src/parser/zip_archive.cpp b/src/parser/zip_archive.cpp
+index 01d3be82..497626b0 100644
+--- a/src/parser/zip_archive.cpp
++++ b/src/parser/zip_archive.cpp
+@@ -8,13 +8,13 @@
+ #include <orcus/zip_archive.hpp>
+ #include <orcus/zip_archive_stream.hpp>
+ #include <orcus/string_pool.hpp>
++#include "format.hpp"
+ 
+ #include <cstdio>
+ #include <cstdlib>
+ #include <cstring>
+ #include <iostream>
+ #include <unordered_map>
+-#include <format>
+ #include <string_view>
+ #include <iomanip>
+ 
+@@ -364,7 +364,7 @@ zip_file_entry_header zip_archive::impl::get_file_entry_header(std::size_t index
+ 
+     header.filename = file_header.read_string(filename_len);
+     if (is_unsafe_zip_path(header.filename))
+-        throw zip_error(std::format("unsafe zip entry name: '{}'", header.filename));
++        throw zip_error(orcus::detail::format("unsafe zip entry name: '{}'", header.filename));
+ 
+     if (extra_field_len)
+         header.extra_field = file_header.read_bytes(extra_field_len);
+@@ -377,7 +377,7 @@ zip_file_entry_header zip_archive::impl::get_file_entry_header(std::string_view
+     auto it = m_filenames.find(name);
+     if (it == m_filenames.end())
+     {
+-        throw zip_error(std::format("file entry named '{}' not found", name));
++        throw zip_error(orcus::detail::format("file entry named '{}' not found", name));
+     }
+ 
+     return get_file_entry_header(it->second);
+@@ -447,7 +447,7 @@ void zip_archive::impl::read_file_entries()
+ 
+         param.filename = central_dir.read_string(param.filename_length, m_pool);
+         if (is_unsafe_zip_path(param.filename))
+-            throw zip_error(std::format("unsafe zip entry name: '{}'", param.filename));
++            throw zip_error(orcus::detail::format("unsafe zip entry name: '{}'", param.filename));
+ 
+         if (param.extra_field_length)
+             // Ignore extra field for now.
+@@ -503,7 +503,7 @@ unnamed_buffer zip_archive::impl::read_file_entry(std::string_view entry_name) c
+     filename_map_type::const_iterator it = m_filenames.find(entry_name);
+     if (it == m_filenames.end())
+     {
+-        throw zip_error(std::format("entry named '{}' not found", entry_name));
++        throw zip_error(orcus::detail::format("entry named '{}' not found", entry_name));
+     }
+ 
+ 
+diff --git a/src/parser/zip_archive_stream.cpp b/src/parser/zip_archive_stream.cpp
+index 0a58f7fa..0a7f70fd 100644
+--- a/src/parser/zip_archive_stream.cpp
++++ b/src/parser/zip_archive_stream.cpp
+@@ -7,8 +7,8 @@
+ 
+ #include "orcus/zip_archive_stream.hpp"
+ #include "orcus/zip_archive.hpp"
++#include "format.hpp"
+ 
+-#include <format>
+ #include <cstring>
+ 
+ #ifdef _MSC_VER
+@@ -26,7 +26,7 @@ zip_archive_stream_fd::zip_archive_stream_fd(const char* filepath) :
+     if (!m_stream)
+     {
+         // Fail early at instantiation time.
+-        throw zip_error(std::format("failed to open {} for reading", filepath));
++        throw zip_error(orcus::detail::format("failed to open {} for reading", filepath));
+     }
+ }
+ 
+@@ -60,7 +60,7 @@ void zip_archive_stream_fd::seek(size_t pos)
+ {
+     if (fseeko(m_stream, pos, SEEK_SET))
+     {
+-        throw zip_error(std::format("failed to set seek position to {}.", pos));
++        throw zip_error(orcus::detail::format("failed to set seek position to {}.", pos));
+     }
+ }
+ 
+@@ -89,7 +89,7 @@ void zip_archive_stream_blob::seek(size_t pos)
+ {
+     if (pos > m_size)
+     {
+-        throw zip_error(std::format("failed to seek position to {}.", pos));
++        throw zip_error(orcus::detail::format("failed to seek position to {}.", pos));
+     }
+     m_cur = m_blob + pos;
+ }
+diff --git a/src/spreadsheet/factory.cpp b/src/spreadsheet/factory.cpp
+index 03fe31d1..9025536c 100644
+--- a/src/spreadsheet/factory.cpp
++++ b/src/spreadsheet/factory.cpp
+@@ -20,13 +20,13 @@
+ #include "factory_shared_strings.hpp"
+ #include "factory_sheet.hpp"
+ #include "global_settings.hpp"
++#include "format.hpp"
+ 
+ #include <ixion/formula_name_resolver.hpp>
+ #include <ixion/formula_tokens.hpp>
+ #include <ixion/formula.hpp>
+ #include <ixion/model_context.hpp>
+ #include <ixion/model_context_loader.hpp>
+-#include <format>
+ #include <iostream>
+ #include <unordered_map>
+ 
+@@ -56,7 +56,7 @@ public:
+ 
+         if (name.type != ixion::formula_name_t::cell_reference)
+         {
+-            throw orcus::invalid_arg_error(std::format("{} is not a valid cell address.", address));
++            throw orcus::invalid_arg_error(orcus::detail::format("{} is not a valid cell address.", address));
+         }
+ 
+         auto addr = std::get<ixion::address_t>(name.value);
+@@ -106,7 +106,7 @@ public:
+                 ;
+         }
+ 
+-        throw orcus::invalid_arg_error(std::format("'{}' is not a valid range address.", range));
++        throw orcus::invalid_arg_error(orcus::detail::format("'{}' is not a valid range address.", range));
+     }
+ };
+ 
+diff --git a/src/version_test.cpp b/src/version_test.cpp
+index 418e32b1..cce0944a 100644
+--- a/src/version_test.cpp
++++ b/src/version_test.cpp
+@@ -6,8 +6,8 @@
+  */
+ 
+ #include "test_global.hpp"
++#include "format.hpp"
+ 
+-#include <format>
+ #include <orcus/version.hpp>
+ 
+ void test_version()
+@@ -18,7 +18,7 @@ void test_version()
+         std::string ver = ORCUS_VERSION; // it's a string literal
+         std::cout << "version: " << ver << std::endl;
+ 
+-        assert(ver == std::format("{}.{}.{}", ORCUS_VERSION_MAJOR, ORCUS_VERSION_MINOR, ORCUS_VERSION_MICRO));
++        assert(ver == orcus::detail::format("{}.{}.{}", ORCUS_VERSION_MAJOR, ORCUS_VERSION_MINOR, ORCUS_VERSION_MICRO));
+     }
+ 
+     {
+@@ -35,7 +35,7 @@ void test_version()
+         std::string ver = ORCUS_API_VERSION; // it's a string literal
+         std::cout << "API version: " << ver << std::endl;
+ 
+-        assert(ver == std::format("{}.{}", ORCUS_API_VERSION_MAJOR, ORCUS_API_VERSION_MINOR));
++        assert(ver == orcus::detail::format("{}.{}", ORCUS_API_VERSION_MAJOR, ORCUS_API_VERSION_MINOR));
+     }
+ 
+     {

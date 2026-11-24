@@ -505,8 +505,8 @@ LXML_TARBALL := lxml-6.0.2.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-MDDS_SHA256SUM := ca295f4c86968a7eb1f5d503ff7ae180e6605210cfb26d01658be42048c0924c
-MDDS_TARBALL := mdds-3.1.0.tar.xz
+MDDS_SHA256SUM := c630abfc0a2c875aa453b8200af6d46265525f897c0640acf91626a283b3d6d6
+MDDS_TARBALL := mdds-4.0.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -567,8 +567,8 @@ OPENSSL_TARBALL := openssl-3.5.8.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-ORCUS_SHA256SUM := 1c6e473d6b8a63d61d0e6874a1762d6f0e0e78338d763e48ac93126ecde19b37
-ORCUS_TARBALL := liborcus-0.21.0.tar.xz
+ORCUS_SHA256SUM := 0020bae999f58dda8fcbab2bad1551e9c91de2b594d9c05fec682222c93491dd
+ORCUS_TARBALL := liborcus-0.22.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

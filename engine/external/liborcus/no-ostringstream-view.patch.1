@@ -1,0 +1,13 @@
+diff --git a/src/liborcus/dom_tree_dump.cpp b/src/liborcus/dom_tree_dump.cpp
+index e911b87d..ccf349dd 100644
+--- a/src/liborcus/dom_tree_dump.cpp
++++ b/src/liborcus/dom_tree_dump.cpp
+@@ -254,7 +254,7 @@ std::string document_tree::dump(std::size_t indent) const
+     {
+         // ensure that the root ends on its own line before the epilog content
+         // is dumped
+-        auto buf = os.view();
++        std::string buf = os.str();
+         if (!buf.empty() && buf.back() != '\n')
+             os << '\n';
+     }

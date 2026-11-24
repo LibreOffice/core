@@ -37,6 +37,7 @@
 
 #include <memory>
 #include <mutex>
+#include <tuple>
 #include <utility>
 #include <vector>
 #include <limits>
@@ -56,14 +57,14 @@ namespace {
  */
 struct matrix_traits
 {
-    typedef sc::string_block string_element_block;
-    typedef sc::uint16_block integer_element_block;
+    using numeric_element_block = sc::numeric_block;
+    using element_blocks = std::tuple<sc::boolean_block, sc::string_block, sc::uint16_block>;
 };
 
 struct matrix_flag_traits
 {
-    typedef sc::string_block string_element_block;
-    typedef mdds::mtv::uint8_element_block integer_element_block;
+    using numeric_element_block = sc::numeric_block;
+    using element_blocks = std::tuple<sc::uint8_block>;
 };
 
 }
@@ -72,6 +73,22 @@ typedef mdds::multi_type_matrix<matrix_traits> MatrixImplType;
 typedef mdds::multi_type_matrix<matrix_flag_traits> MatrixFlagImplType;
 
 namespace {
+
+/** Get the value of a numeric, boolean or integer element, or 0 otherwise. */
+double getNumeric(const MatrixImplType& rMat, const MatrixImplType::const_position_type& rPos)
+{
+    switch (rMat.get_type(rPos))
+    {
+        case MatrixImplType::element_numeric:
+            return rMat.get_numeric(rPos);
+        case sc::element_type_boolean:
+            return rMat.get<bool>(rPos) ? 1.0 : 0.0;
+        case sc::element_type_uint16:
+            return rMat.get<sal_uInt16>(rPos);
+        default:
+            return 0.0;
+    }
+}
 
 double convertStringToValue( ScInterpreter* pErrorInterpreter, const OUString& rStr )
 {
@@ -186,7 +203,7 @@ public:
     {
         switch (node.type)
         {
-            case mdds::mtm::element_numeric:
+            case MatrixImplType::element_numeric:
             {
                 typedef MatrixImplType::numeric_block_type block_type;
 
@@ -199,9 +216,9 @@ public:
                 }
             }
             break;
-            case mdds::mtm::element_boolean:
+            case sc::element_type_boolean:
             {
-                typedef MatrixImplType::boolean_block_type block_type;
+                typedef sc::boolean_block block_type;
 
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
@@ -212,7 +229,7 @@ public:
                 }
             }
             break;
-            case mdds::mtm::element_string:
+            case sc::element_type_string:
             case mdds::mtm::element_empty:
             default:
                 // Fill it with false.
@@ -661,7 +678,7 @@ FormulaError ScMatrixImpl::GetError( SCSIZE nC, SCSIZE nR) const
 {
     if (ValidColRowOrReplicated( nC, nR ))
     {
-        double fVal = maMat.get_numeric(nR, nC);
+        double fVal = getNumeric(maMat, maMat.position(nR, nC));
         return GetDoubleErrorValue(fVal);
     }
     else
@@ -675,7 +692,7 @@ double ScMatrixImpl::GetDouble(SCSIZE nC, SCSIZE nR) const
 {
     if (ValidColRowOrReplicated( nC, nR ))
     {
-        double fVal = maMat.get_numeric(nR, nC);
+        double fVal = getNumeric(maMat, maMat.position(nR, nC));
         if ( pErrorInterpreter )
         {
             FormulaError nError = GetDoubleErrorValue(fVal);
@@ -724,13 +741,13 @@ svl::SharedString ScMatrixImpl::GetString(const MatrixImplType::const_position_t
     double fErr = 0.0;
     switch (maMat.get_type(rPos))
     {
-        case mdds::mtm::element_string:
-            return maMat.get_string(rPos);
+        case sc::element_type_string:
+            return maMat.get<svl::SharedString>(rPos);
         case mdds::mtm::element_empty:
             return svl::SharedString::getEmptyString();
-        case mdds::mtm::element_numeric:
-        case mdds::mtm::element_boolean:
-            fErr = maMat.get_numeric(rPos);
+        case MatrixImplType::element_numeric:
+        case sc::element_type_boolean:
+            fErr = getNumeric(maMat, rPos);
             [[fallthrough]];
         default:
             OSL_FAIL("ScMatrixImpl::GetString: access error, no string");
@@ -759,8 +776,8 @@ svl::SharedString ScMatrixImpl::GetString( ScInterpreterContext& rContext, SCSIZ
     MatrixImplType::const_position_type aPos = maMat.position(nR, nC);
     switch (maMat.get_type(aPos))
     {
-        case mdds::mtm::element_string:
-            return maMat.get_string(aPos);
+        case sc::element_type_string:
+            return maMat.get<svl::SharedString>(aPos);
         case mdds::mtm::element_empty:
         {
             if (maMatFlag.get<uint8_t>(nR, nC) != SC_MATFLAG_EMPTYPATH)
@@ -775,13 +792,13 @@ svl::SharedString ScMatrixImpl::GetString( ScInterpreterContext& rContext, SCSIZ
             rContext.NFGetOutputString( 0.0, nKey, aStr, &pColor);
             return svl::SharedString( aStr);    // string not interned
         }
-        case mdds::mtm::element_boolean:
+        case sc::element_type_boolean:
             // Format the cell through the LOGICAL key so the string
             // form is "TRUE" or "FALSE".
-            fVal = maMat.get_numeric(aPos);
+            fVal = getNumeric(maMat, aPos);
             eFormatType = SvNumFormatType::LOGICAL;
         break;
-        case mdds::mtm::element_numeric:
+        case MatrixImplType::element_numeric:
             fVal = maMat.get_numeric(aPos);
         break;
         default:
@@ -812,17 +829,17 @@ ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
         mdds::mtm::element_t eType = maMat.get_type(aPos);
         switch (eType)
         {
-            case mdds::mtm::element_boolean:
+            case sc::element_type_boolean:
                 aVal.nType = ScMatValType::Boolean;
-                aVal.fVal = double(maMat.get_boolean(aPos));
+                aVal.fVal = double(maMat.get<bool>(aPos));
             break;
-            case mdds::mtm::element_numeric:
+            case MatrixImplType::element_numeric:
                 aVal.nType = ScMatValType::Value;
                 aVal.fVal = maMat.get_numeric(aPos);
             break;
-            case mdds::mtm::element_string:
+            case sc::element_type_string:
                 aVal.nType = ScMatValType::String;
-                aVal.aStr = maMat.get_string(aPos);
+                aVal.aStr = maMat.get<svl::SharedString>(aPos);
             break;
             case mdds::mtm::element_empty:
                 /* TODO: do we need to pass the differentiation of 'empty' and
@@ -832,7 +849,7 @@ ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
                     case mdds::mtm::element_empty:
                         aVal.nType = ScMatValType::Empty;
                     break;
-                    case mdds::mtm::element_integer:
+                    case sc::element_type_uint8:
                         aVal.nType = maMatFlag.get<uint8_t>(nR, nC)
                             == SC_MATFLAG_EMPTYPATH ? ScMatValType::EmptyPath : ScMatValType::Empty;
                     break;
@@ -867,7 +884,7 @@ bool ScMatrixImpl::IsStringOrEmpty( SCSIZE nC, SCSIZE nR ) const
     switch (maMat.get_type(nR, nC))
     {
         case mdds::mtm::element_empty:
-        case mdds::mtm::element_string:
+        case sc::element_type_string:
             return true;
         default:
             ;
@@ -883,7 +900,7 @@ bool ScMatrixImpl::IsEmpty( SCSIZE nC, SCSIZE nR ) const
     // Flag must indicate an 'empty' or 'empty cell' or 'empty result' element,
     // but not an 'empty path' element.
     return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
-        maMatFlag.get_integer(nR, nC) != SC_MATFLAG_EMPTYPATH;
+        maMatFlag.get<TMatFlag>(nR, nC) != SC_MATFLAG_EMPTYPATH;
 }
 
 bool ScMatrixImpl::IsEmptyCell( SCSIZE nC, SCSIZE nR ) const
@@ -905,7 +922,7 @@ bool ScMatrixImpl::IsEmptyResult( SCSIZE nC, SCSIZE nR ) const
     // Flag must indicate an 'empty result' element instead of an
     // 'empty' or 'empty cell' or 'empty path' element.
     return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
-        maMatFlag.get_integer(nR, nC) == SC_MATFLAG_EMPTYRESULT;
+        maMatFlag.get<TMatFlag>(nR, nC) == SC_MATFLAG_EMPTYRESULT;
 }
 
 bool ScMatrixImpl::IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
@@ -913,7 +930,7 @@ bool ScMatrixImpl::IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
     // Flag must indicate an 'empty path' element.
     if (ValidColRowOrReplicated( nC, nR ))
         return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
-            maMatFlag.get_integer(nR, nC) == SC_MATFLAG_EMPTYPATH;
+            maMatFlag.get<TMatFlag>(nR, nC) == SC_MATFLAG_EMPTYPATH;
     else
         return true;
 }
@@ -932,8 +949,8 @@ bool ScMatrixImpl::IsValue( SCSIZE nC, SCSIZE nR ) const
 
     switch (maMat.get_type(nR, nC))
     {
-        case mdds::mtm::element_boolean:
-        case mdds::mtm::element_numeric:
+        case sc::element_type_boolean:
+        case MatrixImplType::element_numeric:
             return true;
         default:
             ;
@@ -948,8 +965,8 @@ bool ScMatrixImpl::IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
 
     switch (maMat.get_type(nR, nC))
     {
-        case mdds::mtm::element_boolean:
-        case mdds::mtm::element_numeric:
+        case sc::element_type_boolean:
+        case MatrixImplType::element_numeric:
         case mdds::mtm::element_empty:
             return true;
         default:
@@ -963,12 +980,12 @@ bool ScMatrixImpl::IsBoolean( SCSIZE nC, SCSIZE nR ) const
     if (!ValidColRowOrReplicated( nC, nR ))
         return false;
 
-    return maMat.get_type(nR, nC) == mdds::mtm::element_boolean;
+    return maMat.get_type(nR, nC) == sc::element_type_boolean;
 }
 
 bool ScMatrixImpl::IsNumeric() const
 {
-    return maMat.numeric();
+    return maMat.all_of<sc::numeric_block, sc::boolean_block, sc::uint16_block>();
 }
 
 void ScMatrixImpl::MatCopy(ScMatrixImpl& mRes) const
@@ -1162,11 +1179,11 @@ double EvalMatrix(const MatrixImplType& rMat)
         for (size_t nR = 0; nR < nRows; ++nR)
         {
             mdds::mtm::element_t eType = rMat.get_type(aPos);
-            if (eType != mdds::mtm::element_numeric && eType != mdds::mtm::element_boolean)
+            if (eType != MatrixImplType::element_numeric && eType != sc::element_type_boolean)
                 // assuming a CompareMat this is an error
                 return CreateDoubleError(FormulaError::IllegalArgument);
 
-            double fVal = rMat.get_numeric(aPos);
+            double fVal = getNumeric(rMat, aPos);
             if (!std::isfinite(fVal))
                 // DoubleError
                 return fVal;
@@ -1224,7 +1241,7 @@ public:
     {
         switch (node.type)
         {
-            case mdds::mtm::element_numeric:
+            case MatrixImplType::element_numeric:
             {
                 typedef MatrixImplType::numeric_block_type block_type;
 
@@ -1243,9 +1260,9 @@ public:
                 maRes.mnCount += node.size - nIgnored;
             }
             break;
-            case mdds::mtm::element_boolean:
+            case sc::element_type_boolean:
             {
-                typedef MatrixImplType::boolean_block_type block_type;
+                typedef sc::boolean_block block_type;
 
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
@@ -1256,7 +1273,7 @@ public:
                 maRes.mnCount += node.size;
             }
             break;
-            case mdds::mtm::element_string:
+            case sc::element_type_string:
                 if (mbTextAsZero)
                     maRes.mnCount += node.size;
             break;
@@ -1303,7 +1320,7 @@ public:
     {
         switch (node.type)
         {
-            case mdds::mtm::element_numeric:
+            case MatrixImplType::element_numeric:
             {
                 typedef MatrixImplType::numeric_block_type block_type;
 
@@ -1317,9 +1334,9 @@ public:
                 maRes.mnCount += node.size;
             }
             break;
-            case mdds::mtm::element_boolean:
+            case sc::element_type_boolean:
             {
-                typedef MatrixImplType::boolean_block_type block_type;
+                typedef sc::boolean_block block_type;
 
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
@@ -1331,7 +1348,7 @@ public:
                 maRes.mnCount += node.size;
             }
             break;
-            case mdds::mtm::element_string:
+            case sc::element_type_string:
             case mdds::mtm::element_empty:
             default:
                 ;
@@ -1356,7 +1373,7 @@ public:
     {
         switch (node.type)
         {
-            case mdds::mtm::element_numeric:
+            case MatrixImplType::element_numeric:
                 mnCount += node.size;
                 if (!mbCountErrors)
                 {
@@ -1371,16 +1388,16 @@ public:
                     }
                 }
             break;
-            case mdds::mtm::element_boolean:
+            case sc::element_type_boolean:
                 mnCount += node.size;
             break;
-            case mdds::mtm::element_string:
+            case sc::element_type_string:
                 if (mbCountString)
                 {
                     mnCount += node.size;
                     if (mbIgnoreEmptyStrings)
                     {
-                        typedef MatrixImplType::string_block_type block_type;
+                        typedef sc::string_block block_type;
 
                         block_type::const_iterator it = block_type::begin(*node.data);
                         block_type::const_iterator itEnd = block_type::end(*node.data);
@@ -1452,7 +1469,7 @@ size_t WalkAndMatchElements<double>::compare(const MatrixImplType::element_block
     size_t nCount = 0;
     switch (node.type)
     {
-        case mdds::mtm::element_numeric:
+        case MatrixImplType::element_numeric:
         {
             typedef MatrixImplType::numeric_block_type block_type;
 
@@ -1468,9 +1485,9 @@ size_t WalkAndMatchElements<double>::compare(const MatrixImplType::element_block
             }
             break;
         }
-        case mdds::mtm::element_boolean:
+        case sc::element_type_boolean:
         {
-            typedef MatrixImplType::boolean_block_type block_type;
+            typedef sc::boolean_block block_type;
 
             block_type::const_iterator it = block_type::begin(*node.data);
             block_type::const_iterator itEnd = block_type::end(*node.data);
@@ -1485,7 +1502,7 @@ size_t WalkAndMatchElements<double>::compare(const MatrixImplType::element_block
             break;
         }
         break;
-        case mdds::mtm::element_string:
+        case sc::element_type_string:
         case mdds::mtm::element_empty:
         default:
             ;
@@ -1498,10 +1515,10 @@ size_t WalkAndMatchElements<svl::SharedString>::compare(const MatrixImplType::el
 {
     switch (node.type)
     {
-        case mdds::mtm::element_string:
+        case sc::element_type_string:
         {
             size_t nCount = 0;
-            typedef MatrixImplType::string_block_type block_type;
+            typedef sc::string_block block_type;
 
             block_type::const_iterator it = block_type::begin(*node.data);
             block_type::const_iterator itEnd = block_type::end(*node.data);
@@ -1515,8 +1532,8 @@ size_t WalkAndMatchElements<svl::SharedString>::compare(const MatrixImplType::el
             }
             break;
         }
-        case mdds::mtm::element_boolean:
-        case mdds::mtm::element_numeric:
+        case sc::element_type_boolean:
+        case MatrixImplType::element_numeric:
         case mdds::mtm::element_empty:
         default:
             ;
@@ -1537,8 +1554,8 @@ struct MaxOp
     }
 
     static double boolValue(
-        MatrixImplType::boolean_block_type::const_iterator it,
-        const MatrixImplType::boolean_block_type::const_iterator& itEnd)
+        sc::boolean_block::const_iterator it,
+        const sc::boolean_block::const_iterator& itEnd)
     {
         // If the array has at least one true value, the maximum value is 1.
         it = std::find(it, itEnd, true);
@@ -1559,8 +1576,8 @@ struct MinOp
     }
 
     static double boolValue(
-        MatrixImplType::boolean_block_type::const_iterator it,
-        const MatrixImplType::boolean_block_type::const_iterator& itEnd)
+        sc::boolean_block::const_iterator it,
+        const sc::boolean_block::const_iterator& itEnd)
     {
         // If the array has at least one false value, the minimum value is 0.
         it = std::find(it, itEnd, false);
@@ -1577,8 +1594,8 @@ struct Lcm
     }
 
     static double boolValue(
-            MatrixImplType::boolean_block_type::const_iterator it,
-            const MatrixImplType::boolean_block_type::const_iterator& itEnd)
+            sc::boolean_block::const_iterator it,
+            const sc::boolean_block::const_iterator& itEnd)
     {
         // If the array has at least one false value, the minimum value is 0.
         it = std::find(it, itEnd, false);
@@ -1595,8 +1612,8 @@ struct Gcd
     }
 
     static double boolValue(
-            MatrixImplType::boolean_block_type::const_iterator it,
-            const MatrixImplType::boolean_block_type::const_iterator& itEnd)
+            sc::boolean_block::const_iterator it,
+            const sc::boolean_block::const_iterator& itEnd)
     {
         // If the array has at least one true value, the gcdResult is 1.
         it = std::find(it, itEnd, true);
@@ -1625,7 +1642,7 @@ public:
 
         switch (node.type)
         {
-            case mdds::mtm::element_numeric:
+            case MatrixImplType::element_numeric:
             {
                 typedef MatrixImplType::numeric_block_type block_type;
 
@@ -1648,9 +1665,9 @@ public:
                 mbHasValue = true;
             }
             break;
-            case mdds::mtm::element_boolean:
+            case sc::element_type_boolean:
             {
-                typedef MatrixImplType::boolean_block_type block_type;
+                typedef sc::boolean_block block_type;
 
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
@@ -1659,7 +1676,7 @@ public:
                 mbHasValue = true;
             }
             break;
-            case mdds::mtm::element_string:
+            case sc::element_type_string:
             case mdds::mtm::element_empty:
             {
                 // empty elements are treated as empty strings.
@@ -1690,7 +1707,7 @@ public:
     {
         switch (node.type)
         {
-            case mdds::mtm::element_numeric:
+            case MatrixImplType::element_numeric:
                 {
                     typedef MatrixImplType::numeric_block_type block_type;
                     block_type::const_iterator it = block_type::begin(*node.data);
@@ -1705,9 +1722,9 @@ public:
                     }
                 }
             break;
-            case mdds::mtm::element_boolean:
+            case sc::element_type_boolean:
                 {
-                    typedef MatrixImplType::boolean_block_type block_type;
+                    typedef sc::boolean_block block_type;
                     block_type::const_iterator it = block_type::begin(*node.data);
                     block_type::const_iterator itEnd = block_type::end(*node.data);
 
@@ -1715,7 +1732,7 @@ public:
                 }
             break;
             case mdds::mtm::element_empty:
-            case mdds::mtm::element_string:
+            case sc::element_type_string:
                 {
                     mfval = CreateDoubleError(FormulaError::IllegalArgument);
                 }
@@ -1797,7 +1814,7 @@ public:
 
         switch (node.type)
         {
-            case mdds::mtm::element_numeric:
+            case MatrixImplType::element_numeric:
             {
                 typedef MatrixImplType::numeric_block_type block_type;
 
@@ -1812,9 +1829,9 @@ public:
                 }
             }
             break;
-            case mdds::mtm::element_boolean:
+            case sc::element_type_boolean:
             {
-                typedef MatrixImplType::boolean_block_type block_type;
+                typedef sc::boolean_block block_type;
 
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
@@ -1827,9 +1844,9 @@ public:
                 }
             }
             break;
-            case mdds::mtm::element_string:
+            case sc::element_type_string:
             {
-                typedef MatrixImplType::string_block_type block_type;
+                typedef sc::string_block block_type;
 
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
@@ -1921,7 +1938,7 @@ public:
     {
         switch (node.type)
         {
-            case mdds::mtm::element_numeric:
+            case MatrixImplType::element_numeric:
             {
                 typedef MatrixImplType::numeric_block_type block_type;
 
@@ -1931,9 +1948,9 @@ public:
                     compareLeftNumeric(*it);
             }
             break;
-            case mdds::mtm::element_boolean:
+            case sc::element_type_boolean:
             {
-                typedef MatrixImplType::boolean_block_type block_type;
+                typedef sc::boolean_block block_type;
 
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
@@ -1941,9 +1958,9 @@ public:
                     compareLeftNumeric(double(*it));
             }
             break;
-            case mdds::mtm::element_string:
+            case sc::element_type_string:
             {
-                typedef MatrixImplType::string_block_type block_type;
+                typedef sc::string_block block_type;
 
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
@@ -2020,7 +2037,7 @@ public:
 
         switch (node.type)
         {
-            case mdds::mtm::element_numeric:
+            case MatrixImplType::element_numeric:
             {
                 double_element_block::const_iterator it = double_element_block::begin(*node.data);
                 double_element_block::const_iterator itEnd = double_element_block::end(*node.data);
@@ -2028,7 +2045,7 @@ public:
                     *miPos = *it;
             }
             break;
-            case mdds::mtm::element_boolean:
+            case sc::element_type_boolean:
             {
                 boolean_element_block::const_iterator it = boolean_element_block::begin(*node.data);
                 boolean_element_block::const_iterator itEnd = boolean_element_block::end(*node.data);
@@ -2036,7 +2053,7 @@ public:
                     *miPos = *it ? 1.0 : 0.0;
             }
             break;
-            case mdds::mtm::element_string:
+            case sc::element_type_string:
             {
                 for (size_t i = 0; i < node.size; ++i, ++miPos)
                     *miPos = mfNaN;
@@ -2097,7 +2114,7 @@ public:
 
         switch (node.type)
         {
-            case mdds::mtm::element_numeric:
+            case MatrixImplType::element_numeric:
             {
                 double_element_block::const_iterator it = double_element_block::begin(*node.data);
                 double_element_block::const_iterator itEnd = double_element_block::end(*node.data);
@@ -2110,7 +2127,7 @@ public:
                 }
             }
             break;
-            case mdds::mtm::element_boolean:
+            case sc::element_type_boolean:
             {
                 boolean_element_block::const_iterator it = boolean_element_block::begin(*node.data);
                 boolean_element_block::const_iterator itEnd = boolean_element_block::end(*node.data);
@@ -2123,7 +2140,7 @@ public:
                 }
             }
             break;
-            case mdds::mtm::element_string:
+            case sc::element_type_string:
             {
                 for (size_t i = 0; i < node.size; ++i, ++miPos)
                     *miPos = mfNaN;
@@ -2213,21 +2230,21 @@ void ScMatrixImpl::IfJump( ScJumpMatrix& rJumpMatrix, const short* pJump, short 
             mdds::mtm::element_t eType = maMat.get_type(aPos);
             switch (eType)
             {
-                case mdds::mtm::element_boolean:
-                    fVal = maMat.get_boolean(aPos) ? 1.0 : 0.0;
+                case sc::element_type_boolean:
+                    fVal = maMat.get<bool>(aPos) ? 1.0 : 0.0;
                     bIsValue = std::isfinite(fVal);
                     bTrue = bIsValue && (fVal != 0.0);
                     if (bTrue)
                         fVal = 1.0;
                 break;
-                case mdds::mtm::element_numeric:
+                case MatrixImplType::element_numeric:
                     fVal = maMat.get_numeric(aPos);
                     bIsValue = std::isfinite(fVal);
                     bTrue = bIsValue && (fVal != 0.0);
                     if (bTrue)
                         fVal = 1.0;
                 break;
-                case mdds::mtm::element_string:
+                case sc::element_type_string:
                     // Treat empty and empty path as 0, but string
                     // as error. ScMatrix::IsValueOrEmpty() returns
                     // true for any empty, empty path, empty cell,
@@ -2538,7 +2555,7 @@ public:
     {
         switch (node.type)
         {
-            case mdds::mtm::element_numeric:
+            case MatrixImplType::element_numeric:
             {
                 typedef MatrixImplType::numeric_block_type block_type;
 
@@ -2548,9 +2565,9 @@ public:
                 pos = mrMat.set(pos,aFunc.begin(), aFunc.end());
             }
             break;
-            case mdds::mtm::element_boolean:
+            case sc::element_type_boolean:
             {
-                typedef MatrixImplType::boolean_block_type block_type;
+                typedef sc::boolean_block block_type;
 
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
@@ -2559,9 +2576,9 @@ public:
                 pos = mrMat.set(pos, aFunc.begin(), aFunc.end());
             }
             break;
-            case mdds::mtm::element_string:
+            case sc::element_type_string:
             {
-                typedef MatrixImplType::string_block_type block_type;
+                typedef sc::string_block block_type;
 
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
@@ -2647,7 +2664,7 @@ public:
     {
         switch (node.type)
         {
-            case mdds::mtm::element_numeric:
+            case MatrixImplType::element_numeric:
             {
                 typedef MatrixImplType::numeric_block_type block_type;
 
@@ -2667,9 +2684,9 @@ public:
                 }
             }
             break;
-            case mdds::mtm::element_string:
+            case sc::element_type_string:
             {
-                typedef MatrixImplType::string_block_type block_type;
+                typedef sc::string_block block_type;
 
                 block_type::const_iterator it = block_type::begin(*node.data);
                 std::advance(it, node.offset);
@@ -2687,9 +2704,9 @@ public:
                 }
             }
             break;
-            case mdds::mtm::element_boolean:
+            case sc::element_type_boolean:
             {
-                typedef MatrixImplType::boolean_block_type block_type;
+                typedef sc::boolean_block block_type;
 
                 block_type::const_iterator it = block_type::begin(*node.data);
                 std::advance(it, node.offset);
@@ -2721,7 +2738,7 @@ public:
                 }
             }
             break;
-            case mdds::mtm::element_integer:
+            case sc::element_type_uint16:
             {
                 SAL_WARN("sc.core","WalkElementBlockOperation - unhandled element_integer");
                 // No function (yet?), but advance row and column count.
@@ -2771,14 +2788,14 @@ void ScMatrixImpl::Dump() const
             std::cout << "  row=" << nRow << ", col=" << nCol << " : ";
             switch (maMat.get_type(nRow, nCol))
             {
-                case mdds::mtm::element_string:
-                    std::cout << "string (" << maMat.get_string(nRow, nCol).getString() << ")";
+                case sc::element_type_string:
+                    std::cout << "string (" << maMat.get<svl::SharedString>(nRow, nCol).getString() << ")";
                 break;
-                case mdds::mtm::element_numeric:
+                case MatrixImplType::element_numeric:
                     std::cout << "numeric (" << maMat.get_numeric(nRow, nCol) << ")";
                 break;
-                case mdds::mtm::element_boolean:
-                    std::cout << "boolean (" << maMat.get_boolean(nRow, nCol) << ")";
+                case sc::element_type_boolean:
+                    std::cout << "boolean (" << maMat.get<bool>(nRow, nCol) << ")";
                 break;
                 case mdds::mtm::element_empty:
                     std::cout << "empty";
@@ -2998,8 +3015,8 @@ bool ScMatrixImpl::IsValueOrEmpty( const MatrixImplType::const_position_type & r
 {
     switch (maMat.get_type(rPos))
     {
-        case mdds::mtm::element_boolean:
-        case mdds::mtm::element_numeric:
+        case sc::element_type_boolean:
+        case MatrixImplType::element_numeric:
         case mdds::mtm::element_empty:
             return true;
         default:
@@ -3010,7 +3027,7 @@ bool ScMatrixImpl::IsValueOrEmpty( const MatrixImplType::const_position_type & r
 
 double ScMatrixImpl::GetDouble(const MatrixImplType::const_position_type & rPos) const
 {
-    double fVal = maMat.get_numeric(rPos);
+    double fVal = getNumeric(maMat, rPos);
     if ( pErrorInterpreter )
     {
         FormulaError nError = GetDoubleErrorValue(fVal);
@@ -3027,8 +3044,8 @@ bool ScMatrixImpl::IsValue( const MatrixImplType::const_position_type & rPos ) c
 {
     switch (maMat.get_type(rPos))
     {
-        case mdds::mtm::element_boolean:
-        case mdds::mtm::element_numeric:
+        case sc::element_type_boolean:
+        case MatrixImplType::element_numeric:
             return true;
         default:
             ;
@@ -3038,7 +3055,7 @@ bool ScMatrixImpl::IsValue( const MatrixImplType::const_position_type & rPos ) c
 
 FormulaError ScMatrixImpl::GetError(const MatrixImplType::const_position_type & rPos) const
 {
-    double fVal = maMat.get_numeric(rPos);
+    double fVal = getNumeric(maMat, rPos);
     return GetDoubleErrorValue(fVal);
 }
 
@@ -3047,7 +3064,7 @@ bool ScMatrixImpl::IsStringOrEmpty(const MatrixImplType::const_position_type & r
     switch (maMat.get_type(rPos))
     {
         case mdds::mtm::element_empty:
-        case mdds::mtm::element_string:
+        case sc::element_type_string:
             return true;
         default:
             ;

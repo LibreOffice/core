@@ -61,7 +61,9 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus-parser,\
 	UnpackedTarball/liborcus/src/parser/string_pool \
 	UnpackedTarball/liborcus/src/parser/tokens \
 	UnpackedTarball/liborcus/src/parser/types \
+	UnpackedTarball/liborcus/src/parser/unnamed_buffer \
 	UnpackedTarball/liborcus/src/parser/utf8 \
+	UnpackedTarball/liborcus/src/parser/xml_encode \
 	UnpackedTarball/liborcus/src/parser/xml_namespace \
 	UnpackedTarball/liborcus/src/parser/xml_writer \
 	UnpackedTarball/liborcus/src/parser/yaml_parser_base \
