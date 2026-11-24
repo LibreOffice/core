@@ -98,6 +98,7 @@
 /// <reference path="./VectorHitTest.test.ts" />
 /// <reference path="./Scene3D.test.ts" />
 /// <reference path="./Polygon.test.ts" />
+/// <reference path="./SvgPathReader.test.ts" />
 /// <reference path="./TextPageVectorSection.test.ts" />
 /// <reference path="./InternUtil.test.ts" />
 /// <reference path="./Plural.test.ts" />

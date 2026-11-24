@@ -122,7 +122,7 @@ namespace cool {
 				return isNaN(value) ? 0 : value;
 			};
 			const hasNumber = (): boolean =>
-				at < tokens.length && !/[a-zA-Z]/.test(tokens[at]);
+				at < tokens.length && !/^[a-zA-Z]$/.test(tokens[at]);
 			const begin = (): ObjectPathPolygon => {
 				polygon = { points: [] };
 				polygons.push(polygon);
@@ -157,7 +157,7 @@ namespace cool {
 
 			while (at < tokens.length) {
 				const token = tokens[at];
-				if (/[a-zA-Z]/.test(token)) {
+				if (/^[a-zA-Z]$/.test(token)) {
 					command = token;
 					at++;
 				} else if (command === 'M') command = 'L';
