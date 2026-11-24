@@ -1332,6 +1332,11 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 		var sections = e.sections || [];
 
+		// The headers are about to be built anew; a section drag in progress holds the header
+		// it started on and section indices that may no longer apply.
+		if (this._dragState && this._dragState.section)
+			this._finishDrag(false);
+
 		// The panel of a linked presentation holds section headers of its own, which go
 		// with the others; the panel opens again once the presentation headers are rebuilt.
 		this._suspendLinkPanel();
@@ -1470,6 +1475,10 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				that._renameSection(section, sectionIndex);
 			}, this);
 		}
+
+		// The header is dragged to move the section, with its slides.
+		if (this._map.isEditMode())
+			this._addDnDHandlers(header);
 
 		// Section context menu
 		if (this._map.isEditMode()) {
@@ -3214,6 +3223,10 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			e.preventDefault();
 			return;
 		}
+		if (this.classList.contains('slide-section-header')) {
+			partsPreview._handleSectionDragStart(e, this);
+			return;
+		}
 		// To avoid having to add a new message to move an arbitrary part, let's select the
 		// slide that is being dragged.
 		const targetNode = (e.target.id.startsWith('preview') ? e.target : e.target.parentNode);
@@ -3265,6 +3278,38 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		}
 	},
 
+	_handleSectionDragStart: function (e, header) {
+		const sections = (app.impress && app.impress.sections) || [];
+		const sectionIndex = parseInt(header.getAttribute('data-section-index'), 10);
+		const section = sections[sectionIndex];
+		// The sections of a linked presentation keep the order of their source, and with a
+		// single section there is no other place to move it to.
+		if (!section || sections.length < 2 || header.classList.contains('in-presentation')) {
+			e.preventDefault();
+			return;
+		}
+
+		const end = sectionIndex + 1 < sections.length ?
+			sections[sectionIndex + 1].startIndex : this._previewTiles.length;
+		const draggedParts = [];
+		for (let i = section.startIndex; i < end; i++) {
+			// The overview slide stays the first slide.
+			if (!this._isOverviewPart(i))
+				draggedParts.push(i);
+		}
+		// A section of the overview slide alone has no slide that can move.
+		if (!draggedParts.length) {
+			e.preventDefault();
+			return;
+		}
+
+		e.dataTransfer.effectAllowed = 'move';
+		e.dataTransfer.clearData();
+		e.dataTransfer.setData('application/x-cool-slide-section', String(sectionIndex));
+
+		this._beginDragOf(draggedParts, { index: sectionIndex, header: header });
+	},
+
 	// Collect the slides taking part in the drag and start the drag
 	// visuals: the dragged frames close smoothly, so the remaining slides
 	// move in to take their place.
@@ -3280,7 +3325,13 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		} else {
 			draggedParts.push(partId);
 		}
+		this._beginDragOf(draggedParts, null);
+	},
 
+	// Start the drag visuals for the given slides. In a section drag, section names the
+	// index of the dragged section and its header, which leaves the sorter with the slides
+	// for the time of the drag.
+	_beginDragOf: function (draggedParts, section) {
 		// In the horizontal sorter layout the frames close and the gap
 		// opens along the x axis.
 		const sizeProperty = this._direction === 'x' ? 'width' : 'height';
@@ -3295,10 +3346,14 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		// size of a single slide, whatever the number of slides dragged.
 		// A selected slide in a collapsed section is hidden and measures
 		// as zero, so the gap takes the first size that is not zero.
-		const gapSize = sizes.find((size) => size > 0) || 0;
+		// A collapsed section shows no slide at all, so its gap takes the size of its header.
+		const gapSize = sizes.find((size) => size > 0) ||
+			(section ? section.header.getBoundingClientRect()[sizeProperty] : 0);
 
 		this._dragState = {
 			draggedParts: draggedParts,
+			section: section,
+			sectionNewIndex: null,
 			frames: frames,
 			sizes: sizes,
 			sizeProperty: sizeProperty,
@@ -3323,6 +3378,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		setTimeout(() => {
 			if (this._dragState !== state)
 				return;
+			if (section)
+				section.header.style.display = 'none';
 			// A grid frame keeps occupying its cell at zero size, so in the
 			// grid the dragged frames leave the flow entirely and the
 			// remaining slides slide into the freed cells.
@@ -3350,7 +3407,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			// The gap holds one slide of the stack. The space of the others
 			// moves to the end of the sorter, so the sorter keeps its length
 			// and its scroll position while the drag goes on.
-			const stackSpace = sizes.reduce((sum, size) => sum + size, 0) - gapSize;
+			const stackSpace = Math.max(0, sizes.reduce((sum, size) => sum + size, 0) - gapSize);
 			this._partsPreviewCont.style[state.stackSpaceProperty] = stackSpace + 'px';
 			// Closing the dragged frames pulls slides from below the view
 			// into it; load their previews once the frames have closed.
@@ -3500,6 +3557,11 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			return;
 		}
 
+		if (state.section) {
+			this._dropSection(state);
+			return;
+		}
+
 		// Insert after the slide preceding the gap; -1 inserts before the
 		// first slide. On a section boundary intoSection names the section
 		// whose first slides the dropped slides become; without it they
@@ -3511,6 +3573,38 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 		this._applyDropLocally(insertIndex, state.draggedParts,
 			state.intoSection !== null);
+		this._finishDrag(false, true);
+	},
+
+	// Ends a section drag on the place its gap shows: the section takes its new place among
+	// the sections on the server, and the header and the previews move there at once.
+	_dropSection: function (state) {
+		const header = state.section.header;
+		if (state.sectionNewIndex === state.section.index) {
+			this._finishDrag(true);
+			return;
+		}
+
+		const command = {
+			'SectionIndex': {
+				'type': 'long',
+				'value': state.section.index
+			},
+			'NewIndex': {
+				'type': 'long',
+				'value': state.sectionNewIndex
+			}
+		};
+		app.socket.sendMessage('uno .uno:MoveSlideSection ' + JSON.stringify(command));
+
+		this._applyDropLocally(state.insertIndex, state.draggedParts, false);
+		// The header goes above its slides, which stay hidden while the section is
+		// collapsed.
+		const collapsed = header.classList.contains('collapsed');
+		for (let i = 0; i < state.frames.length; i++)
+			state.frames[i].classList.toggle('section-collapsed', collapsed);
+		if (state.frames.length)
+			this._partsPreviewCont.insertBefore(header, state.frames[0]);
 		this._finishDrag(false, true);
 	},
 
@@ -3622,9 +3716,12 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		if (!state || !state.pointer)
 			return;
 
+		if (state.section) {
+			this._updateSectionDropGap(state);
+			return;
+		}
+
 		const horizontal = this._direction === 'x';
-		const rtl = document.documentElement.dir === 'rtl';
-		const pointerPosition = horizontal ? state.pointer.x : state.pointer.y;
 
 		let insertIndex = this._previewTiles.length;
 		let gapFrame = null;
@@ -3645,23 +3742,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				lastFrame = frame;
 				continue;
 			}
-			const rect = frame.getBoundingClientRect();
-			let pointerBefore;
-			if (state.grid) {
-				// The grid flows in reading order: the pointer comes before
-				// a frame when it is above the frame's row, or in the same
-				// row on the near side of the frame's middle.
-				const middleX = rect.left + rect.width / 2;
-				const beforeInRow = rtl ?
-					state.pointer.x > middleX : state.pointer.x < middleX;
-				pointerBefore = state.pointer.y < rect.top ||
-					(state.pointer.y < rect.bottom && beforeInRow);
-			} else {
-				const middle = horizontal ?
-					rect.left + rect.width / 2 : rect.top + rect.height / 2;
-				pointerBefore = pointerPosition < middle;
-			}
-			if (pointerBefore) {
+			if (this._isPointerBefore(state, frame)) {
 				insertIndex = i;
 				gapFrame = frame;
 				break;
@@ -3713,6 +3794,74 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 		state.insertIndex = insertIndex;
 		state.intoSection = intoSection;
+		this._setDropGap(state, gapFrame, gapSide);
+	},
+
+	// Whether the drag pointer comes before the given frame or header of the sorter.
+	_isPointerBefore: function (state, element) {
+		const rect = element.getBoundingClientRect();
+		if (state.grid) {
+			// The grid flows in reading order: the pointer comes before
+			// a frame when it is above the frame's row, or in the same
+			// row on the near side of the frame's middle.
+			const rtl = document.documentElement.dir === 'rtl';
+			const middleX = rect.left + rect.width / 2;
+			const beforeInRow = rtl ?
+				state.pointer.x > middleX : state.pointer.x < middleX;
+			return state.pointer.y < rect.top ||
+				(state.pointer.y < rect.bottom && beforeInRow);
+		}
+		if (this._direction === 'x')
+			return state.pointer.x < rect.left + rect.width / 2;
+		return state.pointer.y < rect.top + rect.height / 2;
+	},
+
+	// Choose the place of a dragged section from the pointer position and open the gap
+	// there. A section lands above the header of another section, the first one the pointer
+	// comes before, or after the last slide.
+	_updateSectionDropGap: function (state) {
+		const sections = (app.impress && app.impress.sections) || [];
+		const dragged = state.section.index;
+		for (let h = 0; h < this._sectionHeaders.length; h++) {
+			const header = this._sectionHeaders[h];
+			const index = parseInt(header.getAttribute('data-section-index'), 10);
+			if (index === dragged || !sections[index])
+				continue;
+			// The place above the first section of a linked presentation is above the
+			// header of the presentation. Its other sections offer no place, because the
+			// presentation keeps its sections together.
+			const presentationHeader = this._presentationHeaderBefore(header);
+			if (header.classList.contains('in-presentation') && !presentationHeader)
+				continue;
+			// Nothing goes above a first section that holds the overview slide alone.
+			if (index === 0 && this._isOverviewPart(sections[0].startIndex) &&
+			    sections[1].startIndex === 1)
+				continue;
+			const boundary = presentationHeader || header;
+			if (!this._isPointerBefore(state, boundary))
+				continue;
+			state.insertIndex = sections[index].startIndex;
+			// Taking the dragged section out moves the sections after it one place up.
+			state.sectionNewIndex = index < dragged ? index : index - 1;
+			this._setDropGap(state, boundary, 'before');
+			return;
+		}
+
+		let lastFrame = null;
+		for (let i = this._previewTiles.length - 1; i >= 0 && !lastFrame; i--) {
+			const frame = this._previewTiles[i].parentNode;
+			if (state.draggedParts.indexOf(i) === -1 &&
+			    frame.parentNode === this._partsPreviewCont && !this._isFrameHidden(frame))
+				lastFrame = frame;
+		}
+		state.insertIndex = this._previewTiles.length;
+		state.sectionNewIndex = sections.length - 1;
+		this._setDropGap(state, lastFrame, 'after');
+	},
+
+	// Open the insertion gap on the given side of the given frame or header, and close the
+	// gap that was open elsewhere.
+	_setDropGap: function (state, gapFrame, gapSide) {
 		if (gapFrame === state.gapFrame && gapSide === state.gapSide)
 			return;
 
@@ -3895,6 +4044,10 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 		if (state.autoScrollId !== null)
 			cancelAnimationFrame(state.autoScrollId);
+
+		// The header of a dragged section shows again.
+		if (state.section)
+			state.section.header.style.display = '';
 
 		const container = this._partsPreviewCont;
 		const restoreFrame = function (frame) {

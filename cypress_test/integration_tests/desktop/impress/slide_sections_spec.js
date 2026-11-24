@@ -606,6 +606,108 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 						.to.deep.equal([0, 3, 11]);
 				});
 			});
+
+			describe('Move a whole section', function() {
+
+				// Drops the drag in progress just above the header of the section with
+				// the given name, or below the last slide when no name is given. The
+				// dragged slides leave the sorter once the drag has started, so the
+				// drop point is measured in a later step than the dragstart.
+				function dropAboveSection(win, name) {
+					helper.processToIdle(win);
+					cy.then(function() {
+						var sorter = win.document.getElementById('slide-sorter');
+						var rect, y;
+						if (name) {
+							var headers = Array.from(
+								win.document.querySelectorAll('.slide-section-header'));
+							rect = headers.find(function(candidate) {
+								return candidate.querySelector('.slide-section-name')
+									.textContent === name;
+							}).getBoundingClientRect();
+							y = rect.top + 1;
+						} else {
+							var frames = sorter.querySelectorAll('.preview-frame');
+							rect = frames[frames.length - 1].getBoundingClientRect();
+							y = rect.bottom + 100;
+						}
+						var x = rect.left + rect.width / 2;
+						dragOverAt(win, x, y);
+						dropOn(win, sorter, x, y);
+					});
+					helper.processToIdle(win);
+				}
+
+				function dragSectionHeader(win, sectionIndex, aboveName) {
+					cy.then(function() {
+						win.document.querySelectorAll('.slide-section-header')[sectionIndex]
+							.dispatchEvent(new win.DragEvent('dragstart', {
+								bubbles: true,
+								cancelable: true,
+								dataTransfer: new win.DataTransfer(),
+							}));
+					});
+					dropAboveSection(win, aboveName);
+				}
+
+				function assertSectionStarts(starts) {
+					cy.window().should(function(win) {
+						expect(win['0'].app.impress.sections.map(function(s) { return s.startIndex; }))
+							.to.deep.equal(starts);
+					});
+				}
+
+				it('A header dragged above the first section moves the section there', function() {
+					helper.processToIdle(this.win);
+					waitForInitialSections();
+
+					dragSectionHeader(this.win, 2, 'Section-1');
+
+					assertSectionHeaders(['Section-3', 'Section-1', 'Section-2']);
+					assertSectionStarts([0, 2, 6]);
+				});
+
+				it('A header dragged below the last slide moves the section to the end', function() {
+					helper.processToIdle(this.win);
+					waitForInitialSections();
+
+					dragSectionHeader(this.win, 0);
+
+					assertSectionHeaders(['Section-2', 'Section-3', 'Section-1']);
+					assertSectionStarts([0, 7, 9]);
+				});
+
+				it('A header dropped on its own place leaves the sections as they are', function() {
+					helper.processToIdle(this.win);
+					waitForInitialSections();
+
+					dragSectionHeader(this.win, 1, 'Section-3');
+
+					assertSectionHeaders(['Section-1', 'Section-2', 'Section-3']);
+					assertSectionStarts([0, 4, 11]);
+					// The header that left the sorter for the drag is back in it.
+					cy.cGet('.slide-section-header').eq(1).should('not.have.css', 'display', 'none');
+				});
+
+				it('The selected slides of a whole section keep their section when dragged', function() {
+					helper.processToIdle(this.win);
+					waitForInitialSections();
+
+					// A click on the header selects every slide of Section-3.
+					cy.cGet('.slide-section-header').eq(2).click();
+					assertSlidesSelected(11, 12);
+					helper.processToIdle(this.win);
+
+					var win = this.win;
+					cy.then(function() {
+						beginSlideDrag(win, 11);
+					});
+					dropAboveSection(win, 'Section-1');
+
+					assertSectionHeaders(['Section-3', 'Section-1', 'Section-2']);
+					assertSectionStarts([0, 2, 6]);
+				});
+			});
 		});
 
 		describe('Section anchors follow insert and delete', function() {
