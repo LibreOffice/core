@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,fontconfig,\
 	external/fontconfig/nowarnnoconfig.patch.1 \
 	external/fontconfig/apple-xlocale.patch.1 \
 	external/fontconfig/ofz584604666.patch.1 \
+	external/fontconfig/ofz589396683.patch.1 \
 ))
 
 ifneq ($(OS),MACOSX)

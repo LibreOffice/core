@@ -1,0 +1,20 @@
+--- a/src/fcfreetype.c
++++ b/src/fcfreetype.c
+@@ -2386,7 +2386,7 @@
+ 	    continue;
+ 
+ 	ucs4 = FT_Get_First_Char (face, &glyph);
+-	while (glyph != 0 && num_advances < 3) {
++	while (glyph != 0 && ucs4 <= 0x10ffff && num_advances < 3) {
+ 	    FT_Pos advance = 0;
+ 	    if (!FT_Get_Advance (face, glyph, load_flags, &advance) && advance) {
+ 		unsigned int j;
+@@ -2434,7 +2434,7 @@
+ 	    continue;
+ 
+ 	ucs4 = FT_Get_First_Char (face, &glyph);
+-	while (glyph != 0) {
++	while (glyph != 0 && ucs4 <= 0x10ffff) {
+ 	    FcBool good = FcTrue;
+ 
+ 	    /* CID fonts built by Adobe used to make ASCII control chars to cid1
