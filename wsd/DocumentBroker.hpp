@@ -1343,14 +1343,15 @@ private:
         return isModified();
     }
 
-    /// True iff there is at least one non-readonly session other than the given.
+    /// True when there is at least one loaded, non-readonly session other than the given one that
+    /// is not removed.
     /// Since only editable sessions can save, we need to use the last to
     /// save modified documents, otherwise we'll potentially have to save on
     /// every editable session disconnect, lest we lose data due to racing.
     bool haveAnotherEditableSession(const std::string& id) const;
 
     /// Returns the number of active sessions.
-    /// This includes only those that are loaded and not waiting disconnection.
+    /// This includes only those that are loaded, not closed and not removed.
     std::size_t countActiveSessions() const;
 
     /// Returns the number of sessions still loading.

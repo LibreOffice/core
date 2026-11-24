@@ -5729,8 +5729,6 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
     const std::string id = session->getId();
     try
     {
-        const std::size_t activeSessionCount = countActiveSessions();
-
         // A session that was removed before has had its save, the upload of its presets and the
         // rescue of its clipboard. Only its disconnection and the decision whether to destroy
         // the document are left.
@@ -5740,6 +5738,10 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
             session->setRemoved();
             UNITWSD_CALL_INSTANCE(_unitWsd, onDocBrokerRemovingSession(_docKey, session));
         }
+
+        // This session is removed, so these are the other views, whether this one was still live
+        // or not.
+        const std::size_t activeSessionCount = countActiveSessions();
 
         const bool lastEditableSession = session->isEditable() && !haveAnotherEditableSession(id);
         // Forcing a save when always_save_on_exit=true creates a new
@@ -5757,7 +5759,7 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
         LOG_INF("Removing session [" << id << "] on docKey [" << _docKey << "] with appDocId ["
                                      << _mobileAppDocId << "]. Have "
                                      << _sessions.size() << " sessions (" << activeSessionCount
-                                     << " active). IsLive: " << session->isLive()
+                                     << " others active). IsLive: " << session->isLive()
                                      << ", IsReadOnly: " << session->isReadOnly()
                                      << ", IsAllowChangeComments: " << session->isAllowChangeComments()
                                      << ", IsAllowManageRedlines: " << session->isAllowManageRedlines()
@@ -5845,7 +5847,7 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
         }
 
         // Last view going away; can destroy?
-        if (activeSessionCount <= 1)
+        if (activeSessionCount == 0)
         {
             if (isDetached())
             {
@@ -5870,7 +5872,7 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
                 LOG_DBG("No more sessions after removing last. Setting MarkToDestroy flag.");
             }
         }
-        else if (activeSessionCount > 0)
+        else
         {
             LOG_ASSERT_MSG(!_docState.isMarkedToDestroy(),
                            "Have active sessions while marked to destroy");
@@ -5976,8 +5978,10 @@ void DocumentBroker::disconnectSessionInternal(const std::shared_ptr<ClientSessi
 #endif
         if (_docState.isUnloadRequested())
         {
-            // We must be the last session, flag to destroy if unload is requested.
-            LOG_ASSERT_MSG(countActiveSessions() <= 1, "Unload-requested with multiple sessions");
+            // This session is removed, and no other is active, so flag to destroy if unload is
+            // requested.
+            LOG_ASSERT_MSG(countActiveSessions() == 0,
+                           "Unload-requested with other active sessions");
             LOG_TRC("Unload requested while disconnecting session ["
                     << id << "], having " << _sessions.size() << " sessions, marking to destroy");
             _docState.markToDestroy();
@@ -6206,7 +6210,7 @@ std::shared_ptr<ClientSession> DocumentBroker::createNewClientSession(
             if (ws) {
                 std::set<std::string> userNames;
                 for (auto const & pair: _sessions) {
-                    if (pair.second->isLive()) {
+                    if (pair.second->isLive() && !pair.second->isRemoved()) {
                         userNames.insert(pair.second->getUserName());
                     }
                 }
@@ -8164,7 +8168,8 @@ bool DocumentBroker::haveAnotherEditableSession(const std::string& id) const
 
     for (const auto& it : _sessions)
     {
-        if (it.second->getId() != id && it.second->isViewLoaded() && it.second->isEditable())
+        if (it.second->getId() != id && it.second->isViewLoaded() && it.second->isEditable() &&
+            !it.second->isRemoved())
         {
             // This is a loaded session that is non-readonly.
             return true;
@@ -8182,7 +8187,7 @@ std::size_t DocumentBroker::countActiveSessions() const
     std::size_t count = 0;
     for (const auto& it : _sessions)
     {
-        if (it.second->isLive())
+        if (it.second->isLive() && !it.second->isRemoved())
         {
             ++count;
         }

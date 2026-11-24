@@ -586,6 +586,213 @@ public:
     }
 };
 
+/// A view that leaves while another stays leaves the document loaded for the other. Here the second
+/// view removes the first, and the socket of the first closes while an upload is running, which
+/// removes it a second time.
+class UnitLeaveDuringUpload : public WopiTestServer
+{
+    STATE_ENUM(Phase, LoadFirst, WaitFirstLoaded, LoadSecond, WaitSecondLoaded, WaitModified,
+               WaitUpload, WaitRemoved, CloseFirst, WaitDropped, WaitUploaded, ModifyAgain,
+               WaitModifiedAgain, Done)
+    _phase;
+
+    /// The first upload reached the host, which holds it until the first view is gone.
+    std::atomic<bool> _uploadHeld;
+    std::atomic<bool> _releaseUpload;
+
+    /// The number of views loaded. Touched on the broker's thread only.
+    std::size_t _viewCount;
+
+    /// The view id of the first view in the Kit.
+    std::atomic<int> _firstViewId;
+
+    /// The session of the first view. Touched on the broker's thread only.
+    std::string _firstViewSessionId;
+
+    /// Whether the broker started removing the first view. Touched on the broker's thread only.
+    bool _firstViewRemoving;
+
+public:
+    UnitLeaveDuringUpload()
+        : WopiTestServer("UnitLeaveDuringUpload")
+        , _phase(Phase::LoadFirst)
+        , _uploadHeld(false)
+        , _releaseUpload(false)
+        , _viewCount(0)
+        , _firstViewId(-1)
+        , _firstViewRemoving(false)
+    {
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        fileInfo->set("UserCanWrite", "true");
+    }
+
+    std::unique_ptr<http::Response>
+    assertPutFileRequest(const Poco::Net::HTTPRequest& /*request*/) override
+    {
+        if (getCountPutFile() == 1)
+        {
+            TST_LOG("Holding the first upload until the first view is gone");
+            LOK_ASSERT_STATE(_phase, Phase::WaitUpload);
+            _uploadHeld = true;
+            LOK_ASSERT_MESSAGE("Expected the first view to be gone during the upload",
+                               waitForFlag(_releaseUpload));
+        }
+
+        return nullptr;
+    }
+
+    void onDocBrokerViewLoaded(const std::string& /*docKey*/,
+                               const std::shared_ptr<ClientSession>& session) override
+    {
+        ++_viewCount;
+        TST_LOG("View #" << _viewCount << " [" << session->getId() << "] loaded");
+
+        if (_viewCount == 1 && _phase == Phase::WaitFirstLoaded)
+        {
+            _firstViewId = session->getKitViewId();
+            _firstViewSessionId = session->getId();
+            TRANSITION_STATE(_phase, Phase::LoadSecond);
+        }
+        else if (_viewCount == 2 && _phase == Phase::WaitSecondLoaded)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitModified);
+            WSD_CMD_BY_CONNECTION_INDEX(1, "key type=input char=97 key=0");
+            WSD_CMD_BY_CONNECTION_INDEX(1, "key type=up char=0 key=512");
+        }
+    }
+
+    bool onDocumentModified(const std::string& message) override
+    {
+        TST_LOG("onDocumentModified: [" << message << ']');
+        if (_phase == Phase::WaitModified)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitUpload);
+            WSD_CMD_BY_CONNECTION_INDEX(1, "save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+        }
+        else if (_phase == Phase::WaitModifiedAgain)
+        {
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("The second view still edits the document");
+        }
+
+        return true;
+    }
+
+    void onDocBrokerRemovingSession(const std::string& /*docKey*/,
+                                    const std::shared_ptr<ClientSession>& session) override
+    {
+        TST_LOG("Removing session [" << session->getId() << ']');
+        if (_phase == Phase::WaitRemoved)
+        {
+            LOK_ASSERT_EQUAL_MESSAGE("Expected the first view to be removed", _firstViewSessionId,
+                                     session->getId());
+            _firstViewRemoving = true;
+            TRANSITION_STATE(_phase, Phase::CloseFirst);
+        }
+    }
+
+    bool onFilterLOKitMessage(const std::shared_ptr<Message>& message) override
+    {
+        // The Kit's confirmation keeps the first view waiting for it, so its socket closes first.
+        if (_firstViewRemoving && message->forwardToken() == "client-" + _firstViewSessionId &&
+            message->firstTokenMatches("disconnected:"))
+        {
+            TST_LOG("Dropping the Kit's confirmation that [" << _firstViewSessionId
+                                                             << "] disconnected");
+            return true;
+        }
+
+        return false;
+    }
+
+    void onDocBrokerRemoveSession(const std::string& /*docKey*/,
+                                  const std::shared_ptr<ClientSession>& session) override
+    {
+        TST_LOG("Removed session [" << session->getId() << ']');
+        if (_phase == Phase::WaitDropped && session->getId() == _firstViewSessionId)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitUploaded);
+            _releaseUpload = true;
+        }
+    }
+
+    void onDocumentUploaded(bool success) override
+    {
+        TST_LOG("onDocumentUploaded: " << (success ? "success" : "failure"));
+        if (_phase == Phase::WaitUploaded)
+        {
+            LOK_ASSERT_MESSAGE("Expected the first upload to succeed", success);
+            TRANSITION_STATE(_phase, Phase::ModifyAgain);
+        }
+    }
+
+    void onDocBrokerDestroy(const std::string& /*docKey*/) override
+    {
+        TST_LOG("Destroyed in phase " << name(_phase));
+        LOK_ASSERT_STATE(_phase, Phase::Done);
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::LoadFirst:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitFirstLoaded);
+
+                initWebsocket("/wopi/files/0?access_token=anything");
+                WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::LoadSecond:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitSecondLoaded);
+
+                addWebSocket();
+                WSD_CMD_BY_CONNECTION_INDEX(1, "load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitUpload:
+            {
+                if (_uploadHeld)
+                {
+                    // The second view removes the first, which the broker does at once.
+                    TRANSITION_STATE(_phase, Phase::WaitRemoved);
+                    WSD_CMD_BY_CONNECTION_INDEX(1, "removesession " +
+                                                       std::to_string(_firstViewId.load()));
+                }
+                break;
+            }
+            case Phase::CloseFirst:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitDropped);
+                deleteSocketAt(0);
+                break;
+            }
+            case Phase::ModifyAgain:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitModifiedAgain);
+                WSD_CMD_BY_CONNECTION_INDEX(1, "key type=input char=98 key=0");
+                WSD_CMD_BY_CONNECTION_INDEX(1, "key type=up char=0 key=512");
+                break;
+            }
+            case Phase::WaitFirstLoaded:
+            case Phase::WaitSecondLoaded:
+            case Phase::WaitModified:
+            case Phase::WaitRemoved:
+            case Phase::WaitDropped:
+            case Phase::WaitUploaded:
+            case Phase::WaitModifiedAgain:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 /// A view that asks to remove another view removes that view, not itself.
 class UnitRemoveView : public WopiTestServer
 {
@@ -676,9 +883,10 @@ public:
 
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[7]{ new SecondJoinQuitNormal(), new SecondJoinQuitEarly(),
+    return new UnitBase*[8]{ new SecondJoinQuitNormal(), new SecondJoinQuitEarly(),
                              new SecondJoinWhileFirstQuit(), new UnitRemoveSessionOnce(),
-                             new UnitSendQueueFullSaves(), new UnitRemoveView(), nullptr };
+                             new UnitSendQueueFullSaves(), new UnitLeaveDuringUpload(),
+                             new UnitRemoveView(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
