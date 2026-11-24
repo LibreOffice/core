@@ -583,7 +583,7 @@ bool Line::Read(HWPFile & hwpf)
     hwpf.Read2b(&sx, 1);
     hwpf.Read2b(&sy, 1);
     hwpf.Read2b(&ex, 1);
-    hwpf.Read2b(&sy, 1);
+    hwpf.Read2b(&ey, 1);
     hwpf.Read2b(&width, 1);
     hwpf.Read2b(&shade, 1);
     hwpf.Read2b(&color, 1);
