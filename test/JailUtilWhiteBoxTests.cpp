@@ -44,6 +44,7 @@ class JailUtilWhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testCrashNoteReplacesALink);
     CPPUNIT_TEST(testCrashNoteStaysInsideTheJail);
     CPPUNIT_TEST(testCrashedJailKeptOnlyForAFreshNote);
+    CPPUNIT_TEST(testCrashNoteForANamespaceJail);
 #endif // __linux__
     CPPUNIT_TEST_SUITE_END();
 
@@ -57,6 +58,7 @@ class JailUtilWhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testCrashNoteReplacesALink();
     void testCrashNoteStaysInsideTheJail();
     void testCrashedJailKeptOnlyForAFreshNote();
+    void testCrashNoteForANamespaceJail();
 #endif // __linux__
 };
 
@@ -242,6 +244,39 @@ void JailUtilWhiteBoxTests::testCrashedJailKeptOnlyForAFreshNote()
     LOK_ASSERT_EQUAL(0, ::unlink(note.c_str()));
     LOK_ASSERT_EQUAL(0, ::symlink(other.c_str(), note.c_str()));
     LOK_ASSERT(!JailUtil::isCrashedJailKept(jail));
+
+    FileUtil::removeFile(root, /*recursive=*/true);
+}
+
+/// A jail in a mount namespace has no tmp to see from outside. Its crash note goes into the
+/// tmp/cool-<jailid> directory next to it, which is mounted as its tmp, but not when that is a
+/// link.
+void JailUtilWhiteBoxTests::testCrashNoteForANamespaceJail()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::string root = FileUtil::createRandomTmpDir();
+    const std::string jail = root + "/jailid";
+    const std::string assocTmp = root + "/tmp/cool-jailid";
+    const std::string other = root + "/other";
+    LOK_ASSERT_EQUAL(0, ::mkdir(jail.c_str(), S_IRWXU));
+    LOK_ASSERT_EQUAL(0, ::mkdir((root + "/tmp").c_str(), S_IRWXU));
+    LOK_ASSERT_EQUAL(0, ::mkdir(other.c_str(), S_IRWXU));
+
+    LOK_ASSERT_EQUAL(0, ::symlink(other.c_str(), assocTmp.c_str()));
+    JailUtil::noteCrashedJail(jail);
+    LOK_ASSERT(!FileUtil::Stat(other + "/kit-crashed", /*link=*/true).exists());
+    LOK_ASSERT(!JailUtil::isCrashedJailKept(jail));
+
+    LOK_ASSERT_EQUAL(0, ::unlink(assocTmp.c_str()));
+    LOK_ASSERT_EQUAL(0, ::mkdir(assocTmp.c_str(), S_IRWXU));
+    LOK_ASSERT(!JailUtil::isCrashedJailKept(jail));
+
+    JailUtil::noteCrashedJail(jail);
+    const FileUtil::Stat note(assocTmp + "/kit-crashed", /*link=*/true);
+    LOK_ASSERT(note.good());
+    LOK_ASSERT(note.isFile());
+    LOK_ASSERT(JailUtil::isCrashedJailKept(jail));
 
     FileUtil::removeFile(root, /*recursive=*/true);
 }

@@ -27,6 +27,7 @@
 #include <common/Util.hpp>
 
 #include <atomic>
+#include <cerrno>
 #include <csignal>
 #include <cstdio>
 #include <cstdlib>
@@ -41,6 +42,7 @@
 #include <sys/wait.h>
 #include <sysexits.h>
 #include <unistd.h>
+#include <utility>
 #include <vector>
 
 #include <Poco/File.h>
@@ -424,6 +426,19 @@ void removeAuxFolders(const std::string &root)
 }
 #endif
 
+/// For the jail at root, path/<jailid>, returns path/tmp, which holds the cool-<jailid> and
+/// systemplate-<jailid> directories of the jail, and the jail id.
+std::pair<std::string, std::string> getAssocTmpParentOfJail(const std::string& root)
+{
+    Poco::Path jailPath(root);
+    jailPath.makeDirectory();
+    const std::string jailId = jailPath[jailPath.depth() - 1];
+
+    jailPath.popDirectory();
+    jailPath.pushDirectory("tmp");
+    return { jailPath.toString(), jailId };
+}
+
 /*
     The tmp dir of a path/<jailid>/tmp is mounted from (or linked to) a
     path/tmp/cool-<jailid> dir. In a mount namespace case the existence
@@ -434,12 +449,9 @@ void removeAuxFolders(const std::string &root)
 void removeAssocTmpOfJail(const std::string &root)
 {
 #if ENABLE_CHILDROOTS
-    Poco::Path jailPath(root);
-    jailPath.makeDirectory();
-    const std::string jailId = jailPath[jailPath.depth() - 1];
-
-    jailPath.popDirectory();
-    jailPath.pushDirectory("tmp");
+    const std::pair<std::string, std::string> assoc = getAssocTmpParentOfJail(root);
+    const Poco::Path jailPath(assoc.first);
+    const std::string& jailId = assoc.second;
 
     Poco::Path coolTmpPath(jailPath);
     coolTmpPath.pushDirectory(std::string("cool-") + jailId);
@@ -455,24 +467,64 @@ void removeAssocTmpOfJail(const std::string &root)
 
 constexpr const char CrashNoteName[] = "kit-crashed";
 
-} // namespace
-
-void noteCrashedJail(const std::string& root)
+/// Opens the directory that takes the crash note of the jail at root: the jail's own tmp. In a
+/// mount namespace that is mounted only inside, and the jail looks empty from here, so then it is
+/// the path/tmp/cool-<jailid> directory that is mounted there. Neither may be a link. Returns -1
+/// when there is no such directory.
+int openCrashNoteDir(const std::string& root)
 {
     const int rootFD = ::open(root.c_str(), O_RDONLY | O_DIRECTORY | O_CLOEXEC);
     if (rootFD < 0)
     {
         LOG_SYS("Couldn't open jail [" << root << ']');
-        return;
+        return -1;
     }
 
     const int tmpFD = ::openat(rootFD, "tmp", O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC);
+    const int tmpErrno = errno;
     ::close(rootFD);
-    if (tmpFD < 0)
+    if (tmpFD >= 0)
+        return tmpFD;
+
+    if (tmpErrno != ENOENT)
     {
+        errno = tmpErrno;
         LOG_SYS("Couldn't open the tmp directory of jail [" << root << ']');
-        return;
+        return -1;
     }
+
+    const std::pair<std::string, std::string> assoc = getAssocTmpParentOfJail(root);
+    const int parentFD =
+        ::open(assoc.first.c_str(), O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC);
+    if (parentFD < 0)
+    {
+        LOG_SYS("Couldn't open [" << assoc.first << "], which holds the tmp of jail [" << root
+                                   << ']');
+        return -1;
+    }
+
+    const std::string assocName = "cool-" + assoc.second;
+    const int assocFD =
+        ::openat(parentFD, assocName.c_str(), O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC);
+    const int assocErrno = errno;
+    ::close(parentFD);
+    if (assocFD < 0)
+    {
+        errno = assocErrno;
+        LOG_SYS("Couldn't open [" << assoc.first << assocName << "], the tmp of jail [" << root
+                                   << ']');
+    }
+
+    return assocFD;
+}
+
+} // namespace
+
+void noteCrashedJail(const std::string& root)
+{
+    const int tmpFD = openCrashNoteDir(root);
+    if (tmpFD < 0)
+        return;
 
     // The new file carries the time of this crash as its modification time.
     ::unlinkat(tmpFD, CrashNoteName, 0);
@@ -489,7 +541,15 @@ void noteCrashedJail(const std::string& root)
 
 bool isCrashedJailKept(const std::string& root)
 {
-    const FileUtil::Stat noteStat(root + "/tmp/" + CrashNoteName, /*link=*/true);
+    // The note is where noteCrashedJail() wrote it.
+    std::string notePath = root + "/tmp/" + CrashNoteName;
+    if (!FileUtil::Stat(root + "/tmp", /*link=*/true).exists())
+    {
+        const std::pair<std::string, std::string> assoc = getAssocTmpParentOfJail(root);
+        notePath = assoc.first + "cool-" + assoc.second + '/' + CrashNoteName;
+    }
+
+    const FileUtil::Stat noteStat(notePath, /*link=*/true);
     if (!noteStat.good() || !noteStat.isFile())
         return false;
 

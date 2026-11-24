@@ -88,7 +88,9 @@ bool tryRemoveJail(const std::string& root);
 constexpr int CrashedJailKeepSeconds = 180;
 
 /// Writes a crash note into the tmp directory of the jail at root. The note is a new, empty
-/// regular file that replaces whatever had its name.
+/// regular file that replaces whatever had its name. Where the jail has no tmp to see from here,
+/// as with a mount namespace, the note goes into the tmp/cool-<jailid> directory next to the
+/// jail, which is mounted as its tmp.
 void noteCrashedJail(const std::string& root);
 
 /// True while the jail holds a crash note, a regular file, that was written within the last
