@@ -146,8 +146,8 @@
 		forced-color-adjust: none;
 		background-image: none;
 		background-color: ButtonText !important;
-		-webkit-mask: url('images/closedoc.svg') no-repeat center / contain;
-		mask: url('images/closedoc.svg') no-repeat center / contain;
+		-webkit-mask: url('images/closepanel.svg') no-repeat center / contain;
+		mask: url('images/closepanel.svg') no-repeat center / contain;
 	}
 
 	/* The edit icon is a background image, so keeping it keeps its own colour

@@ -744,7 +744,7 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 	width: var(--btn-img-size) !important;
 	height: var(--btn-img-size) !important;
 	border: none !important;
-	background-image: url('images/closedoc.svg');
+	background-image: url('images/closepanel.svg');
 	background-repeat: no-repeat;
 	background-size: contain;
 	background-position: center;
@@ -754,7 +754,7 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 	margin: 0 !important;
 }
 [data-theme='dark'] .close-navigation-button {
-	background-image: url('images/dark/closedoc.svg');
+	background-image: url('images/dark/closepanel.svg');
 }
 
 /* The header title takes the free space so the grid toggle and the close
