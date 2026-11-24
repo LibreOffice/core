@@ -20,6 +20,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/text/XRedline.hpp>
+#include <com/sun/star/text/XTextConvert.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
@@ -64,6 +65,7 @@
 #include <fmtfollowtextflow.hxx>
 #include <frameformats.hxx>
 #include <docsh.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>
 #include <ndtxt.hxx>
@@ -109,6 +111,21 @@
 using namespace css;
 using namespace ::cpo;
 using namespace ::cpo::uno;
+
+namespace
+{
+sal_Int32 countUnoBookmarks(const SwDoc& rDoc)
+{
+    const IDocumentMarkAccess* pMarkAccess = rDoc.getIDocumentMarkAccess();
+    sal_Int32 nRet = 0;
+    for (auto it = pMarkAccess->getAllMarksBegin(); it != pMarkAccess->getAllMarksEnd(); ++it)
+    {
+        if (IDocumentMarkAccess::GetType(**it) == IDocumentMarkAccess::MarkType::UNO_BOOKMARK)
+            ++nRet;
+    }
+    return nRet;
+}
+}
 
 /// Covers sw/source/core/doc/ fixes.
 class SwCoreDocTest : public SwModelTestBase
@@ -897,6 +914,36 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCopyBookmarks)
     // - Actual  : 2
     // i.e. the 2nd header had a duplicated image without "Copy" in its name.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nActual);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testConvertToTextFrameDoesNotLeaveUnoBookmarks)
+{
+    // Given text that will be converted to a frame:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    // convertToTextFrame() is an import helper; import disables undo while converting text.
+    sw::UndoGuard aUndoGuard(pDoc->GetIDocumentUndoRedo());
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xInsertCursor = xText->createTextCursor();
+    xText->insertString(xInsertCursor, u"frame contents"_ustr, /*bAbsorb=*/false);
+    xInsertCursor.clear();
+
+    uno::Reference<text::XTextCursor> xStart = xText->createTextCursor();
+    xStart->gotoStart(/*bExpand=*/false);
+    uno::Reference<text::XTextCursor> xEnd = xText->createTextCursor();
+    xEnd->gotoEnd(/*bExpand=*/false);
+    uno::Reference<text::XTextConvert> xTextConvert(xText, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTextConvert.is());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), countUnoBookmarks(*pDoc));
+
+    // When converting the range to a frame, as DOCX frame conversion does:
+    uno::Reference<text::XTextContent> xFrame = xTextConvert->convertToTextFrame(
+        xStart, xEnd, uno::Sequence<beans::PropertyValue>());
+    CPPUNIT_ASSERT(xFrame.is());
+
+    // Then the temporary range owner leaves no copied UNO mark in the document:
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), countUnoBookmarks(*pDoc));
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testLinkedStyleDelete)

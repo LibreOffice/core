@@ -259,6 +259,13 @@ namespace sw
             auto [/*const SwPosition&*/ rMarkStart, rMarkEnd] = pMark->GetMarkStartEnd();
             if (rEnd < rMarkStart)
                 break;
+            const IDocumentMarkAccess::MarkType aMarkType = IDocumentMarkAccess::GetType(*pMark);
+            if (aMarkType == IDocumentMarkAccess::MarkType::UNO_BOOKMARK)
+            {
+                // A range/cursor owns this mark, but cannot own a copied mark.
+                continue;
+            }
+
             // only include marks that are in the range and not touching both start and end
             // - not for annotation or checkbox marks.
             bool const isIncludeStart(
@@ -276,7 +283,6 @@ namespace sw
                 pMark->IsExpanded()
                 ? (isIncludeStart || isIncludeEnd)  // rMarkStart != rMarkEnd
                 : (isIncludeStart && isIncludeEnd); // rMarkStart == rMarkEnd
-            const IDocumentMarkAccess::MarkType aMarkType = IDocumentMarkAccess::GetType(*pMark);
             if ( rMarkStart >= rStt && rMarkEnd <= rEnd
                  && ( bIsNotOnBoundary
                       || aMarkType == IDocumentMarkAccess::MarkType::ANNOTATIONMARK
