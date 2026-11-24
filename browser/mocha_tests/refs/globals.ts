@@ -93,7 +93,13 @@ noopClass.addInitHook = () => {};
 	// `globalThis.app`, so the stub also needs `file`, `tile`, `map`, and
 	// `following` populated well enough for the load callback and the
 	// RAF helpers (app.enterRAF / app.exitRAF) not to throw.
-	calc: {},
+	calc: {
+		cellCursor: {
+			address: null,
+			visible: false,
+			rectangle: null,
+		},
+	},
 	impress: {},
 	file: {
 		textCursor: {

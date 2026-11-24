@@ -138,27 +138,36 @@ class VectorResourceLoader {
 			);
 			return;
 		}
-		// Image bytes are read through an object URL, which is released once the image settles.
-		const url: string =
-			values.bytes ?
-				URL.createObjectURL(new Blob([values.bytes], { type: values.mime }))
-			:	(values.data as string);
-		const release = () => {
-			if (values.bytes) URL.revokeObjectURL(url);
+		if (!values.bytes) {
+			this._decodeImage(values.checksum, values.data as string);
+			return;
+		}
+		// Image bytes are read into a data: URL, the kind of URL that the Content-Security-Policy
+		// of the editor page allows for images on every server.
+		const reader = new FileReader();
+		reader.onload = () => {
+			this._decodeImage(values.checksum, reader.result as string);
 		};
-		const image = new Image();
-		image.onload = () => {
-			release();
-			this.images.setLoaded(values.checksum, image);
-			this._imageSettled?.(values.checksum);
-			this._loaded(this.images.partsFor(values.checksum));
-		};
-		image.onerror = () => {
-			release();
+		reader.onerror = () => {
 			this._imageUnavailable(
 				values.checksum,
-				'its image data failed to decode',
+				'its image data could not be read',
 			);
+		};
+		reader.readAsDataURL(new Blob([values.bytes], { type: values.mime }));
+	}
+
+	/// Decode the image at the data: URL and keep it, or mark the checksum as unavailable when
+	/// it does not decode.
+	private _decodeImage(checksum: number, url: string): void {
+		const image = new Image();
+		image.onload = () => {
+			this.images.setLoaded(checksum, image);
+			this._imageSettled?.(checksum);
+			this._loaded(this.images.partsFor(checksum));
+		};
+		image.onerror = () => {
+			this._imageUnavailable(checksum, 'its image data failed to decode');
 		};
 		image.src = url;
 	}

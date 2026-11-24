@@ -94,6 +94,7 @@
 /// <reference path="./VectorEffectPrimitives.test.ts" />
 /// <reference path="./VectorImageBlur.test.ts" />
 /// <reference path="./VectorResourceWalker.test.ts" />
+/// <reference path="./VectorResourceLoader.test.ts" />
 /// <reference path="./VectorArrowPrimitives.test.ts" />
 /// <reference path="./VectorHitTest.test.ts" />
 /// <reference path="./Scene3D.test.ts" />
