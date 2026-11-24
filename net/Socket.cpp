@@ -1092,6 +1092,18 @@ void WebSocketHandler::dumpState(std::ostream& os, const std::string& indent) co
                   std::chrono::steady_clock::now() - _lastPongTime)
            << " ago of "
            << std::chrono::duration_cast<std::chrono::seconds>(net::Defaults.pongTimeout) << ' ';
+    if (_unansweredPingTime != std::chrono::steady_clock::time_point())
+        os << "ping unanswered for "
+           << std::chrono::duration_cast<std::chrono::milliseconds>(
+                  std::chrono::steady_clock::now() - _unansweredPingTime)
+           << ' ';
+    if (_pongGraceUsed)
+        os << "pong timeout extended ";
+    if (_lastTimeoutCheckTime != std::chrono::steady_clock::time_point())
+        os << "timeouts checked "
+           << std::chrono::duration_cast<std::chrono::milliseconds>(
+                  std::chrono::steady_clock::now() - _lastTimeoutCheckTime)
+           << " ago ";
     if (_wsPayload.size() > 0)
         HexUtil::dumpHex(os, _wsPayload, "\t\tws queued payload:\n", "\t\t");
     os << '\n';

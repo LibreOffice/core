@@ -16,6 +16,7 @@
 #include <config.h>
 
 #include <common/Log.hpp>
+#include <common/ProcUtil.hpp>
 #include <common/Unit.hpp>
 #include <net/HttpRequest.hpp>
 #include <net/Socket.hpp>
@@ -662,13 +663,10 @@ public:
     }
 };
 
-/// A document connection that stops answering the server's pings is closed, and the other users
-/// hear that its view is gone.
-class UnitTimeoutPong : public UnitTimeoutBase0
+/// A test with a pong timeout above the ping interval, so that a client that answers is never
+/// dropped.
+class UnitTimeoutPongBase : public UnitTimeoutBase0
 {
-    /// Above the ping interval of 18 seconds, so a client that answers is never dropped.
-    static constexpr std::chrono::seconds PongTimeout{ 30 };
-
     void configure(Poco::Util::LayeredConfiguration& config) override
     {
         // A frozen client's view goes when the pong times out, so parking is off.
@@ -681,6 +679,21 @@ class UnitTimeoutPong : public UnitTimeoutBase0
         net::Defaults.maxExtConnections = net::DefaultMaxExtConnections;
         net::Defaults.pongTimeout = PongTimeout;
     }
+
+protected:
+    /// Above the ping interval of 18 seconds.
+    static constexpr std::chrono::seconds PongTimeout{ 30 };
+
+    explicit UnitTimeoutPongBase(const std::string& name)
+        : UnitTimeoutBase0(name)
+    {
+    }
+};
+
+/// A document connection that stops answering the server's pings is closed, and the other users
+/// hear that its view is gone.
+class UnitTimeoutPong : public UnitTimeoutPongBase
+{
 
     /// Waits for a viewinfo message listing the given number of views. Returns false when none
     /// arrives within the timeout.
@@ -708,7 +721,7 @@ class UnitTimeoutPong : public UnitTimeoutBase0
 
 public:
     UnitTimeoutPong()
-        : UnitTimeoutBase0("UnitTimeoutPong")
+        : UnitTimeoutPongBase("UnitTimeoutPong")
     {
         // A frozen connection lives for the pong timeout plus up to one ping interval before the
         // server drops it.
@@ -753,8 +766,9 @@ void UnitTimeoutPong::invokeWSDTest()
     TST_LOG("Freezing session A");
     sessionA->freeze();
 
-    // B keeps answering, stays connected, and hears that A's view is gone. The check runs with each
-    // ping, every 18 seconds, so the drop comes about 36 seconds after the freeze.
+    // B keeps answering, stays connected, and hears that A's view is gone. The first ping after the
+    // freeze, within 18 seconds, times out 30 seconds later, so the drop comes 30 to 48 seconds
+    // after the freeze.
     LOK_ASSERT_MESSAGE("B did not hear that A's view was dropped",
                        waitForViewCount(*sessionB, 1, std::chrono::seconds(60)));
     LOK_ASSERT_EQUAL(true, sessionB->isConnected());
@@ -770,12 +784,89 @@ void UnitTimeoutPong::invokeWSDTest()
     exitTest(TestResult::Ok);
 }
 
+/// A client that answers every ping stays connected when the poll of its document stalls for
+/// longer than the pong timeout, right after a ping went out.
+class UnitTimeoutStall : public UnitTimeoutPongBase
+{
+    /// Longer than the pong timeout.
+    static constexpr std::chrono::seconds Stall{ 31 };
+
+    std::atomic<bool> _loaded{ false };
+    std::atomic<bool> _stallOver{ false };
+    bool _stalled = false; ///< Touched on the document's thread only.
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode code,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (message.starts_with("loaded:"))
+            _loaded = true;
+
+        // The first ping that the document's poll sends after the load.
+        if (std::string_view(ProcUtil::getThreadName()).starts_with("docbroker") && _loaded &&
+            !_stalled && code == WSOpCode::Ping)
+        {
+            _stalled = true;
+            TST_LOG("Stalling the document's poll for " << Stall);
+            std::this_thread::sleep_for(Stall);
+            TST_LOG("Stall over");
+            _stallOver = true;
+        }
+
+        return false;
+    }
+
+public:
+    UnitTimeoutStall()
+        : UnitTimeoutPongBase("UnitTimeoutStall")
+    {
+        // The first ping comes 18 seconds after the load, then the stall.
+        setTimeout(std::chrono::minutes(2));
+    }
+
+    void invokeWSDTest() override;
+};
+
+void UnitTimeoutStall::invokeWSDTest()
+{
+    setTestname(__func__);
+    TST_LOG("Starting Test: " << testname);
+
+    std::string documentPath, documentURL;
+    helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
+
+    std::vector<std::shared_ptr<TerminatingPoll>> socketPollers;
+    std::shared_ptr<SocketPoll> poller =
+        createPoller(socketPollers, /*useOwnPoller=*/true, /*pollerOnClientThread=*/false);
+    std::shared_ptr<http::WebSocketSession> session =
+        http::WebSocketSession::create(helpers::getTestServerURI());
+    http::Request request(documentURL);
+    session->asyncRequest(request, poller);
+    session->sendMessage("load url=" + documentURL);
+
+    const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(90);
+    while (!_stallOver && std::chrono::steady_clock::now() < deadline)
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    LOK_ASSERT_MESSAGE("The document's poll did not stall", _stallOver.load());
+
+    // The client answered the ping during the stall, and the poll reads that pong now.
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+    LOK_ASSERT_MESSAGE("The client was dropped after the stall", session->isConnected());
+
+    session->shutdownWS();
+    for (const std::shared_ptr<TerminatingPoll>& socketPoller : socketPollers)
+        socketPoller->joinThread();
+
+    TST_LOG("Ending Test: " << testname);
+    exitTest(TestResult::Ok);
+}
+
 UnitBase** unit_create_wsd_multi(void)
 {
     return new UnitBase* []
     {
         new UnitTimeout(), new UnitTimeoutInactivity(), new UnitTimeoutPong(),
-            new UnitTimeoutNone(9999, 9), new UnitTimeoutConnections(5, 9), nullptr
+            new UnitTimeoutStall(), new UnitTimeoutNone(9999, 9), new UnitTimeoutConnections(5, 9),
+            nullptr
     };
 }
 

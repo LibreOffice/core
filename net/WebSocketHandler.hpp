@@ -65,6 +65,13 @@ private:
     std::chrono::steady_clock::time_point _lastPingSentTime;
     /// When the last pong arrived. Starts at the construction time, as if a pong had just come.
     std::chrono::steady_clock::time_point _lastPongTime;
+    /// When the oldest ping that still waits for its pong was sent. The default value means that
+    /// every ping sent so far was answered.
+    std::chrono::steady_clock::time_point _unansweredPingTime;
+    /// When the timeouts of this connection were last checked. The default value means never.
+    std::chrono::steady_clock::time_point _lastTimeoutCheckTime;
+    /// Whether the unanswered ping already had its one extension of the pong timeout.
+    bool _pongGraceUsed = false;
     [[maybe_unused]] int _pingTimeUs;
     [[maybe_unused]] bool _isMasking;
     bool _inFragmentBlock;
@@ -91,6 +98,10 @@ protected:
 
     static constexpr std::chrono::microseconds InitialPingDelayMicroS = std::chrono::milliseconds(25);
     static constexpr std::chrono::microseconds PingFrequencyMicroS = std::chrono::seconds(18);
+    /// A gap this long between two checks of the timeouts means that the poll did not run on time,
+    /// as it wakes at least once per ping interval.
+    static constexpr std::chrono::microseconds StalledPollGapMicroS =
+        PingFrequencyMicroS + std::chrono::seconds(5);
 
 public:
     /// Perform upgrade ourselves, or select a client web socket.
@@ -304,8 +315,8 @@ public:
     }
 #endif
 
-    /// Closes the connection once net::Defaults.pongTimeout passes without a pong. Servers only. A
-    /// client never sends pings.
+    /// Closes the connection once a ping stays unanswered for net::Defaults.pongTimeout. Servers
+    /// only. A client never sends pings.
     void closeOnPongTimeout() { _closeOnPongTimeout = true; }
 
     /// Returns true if the underlying socket is connected.
@@ -461,6 +472,8 @@ private:
                             LOG_WRN("Servers should not send pongs, only clients");
 
                         _lastPongTime = std::chrono::steady_clock::now();
+                        _unansweredPingTime = std::chrono::steady_clock::time_point();
+                        _pongGraceUsed = false;
                         _pingTimeUs = std::chrono::duration_cast<std::chrono::microseconds>
                             (_lastPongTime - _lastPingSentTime).count();
                         LOGA_TRC(WebSocket, "Pong received: " << _pingTimeUs << " microseconds");
@@ -658,6 +671,17 @@ protected:
                     = std::chrono::duration_cast<std::chrono::microseconds>(now - _lastPingSentTime);
                 timeoutMaxMicroS
                     = std::min(timeoutMaxMicroS, int64_t((PingFrequencyMicroS - timeSincePingMicroS).count()));
+
+                // Wake when the oldest unanswered ping times out as well.
+                if (isPongTimeoutEnabled() && hasUnansweredPing())
+                {
+                    const auto untilPongTimeout =
+                        std::chrono::duration_cast<std::chrono::microseconds>(
+                            _unansweredPingTime + net::Defaults.pongTimeout - now);
+                    if (untilPongTimeout > std::chrono::microseconds::zero())
+                        timeoutMaxMicroS =
+                            std::min(timeoutMaxMicroS, int64_t(untilPongTimeout.count()));
+                }
             }
         }
         int events = POLLIN;
@@ -687,6 +711,31 @@ private:
         // FIXME: allow an empty payload.
         sendMessage(data, len, code, false);
         _lastPingSentTime = now;
+        if (code == WSOpCode::Ping && !hasUnansweredPing())
+            _unansweredPingTime = now;
+    }
+
+    /// Whether the pong timeout applies to this connection.
+    bool isPongTimeoutEnabled() const
+    {
+        return _closeOnPongTimeout && net::Defaults.pongTimeout > std::chrono::microseconds::zero();
+    }
+
+    /// Whether a ping we sent has no pong yet.
+    bool hasUnansweredPing() const
+    {
+        return _unansweredPingTime != std::chrono::steady_clock::time_point();
+    }
+
+    /// True when the socket has input that is not handled yet: read into its buffer, or still
+    /// waiting to be read.
+    static bool hasUnreadInput(StreamSocket& socket)
+    {
+        if (!socket.getInBuffer().empty())
+            return true;
+
+        pollfd pollFd{ socket.getFD(), POLLIN, 0 };
+        return net::pollDescriptors(&pollFd, 1, 0) > 0 && (pollFd.revents & POLLIN);
     }
 
 public:
@@ -718,6 +767,50 @@ public:
             if (_isClient)
                 return false;
 
+            // After a stall of the poll, the peer's pong may not have been read, or our ping not
+            // sent, so an unanswered ping gets the whole timeout again. Each unanswered ping gets
+            // one extension, so a peer that never answers is still closed.
+            if (hasUnansweredPing() && !_pongGraceUsed &&
+                _lastTimeoutCheckTime != std::chrono::steady_clock::time_point() &&
+                now - _lastTimeoutCheckTime > StalledPollGapMicroS)
+            {
+                LOG_DBG("The poll did not run for "
+                        << std::chrono::duration_cast<std::chrono::milliseconds>(
+                               now - _lastTimeoutCheckTime)
+                        << ", so the unanswered ping is timed from now");
+                _unansweredPingTime = now;
+                _pongGraceUsed = true;
+            }
+            _lastTimeoutCheckTime = now;
+
+            // The poll wakes for every ping and when the oldest unanswered ping times out. A peer
+            // is late only with a ping that it has left unanswered for the timeout, so time in
+            // which we sent no ping does not count against it. Input that is waiting to be read
+            // may be the pong, which the poll reads after this check, once per unanswered ping.
+            if (isPongTimeoutEnabled() && hasUnansweredPing() &&
+                now - _unansweredPingTime > net::Defaults.pongTimeout)
+            {
+                const auto unanswered = std::chrono::duration_cast<std::chrono::milliseconds>(
+                    now - _unansweredPingTime);
+                const std::shared_ptr<StreamSocket> socket = _socket.lock();
+                if (socket && !_pongGraceUsed && hasUnreadInput(*socket))
+                {
+                    LOG_DBG("WebSocket peer left a ping unanswered for "
+                            << unanswered << ", but #" << socket->getFD()
+                            << " has input to read first");
+                    _pongGraceUsed = true;
+                }
+                else if (socket)
+                {
+                    LOG_WRN("WebSocket peer left a ping unanswered for "
+                            << unanswered << ", closing #" << socket->getFD());
+                    _closeOrigin = CloseOrigin::Timeout;
+                    shutdown(StatusCodes::ENDPOINT_GOING_AWAY, "pong timeout",
+                             /*hardShutdown=*/true);
+                    return true;
+                }
+            }
+
             const auto timeSincePingMicroS
                 = std::chrono::duration_cast<std::chrono::microseconds>(now - _lastPingSentTime);
             if (timeSincePingMicroS >= PingFrequencyMicroS)
@@ -725,25 +818,6 @@ public:
                 const std::shared_ptr<StreamSocket> socket = _socket.lock();
                 if (socket)
                     sendPing(now, socket);
-            }
-
-            // The poll wakes for every ping, so this runs at least once per ping interval.
-            if (_closeOnPongTimeout &&
-                net::Defaults.pongTimeout > std::chrono::microseconds::zero() &&
-                now - _lastPongTime > net::Defaults.pongTimeout)
-            {
-                const std::shared_ptr<StreamSocket> socket = _socket.lock();
-                if (socket)
-                {
-                    LOG_WRN("WebSocket peer sent no pong for "
-                            << std::chrono::duration_cast<std::chrono::milliseconds>(
-                                   now - _lastPongTime)
-                            << ", closing #" << socket->getFD());
-                    _closeOrigin = CloseOrigin::Timeout;
-                    shutdown(StatusCodes::ENDPOINT_GOING_AWAY, "pong timeout",
-                             /*hardShutdown=*/true);
-                    return true;
-                }
             }
         }
         return false;
