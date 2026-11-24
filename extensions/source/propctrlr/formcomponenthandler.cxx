@@ -1859,8 +1859,14 @@ namespace pcr
                 OUString sImageURL;
                 impl_getPropertyValue_throw( PROPERTY_IMAGE_URL ) >>= sImageURL;
 
+                // tdf#119988 - enable scaling for an embedded image without an url
+                Reference<graphic::XGraphic> xGraphic;
+                if (sImageURL.isEmpty() && m_xComponent
+                    && impl_componentHasProperty_throw(PROPERTY_GRAPHIC))
+                    m_xComponent->getPropertyValue(PROPERTY_GRAPHIC) >>= xGraphic;
+
                 _rxInspectorUI->enablePropertyUI( impl_getPropertyNameFromId_nothrow( _nPropId ),
-                    ( !sControlSource.isEmpty() ) || ( !sImageURL.isEmpty() )
+                    ( !sControlSource.isEmpty() ) || ( !sImageURL.isEmpty() || xGraphic )
                 );
             }
             break;  // case PROPERTY_ID_SCALEIMAGE, PROPERTY_ID_SCALE_MODE
