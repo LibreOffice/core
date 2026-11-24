@@ -3552,6 +3552,41 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMoveSelectedPartsOfWholeSectionAfterCa
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSection(1).mnStartIndex);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMoveSlideSection)
+{
+    // A section moves past several others in one step, here the last of three to the first place.
+    createSdImpressDoc();
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    sd::SlideSectionManager& rMgr = createThreeSections(*pXImpressDocument);
+    SdPage* pFirstOfThird = pDoc->GetSdPage(4, PageKind::Standard);
+    SfxUndoManager* pUndoManager = pXImpressDocument->GetDocShell()->GetUndoManager();
+    const size_t nUndoCount = pUndoManager->GetUndoActionCount();
+
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { u"SectionIndex"_ustr, uno::Any(sal_Int32(2)) },
+                                           { u"NewIndex"_ustr, uno::Any(sal_Int32(0)) } }));
+    dispatchCommand(mxComponent, u".uno:MoveSlideSection"_ustr, aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(pFirstOfThird, pDoc->GetSdPage(0, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(u"Third"_ustr, rMgr.GetSection(0).maName);
+    CPPUNIT_ASSERT_EQUAL(u"First"_ustr, rMgr.GetSection(1).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Second"_ustr, rMgr.GetSection(2).maName);
+
+    // The pages and the sections go back in one step.
+    CPPUNIT_ASSERT_EQUAL(nUndoCount + 1, pUndoManager->GetUndoActionCount());
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(pFirstOfThird, pDoc->GetSdPage(4, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(u"First"_ustr, rMgr.GetSection(0).maName);
+
+    // An index that names no section changes nothing and leaves nothing to undo.
+    aArgs = comphelper::InitPropertySequence({ { u"SectionIndex"_ustr, uno::Any(sal_Int32(7)) },
+                                               { u"NewIndex"_ustr, uno::Any(sal_Int32(0)) } });
+    dispatchCommand(mxComponent, u".uno:MoveSlideSection"_ustr, aArgs);
+    CPPUNIT_ASSERT_EQUAL(u"First"_ustr, rMgr.GetSection(0).maName);
+    CPPUNIT_ASSERT_EQUAL(nUndoCount, pUndoManager->GetUndoActionCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testRedoDeleteSlideKeepsPosition)
 {
     // Redoing the deletion of a slide leaves the current slide where the deleted one was, as the

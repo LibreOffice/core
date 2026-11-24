@@ -3970,6 +3970,21 @@ SfxVoidItem MoveSlideSectionDown SID_MOVE_SLIDE_SECTION_DOWN
     GroupId = SfxGroupId::Format;
 ]
 
+SfxVoidItem MoveSlideSection SID_MOVE_SLIDE_SECTION
+(SfxInt32Item SectionIndex FN_PARAM_1, SfxInt32Item NewIndex FN_PARAM_2)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Format;
+]
+
 SfxVoidItem EnterPreviewEdit SID_ENTER_PREVIEW_EDIT
 (SfxInt32Item Part FN_PARAM_1)
 [

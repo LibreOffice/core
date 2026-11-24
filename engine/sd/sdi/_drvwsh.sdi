@@ -252,6 +252,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_MOVE_SLIDE_SECTION
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_INSERTLAYER // ole : no, status : play rec
     [
         ExecMethod = FuTemporary ;

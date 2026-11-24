@@ -257,6 +257,30 @@ namespace sd {
 
 namespace {
 
+/// Moves the section at nOldIndex, with its slides, to the place nNewIndex in the order of the
+/// sections, as one step to undo. Nothing changes when either index names no section.
+void moveSlideSection(SdDrawDocument& rDoc, DrawDocShell& rDocShell, sal_Int32 nOldIndex,
+                      sal_Int32 nNewIndex)
+{
+    // The undo of the sections is grouped with the undo of the page order, which MoveSection()
+    // records through MovePages().
+    const bool bUndo = rDoc.IsUndoEnabled();
+    if (bUndo)
+        rDoc.BegUndo(SdResId(STR_UNDO_MOVE_SLIDE_SECTION));
+    auto pUndo = bUndo ? std::make_unique<sd::UndoSlideSection>(
+                             rDoc, SdResId(STR_UNDO_MOVE_SLIDE_SECTION))
+                       : nullptr;
+    const bool bMoved = rDoc.GetSectionManager().MoveSection(nOldIndex, nNewIndex);
+    if (bUndo)
+    {
+        if (bMoved)
+            rDoc.AddUndo(std::move(pUndo));
+        rDoc.EndUndo();
+    }
+    if (bMoved)
+        rDocShell.SetModified();
+}
+
 // A design-template name travels from the picker through the chat request into
 // the system prompt, so the naming contract is deliberately narrow: at most 64
 // characters, each a plain letter, digit, space, hyphen, or underscore. Every
@@ -3209,34 +3233,19 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         break;
 
         case SID_MOVE_SLIDE_SECTION_UP:
+        case SID_MOVE_SLIDE_SECTION_DOWN:
         {
+            // The section of the current slide changes places with the one above or below it.
             SdPage* pPage = GetActualPage();
             if (pPage)
             {
                 sal_uInt16 nPage = (pPage->GetPageNum() - 1) / 2;
-                sd::SlideSectionManager& rMgr = GetDoc()->GetSectionManager();
-                sal_Int32 nSectionIdx = rMgr.GetSectionIndexForSlide(nPage);
-                if (nSectionIdx > 0)
-                {
-                    // Group the section metadata undo with the page-reorder undo
-                    // recorded by MovePages() inside MoveSection().
-                    const bool bUndo = GetDoc()->IsUndoEnabled();
-                    if (bUndo)
-                        GetDoc()->BegUndo(SdResId(STR_UNDO_MOVE_SLIDE_SECTION));
-                    auto pUndo = bUndo
-                        ? std::make_unique<sd::UndoSlideSection>(
-                              *GetDoc(), SdResId(STR_UNDO_MOVE_SLIDE_SECTION))
-                        : nullptr;
-                    const bool bMoved = rMgr.MoveSection(nSectionIdx, nSectionIdx - 1);
-                    if (bUndo)
-                    {
-                        if (bMoved)
-                            GetDoc()->AddUndo(std::move(pUndo));
-                        GetDoc()->EndUndo();
-                    }
-                    if (bMoved)
-                        GetDocSh()->SetModified();
-                }
+                sal_Int32 nSectionIdx
+                    = GetDoc()->GetSectionManager().GetSectionIndexForSlide(nPage);
+                if (nSectionIdx >= 0)
+                    moveSlideSection(*GetDoc(), *GetDocSh(), nSectionIdx,
+                                     nSId == SID_MOVE_SLIDE_SECTION_UP ? nSectionIdx - 1
+                                                                       : nSectionIdx + 1);
             }
 
             Cancel();
@@ -3244,34 +3253,14 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
-        case SID_MOVE_SLIDE_SECTION_DOWN:
+        case SID_MOVE_SLIDE_SECTION:
         {
-            SdPage* pPage = GetActualPage();
-            if (pPage)
-            {
-                sal_uInt16 nPage = (pPage->GetPageNum() - 1) / 2;
-                sd::SlideSectionManager& rMgr = GetDoc()->GetSectionManager();
-                sal_Int32 nSectionIdx = rMgr.GetSectionIndexForSlide(nPage);
-                if (nSectionIdx >= 0 && nSectionIdx < rMgr.GetSectionCount() - 1)
-                {
-                    const bool bUndo = GetDoc()->IsUndoEnabled();
-                    if (bUndo)
-                        GetDoc()->BegUndo(SdResId(STR_UNDO_MOVE_SLIDE_SECTION));
-                    auto pUndo = bUndo
-                        ? std::make_unique<sd::UndoSlideSection>(
-                              *GetDoc(), SdResId(STR_UNDO_MOVE_SLIDE_SECTION))
-                        : nullptr;
-                    const bool bMoved = rMgr.MoveSection(nSectionIdx, nSectionIdx + 1);
-                    if (bUndo)
-                    {
-                        if (bMoved)
-                            GetDoc()->AddUndo(std::move(pUndo));
-                        GetDoc()->EndUndo();
-                    }
-                    if (bMoved)
-                        GetDocSh()->SetModified();
-                }
-            }
+            // The section at SectionIndex takes the place NewIndex in the order of the sections.
+            const SfxInt32Item* pIndexItem = rReq.GetArg<SfxInt32Item>(FN_PARAM_1);
+            const SfxInt32Item* pNewIndexItem = rReq.GetArg<SfxInt32Item>(FN_PARAM_2);
+            if (pIndexItem && pNewIndexItem)
+                moveSlideSection(*GetDoc(), *GetDocSh(), pIndexItem->GetValue(),
+                                 pNewIndexItem->GetValue());
 
             Cancel();
             rReq.Done();

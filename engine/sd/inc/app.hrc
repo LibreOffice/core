@@ -454,5 +454,6 @@
 #define SID_REMOVE_VIDEO_BACKGROUND         (SID_SD_START+474)
 #define SID_SET_MOTION_PATH                 (SID_SD_START+475)
 #define SID_ADD_DRAWN_MOTION_PATH           (SID_SD_START+476)
+#define SID_MOVE_SLIDE_SECTION              (SID_SD_START+477)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
