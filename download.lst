@@ -691,8 +691,8 @@ WPG_TARBALL := libwpg-0.3.$(WPG_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-WPS_SHA256SUM := 365b968e270e85a8469c6b160aa6af5619a4e6c995dbb04c1ecc1b4dd13e80de
-WPS_VERSION_MICRO := 14
+WPS_SHA256SUM := 5b29f1ccd5a0f0737d0f8ff49a1f1c01f5988833c028e7882525136c40674ccc
+WPS_VERSION_MICRO := 15
 WPS_TARBALL := libwps-0.4.$(WPS_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
