@@ -858,8 +858,8 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		// layouts "+" shares a key with "=" and reports the same keyCode, so check the character.
 		if (ev.key === '+')
 			unoKeyCode = UNOKey.ADD;
-		// The same goes for "`", which the core knows as QUOTELEFT (Ctrl+` toggles the formula
-		// view in Calc). Its keyCode 192 is a letter such as "Ö" on other layouts.
+		// The same goes for "`", which the core knows as QUOTELEFT. Its keyCode 192 is a letter
+		// such as "Ö" on other layouts.
 		else if (ev.key === '`')
 			unoKeyCode = UNOKey.QUOTELEFT;
 
