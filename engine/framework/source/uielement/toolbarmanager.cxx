@@ -1002,6 +1002,8 @@ void ToolBarManager::RemoveControllers()
         m_aImageController->dispose();
     m_aImageController.clear();
 
+    auto aControllerMap = std::exchange(m_aControllerMap, {}); // timer can run while disposing
+
     // i90033
     // Remove item window pointers from the toolbar. They were
     // destroyed by the dispose() at the XComponent. This is needed
@@ -1012,8 +1014,7 @@ void ToolBarManager::RemoveControllers()
         ToolBoxItemId nItemId = m_pImpl->GetItemId( i );
         if ( nItemId > ToolBoxItemId(0) )
         {
-            Reference< XComponent > xComponent( m_aControllerMap[ nItemId ], UNO_QUERY );
-            if ( xComponent.is() )
+            if (auto xComponent = aControllerMap[nItemId].query<XComponent>())
             {
                 try
                 {
@@ -1026,7 +1027,6 @@ void ToolBarManager::RemoveControllers()
             m_pImpl->SetItemWindow(nItemId, nullptr);
         }
     }
-    m_aControllerMap.clear();
 }
 
 void ToolBarManager::CreateControllers()
