@@ -1149,10 +1149,6 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				];
 	},
 
-	_isMasterView: function () {
-		return this._map._docLayer.isMasterView();
-	},
-
 	// The context menu of the slide pane in master view. Its entries act on the masters. A right
 	// click on a master offers the entries for that master, and one beside a master offers only
 	// the entries for the whole list. Copied masters can be pasted into this presentation or into
