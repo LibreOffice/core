@@ -3424,6 +3424,134 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMoveSelectedPartsToOwnPlaceWithSection
     CPPUNIT_ASSERT_EQUAL(nUndoCount + 1, pUndoManager->GetUndoActionCount());
 }
 
+namespace
+{
+/// Six slides in the sections First, Second and Third of two slides each, with a slide sorter.
+sd::SlideSectionManager& createThreeSections(SdXImpressDocument& rXImpressDocument)
+{
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(
+        static_cast<cppu::OWeakObject*>(&rXImpressDocument), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xSlides = xPagesSupplier->getDrawPages();
+    while (xSlides->getCount() < 6)
+        xSlides->insertNewByIndex(xSlides->getCount());
+    sd::SlideSectionManager& rMgr = rXImpressDocument.GetDoc()->GetSectionManager();
+    rMgr.AddSection(0, u"First"_ustr);
+    rMgr.AddSection(2, u"Second"_ustr);
+    rMgr.AddSection(4, u"Third"_ustr);
+    return rMgr;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMoveSelectedPartsOfWholeSection)
+{
+    // A section keeps its name and its slides when all of its slides are dropped after the last
+    // slide. It used to be removed, and its slides joined the section Third.
+    createSdImpressDoc();
+    getSlideSorterViewShell();
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    sd::SlideSectionManager& rMgr = createThreeSections(*pXImpressDocument);
+    SdPage* pFirstOfSecond = pDoc->GetSdPage(2, PageKind::Standard);
+    vcl::ITiledRenderable* pRenderable = pXImpressDocument;
+    pRenderable->setPart(2);
+    pRenderable->selectPart(2, 1);
+    pRenderable->selectPart(3, 1);
+    SfxUndoManager* pUndoManager = pXImpressDocument->GetDocShell()->GetUndoManager();
+    const size_t nUndoCount = pUndoManager->GetUndoActionCount();
+
+    pRenderable->moveSelectedParts(5, false, -1);
+
+    CPPUNIT_ASSERT_EQUAL(pFirstOfSecond, pDoc->GetSdPage(4, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(u"Third"_ustr, rMgr.GetSection(1).maName);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rMgr.GetSection(1).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(u"Second"_ustr, rMgr.GetSection(2).maName);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rMgr.GetSection(2).mnStartIndex);
+
+    // The pages and the sections go back in one step.
+    CPPUNIT_ASSERT_EQUAL(nUndoCount + 1, pUndoManager->GetUndoActionCount());
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(pFirstOfSecond, pDoc->GetSdPage(2, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(u"Second"_ustr, rMgr.GetSection(1).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Third"_ustr, rMgr.GetSection(2).maName);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMoveSelectedPartsOfWholeSectionToStart)
+{
+    // Two sections of the same size change places when all slides of the second are dropped
+    // above the first. Every start index stays as it was, so only the names tell the change.
+    createSdImpressDoc();
+    getSlideSorterViewShell();
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    sd::SlideSectionManager& rMgr = createThreeSections(*pXImpressDocument);
+    SdPage* pFirstOfSecond = pDoc->GetSdPage(2, PageKind::Standard);
+    vcl::ITiledRenderable* pRenderable = pXImpressDocument;
+    pRenderable->setPart(2);
+    pRenderable->selectPart(2, 1);
+    pRenderable->selectPart(3, 1);
+
+    pRenderable->moveSelectedParts(-1, false, -1);
+
+    CPPUNIT_ASSERT_EQUAL(pFirstOfSecond, pDoc->GetSdPage(0, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(u"Second"_ustr, rMgr.GetSection(0).maName);
+    CPPUNIT_ASSERT_EQUAL(u"First"_ustr, rMgr.GetSection(1).maName);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rMgr.GetSection(1).mnStartIndex);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMoveSelectedPartsOfWholeSectionIntoAnother)
+{
+    // All slides of a section dropped between the two slides of another section join that
+    // section, and the section they left is gone.
+    createSdImpressDoc();
+    getSlideSorterViewShell();
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    sd::SlideSectionManager& rMgr = createThreeSections(*pXImpressDocument);
+    SdPage* pFirstOfSecond = pDoc->GetSdPage(2, PageKind::Standard);
+    vcl::ITiledRenderable* pRenderable = pXImpressDocument;
+    pRenderable->setPart(2);
+    pRenderable->selectPart(2, 1);
+    pRenderable->selectPart(3, 1);
+
+    pRenderable->moveSelectedParts(0, false, -1);
+
+    CPPUNIT_ASSERT_EQUAL(pFirstOfSecond, pDoc->GetSdPage(1, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(u"First"_ustr, rMgr.GetSection(0).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Third"_ustr, rMgr.GetSection(1).maName);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rMgr.GetSection(1).mnStartIndex);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMoveSelectedPartsOfWholeSectionAfterCanvasPage)
+{
+    // All slides of the second section dropped right after the canvas page make it the first
+    // section, which takes the canvas page from the section that held it.
+    createSdImpressDoc();
+    getSlideSorterViewShell();
+    SdXImpressDocument* pXImpressDocument = addSlidesAndCanvasPage(mxComponent);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    sd::SlideSectionManager& rMgr = pDoc->GetSectionManager();
+    rMgr.AddSection(0, u"First"_ustr);
+    rMgr.AddSection(2, u"Second"_ustr);
+    SdPage* pOnlySlideOfFirst = pDoc->GetSdPage(1, PageKind::Standard);
+    vcl::ITiledRenderable* pRenderable = pXImpressDocument;
+    pRenderable->setPart(2);
+    pRenderable->selectPart(2, 1);
+    pRenderable->selectPart(3, 1);
+
+    pRenderable->moveSelectedParts(0, false, -1);
+
+    CPPUNIT_ASSERT(pDoc->GetSdPage(0, PageKind::Standard)->IsCanvasPage());
+    CPPUNIT_ASSERT_EQUAL(pOnlySlideOfFirst, pDoc->GetSdPage(3, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(u"Second"_ustr, rMgr.GetSection(0).maName);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rMgr.GetSection(0).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(u"First"_ustr, rMgr.GetSection(1).maName);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSection(1).mnStartIndex);
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testRedoDeleteSlideKeepsPosition)
 {
     // Redoing the deletion of a slide leaves the current slide where the deleted one was, as the

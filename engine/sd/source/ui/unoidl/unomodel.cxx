@@ -6804,18 +6804,18 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate, int n
     if (nPosition < -1 || nPosition >= nPageCount)
         return;
 
-    // Sections are positional boundaries - they don't follow dragged slides.
-    // When a section's start slide is moved away, the section anchors to
-    // the first non-moved slide remaining in its range.  If all slides in
-    // the section were moved, the section is removed.
+    // A section is a boundary between slides, and stays where it is when some of its slides move
+    // away: it then starts at the first of its slides that stays.
     //
-    // For sections whose start slide was NOT moved, we still need to
-    // update the startIndex to account for the positional shift caused
-    // by the insertion/removal.
+    // A section whose slides all move goes with them when they land between two sections or after
+    // the last slide, so that it keeps its name and its slides at the new place. When they land
+    // inside another section they join that section, and the section they left is removed.
     //
-    // If nIntoSection is set, the user explicitly wants the first moved
-    // slide to become the new start of that section, overriding the
-    // default anchor for that one section.
+    // With nIntoSection set, the first moved slide becomes the start of that section, and the
+    // moved slides join it.
+    //
+    // The canvas page stays the first slide and belongs to whichever section comes first, so it
+    // is the start of a section only while that section has no other slide.
 
     std::set<SdPage*> aMovedPages(aSelectedPages.begin(), aSelectedPages.end());
 
@@ -6826,9 +6826,27 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate, int n
         OUString aId;
     };
     std::vector<SectionAnchor> aAnchors;
+    bool bCanvasPageInSection = false;
 
     if (nSectionCount > 0)
     {
+        const bool bIntoSection = nIntoSection >= 0 && nIntoSection < nSectionCount;
+        bCanvasPageInSection
+            = mpDoc->HasCanvasPage() && rSectionMgr.GetSection(0).mnStartIndex == 0;
+
+        // The moved slides land in front of the first slide after the position that stays. They
+        // land between two sections when a section starts at that slide, or when no slide follows.
+        bool bBetweenSections = !bIntoSection;
+        for (sal_Int32 p = nPosition + 1; bBetweenSections && p < nPageCount; ++p)
+        {
+            SdPage* pPage = mpDoc->GetSdPage(static_cast<sal_uInt16>(p), PageKind::Standard);
+            if (pPage->IsCanvasPage() || aMovedPages.contains(pPage))
+                continue;
+            bBetweenSections = rSectionMgr.IsSectionStart(p)
+                               || (p == 1 && bCanvasPageInSection);
+            break;
+        }
+
         for (sal_Int32 s = 0; s < nSectionCount; ++s)
         {
             const sd::SlideSection& rSec = rSectionMgr.GetSection(s);
@@ -6837,27 +6855,32 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate, int n
                 ? rSectionMgr.GetSection(s + 1).mnStartIndex
                 : static_cast<sal_Int32>(nPageCount);
 
-            SdPage* pAnchor = nullptr;
-            for (sal_Int32 p = nStart; p < nEnd; ++p)
+            SdPage* pStayingPage = nullptr;
+            SdPage* pMovedPage = nullptr;
+            SdPage* pCanvasPage = nullptr;
+            for (sal_Int32 p = nStart; p < nEnd && !pStayingPage; ++p)
             {
                 SdPage* pPage = mpDoc->GetSdPage(
                     static_cast<sal_uInt16>(p), PageKind::Standard);
-                if (aMovedPages.find(pPage) == aMovedPages.end())
-                {
-                    pAnchor = pPage;
-                    break;
-                }
+                if (pPage->IsCanvasPage())
+                    pCanvasPage = pPage;
+                else if (!aMovedPages.contains(pPage))
+                    pStayingPage = pPage;
+                else if (!pMovedPage)
+                    pMovedPage = pPage;
             }
+
+            SdPage* pAnchor = pStayingPage;
+            if (!pAnchor && bBetweenSections)
+                pAnchor = pMovedPage;
+            if (!pAnchor)
+                pAnchor = pCanvasPage;
 
             aAnchors.push_back({ pAnchor, rSec.maName, rSec.maId });
         }
 
-        // Override one section's anchor with the first moved slide so it
-        // becomes the new section start (drop onto section header UX).
-        if (nIntoSection >= 0 && nIntoSection < nSectionCount)
-        {
+        if (bIntoSection)
             aAnchors[nIntoSection].pPage = aSelectedPages[0];
-        }
     }
 
     const bool bUndo = mpDoc->IsUndoEnabled();
@@ -6905,13 +6928,21 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate, int n
                       return a.mnStartIndex < b.mnStartIndex;
                   });
 
+        // The section that comes first takes the canvas page.
+        if (bCanvasPageInSection && !aNewSections.empty())
+            aNewSections[0].mnStartIndex = 0;
+
         auto aOldSections = rSectionMgr.GetSectionsSnapshot();
         bool bChanged = (aNewSections.size() != aOldSections.size());
         if (!bChanged)
         {
+            // Two sections of the same size that change places leave every start index as it was,
+            // so the name and the identifier are compared as well.
             for (size_t i = 0; i < aNewSections.size(); ++i)
             {
-                if (aNewSections[i].mnStartIndex != aOldSections[i].mnStartIndex)
+                if (aNewSections[i].mnStartIndex != aOldSections[i].mnStartIndex
+                    || aNewSections[i].maId != aOldSections[i].maId
+                    || aNewSections[i].maName != aOldSections[i].maName)
                 {
                     bChanged = true;
                     break;
