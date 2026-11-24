@@ -3049,7 +3049,9 @@ server -> client messages on /cool/collab/ws
     or read the list) and "Not in settings list".  A fetch of the document bytes ("contents") by a
     user whose integrator disallows a clean copy (DisableExport,
     DisableCopy or WatermarkText) carries "error":"Export not allowed" and "cleanExport":false; such a
-    user can open the document only through /cool/ws.
+    user can open the document only through /cool/ws.  The same goes for a user who may only comment
+    or only manage tracked changes (UserCanOnlyComment or UserCanOnlyManageRedlines), but with
+    "error":"Restricted editing".
 
 {"type":"upload_url","stream":"contents","requestId":"<id>","url":"<url>"}
 

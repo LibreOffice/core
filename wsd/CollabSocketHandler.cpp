@@ -372,6 +372,9 @@ void CollabSocketHandler::takeRights(CheckFileInfo & cfi) {
                                 !fileInfo->getUserCanOnlyComment() &&
                                 !fileInfo->getUserCanOnlyManageRedlines();
                 _allowsCleanExport = fileInfo && fileInfo->allowsCleanExport();
+                _userCanOnlyCommentOrManageRedlines = fileInfo
+                    && (fileInfo->getUserCanOnlyComment()
+                        || fileInfo->getUserCanOnlyManageRedlines());
 }
 
 void CollabSocketHandler::renewAccessToken(std::string const & token) {
@@ -638,15 +641,19 @@ void CollabSocketHandler::handleFetch(const std::string& stream, const std::stri
     // Build the URL for the requested stream
     std::string url;
     bool hostChecked = false;
-    if (stream == "contents" && !_allowsCleanExport)
+    if (stream == "contents" && (!_allowsCleanExport || _userCanOnlyCommentOrManageRedlines))
     {
-        LOG_WRN("Collab: refusing " << stream << " fetch, the host allows no clean export");
+        LOG_WRN(
+            "Collab: refusing " << stream
+            << " fetch, the host allows no clean export, or only comments or tracked"
+               " changes");
         std::ostringstream oss;
         oss << "{\"type\":\"fetch_error\",\"stream\":\"" << JsonUtil::escapeJSONValue(stream) << "\"";
         if (!requestId.empty()) {
             oss << ",\"requestId\":\"" << JsonUtil::escapeJSONValue(requestId) << "\"";
         }
-        oss << ",\"error\":\"Export not allowed\",\"cleanExport\":false}";
+        oss << ",\"error\":\"" << (_allowsCleanExport ? "Restricted editing" : "Export not allowed")
+            << "\",\"cleanExport\":false}";
         sendTextMessage(oss.str());
         return;
     }

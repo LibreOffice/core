@@ -1306,6 +1306,102 @@ private:
     std::shared_ptr<http::WebSocketSession> collabWs_;
 };
 
+// A collab client of a user who may only comment, or only manage tracked changes, gets no document
+// bytes, and learns that it can only open the document through the server:
+class UnitCollabRestrictedEditing: public WopiTestServer {
+public:
+    UnitCollabRestrictedEditing():
+        WopiTestServer("UnitCollabRestrictedEditing"), phase_(Phase::ConnectComment) {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
+
+    void configCheckFileInfo(
+        Poco::Net::HTTPRequest const & request, Poco::JSON::Object::Ptr & fileInfo) override
+    {
+        if (request.getURI().find("access_token=comment") != std::string::npos) {
+            fileInfo->set("UserCanOnlyComment", true);
+        } else {
+            fileInfo->set("UserCanOnlyManageRedlines", true);
+        }
+    }
+
+    void invokeWSDTest() override {
+        switch (phase_) {
+        case Phase::ConnectComment: {
+            TRANSITION_STATE(phase_, Phase::WaitCommentAuth);
+            Poco::URI const wopiURL(
+                getWopiHostURI()
+                + "/wopi/files/0?access_token=anything"
+                  "&testname=UnitCollabRestrictedEditing");
+            collabWs_ = startCollabConnection(
+                socketPoll(), Uri::encode(wopiURL.toString()), "comment");
+            break;
+        }
+        case Phase::WaitCommentAuth: {
+            if (!pollCollabMessage(collabWs_, "user_list")) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitCommentRefused);
+            collabWs_->sendMessage(R"({"type":"fetch","stream":"contents","requestId":"f1"})");
+            break;
+        }
+        case Phase::WaitCommentRefused: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "fetch_error");
+            if (!msg) {
+                break;
+            }
+            LOK_ASSERT_EQUAL(std::string("f1"), msg->getValue<std::string>("requestId"));
+            LOK_ASSERT_EQUAL(
+                std::string("Restricted editing"), msg->getValue<std::string>("error"));
+            LOK_ASSERT_EQUAL(false, msg->getValue<bool>("cleanExport"));
+            collabWs_->asyncShutdown();
+            TRANSITION_STATE(phase_, Phase::WaitRedlinesAuth);
+            Poco::URI const wopiURL(
+                getWopiHostURI()
+                + "/wopi/files/0?access_token=anything"
+                  "&testname=UnitCollabRestrictedEditing");
+            collabWs_ = startCollabConnection(
+                socketPoll(), Uri::encode(wopiURL.toString()), "redlines");
+            break;
+        }
+        case Phase::WaitRedlinesAuth: {
+            if (!pollCollabMessage(collabWs_, "user_list")) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitRedlinesRefused);
+            collabWs_->sendMessage(R"({"type":"fetch","stream":"contents","requestId":"f2"})");
+            break;
+        }
+        case Phase::WaitRedlinesRefused: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "fetch_error");
+            if (!msg) {
+                break;
+            }
+            LOK_ASSERT_EQUAL(std::string("f2"), msg->getValue<std::string>("requestId"));
+            LOK_ASSERT_EQUAL(
+                std::string("Restricted editing"), msg->getValue<std::string>("error"));
+            LOK_ASSERT_EQUAL(false, msg->getValue<bool>("cleanExport"));
+            TRANSITION_STATE(phase_, Phase::Done);
+            collabWs_->asyncShutdown();
+            passTest("Users who may only comment or manage tracked changes got no document bytes");
+            break;
+        }
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    STATE_ENUM(
+        Phase, ConnectComment, WaitCommentAuth, WaitCommentRefused, WaitRedlinesAuth,
+        WaitRedlinesRefused, Done) phase_;
+
+    std::shared_ptr<http::WebSocketSession> collabWs_;
+};
+
 // The avatar of a user who joins reaches the other users as an address under /cool/collab/avatar
 // that carries the WOPISrc of the document, and that address answers with the avatar:
 class UnitCollabAvatar: public WopiTestServer {
@@ -2653,15 +2749,15 @@ private:
 
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [25] { new UnitCollabProtocol(),
+    return new UnitBase* [26] { new UnitCollabProtocol(),
                                 new UnitCollabCheckFileInfoTransient(),
                                 new UnitCollabCheckFileInfoRetry(),
                                 new UnitCollabUploadRetry(), new UnitCollabUploadLanded(),
                                 new UnitCollabUploadReplaced(),
                                 new UnitCollabUploadTimestamp(), new UnitCollabUploadConflict(),
                                 new UnitCollabUploadConflictModified(),
-                                new UnitCollabNoCleanExport(), new UnitCollabSettingsStreams(),
-                                new UnitCollabSettingsFile(),
+                                new UnitCollabNoCleanExport(), new UnitCollabRestrictedEditing(),
+                                new UnitCollabSettingsStreams(), new UnitCollabSettingsFile(),
                                 new UnitCollabSettingsListUnreachable(),
                                 new UnitCollabAvatar(),
                                 new UnitCollabConnections(), new UnitCollabTokenRenewal(),
