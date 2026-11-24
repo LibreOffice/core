@@ -114,6 +114,23 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 			assertSectionHeaders(['Section-1', 'Section-2', 'Section-3', 'Untitled Section']);
 		});
 
+		it('A screen reader hears the name and first slide of an added section', function() {
+			var win = this.win;
+			cy.then(function() {
+				win.app.map.setAccessibilityState(true);
+				return helper.processToIdle(win);
+			});
+			cy.cGet('#a11y-jump-status').should('have.text', '');
+
+			cy.cGet('.preview-img').last().rightclick();
+			clickContextMenuItem('Add Section');
+
+			// The message leaves the status again after a few seconds, so it is read as soon
+			// as it arrives, without waiting for idle first.
+			cy.cGet('#a11y-jump-status')
+				.should('have.text', 'Added section Untitled Section, starting at slide 13');
+		});
+
 		it('Rename section in PPTX', function() {
 			helper.processToIdle(this.win);
 

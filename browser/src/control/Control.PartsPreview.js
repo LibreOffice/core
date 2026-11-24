@@ -1396,8 +1396,26 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 		if (this._addedSectionPart !== undefined) {
 			this._scrollToPart(this._addedSectionPart, 'smooth');
+			this._announceAddedSection(sections, this._addedSectionPart);
 			this._addedSectionPart = undefined;
 		}
+	},
+
+	_announceAddedSection: function (sections, part) {
+		const textInput = this._map._textInput;
+		if (!textInput || !textInput.hasAccessibilitySupport())
+			return;
+		const section = sections.find(function (candidate) {
+			return candidate.startIndex === part;
+		});
+		if (!section)
+			return;
+		const values = { '%1': section.name, '%2': String(part + 1) };
+		const message = _('Added section %1, starting at slide %2').replace(/%[12]/g,
+			function (token) {
+				return values[token];
+			});
+		textInput._announceJump(message);
 	},
 
 	_updateSelectedSection: function () {
