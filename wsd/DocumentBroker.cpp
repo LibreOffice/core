@@ -1173,7 +1173,7 @@ void DocumentBroker::pollThread()
                 {
                     // Fallback to quarantining the original document.
                     LOG_WRN("Quarantining the original document file: " << _filename);
-                    _quarantine->quarantineFile(_storage->getRootFilePath());
+                    _quarantine->quarantineFile(_storage->getRootFilePath(), /*copy=*/true);
                 }
             }
         }
@@ -1750,6 +1750,11 @@ bool DocumentBroker::doDownloadDocument(const Authorization& auth,
     if constexpr (!Util::isMobileAppBuild())
     {
         _quarantine = std::make_unique<Quarantine>(*this, _filename);
+
+        // Keep the document as it was opened, so it is there even when the kit goes away before
+        // its first save. The jail, and the file in it, may be gone by the time we learn that.
+        if (Quarantine::isEnabled())
+            _quarantine->quarantineFile(localFilePath, /*copy=*/true);
     }
     else if (templateSource.empty())
     {

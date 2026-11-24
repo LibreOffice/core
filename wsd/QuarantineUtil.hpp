@@ -64,8 +64,10 @@ public:
 
     static bool isEnabled() { return !QuarantinePath.empty(); }
 
-    /// Quarantines a new version of the document.
-    bool quarantineFile(const std::string& docPath);
+    /// Quarantines a new version of the document. The file is hard-linked when possible, unless
+    /// copy is set. Copy a file that the kit may still save over: the engine rewrites a file that
+    /// has more than one link in place, which would change the quarantined version too.
+    bool quarantineFile(const std::string& docPath, bool copy = false);
 
     /// Returns the last quarantined file's path.
     std::string lastQuarantinedFilePath() const;
@@ -76,7 +78,12 @@ private:
 
     /// Quarantines a new version of the document; the implementation.
     static bool quarantineFile(const std::string& docKey, const std::string& docPath,
-                               const std::string& quarantinedFilename);
+                               const std::string& quarantinedFilename, bool copy);
+
+    /// Renames the last version of the document, at path, to the time of now, so it ages from
+    /// now. For a version that is quarantined again, unchanged. Returns false when that version is
+    /// gone, so the file is to be quarantined as a new version.
+    static bool renewVersion(const std::string& docKey, const std::string& path);
 
     /// Cleans up quarantined files to make sure we don't exceed MaxSizeBytes.
     static void makeQuarantineSpace(std::size_t headroomBytes);

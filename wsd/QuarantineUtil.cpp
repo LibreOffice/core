@@ -367,11 +367,11 @@ void Quarantine::deleteOldQuarantineVersions(const std::string& docKey, std::siz
     }
 }
 
-bool Quarantine::quarantineFile(const std::string& docPath)
+bool Quarantine::quarantineFile(const std::string& docPath, bool copy)
 {
     try
     {
-        return quarantineFile(_docKey, docPath, _quarantinedFilename);
+        return quarantineFile(_docKey, docPath, _quarantinedFilename, copy);
     }
     catch (const std::exception& exc)
     {
@@ -383,7 +383,7 @@ bool Quarantine::quarantineFile(const std::string& docPath)
 }
 
 bool Quarantine::quarantineFile(const std::string& docKey, const std::string& docPath,
-                                const std::string& quarantinedFilename)
+                                const std::string& quarantinedFilename, bool copy)
 {
     if (!isEnabled())
         return false;
@@ -395,32 +395,66 @@ bool Quarantine::quarantineFile(const std::string& docKey, const std::string& do
         return false;
     }
 
-    Poco::File(Poco::Path(QuarantinePath, docKey)).createDirectories();
+    // A copy larger than the whole quarantine would push out every other version, and then go over
+    // the limit anyway.
+    if (copy && sourceStat.size() > MaxSizeBytes)
+    {
+        LOG_WRN("Quarantining of file [" << docPath << "] is skipped because its "
+                                         << sourceStat.size()
+                                         << " bytes are more than the quarantine can hold");
+        return false;
+    }
+
+    const std::string docKeyPath = Poco::Path(QuarantinePath, docKey).toString();
+    Poco::File(docKeyPath).createDirectories();
+
+    // The versions of one document are quarantined by its own broker, one at a time. The lock is
+    // shared by all documents, so reading and copying the file, which takes as long as the file is
+    // big, happen without it.
+    std::string lastFile;
+    {
+        std::lock_guard<std::mutex> lock(Mutex);
+        const std::vector<Entry>& fileList = QuarantineMap[docKey];
+        if (!fileList.empty())
+            lastFile = fileList[fileList.size() - 1].fullPath();
+    }
+
+    // Check if we have a duplicate or a new version. The document is in use again, so a duplicate
+    // ages from now, like a new version would. When the duplicate went meanwhile, to make space,
+    // the file is quarantined after all.
+    if (!lastFile.empty() &&
+        FileUtil::Stat::isIdenticalTo(FileUtil::Stat(lastFile), lastFile, sourceStat, docPath) &&
+        renewVersion(docKey, lastFile))
+    {
+        LOG_INF("Quarantining of file ["
+                << docPath << "] is skipped because this file version is already quarantined as ["
+                << lastFile << ']');
+        return false;
+    }
+
+    // The room for the copy is made once it is there, so a copy that fails costs no version.
+    std::string copyPath;
+    if (copy)
+    {
+        copyPath = Poco::Path(docKeyPath, "copy-" + Util::rng::getFilename(12)).toString();
+        if (!FileUtil::copy(docPath, copyPath, /*log=*/false, /*throw_on_error=*/false))
+        {
+            LOG_ERR("Quarantining of file [" << docPath << "] failed to copy it to [" << copyPath
+                                             << ']');
+            FileUtil::removeFile(copyPath);
+            return false;
+        }
+    }
 
     std::lock_guard<std::mutex> lock(Mutex);
 
-    // Check if we have a duplicate or a new version.
-    auto& fileList = QuarantineMap[docKey];
+    // The time is part of the file name, so a second version within the same second would replace
+    // the first. Name it a second later instead, which keeps the versions in order.
+    std::vector<Entry>& fileList = QuarantineMap[docKey];
     uint64_t secondsSinceEpoch = getSecondsSinceEpoch();
     if (!fileList.empty())
-    {
-        const std::string lastFile = fileList[fileList.size() - 1].fullPath();
-        FileUtil::Stat lastFileStat(lastFile);
-
-        if (FileUtil::Stat::isIdenticalTo(lastFileStat, lastFile, sourceStat, docPath))
-        {
-            LOG_INF("Quarantining of file ["
-                    << docPath
-                    << "] is skipped because this file version is already quarantined as ["
-                    << lastFile << ']');
-            return false;
-        }
-
-        // The time is part of the file name, so a second version within the same second would
-        // replace the first. Name it a second later instead, which keeps the versions in order.
         secondsSinceEpoch =
             std::max(secondsSinceEpoch, fileList[fileList.size() - 1].secondsSinceEpoch() + 1);
-    }
 
     Entry entry(QuarantinePath, docKey, secondsSinceEpoch, quarantinedFilename,
                 sourceStat.size());
@@ -430,15 +464,54 @@ bool Quarantine::quarantineFile(const std::string& docKey, const std::string& do
     // Clean-up the quarantine directory and make room for the incoming file.
     makeQuarantineSpace(entry.size());
 
-    if (FileUtil::linkOrCopyFile(docPath, linkedFilePath))
+    const bool quarantined = copy ? ::rename(copyPath.c_str(), linkedFilePath.c_str()) == 0
+                                  : FileUtil::linkOrCopyFile(docPath, linkedFilePath);
+    if (quarantined)
     {
         fileList.emplace_back(entry);
         LOG_INF("Quarantined [" << docPath << "] to [" << linkedFilePath << ']');
         return true;
     }
 
+    if (copy)
+        FileUtil::removeFile(copyPath);
+
     LOG_ERR("Quarantining of file [" << docPath << "] to [" << linkedFilePath << "] failed");
     return false;
+}
+
+bool Quarantine::renewVersion(const std::string& docKey, const std::string& path)
+{
+    std::lock_guard<std::mutex> lock(Mutex);
+
+    // The version may have gone meanwhile, to make space.
+    std::vector<Entry>& fileList = QuarantineMap[docKey];
+    if (fileList.empty() || fileList[fileList.size() - 1].fullPath() != path)
+        return false;
+
+    const Entry& last = fileList[fileList.size() - 1];
+    const uint64_t secondsSinceEpoch = getSecondsSinceEpoch();
+    if (secondsSinceEpoch <= last.secondsSinceEpoch())
+        return true;
+
+    // The name is the time followed by the rest, which stays.
+    const std::string name = Poco::Path(path).getFileName();
+    const std::size_t rest = name.find(Delimiter);
+    if (rest == std::string::npos)
+        return true;
+
+    const Entry renewed(QuarantinePath, docKey, secondsSinceEpoch, name.substr(rest),
+                        last.size());
+    if (::rename(path.c_str(), renewed.fullPath().c_str()) != 0)
+    {
+        LOG_SYS("Failed to rename quarantined version [" << path << "] to ["
+                                                         << renewed.fullPath() << ']');
+        return true;
+    }
+
+    LOG_DBG("Renewed quarantined version [" << path << "] as [" << renewed.fullPath() << ']');
+    fileList[fileList.size() - 1] = renewed;
+    return true;
 }
 
 std::string Quarantine::lastQuarantinedFilePath() const
