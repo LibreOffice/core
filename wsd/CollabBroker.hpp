@@ -51,6 +51,7 @@ struct CollabFetchRequest
     std::string brokerTag;       ///< Broker access token at time of request
     std::string requestId;       ///< Client-provided request ID
     std::string stream;          ///< Stream name (contents)
+    std::string handlerId;       // The ID of the /cool/collab connection that asked for the fetch
     std::chrono::steady_clock::time_point expiry;  ///< When this token expires
 };
 
@@ -64,6 +65,7 @@ struct CollabUploadRequest
     std::string brokerTag;       ///< Broker access token at time of request
     std::string requestId;       ///< Client-provided request ID
     std::string lastModifiedTime; ///< The client's version in storage, if the upload checks it
+    std::string handlerId;       // The ID of the /cool/collab connection that asked for the upload
     std::chrono::steady_clock::time_point expiry;  ///< When this token expires
 };
 
@@ -150,6 +152,9 @@ public:
 
     /// Returns the number of active handlers
     size_t getHandlerCount() const;
+
+    // Whether the connection with that handler ID is open:
+    bool hasHandler(std::string const & handlerId) const;
 
     /// Returns true if there are no active handlers
     bool isEmpty() const;
@@ -263,7 +268,8 @@ std::string createCollabFetchRequest(const std::string& streamUrl,
                                       const std::string& docKey,
                                       const std::string& brokerTag,
                                       const std::string& requestId,
-                                      const std::string& stream);
+                                      const std::string& stream,
+                                      std::string const & handlerId);
 
 /// Find an existing CollabBroker by docKey (returns nullptr if not found or empty)
 std::shared_ptr<CollabBroker> findCollabBroker(const std::string& docKey);
@@ -292,7 +298,8 @@ std::string createCollabUploadRequest(const std::string& targetUrl,
                                        const std::string& docKey,
                                        const std::string& brokerTag,
                                        const std::string& requestId,
-                                       std::string const & lastModifiedTime);
+                                       std::string const & lastModifiedTime,
+                                       std::string const & handlerId);
 
 /// Look up and consume an upload request by token.
 /// Returns true if found and valid, fills in the request details.

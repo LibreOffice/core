@@ -3158,8 +3158,8 @@ Clients use the addresses as they get them, so a later server can change their f
     GET.  Returns the bytes of the stream that the matching {"type":"fetch"} WS request resolved
     to.  The token is one-shot: it is consumed by the first request, also one that then fails, and
     it expires after 5 minutes.  The reply is 400 without a token, 401 for an unknown or expired
-    token, 410 when no /cool/collab connection to the document is open (also during the grace period
-    described for {"type":"bye"}), and 403 or 502 when the integrator refused or failed.  A request
+    token, 410 when the /cool/collab connection that asked for the token is no longer open,
+    and 403 or 502 when the integrator refused or failed.  A request
     with another method gets 405, and leaves the token for a request with the right method.
 
 /cool/collab/put?token=<one-shot-token>&WOPISrc=<wopi-url>

@@ -140,6 +140,16 @@ size_t CollabBroker::getHandlerCount() const
     return count;
 }
 
+bool CollabBroker::hasHandler(std::string const & handlerId) const {
+    std::scoped_lock const lock(_mutex);
+    for (auto const & handler: _handlers) {
+        if (auto const locked = handler.lock(); locked && locked->getHandlerId() == handlerId) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool CollabBroker::isEmpty() const
 {
     return getHandlerCount() == 0;
@@ -563,7 +573,8 @@ std::string createCollabFetchRequest(const std::string& streamUrl,
                                       const std::string& docKey,
                                       const std::string& brokerTag,
                                       const std::string& requestId,
-                                      const std::string& stream)
+                                      const std::string& stream,
+                                      std::string const & handlerId)
 {
     // Generate a unique token
     const std::string token = Util::rng::getHexString(CollabAccessTokenLength);
@@ -577,6 +588,7 @@ std::string createCollabFetchRequest(const std::string& streamUrl,
     request.brokerTag = brokerTag;
     request.requestId = requestId;
     request.stream = stream;
+    request.handlerId = handlerId;
     // Token expires after configured duration
     request.expiry = std::chrono::steady_clock::now() + CollabFetchTokenExpiry;
 
@@ -664,7 +676,8 @@ std::string createCollabUploadRequest(const std::string& targetUrl,
                                        const std::string& docKey,
                                        const std::string& brokerTag,
                                        const std::string& requestId,
-                                       std::string const & lastModifiedTime)
+                                       std::string const & lastModifiedTime,
+                                       std::string const & handlerId)
 {
     const std::string token = Util::rng::getHexString(CollabAccessTokenLength);
 
@@ -676,6 +689,7 @@ std::string createCollabUploadRequest(const std::string& targetUrl,
     request.brokerTag = brokerTag;
     request.requestId = requestId;
     request.lastModifiedTime = lastModifiedTime;
+    request.handlerId = handlerId;
     request.expiry = std::chrono::steady_clock::now() + CollabUploadTokenExpiry;
 
     {

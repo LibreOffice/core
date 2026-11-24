@@ -1570,6 +1570,14 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
                 return MessageResult::Ignore;
             }
 
+            if (!broker->hasHandler(fetchRequest.handlerId)) {
+                LOG_ERR(
+                    "CollabFetch: The connection that asked for the fetch is closed for docKey ["
+                    << fetchRequest.docKey << ']');
+                HttpHelper::sendErrorAndShutdown(http::StatusCode::Gone, socket);
+                return MessageResult::Ignore;
+            }
+
             LOG_INF("CollabFetch: proxying download for stream [" << fetchRequest.stream
                     << "] from [" << Anonymizer::anonymizeUrl(fetchRequest.streamUrl) << ']');
 
@@ -1637,6 +1645,14 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
                 LOG_ERR("CollabPut: Invalid broker access token for docKey ["
                         << uploadRequest.docKey << ']');
                 HttpHelper::sendErrorAndShutdown(http::StatusCode::Unauthorized, socket);
+                return MessageResult::Ignore;
+            }
+
+            if (!broker->hasHandler(uploadRequest.handlerId)) {
+                LOG_ERR(
+                    "CollabPut: The connection that asked for the upload is closed for docKey ["
+                    << uploadRequest.docKey << ']');
+                HttpHelper::sendErrorAndShutdown(http::StatusCode::Gone, socket);
                 return MessageResult::Ignore;
             }
 

@@ -1580,6 +1580,100 @@ private:
     std::string secondConnection_;
 };
 
+// The fetch and upload addresses that a connection got stop working when that connection closes,
+// also while another connection keeps the document open:
+class UnitCollabClosedConnection: public WopiTestServer {
+public:
+    UnitCollabClosedConnection():
+        WopiTestServer("UnitCollabClosedConnection"), phase_(Phase::ConnectFirst) {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
+
+    void invokeWSDTest() override {
+        switch (phase_) {
+        case Phase::ConnectFirst:
+            TRANSITION_STATE(phase_, Phase::WaitFirstAuth);
+            first_ = startCollabConnection(socketPoll(), wopiSrc(), "anything");
+            break;
+        case Phase::WaitFirstAuth:
+            if (!pollCollabMessage(first_, "user_list")) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitSecondAuth);
+            second_ = startCollabConnection(socketPoll(), wopiSrc(), "anything");
+            break;
+        case Phase::WaitSecondAuth:
+            if (!pollCollabMessage(second_, "user_list")) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitFetchUrl);
+            first_->sendMessage(R"({"type":"fetch","stream":"contents","requestId":"f1"})");
+            break;
+        case Phase::WaitFetchUrl: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(first_, "fetch_url");
+            if (!msg) {
+                break;
+            }
+            fetchUrl_ = msg->getValue<std::string>("url");
+            TRANSITION_STATE(phase_, Phase::WaitUploadUrl);
+            first_->sendMessage(
+                R"({"type":"upload","stream":"contents","requestId":"u1","force":true})");
+            break;
+        }
+        case Phase::WaitUploadUrl: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(first_, "upload_url");
+            if (!msg) {
+                break;
+            }
+            uploadUrl_ = msg->getValue<std::string>("url");
+            TRANSITION_STATE(phase_, Phase::WaitLeft);
+            first_->asyncShutdown();
+            break;
+        }
+        case Phase::WaitLeft: {
+            if (!pollCollabMessage(second_, "user_left")) {
+                break;
+            }
+            std::shared_ptr<http::Response const> const fetched
+                = http::Session::create(helpers::getTestServerURI())
+                      ->syncRequest(http::Request(fetchUrl_));
+            LOK_ASSERT_EQUAL(http::StatusCode::Gone, fetched->statusLine().statusCode());
+            http::Request request(uploadUrl_, http::Request::VERB_POST);
+            request.setBody("Uploaded after the connection closed", "application/octet-stream");
+            std::shared_ptr<http::Response const> const uploaded
+                = http::Session::create(helpers::getTestServerURI())->syncRequest(request);
+            LOK_ASSERT_EQUAL(http::StatusCode::Gone, uploaded->statusLine().statusCode());
+            LOK_ASSERT(getFileContent() != "Uploaded after the connection closed");
+            TRANSITION_STATE(phase_, Phase::Done);
+            second_->asyncShutdown();
+            passTest("The addresses of a closed connection answered 410");
+            break;
+        }
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    std::string wopiSrc() const {
+        return Uri::encode(
+            getWopiHostURI()
+            + "/wopi/files/0?access_token=anything&testname=UnitCollabClosedConnection");
+    }
+
+    STATE_ENUM(
+        Phase, ConnectFirst, WaitFirstAuth, WaitSecondAuth, WaitFetchUrl, WaitUploadUrl, WaitLeft,
+        Done) phase_;
+
+    std::shared_ptr<http::WebSocketSession> first_;
+    std::shared_ptr<http::WebSocketSession> second_;
+    std::string fetchUrl_;
+    std::string uploadUrl_;
+};
+
 // A new access token of the same user replaces the one of the connection for the fetches that
 // follow, and one of another user does not:
 class UnitCollabTokenRenewal: public WopiTestServer {
@@ -2771,7 +2865,7 @@ private:
 
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [26] { new UnitCollabProtocol(),
+    return new UnitBase* [27] { new UnitCollabProtocol(),
                                 new UnitCollabCheckFileInfoTransient(),
                                 new UnitCollabCheckFileInfoRetry(),
                                 new UnitCollabUploadRetry(), new UnitCollabUploadLanded(),
@@ -2782,7 +2876,8 @@ UnitBase** unit_create_wsd_multi(void)
                                 new UnitCollabSettingsStreams(), new UnitCollabSettingsFile(),
                                 new UnitCollabSettingsListUnreachable(),
                                 new UnitCollabAvatar(),
-                                new UnitCollabConnections(), new UnitCollabTokenRenewal(),
+                                new UnitCollabConnections(), new UnitCollabClosedConnection(),
+                                new UnitCollabTokenRenewal(),
                                 new UnitCollabMethods(), new UnitCollabRouting(),
                                 new UnitCollabFetchRedirect(), new UnitCollabFetchRetry(),
                                 new UnitCollabFetchRetryLimit(), new UnitCollabFetchNoConnection(),

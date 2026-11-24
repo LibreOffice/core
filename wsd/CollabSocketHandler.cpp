@@ -570,7 +570,7 @@ void CollabSocketHandler::sendFetchUrl(const std::string& stream, const std::str
     // Create a fetch token that the client can use to download via HTTP
     const std::string token =
         createCollabFetchRequest(url, hostChecked, settings ? std::string() : _accessToken,
-                                 _wopiSrc, _docKey, brokerTag, requestId, stream);
+                                 _wopiSrc, _docKey, brokerTag, requestId, stream, _handlerId);
 
     // Build the download URL
     std::ostringstream downloadUrl;
@@ -942,7 +942,7 @@ void CollabSocketHandler::handleUpload(const std::string& stream, const std::str
     // Create an upload token that the client can use to POST via HTTP
     const std::string token = createCollabUploadRequest(
         targetUrl, _accessToken, _wopiSrc, _docKey, brokerTag, requestId,
-        force ? "" : lastModifiedTime);
+        force ? "" : lastModifiedTime, _handlerId);
 
     // Send the upload URL to the client
     std::ostringstream oss;
