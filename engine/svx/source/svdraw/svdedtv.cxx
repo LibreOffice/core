@@ -742,8 +742,6 @@ std::vector<rtl::Reference<SdrObject>> SdrEditView::DeleteMarkedList(SdrMarkList
 
         if(nMarkCount)
         {
-            std::vector< E3DModifySceneSnapRectUpdater* > aUpdaters;
-
             if( bUndo )
             {
                 for(size_t nm = nMarkCount; nm > 0;)
@@ -782,12 +780,11 @@ std::vector<rtl::Reference<SdrObject>> SdrEditView::DeleteMarkedList(SdrMarkList
 
                 const size_t nOrdNum(pObj->GetOrdNumDirect());
 
-                bool bIs3D = DynCastE3dObject(pObj);
-                // set up a scene updater if object is a 3d object
-                if(bIs3D)
-                {
-                    aUpdaters.push_back(new E3DModifySceneSnapRectUpdater(pObj));
-                }
+                // the scene of a 3D object takes the size of what is left in it after each
+                // removal, so the last one leaves it as big as the object it held last
+                std::optional<E3DModifySceneSnapRectUpdater> oUpdater;
+                if (DynCastE3dObject(pObj))
+                    oUpdater.emplace(pObj);
 
                 if( !bUndo )
                 {
@@ -796,13 +793,6 @@ std::vector<rtl::Reference<SdrObject>> SdrEditView::DeleteMarkedList(SdrMarkList
                 }
 
                 pOL->RemoveObject(nOrdNum);
-            }
-
-            // fire scene updaters
-            while(!aUpdaters.empty())
-            {
-                delete aUpdaters.back();
-                aUpdaters.pop_back();
             }
         }
 

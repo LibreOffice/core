@@ -70,6 +70,7 @@
 #include <svx/svxids.hrc>
 #include <svx/documentbullets.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/scene3d.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdpagv.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -9315,6 +9316,33 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDeletedRowKeepsTheTyping)
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pTableObject->getRowCount());
     CPPUNIT_ASSERT(pView->IsTextEdit());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSceneEmptiedAtOnceComesBackAtItsSize)
+{
+    // a 3D scene emptied by one delete of all it holds is deleted with it, and undo brings it
+    // back as big as it was
+    createSdImpressDoc("vector-3d-scene.fodp");
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    SdPage* pPage = pViewShell->GetActualPage();
+
+    E3dScene* pScene = DynCastE3dScene(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pScene);
+    const tools::Rectangle aBefore = pScene->GetSnapRect();
+
+    // the sphere and the scene inside, both at once
+    pView->MarkObj(pScene, pView->GetSdrPageView());
+    pView->EnterMarkedGroup();
+    pView->MarkAllObj();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pView->GetMarkedObjectList().GetMarkCount());
+    pView->DeleteMarked();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(aBefore, pPage->GetObj(0)->GetSnapRect());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
