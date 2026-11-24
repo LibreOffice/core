@@ -11522,7 +11522,7 @@ dnl ===================================================================
 dnl Check for system mdds
 dnl ===================================================================
 MDDS_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/mdds/include"
-libo_CHECK_SYSTEM_MODULE([mdds],[MDDS],[mdds-3.0 >= 3.0.0])
+libo_CHECK_SYSTEM_MODULE([mdds],[MDDS],[mdds-4.0 >= 4.0.0])
 
 dnl ===================================================================
 dnl Check for system dragonbox
@@ -11870,7 +11870,7 @@ fi
 dnl ===================================================================
 dnl Orcus
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.21 >= 0.21.0])
+libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.22 >= 0.22.0])
 
 dnl FIXME by renaming SYSTEM_LIBORCUS to SYSTEM_ORCUS in the build system world
 SYSTEM_LIBORCUS=$SYSTEM_ORCUS

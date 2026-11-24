@@ -9,12 +9,16 @@
 #include <osl/thread.hxx>
 #include <tools/stream.hxx>
 
+#include <filesystem>
+#include <string_view>
+
 orcus::file_content toFileContent(const OUString& rPath)
 {
 #ifdef _WIN32
-    return orcus::file_content(rPath);
+    return orcus::file_content(std::filesystem::path(std::u16string_view(rPath)));
 #else
-    return orcus::file_content(OUStringToOString(rPath, osl_getThreadTextEncoding()));
+    OString aPath = OUStringToOString(rPath, osl_getThreadTextEncoding());
+    return orcus::file_content(std::filesystem::path(std::string_view(aPath)));
 #endif
 }
 

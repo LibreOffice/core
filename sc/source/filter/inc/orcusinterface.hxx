@@ -22,8 +22,6 @@
 #include "orcus_global.hxx"
 #include "sharedformulagroups.hxx"
 
-#include <conditio.hxx>
-
 #include <rtl/strbuf.hxx>
 #include <editeng/borderline.hxx>
 
@@ -178,74 +176,6 @@ public:
     virtual size_t commit_segments() override;
 };
 
-class ScOrcusConditionalFormat : public orcus::spreadsheet::iface::import_conditional_format
-{
-public:
-    ScOrcusConditionalFormat(SCTAB nTab, ScDocument& rDoc);
-    virtual ~ScOrcusConditionalFormat() override;
-
-    virtual void set_color(orcus::spreadsheet::color_elem_t alpha,
-                           orcus::spreadsheet::color_elem_t red,
-                           orcus::spreadsheet::color_elem_t green,
-                           orcus::spreadsheet::color_elem_t blue) override;
-
-    virtual void set_formula(std::string_view formula) override;
-
-    virtual void set_condition_type(orcus::spreadsheet::condition_type_t type) override;
-
-    virtual void set_date(orcus::spreadsheet::condition_date_t date) override;
-
-    virtual void commit_condition() override;
-
-    virtual void set_icon_name(std::string_view name) override;
-
-    virtual void set_databar_gradient(bool gradient) override;
-
-    virtual void set_databar_axis(orcus::spreadsheet::databar_axis_t axis) override;
-
-    virtual void set_databar_color_positive(orcus::spreadsheet::color_elem_t alpha,
-                                            orcus::spreadsheet::color_elem_t red,
-                                            orcus::spreadsheet::color_elem_t green,
-                                            orcus::spreadsheet::color_elem_t blue) override;
-
-    virtual void set_databar_color_negative(orcus::spreadsheet::color_elem_t alpha,
-                                            orcus::spreadsheet::color_elem_t red,
-                                            orcus::spreadsheet::color_elem_t green,
-                                            orcus::spreadsheet::color_elem_t blue) override;
-
-    virtual void set_min_databar_length(double length) override;
-
-    virtual void set_max_databar_length(double length) override;
-
-    virtual void set_show_value(bool show) override;
-
-    virtual void set_iconset_reverse(bool reverse) override;
-
-    virtual void set_xf_id(size_t xf) override;
-
-    virtual void set_operator(orcus::spreadsheet::condition_operator_t condition_type) override;
-
-    virtual void set_type(orcus::spreadsheet::conditional_format_t type) override;
-
-    virtual void commit_entry() override;
-
-    virtual void set_range(std::string_view range) override;
-
-    virtual void set_range(orcus::spreadsheet::row_t row_start, orcus::spreadsheet::col_t col_start,
-                           orcus::spreadsheet::row_t row_end,
-                           orcus::spreadsheet::col_t col_end) override;
-
-    virtual void commit_format() override;
-
-private:
-    SCTAB mnTab;
-    ScDocument& mrDoc;
-
-    std::unique_ptr<ScConditionalFormat> mpCurrentFormat;
-
-    ScFormatEntry::Type meEntryType;
-};
-
 class ScOrcusSheetProperties : public orcus::spreadsheet::iface::import_sheet_properties
 {
     ScDocumentImport& mrDoc;
@@ -358,7 +288,6 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
     sc::SharedFormulaGroups maFormulaGroups;
 
     ScOrcusSheetProperties maProperties;
-    ScOrcusConditionalFormat maConditionalFormat;
     ScOrcusNamedExpression maNamedExpressions;
     ScOrcusFormula maFormula;
     ScOrcusArrayFormula maArrayFormula;
@@ -375,7 +304,6 @@ public:
                  ScOrcusFactory& rFactory);
 
     virtual orcus::spreadsheet::iface::import_sheet_properties* get_sheet_properties() override;
-    virtual orcus::spreadsheet::iface::import_conditional_format* get_conditional_format() override;
     virtual orcus::spreadsheet::iface::import_named_expression* get_named_expression() override;
     virtual orcus::spreadsheet::iface::import_formula* get_formula() override;
     virtual orcus::spreadsheet::iface::import_array_formula* get_array_formula() override;

@@ -54,7 +54,9 @@ const mdds::mtv::element_t element_type_sparkline = mdds::mtv::element_type_user
 /// Mapped standard element types (for convenience).
 const mdds::mtv::element_t element_type_numeric = mdds::mtv::element_type_double;
 const mdds::mtv::element_t element_type_empty = mdds::mtv::element_type_empty;
+const mdds::mtv::element_t element_type_uint8 = mdds::mtv::element_type_uint8;
 const mdds::mtv::element_t element_type_uint16 = mdds::mtv::element_type_uint16;
+const mdds::mtv::element_t element_type_boolean = mdds::mtv::element_type_boolean;
 
 /// Custom element blocks.
 
@@ -68,7 +70,9 @@ typedef mdds::mtv::noncopyable_managed_element_block<element_type_formula, ScFor
 
 /// Mapped standard element blocks (for convenience).
 typedef mdds::mtv::double_element_block numeric_block;
+typedef mdds::mtv::uint8_element_block uint8_block;
 typedef mdds::mtv::uint16_element_block uint16_block;
+typedef mdds::mtv::boolean_element_block boolean_block;
 
 } // end sc namespace
 
