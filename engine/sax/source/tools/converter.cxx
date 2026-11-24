@@ -1260,12 +1260,8 @@ void Converter::convertDuration(OUStringBuffer& rBuffer,
             if (rDuration.NanoSeconds)
             {
                 OSL_ENSURE(rDuration.NanoSeconds < 1000000000,"NanoSeconds cannot be more than 999 999 999");
-                rBuffer.append('.');
-                std::ostringstream ostr;
-                ostr.fill('0');
-                ostr.width(9);
-                ostr << rDuration.NanoSeconds;
-                rBuffer.appendAscii(ostr.str().c_str());
+                auto sNanoseconds = OUString::number(rDuration.NanoSeconds);
+                rBuffer.append("." + RepeatedUChar('0', 9 - sNanoseconds.length) + sNanoseconds);
             }
             rBuffer.append('S');
         }
