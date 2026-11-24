@@ -89,6 +89,8 @@ all_la_unit_tests = \
 	unit-quarantine.la \
 	unit-quarantine-convert-to.la \
 	unit-quarantine-versions.la \
+	unit-quarantine-eviction.la \
+	unit-quarantine-protected.la \
 	unit-remote-document.la \
 	unit-linked-files.la \
 	unit-link-post-disabled.la \
@@ -221,6 +223,7 @@ test_base_sources = \
 	NumUtilWhiteBoxTests.cpp \
 	OomKillsWhiteBoxTests.cpp \
 	ProcessWhiteBoxTests.cpp \
+	QuarantineWhiteBoxTests.cpp \
 	RequestDetailsTests.cpp \
 	RotatingTokenTests.cpp \
 	SettingsSecretsTests.cpp \
@@ -517,6 +520,10 @@ unit_quarantine_convert_to_la_SOURCES = UnitQuarantineConvertTo.cpp
 unit_quarantine_convert_to_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_quarantine_versions_la_SOURCES = UnitQuarantineVersions.cpp
 unit_quarantine_versions_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_quarantine_eviction_la_SOURCES = UnitQuarantineEviction.cpp
+unit_quarantine_eviction_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_quarantine_protected_la_SOURCES = UnitQuarantineProtected.cpp
+unit_quarantine_protected_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_multi_tenant_la_SOURCES = UnitMultiTenant.cpp
 unit_multi_tenant_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_user_presets_la_SOURCES = UnitUserPresets.cpp

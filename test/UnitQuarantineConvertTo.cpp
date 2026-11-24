@@ -110,6 +110,10 @@ class UnitQuarantineConvertTo : public UnitWSD
             Poco::File(docKeyPath).list(names);
             for (const std::string& name : names)
             {
+                // The state file of a document is no version.
+                if (name == "state")
+                    continue;
+
                 TST_LOG("Found quarantined file [" << docKey << '/' << name << ']');
                 files.emplace_back(docKey + '/' + name);
             }

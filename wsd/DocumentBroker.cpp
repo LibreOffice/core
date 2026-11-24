@@ -1041,6 +1041,11 @@ void DocumentBroker::pollThread()
                 << "Storage available: " << bool(_storage));
         if (_storage && _quarantine && Quarantine::isEnabled())
         {
+            // Its versions are what is left to find out what went wrong. They are protected
+            // first, so the last version, which is protected too, pushes out the versions that
+            // are not protected before them.
+            _quarantine->protectVersions();
+
             const std::string uploading = _storage->getRootFilePathUploading();
             if (FileUtil::Stat(uploading).exists())
             {
@@ -1064,6 +1069,9 @@ void DocumentBroker::pollThread()
             }
         }
     }
+
+    if (_quarantine && !batchSucceeded)
+        _quarantine->markClosed();
 #endif
 
 #if !MOBILEAPP
@@ -1770,7 +1778,10 @@ bool DocumentBroker::doDownloadDocument(const Authorization& auth,
         // Keep the document as it was opened, so it is there even when the kit goes away before
         // its first save. The jail, and the file in it, may be gone by the time we learn that.
         if (Quarantine::isEnabled())
+        {
+            _quarantine->markOpen();
             _quarantine->quarantineFile(localFilePath, /*copy=*/true);
+        }
     }
     else if (templateSource.empty())
     {

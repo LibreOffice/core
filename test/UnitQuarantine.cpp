@@ -31,14 +31,24 @@
 #include <csignal>
 #include <ctime>
 #include <memory>
+#include <set>
 
 namespace
 {
 std::vector<std::string> getQuarantineFiles(const std::string testname,
                                             const std::string& quarantinePath)
 {
+    std::vector<std::string> names;
+    if (Poco::File(quarantinePath).exists())
+        Poco::File(quarantinePath).list(names);
+
+    // The state file of a document is no version.
     std::vector<std::string> files;
-    Poco::File(quarantinePath).list(files);
+    for (const std::string& name : names)
+    {
+        if (name != "state")
+            files.emplace_back(name);
+    }
 
     // The names start with the time of quarantining, so this puts the oldest first.
     std::sort(files.begin(), files.end());
@@ -72,6 +82,8 @@ class UnitQuarantineConflict : public WOPIUploadConflictCommon
 
     std::string _quarantinePath;
     bool _unloadingModifiedDocDetected;
+    /// The quarantined files of the document before the scenario.
+    std::set<std::string> _filesBefore;
 
     static constexpr std::size_t LimitStoreFailures = 2;
     static constexpr bool SaveOnExit = true;
@@ -107,8 +119,6 @@ public:
             TST_LOG("Quarantine path found at [" << _quarantinePath << ']');
         }
 
-        // Make sure the quarantine directory is clean.
-        FileUtil::removeFile(_quarantinePath, true);
     }
 
     void onDocBrokerCreate(const std::string& docKey) override
@@ -133,7 +143,9 @@ public:
 
         // Each scenario checks only what it quarantined itself. The document is downloaded, and
         // quarantined as it was opened, only after this.
-        FileUtil::removeFile(_quarantinePath + '/' + docKey, true);
+        const std::vector<std::string> before =
+            getQuarantineFiles(testname, _quarantinePath + '/' + docKey);
+        _filesBefore = std::set<std::string>(before.begin(), before.end());
     }
 
     std::unique_ptr<http::Response>
@@ -249,7 +261,12 @@ public:
 
         const std::string documentUrl = Uri::encode(getWopiHostURI() + "/wopi/files/0");
         const std::string quarantinePath = _quarantinePath + '/' + documentUrl;
-        const std::vector<std::string> files = getQuarantineFiles(testname, quarantinePath);
+        std::vector<std::string> files;
+        for (const std::string& file : getQuarantineFiles(testname, quarantinePath))
+        {
+            if (!_filesBefore.contains(file))
+                files.emplace_back(file);
+        }
 
         // The document as it was opened comes first, then the modified version that could not be
         // uploaded.
@@ -307,8 +324,6 @@ public:
             TST_LOG("Quarantine path found at [" << _quarantinePath << ']');
         }
 
-        // Make sure the quarantine directory is clean.
-        FileUtil::removeFile(_quarantinePath, true);
     }
 
     void onDocBrokerAttachKitProcess(const std::string& docKey, int pid) override
@@ -398,7 +413,7 @@ public:
         TST_LOG("Testing with dockey [" << docKey << "] closed.");
         LOK_ASSERT_STATE(_phase, Phase::Unload);
 
-        const std::string documentUrl = Uri::encode(getWopiHostURI() + "/wopi/files/0");
+        const std::string documentUrl = Uri::encode(getWopiHostURI() + "/wopi/files/1");
         const std::string quarantinePath = _quarantinePath + '/' + documentUrl;
         const std::vector<std::string> files = getQuarantineFiles(testname, quarantinePath);
         // The document as it was opened, and the version saved before the crash.
@@ -418,7 +433,7 @@ public:
                 TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
 
                 TST_LOG("Creating first connection");
-                initWebsocket("/wopi/files/0?access_token=anything");
+                initWebsocket("/wopi/files/1?access_token=anything");
 
                 TST_LOG("Loading view");
                 WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
@@ -476,8 +491,6 @@ public:
             TST_LOG("Quarantine path found at [" << _quarantinePath << ']');
         }
 
-        // Make sure the quarantine directory is clean.
-        FileUtil::removeFile(_quarantinePath, true);
     }
 
     void onDocBrokerAttachKitProcess(const std::string& docKey, int pid) override
@@ -492,7 +505,7 @@ public:
         LOK_ASSERT_STATE(_phase, Phase::WaitLoadStatus);
 
         // The document is quarantined as soon as it is opened, before anything goes wrong.
-        const std::string documentUrl = Uri::encode(getWopiHostURI() + "/wopi/files/0");
+        const std::string documentUrl = Uri::encode(getWopiHostURI() + "/wopi/files/2");
         const std::string quarantinePath = _quarantinePath + '/' + documentUrl;
         const std::vector<std::string> files = getQuarantineFiles(testname, quarantinePath);
         LOK_ASSERT_EQUAL_MESSAGE("Expected the opened document quarantined in [" << quarantinePath
@@ -544,7 +557,7 @@ public:
         LOK_ASSERT_STATE(_phase, Phase::Unload);
 
         // The document was quarantined when it was opened, as no save ever made a version.
-        const std::string documentUrl = Uri::encode(getWopiHostURI() + "/wopi/files/0");
+        const std::string documentUrl = Uri::encode(getWopiHostURI() + "/wopi/files/2");
         const std::string quarantinePath = _quarantinePath + '/' + documentUrl;
         const std::vector<std::string> files = getQuarantineFiles(testname, quarantinePath);
         LOK_ASSERT_EQUAL_MESSAGE("Expected 1 quarantined file in [" << quarantinePath << ']',
@@ -566,7 +579,7 @@ public:
                 TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
 
                 TST_LOG("Creating first connection");
-                initWebsocket("/wopi/files/0?access_token=anything");
+                initWebsocket("/wopi/files/2?access_token=anything");
 
                 TST_LOG("Loading view");
                 WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
@@ -599,7 +612,7 @@ class UnitQuarantineReopen : public WopiTestServer
 
     std::string quarantinePathOfDocument()
     {
-        return _quarantinePath + '/' + Uri::encode(getWopiHostURI() + "/wopi/files/0");
+        return _quarantinePath + '/' + Uri::encode(getWopiHostURI() + "/wopi/files/4");
     }
 
 public:
@@ -629,7 +642,6 @@ public:
         }
 
         TST_LOG("Quarantine path at [" << _quarantinePath << ']');
-        FileUtil::removeFile(_quarantinePath, true);
     }
 
     bool onDocumentLoaded(const std::string& message) override
@@ -679,7 +691,7 @@ public:
         {
             case Phase::Load:
                 TRANSITION_STATE(_phase, Phase::WaitFirstLoad);
-                initWebsocket("/wopi/files/0?access_token=anything");
+                initWebsocket("/wopi/files/4?access_token=anything");
                 WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
                 break;
             case Phase::Reload:
@@ -689,7 +701,7 @@ public:
 
                 TRANSITION_STATE(_phase, Phase::WaitSecondLoad);
                 _reopened = std::time(nullptr);
-                initWebsocket("/wopi/files/0?access_token=anything");
+                initWebsocket("/wopi/files/4?access_token=anything");
                 WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
                 break;
             case Phase::WaitFirstLoad:
@@ -703,7 +715,6 @@ public:
 
 UnitBase** unit_create_wsd_multi(void)
 {
-    // UnitQuarantineReopen runs first, while no other test has given its document versions.
     return new UnitBase*[5]{
         new UnitQuarantineReopen(),
         new UnitQuarantineCrash(),

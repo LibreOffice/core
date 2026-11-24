@@ -146,8 +146,16 @@ public:
         // The document as it was opened and the first save are gone, although they are recent.
         const std::string documentUrl = Uri::encode(getWopiHostURI() + "/wopi/files/0");
         const std::string quarantinePath = _quarantinePath + '/' + documentUrl;
+        std::vector<std::string> names;
+        Poco::File(quarantinePath).list(names);
+
+        // The state file of a document is no version.
         std::vector<std::string> files;
-        Poco::File(quarantinePath).list(files);
+        for (const std::string& name : names)
+        {
+            if (name != "state")
+                files.emplace_back(name);
+        }
         std::sort(files.begin(), files.end());
         for (const std::string& file : files)
             TST_LOG("Found quarantined file [" << file << ']');

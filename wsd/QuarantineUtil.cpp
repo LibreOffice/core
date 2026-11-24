@@ -34,6 +34,7 @@
 #include <algorithm>
 #include <chrono>
 #include <exception>
+#include <fstream>
 #include <mutex>
 #include <stdexcept>
 
@@ -45,10 +46,46 @@ std::size_t getSecondsSinceEpoch()
     return std::chrono::duration_cast<std::chrono::seconds>(timeNow.time_since_epoch()).count();
 }
 
+/// Whether quarantine_files is enabled in the active config. A value that can't be read is false.
+bool isEnabledInConfig()
+{
+    try
+    {
+        return ConfigUtil::getBool("quarantine_files[@enable]", false);
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_WRN("Invalid quarantine_files[@enable], the quarantine is off: " << exc.what());
+    }
+
+    return false;
+}
+
+/// A setting of the quarantine from the active config, a number that is not negative. Where
+/// that can't be read, the default.
+std::size_t getSetting(const std::string& key, int def)
+{
+    try
+    {
+        const int value = ConfigUtil::getInt(key, def);
+        if (value >= 0)
+            return static_cast<std::size_t>(value);
+
+        LOG_WRN("Invalid " << key << " of " << value << ", taking " << def);
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_WRN("Invalid " << key << ", taking " << def << ": " << exc.what());
+    }
+
+    return static_cast<std::size_t>(def);
+}
+
 } // namespace
 
 std::string Quarantine::QuarantinePath;
 Util::UnorderedStringMap<std::vector<Quarantine::Entry>> Quarantine::QuarantineMap;
+std::unordered_set<std::string> Quarantine::OpenDocKeys;
 std::mutex Quarantine::Mutex;
 std::size_t Quarantine::MaxSizeBytes;
 std::size_t Quarantine::MaxAgeSecs;
@@ -66,19 +103,16 @@ Quarantine::Quarantine(DocumentBroker& docBroker, const std::string& docName)
 
 void Quarantine::initialize(const std::string& path)
 {
-    if (!ConfigUtil::getConfigValue<bool>("quarantine_files[@enable]", false) ||
-        !QuarantinePath.empty())
+    // The active config, which a test can set without an application.
+    if (!QuarantinePath.empty() || !isEnabledInConfig())
     {
         return;
     }
 
-    MaxSizeBytes =
-        ConfigUtil::getConfigValue<std::size_t>("quarantine_files.limit_dir_size_mb", 250) * 1024 *
-        1024;
-    MaxAgeSecs = ConfigUtil::getConfigValue<std::size_t>("quarantine_files.expiry_min", 3000) * 60;
-    MaxVersions = std::max(
-        ConfigUtil::getConfigValue<std::size_t>("quarantine_files.max_versions_to_maintain", 5),
-        1UL);
+    MaxSizeBytes = getSetting("quarantine_files.limit_dir_size_mb", 250) * 1024 * 1024;
+    MaxAgeSecs = getSetting("quarantine_files.expiry_min", 3000) * 60;
+    MaxVersions = std::max<std::size_t>(getSetting("quarantine_files.max_versions_to_maintain", 5),
+                                        1);
     LOG_INF("Initializing Quarantine at [" << path << "] with Max Size: " << MaxSizeBytes
                                            << " bytes, Max Age: " << MaxAgeSecs
                                            << " seconds, Max Versions: " << MaxVersions);
@@ -128,6 +162,7 @@ void Quarantine::initialize(const std::string& path)
     std::lock_guard<std::mutex> lock(Mutex);
 
     QuarantineMap.clear();
+    OpenDocKeys.clear();
 
     std::vector<Poco::File> legacyFiles;
     std::vector<Poco::File> files;
@@ -161,14 +196,28 @@ void Quarantine::initialize(const std::string& path)
             {
                 if (newFile.isFile())
                 {
-                    entries.emplace_back(path, docKey, Poco::Path(newFile.path()).getFileName());
+                    const std::string fileName = Poco::Path(newFile.path()).getFileName();
+                    if (fileName.starts_with(CopyPrefix))
+                    {
+                        // A copy that was not finished when wsd went away.
+                        LOG_DBG("Removing unfinished quarantine copy [" << newFile.path() << ']');
+                        FileUtil::removeFile(newFile.path());
+                    }
+                    else if (fileName != StateFileName)
+                        entries.emplace_back(path, docKey, fileName);
                 }
             }
 
             LOG_TRC("Found " << entries.size() << " quarantine file for DocKey [" << docKey << ']');
             if (!entries.empty())
             {
+                readState(path, docKey, entries);
                 QuarantineMap[docKey] = std::move(entries);
+            }
+            else
+            {
+                LOG_TRC("Removing quarantine directory without versions [" << fullPath << ']');
+                FileUtil::removeFile(fullPath, /*recursive=*/true);
             }
         }
     }
@@ -197,8 +246,21 @@ void Quarantine::initialize(const std::string& path)
                             << pair.first << ']');
     }
 
-    // Clean up.
-    makeQuarantineSpace(/*headroomBytes=*/0);
+    // Clean up, and write the state of each document again, with the protection it has now.
+    makeQuarantineSpace(/*headroomBytes=*/0, /*mayRemoveProtected=*/true);
+    for (const auto& pair : QuarantineMap)
+    {
+        try
+        {
+            writeState(pair.first);
+        }
+        catch (const std::exception& exc)
+        {
+            LOG_WRN("Failed to write the quarantine state of [" << pair.first
+                                                                << "]: " << exc.what());
+        }
+    }
+    removeEmptyDocKeys();
 
     for (const auto& pair : QuarantineMap)
     {
@@ -226,97 +288,226 @@ std::size_t Quarantine::quarantineSize()
     return size;
 }
 
-void Quarantine::makeQuarantineSpace(std::size_t headroomBytes)
+bool Quarantine::makeQuarantineSpace(std::size_t headroomBytes, bool mayRemoveProtected)
 {
     LOG_ASSERT_MSG(!Mutex.try_lock(), "Quarantine Mutex must be taken");
 
     if (!isEnabled())
-        return;
+        return false;
 
-    std::size_t currentSize = quarantineSize() + headroomBytes;
-    if (currentSize > MaxSizeBytes)
-    {
-        LOG_INF("Quarantine directory is too large at "
-                << currentSize - headroomBytes << " bytes for incoming file of " << headroomBytes
-                << " bytes (Max Size: " << MaxSizeBytes << " bytes). Shrinking.");
-    }
-
-    // We have to remove some files. Start with culling old entries.
+    // Start with culling the expired and excess versions.
     const std::size_t now = getSecondsSinceEpoch();
     for (const auto& pair : QuarantineMap)
     {
-        deleteOldQuarantineVersions(pair.first, now - MaxAgeSecs);
+        deleteOldQuarantineVersions(pair.first, now > MaxAgeSecs ? now - MaxAgeSecs : 0);
     }
 
-    // Check the size again.
-    currentSize = quarantineSize() + headroomBytes;
+    std::size_t currentSize = quarantineSize() + headroomBytes;
     if (currentSize <= MaxSizeBytes)
+        return true;
+
+    // When the protected versions are to stay, check first that there can be room at all, so
+    // the other versions are not removed for an incoming file that does not fit anyway.
+    std::size_t keptBytes = headroomBytes;
+    if (!mayRemoveProtected)
     {
-        return; // We are good, for now.
-    }
-
-    // Ok, we need to remove the oldest entry, but target the document with the most versions first.
-    // First, get a reference into all the Entry containers.
-    std::vector<std::vector<Entry>*> entries;
-    entries.reserve(QuarantineMap.size());
-    for (auto& pair : QuarantineMap)
-    {
-        if (!pair.second.empty())
+        for (const auto& pair : QuarantineMap)
         {
-            entries.emplace_back(&pair.second);
-        }
-    }
-
-    // Sort by the one with the most entries followed by the one with the older entry.
-    std::sort(entries.begin(), entries.end(),
-              [](const std::vector<Entry>* const& lhs, const std::vector<Entry>* const& rhs)
-              {
-                  assert(!lhs->empty() && !rhs->empty() && "Unexpected empty Quarantine Entries");
-                  if (lhs->size() != rhs->size())
-                  {
-                      return lhs->size() > rhs->size();
-                  }
-
-                  return (*lhs)[0].secondsSinceEpoch() < (*rhs)[0].secondsSinceEpoch();
-              });
-
-    while (!entries.empty())
-    {
-        // Remove the first entry of the first container.
-        assert(!(*entries[0]).empty() && "Unexpected empty Quarantine Entries");
-        const Entry& entry = *entries[0]->begin();
-        const std::size_t size = entry.size();
-        LOG_DBG("Removing quarantined file [" << entry.filename() << "] for [" << entry.docKey()
-                                              << "] with " << size << " bytes");
-        FileUtil::removeFile(entry.fullPath());
-        entries[0]->erase(entries[0]->begin()); // Invalidates entry.
-
-        currentSize -= size;
-        if (currentSize <= MaxSizeBytes)
-        {
-            return; // We are good, for now.
-        }
-
-        if (entries[0]->empty())
-        {
-            entries.erase(entries.begin()); // No quarantines left; remove this container.
-            continue; // The next container (if any) should be correctly sorted.
-        }
-
-        // Order the top two entries if their sorting has now changed.
-        if (entries.size() >= 2)
-        {
-            const std::vector<Entry>* first = entries[0];
-            const std::vector<Entry>* second = entries[1];
-            assert(!first->empty() && !second->empty() && "Unexpected empty Quarantine Entries");
-            if (second->size() > first->size() ||
-                ((second->size() == first->size()) &&
-                 (*second)[0].secondsSinceEpoch() < (*first)[0].secondsSinceEpoch()))
+            for (const Entry& entry : pair.second)
             {
-                std::swap(entries[0], entries[1]);
+                if (entry.isProtected())
+                    keptBytes += entry.size();
             }
         }
     }
+
+    if (keptBytes > MaxSizeBytes)
+    {
+        LOG_WRN("Quarantine directory has no room for an incoming file of "
+                << headroomBytes << " bytes"
+                << (mayRemoveProtected ? "" : " without removing protected versions"));
+        return false;
+    }
+
+    LOG_INF("Quarantine directory is too large at "
+            << currentSize - headroomBytes << " bytes for incoming file of " << headroomBytes
+            << " bytes (Max Size: " << MaxSizeBytes << " bytes). Shrinking.");
+
+    while (currentSize > MaxSizeBytes)
+    {
+        // The version to remove: of the document with the most versions that are not protected,
+        // the oldest of those; when no such version is left, the oldest protected version.
+        std::vector<Entry>* victimList = nullptr;
+        std::size_t victimIndex = 0;
+        std::size_t victimCount = 0;
+        for (auto& pair : QuarantineMap)
+        {
+            std::vector<Entry>& entries = pair.second;
+            std::size_t unprotected = 0;
+            std::size_t oldest = entries.size();
+            for (std::size_t i = 0; i < entries.size(); ++i)
+            {
+                if (entries[i].isProtected())
+                    continue;
+
+                if (oldest == entries.size())
+                    oldest = i;
+                ++unprotected;
+            }
+
+            if (unprotected > 0 &&
+                (unprotected > victimCount ||
+                 (unprotected == victimCount && entries[oldest].secondsSinceEpoch() <
+                                                    (*victimList)[victimIndex].secondsSinceEpoch())))
+            {
+                victimList = &entries;
+                victimIndex = oldest;
+                victimCount = unprotected;
+            }
+        }
+
+        if (!victimList && mayRemoveProtected)
+        {
+            for (auto& pair : QuarantineMap)
+            {
+                std::vector<Entry>& entries = pair.second;
+                for (std::size_t i = 0; i < entries.size(); ++i)
+                {
+                    if (!entries[i].isProtected())
+                        continue;
+
+                    if (!victimList || entries[i].secondsSinceEpoch() <
+                                           (*victimList)[victimIndex].secondsSinceEpoch())
+                    {
+                        victimList = &entries;
+                        victimIndex = i;
+                    }
+
+                    break; // The oldest protected version of this document.
+                }
+            }
+        }
+
+        if (!victimList)
+        {
+            LOG_WRN("Quarantine directory has no room for an incoming file of " << headroomBytes
+                                                                                << " bytes");
+            return false;
+        }
+
+        const Entry& entry = (*victimList)[victimIndex];
+        const std::size_t size = entry.size();
+        const bool wasProtected = entry.isProtected();
+        const std::string docKey = entry.docKey();
+        LOG_DBG("Removing quarantined file [" << entry.filename() << "] for [" << docKey
+                                              << "] with " << size << " bytes"
+                                              << (wasProtected ? ", protected" : ""));
+        FileUtil::removeFile(entry.fullPath());
+        victimList->erase(victimList->begin() + victimIndex); // Invalidates entry.
+        currentSize -= std::min(size, currentSize);
+
+        if (wasProtected)
+            writeState(docKey);
+    }
+
+    return true;
+}
+
+void Quarantine::removeEmptyDocKeys()
+{
+    LOG_ASSERT_MSG(!Mutex.try_lock(), "Quarantine Mutex must be taken");
+
+    for (auto it = QuarantineMap.begin(); it != QuarantineMap.end();)
+    {
+        // A legacy version whose name could not be read has no docKey; it is in no directory.
+        if (!it->second.empty() || OpenDocKeys.contains(it->first) || it->first.empty())
+        {
+            ++it;
+            continue;
+        }
+
+        const std::string docKeyPath = Poco::Path(QuarantinePath, it->first).toString();
+        FileUtil::removeFile(Poco::Path(docKeyPath, StateFileName).toString());
+        if (FileUtil::isEmptyDirectory(docKeyPath))
+            FileUtil::removeFile(docKeyPath, /*recursive=*/true);
+
+        it = QuarantineMap.erase(it);
+    }
+}
+
+void Quarantine::writeState(const std::string& docKey)
+{
+    LOG_ASSERT_MSG(!Mutex.try_lock(), "Quarantine Mutex must be taken");
+
+    const bool isOpen = OpenDocKeys.contains(docKey);
+    std::vector<std::string> protectedNames;
+    for (const Entry& entry : QuarantineMap[docKey])
+    {
+        if (entry.isProtected())
+            protectedNames.emplace_back(Poco::Path(entry.fullPath()).getFileName());
+    }
+
+    const std::string docKeyPath = Poco::Path(QuarantinePath, docKey).toString();
+    const std::string statePath = Poco::Path(docKeyPath, StateFileName).toString();
+    if (!isOpen && protectedNames.empty())
+    {
+        FileUtil::removeFile(statePath);
+        return;
+    }
+
+    // The state is written in full under another name first, so it is never found half written.
+    // That name is one of an unfinished copy, which goes at the next start.
+    Poco::File(docKeyPath).createDirectories();
+    const std::string newStatePath =
+        Poco::Path(docKeyPath, std::string(CopyPrefix) + StateFileName).toString();
+    {
+        std::ofstream state(newStatePath, std::ios::trunc);
+        state << (isOpen ? "open" : "closed") << '\n';
+        for (const std::string& name : protectedNames)
+            state << name << '\n';
+
+        state.flush();
+        if (!state)
+        {
+            LOG_WRN("Failed to write the quarantine state of [" << docKey << ']');
+            FileUtil::removeFile(newStatePath);
+            return;
+        }
+    }
+
+    if (::rename(newStatePath.c_str(), statePath.c_str()) != 0)
+    {
+        LOG_SYS("Failed to write the quarantine state of [" << docKey << ']');
+        FileUtil::removeFile(newStatePath);
+    }
+}
+
+void Quarantine::readState(const std::string& root, const std::string& docKey,
+                           std::vector<Entry>& entries)
+{
+    const std::string statePath =
+        Poco::Path(Poco::Path(root, docKey).toString(), StateFileName).toString();
+    std::ifstream state(statePath);
+    if (!state)
+        return;
+
+    std::string line;
+    std::getline(state, line);
+
+    // A document that was still open when wsd went away ended badly.
+    const bool wasOpen = line == "open";
+    std::unordered_set<std::string> protectedNames;
+    while (std::getline(state, line))
+        protectedNames.insert(line);
+
+    for (Entry& entry : entries)
+    {
+        if (wasOpen || protectedNames.contains(Poco::Path(entry.fullPath()).getFileName()))
+            entry.setProtected(true);
+    }
+
+    LOG_DBG("Quarantine state of [" << docKey << "]: " << (wasOpen ? "was open" : "closed")
+                                    << ", " << protectedNames.size() << " protected versions");
 }
 
 void Quarantine::deleteOldQuarantineVersions(const std::string& docKey, std::size_t oldestTimestamp)
@@ -328,42 +519,54 @@ void Quarantine::deleteOldQuarantineVersions(const std::string& docKey, std::siz
 
     std::vector<Entry>& container = QuarantineMap[docKey];
 
-    // The versions are sorted oldest first. The oldest go when there are more than MaxVersions.
-    const std::size_t excessVersions =
-        container.size() > MaxVersions ? container.size() - MaxVersions : 0;
-
-    // Of the rest, the ones older than oldestTimestamp go too.
-    std::size_t excess = excessVersions;
-    while (excess < container.size() && container[excess].secondsSinceEpoch() < oldestTimestamp)
-        ++excess;
-
-    if (excess > 0)
+    // The versions are sorted oldest first. Of those that are not protected, the oldest go when
+    // there are more than MaxVersions of them.
+    std::size_t unprotected = 0;
+    for (const Entry& entry : container)
     {
-        LOG_DBG("Removing " << excess << " excess quarantined-file versions for [" << docKey
-                            << "] from current " << container.size() << " versions, "
-                            << excessVersions << " due to exceeding MaxVersions (" << MaxVersions
-                            << ") and " << excess - excessVersions << " due to being older than "
-                            << MaxAgeSecs << " seconds");
+        if (!entry.isProtected())
+            ++unprotected;
+    }
 
-        for (std::size_t i = 0; i < excess; ++i)
+    std::size_t excessVersions = unprotected > MaxVersions ? unprotected - MaxVersions : 0;
+    bool protectedRemoved = false;
+    std::size_t removed = 0;
+    for (std::size_t i = 0; i < container.size();)
+    {
+        const Entry& entry = container[i];
+        const bool expired = entry.secondsSinceEpoch() < oldestTimestamp;
+        const bool excess = !entry.isProtected() && excessVersions > 0;
+        if (!expired && !excess)
         {
-            const std::string& path = container[i].fullPath();
-            LOG_TRC("Removing excess quarantined-file version #" << (i + 1) << " [" << path
-                                                                 << "] for [" << docKey << ']');
-
-            FileUtil::removeFile(path);
+            ++i;
+            continue;
         }
 
-        // And remove them from the container.
-        container.erase(container.begin(), container.begin() + excess);
+        LOG_TRC("Removing " << (expired ? "expired" : "excess") << " quarantined-file version ["
+                            << entry.fullPath() << "] for [" << docKey << ']');
+        FileUtil::removeFile(entry.fullPath());
+        if (!entry.isProtected())
+            excessVersions -= std::min<std::size_t>(excessVersions, 1);
+        else
+            protectedRemoved = true;
+
+        container.erase(container.begin() + i);
+        ++removed;
     }
+
+    if (removed > 0)
+        LOG_DBG("Removed " << removed << " expired or excess quarantined-file versions for ["
+                           << docKey << "], " << container.size() << " left");
+
+    if (protectedRemoved)
+        writeState(docKey);
 }
 
 bool Quarantine::quarantineFile(const std::string& docPath, bool copy)
 {
     try
     {
-        return quarantineFile(_docKey, docPath, _quarantinedFilename, copy);
+        return quarantineFile(_docKey, docPath, _quarantinedFilename, copy, _endedBadly);
     }
     catch (const std::exception& exc)
     {
@@ -375,7 +578,8 @@ bool Quarantine::quarantineFile(const std::string& docPath, bool copy)
 }
 
 bool Quarantine::quarantineFile(const std::string& docKey, const std::string& docPath,
-                                const std::string& quarantinedFilename, bool copy)
+                                const std::string& quarantinedFilename, bool copy,
+                                bool isProtected)
 {
     if (!isEnabled())
         return false;
@@ -387,9 +591,9 @@ bool Quarantine::quarantineFile(const std::string& docKey, const std::string& do
         return false;
     }
 
-    // A copy larger than the whole quarantine would push out every other version, and then go over
-    // the limit anyway.
-    if (copy && sourceStat.size() > MaxSizeBytes)
+    // A version larger than the whole quarantine would push out every other version, and then go
+    // over the limit anyway.
+    if (sourceStat.size() > MaxSizeBytes)
     {
         LOG_WRN("Quarantining of file [" << docPath << "] is skipped because its "
                                          << sourceStat.size()
@@ -398,7 +602,6 @@ bool Quarantine::quarantineFile(const std::string& docKey, const std::string& do
     }
 
     const std::string docKeyPath = Poco::Path(QuarantinePath, docKey).toString();
-    Poco::File(docKeyPath).createDirectories();
 
     // The versions of one document are quarantined by its own broker, one at a time. The lock is
     // shared by all documents, so reading and copying the file, which takes as long as the file is
@@ -424,18 +627,38 @@ bool Quarantine::quarantineFile(const std::string& docKey, const std::string& do
         return false;
     }
 
-    // The room for the copy is made once it is there, so a copy that fails costs no version.
-    std::string copyPath;
-    if (copy)
+    // The new version is made under another name first, and that is removed unless it becomes
+    // the new version, also when anything throws.
+    struct UnfinishedCopy
     {
-        copyPath = Poco::Path(docKeyPath, "copy-" + Util::rng::getFilename(12)).toString();
-        if (!FileUtil::copy(docPath, copyPath, /*log=*/false, /*throw_on_error=*/false))
+        std::string path;
+        ~UnfinishedCopy()
         {
-            LOG_ERR("Quarantining of file [" << docPath << "] failed to copy it to [" << copyPath
-                                             << ']');
-            FileUtil::removeFile(copyPath);
-            return false;
+            if (!path.empty())
+                FileUtil::removeFile(path);
         }
+    } unfinishedCopy;
+
+    // The directory is made under the lock, as removeEmptyDocKeys() removes directories under it
+    // too.
+    {
+        std::lock_guard<std::mutex> lock(Mutex);
+        Poco::File(docKeyPath).createDirectories();
+    }
+
+    // Room for the version is made only once it is there, so a version that can't be made, for
+    // example because its file went meanwhile, costs no other version.
+    const std::string copyPath =
+        Poco::Path(docKeyPath, CopyPrefix + Util::rng::getFilename(12)).toString();
+    unfinishedCopy.path = copyPath;
+    const bool made = copy ? FileUtil::copy(docPath, copyPath, /*log=*/false,
+                                            /*throw_on_error=*/false)
+                           : FileUtil::linkOrCopyFile(docPath, copyPath);
+    if (!made)
+    {
+        LOG_ERR("Quarantining of file [" << docPath << "] failed to " << (copy ? "copy" : "link")
+                                         << " it to [" << copyPath << ']');
+        return false;
     }
 
     std::lock_guard<std::mutex> lock(Mutex);
@@ -450,28 +673,37 @@ bool Quarantine::quarantineFile(const std::string& docKey, const std::string& do
 
     Entry entry(QuarantinePath, docKey, secondsSinceEpoch, quarantinedFilename,
                 sourceStat.size());
+    entry.setProtected(isProtected);
     const std::string linkedFilePath = entry.fullPath();
     LOG_TRC("Quarantining [" << docPath << "] to [" << linkedFilePath << ']');
 
     // Clean-up the quarantine directory and make room for the incoming file.
-    makeQuarantineSpace(entry.size());
-
-    const bool quarantined = copy ? ::rename(copyPath.c_str(), linkedFilePath.c_str()) == 0
-                                  : FileUtil::linkOrCopyFile(docPath, linkedFilePath);
+    bool quarantined = makeQuarantineSpace(entry.size(), isProtected);
     if (quarantined)
     {
+        Poco::File(docKeyPath).createDirectories();
+        quarantined = ::rename(copyPath.c_str(), linkedFilePath.c_str()) == 0;
+    }
+
+    if (quarantined)
+    {
+        unfinishedCopy.path.clear();
         fileList.emplace_back(entry);
-        LOG_INF("Quarantined [" << docPath << "] to [" << linkedFilePath << ']');
+        LOG_INF("Quarantined [" << docPath << "] to [" << linkedFilePath << ']'
+                                << (isProtected ? ", protected" : ""));
 
         // The space above was made before this version was added, so it may be one too many.
-        deleteOldQuarantineVersions(docKey, getSecondsSinceEpoch() - MaxAgeSecs);
+        const std::size_t now = getSecondsSinceEpoch();
+        deleteOldQuarantineVersions(docKey, now > MaxAgeSecs ? now - MaxAgeSecs : 0);
+        if (isProtected)
+            writeState(docKey);
+
+        removeEmptyDocKeys();
         return true;
     }
 
-    if (copy)
-        FileUtil::removeFile(copyPath);
-
     LOG_ERR("Quarantining of file [" << docPath << "] to [" << linkedFilePath << "] failed");
+    removeEmptyDocKeys();
     return false;
 }
 
@@ -495,8 +727,8 @@ bool Quarantine::renewVersion(const std::string& docKey, const std::string& path
     if (rest == std::string::npos)
         return true;
 
-    const Entry renewed(QuarantinePath, docKey, secondsSinceEpoch, name.substr(rest),
-                        last.size());
+    Entry renewed(QuarantinePath, docKey, secondsSinceEpoch, name.substr(rest), last.size());
+    renewed.setProtected(last.isProtected());
     if (::rename(path.c_str(), renewed.fullPath().c_str()) != 0)
     {
         LOG_SYS("Failed to rename quarantined version [" << path << "] to ["
@@ -506,6 +738,9 @@ bool Quarantine::renewVersion(const std::string& docKey, const std::string& path
 
     LOG_DBG("Renewed quarantined version [" << path << "] as [" << renewed.fullPath() << ']');
     fileList[fileList.size() - 1] = renewed;
+    if (renewed.isProtected())
+        writeState(docKey);
+
     return true;
 }
 
@@ -514,17 +749,86 @@ void Quarantine::removeQuarantinedFiles()
     if (!isEnabled())
         return;
 
-    std::lock_guard<std::mutex> lock(Mutex);
+    try
+    {
+        std::lock_guard<std::mutex> lock(Mutex);
 
-    for (const Entry& entry : QuarantineMap[_docKey])
-        FileUtil::removeFile(entry.fullPath());
-    QuarantineMap.erase(_docKey);
+        for (const Entry& entry : QuarantineMap[_docKey])
+            FileUtil::removeFile(entry.fullPath());
+        QuarantineMap.erase(_docKey);
+        OpenDocKeys.erase(_docKey);
 
-    const std::string docKeyPath = Poco::Path(QuarantinePath, _docKey).toString();
-    if (FileUtil::isEmptyDirectory(docKeyPath))
-        FileUtil::removeFile(docKeyPath, /*recursive=*/true);
+        const std::string docKeyPath = Poco::Path(QuarantinePath, _docKey).toString();
+        FileUtil::removeFile(Poco::Path(docKeyPath, StateFileName).toString());
+        if (FileUtil::isEmptyDirectory(docKeyPath))
+            FileUtil::removeFile(docKeyPath, /*recursive=*/true);
 
-    LOG_DBG("Removed the quarantined versions of [" << _docKey << ']');
+        LOG_DBG("Removed the quarantined versions of [" << _docKey << ']');
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_WRN("Failed to remove the quarantined versions of [" << _docKey
+                                                                  << "]: " << exc.what());
+    }
+}
+
+void Quarantine::markOpen()
+{
+    if (!isEnabled())
+        return;
+
+    try
+    {
+        std::lock_guard<std::mutex> lock(Mutex);
+        OpenDocKeys.insert(_docKey);
+        writeState(_docKey);
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_WRN("Failed to note [" << _docKey << "] as open in the quarantine: " << exc.what());
+    }
+}
+
+void Quarantine::markClosed()
+{
+    if (!isEnabled())
+        return;
+
+    try
+    {
+        std::lock_guard<std::mutex> lock(Mutex);
+        OpenDocKeys.erase(_docKey);
+        writeState(_docKey);
+        removeEmptyDocKeys();
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_WRN("Failed to note [" << _docKey << "] as closed in the quarantine: " << exc.what());
+    }
+}
+
+void Quarantine::protectVersions()
+{
+    if (!isEnabled())
+        return;
+
+    _endedBadly = true;
+
+    try
+    {
+        std::lock_guard<std::mutex> lock(Mutex);
+        for (Entry& entry : QuarantineMap[_docKey])
+            entry.setProtected(true);
+
+        // The document stays noted as open until markClosed(), after its last version.
+        writeState(_docKey);
+        LOG_INF("Protected the quarantined versions of [" << _docKey << ']');
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_WRN("Failed to protect the quarantined versions of [" << _docKey
+                                                                   << "]: " << exc.what());
+    }
 }
 
 std::string Quarantine::lastQuarantinedFilePath() const
