@@ -361,6 +361,15 @@ sal_Int32 InternalData::appendRow()
     return getRowCount() - 1;
 }
 
+void InternalData::ensureRowCount( sal_Int32 nRowCount )
+{
+    if (nRowCount <= 0)
+        return;
+    if (o3tl::make_unsigned(nRowCount) > m_aRowLabels.size())
+        m_aRowLabels.resize(nRowCount);
+    enlargeData(0, nRowCount);
+}
+
 sal_Int32 InternalData::getRowCount() const
 {
     return m_nRowCount;

@@ -614,6 +614,10 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, st
     {
         // Category labels.
 
+        // Size the table for all categories at once, so each label below goes into a row that
+        // already exists and the data columns are copied only once
+        m_aInternalData.ensureRowCount(static_cast<sal_Int32>(aRawElems.size()));
+
         // Store date categories as numbers.
         bool bStoreNumeric = rRoleQualifier == u"date";
         double fValue;

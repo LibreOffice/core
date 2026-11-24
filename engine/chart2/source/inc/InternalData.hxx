@@ -61,6 +61,8 @@ public:
     sal_Int32 appendColumn();
     /// @return the index of the newly appended row
     sal_Int32 appendRow();
+    /// grows the data and the row labels to at least nRowCount rows (never shrinks them)
+    void ensureRowCount( sal_Int32 nRowCount );
 
     sal_Int32 getRowCount() const;
     sal_Int32 getColumnCount() const;
