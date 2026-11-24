@@ -32,6 +32,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,framework,\
     CppunitTest_framework_accelerators \
     CppunitTest_framework_accelerators2 \
     CppunitTest_framework_checkdispatchapi \
+    CppunitTest_framework_toolbarmanager \
 ))
 
 # Not sure why this is not stable on macOS.
