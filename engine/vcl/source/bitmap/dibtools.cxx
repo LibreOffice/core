@@ -537,6 +537,8 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
             std::vector<sal_uInt8> aBuffer(rHeader.nSizeImage);
             if (rIStm.ReadBytes(aBuffer.data(), rHeader.nSizeImage) != rHeader.nSizeImage)
                 return false;
+            // The run-length codes can skip pixels, which then keep palette entry 0
+            rAcc.Erase(rPalette[0]);
             if (!ImplDecodeRLE(aBuffer.data(), rHeader, rAcc, rPalette, RLE_4 == rHeader.nCompression))
                 return false;
         }
@@ -884,6 +886,9 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uI
     }
 
     if (pIStm->GetError())
+        return false;
+
+    if (aHeader.nBitCount <= 8 && !aPalette.GetEntryCount())
         return false;
 
     if (nOffset)
