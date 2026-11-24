@@ -271,7 +271,16 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 	content.value = data.text;
 	content.role = 'combobox';
 	content.setAttribute('autocomplete', 'off');
-	content.setAttribute('aria-autocomplete', 'list');
+	// The system picker is the only way to change the value, so the field just shows it. A
+	// field with the focus gets a caret, and the device then offers to fill it in.
+	if (data.pickWithSystemControl) {
+		content.readOnly = true;
+		content.tabIndex = -1;
+		content.setAttribute('aria-haspopup', 'dialog');
+		window.L.DomUtil.addClass(container, 'ui-combobox-system-picker');
+	} else {
+		content.setAttribute('aria-autocomplete', 'list');
+	}
 
 	JSDialog.SetupA11yLabelForLabelableElement(parentContainer, content, data, builder);
 
@@ -279,7 +288,11 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 	content.setAttribute('aria-expanded', false);
 
 	var button = window.L.DomUtil.create('button', 'ui-combobox-button ' + builder.options.cssClass, container);
-	button.setAttribute('aria-expanded', false);
+	// The system picker is a window of its own. Any other box expands a list below itself.
+	if (data.pickWithSystemControl)
+		button.setAttribute('aria-haspopup', 'dialog');
+	else
+		button.setAttribute('aria-expanded', false);
 
 	app.layoutingService.appendLayoutingTask(function () {
 		app.layoutingService.appendLayoutingTask(function () {
@@ -389,7 +402,13 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 	JSDialog.SynchronizeDisabledState(container, [content, button]);
 
 	// notebookbar a11y requires main element to have click handler for shortcuts to work
-	container.addEventListener('click', function () { content.focus(); });
+	container.addEventListener('click', function () {
+		// The arrow holds the focus where the field takes none.
+		if (data.pickWithSystemControl)
+			button.focus();
+		else
+			content.focus();
+	});
 
 	content.addEventListener('keyup', function (event) {
 		// Suggest the first entry that starts with what has been typed so far, with the
@@ -449,7 +468,7 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 	});
 
 	var comboboxId = data.id;
-	var clickFunction = function () {
+	var openDropdown = function () {
 		if (container.hasAttribute('disabled'))
 			return;
 
@@ -542,11 +561,25 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 		}
 	};
 
-	button.addEventListener('click', clickFunction);
-	button.addEventListener('keypress', function (event) {
-		if (event.key === 'Enter' || event.key === ' ')
-			clickFunction();
-	});
+	// A press anywhere on the box opens the system picker, the arrow included. Enter and Space
+	// on the arrow make the browser send a click of its own, which arrives here too.
+	if (data.pickWithSystemControl) {
+		container.addEventListener('click', function () {
+			// The browser leaves the disabled attribute on a div alone, so a
+			// press on a disabled box still arrives here.
+			if (container.hasAttribute('disabled'))
+				return;
+
+			data.pickWithSystemControl();
+		});
+	} else {
+		button.addEventListener('click', openDropdown);
+
+		button.addEventListener('keypress', function (event) {
+			if (event.key === 'Enter' || event.key === ' ')
+				openDropdown();
+		});
+	}
 
 	// The field shows its own text while no picture is there, so the name and
 	// the preview never appear at once.

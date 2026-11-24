@@ -2080,6 +2080,12 @@ img.ui-combobox-value-preview {
 	background-color: color-mix(in srgb, var(--color-warning) 40%, var(--color-background-lighter));
 }
 
+/* A press anywhere on a system-picker box opens the picker, so the field takes none of its
+   own. A caret in the field is what makes the device offer to fill it in. */
+.ui-combobox-system-picker > .ui-combobox-content {
+	pointer-events: none;
+}
+
 /* Similar to .arrowbackground, centers the vector dropdown arrow. */
 .ui-combobox-button {
 	box-sizing: border-box;

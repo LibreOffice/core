@@ -541,6 +541,8 @@ interface ComboBoxWidget extends WidgetJSON {
 	// entries which are values of the box but are not offered in its list
 	hiddenEntries?: Array<string | number>;
 	entrycompletion?: boolean;
+	// opens the system picker for the value in place of the list of entries
+	pickWithSystemControl?: () => void;
 }
 
 interface TreeColumnJSON {

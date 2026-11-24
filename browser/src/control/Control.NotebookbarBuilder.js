@@ -178,14 +178,7 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 		var commandName = e.commandName;
 		var state = e.state;
 
-		if (commandName === '.uno:CharFontName') {
-			if (window.ThisIsTheiOSApp) {
-				const fontNameCombobox = document.getElementById('fontnamecomboboxios');
-				if (fontNameCombobox)
-					fontNameCombobox.textContent = state === '' ? _('Font Name') : state;
-				window.LastSetiOSFontNameButtonFont = state;
-			}
-		} else if (commandName === '.uno:StyleApply') {
+		if (commandName === '.uno:StyleApply') {
 			const applyStyle = document.getElementById('applystyle');
 			if (applyStyle) {
 				applyStyle.value = state;
@@ -221,41 +214,25 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 		if (!data.entries || data.entries.length === 0)
 			return false;
 
-		// Fix exception due to undefined _createiOsFontButton function
-		// Starting with commit 4082e1e570258f5032dfd460cf4d34ff6ae0d575,
-		// this._createiOsFontButton() throws and exception because "this"
-		// is a Window object. So fix this by moving the _createiOsFontButton
-		// function inline.
+		// On iOS the font name box opens the system font picker in place of its own entries.
 		if (window.ThisIsTheiOSApp && data.id === 'fontnamecombobox') {
-			// Fix issue #5838 Use unique IDs for font name combobox elements
-			var table = window.L.DomUtil.createWithId('div', data.id, parentContainer);
-			var row = window.L.DomUtil.create('div', 'notebookbar row', table);
-			var button = window.L.DomUtil.createWithId('button', data.id + 'ios', row);
+			data.pickWithSystemControl = function() {
+				// UIFontPickerViewController opens on no particular entry, so
+				// the current font is not passed to it.
+				window.postMobileMessage('FONTPICKER');
+			};
 
-			$(table).addClass('ui-combobox jsdialog');
-			$(row).addClass('ui-combobox-content');
-			$(button).addClass('ui-combobox-content');
+			const result = JSDialog.combobox(parentContainer, data, builder);
 
-			if (data.selectedEntries.length && data.entries[data.selectedEntries[0]])
-				button.innerText = data.entries[data.selectedEntries[0]];
-			else if (window.LastSetiOSFontNameButtonFont)
-				button.innerText = window.LastSetiOSFontNameButtonFont;
-			else if (data.text)
-				button.innerText = data.text;
-			var map = builder.map;
+			const box = parentContainer.querySelector('#' + data.id);
+			const map = builder.map;
 			window.MagicFontNameCallback = function(font) {
-				button.innerText = font;
+				box.onSetText(font);
 				map.applyFont(font);
 				map.focus();
 			};
-			button.onclick = function() {
 
-				// There doesn't seem to be a way to pre-select an entry in the
-				// UIFontPickerViewController so no need to pass the
-				// current font here.
-				window.postMobileMessage('FONTPICKER');
-			};
-			return false;
+			return result;
 		}
 
 		return JSDialog.combobox(parentContainer, data, builder);
