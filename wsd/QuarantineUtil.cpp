@@ -31,6 +31,7 @@
 #include <Poco/Path.h>
 #include <Poco/URI.h>
 
+#include <algorithm>
 #include <chrono>
 #include <exception>
 #include <mutex>
@@ -394,17 +395,13 @@ bool Quarantine::quarantineFile(const std::string& docKey, const std::string& do
         return false;
     }
 
-    Entry entry(QuarantinePath, docKey, getSecondsSinceEpoch(), quarantinedFilename,
-                sourceStat.size());
     Poco::File(Poco::Path(QuarantinePath, docKey)).createDirectories();
-
-    const std::string linkedFilePath = entry.fullPath();
-    LOG_TRC("Quarantining [" << docPath << "] to [" << linkedFilePath << ']');
 
     std::lock_guard<std::mutex> lock(Mutex);
 
     // Check if we have a duplicate or a new version.
     auto& fileList = QuarantineMap[docKey];
+    uint64_t secondsSinceEpoch = getSecondsSinceEpoch();
     if (!fileList.empty())
     {
         const std::string lastFile = fileList[fileList.size() - 1].fullPath();
@@ -413,12 +410,22 @@ bool Quarantine::quarantineFile(const std::string& docKey, const std::string& do
         if (FileUtil::Stat::isIdenticalTo(lastFileStat, lastFile, sourceStat, docPath))
         {
             LOG_INF("Quarantining of file ["
-                    << docPath << "] to [" << linkedFilePath
+                    << docPath
                     << "] is skipped because this file version is already quarantined as ["
                     << lastFile << ']');
             return false;
         }
+
+        // The time is part of the file name, so a second version within the same second would
+        // replace the first. Name it a second later instead, which keeps the versions in order.
+        secondsSinceEpoch =
+            std::max(secondsSinceEpoch, fileList[fileList.size() - 1].secondsSinceEpoch() + 1);
     }
+
+    Entry entry(QuarantinePath, docKey, secondsSinceEpoch, quarantinedFilename,
+                sourceStat.size());
+    const std::string linkedFilePath = entry.fullPath();
+    LOG_TRC("Quarantining [" << docPath << "] to [" << linkedFilePath << ']');
 
     // Clean-up the quarantine directory and make room for the incoming file.
     makeQuarantineSpace(entry.size());
