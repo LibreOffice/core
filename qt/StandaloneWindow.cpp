@@ -26,7 +26,7 @@
 namespace
 {
 // The welcome slideshow gets the size of Desktop::welcomeWindowSize(), and the other standalone
-// windows, such as the starter screen and the presenter console, 1.5 times that.
+// windows, such as a second view of a document and the presenter console, 1.5 times that.
 std::pair<int, int> standaloneWindowSize(bool isWelcome)
 {
     const int viewportWidth = QGuiApplication::primaryScreen()->availableGeometry().width();

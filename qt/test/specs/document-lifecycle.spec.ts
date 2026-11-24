@@ -8,10 +8,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+import * as draft from '../lib/draft.js';
 import * as webview from '../lib/webview.js';
 
 describe('Document lifecycle', () => {
 	it('should open a blank document from backstage', async function () {
+		// The window of the Start page has a tab strip page too, and the
+		// session can begin there.
+		await draft.switchToAnyDocumentPage(browser.webEngine);
 		await browser.webEngine.waitForCondition(
 			() =>
 				document.readyState === 'complete' &&

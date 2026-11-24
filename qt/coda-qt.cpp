@@ -22,8 +22,8 @@
 #include <common/Log.hpp>
 #include <common/SettingsStorage.hpp>
 #include <common/Util.hpp>
-#include <qt/StandaloneWindow.hpp>
-#include <qt/WebView.hpp>
+#include <qt/TabManager.hpp>
+#include <qt/TabbedWindow.hpp>
 #include <qt/qt.hpp>
 
 #include <Poco/File.h>
@@ -404,11 +404,9 @@ int main(int argc, char** argv)
     }
     else if (!recoveredDrafts)
     {
-        // The starter screen runs standalone, not as a tab; closing it quits
-        // the app.
-        WebView* starterView = new WebView(Application::getProfile());
-        StandaloneWindow::wrap(starterView);
-        starterView->load(Poco::URI(), /*isStarterMode*/ true);
+        // The start page is the first tab of a window, and a document opened from it takes its
+        // place in that window.
+        TabbedWindow::getOrCreate(Application::getProfile())->manager()->addStarterTab();
     }
 
     auto const ret = app.exec();

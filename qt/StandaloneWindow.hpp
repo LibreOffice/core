@@ -19,9 +19,9 @@
 class QCloseEvent;
 class WebView;
 
-// A window hosting a single WebView (non-tabbed): the starter screen, the
-// welcome slideshow, or the presenter console. Owns the WebView and deletes
-// it on close; the app autosaves on exit, so there is no save prompt.
+// A window hosting a single WebView (non-tabbed): the welcome slideshow, a second view of a
+// document, or the presenter console. Owns the WebView and deletes it on close; the app autosaves
+// on exit, so there is no save prompt.
 class StandaloneWindow : public QMainWindow
 {
 public:

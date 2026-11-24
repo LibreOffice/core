@@ -23,6 +23,9 @@ import * as webview from '../lib/webview.js';
 
 describe('Local version history', () => {
 	it('keeps the file as opened just before the first save', async () => {
+		// The window of the Start page has a tab strip page too, and the
+		// session can begin there.
+		await draft.switchToAnyDocumentPage(browser.webEngine);
 		await openFixture(browser.webEngine, browser.native, 'simple.odt');
 		expect(versions.allVersionFiles().length).toBe(0);
 		const asOpened = readFileSync(
