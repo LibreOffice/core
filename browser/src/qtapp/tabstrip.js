@@ -372,18 +372,21 @@
 		return inheritedTransitionNames.get(id) || 'tab-' + id;
 	}
 
-	// A document that opens from the Backstage takes the place of the Backstage tab: in one change
-	// of the strip a starter tab goes and a new tab comes. The new tab then has the name of the
-	// starter tab, so the starter tab turns into it, and the name stays with the new tab.
+	// A document that opens from the Backstage takes the place of the Backstage tab, and the
+	// Backstage takes the place of the last document of a window that closes: in one change of
+	// the strip one tab goes and one tab comes. The new tab then has the name of the tab that
+	// went, so the tab that went turns into it, and the name stays with the new tab. The new tab
+	// may not know its document type yet.
 	function inheritTransitionNames(previousTabs) {
 		const ids = new Set(tabs.map((t) => t.id));
 		const previousIds = new Set(previousTabs.map((t) => t.id));
-		const replaced = previousTabs.find(
-			(t) => t.docType === 'starter' && !ids.has(t.id),
-		);
-		const added = tabs.find((t) => !previousIds.has(t.id));
-		if (replaced && added)
-			inheritedTransitionNames.set(added.id, transitionNameOf(replaced.id));
+		const removed = previousTabs.filter((t) => !ids.has(t.id));
+		const added = tabs.filter((t) => !previousIds.has(t.id));
+		if (removed.length === 1 && added.length === 1)
+			inheritedTransitionNames.set(
+				added[0].id,
+				transitionNameOf(removed[0].id),
+			);
 
 		for (const id of inheritedTransitionNames.keys())
 			if (!ids.has(id)) inheritedTransitionNames.delete(id);
