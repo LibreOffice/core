@@ -10,6 +10,7 @@
  */
 
 #include <svx/VectorObjectContent.hxx>
+#include "Vector3DContent.hxx"
 
 #include <algorithm>
 #include <map>
@@ -67,6 +68,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/obj3d.hxx>
 #include <svx/sxcecitm.hxx>
 #include <svx/sxcgitm.hxx>
 #include <svx/sxcllitm.hxx>
@@ -1183,9 +1185,6 @@ SdrObjEditView* inPlaceTextEditOf(const SfxViewShell& rViewShell)
 
 const SdrObjList* membersOf(const SdrObject& rObject)
 {
-    if (DynCastE3dScene(&rObject))
-        return nullptr;
-
     // a chart active in place has the objects of its page as members, as long as it is active
     if (const auto* pChart = dynamic_cast<const SdrOle2Obj*>(&rObject))
     {
@@ -1289,9 +1288,14 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
     // an active chart holds its parts and still is the embedded object
     if (rObject.GetObjIdentifier() == SdrObjKind::OLE2)
         rContent.meKind = SdrObjKind::OLE2;
-    if (!pChildren || pChildren->GetObjCount() == 0)
+    // the outermost 3D scene draws all that is inside it as one picture, its members draw nothing
+    // in 2D
+    const E3dObject* p3DObject(DynCastE3dObject(&rObject));
+    const bool bInAScene(p3DObject && p3DObject->getParentE3dSceneFromE3dObject());
+    const bool bDrawsAScene(p3DObject && !bInAScene);
+    if (!pChildren || pChildren->GetObjCount() == 0 || bDrawsAScene)
     {
-        if (rContent.maPrimitives.empty())
+        if (rContent.maPrimitives.empty() && !bInAScene)
         {
             // an embedded document active in place shows itself as it is being edited
             if (std::optional<drawinglayer::primitive2d::Primitive2DContainer> oInPlace
@@ -1631,6 +1635,8 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
     rContent.mbTextEdit = hasActiveTextEdit(&rObject);
     const SdrObject* pParent = holderOf(rObject);
     rContent.mnParentId = pParent ? idOf(*pParent) : 0;
+    if (p3DObject)
+        describeIn3D(*p3DObject, rContent);
 }
 
 void makeTheCurveRunThatWay(basegfx::B2DPolygon& rPolygon, sal_uInt32 nPoint,
@@ -1772,6 +1778,7 @@ void writeEntryGeometry(tools::JsonWriter& rWriter, const ObjectContent& rConten
         auto aAidArray = rWriter.startArray("aids");
         rProcessor.decomposeAndWrite(rContent.maAids);
     }
+    writeIn3D(rWriter, rContent);
     if (rContent.meKind != SdrObjKind::NONE)
         rWriter.put("objectKind", static_cast<sal_Int32>(rContent.meKind));
     if (!rContent.maShapeType.isEmpty())

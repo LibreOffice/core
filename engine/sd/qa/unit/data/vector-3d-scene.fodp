@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:styles>
+  <style:style style:name="standard" style:family="graphic">
+   <style:graphic-properties draw:fill="solid" draw:fill-color="#729fcf" svg:stroke-color="#1e3a5f"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="PM1">
+   <style:page-layout-properties fo:page-width="28cm" fo:page-height="15.75cm" style:print-orientation="landscape"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="PM1"/>
+ </office:master-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page draw:name="page1" draw:master-page-name="Default">
+    <dr3d:scene draw:style-name="standard" svg:width="9cm" svg:height="9cm" svg:x="2cm" svg:y="2.5cm" dr3d:vrp="(0 0 16885)" dr3d:vpn="(0 0 16885)" dr3d:projection="perspective" dr3d:distance="4.2cm" dr3d:focal-length="10cm" dr3d:shadow-slant="0" dr3d:shade-mode="gouraud" dr3d:ambient-color="#666666" dr3d:lighting-mode="false">
+     <dr3d:light dr3d:diffuse-color="#cccccc" dr3d:direction="(0.577 0.577 0.577)" dr3d:enabled="true" dr3d:specular="true"/>
+     <dr3d:sphere draw:style-name="standard" dr3d:center="(0 0 0)" dr3d:size="(5000 5000 5000)"/>
+     <dr3d:scene dr3d:transform="translate(4cm 0cm 0cm)">
+      <dr3d:cube draw:style-name="standard" dr3d:min-edge="(-1000 -1000 -1000)" dr3d:max-edge="(1000 1000 1000)"/>
+     </dr3d:scene>
+    </dr3d:scene>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>

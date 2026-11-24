@@ -412,6 +412,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/svdraw/svdviter \
     svx/source/svdraw/svdxcgv \
     svx/source/svdraw/sxelditm \
+    svx/source/vector/Vector3DContent \
     svx/source/vector/VectorObjectContent \
     svx/source/vector/VectorPart \
     svx/source/svdraw/textchain \

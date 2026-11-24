@@ -3009,6 +3009,65 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testThumbnailLeavesThePartAlone)
 
 } // namespace
 
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testSceneSendsItsObjectsIn3D)
+{
+    // a 3D scene sends what is inside it as objects of their own, each with its 3D mapping and
+    // its one 3D primitive, and still draws them all as one picture itself
+    loadFromURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/vector-3d-scene.fodp"));
+    const tools::JsonPath aJson = getVectorPrimitives(u"testSceneSendsItsObjectsIn3D");
+
+    // the scene on the slide, the scene inside it, the sphere and the cube
+    std::optional<tools::JsonPath> oScene, oInnerScene, oSphere, oCube;
+    const size_t nCount = aJson.getSize("/objects").value_or(0);
+    for (size_t nIndex = 0; nIndex < nCount; ++nIndex)
+    {
+        auto oEntry = aJson.at(rtl::Concat2View("/objects/" + OString::number(sal_Int32(nIndex))));
+        const sal_Int64 nKind = oEntry->getInt("objectKind").value_or(0);
+        if (nKind == sal_Int64(SdrObjKind::E3D_Scene))
+            (oEntry->getInt("parent").value_or(-1) == 0 ? oScene : oInnerScene) = oEntry;
+        else if (nKind == sal_Int64(SdrObjKind::E3D_Sphere))
+            oSphere = oEntry;
+        else if (nKind == sal_Int64(SdrObjKind::E3D_Cube))
+            oCube = oEntry;
+    }
+    CPPUNIT_ASSERT(oScene);
+    CPPUNIT_ASSERT(oInnerScene);
+    CPPUNIT_ASSERT(oSphere);
+    CPPUNIT_ASSERT(oCube);
+    const sal_Int64 nScene = oScene->getInt("id").value_or(-1);
+    const sal_Int64 nInnerScene = oInnerScene->getInt("id").value_or(-1);
+
+    CPPUNIT_ASSERT(oScene->getSize("primitives").value_or(0) > 0);
+    CPPUNIT_ASSERT_EQUAL(size_t(16), oScene->getSize("scene3D/transformation").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(16), oScene->getSize("scene3D/projection").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(6), oScene->getSize("scene3D/placement").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(true, oScene->getBool("scene3D/perspective").value_or(false));
+    // the one light that is switched on
+    CPPUNIT_ASSERT_EQUAL(size_t(1), oScene->getSize("scene3D/lights").value_or(0));
+    CPPUNIT_ASSERT(!oScene->has("transform3D"));
+
+    // what is inside draws nothing in 2D and is seen through the outermost scene alone
+    for (const tools::JsonPath& rInside : { *oInnerScene, *oSphere, *oCube })
+    {
+        CPPUNIT_ASSERT_EQUAL(size_t(0), rInside.getSize("primitives").value_or(0));
+        CPPUNIT_ASSERT(!rInside.has("scene3D"));
+        CPPUNIT_ASSERT_EQUAL(size_t(16), rInside.getSize("transform3D").value_or(0));
+    }
+    CPPUNIT_ASSERT_EQUAL(nScene, oInnerScene->getInt("parent").value_or(-1));
+    // the move of 4 cm across, in the last column of the first row
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4000.0, oInnerScene->getDouble("transform3D/3").value_or(0), 1.0);
+    CPPUNIT_ASSERT(!oInnerScene->has("primitives3D"));
+
+    CPPUNIT_ASSERT_EQUAL(nScene, oSphere->getInt("parent").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), oSphere->getSize("primitives3D").value_or(0));
+    CPPUNIT_ASSERT_EQUAL("sphere"_ostr, oSphere->getString("primitives3D/0/type").value_or(""_ostr));
+    CPPUNIT_ASSERT(oSphere->getInt("primitives3D/0/horizontalSegments").value_or(0) > 0);
+    CPPUNIT_ASSERT_EQUAL(size_t(16), oSphere->getSize("primitives3D/0/transform").value_or(0));
+
+    CPPUNIT_ASSERT_EQUAL(nInnerScene, oCube->getInt("parent").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL("cube"_ostr, oCube->getString("primitives3D/0/type").value_or(""_ostr));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

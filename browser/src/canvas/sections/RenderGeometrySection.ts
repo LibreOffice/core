@@ -504,9 +504,14 @@ class RenderGeometrySection extends CanvasSectionObject {
 		const data = RenderGeometrySection.currentPart();
 		if (!data) return [];
 
+		// a 3D scene paints its picture itself, what it holds paints nothing
 		const groups = new Set<number>();
 		data.objects.forEach((object: cool.SlideObject) => {
-			if (object.parent !== undefined && object.parent > 0)
+			if (
+				object.parent !== undefined &&
+				object.parent > 0 &&
+				data.objects.get(object.parent)?.objectKind !== 202
+			)
 				groups.add(object.parent);
 		});
 
@@ -1601,11 +1606,13 @@ class RenderGeometrySection extends CanvasSectionObject {
 
 		// The entry of a text edit names the object under edit as its parent, but it is what that
 		// object shows while the edit runs, not something the object holds.
+		// A 3D scene draws what it holds itself, as one picture.
 		const holds = new Map<number, number[]>();
 		for (const id of data.order) {
 			const object = data.objects.get(id);
 			const parent = object?.parent;
 			if (!parent || object?.kind === 'texteditoverlay') continue;
+			if (data.objects.get(parent)?.objectKind === 202) continue;
 
 			const held = holds.get(parent);
 			if (held) held.push(id);
@@ -1654,10 +1661,13 @@ class RenderGeometrySection extends CanvasSectionObject {
 	}
 
 	/// The objects that object holds, in the order the page draws them. Empty for anything that
-	/// is not a group.
+	/// is not a group, and for a 3D scene.
 	public static heldBy(objectId: number): number[] {
 		const data = RenderGeometrySection.currentPart();
 		if (!data) return [];
+
+		// a 3D scene draws what it holds as one picture, so we take it as one object
+		if (data.objects.get(objectId)?.objectKind === 202) return [];
 
 		// A text edit entry names the object under edit as its parent without being held by it.
 		return data.order.filter((id: number) => {

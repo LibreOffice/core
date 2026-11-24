@@ -12,7 +12,12 @@
 #pragma once
 
 #include <basegfx/vector/b2enums.hxx>
+#include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b3dhommatrix.hxx>
+#include <basegfx/vector/b3dvector.hxx>
+#include <com/sun/star/drawing/ShadeMode.hpp>
+#include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
@@ -502,6 +507,51 @@ struct ObjectContent
 
     /// Nothing for any object the chart's keys do not go to.
     std::optional<ChartKeys> moChartKeys;
+
+    /** What a 3D scene that sits in no other scene is seen through: the camera, the look and the
+        lights. The 3D objects inside it, those of the scenes inside it included, are seen through
+        it alone.
+     */
+    struct Scene3D
+    {
+        /// The mapping of the unit square the scene is seen on onto the page, in twips.
+        basegfx::B2DHomMatrix maPlacement;
+        /// The steps from the space of the scene to that unit square, in the order they are
+        /// taken: the scene's own transformation, the orientation of the camera, the projection
+        /// and the step from the device to the view. Depth runs from 0 at the front to 1.
+        basegfx::B3DHomMatrix maTransformation;
+        basegfx::B3DHomMatrix maOrientation;
+        basegfx::B3DHomMatrix maProjection;
+        basegfx::B3DHomMatrix maDeviceToView;
+        /// True for a projection with perspective, false for a parallel one.
+        bool mbPerspective = false;
+        css::drawing::ShadeMode meShadeMode = css::drawing::ShadeMode_FLAT;
+        bool mbTwoSidedLighting = false;
+        basegfx::BColor maAmbientLight;
+
+        /// One light that is switched on: its color, the direction it shines from in the space
+        /// of the scene, and whether it gives a shine on the surfaces.
+        struct Light
+        {
+            basegfx::BColor maColor;
+            basegfx::B3DVector maDirection;
+            bool mbSpecular = false;
+
+            bool operator==(const Light&) const = default;
+        };
+        std::vector<Light> maLights;
+
+        bool operator==(const Scene3D&) const = default;
+    };
+
+    /// Nothing for any object but a 3D scene that sits in no other scene.
+    std::optional<Scene3D> moScene3D;
+    /// For a 3D object or a 3D scene inside a scene: the mapping of its own space into the space
+    /// of the scene holding it. Nothing for any other object.
+    std::optional<basegfx::B3DHomMatrix> mo3DMapping;
+    /// For a 3D object inside a scene: what it is made of, as its one 3D primitive in its own
+    /// space, the mapping above not applied. Empty for any other object.
+    drawinglayer::primitive3d::Primitive3DContainer maPrimitives3D;
     /// The name the object carries, empty for an entry that stands for no object.
     OUString maName;
     /// The layer the entry draws with, nothing for an entry that belongs to no object. For
@@ -545,7 +595,8 @@ struct ObjectContent
                && mbTiedAtStart == rOther.mbTiedAtStart && mbTiedAtEnd == rOther.mbTiedAtEnd
                && mnTiedToAtStart == rOther.mnTiedToAtStart && mnTiedToAtEnd == rOther.mnTiedToAtEnd
                && moRouting == rOther.moRouting && maOwnGluePoints == rOther.maOwnGluePoints
-               && maSideGluePoints == rOther.maSideGluePoints;
+               && maSideGluePoints == rOther.maSideGluePoints && moScene3D == rOther.moScene3D
+               && mo3DMapping == rOther.mo3DMapping && maPrimitives3D == rOther.maPrimitives3D;
     }
 };
 
@@ -592,9 +643,9 @@ protected:
 SVXCORE_DLLPUBLIC SdrObjEditView* inPlaceTextEditOf(const SfxViewShell& rViewShell);
 
 /** The members of an object as the vector view takes them: those of a group, and nothing for any
-    other object. A 3D scene holds its 3D objects as members but draws them as one picture of its
-    own, so it is taken whole. A chart active in place has the objects of the page it draws on as
-    members, as long as it is active.
+    other object. A 3D scene has its 3D objects and the scenes inside it as members, while the
+    outermost scene draws them all as one picture of its own. A chart active in place has the
+    objects of the page it draws on as members, as long as it is active.
  */
 SVXCORE_DLLPUBLIC const SdrObjList* membersOf(const SdrObject& rObject);
 
@@ -640,8 +691,10 @@ SVXCORE_DLLPUBLIC const SdrObject* holderOf(const SdrObject& rObject);
 /** Fills in what the object says about itself: its handles, path, connector ties, glue points,
     what may be done to it, the box it paints and the mapping of its square onto the page, all in
     twips. The objects inside a group draw the group's content, so a group with members has no
-    primitives of its own. A leaf object with no primitives set yet takes the ones the object
-    draws on its own. The aids and whether the document is being signed are left as they are.
+    primitives of its own. A 3D scene is the other way round: the outermost one draws its content
+    as one picture, and what is inside it draws nothing in 2D, but has its 3D mapping and its 3D
+    primitive. A leaf object with no primitives set yet takes the ones the object draws on its
+    own. The aids and whether the document is being signed are left as they are.
  */
 SVXCORE_DLLPUBLIC void
 describeObject(SdrObject& rObject, ObjectContent& rContent,
