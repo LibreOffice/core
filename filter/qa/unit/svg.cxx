@@ -364,7 +364,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testMapModeText)
     // ahead to get the rotation.
 }
 
-CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf91315)
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf91315_SVG_export_saves_RTL_text_direction)
 {
     // Load a presentation containing RTL text
     loadFromFile(u"tdf91315.fodp");
@@ -379,7 +379,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf91315)
     // - Actual  : 0
 }
 
-CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf166789)
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf166789_SVG_export_adjusts_text_width)
 {
     // A fit-to-size text
     loadFromFile(u"fit-to-size-text.fodg");
@@ -491,7 +491,8 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testDashedLine)
     assertXPath(pXmlDoc, "/svg:svg/svg:g//svg:path", "stroke-dasharray", u"800,300,90,300,90,300");
 }
 
-CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf168135)
+CPPUNIT_TEST_FIXTURE(SvgFilterTest,
+                     testTdf168135_superscript_subscript_have_same_highlight_height_as_normal_text)
 {
     // Make sure that highlighting has the same height for superscript/subscript as for normal text.
     loadFromFile(u"tdf168135.fodp");
