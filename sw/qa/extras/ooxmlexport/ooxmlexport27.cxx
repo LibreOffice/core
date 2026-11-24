@@ -164,6 +164,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf171433_equation)
     assertXPath(pXmlDoc, "//m:sSubSup/m:sup", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf172878_dropDownDataBinding)
+{
+    // Given a file where the dropdown value is provided by /customXml/item2.xml data binding
+    createSwDoc("tdf172878_dropDownDataBinding.docx");
+
+    // The text after 'Inline: ' should be the display value, not the actual stored value ("1").
+    getParagraph(1, "Inline: Wert 1");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testSdtPictureDataBinding)
 {
     // Given a DOCX with a picture content control (w:picture + w:dataBinding)
