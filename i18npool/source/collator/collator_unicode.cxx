@@ -41,6 +41,33 @@ namespace i18npool {
 
 constexpr OUString implementationName = u"com.sun.star.i18n.Collator_Unicode"_ustr;
 
+namespace
+{
+// tdf#174565 with Kurdish (Kurmanji)
+// specific way to compare that can't be defined just with ICU's options
+sal_Int32 compareKmrLatn(icu::RuleBasedCollator& rCollator,
+                         const OUString& rStr1,
+                         const OUString& rStr2)
+{
+    // Ignore ASCII spaces during the alphabetical comparison
+    const OUString aStr1 = rStr1.replaceAll(u" ", u"");
+    const OUString aStr2 = rStr2.replaceAll(u" ", u"");
+
+    const sal_Int32 nResult = rCollator.compare(
+        reinterpret_cast<const UChar*>(aStr1.getStr()), aStr1.getLength(),
+        reinterpret_cast<const UChar*>(aStr2.getStr()), aStr2.getLength());
+
+    if (nResult != 0)
+        return nResult;
+
+    // If the alphabetical comparison is equal, prefer fewer spaces
+    const sal_Int32 nSpaces1 = rStr1.getLength() - aStr1.getLength();
+    const sal_Int32 nSpaces2 = rStr2.getLength() - aStr2.getLength();
+
+    return nSpaces1 - nSpaces2;
+}
+}
+
 Collator_Unicode::Collator_Unicode()
 {
     collator = nullptr;
@@ -57,12 +84,22 @@ sal_Int32 SAL_CALL
 Collator_Unicode::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int32 len1,
     const OUString& str2, sal_Int32 off2, sal_Int32 len2)
 {
+    // use the specific way to compare
+    if (m_pCompare)
+        return m_pCompare(*collator, str1.copy(off1, len1),
+                          str2.copy(off2, len2));
+    // use the generic way to compare
     return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()) + off1, len1, reinterpret_cast<const UChar *>(str2.getStr()) + off2, len2);
 }
 
 sal_Int32 SAL_CALL
 Collator_Unicode::compareString( const OUString& str1, const OUString& str2)
 {
+    // use the specific way to compare
+    if (m_pCompare)
+        return m_pCompare(*collator, str1, str2);
+
+    // use the generic way to compare
     return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()), str1.getLength(),
                              reinterpret_cast<const UChar *>(str2.getStr()), str2.getLength());
 }
@@ -89,7 +126,10 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
 #if WITH_LOCALE_ALL || WITH_LOCALE_kmr_Latn
         // tdf#173547: specific case for Kurdish Latin (it could be "kmr-Latn-TR" but also "kmr-Latn-SY")
         bKmrLatn = rLocale.Language == I18NLANGTAG_QLT && rLocale.Variant.startsWith("kmr-Latn") && rAlgorithm == "alphanumeric";
+
         if (bKmrLatn) {
+            // tdf#174565 use the specific compare function for Kurdish (Kurmanji)
+            m_pCompare = compareKmrLatn;
             func = get_collator_data_kmr_Latn_alphanumeric;
             funclen = get_collator_data_kmr_Latn_alphanumeric_length;
         }

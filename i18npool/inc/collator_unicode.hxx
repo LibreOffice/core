@@ -62,6 +62,8 @@ public:
 
 private:
     std::unique_ptr<icu::RuleBasedCollator> uca_base, collator;
+    // generic function pointer for specific locale (eg tdf#174565 with Kurdish (Kurmanji))
+    sal_Int32 (*m_pCompare)(icu::RuleBasedCollator&, const OUString&, const OUString&) = nullptr;
 };
 
 }
