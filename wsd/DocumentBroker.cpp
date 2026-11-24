@@ -965,30 +965,11 @@ void DocumentBroker::pollThread()
 #endif
     }
 
-#if !MOBILEAPP
-    // The user's settings saved since the last session left would be lost with
-    // the document otherwise.
-    flushUserConfigUpload();
-    abandonPreviewSessions();
-#endif
-
-#if (defined(ENABLE_PYTHON_COMPUTE) && ENABLE_PYTHON_COMPUTE) && !MOBILEAPP
-    // Teardown starts: cancel =PY() POSTs so their sockets do not outlive the document.
-    shutdownPythonCompute();
-#endif
-
     LOG_INF("Finished polling doc ["
             << _docKey << "]. stop: " << _stop << ", continuePolling: " << _poll->continuePolling()
             << ", CloseReason: [" << _closeReason << ']'
             << ", ShutdownRequestFlag: " << SigUtil::getShutdownRequestFlag()
             << ", TerminationFlag: " << SigUtil::getTerminationFlag());
-
-    if (_childProcess && _sessions.empty())
-    {
-        LOG_INF("Requesting termination of child [" << getPid() << "] for doc [" << _docKey
-                                                    << "] as there are no sessions");
-        _childProcess->requestTermination();
-    }
 
     // Check for data-loss.
     std::string reason;
@@ -1032,6 +1013,65 @@ void DocumentBroker::pollThread()
         }
 
         LOG_WRN(state.str());
+    }
+
+#if !MOBILEAPP
+    // Quarantine as soon as the polling ends, before anything that takes time and before the kit
+    // is asked to exit: once the kit is gone, the forkit removes its jail, and the files of the
+    // document in it.
+    if (dataLoss || _docState.kitDisconnected() == DocumentState::KitDisconnected::Unexpected)
+    {
+        // Quarantine the last copy, if different.
+        LOG_WRN((dataLoss ? "Data loss " : "Crash ")
+                << "detected on [" << getDocKey() << ']'
+                << (_storage && _quarantine && Quarantine::isEnabled()
+                        ? ". Will quarantine the last version. "
+                        : ", but Quarantine is disabled. ")
+                << "Storage available: " << bool(_storage));
+        if (_storage && _quarantine && Quarantine::isEnabled())
+        {
+            const std::string uploading = _storage->getRootFilePathUploading();
+            if (FileUtil::Stat(uploading).exists())
+            {
+                LOG_WRN("Quarantining the .uploading file: " << uploading);
+                _quarantine->quarantineFile(uploading);
+            }
+            else
+            {
+                const std::string upload = _storage->getRootFilePathToUpload();
+                if (FileUtil::Stat(upload).exists())
+                {
+                    LOG_WRN("Quarantining the .upload file: " << upload);
+                    _quarantine->quarantineFile(upload);
+                }
+                else
+                {
+                    // Fallback to quarantining the original document.
+                    LOG_WRN("Quarantining the original document file: " << _filename);
+                    _quarantine->quarantineFile(_storage->getRootFilePath(), /*copy=*/true);
+                }
+            }
+        }
+    }
+#endif
+
+#if !MOBILEAPP
+    // The user's settings saved since the last session left would be lost with
+    // the document otherwise.
+    flushUserConfigUpload();
+    abandonPreviewSessions();
+#endif
+
+#if (defined(ENABLE_PYTHON_COMPUTE) && ENABLE_PYTHON_COMPUTE) && !MOBILEAPP
+    // Teardown starts: cancel =PY() POSTs so their sockets do not outlive the document.
+    shutdownPythonCompute();
+#endif
+
+    if (_childProcess && _sessions.empty())
+    {
+        LOG_INF("Requesting termination of child [" << getPid() << "] for doc [" << _docKey
+                                                    << "] as there are no sessions");
+        _childProcess->requestTermination();
     }
 
     if (_lockCtx && _lockCtx->supportsLocks() && _lockCtx->isLocked())
@@ -1144,41 +1184,6 @@ void DocumentBroker::pollThread()
     _poll->stop();
 
 #if !MOBILEAPP
-    if (dataLoss || _docState.kitDisconnected() == DocumentState::KitDisconnected::Unexpected)
-    {
-        // Quarantine the last copy, if different.
-        LOG_WRN((dataLoss ? "Data loss " : "Crash ")
-                << "detected on [" << getDocKey() << ']'
-                << (_storage && _quarantine && Quarantine::isEnabled()
-                        ? ". Will quarantine the last version. "
-                        : ", but Quarantine is disabled. ")
-                << "Storage available: " << bool(_storage));
-        if (_storage && _quarantine && Quarantine::isEnabled())
-        {
-            const std::string uploading = _storage->getRootFilePathUploading();
-            if (FileUtil::Stat(uploading).exists())
-            {
-                LOG_WRN("Quarantining the .uploading file: " << uploading);
-                _quarantine->quarantineFile(uploading);
-            }
-            else
-            {
-                const std::string upload = _storage->getRootFilePathToUpload();
-                if (FileUtil::Stat(upload).exists())
-                {
-                    LOG_WRN("Quarantining the .upload file: " << upload);
-                    _quarantine->quarantineFile(upload);
-                }
-                else
-                {
-                    // Fallback to quarantining the original document.
-                    LOG_WRN("Quarantining the original document file: " << _filename);
-                    _quarantine->quarantineFile(_storage->getRootFilePath(), /*copy=*/true);
-                }
-            }
-        }
-    }
-
     // Async cleanup.
     COOLWSD::doHousekeeping();
 #endif
