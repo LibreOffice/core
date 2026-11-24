@@ -1,11 +1,11 @@
---- ltmain.sh.sav	2023-05-03 21:29:15.000000000 +0900
-+++ ltmain.sh	2023-09-21 20:13:31.766938069 +0900
-@@ -7277,7 +7277,7 @@ func_mode_link ()
-       -64|-mips[0-9]|-r[0-9][0-9]*|-xarch=*|-xtarget=*|+DA*|+DD*|-q*|-m*| \
-       -t[45]*|-txscale*|-p|-pg|--coverage|-fprofile-*|-F*|@*|-tp=*|--sysroot=*| \
-       -O*|-g*|-flto*|-fwhopr*|-fuse-linker-plugin|-fstack-protector*|-stdlib=*| \
--      -fsanitize=*)
-+      -fsanitize=*|-fuse-ld=*|--ld-path=*)
-         func_quote_for_eval "$arg"
- 	arg=$func_quote_for_eval_result
+--- ltmain.sh.orig	2026-11-24 20:11:55.614599405 +0000
++++ ltmain.sh	2026-11-24 20:11:55.697599982 +0000
+@@ -7722,7 +7722,7 @@
+       -specs=*|-fsanitize=*|-fno-sanitize*|-shared-libsan|-static-libsan| \
+       -ffile-prefix-map=*|-fdebug-prefix-map=*|-fmacro-prefix-map=*|-fprofile-prefix-map=*| \
+       -fdiagnostics-color*|-frecord-gcc-switches| \
+-      -fuse-ld=*|-static-*|-fcilkplus|-Wa,*|-Werror|-Werror=*)
++      -fuse-ld=*|--ld-path=*|-static-*|-fcilkplus|-Wa,*|-Werror|-Werror=*)
+         func_quote_arg pretty "$arg"
+ 	arg=$func_quote_arg_result
          func_append compile_command " $arg"

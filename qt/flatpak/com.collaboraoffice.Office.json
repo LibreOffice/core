@@ -675,11 +675,11 @@
           "dest-filename": "libwpg-0.3.4.tar.xz"
         },
         {
-          "url": "https://gerrit.collaboraoffice.com/src/libwps-0.4.14.tar.xz",
-          "sha256": "365b968e270e85a8469c6b160aa6af5619a4e6c995dbb04c1ecc1b4dd13e80de",
+          "url": "https://gerrit.collaboraoffice.com/src/libwps-0.4.15.tar.xz",
+          "sha256": "5b29f1ccd5a0f0737d0f8ff49a1f1c01f5988833c028e7882525136c40674ccc",
           "type": "file",
           "dest": "engine/external/tarballs",
-          "dest-filename": "libwps-0.4.14.tar.xz"
+          "dest-filename": "libwps-0.4.15.tar.xz"
         },
         {
           "url": "https://gerrit.collaboraoffice.com/src/libzmf-0.0.2.tar.xz",
