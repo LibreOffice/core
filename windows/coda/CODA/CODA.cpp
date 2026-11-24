@@ -496,6 +496,8 @@ static void processMessage(DocumentTab& tab, wil::unique_cotaskmem_string& messa
 
 static void requestCloseTab(HWND hWnd, int tabId);
 
+static void openStarterTab(WindowState& window);
+
 static void activateAdjacentTab(WindowState& window, int direction);
 
 static void showTabContextMenu(HWND hWnd, int tabId, POINT point);
@@ -4642,6 +4644,18 @@ static void requestCloseTab(HWND hWnd, int tabId)
     }
 
     const bool closingAll = window->closingAll;
+
+    // The last document of a window gives its place to a start page, and the window stays. The
+    // document leaves the strip in the same change that brings the start page there. A window
+    // whose tabs all close at once goes away, and so does a window whose last tab is the start
+    // page.
+    if (window->isTabbed && !window->holdsSecondaryView && !closingAll &&
+        window->tabIds.size() == 1 && tab->mode != DocumentMode::STARTER)
+    {
+        tab->leavingStrip = true;
+        openStarterTab(*window);
+    }
+
     closeTab(*window, tabId);
     // The window is what is left of the last document, so it goes too. That frees its state.
     if (window->tabIds.empty())
@@ -4841,8 +4855,6 @@ static void installTabSwitchAccelerator(ICoreWebView2Controller* controller)
             .Get(),
         &token);
 }
-
-static void openStarterTab(WindowState& window);
 
 // What the tab strip page asks of the app, as {call, args}.
 static void processStripMessage(WindowState& window, const std::string& message)
