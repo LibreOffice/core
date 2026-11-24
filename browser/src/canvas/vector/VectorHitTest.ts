@@ -640,12 +640,6 @@ namespace cool {
 			return path;
 		}
 
-		/// Whether the point lies inside the path as the engine fills it, by the even-odd rule.
-		public static isInside(path: Path2D, x: number, y: number): boolean {
-			const context = VectorHitTest.context();
-			return !!context && context.isPointInPath(path, x, y, 'evenodd');
-		}
-
 		/// Where the point lies in a filled path: inside it, within the tolerance of its
 		/// boundary, or neither. The engine fills with the even-odd rule, so a subpath inside
 		/// another subpath is a hole there as well.

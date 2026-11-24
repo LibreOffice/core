@@ -532,6 +532,8 @@ COOL_JS_LST =\
 	src/geometry/Range2D.ts \
 	src/geometry/Point3D.ts \
 	src/geometry/Matrix3D.ts \
+	src/geometry/Polygon2D.ts \
+	src/geometry/Polygon3D.ts \
 	src/app/dom/DomUtil.ts \
 	src/app/InternUtil.ts \
 	src/control/IFrameDialog.js \

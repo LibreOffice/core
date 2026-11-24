@@ -219,20 +219,8 @@ namespace cool {
 		): boolean {
 			if (area.length < 3 || !lines.length) return false;
 
-			const inside = (at: Point): boolean => {
-				let crossings = 0;
-				for (let edge = 0; edge < area.length; ++edge) {
-					const from = area[edge];
-					const to = area[(edge + 1) % area.length];
-					if (
-						from.y > at.y !== to.y > at.y &&
-						at.x <
-							from.x + ((at.y - from.y) * (to.x - from.x)) / (to.y - from.y)
-					)
-						++crossings;
-				}
-				return crossings % 2 === 1;
-			};
+			const region = new Polygon2D(area);
+			const inside = (at: Point): boolean => region.isInside(at.x, at.y);
 			const side = (a: Point, b: Point, c: Point): number =>
 				Math.sign(b.subtract(a).cross(c.subtract(a)));
 			const cross = (a: Point, b: Point, c: Point, d: Point): boolean =>

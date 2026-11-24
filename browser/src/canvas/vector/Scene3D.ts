@@ -12,7 +12,7 @@
 namespace cool {
 	/// One planar face of a 3D primitive, in the space of the primitive: its polygons, the outer
 	/// one first, then the holes. Answers whether the walk goes on.
-	export type Face3DSink = (polygons: Point3D[][]) => boolean;
+	export type Face3DSink = (face: PolyPolygon3D) => boolean;
 
 	/// A 3D object of a scene with the mapping of its primitive's space into the view, where x
 	/// and y run over the unit square the scene is seen on and z is the depth.
@@ -23,19 +23,11 @@ namespace cool {
 		toScene: Matrix3D;
 	}
 
-	/// One polygon of the 2D outline an extrusion or a body of rotation is made from.
-	interface OutlinePolygon2D {
-		closed: boolean;
-		points: Point[];
-	}
-
-	type Outline2D = OutlinePolygon2D[];
-
 	/// The outline of an extrusion or a body of rotation placed in 3D: a lid that closes the
 	/// front or the back, or one of the regular slices between them.
 	interface Slice3D {
 		kind: 'front' | 'regular' | 'back';
-		polygons: { closed: boolean; points: Point3D[] }[];
+		outline: PolyPolygon3D;
 	}
 
 	/*
@@ -149,7 +141,8 @@ namespace cool {
 				outline = new Path2D();
 				for (const member of Scene3D.membersOf(data, sceneId) ?? [])
 					if (Scene3D.liesIn(data, member.id, objectId))
-						Scene3D.addTheShape(member, placement, outline);
+						for (const line of Scene3D.linesOfTheShape(member, placement))
+							line.addTo(outline);
 			}
 
 			Scene3D.outlineKept = { key: key, outline: outline };
@@ -269,31 +262,19 @@ namespace cool {
 			y: number,
 		): number | undefined {
 			let nearest: number | undefined;
-			Scene3D.forEachFace(member.primitive, (polygons: Point3D[][]) => {
-				const seen = polygons.map((polygon: Point3D[]) =>
-					polygon.map((one: Point3D) => member.toView.apply(one)),
-				);
-				const onThePage = seen.map((polygon: Point3D[]) =>
-					polygon.map((one: Point3D) => toPage.apply(one.x, one.y)),
-				);
+			Scene3D.forEachFace(member.primitive, (face: PolyPolygon3D) => {
+				const seen = face.transformed(member.toView);
+				const onThePage = seen.flattened().transformed(toPage);
 
-				const box = Range2D.fromPoints(onThePage[0]);
+				const box = onThePage.polygons[0].range();
 				if (x < box.minX || x > box.maxX || y < box.minY || y > box.maxY)
 					return true;
-
-				const path = new Path2D();
-				for (const polygon of onThePage) {
-					polygon.forEach((one: Point, at: number) =>
-						at ? path.lineTo(one.x, one.y) : path.moveTo(one.x, one.y),
-					);
-					path.closePath();
-				}
-				if (!VectorHitTest.isInside(path, x, y)) return true;
+				if (!onThePage.isInside(x, y)) return true;
 
 				// a face seen on its edge has no depth of its own at a point
-				const normal = Scene3D.normalOf(seen[0]);
+				const normal = seen.polygons[0].normal();
 				if (Math.abs(normal.z) < 1e-12) return true;
-				const corner = seen[0][0];
+				const corner = seen.polygons[0].points[0];
 				const depth =
 					corner.z -
 					(normal.x * (onTheScene.x - corner.x) +
@@ -305,68 +286,23 @@ namespace cool {
 			return nearest;
 		}
 
-		/// The normal of a polygon by Newell's way, which holds for any planar polygon, convex or
-		/// not.
-		private static normalOf(polygon: Point3D[]): Point3D {
-			let x = 0;
-			let y = 0;
-			let z = 0;
-			for (let at = 0; at < polygon.length; ++at) {
-				const one = polygon[at];
-				const next = polygon[(at + 1) % polygon.length];
-				x += (one.y - next.y) * (one.z + next.z);
-				y += (one.z - next.z) * (one.x + next.x);
-				z += (one.x - next.x) * (one.y + next.y);
-			}
-			return new Point3D(x, y, z);
-		}
-
 		/*
-			Adds what shows the shape of one 3D object to the path, on the page in twips, in the
-			way that reads best for its kind: a body of rotation by its profile at each step of
-			the turn and the ends of it, a sphere by a few of its rings and meridians, and any
-			other kind by its silhouette and the edges where its faces meet at an angle.
+			The lines that show the shape of one 3D object, on the page in twips, in the way that
+			reads best for its kind: a body of rotation by its profile at each eighth of the turn
+			and the ends of it, a sphere by a few of its rings and meridians, and any other kind
+			by its silhouette and the edges where its faces meet at an angle.
 		*/
-		private static addTheShape(
+		private static linesOfTheShape(
 			member: Scene3DMember,
 			placement: Matrix2D,
-			outline: Path2D,
-		): void {
-			const onThePage = (point: Point3D): Point => {
-				const seen = member.toView.apply(point);
-				return placement.apply(seen.x, seen.y);
-			};
+		): Polygon2D[] {
+			const onThePage = (line: Polygon3D): Polygon2D =>
+				line.transformed(member.toView).flattened().transformed(placement);
 			if (member.primitive.type === 'lathe')
-				Scene3D.addTheLines(
-					Scene3D.linesOfALathe(member.primitive),
-					outline,
-					onThePage,
-				);
-			else if (member.primitive.type === 'sphere')
-				Scene3D.addTheLines(
-					Scene3D.linesOfASphere(member.primitive),
-					outline,
-					onThePage,
-				);
-			else Scene3D.addTheEdges(member, placement, outline);
-		}
-
-		/// Adds lines given in the space of the primitive to the path, each as one line, closed
-		/// where it says so.
-		private static addTheLines(
-			lines: { closed: boolean; points: Point3D[] }[],
-			outline: Path2D,
-			onThePage: (point: Point3D) => Point,
-		): void {
-			for (const line of lines) {
-				if (line.points.length < 2) continue;
-				line.points.forEach((point: Point3D, at: number) => {
-					const place = onThePage(point);
-					if (at) outline.lineTo(place.x, place.y);
-					else outline.moveTo(place.x, place.y);
-				});
-				if (line.closed) outline.closePath();
-			}
+				return Scene3D.linesOfALathe(member.primitive).map(onThePage);
+			if (member.primitive.type === 'sphere')
+				return Scene3D.linesOfASphere(member.primitive).map(onThePage);
+			return Scene3D.edgesOf(member).map(onThePage);
 		}
 
 		/*
@@ -375,16 +311,14 @@ namespace cool {
 			unless an end stays on the axis; and where it does not go all round, the outlines of
 			its lids.
 		*/
-		private static linesOfALathe(
-			primitive: Primitive3D,
-		): { closed: boolean; points: Point3D[] }[] {
+		private static linesOfALathe(primitive: Primitive3D): Polygon3D[] {
 			const slices = Scene3D.latheSlices(primitive);
 			const regular = slices.filter(
 				(slice: Slice3D) => slice.kind === 'regular',
 			);
-			const lines: { closed: boolean; points: Point3D[] }[] = [];
+			const lines: Polygon3D[] = [];
 			for (const slice of slices)
-				if (slice.kind !== 'regular') lines.push(...slice.polygons);
+				if (slice.kind !== 'regular') lines.push(...slice.outline.polygons);
 
 			// a profile for each eighth of a full turn, spread evenly over the turn; one that
 			// does not go all round keeps its first and its last
@@ -399,7 +333,7 @@ namespace cool {
 					lines.push(
 						...regular[
 							Math.round((profile * regular.length) / profiles) % regular.length
-						].polygons,
+						].outline.polygons,
 					);
 			} else if (regular.length) {
 				const steps = Math.min(regular.length - 1, eighths);
@@ -407,32 +341,29 @@ namespace cool {
 					lines.push(
 						...regular[
 							steps ? Math.round((profile * (regular.length - 1)) / steps) : 0
-						].polygons,
+						].outline.polygons,
 					);
 			}
-			const polygons = regular.length ? regular[0].polygons.length : 0;
-			for (let polygon = 0; polygon < polygons; ++polygon) {
-				if (regular[0].polygons[polygon].closed) continue;
-				const last = regular[0].polygons[polygon].points.length - 1;
-				for (const end of [0, last]) {
-					const ring = regular.map(
-						(slice: Slice3D) => slice.polygons[polygon].points[end],
+
+			const profiles = regular.length ? regular[0].outline.polygons : [];
+			profiles.forEach((profile: Polygon3D, polygon: number) => {
+				if (profile.closed) return;
+				for (const end of [0, profile.points.length - 1]) {
+					const ring = new Polygon3D(
+						regular.map(
+							(slice: Slice3D) => slice.outline.polygons[polygon].points[end],
+						),
+						allRound,
 					);
-					if (
-						ring.every((point: Point3D) => point.minus(ring[0]).length() < 1e-9)
-					)
-						continue;
-					lines.push({ closed: allRound, points: ring });
+					if (ring.longestEdge() > 1e-9) lines.push(ring);
 				}
-			}
+			});
 			return lines;
 		}
 
 		/// The lines of a sphere: at most eight of its meridians and the rings between at most six
 		/// bands, through the points of its own faces, so they lie on what the engine draws.
-		private static linesOfASphere(
-			primitive: Primitive3D,
-		): { closed: boolean; points: Point3D[] }[] {
+		private static linesOfASphere(primitive: Primitive3D): Polygon3D[] {
 			const around = Scene3D.segmentsOf(
 				primitive.horizontalSegments,
 				2 * Math.PI,
@@ -441,36 +372,32 @@ namespace cool {
 			const meridians = Math.min(around, 8);
 			const bands = Math.min(down, 6);
 
-			const lines: { closed: boolean; points: Point3D[] }[] = [];
+			const lines: Polygon3D[] = [];
 			for (let meridian = 0; meridian < meridians; ++meridian) {
 				const piece = Math.round((meridian * around) / meridians);
 				const points: Point3D[] = [];
 				for (let ring = 0; ring <= down; ++ring)
 					points.push(Scene3D.onTheSphere(piece, around, ring, down));
-				lines.push({ closed: false, points: points });
+				lines.push(new Polygon3D(points, false));
 			}
 			for (let band = 1; band < bands; ++band) {
 				const ring = Math.round((band * down) / bands);
 				const points: Point3D[] = [];
 				for (let piece = 0; piece < around; ++piece)
 					points.push(Scene3D.onTheSphere(piece, around, ring, down));
-				lines.push({ closed: true, points: points });
+				lines.push(new Polygon3D(points, true));
 			}
 			return lines;
 		}
 
 		/*
-			Adds the silhouette of one 3D object and the edges where its faces meet at an angle
-			to the path, on the page in twips: the edges where a face turned towards us meets one
-			turned away, and those where neighbouring faces turn by more than the crease angle.
-			An edge that only one face has, as on a single polygon, is drawn too. Each edge is
-			drawn once, none is hidden by what lies in front of it.
+			The silhouette of one 3D object and the edges where its faces meet at an angle, in
+			the space of its primitive: the edges where a face turned towards us meets one turned
+			away, and those where neighbouring faces turn by more than the crease angle. An edge
+			that only one face has, as on a single polygon, is taken too. Each edge is taken once,
+			none is hidden by what lies in front of it, and they come joined into chains.
 		*/
-		private static addTheEdges(
-			member: Scene3DMember,
-			placement: Matrix2D,
-			outline: Path2D,
-		): void {
+		private static edgesOf(member: Scene3DMember): Polygon3D[] {
 			// the same corner of two faces is one point, so each edge is found once
 			const pointIds = new Map<string, number>();
 			const points: Point3D[] = [];
@@ -496,55 +423,37 @@ namespace cool {
 				{ from: number; to: number; faces: number[] }
 			>();
 			const pointLimit = 1 << 20;
-			Scene3D.forEachFace(member.primitive, (polygons: Point3D[][]) => {
+			Scene3D.forEachFace(member.primitive, (face: PolyPolygon3D) => {
 				// a face whose corners all lie on one line has no area and no edges to show
-				const inTheScene = polygons[0].map((one: Point3D) =>
-					member.toScene.apply(one),
-				);
-				const normal = Scene3D.normalOf(inTheScene);
-				let longest = 0;
-				for (let at = 0; at < inTheScene.length; ++at)
-					longest = Math.max(
-						longest,
-						inTheScene[at]
-							.minus(inTheScene[(at + 1) % inTheScene.length])
-							.length(),
-					);
-				if (normal.length() <= 1e-9 * longest * longest) return true;
+				const inTheScene = face.polygons[0].transformed(member.toScene);
+				if (inTheScene.isFlat()) return true;
 
 				// the turn of the face as we see it; which way is towards us is found below
-				const face = faces.length;
-				const seen = polygons[0].map((one: Point3D) =>
-					member.toView.apply(one),
-				);
-				let area = 0;
-				for (let at = 0; at < seen.length; ++at) {
-					const next = seen[(at + 1) % seen.length];
-					area += seen[at].x * next.y - next.x * seen[at].y;
-				}
+				const seen = face.polygons[0].transformed(member.toView);
 				faces.push({
-					area: area,
+					area: seen.normal().z,
 					depth:
-						seen.reduce((sum: number, one: Point3D) => sum + one.z, 0) /
-						seen.length,
-					normal: normal,
+						seen.points.reduce((sum: number, one: Point3D) => sum + one.z, 0) /
+						seen.points.length,
+					normal: inTheScene.normal(),
 				});
 
-				for (const polygon of polygons) {
-					const ids = polygon.map(idOf);
+				const index = faces.length - 1;
+				for (const polygon of face.polygons) {
+					const ids = polygon.points.map(idOf);
 					for (let at = 0; at < ids.length; ++at) {
 						const from = ids[at];
 						const to = ids[(at + 1) % ids.length];
 						if (from === to) continue;
 						const key = Math.min(from, to) * pointLimit + Math.max(from, to);
 						const edge = edges.get(key);
-						if (edge) edge.faces.push(face);
-						else edges.set(key, { from: from, to: to, faces: [face] });
+						if (edge) edge.faces.push(index);
+						else edges.set(key, { from: from, to: to, faces: [index] });
 					}
 				}
 				return true;
 			});
-			if (!faces.length) return;
+			if (!faces.length) return [];
 
 			// the nearest face is surely turned towards us, the faces turned like it are too
 			const nearest = faces.reduce((one, other) =>
@@ -569,23 +478,25 @@ namespace cool {
 				if (shown) drawn.push([edge.from, edge.to]);
 			}
 
-			Scene3D.addTheChains(drawn, outline, (point: number) => {
-				const seen = member.toView.apply(points[point]);
-				return placement.apply(seen.x, seen.y);
-			});
+			return Scene3D.chainsOf(drawn, (point: number) => points[point]).map(
+				(chain: Point3D[]) => {
+					const closed =
+						chain.length > 3 && chain[0] === chain[chain.length - 1];
+					return new Polygon3D(closed ? chain.slice(0, -1) : chain, closed);
+				},
+			);
 		}
 
 		/*
-			Adds the edges to the path as chains of edges that meet end to end, each drawn as one
-			line, so a dashed line runs on evenly along a curve made of many short edges. A
-			chain that comes back to where it started is closed. Each edge is given by its two
-			points, where the page places a point is asked once.
+			The edges joined into chains of edges that meet end to end, so a dashed line runs on
+			evenly along a curve made of many short edges. At a point where several edges meet,
+			a chain goes on along the one that goes on the straightest. A chain that comes back to
+			where it started ends on its first point again. Each edge is given by its two points.
 		*/
-		private static addTheChains(
+		private static chainsOf(
 			edges: [number, number][],
-			outline: Path2D,
-			onThePage: (point: number) => Point,
-		): void {
+			pointOf: (point: number) => Point3D,
+		): Point3D[][] {
 			const edgesAt = new Map<number, number[]>();
 			edges.forEach(([from, to], index: number) => {
 				for (const point of [from, to]) {
@@ -595,33 +506,21 @@ namespace cool {
 				}
 			});
 			const used = edges.map(() => false);
-			const placed = new Map<number, Point>();
-			const placeOf = (point: number): Point => {
-				let place = placed.get(point);
-				if (!place) {
-					place = onThePage(point);
-					placed.set(point, place);
-				}
-				return place;
-			};
+			const otherEnd = (index: number, point: number): number =>
+				edges[index][0] === point ? edges[index][1] : edges[index][0];
 
-			// of the edges not drawn yet at a point, the one that goes on the straightest from
-			// the way the chain came, so a ring or a meridian runs on as one line
+			// of the edges not taken yet at a point, the one that goes on the straightest from the
+			// way the chain came
 			const nextAt = (point: number, from: number): number | undefined => {
-				const here = placeOf(point);
-				const came = placeOf(from);
-				const inX = here.x - came.x;
-				const inY = here.y - came.y;
-				const inLength = Math.hypot(inX, inY) || 1;
+				const here = pointOf(point);
+				const came = here.minus(pointOf(from));
 				let best: number | undefined;
 				let straightest = -Infinity;
 				for (const index of edgesAt.get(point) ?? []) {
 					if (used[index]) continue;
-					const there = placeOf(otherEnd(index, point));
-					const outX = there.x - here.x;
-					const outY = there.y - here.y;
-					const outLength = Math.hypot(outX, outY) || 1;
-					const straight = (inX * outX + inY * outY) / (inLength * outLength);
+					const goes = pointOf(otherEnd(index, point)).minus(here);
+					const lengths = came.length() * goes.length() || 1;
+					const straight = came.dot(goes) / lengths;
 					if (straight > straightest) {
 						straightest = straight;
 						best = index;
@@ -629,9 +528,8 @@ namespace cool {
 				}
 				return best;
 			};
-			const otherEnd = (index: number, point: number): number =>
-				edges[index][0] === point ? edges[index][1] : edges[index][0];
 
+			const chains: Point3D[][] = [];
 			edges.forEach(([from, to], first: number) => {
 				if (used[first]) return;
 				used[first] = true;
@@ -655,18 +553,9 @@ namespace cool {
 					used[index] = true;
 					behind.push(otherEnd(index, behind[behind.length - 1]));
 				}
-				const chain = behind.slice(2).reverse().concat(ahead);
-
-				const closed = chain.length > 3 && chain[0] === chain[chain.length - 1];
-				const last = closed ? chain.length - 1 : chain.length;
-				const start = placeOf(chain[0]);
-				outline.moveTo(start.x, start.y);
-				for (let at = 1; at < last; ++at) {
-					const next = placeOf(chain[at]);
-					outline.lineTo(next.x, next.y);
-				}
-				if (closed) outline.closePath();
+				chains.push(behind.slice(2).reverse().concat(ahead).map(pointOf));
 			});
+			return chains;
 		}
 
 		/// The six faces of the unit cube, from 0 to 1, each turned as the engine makes it.
@@ -688,7 +577,8 @@ namespace cool {
 				[h, g, c, d],
 				[f, g, h, e],
 			];
-			for (const face of faces) if (!sink([face])) return;
+			for (const face of faces)
+				if (!sink(new PolyPolygon3D([new Polygon3D(face)]))) return;
 		}
 
 		/// The faces of the sphere, ring by ring from the top, each a four cornered piece, the
@@ -701,13 +591,13 @@ namespace cool {
 			const down = Scene3D.segmentsOf(primitive.verticalSegments, Math.PI);
 			for (let ring = 0; ring < down; ++ring)
 				for (let piece = 0; piece < around; ++piece) {
-					const face = [
+					const face = new Polygon3D([
 						Scene3D.onTheSphere(piece, around, ring, down),
 						Scene3D.onTheSphere(piece + 1, around, ring, down),
 						Scene3D.onTheSphere(piece + 1, around, ring + 1, down),
 						Scene3D.onTheSphere(piece, around, ring + 1, down),
-					];
-					if (!sink([face])) return;
+					]);
+					if (!sink(new PolyPolygon3D([face]))) return;
 				}
 		}
 
@@ -743,21 +633,13 @@ namespace cool {
 			primitive: Primitive3D,
 			sink: Face3DSink,
 		): void {
-			const polygons = (primitive.polygons ?? []).map(
-				(polygon: Primitive3DPolygon) => {
-					const points: Point3D[] = [];
-					for (let at = 0; at + 2 < polygon.points.length; at += 3)
-						points.push(
-							new Point3D(
-								polygon.points[at],
-								polygon.points[at + 1],
-								polygon.points[at + 2],
-							),
-						);
-					return points;
-				},
+			const face = new PolyPolygon3D(
+				(primitive.polygons ?? []).map((polygon: Primitive3DPolygon) =>
+					Polygon3D.fromFlat(polygon.points, polygon.closed),
+				),
 			);
-			if (polygons.length && polygons[0].length >= 3) sink(polygons);
+			if (face.polygons.length && face.polygons[0].points.length >= 3)
+				sink(face);
 		}
 
 		/*
@@ -774,14 +656,10 @@ namespace cool {
 		): void {
 			const count = slices.length;
 			if (!count) return;
-			const flipped = (slice: Slice3D): Point3D[][] =>
-				slice.polygons.map((polygon) => polygon.points.slice().reverse());
-			const whole = (slice: Slice3D): Point3D[][] =>
-				slice.polygons.map((polygon) => polygon.points);
 
 			const pairs = allRound ? count : count - 1;
 			if (!pairs) {
-				sink(flipped(slices[0]));
+				sink(slices[0].outline.reversed());
 				return;
 			}
 
@@ -793,21 +671,21 @@ namespace cool {
 				const before = slices[(at + count - 1) % count];
 				if (before.kind === 'front') {
 					if (
-						!Scene3D.sameSlices(one, before) &&
+						!one.outline.equals(before.outline, 1e-9) &&
 						!Scene3D.sides(one, before, sink)
 					)
 						return;
-					if (!sink(flipped(before))) return;
+					if (!sink(before.outline.reversed())) return;
 				}
 
 				const after = slices[(at + 2) % count];
 				if (after.kind === 'back') {
 					if (
-						!Scene3D.sameSlices(other, after) &&
+						!other.outline.equals(after.outline, 1e-9) &&
 						!Scene3D.sides(after, other, sink)
 					)
 						return;
-					if (!sink(whole(after))) return;
+					if (!sink(after.outline)) return;
 				}
 
 				if (!Scene3D.sides(other, one, sink)) return;
@@ -821,47 +699,34 @@ namespace cool {
 			other: Slice3D,
 			sink: Face3DSink,
 		): boolean {
-			const polygons = Math.min(one.polygons.length, other.polygons.length);
+			const polygons = Math.min(
+				one.outline.polygons.length,
+				other.outline.polygons.length,
+			);
 			for (let polygon = 0; polygon < polygons; ++polygon) {
-				const a = one.polygons[polygon];
-				const b = other.polygons[polygon];
+				const a = one.outline.polygons[polygon];
+				const b = other.outline.polygons[polygon];
 				const points = Math.min(a.points.length, b.points.length);
 				if (!points) continue;
 				const edges = a.closed ? points : points - 1;
 				for (let edge = 0; edge < edges; ++edge) {
 					const next = (edge + 1) % points;
-					const face = [
+					const face = new Polygon3D([
 						a.points[edge],
 						b.points[edge],
 						b.points[next],
 						a.points[next],
-					];
-					if (!sink([face])) return false;
+					]);
+					if (!sink(new PolyPolygon3D([face]))) return false;
 				}
 			}
 			return true;
 		}
 
-		/// Whether two slices lie on the same places, as where a lid has no bevel.
-		private static sameSlices(one: Slice3D, other: Slice3D): boolean {
-			return (
-				one.polygons.length === other.polygons.length &&
-				one.polygons.every((polygon, at) => {
-					const theirs = other.polygons[at].points;
-					return (
-						polygon.points.length === theirs.length &&
-						polygon.points.every(
-							(point, index) => point.minus(theirs[index]).length() < 1e-9,
-						)
-					);
-				})
-			);
-		}
-
 		/// The slices of an extrusion: the outline at the front and at the back of its depth,
 		/// and a lid at each end that is closed.
 		private static extrudeSlices(primitive: Primitive3D): Slice3D[] {
-			const source = Scene3D.outlineToTurn(primitive);
+			const source = Scene3D.outlineOf2D(primitive);
 			const depth = primitive.depth ?? 0;
 			if (Math.abs(depth) < 1e-12)
 				return [Scene3D.slice(source, Matrix3D.IDENTITY, 'regular')];
@@ -873,7 +738,7 @@ namespace cool {
 			let frontDepth = depth;
 			let backDepth = 0;
 			const backScale = Scene3D.backScaleOf(primitive);
-			if (backScale !== 1) front = Scene3D.scaledOnTheCenter(front, backScale);
+			if (backScale !== 1) front = front.scaledOnTheCenter(backScale);
 
 			const slices: Slice3D[] = [];
 			if (primitive.closeFront) {
@@ -881,10 +746,12 @@ namespace cool {
 				frontDepth = depth - offset;
 				const lid = Scene3D.withTheBevel(front, offset, characters);
 				front = lid.body;
-				slices.push(Scene3D.slice(lid.lid, Scene3D.moved(depth), 'front'));
+				slices.push(
+					Scene3D.slice(lid.lid, Matrix3D.translation(0, 0, depth), 'front'),
+				);
 			}
 
-			let backLid: Outline2D | undefined;
+			let backLid: PolyPolygon2D | undefined;
 			if (primitive.closeBack) {
 				const offset = depth * diagonal * 0.5;
 				backDepth = offset;
@@ -893,8 +760,12 @@ namespace cool {
 				backLid = lid.lid;
 			}
 
-			slices.push(Scene3D.slice(front, Scene3D.moved(frontDepth), 'regular'));
-			slices.push(Scene3D.slice(back, Scene3D.moved(backDepth), 'regular'));
+			slices.push(
+				Scene3D.slice(front, Matrix3D.translation(0, 0, frontDepth), 'regular'),
+			);
+			slices.push(
+				Scene3D.slice(back, Matrix3D.translation(0, 0, backDepth), 'regular'),
+			);
 			if (backLid)
 				slices.push(Scene3D.slice(backLid, Matrix3D.IDENTITY, 'back'));
 			return slices;
@@ -903,7 +774,7 @@ namespace cool {
 		/// The slices of a body of rotation: the outline turned about the y axis in its steps,
 		/// and a lid at each end that is closed, where it does not go all round.
 		private static latheSlices(primitive: Primitive3D): Slice3D[] {
-			const source = Scene3D.outlineToTurn(primitive);
+			const source = Scene3D.outlineOf2D(primitive);
 			const rotation = primitive.rotation ?? 0;
 			const steps = primitive.horizontalSegments ?? 0;
 			if (Math.abs(rotation) < 1e-12 || !steps)
@@ -917,27 +788,29 @@ namespace cool {
 			const characters = primitive.characterMode === true;
 			let front = source;
 			let back = source;
-			if (backScale !== 1) back = Scene3D.scaledOnTheCenter(back, backScale);
+			if (backScale !== 1) back = back.scaledOnTheCenter(backScale);
 
 			const slices: Slice3D[] = [];
 			let backLid: Slice3D | undefined;
 			if (closeFront || closeBack) {
 				// the bevel is a twelfth of the way the middle of the outline goes round
-				const box = Range2D.fromPoints(
-					front.flatMap((polygon: OutlinePolygon2D) => polygon.points),
-				);
+				const box = front.range();
 				const offset = (((box.maxX + box.minX) * rotation) / 2 / 12) * diagonal;
 				if (closeFront) {
 					const lid = Scene3D.withTheBevel(front, offset, characters);
 					front = lid.body;
-					slices.push(Scene3D.slice(lid.lid, Scene3D.moved(offset), 'front'));
+					slices.push(
+						Scene3D.slice(lid.lid, Matrix3D.translation(0, 0, offset), 'front'),
+					);
 				}
 				if (closeBack) {
 					const lid = Scene3D.withTheBevel(back, offset, characters);
 					back = lid.body;
 					backLid = Scene3D.slice(
 						lid.lid,
-						Scene3D.moved(-offset).then(Scene3D.turned(rotation)),
+						Matrix3D.translation(0, 0, -offset).then(
+							Matrix3D.turnAboutY(rotation),
+						),
 						'back',
 					);
 				}
@@ -949,8 +822,8 @@ namespace cool {
 				const share = step / steps;
 				slices.push(
 					Scene3D.slice(
-						backScale !== 1 ? Scene3D.between(front, back, share) : front,
-						Scene3D.turned(rotation * share),
+						backScale !== 1 ? front.interpolated(back, share) : front,
+						Matrix3D.turnAboutY(rotation * share),
 						'regular',
 					),
 				);
@@ -977,110 +850,22 @@ namespace cool {
 			return Math.abs(scale) < 1e-12 ? 0.000001 : scale;
 		}
 
-		/// The 2D outline the body is made from, as the engine prepared it.
-		private static outlineToTurn(primitive: Primitive3D): Outline2D {
-			return (primitive.outline ?? []).map((polygon) => {
-				const points: Point[] = [];
-				for (let at = 0; at + 1 < polygon.points.length; at += 2)
-					points.push(new Point(polygon.points[at], polygon.points[at + 1]));
-				return { closed: polygon.closed, points: points };
-			});
+		/// The 2D outline an extrusion or a body of rotation is made from, as the engine prepared
+		/// it.
+		private static outlineOf2D(primitive: Primitive3D): PolyPolygon2D {
+			return new PolyPolygon2D(
+				(primitive.outline ?? []).map((polygon) =>
+					Polygon2D.fromFlat(polygon.points, polygon.closed),
+				),
+			);
 		}
 
 		private static slice(
-			outline: Outline2D,
+			outline: PolyPolygon2D,
 			place: Matrix3D,
 			kind: 'front' | 'regular' | 'back',
 		): Slice3D {
-			return {
-				kind: kind,
-				polygons: outline.map((polygon: OutlinePolygon2D) => ({
-					closed: polygon.closed,
-					points: polygon.points.map((point: Point) =>
-						place.apply(new Point3D(point.x, point.y, 0)),
-					),
-				})),
-			};
-		}
-
-		private static moved(depth: number): Matrix3D {
-			return Matrix3D.fromArray([
-				1,
-				0,
-				0,
-				0,
-				0,
-				1,
-				0,
-				0,
-				0,
-				0,
-				1,
-				depth,
-				0,
-				0,
-				0,
-				1,
-			]) as Matrix3D;
-		}
-
-		/// A turn about the y axis, turned the way the drawing layer turns.
-		private static turned(angle: number): Matrix3D {
-			const cos = Math.cos(angle);
-			const sin = Math.sin(angle);
-			return Matrix3D.fromArray([
-				cos,
-				0,
-				sin,
-				0,
-				0,
-				1,
-				0,
-				0,
-				-sin,
-				0,
-				cos,
-				0,
-				0,
-				0,
-				0,
-				1,
-			]) as Matrix3D;
-		}
-
-		private static scaledOnTheCenter(
-			outline: Outline2D,
-			scale: number,
-		): Outline2D {
-			const box = Range2D.fromPoints(
-				outline.flatMap((polygon: OutlinePolygon2D) => polygon.points),
-			);
-			const x = (box.minX + box.maxX) / 2;
-			const y = (box.minY + box.maxY) / 2;
-			return outline.map((polygon: OutlinePolygon2D) => ({
-				closed: polygon.closed,
-				points: polygon.points.map(
-					(point: Point) =>
-						new Point(x + (point.x - x) * scale, y + (point.y - y) * scale),
-				),
-			}));
-		}
-
-		private static between(
-			one: Outline2D,
-			other: Outline2D,
-			share: number,
-		): Outline2D {
-			return one.map((polygon: OutlinePolygon2D, at: number) => ({
-				closed: polygon.closed,
-				points: polygon.points.map((point: Point, index: number) => {
-					const theirs = other[at].points[index];
-					return new Point(
-						point.x + (theirs.x - point.x) * share,
-						point.y + (theirs.y - point.y) * share,
-					);
-				}),
-			}));
+			return { kind: kind, outline: outline.inSpace(place) };
 		}
 
 		/*
@@ -1090,67 +875,26 @@ namespace cool {
 			letter does not cross itself.
 		*/
 		private static withTheBevel(
-			outline: Outline2D,
+			outline: PolyPolygon2D,
 			width: number,
 			characters: boolean,
-		): { body: Outline2D; lid: Outline2D } {
+		): { body: PolyPolygon2D; lid: PolyPolygon2D } {
 			if (width <= 0 || Math.abs(width) < 1e-12)
 				return { body: outline, lid: outline };
 			if (!characters)
-				return { body: outline, lid: Scene3D.grown(outline, -width) };
+				return { body: outline, lid: outline.grownInNormalDirection(-width) };
 
-			const box = Range2D.fromPoints(
-				outline.flatMap((polygon: OutlinePolygon2D) => polygon.points),
-			);
-			const grown = Scene3D.grown(outline, width);
-			const grownBox = Range2D.fromPoints(
-				grown.flatMap((polygon: OutlinePolygon2D) => polygon.points),
-			);
+			const box = outline.range();
+			const grown = outline.grownInNormalDirection(width);
+			const grownBox = grown.range();
 			const scaleX =
 				Math.abs(grownBox.width) < 1e-12 ? 1 : box.width / grownBox.width;
 			const scaleY =
 				Math.abs(grownBox.height) < 1e-12 ? 1 : box.height / grownBox.height;
-			const back = (polygons: Outline2D): Outline2D =>
-				polygons.map((polygon: OutlinePolygon2D) => ({
-					closed: polygon.closed,
-					points: polygon.points.map(
-						(point: Point) =>
-							new Point(
-								(point.x - grownBox.minX) * scaleX + box.minX,
-								(point.y - grownBox.minY) * scaleY + box.minY,
-							),
-					),
-				}));
-			return { body: back(grown), lid: back(outline) };
-		}
-
-		/// Each point moved that far along the way between the normals of its two edges, as the
-		/// drawing layer grows a polygon.
-		private static grown(outline: Outline2D, width: number): Outline2D {
-			const across = (x: number, y: number): Point => {
-				const length = Math.hypot(x, y);
-				return length ? new Point(-y / length, x / length) : new Point(0, 0);
-			};
-			return outline.map((polygon: OutlinePolygon2D) => {
-				const points = polygon.points;
-				return {
-					closed: polygon.closed,
-					points: points.map((current: Point, at: number) => {
-						const before = points[(at + points.length - 1) % points.length];
-						const next = points[(at + 1) % points.length];
-						const back = across(before.x - current.x, before.y - current.y);
-						const forth = across(next.x - current.x, next.y - current.y);
-						let x = back.x - forth.x;
-						let y = back.y - forth.y;
-						const length = Math.hypot(x, y);
-						if (length) {
-							x = (x / length) * width;
-							y = (y / length) * width;
-						}
-						return new Point(current.x + x, current.y + y);
-					}),
-				};
-			});
+			const back = Matrix2D.IDENTITY.translate(-grownBox.minX, -grownBox.minY)
+				.scale(scaleX, scaleY)
+				.translate(box.minX, box.minY);
+			return { body: grown.transformed(back), lid: outline.transformed(back) };
 		}
 	}
 }

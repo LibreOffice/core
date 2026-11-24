@@ -261,8 +261,10 @@ describe('Scene3D', function () {
 	// all faces of a primitive, each as its polygons
 	function facesOf(primitive: any): cool.Point3D[][][] {
 		const faces: cool.Point3D[][][] = [];
-		cool.Scene3D.forEachFace(primitive, (polygons: cool.Point3D[][]) => {
-			faces.push(polygons);
+		cool.Scene3D.forEachFace(primitive, (face: cool.PolyPolygon3D) => {
+			faces.push(
+				face.polygons.map((polygon: cool.Polygon3D) => polygon.points),
+			);
 			return true;
 		});
 		return faces;

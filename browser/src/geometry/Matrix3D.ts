@@ -28,6 +28,53 @@ namespace cool {
 			1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
 		]) as Matrix3D;
 
+		/// The move by that much along each axis.
+		static translation(x: number, y: number, z: number): Matrix3D {
+			return Matrix3D.fromArray([
+				1,
+				0,
+				0,
+				x,
+				0,
+				1,
+				0,
+				y,
+				0,
+				0,
+				1,
+				z,
+				0,
+				0,
+				0,
+				1,
+			]) as Matrix3D;
+		}
+
+		/// The turn about the y axis by the angle in radians, turned the way the drawing layer
+		/// turns: the x axis towards the minus z axis.
+		static turnAboutY(angle: number): Matrix3D {
+			const cos = Math.cos(angle);
+			const sin = Math.sin(angle);
+			return Matrix3D.fromArray([
+				cos,
+				0,
+				sin,
+				0,
+				0,
+				1,
+				0,
+				0,
+				-sin,
+				0,
+				cos,
+				0,
+				0,
+				0,
+				0,
+				1,
+			]) as Matrix3D;
+		}
+
 		/// From the sixteen values row by row. Null when there are fewer.
 		static fromArray(values: number[] | undefined): Matrix3D | null {
 			if (!values || values.length < 16) return null;
