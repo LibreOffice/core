@@ -124,6 +124,24 @@ describe('Scene3D', function () {
 		};
 	}
 
+	// the straight pieces a recorded path draws, from its moves, lines and closes
+	function segmentsOf(path: any): number[][] {
+		const segments: number[][] = [];
+		let start: number[] = [];
+		let at: number[] = [];
+		for (const call of path.calls) {
+			if (call.method === 'moveTo') start = at = call.args;
+			else if (call.method === 'lineTo') {
+				segments.push(at.concat(call.args));
+				at = call.args;
+			} else if (call.method === 'closePath') {
+				segments.push(at.concat(start));
+				at = start;
+			}
+		}
+		return segments;
+	}
+
 	it('a transform followed by another maps a point through both, in that order', function () {
 		const move = cool.Matrix3D.fromArray([
 			1, 0, 0, 10, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
@@ -185,11 +203,11 @@ describe('Scene3D', function () {
 	it('the scene is worked out from its 3D objects where each is of a kind made here', function () {
 		const data = sceneData();
 		assert.strictEqual(cool.Scene3D.takes(data, 1), true);
-		data.objects.get(4).primitives3D[0].type = 'lathe';
+		data.objects.get(4).primitives3D[0].type = 'tube';
 		assert.strictEqual(
 			cool.Scene3D.takes(data, 1),
 			false,
-			'a lathe is not made yet',
+			'a kind not made here',
 		);
 	});
 
@@ -234,44 +252,223 @@ describe('Scene3D', function () {
 	});
 
 	it('the outline of one 3D object holds its edges only', function () {
-		const cube: any = cool.Scene3D.outlineOf(sceneData(), 4);
-		const lines = cube.calls.filter((call: any) => call.method === 'lineTo');
-		assert.ok(lines.length >= 6 && lines.length <= 9, String(lines.length));
-		for (const line of lines)
-			assert.ok(line.args[0] >= 4470, String(line.args[0]));
+		const segments = segmentsOf(cool.Scene3D.outlineOf(sceneData(), 4));
+		assert.strictEqual(segments.length, 12, 'the twelve edges of the cube');
+		for (const segment of segments)
+			assert.ok(segment[0] >= 4470 && segment[2] >= 4470, String(segment));
+	});
+
+	// all faces of a primitive, each as its polygons
+	function facesOf(primitive: any): cool.Point3D[][][] {
+		const faces: cool.Point3D[][][] = [];
+		cool.Scene3D.forEachFace(primitive, (polygons: cool.Point3D[][]) => {
+			faces.push(polygons);
+			return true;
+		});
+		return faces;
+	}
+
+	function square(from: number, to: number): any {
+		return { closed: true, points: [from, from, to, from, to, to, from, to] };
+	}
+
+	it('an extruded square closed at both ends has two lids and four sides', function () {
+		const faces = facesOf({
+			type: 'extrude',
+			outline: [square(0, 1000)],
+			depth: 500,
+			closeFront: true,
+			closeBack: true,
+		});
+		assert.strictEqual(faces.length, 6);
+		const lids = faces.filter((face) =>
+			face[0].every((point) => point.z === face[0][0].z),
+		);
+		assert.deepStrictEqual(
+			lids.map((face) => face[0][0].z).sort((a, b) => a - b),
+			[0, 500],
+		);
+	});
+
+	it('an extrusion with a hole keeps the hole in its lids and walls it in', function () {
+		const hole = {
+			closed: true,
+			points: [300, 300, 300, 700, 700, 700, 700, 300],
+		};
+		const faces = facesOf({
+			type: 'extrude',
+			outline: [square(0, 1000), hole],
+			depth: 500,
+			closeFront: true,
+			closeBack: true,
+		});
+		const lids = faces.filter((face) => face.length === 2);
+		assert.strictEqual(lids.length, 2, 'each lid with its hole');
+		assert.strictEqual(
+			faces.length - lids.length,
+			8,
+			'four walls outside, four inside',
+		);
+	});
+
+	it('a bevel takes the front lid in from the outline', function () {
+		const faces = facesOf({
+			type: 'extrude',
+			outline: [square(0, 1000)],
+			depth: 500,
+			diagonal: 0.2,
+			closeFront: true,
+		});
+		const front = faces.find((face) =>
+			face[0].every((point) => point.z === 500),
+		);
+		assert.ok(front, 'a front lid');
+		for (const point of front![0]) {
+			assert.ok(point.x > 0 && point.x < 1000, String(point.x));
+			assert.ok(point.y > 0 && point.y < 1000, String(point.y));
+		}
+	});
+
+	it('a body turned all round has no lids and closes on itself', function () {
+		const faces = facesOf({
+			type: 'lathe',
+			outline: [{ closed: false, points: [500, 0, 500, 1000] }],
+			rotation: 2 * Math.PI,
+			horizontalSegments: 8,
+			closeFront: true,
+			closeBack: true,
+		});
+		assert.strictEqual(
+			faces.length,
+			8,
+			'one face for each step, none for a lid',
+		);
+	});
+
+	it('a body turned half way round has its sides and a lid at each end', function () {
+		const faces = facesOf({
+			type: 'lathe',
+			outline: [{ closed: true, points: [200, 0, 600, 0, 400, 500] }],
+			rotation: Math.PI,
+			horizontalSegments: 6,
+			closeFront: true,
+			closeBack: true,
+		});
+		assert.strictEqual(faces.length, 6 * 3 + 2);
+	});
+
+	it('an extruded square placed as the cube is hit where the cube is', function () {
+		const data = sceneData();
+		data.objects.get(4).objectKind = 206;
+		data.objects.get(4).primitives3D = [
+			{
+				type: 'extrude',
+				outline: [square(0, 2000)],
+				depth: 2000,
+				closeFront: true,
+				closeBack: true,
+				transform: [1, 0, 0, -1000, 0, 1, 0, -1000, 0, 0, 1, -1000, 0, 0, 0, 1],
+			},
+		];
+		assert.strictEqual(cool.Scene3D.takes(data, 1), true);
+		assert.strictEqual(
+			cool.Scene3D.hitAt(data, 1, 4476 + 720, 3044 + 925)?.id,
+			4,
+		);
+		assert.strictEqual(
+			cool.Scene3D.hitAt(data, 1, 4476 + 1500, 3044 + 925),
+			undefined,
+		);
+	});
+
+	it('a sphere is outlined by eight meridians and five rings', function () {
+		// 24 by 24 segments: each meridian runs over 24 pieces down, each ring over 24 round
+		const data = sceneData();
+		const segments = segmentsOf(cool.Scene3D.outlineOf(data, 2));
+		assert.strictEqual(segments.length, 8 * 24 + 5 * 24);
+	});
+
+	it('a body turned all round is outlined by its profiles and the rings of its ends', function () {
+		const data = sceneData();
+		// a changed record comes with a new version of the part
+		data.version = 2;
+		data.objects.get(2).primitives3D = [
+			{
+				type: 'lathe',
+				outline: [{ closed: false, points: [500, 0, 500, 1000] }],
+				rotation: 2 * Math.PI,
+				horizontalSegments: 8,
+			},
+		];
+		// eight profiles of one edge each, and the two rings of eight
+		const segments = segmentsOf(cool.Scene3D.outlineOf(data, 2));
+		assert.strictEqual(segments.length, 8 + 2 * 8);
+	});
+
+	it('a body of many steps turned all round is outlined by eight of its profiles', function () {
+		const data = sceneData();
+		data.version = 3;
+		data.objects.get(2).primitives3D = [
+			{
+				type: 'lathe',
+				outline: [{ closed: false, points: [500, 0, 500, 1000] }],
+				rotation: 2 * Math.PI,
+				horizontalSegments: 24,
+			},
+		];
+		// eight profiles of one edge each, and the two rings of twenty four
+		const segments = segmentsOf(cool.Scene3D.outlineOf(data, 2));
+		assert.strictEqual(segments.length, 8 + 2 * 24);
+	});
+
+	it('a body turned half way round has a profile for each eighth of a turn', function () {
+		const data = sceneData();
+		data.version = 4;
+		data.objects.get(2).primitives3D = [
+			{
+				type: 'lathe',
+				outline: [{ closed: false, points: [500, 0, 500, 1000] }],
+				rotation: Math.PI,
+				horizontalSegments: 12,
+			},
+		];
+		// five profiles from start to end, and the two open rings of twelve steps
+		const segments = segmentsOf(cool.Scene3D.outlineOf(data, 2));
+		assert.strictEqual(segments.length, 5 + 2 * 12);
 	});
 
 	it('the outline follows the shapes, each edge drawn once', function () {
 		const outline: any = cool.Scene3D.outlineOf(sceneData(), 1);
-		const lines = outline.calls.filter((call: any) => call.method === 'lineTo');
-		const starts = outline.calls.filter(
-			(call: any) => call.method === 'moveTo',
-		);
-		assert.ok(lines.length > 0, 'some edges');
-		assert.strictEqual(lines.length, starts.length);
+		const segments = segmentsOf(outline);
+		assert.ok(segments.length > 0, 'some edges');
 
 		// no edge twice
 		const keys = new Set<string>();
-		for (let at = 0; at < lines.length; ++at) {
-			const one = starts[at].args.map((value: number) => value.toFixed(3));
-			const other = lines[at].args.map((value: number) => value.toFixed(3));
+		for (const segment of segments) {
+			const one = segment.slice(0, 2).map((value: number) => value.toFixed(3));
+			const other = segment.slice(2).map((value: number) => value.toFixed(3));
 			const key = [one.join(','), other.join(',')].sort().join(' ');
 			assert.ok(!keys.has(key), 'an edge drawn twice: ' + key);
 			keys.add(key);
 		}
 
-		// a sphere has no edges of its own, a cube seen from the front and a little aside shows
-		// at most its nine edges towards us
-		const insideTheCube = lines.filter(
-			(call: any) =>
-				call.args[0] >= 4470 &&
-				call.args[0] <= 5922 &&
-				call.args[1] >= 3038 &&
-				call.args[1] <= 4900,
-		);
+		// the edges run on in chains, fewer moves than edges
+		const moves = outline.calls.filter((call: any) => call.method === 'moveTo');
 		assert.ok(
-			insideTheCube.length >= 6 && insideTheCube.length <= 9,
-			String(insideTheCube.length),
+			moves.length < segments.length,
+			moves.length + ' ' + segments.length,
 		);
+
+		// a sphere has no edges of its own, a cube shows all its twelve edges
+		const insideTheCube = segments.filter(
+			(segment: number[]) =>
+				segment[0] >= 4470 &&
+				segment[0] <= 5922 &&
+				segment[1] >= 3038 &&
+				segment[1] <= 4900 &&
+				segment[2] >= 4470 &&
+				segment[2] <= 5922,
+		);
+		assert.strictEqual(insideTheCube.length, 12);
 	});
 });

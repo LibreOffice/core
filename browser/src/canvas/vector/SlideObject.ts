@@ -324,6 +324,9 @@ namespace cool {
 		rotation?: number;
 		diagonal?: number;
 		backScale?: number;
+		characterMode?: boolean;
+		closeFront?: boolean;
+		closeBack?: boolean;
 		fill?: { color: string; transparence?: number; kind?: string };
 		line?: { color: string; width: number; transparence?: number };
 	}

@@ -814,7 +814,7 @@ in the sections above.
 | Formula | As in the office | Edit in place in the drawn formula (see Formulas) | - |
 | Table | As in the office | Eight handles; the table markers (see Tables below) | Light lines between cells come and go with the zoom, in the office too |
 | Form control | Drawn in Online's look (see below) | In design mode select, move, scale, undo, as any object; out of it they work | Not every kind works yet out of design mode |
-| 3D scene | As one picture | Select, move, scale | Hit and hovered where its 3D objects are, as on the desktop: a press beside them goes to what lies behind, the hover follows their shape. A cube, a sphere and a 3D polygon so far; a scene holding an extrusion or a body of rotation is still hit all over its picture. Nothing inside can be selected yet; no 3D turn |
+| 3D scene | As one picture | Select, move, scale | Hit and hovered where its 3D objects are, as on the desktop: a press beside them goes to what lies behind. The hover draws the 3D object under the mouse by lines that read for its kind: a cube, an extrusion or a 3D polygon by its outline and the edges where its faces meet at an angle, a sphere by eight meridians and five rings, a body of rotation by a profile for each eighth of a turn and the rings of its open ends. Nothing inside can be selected yet; no 3D turn |
 | Video, audio | Filled black | Select, move, scale | The desktop application on Qt 6.10 may crash when a video is selected |
 
 ### Tables
