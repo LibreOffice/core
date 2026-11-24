@@ -326,34 +326,26 @@ void Quarantine::deleteOldQuarantineVersions(const std::string& docKey, std::siz
     if (!isEnabled())
         return;
 
-    auto& container = QuarantineMap[docKey];
+    std::vector<Entry>& container = QuarantineMap[docKey];
 
-    // Check for excessive versions.
+    // The versions are sorted oldest first. The oldest go when there are more than MaxVersions.
     const std::size_t excessVersions =
         container.size() > MaxVersions ? container.size() - MaxVersions : 0;
 
-    // Before removing, check if the remaining ones are too old.
-    std::size_t excessAge = 0;
-    for (std::size_t i = excessVersions; i < container.size(); ++i)
-    {
-        // The container is sorted by age, oldest (smallest) first.
-        if (oldestTimestamp <= container[i].secondsSinceEpoch())
-        {
-            break; // These are recent-enough versions.
-        }
+    // Of the rest, the ones older than oldestTimestamp go too.
+    std::size_t excess = excessVersions;
+    while (excess < container.size() && container[excess].secondsSinceEpoch() < oldestTimestamp)
+        ++excess;
 
-        excessAge = i;
-    }
-
-    if (excessAge > 0)
+    if (excess > 0)
     {
-        LOG_DBG("Removing " << excessAge << " excess quarantined-file versions for [" << docKey
+        LOG_DBG("Removing " << excess << " excess quarantined-file versions for [" << docKey
                             << "] from current " << container.size() << " versions, "
                             << excessVersions << " due to exceeding MaxVersions (" << MaxVersions
-                            << ") including " << excessAge << " due to being older than "
+                            << ") and " << excess - excessVersions << " due to being older than "
                             << MaxAgeSecs << " seconds");
 
-        for (std::size_t i = 0; i < excessAge; ++i)
+        for (std::size_t i = 0; i < excess; ++i)
         {
             const std::string& path = container[i].fullPath();
             LOG_TRC("Removing excess quarantined-file version #" << (i + 1) << " [" << path
@@ -363,7 +355,7 @@ void Quarantine::deleteOldQuarantineVersions(const std::string& docKey, std::siz
         }
 
         // And remove them from the container.
-        container.erase(container.begin(), container.begin() + excessAge);
+        container.erase(container.begin(), container.begin() + excess);
     }
 }
 
@@ -470,6 +462,9 @@ bool Quarantine::quarantineFile(const std::string& docKey, const std::string& do
     {
         fileList.emplace_back(entry);
         LOG_INF("Quarantined [" << docPath << "] to [" << linkedFilePath << ']');
+
+        // The space above was made before this version was added, so it may be one too many.
+        deleteOldQuarantineVersions(docKey, getSecondsSinceEpoch() - MaxAgeSecs);
         return true;
     }
 
