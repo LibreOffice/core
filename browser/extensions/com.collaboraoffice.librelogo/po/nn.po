@@ -1,0 +1,280 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: com.collaboraoffice.librelogo\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-20 11:57+0000\n"
+"PO-Revision-Date: 2026-11-24 08:14+0000\n"
+"Last-Translator: Roy-Magne Mo <gaupe@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Norwegian Nynorsk <https://hosted.weblate.org/projects/"
+"collabora-online/extensions/librelogo/nn/>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nn\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.12.dev0\n"
+
+#: panel.js:443
+msgid "%1 has no embedded LibreLogo program."
+msgstr "%1 har ikkje noko innebygd LibreLogo-program."
+
+#: panel.js:438
+msgid "%1 is not a valid SVG file."
+msgstr "%1 er ikkje ei gyldig SVG-fil."
+
+#: panel.js:413
+msgid "Animation"
+msgstr "Animasjon"
+
+#: ui.json:commands.back
+msgid "Back"
+msgstr "Tilbake"
+
+#: panel.js:414
+msgid "Beaver"
+msgstr "Bever"
+
+#: index.html:66
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: ui.json:notebookbar.group.logoCanvas
+msgid "Canvas"
+msgstr "Teikneflate"
+
+#: ui.json:commands.clearscreen
+msgid "Clear Screen"
+msgstr "Tøm skjermen"
+
+#: index.html:38
+msgid "Command line"
+msgstr "Kommandolinje"
+
+#: index.html:46
+msgid "Copy the document text (or the selection) into the editor"
+msgstr "Kopier dokumentteksten (eller utvalet) til redigeringsfeltet"
+
+#: panel.js:375
+msgid "Could not insert the drawing: %1"
+msgstr "Klarte ikkje setja inn teikninga: %1"
+
+#: panel.js:450
+msgid "Could not read %1: %2"
+msgstr "Klarte ikkje lesa %1: %2"
+
+#: panel.js:389
+msgid "Could not save %1: %2"
+msgstr "Klarte ikkje lagra %1: %2"
+
+#: panel.js:480
+msgid "Could not start LibreLogo: %1"
+msgstr "Klarte ikkje starta LibreLogo: %1"
+
+#: panel.js:386
+msgid "Downloaded %1"
+msgstr "Lasta ned %1"
+
+#: panel.js:188
+msgid "Drawing removed from the document."
+msgstr "Teikninga er fjerna frå dokumentet."
+
+#: index.html:58
+msgid "Empty: the Writer document (or the selected text) is the program."
+msgstr "Tomt: Writer-dokumentet (eller den merkte teksten) er programmet."
+
+#: index.html:53
+msgid "Examples"
+msgstr "Eksempel"
+
+#: index.html:40
+msgid "Execute the command line (Enter)"
+msgstr "Køyr kommandolinja (Enter)"
+
+#: ui.json:commands.forward
+msgid "Forward"
+msgstr "Fram"
+
+#: index.html:48
+msgid "From SVG"
+msgstr "Frå SVG"
+
+#: index.html:46
+msgid "From document"
+msgstr "Frå dokumentet"
+
+#: ui.json:commands.home
+msgid "Home"
+msgstr "Heim"
+
+#: index.html:72
+msgid "Insert the drawing into the document after each run"
+msgstr "Set inn teikninga i dokumentet etter kvar køyring"
+
+#: panel.js:117
+msgid "Internal error: %1"
+msgstr "Intern feil: %1"
+
+#: ui.json:commands.left
+msgid "Left"
+msgstr "Venstre"
+
+#: manifest.json:name
+msgid "LibreLogo"
+msgstr "LibreLogo"
+
+#: index.html:55
+msgid "Load an example…"
+msgstr "Opna eit eksempel …"
+
+#: panel.js:458
+msgid "Loaded the document text."
+msgstr "Dokumentteksten er lasta inn."
+
+#: panel.js:448
+msgid "Loaded the program from %1."
+msgstr "Programmet er lasta inn frå %1."
+
+#: panel.js:458
+msgid "Loaded the selected text."
+msgstr "Den merkte teksten er lasta inn."
+
+#: ui.json:notebookbar.tab
+msgid "Logo"
+msgstr "Logo"
+
+#: index.html:34
+msgid "Logo language: commands are read in this language and in English"
+msgstr "Logo-språk: kommandoar vert lesne på dette språket og på engelsk"
+
+#: panel.js:188
+msgid "No LibreLogo drawing in the document."
+msgstr "Det finst inga LibreLogo-teikning i dokumentet."
+
+#: index.html:65
+msgid "OK"
+msgstr "OK"
+
+#: index.html:71
+msgid "Options"
+msgstr "Innstillingar"
+
+#: index.html:73
+msgid "Place it"
+msgstr "Plassering"
+
+#: ui.json:notebookbar.group.logoProgram index.html:44
+msgid "Program"
+msgstr "Program"
+
+#: panel.js:472
+msgid "Program written to the document."
+msgstr "Programmet er skrive til dokumentet."
+
+#: index.html:48
+msgid "Recover the program embedded in an exported .svg file"
+msgstr "Hent fram att programmet som er innebygd i ei eksportert .svg-fil"
+
+#: index.html:80
+msgid "Remove the drawing from the document"
+msgstr "Fjern teikninga frå dokumentet"
+
+#: ui.json:commands.right
+msgid "Right"
+msgstr "Høgre"
+
+#: panel.js:411
+msgid "Rosette"
+msgstr "Rosett"
+
+#: index.html:20
+msgid "Run"
+msgstr "Køyr"
+
+#: ui.json:commands.run
+msgid "Run Logo Program"
+msgstr "Køyr Logo-program"
+
+#: index.html:20
+msgid "Run the Logo program (Ctrl+Enter)"
+msgstr "Køyr Logo-programmet (Ctrl+Enter)"
+
+#: panel.js:255
+msgid "Running the document text."
+msgstr "Køyrer dokumentteksten."
+
+#: panel.js:255
+msgid "Running the selected text."
+msgstr "Køyrer den merkte teksten."
+
+#: panel.js:387
+msgid "Saved %1"
+msgstr "Lagra %1"
+
+#: index.html:79
+msgid "Show the turtle in the inserted drawing"
+msgstr "Vis skjelpadda i den innsette teikninga"
+
+#: panel.js:410
+msgid "Square spiral"
+msgstr "Firkanta spiral"
+
+#: panel.js:409
+msgid "Star"
+msgstr "Stjerne"
+
+#: ui.json:commands.stop index.html:21
+msgid "Stop"
+msgstr "Stopp"
+
+#: index.html:21
+msgid "Stop the program"
+msgstr "Stopp programmet"
+
+#: panel.js:252
+msgid ""
+"The document is empty. Type a program in the editor or in the document."
+msgstr ""
+"Dokumentet er tomt. Skriv eit program i redigeringsfeltet eller i dokumentet."
+
+#: panel.js:467
+msgid "The editor is empty, so there is no program to write to the document."
+msgstr ""
+"Redigeringsprogrammet er tomt, så det finst ikkje noko program å skriva til "
+"dokumentet."
+
+#: index.html:47
+msgid "To document"
+msgstr "Til dokumentet"
+
+#: panel.js:412
+msgid "Tree"
+msgstr "Tre"
+
+#: ui.json:notebookbar.group.logoTurtle
+msgid "Turtle"
+msgstr "Skjelpadde"
+
+#: index.html:33
+msgid "Turtle canvas"
+msgstr "Skjelpaddeflate"
+
+#: panel.js:90
+msgid "Using A4 page size: %1"
+msgstr "Brukar A4-sidestorleik: %1"
+
+#: index.html:47
+msgid ""
+"Write the editor's program into the document, over the selection or at the "
+"cursor"
+msgstr ""
+"Skriv programmet frå redigeringsfeltet inn i dokumentet, over utvalet eller "
+"ved markøren"
+
+#: index.html:76
+msgid "at the cursor, as an inline image"
+msgstr "ved markøren, som eit bilete i teksten"
+
+#: index.html:75
+msgid "on the page where the turtle drew"
+msgstr "på sida der skjelpadda teikna"

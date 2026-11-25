@@ -129,11 +129,11 @@
     </message>
     <message>
         <source>Add Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg til mal</translation>
     </message>
     <message>
         <source>Templates and documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Maler og dokumenter</translation>
     </message>
     <message>
         <source>Open File</source>
@@ -141,11 +141,11 @@
     </message>
     <message>
         <source>All Files (*);;Text Documents (*.odt *.ott *.doc *.docx *.rtf *.txt);;Spreadsheets (*.ods *.ots *.xls *.xlsx *.csv);;Presentations (*.odp *.otp *.ppt *.pptx);;PDF Documents (*.pdf)</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle filer (*);;Tekstdokumenter (*.odt *.ott *.doc *.docx *.rtf *.txt);;Regneark (*.ods *.ots *.xls *.xlsx *.csv);;Presentasjoner (*.odp *.otp *.ppt *.pptx);;PDF-dokumenter (*.pdf)</translation>
     </message>
     <message>
         <source>Choose the folder that holds the files this document links to</source>
-        <translation type="unfinished"></translation>
+        <translation>Velg mappen som inneholder filene dette dokumentet lenker til</translation>
     </message>
     <message>
         <source>Save File</source>
@@ -197,11 +197,11 @@
     </message>
     <message>
         <source>Account not opened</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontoen ble ikke åpnet</translation>
     </message>
     <message>
         <source>%1 redirected to %2, so the account was not opened. Only a redirect within the same site is followed.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 videresendte til %2, så kontoen ble ikke åpnet. Bare videresending innenfor samme nettsted blir fulgt.</translation>
     </message>
 </context>
 <context>
@@ -209,17 +209,17 @@
     <message>
         <source>Close tab</source>
         <extracomment>Tooltip of the button that closes a tab</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Lukk fanen</translation>
     </message>
     <message>
         <source>New</source>
         <extracomment>Tooltip of the + button at the end of the tab strip</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ny</translation>
     </message>
     <message>
         <source>(untitled)</source>
         <extracomment>The name in a tab whose document has no name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>(uten navn)</translation>
     </message>
     <message>
         <source>Draft</source>

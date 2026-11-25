@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 12:57+0200\n"
-"PO-Revision-Date: 2026-10-14 12:57+0000\n"
+"PO-Revision-Date: 2026-11-24 08:14+0000\n"
 "Last-Translator: Roy-Magne Mo <gaupe@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Norwegian Nynorsk <https://hosted.weblate.org/projects/"
 "collabora-online/help/nn/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.18.1\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -25,6 +25,10 @@ msgid ""
 "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Fn</kbd><span "
 "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>F10</kbd>."
 msgstr ""
+"På nokre tastatur må du halda inne <kbd>Fn</kbd>-tasten i tillegg for "
+"tastane <kbd>F1</kbd> til <kbd>F12</kbd>, til dømes <kbd>Shift</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Fn</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>F10</kbd>."
 
 #: html/cool-help.html%2Bdiv.div.h2:13-9
 msgid "General Keyboard Shortcuts"
@@ -513,7 +517,7 @@ msgstr "Gå til byrjinga av linja"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:84-88
 msgid "Home"
-msgstr "Home"
+msgstr "Heim"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:85-38
 msgid "Go and select to the beginning of a line"
@@ -1264,10 +1268,12 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-38
 msgid "Renames the focused sheet tab, the same as double-clicking it."
 msgstr ""
+"Endrar namn på den valde arkfana, på same måten som når du dobbeltklikkar på "
+"ho."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-127
 msgid "F2"
-msgstr ""
+msgstr "F2"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:169-38
 msgid ""
@@ -1683,6 +1689,7 @@ msgid ""
 "Status bar showing the page number, the word count, the language, the view "
 "buttons and the zoom"
 msgstr ""
+"Statuslinja med sidenummer, ordteljing, språk, visingsknappar og skalering"
 
 #: html/cool-help.html%2Bdiv.div.div.p:417-5
 msgid ""
@@ -1695,10 +1702,18 @@ msgid ""
 "go to it. In spreadsheets, presentations and drawings the <span "
 "class=\"ui\">Find and Replace</span> dialog opens."
 msgstr ""
+"<span class=\"def\">Søk:</span> Vel <span class=\"ui\">Søk</span> på fana "
+"<span class=\"ui\">Home</span>, eller trykk <kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>F</kbd>. I "
+"tekstdokument får søkjefeltet i <span class=\"ui\">Navigering</span>-panelet "
+"fokus: skriv inn teksten og trykk <kbd>Enter</kbd> for å lista opp treffa på "
+"fana <span class=\"ui\">Resultat</span>, og klikk så på eit treff for å gå "
+"til det. I rekneark, presentasjonar og teikningar opnar vindauget <span "
+"class=\"ui\">Finn og byt ut</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:418-5
 msgid "On a phone, the search bar has buttons next to the search box:"
-msgstr ""
+msgstr "På ein telefon har søkjelinja knappar ved sida av søkjefeltet:"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:420-7
 msgid "Search backwards"
@@ -1813,6 +1828,12 @@ msgid ""
 "(the pencil) in the bottom right corner instead. New documents and "
 "documents created from a template open ready to edit."
 msgstr ""
+"Eit eksisterande dokument vert opna i visingsmodus, slik at du kan lesa det "
+"utan å endra det ved eit uhell. For å byrja å redigera, klikk på <span "
+"class=\"ui\">Vising</span> øvst til høgre og vel <span class=\"ui\">"
+"Redigeringsmodus</span>. På ein telefon eller eit nettbrett trykkjer du i "
+"staden på redigeringsknappen (blyanten) nedst til høgre. Nye dokument og "
+"dokument laga frå ein mal vert opna klare til redigering."
 
 #: html/cool-help.html%2Bdiv.div.div.p:456-7
 msgid ""
@@ -2258,6 +2279,13 @@ msgid ""
 "kbd> will move the cursor to the next cell to the right, and with an "
 "<kbd>Enter</kbd> to the cell below for easy further data entry."
 msgstr ""
+"Å skriva inn data og merka område, kolonnar, rader eller ark fungerer som i "
+"andre reknearkprogram. Bruk tastaturet, fanene eller sprettoppmenyane til å "
+"utføra handlingar i reknearket. Du kan òg dra celleinnhald for å fylla "
+"celler med data. Kommandoane for å kopiera, klippa ut og lima inn finst i "
+"sprettoppmenyen. Trykkjer du <kbd>Tab</kbd> etter å ha skrive inn data, "
+"flyttar markøren seg til neste celle til høgre, og med <kbd>Enter</kbd> til "
+"cella under, slik at det er lett å skriva inn meir."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:563-5
 msgid ""
@@ -2529,6 +2557,12 @@ msgid ""
 "work as in other word processors. Use the keyboard, the tabs and the "
 "context menus to interact with your document."
 msgstr ""
+"<span class=\"productname\">{productname}</span> har ei WYSIWYG-utforming "
+"(What You See Is What You Get) som viser dokumentet slik det vert skrive ut. "
+"Å skriva tekst, klippa ut, kopiera og lima inn, merka tekst, setja inn "
+"bilete, endra storleik på og forankra dei, og leggja til og handsama "
+"tabellar og diagram fungerer som i andre teksthandsamingsprogram. Bruk "
+"tastaturet, fanene og sprettoppmenyane til å arbeida med dokumentet."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:629-30
 msgid ""
@@ -2659,6 +2693,8 @@ msgid ""
 "Tooltip over an inserted text showing the kind of change, the author and "
 "the date"
 msgstr ""
+"Verktøytips over ein innsett tekst som viser kva slags endring det er, kven "
+"som gjorde ho og datoen"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:657-5
 msgid ""
@@ -2667,6 +2703,10 @@ msgid ""
 "click it and choose <span class=\"ui\">Accept Change</span> or <span "
 "class=\"ui\">Reject Change</span>."
 msgstr ""
+"Endringar som ulike personar har gjort, vert viste i ulike fargar. Peik på "
+"ei endring for å sjå kven som gjorde ho og når. For å godta eller avvisa ei "
+"endring, høgreklikk på ho og vel <span class=\"ui\">Godta endring</span> "
+"eller <span class=\"ui\">Avvis endring</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:658-5
 msgid ""
@@ -2674,6 +2714,9 @@ msgid ""
 "the right of the document, like comments, with icons to accept or reject "
 "them. You can also add a comment there."
 msgstr ""
+"Har administratoren slått det på, vert endringane òg viste i boksar til "
+"høgre for dokumentet, som merknadar, med ikon for å godta eller avvisa dei. "
+"Du kan òg leggja til ein merknad der."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:659-78
 msgid ""
@@ -2762,6 +2805,10 @@ msgid ""
 "presentation applications. Use the keyboard, the tabs and the context menus "
 "to perform actions in your presentation."
 msgstr ""
+"Å skriva tekst, klippa ut, kopiera og lima inn, merka tekst, setja inn "
+"bilete, endra storleik på og forankra dei, og leggja til og handsama "
+"tabellar fungerer som i andre presentasjonsprogram. Bruk tastaturet, fanene "
+"og sprettoppmenyane til å utføra handlingar i presentasjonen."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:684-5
 msgid ""
@@ -3163,15 +3210,16 @@ msgid "Additions are marked with colored underlined characters."
 msgstr "Tillegg vert markerte med farga, understreka teikn."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ul.li:786-7
-#, fuzzy
 msgid "All changed lines are marked with a vertical bar in the left margin."
-msgstr "Alle endringar vert markerte med ein loddrett strek i høgremargen."
+msgstr "Alle endra linjer vert markerte med ein loddrett strek i venstremargen."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ul.li:787-7
 msgid ""
 "If the administrator turned it on, changes are also shown as boxes on the "
 "right of the document area."
 msgstr ""
+"Har administratoren slått det på, vert endringane òg viste som boksar til "
+"høgre for dokumentområdet."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:790-5
 msgid ""
@@ -3181,7 +3229,6 @@ msgstr ""
 "Kva farge endringane får, er avhengig av kva brukar som endrar dokumentet."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:791-5
-#, fuzzy
 msgid ""
 "To hide the changes choose <span class=\"ui\">Review</span> → <span "
 "class=\"ui\">View Changes</span> → <span class=\"ui\">Hidden</span>, and "
@@ -3189,11 +3236,12 @@ msgid ""
 "changes are enabled but hidden, you still record changes and may "
 "inadvertently leave unwanted text available in the document."
 msgstr ""
-"For å visa eller gøyma sporing av endringar vel du <span class=\"ui\">Sjå "
-"gjennom</span> → <span class=\"ui\">Vis endringane</span> → <span "
-"class=\"ui\">Vis</span>. Ver merksam på at sjølv om sporing av endringar er "
-"påslått, men gøymd, vert endringar framleis registrerte og du kan utilsikta "
-"la uønskt tekst vera tilgjengeleg i dokumentet."
+"For å gøyma endringane vel du <span class=\"ui\">Sjå gjennom</span> → <span "
+"class=\"ui\">Vis endringane</span> → <span class=\"ui\">Gøymd</span>, og "
+"<span class=\"ui\">I teksten</span> for å visa dei att. Ver merksam på at "
+"sjølv om sporing av endringar er påslått, men gøymd, vert endringar framleis "
+"registrerte, og du kan utilsikta la uønskt tekst vera tilgjengeleg i "
+"dokumentet."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:792-5
 msgid ""
@@ -3207,6 +3255,14 @@ msgid ""
 "A dialog shows a list of all tracked changes. Use the dialog buttons "
 "accordingly."
 msgstr ""
+"Endringar kan godtakast eller avvisast. For å godta eller avvisa ei endring, "
+"høgreklikk på ho og vel <span class=\"ui\">Godta endring</span> eller <span "
+"class=\"ui\">Avvis endring</span>. Du kan òg plassera markøren i endringa og "
+"velja <span class=\"ui\">Sjå gjennom</span> → <span class=\"ui\">Godta</"
+"span> eller <span class=\"ui\">Avvis</span>. Vidare, om du må filtrera "
+"endringar før du godtek eller avviser, vel <span class=\"ui\">Sjå gjennom</"
+"span> → <span class=\"ui\">Handsam</span>. Eit vindauge viser ei liste over "
+"alle spora endringar. Bruk knappane i vindauget etter behov."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:793-54
 msgid ""
@@ -3251,6 +3307,7 @@ msgid ""
 "Page Style dialog on the Page tab with the paper format, orientation, "
 "margins and layout settings"
 msgstr ""
+"Vindauget Sidestil med fana Side, med papirformat, retning, margar og oppsett"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:806-5
 msgid "How do I change the page orientation to landscape inside my document?"

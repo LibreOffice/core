@@ -1,0 +1,78 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: com.collaboraoffice.demo-wordcloud\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-20 11:57+0000\n"
+"PO-Revision-Date: 2026-11-23 14:28+0000\n"
+"Last-Translator: Roy-Magne Mo <gaupe@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Norwegian Nynorsk <https://hosted.weblate.org/projects/"
+"collabora-online/extensions/demo-wordcloud/nn/>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nn\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.12.dev0\n"
+
+#: index.html:36
+msgid "Generate & insert"
+msgstr "Lag og set inn"
+
+#: index.html:33
+msgid "Insert width (cm):"
+msgstr "Breidd ved innsetjing (cm):"
+
+#: index.html:30
+msgid "Maximum words:"
+msgstr "Største tal på ord:"
+
+#: index.html:27
+msgid "Selection"
+msgstr "Utval"
+
+#: index.html:24
+msgid "Source:"
+msgstr "Kjelde:"
+
+#: index.html:26
+msgid "Whole document"
+msgstr "Heile dokumentet"
+
+#: manifest.json:name
+msgid "Word cloud"
+msgstr "Ordsky"
+
+#: index.html:167
+msgid "document is empty"
+msgstr "dokumentet er tomt"
+
+#: index.html:161
+msgid "gathering text..."
+msgstr "samlar tekst …"
+
+#: index.html:197
+msgid "inserted %1 word"
+msgid_plural "inserted %1 words"
+msgstr[0] "sette inn %1 ord"
+msgstr[1] "sette inn %1 ord"
+
+#: index.html:187
+msgid "inserting %1 / %2 words..."
+msgstr "set inn %1 / %2 ord …"
+
+#: index.html:38
+msgid "no cloud yet"
+msgstr "inga ordsky enno"
+
+#: index.html:166
+msgid "no text selected"
+msgstr "ingen tekst er merkt"
+
+#: index.html:174
+msgid "no words left after filtering"
+msgstr "ingen ord er att etter filtreringa"
+
+#: index.html:181
+msgid "nothing fit on the canvas"
+msgstr "ingenting fekk plass på teikneflata"

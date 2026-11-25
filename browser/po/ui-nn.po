@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 12:57+0100\n"
-"PO-Revision-Date: 2026-11-04 11:10+0000\n"
+"PO-Revision-Date: 2026-11-24 08:14+0000\n"
 "Last-Translator: Roy-Magne Mo <gaupe@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Norwegian Nynorsk <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/nn/>\n"
-"Language: \n"
+"Language: nn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.11.1.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -446,9 +446,8 @@ msgstr ""
 
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:107
-#, fuzzy
 msgid "No WOPI host configured: trusting the first host that connects"
-msgstr "Ingen WOPI-vert er sett opp: stolar på den første verten som kopla til"
+msgstr "Ingen WOPI-vert er sett opp: stolar på den første verten som koplar til"
 
 #: admin/src/AdminSocketServerAudit.js:53
 #: src/control/Control.ServerAuditDialog.ts:113
@@ -456,6 +455,8 @@ msgid ""
 "No WOPI host is allowed: alias_groups mode is \"groups\" but no group is "
 "defined"
 msgstr ""
+"Ingen WOPI-vert er tillaten: alias_groups-modusen er «groups», men ingen "
+"gruppe er definert"
 
 #: admin/src/AdminSocketServerAudit.js:58
 #: src/control/Control.ServerAuditDialog.ts:129
@@ -1703,9 +1704,8 @@ msgstr "EPUB (.epub)"
 
 #: src/app/ExportFormats.ts:65 src/control/Control.Menubar.ts:144
 #: src/control/Control.NotebookbarBuilder.js:453
-#, fuzzy
 msgid "ODF master document (.odm)"
-msgstr "ODF-tekstdokument (.odt)"
+msgstr "ODF-hovuddokument (.odm)"
 
 #: src/app/ExportFormats.ts:66 src/app/ExportFormats.ts:78
 #: src/control/Control.Menubar.ts:145
@@ -1808,113 +1808,111 @@ msgstr "Bilete (.png)"
 
 #: src/app/HandleGroups.ts:1855
 msgid "Top Left"
-msgstr ""
+msgstr "Øvst til venstre"
 
 #: src/app/HandleGroups.ts:1856
 msgid "Top"
-msgstr ""
+msgstr "Øvst"
 
 #: src/app/HandleGroups.ts:1857
 msgid "Top Right"
-msgstr ""
+msgstr "Øvst til høgre"
 
 #: src/app/HandleGroups.ts:1858 src/app/HandleGroups.ts:1996
 msgid "Left"
-msgstr ""
+msgstr "Venstre"
 
 #: src/app/HandleGroups.ts:1859
 msgid "Center"
-msgstr ""
+msgstr "Midt på"
 
 #: src/app/HandleGroups.ts:1860 src/app/HandleGroups.ts:1997
-#, fuzzy
 msgid "Right"
-msgstr "Lys"
+msgstr "Høgre"
 
 #: src/app/HandleGroups.ts:1861
 msgid "Bottom Left"
-msgstr ""
+msgstr "Nedst til venstre"
 
 #: src/app/HandleGroups.ts:1862
 msgid "Bottom"
-msgstr ""
+msgstr "Nedst"
 
 #: src/app/HandleGroups.ts:1863
 msgid "Bottom Right"
-msgstr ""
+msgstr "Nedst til høgre"
 
 #: src/app/HandleGroups.ts:1951
 msgid "Gluepoint"
-msgstr ""
+msgstr "Festepunkt"
 
 #: src/app/HandleGroups.ts:1998
 msgid "Up"
-msgstr ""
+msgstr "Opp"
 
 #: src/app/HandleGroups.ts:1999
 msgid "Down"
-msgstr ""
+msgstr "Ned"
 
 #: src/app/HandleGroups.ts:2004
 msgid "Anchor"
-msgstr ""
+msgstr "Forankring"
 
 #: src/app/HandleGroups.ts:2045
 msgid "Default gluepoints cannot be edited."
-msgstr ""
+msgstr "Standardfestepunkt kan ikkje redigerast."
 
 #: src/app/HandleGroups.ts:2863
-#, fuzzy
 msgid "Point"
-msgstr "Skriv ut"
+msgstr "Punkt"
 
 #: src/app/HandleGroups.ts:2875
 msgid "To Line"
-msgstr ""
+msgstr "Til linje"
 
 #: src/app/HandleGroups.ts:2875
 msgid "To Curve"
-msgstr ""
+msgstr "Til kurve"
 
 #: src/app/HandleGroups.ts:2882
 msgid "Corner Point"
-msgstr ""
+msgstr "Hjørnepunkt"
 
 #: src/app/HandleGroups.ts:2889
 msgid "Smooth Transition"
-msgstr ""
+msgstr "Mjuk overgang"
 
 #: src/app/HandleGroups.ts:2896
 msgid "Symmetric Transition"
-msgstr ""
+msgstr "Symmetrisk overgang"
 
 #: src/app/HandleGroups.ts:2905
 msgid "Split Path"
-msgstr ""
+msgstr "Del banen"
 
 #: src/app/HandleGroups.ts:3420
 msgid "Motion Path"
-msgstr ""
+msgstr "Rørslebane"
 
 #: src/app/HandleGroups.ts:3421 src/control/jsdialog/Definitions.Menu.ts:2515
 msgid "Add Point"
-msgstr ""
+msgstr "Legg til punkt"
 
 #: src/app/HandleGroups.ts:3426
 msgid "Open Path"
-msgstr ""
+msgstr "Opna banen"
 
 #: src/app/HandleGroups.ts:3426 src/control/jsdialog/Definitions.Menu.ts:2522
 msgid "Close Path"
-msgstr ""
+msgstr "Lukk banen"
 
 #: src/app/HandleGroups.ts:3433 src/control/jsdialog/Definitions.Menu.ts:2531
 msgid "Simplify Curves"
-msgstr ""
+msgstr "Forenkla kurver"
 
 #: src/app/HandleGroups.ts:3439 src/control/jsdialog/Definitions.Menu.ts:2536
 msgid "Simplify All"
-msgstr ""
+msgstr "Forenkla alle"
 
 #: src/app/LOUtil.ts:1455
 msgid "{0} website, opens in new tab"
@@ -1988,33 +1986,35 @@ msgstr "under eit minutt"
 
 #: src/control/VideoBackgroundDialog.ts:24
 msgid "Clouds"
-msgstr ""
+msgstr "Skyer"
 
 #: src/control/VideoBackgroundDialog.ts:25
 msgid "Clouds at dusk"
-msgstr ""
+msgstr "Skyer i skumringa"
 
 #: src/control/VideoBackgroundDialog.ts:26
 msgid "Bokeh"
-msgstr ""
+msgstr "Bokeh"
 
 #: src/control/VideoBackgroundDialog.ts:64
 #: src/control/Control.NotebookbarImpress.js:2112
 msgid "Background Video"
-msgstr ""
+msgstr "Bakgrunnsvideo"
 
 #: src/control/VideoBackgroundDialog.ts:69
 msgid ""
 "The video plays behind every slide that uses the master slide of this slide."
 msgstr ""
+"Videoen vert spela av bak kvart lysbilete som brukar same hovudlysbilete som "
+"dette lysbiletet."
 
 #: src/control/VideoBackgroundDialog.ts:98
 msgid "Remove Background Video"
-msgstr ""
+msgstr "Fjern bakgrunnsvideoen"
 
 #: src/control/VideoBackgroundDialog.ts:104
 msgid "Choose Your Own Video..."
-msgstr ""
+msgstr "Vel din eigen video …"
 
 #: src/canvas/sections/CommentListSection.ts:2301
 #: src/canvas/sections/CommentListSection.ts:2314
@@ -2414,34 +2414,28 @@ msgid "What would you like to do with this document?"
 msgstr "Kva vil du gjere med dette dokumentet?"
 
 #: src/control/Control.AIChatSidebar.ts:838
-#, fuzzy
 msgid "Good morning, {0}"
-msgstr "God morgon, {0}!"
+msgstr "God morgon, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:839
-#, fuzzy
 msgid "Good morning"
-msgstr "God morgon!"
+msgstr "God morgon"
 
 #: src/control/Control.AIChatSidebar.ts:841
-#, fuzzy
 msgid "Good afternoon, {0}"
-msgstr "God ettermiddag, {0}!"
+msgstr "God ettermiddag, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:842
-#, fuzzy
 msgid "Good afternoon"
-msgstr "God ettermiddag!"
+msgstr "God ettermiddag"
 
 #: src/control/Control.AIChatSidebar.ts:844
-#, fuzzy
 msgid "Good evening, {0}"
-msgstr "God kveld, {0}!"
+msgstr "God kveld, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:845
-#, fuzzy
 msgid "Good evening"
-msgstr "God kveld!"
+msgstr "God kveld"
 
 #: src/control/Control.AIChatSidebar.ts:896
 #: src/control/Control.AIChatSidebar.ts:2962
@@ -2491,7 +2485,7 @@ msgstr "Brukar den valde teksten som samanheng"
 
 #: src/control/Control.AIChatSidebar.ts:1088
 msgid "Ask AI, or type / for a saved prompt..."
-msgstr ""
+msgstr "Spør KI, eller skriv / for ein lagra instruks …"
 
 #: src/control/Control.AIChatSidebar.ts:1091
 msgid "Message input"
@@ -2507,7 +2501,6 @@ msgstr "Send melding"
 
 #: src/control/Control.AIChatSidebar.ts:1130
 #: src/control/Control.AIChatSidebar.ts:1143
-#, fuzzy
 msgid "Set Tone"
 msgstr "Vel tonefall"
 
@@ -2574,64 +2567,66 @@ msgstr "Slå emojifisering av/på"
 
 #: src/control/Control.AIChatSidebar.ts:1313
 msgid "Add Prompts"
-msgstr ""
+msgstr "Legg til instruksar"
 
 #: src/control/Control.AIChatSidebar.ts:1316
 msgid "Saved prompts"
-msgstr ""
+msgstr "Lagra instruksar"
 
 #: src/control/Control.AIChatSidebar.ts:1345
 msgid "My prompts"
-msgstr ""
+msgstr "Instruksane mine"
 
 #: src/control/Control.AIChatSidebar.ts:1354
 msgid "Type / in the message box to run a prompt."
-msgstr ""
+msgstr "Skriv / i meldingsfeltet for å køyra ein instruks."
 
 #: src/control/Control.AIChatSidebar.ts:1363
 msgid "Run prompt {0}"
-msgstr ""
+msgstr "Køyr instruksen {0}"
 
 #: src/control/Control.AIChatSidebar.ts:1368
 #: src/control/Control.AIChatSidebar.ts:1369
 #: src/control/Control.AIChatSidebar.ts:1424
 msgid "Edit prompt"
-msgstr ""
+msgstr "Rediger instruksen"
 
 #: src/control/Control.AIChatSidebar.ts:1385
 msgid ""
 "Save instructions you use often and run them on the selected text. Type / "
 "in the message box to run a prompt."
 msgstr ""
+"Lagra instruksar du brukar ofte, og køyr dei på den merkte teksten. Skriv / "
+"i meldingsfeltet for å køyra ein instruks."
 
 #: src/control/Control.AIChatSidebar.ts:1394
 #: src/control/Control.AIChatSidebar.ts:1769
 msgid "+ Add a prompt"
-msgstr ""
+msgstr "+ Legg til ein instruks"
 
 #: src/control/Control.AIChatSidebar.ts:1398
 #: src/control/Control.AIChatSidebar.ts:1772
 msgid "Add a prompt"
-msgstr ""
+msgstr "Legg til ein instruks"
 
 #: src/control/Control.AIChatSidebar.ts:1418
 msgid "Back to prompts"
-msgstr ""
+msgstr "Tilbake til instruksane"
 
 #: src/control/Control.AIChatSidebar.ts:1424
 msgid "New prompt"
-msgstr ""
+msgstr "Ny instruks"
 
 #: src/control/Control.AIChatSidebar.ts:1434
 #: src/control/Control.AIChatSidebar.ts:1519
 #: src/control/Control.AIChatSidebar.ts:1545
 msgid "Delete prompt"
-msgstr ""
+msgstr "Slett instruksen"
 
 #: src/control/Control.AIChatSidebar.ts:1449
 #: src/control/Control.AIChatSidebar.ts:1451
 msgid "Save prompt"
-msgstr ""
+msgstr "Lagra instruksen"
 
 #: src/control/Control.AIChatSidebar.ts:1469
 #: src/control/backstage/HomeView.tsx:75
@@ -2644,34 +2639,34 @@ msgstr "Namn"
 
 #: src/control/Control.AIChatSidebar.ts:1476
 msgid "e.g. Meeting minutes"
-msgstr ""
+msgstr "Til dømes: Møtereferat"
 
 #: src/control/Control.AIChatSidebar.ts:1478
 msgid "Prompt name"
-msgstr ""
+msgstr "Namn på instruksen"
 
 #: src/control/Control.AIChatSidebar.ts:1483
 msgid "What should AI do with the selected text?"
-msgstr ""
+msgstr "Kva skal KI gjera med den merkte teksten?"
 
 #: src/control/Control.AIChatSidebar.ts:1491
 msgid ""
 "Turn the selected notes into meeting minutes with decisions and action "
 "items."
 msgstr ""
+"Gjer dei merkte notata om til eit møtereferat med vedtak og oppfølgingspunkt."
 
 #: src/control/Control.AIChatSidebar.ts:1495
 msgid "Prompt instruction"
-msgstr ""
+msgstr "Instruks"
 
 #: src/control/Control.AIChatSidebar.ts:1514
-#, fuzzy
 msgid "Delete prompt confirmation"
-msgstr "Stadfest sletting av tonefall"
+msgstr "Stadfest sletting av instruksen"
 
 #: src/control/Control.AIChatSidebar.ts:1525
 msgid "The prompt \"{0}\" will be deleted."
-msgstr ""
+msgstr "Instruksen «{0}» vert sletta."
 
 #: src/control/Control.AIChatSidebar.ts:1538
 #: src/control/Control.AIChatSidebar.ts:2240
@@ -2679,17 +2674,16 @@ msgid "Cancel delete"
 msgstr "Avbryt sletting"
 
 #: src/control/Control.AIChatSidebar.ts:1635
-#, fuzzy
 msgid "You have reached the maximum of {0} saved prompts."
-msgstr "Du har nådd grensa på {0} sjølvvalde tonefall."
+msgstr "Du har nådd grensa på {0} lagra instruksar."
 
 #: src/control/Control.AIChatSidebar.ts:1753
 msgid "No saved prompt matches this name."
-msgstr ""
+msgstr "Ingen lagra instruks har dette namnet."
 
 #: src/control/Control.AIChatSidebar.ts:1754
 msgid "You have no saved prompts yet."
-msgstr ""
+msgstr "Du har ingen lagra instruksar enno."
 
 #: src/control/Control.AIChatSidebar.ts:2057
 msgid "Use icon"
@@ -3678,7 +3672,7 @@ msgstr "Ryddar opp …"
 
 #: src/control/Control.CleanupSidebar.ts:737
 msgid "Saved %1"
-msgstr "Spart %1"
+msgstr "Lagra %1"
 
 #: src/control/Control.CleanupSidebar.ts:744
 msgid "%1 thing to clean up"
@@ -3822,7 +3816,7 @@ msgstr "Tenaren fann ein {0}-feil ved utføringa av {1}-kommandoen."
 #: src/control/Control.NotebookbarImpress.js:89
 #: src/control/Control.NotebookbarWriter.js:74
 msgid "Home"
-msgstr "Home"
+msgstr "Heim"
 
 #: src/control/Control.BackstageView.ts:136
 #: src/control/Control.BackstageView.ts:761
@@ -3879,7 +3873,7 @@ msgstr "Avslutt"
 
 #: src/control/Control.BackstageView.ts:299
 msgid "Start something new, or continue where you left off."
-msgstr ""
+msgstr "Start noko nytt, eller hald fram der du slapp."
 
 #: src/control/Control.BackstageView.ts:332
 #: src/control/jsdialog/Widget.ColorPicker.ts:476
@@ -3888,19 +3882,19 @@ msgstr "Nyleg"
 
 #: src/control/Control.BackstageView.ts:718
 msgid "Account in use"
-msgstr ""
+msgstr "Kontoen er i bruk"
 
 #: src/control/Control.BackstageView.ts:720
 msgid "Close the windows and documents of this account before you remove it."
-msgstr ""
+msgstr "Lukk vindauga og dokumenta til denne kontoen før du fjernar han."
 
 #: src/control/Control.BackstageView.ts:873
 msgid "Template removed from favorites"
-msgstr ""
+msgstr "Malen er fjerna frå favorittane"
 
 #: src/control/Control.BackstageView.ts:874
 msgid "Template added to favorites"
-msgstr ""
+msgstr "Malen er lagd til i favorittane"
 
 #: src/control/Control.BackstageView.ts:1188
 msgid "Document Info"
@@ -3912,7 +3906,7 @@ msgstr "Vis eigenskapane og informasjon om dokumentet"
 
 #: src/control/Control.BackstageView.ts:1219
 msgid "Master document, a document per chapter"
-msgstr ""
+msgstr "Hovuddokument, eitt dokument per kapittel"
 
 #: src/control/Control.BackstageView.ts:1226
 msgid "Export Document"
@@ -4002,7 +3996,6 @@ msgid "Back to document"
 msgstr "Tilbake til dokumentet"
 
 #: src/control/backstage/HomeView.tsx:57 src/control/backstage/HomeView.tsx:60
-#, fuzzy
 msgid "More templates"
 msgstr "Fleire malar"
 
@@ -4012,15 +4005,15 @@ msgstr "Endringsdato"
 
 #: src/control/backstage/TemplatesView.tsx:106
 msgid "Remove from favorites"
-msgstr ""
+msgstr "Fjern frå favorittane"
 
 #: src/control/backstage/TemplatesView.tsx:107
 msgid "Add to favorites"
-msgstr ""
+msgstr "Legg til i favorittane"
 
 #: src/control/backstage/TemplatesView.tsx:138
 msgid "Templates"
-msgstr ""
+msgstr "Malar"
 
 #: src/control/backstage/TemplatesView.tsx:142
 msgid "Search templates"
@@ -4034,7 +4027,7 @@ msgstr "Alle"
 
 #: src/control/backstage/TemplatesView.tsx:243
 msgid "Built-in templates"
-msgstr ""
+msgstr "Innebygde malar"
 
 #: src/control/backstage/TemplatesView.tsx:265
 #: src/control/backstage/MyTemplatesView.tsx:212
@@ -4044,39 +4037,37 @@ msgstr "Ingen malar passar til søket ditt."
 #: src/control/backstage/TemplatesView.tsx:266
 #: src/control/backstage/MyTemplatesView.tsx:213
 msgid "No templates of this type."
-msgstr ""
+msgstr "Ingen malar av denne typen."
 
 #: src/control/backstage/MyTemplatesView.tsx:75
 msgid "Document template"
-msgstr ""
+msgstr "Dokumentmal"
 
 #: src/control/backstage/MyTemplatesView.tsx:76
 msgid "Spreadsheet template"
-msgstr ""
+msgstr "Reknearkmal"
 
 #: src/control/backstage/MyTemplatesView.tsx:77
-#, fuzzy
 msgid "Presentation template"
-msgstr "Presentasjonsmalar"
+msgstr "Presentasjonsmal"
 
 #: src/control/backstage/MyTemplatesView.tsx:78
 msgid "Drawing template"
-msgstr ""
+msgstr "Teiknemal"
 
 #: src/control/backstage/MyTemplatesView.tsx:103
-#, fuzzy
 msgid "My templates"
-msgstr "Fleire malar"
+msgstr "Malane mine"
 
 #: src/control/backstage/MyTemplatesView.tsx:109
 msgid "Manage"
-msgstr ""
+msgstr "Handsam"
 
 #: src/control/backstage/MyTemplatesView.tsx:141
 #: src/control/backstage/MyTemplatesView.tsx:168
 #: src/control/backstage/MyTemplatesView.tsx:330
 msgid "Add template"
-msgstr ""
+msgstr "Legg til mal"
 
 #: src/control/backstage/MyTemplatesView.tsx:155
 #: src/control/backstage/MyTemplatesView.tsx:156
@@ -4085,36 +4076,36 @@ msgid "Back"
 msgstr "Tilbake"
 
 #: src/control/backstage/MyTemplatesView.tsx:161
-#, fuzzy
 msgid "Manage templates"
-msgstr "Fleire malar"
+msgstr "Handsam malar"
 
 #: src/control/backstage/MyTemplatesView.tsx:174
 msgid ""
 "Rename or remove the templates you added. Built-in templates can't be "
 "changed."
 msgstr ""
+"Endra namn på eller fjern malane du har lagt til. Innebygde malar kan ikkje "
+"endrast."
 
 #: src/control/backstage/MyTemplatesView.tsx:176
 msgid "Templates you add will appear here and in New."
-msgstr ""
+msgstr "Malar du legg til, vert viste her og under Ny."
 
 #: src/control/backstage/MyTemplatesView.tsx:183
-#, fuzzy
 msgid "Search my templates"
-msgstr "Søk i malar"
+msgstr "Søk i malane mine"
 
 #: src/control/backstage/MyTemplatesView.tsx:193
 msgid "No templates yet"
-msgstr ""
+msgstr "Ingen malar enno"
 
 #: src/control/backstage/MyTemplatesView.tsx:196
 msgid "Add a template to start new documents from your own layout."
-msgstr ""
+msgstr "Legg til ein mal for å laga nye dokument frå din eigen layout."
 
 #: src/control/backstage/MyTemplatesView.tsx:224
 msgid "Actions"
-msgstr ""
+msgstr "Handlingar"
 
 #: src/control/backstage/MyTemplatesView.tsx:257
 #: src/control/backstage/MyTemplatesView.tsx:451
@@ -4128,23 +4119,23 @@ msgstr "Endra namn"
 
 #: src/control/backstage/MyTemplatesView.tsx:302
 msgid "This type of file cannot be added as a template."
-msgstr ""
+msgstr "Denne filtypen kan ikkje leggjast til som mal."
 
 #: src/control/backstage/MyTemplatesView.tsx:323
 msgid "The template could not be added."
-msgstr ""
+msgstr "Klarte ikkje leggja til malen."
 
 #: src/control/backstage/MyTemplatesView.tsx:341
 msgid "Drop a file here, or"
-msgstr ""
+msgstr "Slepp ei fil her, eller"
 
 #: src/control/backstage/MyTemplatesView.tsx:343
 msgid "Browse"
-msgstr ""
+msgstr "Bla gjennom"
 
 #: src/control/backstage/MyTemplatesView.tsx:359
 msgid "Template name"
-msgstr ""
+msgstr "Namn på malen"
 
 #: src/control/backstage/MyTemplatesView.tsx:403
 #: src/control/Control.NotebookbarCalc.js:1128
@@ -4156,19 +4147,19 @@ msgstr "Byt ut"
 
 #: src/control/backstage/MyTemplatesView.tsx:419
 msgid "The template could not be renamed."
-msgstr ""
+msgstr "Klarte ikkje endra namn på malen."
 
 #: src/control/backstage/MyTemplatesView.tsx:424
 msgid "Rename template"
-msgstr ""
+msgstr "Endra namn på malen"
 
 #: src/control/backstage/MyTemplatesView.tsx:471
 msgid "Remove this template?"
-msgstr ""
+msgstr "Vil du fjerna denne malen?"
 
 #: src/control/backstage/MyTemplatesView.tsx:476
 msgid "\"%1\" will be removed from My templates."
-msgstr ""
+msgstr "«%1» vert fjerna frå Malane mine."
 
 #: src/control/backstage/InfoView.tsx:31 src/control/Control.Menubar.ts:434
 #: src/control/Control.Menubar.ts:1497
@@ -4209,7 +4200,7 @@ msgstr "Rediger konto"
 
 #: src/control/backstage/CloudDialogs.tsx:135
 msgid "Enter a web address, such as %1."
-msgstr ""
+msgstr "Skriv inn ei nettadresse, til dømes %1."
 
 #: src/control/backstage/CloudDialogs.tsx:152
 msgid "Add new account"
@@ -4287,9 +4278,8 @@ msgid "Dismiss"
 msgstr "Lukk"
 
 #: src/control/onboarding/OnboardingSteps.ts:26
-#, fuzzy
 msgid "Welcome to Collabora Office"
-msgstr "Velkomen til Collabora Online"
+msgstr "Velkomen til Collabora Office"
 
 #: src/control/onboarding/OnboardingSteps.ts:27
 msgid "Welcome to Collabora Online"
@@ -5004,9 +4994,8 @@ msgid "Language"
 msgstr "Språk"
 
 #: src/control/Control.Mention.ts:193
-#, fuzzy
 msgid "No search results found"
-msgstr "Fann ingen søkjeresultat!"
+msgstr "Fann ingen søkjeresultat"
 
 #: src/control/Control.Menubar.ts:57
 msgid "PDF Document (.pdf) as..."
@@ -5028,7 +5017,7 @@ msgstr "Eksporter som"
 
 #: src/control/Control.Menubar.ts:151
 msgid "Create Master Document..."
-msgstr ""
+msgstr "Lag hovuddokument …"
 
 #: src/control/Control.Menubar.ts:152 src/control/Control.Menubar.ts:498
 #: src/control/Control.Menubar.ts:714 src/control/Control.Menubar.ts:891
@@ -5327,7 +5316,7 @@ msgstr "Lokalt multimedium …"
 
 #: src/control/Control.Menubar.ts:569
 msgid "Background Video..."
-msgstr ""
+msgstr "Bakgrunnsvideo …"
 
 #: src/control/Control.Menubar.ts:610 src/control/Control.Menubar.ts:803
 #: src/control/Control.NotebookbarDraw.js:1425
@@ -6455,15 +6444,14 @@ msgstr "Avsnitt"
 #: src/control/Control.NotebookbarDraw.js:1675
 #: src/control/Control.NotebookbarImpress.js:1740
 #: src/control/Control.TopToolbar.js:284
-#, fuzzy
 msgid "Lines"
-msgstr "Linje"
+msgstr "Linjer"
 
 #: src/control/Control.NotebookbarDraw.js:1695
 #: src/control/Control.NotebookbarImpress.js:1760
 #: src/control/Control.TopToolbar.js:285
 msgid "Curves"
-msgstr ""
+msgstr "Kurver"
 
 #: src/control/Control.NotebookbarImpress.js:110
 #: src/slideshow/SlideShowPresenter.ts:1205
@@ -6526,6 +6514,7 @@ msgstr "Presenter for alle"
 #: src/control/Control.NotebookbarImpress.js:647
 msgid "Show your slideshow on every viewer's screen when you start it"
 msgstr ""
+"Vis lysbiletframvisinga på skjermen til alle som ser på, når du startar ho"
 
 #: src/control/Control.NotebookbarImpress.js:767
 msgid "Slide Views"
@@ -6593,7 +6582,7 @@ msgstr "Bakgrunnsbilete"
 
 #: src/control/Control.NotebookbarImpress.js:3007
 msgid "Edit Points"
-msgstr ""
+msgstr "Rediger punkt"
 
 #: src/control/Control.NotebookbarImpress.js:3067
 msgid "Effects"
@@ -6697,7 +6686,7 @@ msgstr "Legg til bolk"
 
 #: src/control/Control.PartsPreview.js:893
 msgid "Start Slideshow from This Slide"
-msgstr ""
+msgstr "Start lysbiletframvisinga frå dette lysbiletet"
 
 #: src/control/Control.PartsPreview.js:1026
 msgid "with 1 other"
@@ -6793,35 +6782,35 @@ msgstr "%1, lenkja til %2"
 
 #: src/control/Control.PartsPreview.js:1396
 msgid "Linked to the presentation %1 that is missing"
-msgstr ""
+msgstr "Lenkja til presentasjonen %1, som manglar"
 
 #: src/control/Control.PartsPreview.js:1398
 msgid "Linked to the presentation %1 that has changed"
-msgstr ""
+msgstr "Lenkja til presentasjonen %1, som er endra"
 
 #: src/control/Control.PartsPreview.js:1400
 msgid "Linked to the presentation %1, disconnected"
-msgstr ""
+msgstr "Lenkja til presentasjonen %1, fråkopla"
 
 #: src/control/Control.PartsPreview.js:1401
 msgid "Linked to the presentation %1"
-msgstr ""
+msgstr "Lenkja til presentasjonen %1"
 
 #: src/control/Control.PartsPreview.js:1406
 msgid "Linked to the slides outside the sections of %1, which is missing"
-msgstr ""
+msgstr "Lenkja til lysbileta utanfor bolkane i %1, som manglar"
 
 #: src/control/Control.PartsPreview.js:1409
 msgid "Linked to the slides outside the sections of %1, which has changed"
-msgstr ""
+msgstr "Lenkja til lysbileta utanfor bolkane i %1, som er endra"
 
 #: src/control/Control.PartsPreview.js:1412
 msgid "Linked to the slides outside the sections of %1, disconnected"
-msgstr ""
+msgstr "Lenkja til lysbileta utanfor bolkane i %1, fråkopla"
 
 #: src/control/Control.PartsPreview.js:1413
 msgid "Linked to the slides outside the sections of %1"
-msgstr ""
+msgstr "Lenkja til lysbileta utanfor bolkane i %1"
 
 #: src/control/Control.PartsPreview.js:1416
 msgid "Linked to a section of %1 that is missing"
@@ -6842,12 +6831,12 @@ msgstr "Lenkja til ein bolk i %1"
 #: src/control/Control.PartsPreview.js:1661
 msgid "%n slide"
 msgid_plural "%n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n lysbilete"
+msgstr[1] "%n lysbilete"
 
 #: src/control/Control.PartsPreview.js:1662
 msgid "Toggle presentation %1"
-msgstr ""
+msgstr "Fald saman eller ut presentasjonen %1"
 
 #: src/control/Control.PartsPreview.js:2111
 #: src/control/Control.PartsPreview.js:2378
@@ -6898,35 +6887,31 @@ msgstr[1] "Slett bolken «%1» og dei %n lysbileta han inneheld?"
 
 #: src/control/Control.PartsPreview.js:2285
 msgid "Close Panel"
-msgstr ""
+msgstr "Lukk panelet"
 
 #: src/control/Control.PartsPreview.js:2294
-#, fuzzy
 msgid "Collapse Presentation"
-msgstr "Lukk presentasjonen"
+msgstr "Fald saman presentasjonen"
 
 #: src/control/Control.PartsPreview.js:2294
-#, fuzzy
 msgid "Expand Presentation"
-msgstr "Avslutt presentasjonen"
+msgstr "Fald ut presentasjonen"
 
 #: src/control/Control.PartsPreview.js:2301
 msgid "Open in Panel"
-msgstr ""
+msgstr "Opna i panelet"
 
 #: src/control/Control.PartsPreview.js:2309
-#, fuzzy
 msgid "Update Presentation"
-msgstr "Filtrer presentasjonar"
+msgstr "Oppdater presentasjonen"
 
 #: src/control/Control.PartsPreview.js:2317
-#, fuzzy
 msgid "Unlink Presentation"
-msgstr "Tom presentasjon"
+msgstr "Fjern lenkja til presentasjonen"
 
 #: src/control/Control.PartsPreview.js:2324
 msgid "Unlink Presentation & Contents"
-msgstr ""
+msgstr "Fjern lenkja til presentasjonen og innhaldet"
 
 #: src/control/Control.PartsPreview.js:2379
 msgid "Enter new section name:"
@@ -7003,6 +6988,7 @@ msgid ""
 "Original file can't be found. Choose it again to keep your slides up to "
 "date."
 msgstr ""
+"Finn ikkje originalfila. Vel ho på nytt for å halda lysbileta oppdaterte."
 
 #: src/control/Control.SlideImportPane.tsx:960
 msgid "This file is here. You do not have permission to open it."
@@ -7013,6 +6999,8 @@ msgid ""
 "Slides cannot be linked from this file: the link would lead back to this "
 "presentation."
 msgstr ""
+"Lysbilete kan ikkje lenkjast frå denne fila: lenkja ville ført tilbake til "
+"denne presentasjonen."
 
 #: src/control/Control.SlideImportPane.tsx:966
 msgid "This file could not be read this time."
@@ -7020,11 +7008,11 @@ msgstr "Fila kunne ikkje lesast denne gongen."
 
 #: src/control/Control.SlideImportPane.tsx:974
 msgid "Choose file…"
-msgstr ""
+msgstr "Vel fil …"
 
 #: src/control/Control.SlideImportPane.tsx:982
 msgid "Try again"
-msgstr ""
+msgstr "Prøv igjen"
 
 #: src/control/Control.SlideImportPane.tsx:994
 #: src/control/Control.SlideImportPane.tsx:1613
@@ -7172,7 +7160,7 @@ msgstr "Vel alle lysbileta"
 
 #: src/control/Control.SlideImportPane.tsx:1634
 msgid "Link whole presentation"
-msgstr ""
+msgstr "Lenk heile presentasjonen"
 
 #: src/control/Control.SlideImportPane.tsx:1642
 msgid "Update the slides linked to this file"
@@ -7204,7 +7192,7 @@ msgstr "Behald den opphavlege designen"
 
 #: src/control/Control.SlideImportPane.tsx:1805
 msgid "Not supported in PPTX, please save as ODP to use links"
-msgstr ""
+msgstr "Ikkje støtta i PPTX. Lagra som ODP for å bruka lenkjer"
 
 #: src/control/Control.SlideImportPane.tsx:1820
 msgid "Stay linked to the source file"
@@ -7235,9 +7223,8 @@ msgid "In a section linked to {0}"
 msgstr "I ein bolk lenkja til {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:131
-#, fuzzy
 msgid "In a presentation linked to {0}"
-msgstr "I ein bolk lenkja til {0}"
+msgstr "I ein presentasjon lenkja til {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:154
 msgid "Hide the actions for this linked slide"
@@ -7258,9 +7245,8 @@ msgstr "Oppdater bolk"
 
 #: src/control/Control.SlideLinkToolbar.tsx:195
 #: src/slideimport/SlideLinks.ts:492
-#, fuzzy
 msgid "Update presentation"
-msgstr "Filtrer presentasjonar"
+msgstr "Oppdater presentasjonen"
 
 #: src/control/Control.SlideLinkToolbar.tsx:209
 msgid "Not available"
@@ -7272,29 +7258,27 @@ msgstr "Vis/gøym bolken %1"
 
 #: src/control/SlideLinkPanel.tsx:26
 msgid "Close the linked presentation"
-msgstr ""
+msgstr "Lukk den lenkja presentasjonen"
 
 #: src/control/SlideLinkPanel.tsx:31
-#, fuzzy
 msgid "Linked presentation %1"
-msgstr "Filtrer presentasjonar"
+msgstr "Lenkja presentasjon %1"
 
 #: src/control/SlideLinkPanel.tsx:54
 msgid "Slides of %1"
-msgstr ""
+msgstr "Lysbilete i %1"
 
 #: src/control/SlidePresentationsRow.tsx:34 src/control/LinkedViewRow.tsx:52
-#, fuzzy
 msgid "Linked presentations"
-msgstr "Filtrer presentasjonar"
+msgstr "Lenkja presentasjonar"
 
 #: src/control/SlidePresentationsRow.tsx:44
 msgid "Expand all linked presentations"
-msgstr ""
+msgstr "Fald ut alle lenkja presentasjonar"
 
 #: src/control/SlidePresentationsRow.tsx:54
 msgid "Collapse all linked presentations"
-msgstr ""
+msgstr "Fald saman alle lenkja presentasjonar"
 
 #: src/slideimport/SlideImportSession.ts:352
 msgid "The slides of the source could not be read."
@@ -7322,41 +7306,37 @@ msgid "Cannot update the section: {0} no longer holds its source section."
 msgstr "Kan ikkje oppdatera bolken: {0} held ikkje lenger kjeldebolken sin."
 
 #: src/slideimport/SlideLinks.ts:384
-#, fuzzy
 msgid "Cannot update the slide: {0} no longer holds its source slide."
-msgstr "Kan ikkje oppdatera bolken: {0} held ikkje lenger kjeldebolken sin."
+msgstr ""
+"Kan ikkje oppdatera lysbiletet: {0} inneheld ikkje lenger kjeldelysbiletet."
 
 #: src/slideimport/SlideLinks.ts:489
-#, fuzzy
 msgid "Update links"
 msgstr "Oppdater lenkjer"
 
 #: src/slideimport/SlideLinks.ts:493
-#, fuzzy
 msgid "Update presentations"
-msgstr "Filtrer presentasjonar"
+msgstr "Oppdater presentasjonar"
 
 #: src/slideimport/SlideLinks.ts:494
 msgid "Update sections"
 msgstr "Oppdater bolkane"
 
 #: src/slideimport/SlideLinks.ts:504
-#, fuzzy
 msgid ""
 "The linked presentation will hold the slides and sections that {0} holds "
 "now. Changes made to these slides in this presentation will be lost."
 msgstr ""
-"Bolken vil få dei lysbileta som bolken i {0} har no. Endringar som vert "
-"gjorde på desse lysbileta i denne presentasjonen går tapt."
+"Den lenkja presentasjonen vil få dei lysbileta og bolkane som {0} har no. "
+"Endringar som er gjorde på desse lysbileta i denne presentasjonen, går tapt."
 
 #: src/slideimport/SlideLinks.ts:508
-#, fuzzy
 msgid ""
 "The section will hold the slides that {0} keeps outside its sections now. "
 "Changes made to these slides in this presentation will be lost."
 msgstr ""
-"Bolken vil få dei lysbileta som bolken i {0} har no. Endringar som vert "
-"gjorde på desse lysbileta i denne presentasjonen går tapt."
+"Bolken vil få dei lysbileta som {0} har utanfor bolkane sine no. Endringar "
+"som er gjorde på desse lysbileta i denne presentasjonen, går tapt."
 
 #: src/slideimport/SlideLinks.ts:511
 msgid ""
@@ -7377,26 +7357,24 @@ msgstr ""
 "tapt."
 
 #: src/slideimport/SlideLinks.ts:531
-#, fuzzy
 msgid ""
 "{0} linked presentations will hold the slides and sections that their "
 "source files hold now. Changes made to these slides in this presentation "
 "will be lost."
 msgstr ""
-"{0} lenkja bolkar vil få dei lysbileta som bolkane deira i kjeldefilene har "
-"no. Endringar som vert gjorde på desse lysbileta i denne presentasjonen går "
-"tapt."
+"{0} lenkja presentasjonar vil få dei lysbileta og bolkane som kjeldefilene "
+"deira har no. Endringar som er gjorde på desse lysbileta i denne "
+"presentasjonen, går tapt."
 
 #: src/slideimport/SlideLinks.ts:534
-#, fuzzy
 msgid ""
 "{0} linked sections and presentations will hold the slides that their "
 "source files hold now. Changes made to these slides in this presentation "
 "will be lost."
 msgstr ""
-"{0} lenkja bolkar vil få dei lysbileta som bolkane deira i kjeldefilene har "
-"no. Endringar som vert gjorde på desse lysbileta i denne presentasjonen går "
-"tapt."
+"{0} lenkja bolkar og presentasjonar vil få dei lysbileta som kjeldefilene "
+"deira har no. Endringar som er gjorde på desse lysbileta i denne "
+"presentasjonen, går tapt."
 
 #: src/slideimport/SlideLinks.ts:768
 msgid ""
@@ -7407,9 +7385,9 @@ msgstr ""
 "kan ikkje lesa det."
 
 #: src/slideimport/SlideLinks.ts:779
-#, fuzzy
 msgid "You do not have access to {0}, so its slides cannot be updated."
-msgstr "Du har ikkje tilgang til {0}, så bolken kan ikkje oppdaterast."
+msgstr ""
+"Du har ikkje tilgang til {0}, så lysbileta derifrå kan ikkje oppdaterast."
 
 #: src/slideimport/SlideLinks.ts:780
 msgid "{0} could not be read."
@@ -7438,9 +7416,8 @@ msgid "Unlinking the section failed."
 msgstr "Klarte ikkje fjerna lenkja frå bolken."
 
 #: src/slideimport/SlideLinks.ts:1095
-#, fuzzy
 msgid "Unlinking the presentation failed."
-msgstr "Klarte ikkje fjerna lenkja frå bolken."
+msgstr "Klarte ikkje fjerna lenkja til presentasjonen."
 
 #: src/slideimport/SlideLinks.ts:1109
 msgid "Updating the slides of {0} failed."
@@ -8055,7 +8032,7 @@ msgstr "Slett tabulator"
 #. links to this one.
 #: src/control/LinkedViewRow.tsx:26
 msgid "%1 - linked presentation"
-msgstr ""
+msgstr "%1 – lenkja presentasjon"
 
 #: src/control/Parts.js:636 src/control/Parts.js:640
 msgid "Show sheets"
@@ -8139,21 +8116,23 @@ msgstr ""
 
 #: src/control/Permission.js:757
 msgid "Close without saving"
-msgstr ""
+msgstr "Lukk utan å lagra"
 
 #: src/control/Permission.js:766
 msgid ""
 "\"%FILENAME\" could not be written. The file may be read-only or in use by "
 "another program. You can save your changes to a different file."
 msgstr ""
+"Klarte ikkje skriva «%FILENAME». Fila kan vera skriveverna eller i bruk av "
+"eit anna program. Du kan lagra endringane i ei anna fil."
 
 #: src/control/Permission.js:770
 msgid "Cannot Save Document"
-msgstr ""
+msgstr "Kan ikkje lagra dokumentet"
 
 #: src/control/Permission.js:784
 msgid "{0} wants to edit together"
-msgstr ""
+msgstr "{0} vil redigera saman med deg"
 
 #: src/control/Permission.js:785 src/control/Permission.js:808
 #: src/control/Permission.js:824
@@ -8597,7 +8576,7 @@ msgstr "Kopier Markdown"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1840
 msgid "Merge Formatting"
-msgstr ""
+msgstr "Slå saman formatering"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1853
 msgid "Inline"
@@ -8757,11 +8736,11 @@ msgstr "Vassmerke"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2469
 msgid "Show"
-msgstr ""
+msgstr "Vis"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2474
 msgid "Add New"
-msgstr ""
+msgstr "Legg til ny"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2546
 msgid "Insert comment"
@@ -9191,6 +9170,8 @@ msgid ""
 "This file cannot be written, so the document opened read-only. Use Save As "
 "to keep your changes in a new file."
 msgstr ""
+"Fila kan ikkje skrivast til, så dokumentet vart opna skriveverna. Bruk Lagra "
+"som for å ta vare på endringane i ei ny fil."
 
 #: src/app/Socket.ts:2469
 msgid "Document is getting migrated"
@@ -9201,6 +9182,8 @@ msgid ""
 "Waiting for %USERS to decide which version of this document to keep. The "
 "document opens here once they decide."
 msgstr ""
+"Ventar på at %USERS skal avgjera kva versjon av dokumentet som skal "
+"behaldast. Dokumentet vert opna her når avgjerda er teken."
 
 #: src/app/Socket.ts:2834
 msgid "Document requires password to view."
@@ -9564,37 +9547,35 @@ msgstr "Kommentar frå {0}: {1}"
 #. {1} its text
 #: src/layer/marker/A11yTextInput.js:363
 msgid "{0}: {1}"
-msgstr ""
+msgstr "{0}: {1}"
 
 #: src/layer/marker/A11yTextInput.js:533
 msgid "Heading level {0}"
 msgstr "Overskriftsnivå {0}"
 
 #: src/layer/marker/A11yTextInput.js:570
-#, fuzzy
 msgid "Footnote"
-msgstr "Fotnotar"
+msgstr "Fotnote"
 
 #: src/layer/marker/A11yTextInput.js:572
-#, fuzzy
 msgid "Endnote"
-msgstr "Sluttnotar"
+msgstr "Sluttnote"
 
 #: src/layer/marker/A11yTextInput.js:580
 msgid "Out of header"
-msgstr ""
+msgstr "Ut av topptekst"
 
 #: src/layer/marker/A11yTextInput.js:582
 msgid "Out of footer"
-msgstr ""
+msgstr "Ut av botntekst"
 
 #: src/layer/marker/A11yTextInput.js:584
 msgid "Out of footnote"
-msgstr ""
+msgstr "Ut av fotnote"
 
 #: src/layer/marker/A11yTextInput.js:586
 msgid "Out of endnote"
-msgstr ""
+msgstr "Ut av sluttnote"
 
 #: src/layer/marker/A11yTextInput.js:1600
 msgid "Out of table"
@@ -9656,15 +9637,15 @@ msgstr "{0} sletta"
 
 #: src/layer/marker/TextInput.js:532 src/layer/marker/TextInput.js:542
 msgid "Formatting changed"
-msgstr ""
+msgstr "Formatering endra"
 
 #: src/layer/marker/TextInput.js:541
 msgid "Insertion"
-msgstr ""
+msgstr "Innsetjing"
 
 #: src/layer/marker/TextInput.js:542
 msgid "Deletion"
-msgstr ""
+msgstr "Sletting"
 
 #: src/layer/marker/TextInput.js:598
 msgid "Placeholder"
@@ -9721,10 +9702,11 @@ msgstr "Nettredigerar"
 #: src/layer/tile/CanvasTileLayer.js:1490
 msgid "This document links to files in a folder the app may not read."
 msgstr ""
+"Dokumentet lenkjer til filer i ei mappe som appen kanskje ikkje kan lesa."
 
 #: src/layer/tile/CanvasTileLayer.js:1491
 msgid "Allow access"
-msgstr ""
+msgstr "Gje tilgang"
 
 #: src/layer/tile/CanvasTileLayer.js:1517
 msgid "%1 started recording changes for all users."
@@ -9753,10 +9735,11 @@ msgstr "Ingen merknadar"
 #: src/main.js:357
 msgid "This server is too old for %APP, so some features may not work."
 msgstr ""
+"Tenaren er for gammal for %APP, så nokre funksjonar verkar kanskje ikkje."
 
 #: src/main.js:358
 msgid "Please ask the administrator to update it."
-msgstr ""
+msgstr "Be administratoren om å oppdatera han."
 
 #: src/main.js:451
 msgid "Warning! The browser you are using is not supported."
@@ -9774,7 +9757,7 @@ msgstr "Administratoren din har slått av kopiering frå dokumentet"
 
 #: src/map/Clipboard.js:222
 msgid "Copying from {productname}, please paste again in a moment"
-msgstr ""
+msgstr "Kopierer frå {productname}. Lim inn på nytt om litt"
 
 #: src/map/Clipboard.js:335
 msgid "warning: copy/paste request timed out"
@@ -9789,9 +9772,8 @@ msgid "Failed to upload the clipboard"
 msgstr "Klarte ikkje lasta opp utklippstavla"
 
 #: src/map/Clipboard.js:1141
-#, fuzzy
 msgid "Copying to clipboard"
-msgstr "Kopier til utklippstavla"
+msgstr "Kopierer til utklippstavla"
 
 #: src/map/Clipboard.js:1673
 msgid ""
@@ -9847,9 +9829,8 @@ msgid "Last saved:"
 msgstr "Sist lagra:"
 
 #: src/map/Map.js:1170
-#, fuzzy
 msgid "Please wait..."
-msgstr "Vent litt!"
+msgstr "Vent litt …"
 
 #: src/map/handler/Map.Feedback.js:102
 msgid "Please send us your feedback"
@@ -9899,9 +9880,8 @@ msgstr "Tom lysbiletframvising"
 
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1453
-#, fuzzy
 msgid "All slides are hidden."
-msgstr "Alle lysbileta er gøymde!"
+msgstr "Alle lysbileta er gøymde."
 
 #: src/map/handler/Map.SlideShow.js:175
 #: src/slideshow/SlideShowPresenter.ts:1480
