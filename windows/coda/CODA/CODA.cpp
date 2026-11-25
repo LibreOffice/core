@@ -492,6 +492,26 @@ static std::wstring translate(const char* context, const char* source)
     return Util::string_to_wide_string(source);
 }
 
+// The text with each placeholder %1 to %9 replaced by the corresponding argument (the placeholders
+// of QString::arg, which the strings in the Qt catalogs use):
+static std::wstring fillPlaceholders(
+    std::wstring const & text, std::vector<std::wstring> const & arguments)
+{
+    std::wstring result;
+    for (std::size_t i = 0; i != text.size(); ++i) {
+        if (text[i] == L'%' && i + 1 != text.size() && text[i + 1] >= L'1' && text[i + 1] <= L'9') {
+            std::size_t const index = text[i + 1] - L'1';
+            if (index < arguments.size()) {
+                result += arguments[index];
+                ++i;
+                continue;
+            }
+        }
+        result += text[i];
+    }
+    return result;
+}
+
 static void processMessage(DocumentTab& tab, wil::unique_cotaskmem_string& message);
 
 static void requestCloseTab(HWND hWnd, int tabId);
@@ -3649,7 +3669,7 @@ static LRESULT CALLBACK NoticeWndProc(HWND hWnd, UINT message, WPARAM wParam, LP
 
 // Shows the text at the top of the account window, above its web view, until the user closes it:
 static void showNotice(
-    DocumentTab & account, std::string const & text, std::function<void()> const & dontShowAgain)
+    DocumentTab & account, std::wstring const & text, std::function<void()> const & dontShowAgain)
 {
     if (!account.noticeWindow) {
         account.noticeWindow = CreateWindowExW(
@@ -3660,14 +3680,15 @@ static void showNotice(
             return;
         }
         CreateWindowExW(
-            0, L"BUTTON", L"Close", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON, 0, 0, 0, 0,
-            account.noticeWindow, reinterpret_cast<HMENU>(NOTICE_CLOSE_ID), appInstance, nullptr);
+            0, L"BUTTON", translate("QObject", "Close").c_str(),
+            WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON, 0, 0, 0, 0, account.noticeWindow,
+            reinterpret_cast<HMENU>(NOTICE_CLOSE_ID), appInstance, nullptr);
         CreateWindowExW(
             0, L"BUTTON", translate("QObject", "Don't show again").c_str(),
             WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON, 0, 0, 0, 0, account.noticeWindow,
             reinterpret_cast<HMENU>(NOTICE_DONT_SHOW_AGAIN_ID), appInstance, nullptr);
     }
-    SetWindowTextW(account.noticeWindow, Util::string_to_wide_string(text).c_str());
+    SetWindowTextW(account.noticeWindow, text.c_str());
     account.dontShowNoticeAgain = dontShowAgain;
     ShowWindow(account.noticeWindow, SW_SHOWNA);
     if (WindowState * window = findWindow(account.hWnd)) {
@@ -6160,29 +6181,31 @@ static void showServerEditorNotice(
     auto const dontShowAgain = [reason, origin] {
         Desktop::hideServerEditorNotice(reason, origin);
     };
-    std::string const server = Poco::URI(editorUrl).getHost();
+    std::wstring text;
     if (reason == EditorFrameScripts::disabledReason) {
-        showNotice(
-            account,
-            server + " does not allow editing in " APP_NAME ", so the document is open in the "
-            "server's own editor. To edit documents from " + server + " in " APP_NAME ", ask the "
-            "server's administrator to allow that (client_document_loading.enable in "
-            "coolwsd.xml).",
-            dontShowAgain);
+        text = translate(
+            "QObject",
+            "%1 does not allow editing in %2, so the document is open in the server's own editor. "
+            "To edit documents from %1 in %2, ask the server's administrator to allow that "
+            "(client_document_loading.enable in coolwsd.xml).");
     } else if (reason == EditorFrameScripts::outdatedReason) {
-        showNotice(
-            account,
-            "This version of " APP_NAME " is too old to edit documents from " + server + ", so the "
-            "document is open in the server's own editor. To edit documents from " + server + " in "
-            APP_NAME ", update your copy of " APP_NAME ".",
-            dontShowAgain);
+        text = translate(
+            "QObject",
+            "This version of %2 is too old to edit documents from %1, so the document is open in "
+            "the server's own editor. To edit documents from %1 in %2, update your copy of %2.");
     } else {
-        showNotice(
-            account,
-            server + " runs a version of Collabora Online that does not support editing in "
-            APP_NAME ", so the document is open in the server's own editor.",
-            dontShowAgain);
+        text = translate(
+            "QObject",
+            "%1 runs a version of Collabora Online that does not support editing in %2, so the "
+            "document is open in the server's own editor.");
     }
+    showNotice(
+        account,
+        fillPlaceholders(
+            text,
+            {Util::string_to_wide_string(Poco::URI(editorUrl).getHost()),
+             Util::string_to_wide_string(APP_NAME)}),
+        dontShowAgain);
 }
 
 // Posts the integrator's form into the frame again, for the server's own editor:
