@@ -11942,7 +11942,12 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
 
                 setLanguageAndLocale(u"en-US"_ustr);
 
+                // The caches of command labels and images are per UI language, which is the
+                // COKit language tag, so fill them for the views in en-US
+                const LanguageTag aPreviousLanguage(comphelper::COKit::getLanguageTag());
+                comphelper::COKit::setLanguageTag(LanguageTag(u"en-US"_ustr));
                 preloadData();
+                comphelper::COKit::setLanguageTag(aPreviousLanguage);
 
                 // Release Solar Mutex, lo_startmain thread should acquire it.
                 Application::ReleaseSolarMutex();
