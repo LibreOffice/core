@@ -420,30 +420,28 @@
 	background-image: url('images/dark/lc_more.svg');
 }
 
-/* The button that keeps a file in the presentation is faint until the file is
- * kept, and is then drawn in full on a filled ground. */
+/* The button that keeps a file in the presentation shows an outlined pin until
+ * the file is kept, and then a filled pin on a filled ground. */
 #slide-import-panel .slide-import-source-keep {
 	flex-shrink: 0;
-	width: 24px;
-	height: 24px;
+	width: var(--btn-size-m);
+	height: var(--btn-size-m);
 	padding: 0;
-	border: 1px solid transparent;
-	border-radius: var(--border-radius);
-	background: transparent url('images/lc_insertbookmark.svg') no-repeat center;
-	background-size: 20px 20px;
-	opacity: 0.5;
+	border: 1px solid var(--color-border-dark);
+	border-radius: var(--border-radius-s);
+	background: transparent url('images/slide-import-source-keep.svg') no-repeat center;
+	background-size: var(--btn-img-size-m) var(--btn-img-size-m);
 	cursor: pointer;
 }
 
-#slide-import-panel .slide-import-source-keep:hover:not(:disabled) {
-	border-color: var(--color-border-dark);
-	opacity: 1;
+#slide-import-panel .slide-import-source-keep:hover:not(:disabled):not(.kept) {
+	background-color: var(--color-background-dark) !important;
 }
 
 #slide-import-panel .slide-import-source-keep.kept {
 	border-color: var(--color-primary);
 	background-color: var(--color-background-dark);
-	opacity: 1;
+	background-image: url('images/slide-import-source-kept.svg');
 }
 
 #slide-import-panel .slide-import-source-keep:disabled {
@@ -451,7 +449,11 @@
 }
 
 [data-theme='dark'] #slide-import-panel .slide-import-source-keep {
-	background-image: url('images/dark/lc_insertbookmark.svg');
+	background-image: url('images/dark/slide-import-source-keep.svg');
+}
+
+[data-theme='dark'] #slide-import-panel .slide-import-source-keep.kept {
+	background-image: url('images/dark/slide-import-source-kept.svg');
 }
 
 /* The pane of a document that has no presentation to import from: what the
