@@ -86,19 +86,25 @@ void CollabFileProxy::handleFetchRequest(const std::string& streamUrl, bool host
     // contain query parameters, so use Poco::URI to add it properly.
     // A request that has no access token fetches the URL as it is.
     Poco::URI uri(streamUrl);
-    if (!_accessToken.empty())
+    if (!_accessToken.empty() && hostChecked)
         uri.addQueryParameter("access_token", _accessToken);
+    // A URL that is not on the WOPI host gets the access token only in the Authorization header (as
+    // for a FileUrl on /cool/ws):
+    Authorization auth = _accessToken.empty() || hostChecked
+        ? Authorization::create(uri)
+        : Authorization(Authorization::Type::Token, _accessToken, false);
 
     // Transfer to poll and start download directly (bypassing CheckFileInfo)
     disposition.setTransfer(*poll,
-        [this, poll, uri = std::move(uri), hostChecked, keepalive = shared_from_this()](
+        [this, poll, uri = std::move(uri), auth = std::move(auth), hostChecked,
+         keepalive = shared_from_this()](
             const std::shared_ptr<Socket>& moveSocket)
         {
             LOG_TRC('#' << moveSocket->getFD()
                         << ": CollabFileProxy: starting direct fetch for ["
                         << Anonymizer::anonymizeUrl(uri.toString()) << ']');
 
-            doDownload(poll, uri, HTTP_REDIRECTION_LIMIT, hostChecked, DownloadRetries);
+            doDownload(poll, uri, auth, HTTP_REDIRECTION_LIMIT, hostChecked, DownloadRetries);
         });
 }
 
@@ -141,8 +147,8 @@ void CollabFileProxy::handleUploadRequest(const std::string& targetUrl,
 }
 
 void CollabFileProxy::doDownload(const std::shared_ptr<TerminatingPoll>& poll,
-                                 const Poco::URI& uri, int redirectLimit, bool hostChecked,
-                                 int retriesLeft)
+                                 const Poco::URI& uri, Authorization const & auth,
+                                 int redirectLimit, bool hostChecked, int retriesLeft)
 {
     const std::string uriAnonym = Anonymizer::anonymizeUrl(uri.toString());
     LOG_DBG("CollabFileProxy: downloading from [" << uriAnonym << ']');
@@ -152,13 +158,12 @@ void CollabFileProxy::doDownload(const std::shared_ptr<TerminatingPoll>& poll,
     std::shared_ptr<http::Session> const httpSession
         = hostChecked ? StorageConnectionManager::getWopiHttpSession(uri)
                       : StorageConnectionManager::getHttpSession(uri);
-    Authorization auth = Authorization::create(uri);
     http::Request httpRequest = StorageConnectionManager::createHttpRequest(uri, auth);
 
     const auto startTime = std::chrono::steady_clock::now();
 
     http::Session::FinishedCallback finishedCallback =
-        [this, poll, uri, startTime, uriAnonym, redirectLimit, hostChecked, retriesLeft,
+        [this, poll, uri, auth, startTime, uriAnonym, redirectLimit, hostChecked, retriesLeft,
          keepalive = shared_from_this()](const std::shared_ptr<http::Session>& session)
     {
         if (SigUtil::getShutdownRequestFlag())
@@ -197,7 +202,10 @@ void CollabFileProxy::doDownload(const std::shared_ptr<TerminatingPoll>& poll,
                 const std::string location = httpResponse->get("Location");
                 LOG_TRC("CollabFileProxy: redirect to ["
                         << Anonymizer::anonymizeUrl(location) << ']');
-                doDownload(poll, Poco::URI(location), redirectLimit - 1, false, retriesLeft);
+                Poco::URI const target(location);
+                doDownload(
+                    poll, target, Authorization::create(target), redirectLimit - 1, false,
+                    retriesLeft);
                 return;
             }
             else
@@ -217,7 +225,7 @@ void CollabFileProxy::doDownload(const std::shared_ptr<TerminatingPoll>& poll,
             LOG_WRN("CollabFileProxy: trying GetFile from [" << uriAnonym << "] again after "
                     << (answered ? "a temporary error" : "no answer") << " (" << statusCode
                     << ')');
-            doDownload(poll, uri, redirectLimit, hostChecked, retriesLeft - 1);
+            doDownload(poll, uri, auth, redirectLimit, hostChecked, retriesLeft - 1);
             return;
         }
 

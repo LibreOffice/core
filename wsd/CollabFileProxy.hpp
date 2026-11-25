@@ -22,6 +22,7 @@
 #include <string>
 #include <string_view>
 
+class Authorization;
 class CheckFileInfo;
 
 /// Proxies file download/upload through the /cool/collab endpoint
@@ -52,7 +53,8 @@ private:
     inline void logPrefix(std::ostream& os) const { os << '#' << _logFD << ": "; }
 
     void doDownload(const std::shared_ptr<TerminatingPoll>& poll, const Poco::URI& uri,
-                    int redirectionLimit, bool hostChecked, int retriesLeft);
+                    Authorization const & auth, int redirectionLimit, bool hostChecked,
+                    int retriesLeft);
     void doUpload(const std::shared_ptr<TerminatingPoll>& poll, const Poco::URI& uri,
                   const std::string& body);
     void answerUploaded(std::shared_ptr<StreamSocket> const & socket,

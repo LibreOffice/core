@@ -45,7 +45,7 @@ struct CollabFetchRequest
 {
     std::string streamUrl;       ///< URL to fetch from
     bool hostChecked;            // Whether streamUrl is on the WOPI host that passed the host check
-    std::string accessToken;     ///< WOPI access token to add to streamUrl, or empty
+    std::string accessToken;     ///< WOPI access token for streamUrl, or empty
     std::string wopiSrc;         ///< Original WOPISrc for validation
     std::string docKey;          ///< Document key to verify live CollabBroker
     std::string brokerTag;       ///< Broker access token at time of request
