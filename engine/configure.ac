@@ -190,6 +190,9 @@ PathFormat()
                 ;;
         esac
         formatted_path_unix=$(wslpath -u "$formatted_path")
+        # wslpath -m takes only the Unix form, and this turns a Windows
+        # spelling with backslashes into one with forward slashes
+        formatted_path=$(wslpath -m "$formatted_path_unix")
     elif test -n "$MSYS_ONLY_AS_HELPER"; then
         # tool output (vswhere, reg.exe, ...) can carry a trailing CR
         formatted_path=$(echo "$formatted_path" | tr -d '\r')
