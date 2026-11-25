@@ -385,6 +385,10 @@
 	font-weight: 600;
 }
 
+.slide-presentation-header .slide-section-count {
+	font-size: var(--medium-font-size);
+}
+
 /* The header of a section inside a linked presentation sits under the header
    of the presentation, indented. */
 .slide-section-header.in-presentation {
@@ -472,6 +476,7 @@
 	flex-shrink: 0;
 	margin-inline-start: 8px;
 	color: var(--color-text-light);
+	font-family: var(--cool-font);
 	white-space: nowrap;
 }
 
@@ -622,7 +627,8 @@
 	border-radius: var(--border-radius);
 	background: transparent;
 	color: var(--color-primary) !important;
-	font: inherit;
+	font-family: var(--cool-font);
+	font-size: var(--medium-font-size);
 	cursor: pointer;
 }
 
