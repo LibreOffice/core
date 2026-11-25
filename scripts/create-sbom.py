@@ -186,8 +186,9 @@ def parse_make_variables(path, names):
 
 def local_path(path):
     """A path as the engine's build recorded it, usable here: on Windows the
-    engine is configured in Cygwin and records C:/..., which WSL calls
-    /mnt/c/... and MSYS2 /c/..."""
+    engine records C:/..., whether its build used MSYS2 or WSL for the Unix
+    helper tools, and this script runs in either of them: MSYS2 calls it
+    /c/..., WSL /mnt/c/..."""
     if os.path.exists(path):
         return path
     match = re.match(r"^([A-Za-z]):[/\\](.*)$", path)
