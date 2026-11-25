@@ -6376,254 +6376,277 @@ void addHybridPDFOption(std::string& filterOptions)
 
 bool ChildSession::saveAs(const StringVector& tokens)
 {
-    std::string wopiFilename, url, format, filterOptions;
-
-    if (tokens.size() <= 1 ||
-        !getTokenString(tokens[1], "url", url))
+    try
     {
-        sendTextFrameAndLogError("error: cmd=saveas kind=syntax");
-        return false;
-    }
+        std::string wopiFilename, url, format, filterOptions;
 
-    // if the url is a 'wopi:///something/blah.odt', then save to a temporary
-    Poco::URI wopiURL(url);
-    bool encodeURL = false;
-    if (wopiURL.getScheme() == "wopi")
-    {
-        std::vector<std::string> pathSegments;
-        wopiURL.getPathSegments(pathSegments);
-
-        if (pathSegments.empty())
+        if (tokens.size() <= 1 ||
+            !getTokenString(tokens[1], "url", url))
         {
             sendTextFrameAndLogError("error: cmd=saveas kind=syntax");
             return false;
         }
 
-        std::string jailDoc = getJailDocRoot();
+        // if the url is a 'wopi:///something/blah.odt', then save to a temporary
+        Poco::URI wopiURL(url);
+        bool encodeURL = false;
+        if (wopiURL.getScheme() == "wopi")
+        {
+            std::vector<std::string> pathSegments;
+            wopiURL.getPathSegments(pathSegments);
 
-        const std::string tmpDir = Util::rng::getFilename(64);
-        FileUtil::createDirectory(jailDoc + '/' + tmpDir);
-        const Poco::Path filenameParam(pathSegments[pathSegments.size() - 1]);
-        url = std::string("file://") + jailDoc + tmpDir + '/' + filenameParam.getFileName();
-        // url becomes decoded at this stage
-        // on saveAs we should send encoded!
-        encodeURL = true;
-        wopiFilename = wopiURL.getPath();
+            if (pathSegments.empty())
+            {
+                sendTextFrameAndLogError("error: cmd=saveas kind=syntax");
+                return false;
+            }
+
+            std::string jailDoc = getJailDocRoot();
+
+            const std::string tmpDir = Util::rng::getFilename(64);
+            FileUtil::createDirectory(jailDoc + '/' + tmpDir);
+            const Poco::Path filenameParam(pathSegments[pathSegments.size() - 1]);
+            url = std::string("file://") + jailDoc + tmpDir + '/' + filenameParam.getFileName();
+            // url becomes decoded at this stage
+            // on saveAs we should send encoded!
+            encodeURL = true;
+            wopiFilename = wopiURL.getPath();
+        }
+        else if (!Util::isMobileApp() && !isFileUrlDirectlyIn(url, getJailDocRoot()))
+        {
+            // On a server any other target is a file directly in the document folder of the jail.
+            sendTextFrameAndLogError("error: cmd=saveas kind=syntax");
+            return false;
+        }
+
+        if (tokens.size() > 2)
+            (void)getTokenString(tokens[2], "format", format);
+
+        if (tokens.size() > 3 && getTokenString(tokens[3], "options", filterOptions))
+        {
+            if (tokens.size() > 4)
+            {
+                // Syntax is options=<options>, and <options> may contain spaces, account for that.
+                filterOptions += " " + tokens.cat(' ', 4);
+            }
+        }
+
+        bool success = false;
+
+        if (filterOptions.empty() && format == "html")
+        {
+            // Opt-in to avoid linked images, those would not leave the chroot.
+            filterOptions = "EmbedImages";
+        }
+
+        // A document opened from a hybrid PDF stays hybrid when it is saved as PDF again, so the
+        // PDF keeps carrying the ODF document. The format comes from the file name when it is not
+        // given.
+        const std::string saveFormat =
+            format.empty() ? Util::toLower(Poco::Path(url).getExtension()) : format;
+        if (saveFormat == "pdf" && LOKitHelper::isHybridPDF(getLOKitDocument().get()))
+            addHybridPDFOption(filterOptions);
+
+        if (_docManager->isDocPasswordProtected() && _docManager->haveDocPassword())
+        {
+            if (_docManager->getDocPasswordType() == DocumentPasswordType::ToView)
+            {
+                filterOptions += std::string(",Password=") + _docManager->getDocPassword() +
+                                 std::string("PASSWORDEND");
+            }
+            else
+            {
+                filterOptions += std::string(",PasswordToModify=") + _docManager->getDocPassword() +
+                                 std::string("PASSWORDTOMODIFYEND");
+            }
+            // Password might have changed since load
+            setHaveDocPassword(true);
+            setDocPassword(_docManager->getDocPassword());
+        }
+
+        // We don't have the FileId at this point, just a new filename to save-as.
+        // So here the filename will be obfuscated with some hashing, which later will
+        // get a proper FileId that we will use going forward.
+        LOG_DBG("Calling COKit's saveAs with URL: ["
+                << anonymizeUrl(wopiFilename) << "], Format: ["
+                << (format.empty() ? "(nullptr)" : format.c_str()) << "], Filter Options: ["
+                << (filterOptions.empty() ? "(nullptr)" : filterOptions.c_str()) << ']');
+
+        getLOKitDocument()->setView(_viewId);
+
+        // The URL as the engine takes it, encoded here unless it came encoded.
+        const auto encodeUrl = [encodeURL](const std::string& text)
+        {
+            std::string encoded;
+            if (encodeURL)
+                Poco::URI::encode(text, "", encoded);
+            else
+                encoded = text;
+            return encoded;
+        };
+
+        std::string encodedURL = encodeUrl(url);
+
+        if (!Util::isMobileApp())
+            consistencyCheckJail();
+
+        // The desktop apps give no filename token, so a failure names the file from the URL.
+        std::string encodedTargetName;
+        const Poco::Path targetPath(
+            FileUtil::localPathOfFileUri(wopiURL.getHost(), wopiURL.getPath()));
+        Poco::URI::encode(targetPath.getFileName(), "", encodedTargetName);
+
+        success = getLOKitDocument()->saveAs(
+            encodedURL.c_str(), format.empty() ? nullptr : format.c_str(),
+            filterOptions.empty() ? nullptr : filterOptions.c_str());
+
+        // A target without an extension gets the one of the document type and a second try. A
+        // target that has one failed for another reason, such as the user cancelling a question
+        // the save asked, and is not tried again.
+        if (!success && Poco::Path(url).getExtension().empty())
+        {
+            bool retry = true;
+            switch (getLOKitDocument()->getDocumentType())
+            {
+                case COKitDocumentType::TEXT:         url += ".odt"; wopiFilename += ".odt"; break;
+                case COKitDocumentType::SPREADSHEET:  url += ".ods"; wopiFilename += ".ods"; break;
+                case COKitDocumentType::PRESENTATION: url += ".odp"; wopiFilename += ".odp"; break;
+                case COKitDocumentType::DRAWING:      url += ".odg"; wopiFilename += ".odg"; break;
+                default:                       retry = false; break;
+            }
+
+            if (retry)
+            {
+                LOG_DBG("Retry: calling COKit's saveAs with URL: ["
+                        << url << "], Format: [" << (format.empty() ? "(nullptr)" : format.c_str())
+                        << "], Filter Options: ["
+                        << (filterOptions.empty() ? "(nullptr)" : filterOptions.c_str()) << ']');
+
+                encodedURL = encodeUrl(url);
+                success = getLOKitDocument()->saveAs(
+                    encodedURL.c_str(), format.empty() ? nullptr : format.c_str(),
+                    filterOptions.empty() ? nullptr : filterOptions.c_str());
+            }
+        }
+
+        if (success)
+        {
+            // The thumbnails go next to the new file, at the path the saveas message names.
+            renderThumbnails(Poco::URI(encodedURL).getPath());
+
+            std::string encodedWopiFilename;
+            Poco::URI::encode(wopiFilename, "", encodedWopiFilename);
+            sendTextFrame("saveas: url=" + encodedURL + " filename=" + encodedWopiFilename);
+        }
+        else
+            sendTextFrameAndLogError("error: cmd=saveas kind=savefailed filename=" +
+                                     encodedTargetName);
+
+        return true;
     }
-    else if (!Util::isMobileApp() && !isFileUrlDirectlyIn(url, getJailDocRoot()))
+    catch (const std::exception& exc)
     {
-        // On a server any other target is a file directly in the document folder of the jail.
-        sendTextFrameAndLogError("error: cmd=saveas kind=syntax");
+        // The client waits for a result, so a failure that throws is reported like one the engine
+        // returns. The target name may be what failed, so the message leaves it out.
+        LOG_ERR("Save As failed: " << exc.what());
+        sendTextFrameAndLogError("error: cmd=saveas kind=savefailed");
         return false;
     }
-
-    if (tokens.size() > 2)
-        (void)getTokenString(tokens[2], "format", format);
-
-    if (tokens.size() > 3 && getTokenString(tokens[3], "options", filterOptions))
-    {
-        if (tokens.size() > 4)
-        {
-            // Syntax is options=<options>, and <options> may contain spaces, account for that.
-            filterOptions += " " + tokens.cat(' ', 4);
-        }
-    }
-
-    bool success = false;
-
-    if (filterOptions.empty() && format == "html")
-    {
-        // Opt-in to avoid linked images, those would not leave the chroot.
-        filterOptions = "EmbedImages";
-    }
-
-    // A document opened from a hybrid PDF stays hybrid when it is saved as PDF again, so the PDF
-    // keeps carrying the ODF document. The format comes from the file name when it is not given.
-    const std::string saveFormat =
-        format.empty() ? Util::toLower(Poco::Path(url).getExtension()) : format;
-    if (saveFormat == "pdf" && LOKitHelper::isHybridPDF(getLOKitDocument().get()))
-        addHybridPDFOption(filterOptions);
-
-    if (_docManager->isDocPasswordProtected() && _docManager->haveDocPassword())
-    {
-        if (_docManager->getDocPasswordType() == DocumentPasswordType::ToView)
-        {
-            filterOptions += std::string(",Password=") + _docManager->getDocPassword() +
-                             std::string("PASSWORDEND");
-        }
-        else
-        {
-            filterOptions += std::string(",PasswordToModify=") + _docManager->getDocPassword() +
-                             std::string("PASSWORDTOMODIFYEND");
-        }
-        // Password might have changed since load
-        setHaveDocPassword(true);
-        setDocPassword(_docManager->getDocPassword());
-    }
-
-    // We don't have the FileId at this point, just a new filename to save-as.
-    // So here the filename will be obfuscated with some hashing, which later will
-    // get a proper FileId that we will use going forward.
-    LOG_DBG("Calling COKit's saveAs with URL: ["
-            << anonymizeUrl(wopiFilename) << "], Format: ["
-            << (format.empty() ? "(nullptr)" : format.c_str()) << "], Filter Options: ["
-            << (filterOptions.empty() ? "(nullptr)" : filterOptions.c_str()) << ']');
-
-    getLOKitDocument()->setView(_viewId);
-
-    // The URL as the engine takes it, encoded here unless it came encoded.
-    const auto encodeUrl = [encodeURL](const std::string& text)
-    {
-        std::string encoded;
-        if (encodeURL)
-            Poco::URI::encode(text, "", encoded);
-        else
-            encoded = text;
-        return encoded;
-    };
-
-    std::string encodedURL = encodeUrl(url);
-
-    if (!Util::isMobileApp())
-        consistencyCheckJail();
-
-    // The desktop apps give no filename token, so a failure names the file from the URL.
-    std::string encodedTargetName;
-    const Poco::Path targetPath(FileUtil::localPathOfFileUri(wopiURL.getHost(), wopiURL.getPath()));
-    Poco::URI::encode(targetPath.getFileName(), "", encodedTargetName);
-
-    success = getLOKitDocument()->saveAs(encodedURL.c_str(),
-                                         format.empty() ? nullptr : format.c_str(),
-                                         filterOptions.empty() ? nullptr : filterOptions.c_str());
-
-    // A target without an extension gets the one of the document type and a second try. A
-    // target that has one failed for another reason, such as the user cancelling a question
-    // the save asked, and is not tried again.
-    if (!success && Poco::Path(url).getExtension().empty())
-    {
-        bool retry = true;
-        switch (getLOKitDocument()->getDocumentType())
-        {
-            case COKitDocumentType::TEXT:         url += ".odt"; wopiFilename += ".odt"; break;
-            case COKitDocumentType::SPREADSHEET:  url += ".ods"; wopiFilename += ".ods"; break;
-            case COKitDocumentType::PRESENTATION: url += ".odp"; wopiFilename += ".odp"; break;
-            case COKitDocumentType::DRAWING:      url += ".odg"; wopiFilename += ".odg"; break;
-            default:                       retry = false; break;
-        }
-
-        if (retry)
-        {
-            LOG_DBG("Retry: calling COKit's saveAs with URL: ["
-                    << url << "], Format: [" << (format.empty() ? "(nullptr)" : format.c_str())
-                    << "], Filter Options: ["
-                    << (filterOptions.empty() ? "(nullptr)" : filterOptions.c_str()) << ']');
-
-            encodedURL = encodeUrl(url);
-            success = getLOKitDocument()->saveAs(
-                encodedURL.c_str(), format.empty() ? nullptr : format.c_str(),
-                filterOptions.empty() ? nullptr : filterOptions.c_str());
-        }
-    }
-
-    if (success)
-    {
-        // The thumbnails go next to the new file, at the path the saveas message names.
-        renderThumbnails(Poco::URI(encodedURL).getPath());
-
-        std::string encodedWopiFilename;
-        Poco::URI::encode(wopiFilename, "", encodedWopiFilename);
-        sendTextFrame("saveas: url=" + encodedURL + " filename=" + encodedWopiFilename);
-    }
-    else
-        sendTextFrameAndLogError("error: cmd=saveas kind=savefailed filename=" +
-                                 encodedTargetName);
-
-    return true;
 }
 
 bool ChildSession::exportAs(const StringVector& tokens)
 {
-    std::string wopiFilename, url;
-
-    if (tokens.size() <= 1 ||
-        !getTokenString(tokens[1], "url", url))
+    try
     {
-        sendTextFrameAndLogError("error: cmd=exportas kind=syntax");
-        return false;
-    }
+        std::string wopiFilename, url;
 
-    Poco::URI wopiURL(url);
-    if (wopiURL.getScheme() == "wopi")
-    {
-        std::vector<std::string> pathSegments;
-        wopiURL.getPathSegments(pathSegments);
-
-        if (pathSegments.empty())
+        if (tokens.size() <= 1 ||
+            !getTokenString(tokens[1], "url", url))
         {
             sendTextFrameAndLogError("error: cmd=exportas kind=syntax");
             return false;
         }
 
-        wopiFilename = wopiURL.getPath();
-    }
-    else
-    {
-        sendTextFrameAndLogError("error: cmd=exportas kind=syntax");
-        return false;
-    }
-
-    // for PDF and EPUB show dialog with export options first
-    // when options will be chosen and file exported we will
-    // receive COKitCallbackType::EXPORT_FILE message
-    std::string extension = FileUtil::extractFileExtension(wopiFilename);
-
-    const bool isPDF = extension == "pdf";
-    const bool isEPUB = extension == "epub";
-
-    // We don't have the FileId at this point, just a new filename to save-as.
-    // So here the filename will be obfuscated with some hashing, which later will
-    // get a proper FileId that we will use going forward.
-    LOG_DBG("Calling COKit's exportAs with: [" << anonymizeUrl(wopiFilename) << ']');
-
-    getLOKitDocument()->setView(_viewId);
-
-    std::string encodedWopiFilename;
-    Poco::URI::encode(wopiFilename, "", encodedWopiFilename);
-
-    _exportAsWopiUrl = std::move(encodedWopiFilename);
-
-    if (isPDF || isEPUB)
-    {
-        Object::Ptr argumentsObj = new Object();
-        argumentsObj->set("SynchronMode", JsonUtil::makePropertyValue("boolean", false));
-
-        if (isPDF)
+        Poco::URI wopiURL(url);
+        if (wopiURL.getScheme() == "wopi")
         {
-            // Put the signing certificate from user private info on the view, so
-            // the export dialog offers its signature tab.
-            addSignatureArguments(argumentsObj);
+            std::vector<std::string> pathSegments;
+            wopiURL.getPathSegments(pathSegments);
+
+            if (pathSegments.empty())
+            {
+                sendTextFrameAndLogError("error: cmd=exportas kind=syntax");
+                return false;
+            }
+
+            wopiFilename = wopiURL.getPath();
+        }
+        else
+        {
+            sendTextFrameAndLogError("error: cmd=exportas kind=syntax");
+            return false;
         }
 
-        std::ostringstream oss;
-        argumentsObj->stringify(oss);
-        const std::string arguments = oss.str();
+        // for PDF and EPUB show dialog with export options first
+        // when options will be chosen and file exported we will
+        // receive COKitCallbackType::EXPORT_FILE message
+        std::string extension = FileUtil::extractFileExtension(wopiFilename);
 
-        if (isPDF)
-            getLOKitDocument()->postUnoCommand(".uno:ExportToPDF", arguments.c_str(), false);
-        else if (isEPUB)
-            getLOKitDocument()->postUnoCommand(".uno:ExportToEPUB", arguments.c_str(), false);
+        const bool isPDF = extension == "pdf";
+        const bool isEPUB = extension == "epub";
 
+        // We don't have the FileId at this point, just a new filename to save-as.
+        // So here the filename will be obfuscated with some hashing, which later will
+        // get a proper FileId that we will use going forward.
+        LOG_DBG("Calling COKit's exportAs with: [" << anonymizeUrl(wopiFilename) << ']');
+
+        getLOKitDocument()->setView(_viewId);
+
+        std::string encodedWopiFilename;
+        Poco::URI::encode(wopiFilename, "", encodedWopiFilename);
+
+        _exportAsWopiUrl = std::move(encodedWopiFilename);
+
+        if (isPDF || isEPUB)
+        {
+            Object::Ptr argumentsObj = new Object();
+            argumentsObj->set("SynchronMode", JsonUtil::makePropertyValue("boolean", false));
+
+            if (isPDF)
+            {
+                // Put the signing certificate from user private info on the view, so
+                // the export dialog offers its signature tab.
+                addSignatureArguments(argumentsObj);
+            }
+
+            std::ostringstream oss;
+            argumentsObj->stringify(oss);
+            const std::string arguments = oss.str();
+
+            if (isPDF)
+                getLOKitDocument()->postUnoCommand(".uno:ExportToPDF", arguments.c_str(), false);
+            else if (isEPUB)
+                getLOKitDocument()->postUnoCommand(".uno:ExportToEPUB", arguments.c_str(), false);
+
+            return true;
+        }
+
+        // For image export (triggered from the image context menu).
+        // SaveGraphic writes the image in its native format to /tmp/
+        // and fires COKitCallbackType::EXPORT_FILE. If no graphic is selected,
+        // the command is a no-op.
+        // NOTE: new document export formats must be handled above this,
+        // like PDF and EPUB.
+        getLOKitDocument()->postUnoCommand(".uno:SaveGraphic", nullptr, false);
         return true;
     }
-
-    // For image export (triggered from the image context menu).
-    // SaveGraphic writes the image in its native format to /tmp/
-    // and fires COKitCallbackType::EXPORT_FILE. If no graphic is selected,
-    // the command is a no-op.
-    // NOTE: new document export formats must be handled above this,
-    // like PDF and EPUB.
-    getLOKitDocument()->postUnoCommand(".uno:SaveGraphic", nullptr, false);
-    return true;
+    catch (const std::exception& exc)
+    {
+        // The client waits for a result, so a failure that throws is reported like a failed export.
+        LOG_ERR("Export failed: " << exc.what());
+        sendTextFrameAndLogError("error: cmd=exportas kind=saveasfailed");
+        return false;
+    }
 }
 
 bool ChildSession::setClientPart(const StringVector& tokens)
