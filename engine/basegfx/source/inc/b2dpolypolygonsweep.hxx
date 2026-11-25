@@ -46,6 +46,20 @@ enum class SweepOperation
 B2DPolyPolygon solvePolygonsBySweep(const B2DPolyPolygon& rFirst, SweepFillRule eFirstRule,
                                     const B2DPolyPolygon& rSecond, SweepFillRule eSecondRule,
                                     SweepOperation eOperation, size_t* pSplitLimit = nullptr);
+
+/** the parts of the lines rStroke inside the area rClip, filled by eClipRule, or with bInside
+    false the parts outside of it. A part on the border of rClip counts as inside when rClip is on
+    one side of it. A closed line stays closed when all of it is kept, else it gives open lines,
+    one per run, and a run over its start is one line. Curves stay curves
+
+    @param pSplitLimit
+    the most split points one round of cutting may find, set to 0 when there are more or a
+    coordinate does not fit the grid; the result is then empty for inside and rStroke for
+    outside
+*/
+B2DPolyPolygon clipStrokeBySweep(const B2DPolyPolygon& rStroke, const B2DPolyPolygon& rClip,
+                                 SweepFillRule eClipRule, bool bInside,
+                                 size_t* pSplitLimit = nullptr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

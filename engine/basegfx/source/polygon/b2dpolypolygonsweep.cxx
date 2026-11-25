@@ -929,6 +929,46 @@ bool crossByBisection(const B2DCubicBezier& rA, double fStartS, double fEndS,
     return bFound;
 }
 
+// the winding of the curves of rCurves from nFirst on at rPoint, with the sign of the sweep: their
+// crossings with the ray from rPoint to smaller x, one more for each that runs to growing y. A
+// piece left of rPoint as a whole counts by its ends, so we halve only the pieces around rPoint
+int getWindingAt(const std::vector<std::vector<B2DCubicBezier>>& rCurves, size_t nFirst,
+                 const B2DPoint& rPoint, double fEpsilon)
+{
+    int nWinding(0);
+    std::vector<B2DCubicBezier> aStack;
+    for (size_t a = nFirst; a < rCurves.size(); a++)
+        for (const B2DCubicBezier& rCurve : rCurves[a])
+        {
+            aStack.assign(1, rCurve);
+            while (!aStack.empty())
+            {
+                const B2DCubicBezier aPiece(aStack.back());
+                aStack.pop_back();
+                const B2DRange aBox(getControlBox(aPiece));
+                if (aBox.getMinY() > rPoint.getY() || aBox.getMaxY() < rPoint.getY()
+                    || aBox.getMinX() >= rPoint.getX())
+                    continue;
+                if (aBox.getMaxX() < rPoint.getX()
+                    || std::max(aBox.getWidth(), aBox.getHeight()) <= fEpsilon)
+                {
+                    const double fStartY(aPiece.getStartPoint().getY());
+                    const double fEndY(aPiece.getEndPoint().getY());
+                    if (fStartY <= rPoint.getY() && rPoint.getY() < fEndY)
+                        nWinding++;
+                    else if (fEndY <= rPoint.getY() && rPoint.getY() < fStartY)
+                        nWinding--;
+                    continue;
+                }
+                B2DCubicBezier aFirst, aSecond;
+                aPiece.split(0.5, &aFirst, &aSecond);
+                aStack.push_back(aFirst);
+                aStack.push_back(aSecond);
+            }
+        }
+    return nWinding;
+}
+
 // the flat points of one polygon: segment and parameter of each
 struct FlatPolygon
 {
@@ -971,13 +1011,22 @@ struct CutReference
 };
 
 // the polygons of the first operand come first in rCandidate, nFirstCount of them; an empty
-// optional means the result is too expensive
+// optional means the result is too expensive. With bStroke the first operand are lines: they
+// have no winding, and And keeps the parts of them inside the second operand, Diff the others
 std::optional<B2DPolyPolygon> solve(const B2DPolyPolygon& rCandidate, sal_uInt32 nFirstCount,
                                     utils::SweepFillRule eFirstRule,
                                     utils::SweepFillRule eSecondRule,
-                                    utils::SweepOperation eOperation, size_t nSplitLimit)
+                                    utils::SweepOperation eOperation, size_t nSplitLimit,
+                                    bool bStroke = false)
 {
     const bool bFill(eOperation == utils::SweepOperation::Fill);
+    auto isInsideSecond = [&](const Winding& rWinding)
+    {
+        return eSecondRule == utils::SweepFillRule::Nonzero ? rWinding.mnSecond != 0
+                                                            : (rWinding.mnSecond & 1) != 0;
+    };
+    auto isKeptLine = [&](bool bInsideSecond)
+    { return bInsideSecond == (eOperation == utils::SweepOperation::And); };
     auto isInside = [&](const Winding& rWinding)
     {
         const bool bFirst(eFirstRule == utils::SweepFillRule::Nonzero
@@ -1054,7 +1103,11 @@ std::optional<B2DPolyPolygon> solve(const B2DPolyPolygon& rCandidate, sal_uInt32
         const B2DPolygon& rPolygon(aOriginals[a]);
         FlatPolygon& rFlat(aFlats[a]);
         aPoints.clear();
-        for (sal_uInt32 nSegment(0); nSegment < rPolygon.count(); nSegment++)
+        // an open line has no segment back to its start
+        const bool bOpenLine(bStroke && a < nFirstCount && !rPolygon.isClosed());
+        const sal_uInt32 nSegments(bOpenLine && rPolygon.count() ? rPolygon.count() - 1
+                                                                 : rPolygon.count());
+        for (sal_uInt32 nSegment(0); nSegment < nSegments; nSegment++)
         {
             aPoints.push_back(rPolygon.getB2DPoint(nSegment));
             rFlat.maParameters.push_back(0.0);
@@ -1069,6 +1122,12 @@ std::optional<B2DPolyPolygon> solve(const B2DPolyPolygon& rCandidate, sal_uInt32
             rFlat.maParameters.pop_back();
             rFlat.maSegments.resize(aPoints.size(), nSegment);
         }
+        if (bOpenLine && nSegments)
+        {
+            aPoints.push_back(rPolygon.getB2DPoint(nSegments));
+            rFlat.maParameters.push_back(0.0);
+            rFlat.maSegments.push_back(nSegments);
+        }
         B2DPolygon aFlat;
         aFlat.reserve(aPoints.size());
         aGrid.clear();
@@ -1080,9 +1139,11 @@ std::optional<B2DPolyPolygon> solve(const B2DPolyPolygon& rCandidate, sal_uInt32
             aGrid.push_back(aGridPoint);
         }
         aFlattened.push_back(aFlat);
+        // lines have no winding
         Winding aOne;
-        (a < nFirstCount ? aOne.mnFirst : aOne.mnSecond) = 1;
-        for (size_t b = 0; b < aGrid.size(); b++)
+        if (!(bStroke && a < nFirstCount))
+            (a < nFirstCount ? aOne.mnFirst : aOne.mnSecond) = 1;
+        for (size_t b = 0; b + (bOpenLine ? 1 : 0) < aGrid.size(); b++)
         {
             const size_t nNext((b + 1) % aGrid.size());
             // the last flat edge of a segment ends at t = 1
@@ -1172,7 +1233,11 @@ std::optional<B2DPolyPolygon> solve(const B2DPolyPolygon& rCandidate, sal_uInt32
             }
     }
 
-    // pass 2: merge pieces on top of each other, the merged one keeps the origin of the first
+    // pass 2: merge pieces on top of each other, the merged one keeps the origin of the first.
+    // Line pieces stay as they are and come last, from nFirstLine on; one on top of an area piece
+    // has that piece in aOnArea, all others -1
+    size_t nFirstLine(0);
+    std::vector<int> aOnArea;
     {
         struct KeyHash
         {
@@ -1182,9 +1247,14 @@ std::optional<B2DPolyPolygon> solve(const B2DPolyPolygon& rCandidate, sal_uInt32
             }
         };
         std::unordered_map<std::pair<GridPoint, GridPoint>, size_t, KeyHash> aIndex;
-        std::vector<Edge> aMerged;
+        std::vector<Edge> aMerged, aLines;
         for (const Edge& rEdge : aEdges)
         {
+            if (bStroke && rEdge.maOrigin.mnPolygon < sal_Int32(nFirstCount))
+            {
+                aLines.push_back(rEdge);
+                continue;
+            }
             const auto [it, bNew]
                 = aIndex.try_emplace({ rEdge.maFirst, rEdge.maSecond }, aMerged.size());
             if (bNew)
@@ -1193,20 +1263,35 @@ std::optional<B2DPolyPolygon> solve(const B2DPolyPolygon& rCandidate, sal_uInt32
                 aMerged[it->second].maDelta = aMerged[it->second].maDelta + rEdge.maDelta;
         }
         aEdges.clear();
+        aIndex.clear();
         for (const Edge& rEdge : aMerged)
             if (!rEdge.maDelta.isZero() || isHorizontal(rEdge))
+            {
+                aIndex.try_emplace({ rEdge.maFirst, rEdge.maSecond }, aEdges.size());
                 aEdges.push_back(rEdge);
+            }
+        nFirstLine = aEdges.size();
+        aOnArea.assign(nFirstLine, -1);
+        for (const Edge& rEdge : aLines)
+        {
+            const auto it(aIndex.find({ rEdge.maFirst, rEdge.maSecond }));
+            aOnArea.push_back(it == aIndex.end() ? -1 : int(it->second));
+            aEdges.push_back(rEdge);
+        }
     }
 
     std::vector<int64_t> aYs;
     std::vector<int> aSloped, aHorizontal;
     for (size_t a = 0; a < aEdges.size(); a++)
     {
+        // a line piece on an area piece gets the windings of that one
+        if (aOnArea[a] >= 0)
+            continue;
         aYs.push_back(aEdges[a].maFirst.mnY);
         aYs.push_back(aEdges[a].maSecond.mnY);
         (isHorizontal(aEdges[a]) ? aHorizontal : aSloped).push_back(int(a));
     }
-    if (aSloped.empty())
+    if (aSloped.empty() && !bStroke)
         return bFill ? rCandidate : B2DPolyPolygon();
     std::sort(aYs.begin(), aYs.end());
     aYs.erase(std::unique(aYs.begin(), aYs.end()), aYs.end());
@@ -1216,6 +1301,8 @@ std::optional<B2DPolyPolygon> solve(const B2DPolyPolygon& rCandidate, sal_uInt32
               { return aEdges[nLeft].maFirst < aEdges[nRight].maFirst; });
 
     std::vector<Border> aBorders;
+    // per piece: the second operand is inside on at least one side
+    std::vector<bool> aTouchesSecond(aEdges.size(), false);
     // for a nonzero fill the input is fine already when no winding is even and not zero
     bool bNeedsChange(!bFill || eFirstRule == utils::SweepFillRule::EvenOdd);
     auto isEvenNotZero = [](int nWinding) { return nWinding != 0 && nWinding % 2 == 0; };
@@ -1266,6 +1353,7 @@ std::optional<B2DPolyPolygon> solve(const B2DPolyPolygon& rCandidate, sal_uInt32
                                                       : aWindingRight[aActive.edge(std::prev(it))]);
             const Winding aRight(aLeft + rEdge.maDelta);
             aWindingRight[nEdge] = aRight;
+            aTouchesSecond[nEdge] = isInsideSecond(aLeft) || isInsideSecond(aRight);
             bNeedsChange |= isEvenNotZero(aLeft.mnFirst) || isEvenNotZero(aRight.mnFirst);
             const bool bLeftInside(isInside(aLeft));
             if (bLeftInside != isInside(aRight))
@@ -1283,6 +1371,7 @@ std::optional<B2DPolyPolygon> solve(const B2DPolyPolygon& rCandidate, sal_uInt32
             const Edge& rEdge(aEdges[aHorizontal[a]]);
             const Winding aAbove(aAboveOfHorizontal[a - nHorizontalBegin]);
             const Winding aBelow(getWindingLeftOf(rEdge));
+            aTouchesSecond[aHorizontal[a]] = isInsideSecond(aBelow) || isInsideSecond(aAbove);
             bNeedsChange |= isEvenNotZero(aBelow.mnFirst) || isEvenNotZero(aAbove.mnFirst);
             const bool bBelowInside(isInside(aBelow));
             if (bBelowInside != isInside(aAbove))
@@ -1300,8 +1389,49 @@ std::optional<B2DPolyPolygon> solve(const B2DPolyPolygon& rCandidate, sal_uInt32
     if (!bNeedsChange)
         return rCandidate;
 
-    // pass 3: the border parts, each once, turned so that the inside is on the left
+    auto getPart = [&](const Edge& rEdge)
+    {
+        const std::vector<Cut>& rCuts(aCuts[rEdge.maOrigin.mnPolygon][rEdge.maOrigin.mnSegment]);
+        const double fMiddleT(0.5 * (rEdge.mfFirstT + rEdge.mfSecondT));
+        return std::clamp(
+            int(std::upper_bound(rCuts.begin(), rCuts.end(), fMiddleT,
+                                 [](double fT, const Cut& rCut) { return fT < rCut.mfT; })
+                - rCuts.begin())
+                - 1,
+            0, int(rCuts.size()) - 2);
+    };
+
+    // pass 3: the border parts, each once, turned so that the inside is on the left; for lines
+    // the parts that are kept, forward
     std::vector<Part> aParts;
+    std::map<std::tuple<sal_Int32, sal_uInt32, int>, bool> aLineParts;
+    if (bStroke)
+    {
+        int nConflicts(0);
+        for (size_t a = nFirstLine; a < aEdges.size(); a++)
+        {
+            const Edge& rEdge(aEdges[a]);
+            // on an area border we keep the line for inside when the area is on one side of it
+            const bool bInsideSecond(aOnArea[a] >= 0 ? aTouchesSecond[aOnArea[a]]
+                                                     : aTouchesSecond[a]);
+            const auto [it, bNew] = aLineParts.try_emplace(
+                { rEdge.maOrigin.mnPolygon, rEdge.maOrigin.mnSegment, getPart(rEdge) },
+                isKeptLine(bInsideSecond));
+            if (!bNew && it->second != isKeptLine(bInsideSecond))
+                nConflicts++;
+        }
+        SAL_WARN_IF(nConflicts, "basegfx", nConflicts << " line parts are inside and outside");
+        for (const auto& [rKey, bKept] : aLineParts)
+        {
+            if (!bKept)
+                continue;
+            const auto [nPolygon, nSegment, nPart] = rKey;
+            const std::vector<Cut>& rCuts(aCuts[nPolygon][nSegment]);
+            aParts.push_back(Part{ nPolygon, nSegment, nPart, true, rCuts[nPart].maVertex,
+                                   rCuts[nPart + 1].maVertex });
+        }
+    }
+    else
     {
         std::map<std::tuple<sal_Int32, sal_uInt32, int>, size_t> aPartIndex;
         int nDirectionConflicts(0);
@@ -1310,13 +1440,7 @@ std::optional<B2DPolyPolygon> solve(const B2DPolyPolygon& rCandidate, sal_uInt32
             const Edge& rEdge(aEdges[rBorder.mnEdge]);
             const std::vector<Cut>& rCuts(
                 aCuts[rEdge.maOrigin.mnPolygon][rEdge.maOrigin.mnSegment]);
-            const double fMiddleT(0.5 * (rEdge.mfFirstT + rEdge.mfSecondT));
-            const int nPart(std::clamp(
-                int(std::upper_bound(rCuts.begin(), rCuts.end(), fMiddleT,
-                                     [](double fT, const Cut& rCut) { return fT < rCut.mfT; })
-                    - rCuts.begin())
-                    - 1,
-                0, int(rCuts.size()) - 2));
+            const int nPart(getPart(rEdge));
             const bool bFromFirst(rBorder.maFrom == rEdge.maFirst);
             const bool bForward(bFromFirst ? rEdge.mfSecondT > rEdge.mfFirstT
                                            : rEdge.mfFirstT > rEdge.mfSecondT);
@@ -1427,6 +1551,67 @@ std::optional<B2DPolyPolygon> solve(const B2DPolyPolygon& rCandidate, sal_uInt32
                            != aCuts[rReference.mnPolygon][rReference.mnSegment].size()
                     && !isFlatPoint(rReference, rVertex))
                     aOpen.push_back(&rReference);
+            if (bStroke)
+            {
+                // a line gets cut where its true curve crosses an area segment through the
+                // vertex, also at an input point of the area; lines need no shared point
+                for (const CutReference& rLine : rReferences)
+                {
+                    const size_t nCuts(aCuts[rLine.mnPolygon][rLine.mnSegment].size());
+                    if (rLine.mnPolygon >= sal_Int32(nFirstCount) || rLine.mnIndex == 0
+                        || rLine.mnIndex + 1 == nCuts)
+                        continue;
+                    const B2DCubicBezier& rCurveA(aCurves[rLine.mnPolygon][rLine.mnSegment]);
+                    double fBestDistance(1e-3 * fExtent), fBestS(-1.0);
+                    for (const CutReference& rArea : rReferences)
+                    {
+                        if (rArea.mnPolygon < sal_Int32(nFirstCount))
+                            continue;
+                        const B2DCubicBezier& rCurveB(aCurves[rArea.mnPolygon][rArea.mnSegment]);
+                        double fStartS, fEndS, fStartU, fEndU, fS, fU;
+                        getFlatInterval(rLine.mnPolygon, rLine.mnSegment, getT(rLine), fStartS,
+                                        fEndS);
+                        getFlatInterval(rArea.mnPolygon, rArea.mnSegment, getT(rArea), fStartU,
+                                        fEndU);
+                        if (!crossByBisection(rCurveA, fStartS, fEndS, rCurveB, fStartU, fEndU,
+                                              aPoint, fEpsilon, fS, fU))
+                            continue;
+                        double fNewtonS(fS), fNewtonU(fU);
+                        if (findCrossingByNewton(rCurveA, fNewtonS, rCurveB, fNewtonU,
+                                                 1e-12 * fExtent)
+                            && B2DVector(getPointAt(rCurveA, fNewtonS) - getPointAt(rCurveA, fS))
+                                       .getLength()
+                                   <= 10.0 * fEpsilon)
+                        {
+                            fS = fNewtonS;
+                            fU = fNewtonU;
+                        }
+                        const B2DPoint aCrossing(getPointAt(rCurveA, fS));
+                        const double fDistance(B2DVector(aCrossing - aPoint).getLength());
+                        if (B2DVector(aCrossing - getPointAt(rCurveB, fU)).getLength()
+                                <= 4.0 * fEpsilon
+                            && fDistance <= fBestDistance && fits(rLine, fS))
+                        {
+                            fBestDistance = fDistance;
+                            fBestS = fS;
+                        }
+                    }
+                    if (fBestS >= 0.0)
+                        getT(rLine) = fBestS;
+                    else if (!isFlatPoint(rLine, rVertex))
+                    {
+                        double fStartT, fEndT;
+                        getFlatInterval(rLine.mnPolygon, rLine.mnSegment, getT(rLine), fStartT,
+                                        fEndT);
+                        const double fT(
+                            projectByBisection(rCurveA, fStartT, fEndT, aPoint, fEpsilon));
+                        if (fits(rLine, fT))
+                            getT(rLine) = fT;
+                    }
+                }
+                aVertexPoints[rVertex] = aPoint;
+                continue;
+            }
             if (pEnd)
             {
                 const B2DCubicBezier& rEndCurve(aCurves[pEnd->mnPolygon][pEnd->mnSegment]);
@@ -1500,6 +1685,51 @@ std::optional<B2DPolyPolygon> solve(const B2DPolyPolygon& rCandidate, sal_uInt32
     int nDeadEnds(0);
     std::vector<std::pair<B2DPoint, B2DPoint>> aControls;
     std::vector<sal_uInt32> aCurveAt;
+    // the run from part rFirst to part rLast of one segment, cut out of it, starting at the
+    // point of rFirst; the control points get set once the polygon has all its points
+    // a line keeps its own points, at a cut too
+    auto getLinePoint = [&](const Part& rPart, double fT)
+    {
+        const B2DCubicBezier& rSegment(aCurves[rPart.mnPolygon][rPart.mnSegment]);
+        return fT == 0.0 ? rSegment.getStartPoint()
+                         : (fT == 1.0 ? rSegment.getEndPoint() : getPointAt(rSegment, fT));
+    };
+    auto appendRun = [&](B2DPolygon& rPolygon, const Part& rFirst, const Part& rLast)
+    {
+        const std::vector<Cut>& rCuts(aCuts[rFirst.mnPolygon][rFirst.mnSegment]);
+        const double fStartT(rCuts[rFirst.mnPart + (rFirst.mbForward ? 0 : 1)].mfT);
+        const double fEndT(rCuts[rLast.mnPart + (rLast.mbForward ? 1 : 0)].mfT);
+        const B2DPoint aStartPoint(bStroke ? getLinePoint(rFirst, fStartT)
+                                           : aVertexPoints[rFirst.maFrom]);
+        const B2DPoint aEndPoint(bStroke ? getLinePoint(rLast, fEndT) : aVertexPoints[rLast.maTo]);
+        rPolygon.append(aStartPoint);
+        const B2DCubicBezier& rSegment(aCurves[rFirst.mnPolygon][rFirst.mnSegment]);
+        if (rSegment.isBezier())
+        {
+            const bool bReverse(fStartT > fEndT);
+            const double fLowT(std::min(fStartT, fEndT)), fHighT(std::max(fStartT, fEndT));
+            const B2DCubicBezier aPart(
+                fLowT == 0.0 && fHighT == 1.0 ? rSegment : rSegment.snippet(fLowT, fHighT));
+            B2DPoint aControlA(bReverse ? aPart.getControlPointB() : aPart.getControlPointA());
+            B2DPoint aControlB(bReverse ? aPart.getControlPointA() : aPart.getControlPointB());
+            // the part ends where the next run begins, its control points move along
+            aControlA += aStartPoint - (bReverse ? aPart.getEndPoint() : aPart.getStartPoint());
+            aControlB += aEndPoint - (bReverse ? aPart.getStartPoint() : aPart.getEndPoint());
+            aControls.emplace_back(aControlA, aControlB);
+            aCurveAt.push_back(rPolygon.count() - 1);
+        }
+    };
+    auto setControls = [&](B2DPolygon& rPolygon)
+    {
+        const sal_uInt32 nCount(rPolygon.count());
+        for (size_t b = 0; b < aCurveAt.size(); b++)
+        {
+            rPolygon.setNextControlPoint(aCurveAt[b], aControls[b].first);
+            rPolygon.setPrevControlPoint((aCurveAt[b] + 1) % nCount, aControls[b].second);
+        }
+        aControls.clear();
+        aCurveAt.clear();
+    };
     // where a loop starts and its place in the result: the input point with the lowest polygon
     // and point index, so a loop nothing cut starts where its input did; a loop with no input
     // point goes after those, by the place of its first cut on the input
@@ -1537,49 +1767,119 @@ std::optional<B2DPolyPolygon> solve(const B2DPolyPolygon& rCandidate, sal_uInt32
             aKey = getKey(aParts[rLoop[0]]);
         }
         B2DPolygon aPolygon;
-        // control points get set once the polygon has all its points
-        aControls.clear();
-        aCurveAt.clear();
         for (size_t b = 0; b < nLength;)
         {
-            const Part& rFirst(aParts[rLoop[(nFirst + b) % nLength]]);
             size_t c(b + 1);
             while (c < nLength
                    && continues(rLoop[(nFirst + c - 1) % nLength], rLoop[(nFirst + c) % nLength]))
                 c++;
-            const Part& rLast(aParts[rLoop[(nFirst + c - 1) % nLength]]);
-            const std::vector<Cut>& rCuts(aCuts[rFirst.mnPolygon][rFirst.mnSegment]);
-            const double fStartT(rCuts[rFirst.mnPart + (rFirst.mbForward ? 0 : 1)].mfT);
-            const double fEndT(rCuts[rLast.mnPart + (rLast.mbForward ? 1 : 0)].mfT);
-            const B2DPoint aStartPoint(aVertexPoints[rFirst.maFrom]);
-            const B2DPoint aEndPoint(aVertexPoints[rLast.maTo]);
-            aPolygon.append(aStartPoint);
-            const B2DCubicBezier& rSegment(aCurves[rFirst.mnPolygon][rFirst.mnSegment]);
-            if (rSegment.isBezier())
-            {
-                const bool bReverse(fStartT > fEndT);
-                const double fLowT(std::min(fStartT, fEndT)), fHighT(std::max(fStartT, fEndT));
-                const B2DCubicBezier aPart(
-                    fLowT == 0.0 && fHighT == 1.0 ? rSegment : rSegment.snippet(fLowT, fHighT));
-                B2DPoint aControlA(bReverse ? aPart.getControlPointB() : aPart.getControlPointA());
-                B2DPoint aControlB(bReverse ? aPart.getControlPointA() : aPart.getControlPointB());
-                // the part ends where the next run begins, its control points move along
-                aControlA += aStartPoint - (bReverse ? aPart.getEndPoint() : aPart.getStartPoint());
-                aControlB += aEndPoint - (bReverse ? aPart.getStartPoint() : aPart.getEndPoint());
-                aControls.emplace_back(aControlA, aControlB);
-                aCurveAt.push_back(aPolygon.count() - 1);
-            }
+            appendRun(aPolygon, aParts[rLoop[(nFirst + b) % nLength]],
+                      aParts[rLoop[(nFirst + c - 1) % nLength]]);
             b = c;
         }
-        const sal_uInt32 nCount(aPolygon.count());
-        for (size_t b = 0; b < aCurveAt.size(); b++)
-        {
-            aPolygon.setNextControlPoint(aCurveAt[b], aControls[b].first);
-            aPolygon.setPrevControlPoint((aCurveAt[b] + 1) % nCount, aControls[b].second);
-        }
+        setControls(aPolygon);
         aPolygon.setClosed(true);
         aLoops.emplace_back(aKey, aPolygon);
     };
+    if (bStroke)
+    {
+        std::map<std::tuple<sal_Int32, sal_uInt32, int>, int> aKeptIndex;
+        for (size_t a = 0; a < aParts.size(); a++)
+            aKeptIndex.emplace(
+                std::make_tuple(aParts[a].mnPolygon, aParts[a].mnSegment, aParts[a].mnPart),
+                int(a));
+        // per part of a line in its order: the index in aParts when kept, -1 when not
+        std::vector<int> aSequence;
+        std::vector<int> aState;
+        std::vector<std::vector<size_t>> aRuns;
+        for (sal_uInt32 a(0); a < nFirstCount; a++)
+        {
+            const B2DPolygon& rPolygon(aOriginals[a]);
+            const bool bClosed(rPolygon.isClosed());
+            const sal_uInt32 nSegments(bClosed || !rPolygon.count() ? rPolygon.count()
+                                                                    : rPolygon.count() - 1);
+            aSequence.clear();
+            aState.clear();
+            for (sal_uInt32 b(0); b < nSegments; b++)
+                for (int c = 0; c + 1 < int(aCuts[a][b].size()); c++)
+                {
+                    const auto itLine(aLineParts.find({ sal_Int32(a), b, c }));
+                    const auto itKept(aKeptIndex.find({ sal_Int32(a), b, c }));
+                    aSequence.push_back(itKept == aKeptIndex.end() ? -1 : itKept->second);
+                    // 1 kept, 0 not, -1 a part without any piece, of no length
+                    aState.push_back(itLine == aLineParts.end() ? -1 : (itLine->second ? 1 : 0));
+                }
+            const auto itKnown(
+                std::find_if(aState.begin(), aState.end(), [](int nState) { return nState >= 0; }));
+            if (itKnown == aState.end())
+            {
+                // no part has a length, the clip at its point decides for all of the line
+                if (nSegments
+                    && isKeptLine(isInsideSecond(Winding{
+                           0, getWindingAt(aCurves, nFirstCount, rPolygon.getB2DPoint(0),
+                                           1e-7 * fExtent) })))
+                    aRetval.append(rPolygon);
+                continue;
+            }
+            // a part of no length goes with the part before it
+            int nPrevious(*itKnown);
+            if (bClosed)
+                for (int nState : aState)
+                    if (nState >= 0)
+                        nPrevious = nState;
+            for (int& rState : aState)
+                rState = rState >= 0 ? (nPrevious = rState) : nPrevious;
+            if (std::all_of(aState.begin(), aState.end(), [](int nState) { return nState == 1; }))
+            {
+                aRetval.append(rPolygon);
+                continue;
+            }
+
+            // runs of kept parts, a part of no length adds nothing
+            aRuns.clear();
+            bool bInRun(false);
+            for (size_t b = 0; b < aState.size(); b++)
+            {
+                if (aState[b] == 0)
+                {
+                    bInRun = false;
+                    continue;
+                }
+                if (!bInRun)
+                    aRuns.emplace_back();
+                bInRun = true;
+                if (aSequence[b] >= 0)
+                    aRuns.back().push_back(b);
+            }
+            // a closed line runs on over its start
+            if (bClosed && aRuns.size() > 1 && aState.front() == 1 && aState.back() == 1)
+            {
+                aRuns.back().insert(aRuns.back().end(), aRuns.front().begin(), aRuns.front().end());
+                aRuns.erase(aRuns.begin());
+            }
+            for (const std::vector<size_t>& rRun : aRuns)
+            {
+                if (rRun.empty())
+                    continue;
+                B2DPolygon aPolygon;
+                for (size_t b = 0; b < rRun.size();)
+                {
+                    size_t c(b + 1);
+                    while (c < rRun.size() && continues(aSequence[rRun[c - 1]], aSequence[rRun[c]]))
+                        c++;
+                    appendRun(aPolygon, aParts[aSequence[rRun[b]]], aParts[aSequence[rRun[c - 1]]]);
+                    b = c;
+                }
+                const Part& rLastPart(aParts[aSequence[rRun.back()]]);
+                aPolygon.append(getLinePoint(
+                    rLastPart,
+                    aCuts[rLastPart.mnPolygon][rLastPart.mnSegment][rLastPart.mnPart + 1].mfT));
+                setControls(aPolygon);
+                aRetval.append(aPolygon);
+            }
+        }
+        return aRetval;
+    }
     std::vector<int> aLoop, aPending;
     std::unordered_map<GridPoint, size_t, GridPointHash> aIndexOfVertex;
     for (size_t a = 0; a < aParts.size(); a++)
@@ -1675,6 +1975,31 @@ B2DPolyPolygon solvePolygonsBySweep(const B2DPolyPolygon& rFirst, SweepFillRule 
             return rFirst;
     }
     return rFirst;
+}
+
+B2DPolyPolygon clipStrokeBySweep(const B2DPolyPolygon& rStroke, const B2DPolyPolygon& rClip,
+                                 SweepFillRule eClipRule, bool bInside, size_t* pSplitLimit)
+{
+    if (!rStroke.count())
+        return B2DPolyPolygon();
+    // without overlap all of the lines is outside
+    if (!rClip.count() || !rStroke.getB2DRange().overlaps(rClip.getB2DRange()))
+        return bInside ? B2DPolyPolygon() : rStroke;
+
+    B2DPolyPolygon aCandidate(rStroke);
+    aCandidate.append(rClip);
+    std::optional<B2DPolyPolygon> oResult(
+        solve(aCandidate, rStroke.count(), SweepFillRule::EvenOdd, eClipRule,
+              bInside ? SweepOperation::And : SweepOperation::Diff,
+              pSplitLimit ? *pSplitLimit : nDefaultSplitLimit, true));
+    if (oResult)
+        return *oResult;
+
+    if (pSplitLimit)
+        *pSplitLimit = 0;
+    SAL_WARN("basegfx", "the lines cross the clip too often to be solved in time, or a coordinate "
+                        "does not fit");
+    return bInside ? B2DPolyPolygon() : rStroke;
 }
 }
 

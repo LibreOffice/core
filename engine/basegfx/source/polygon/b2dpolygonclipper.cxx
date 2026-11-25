@@ -342,69 +342,9 @@ namespace basegfx::utils
                 // against PolyPolygon...
                 if(bStroke)
                 {
-                    // line clipping, create line snippets by first adding all cut points and
-                    // then marching along the edges and detecting if they are inside or outside
-                    // the clip polygon
-                    for(const auto& rPolygon : rCandidate)
-                    {
-                        // add cuts with clip to polygon, including bezier segments
-                        const B2DPolygon aCandidate(addPointsAtCuts(rPolygon, rClip));
-                        const sal_uInt32 nPointCount(aCandidate.count());
-                        const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount : nPointCount - 1);
-                        B2DCubicBezier aEdge;
-                        B2DPolygon aRun;
-
-                        for(sal_uInt32 b(0); b < nEdgeCount; b++)
-                        {
-                            aCandidate.getBezierSegment(b, aEdge);
-                            const B2DPoint aTestPoint(aEdge.interpolatePoint(0.5));
-                            const bool bIsInside(utils::isInside(rClip, aTestPoint) == bInside);
-
-                            if(bIsInside)
-                            {
-                                if(!aRun.count())
-                                {
-                                    aRun.append(aEdge.getStartPoint());
-                                }
-
-                                if(aEdge.isBezier())
-                                {
-                                    aRun.appendBezierSegment(aEdge.getControlPointA(), aEdge.getControlPointB(), aEdge.getEndPoint());
-                                }
-                                else
-                                {
-                                    aRun.append(aEdge.getEndPoint());
-                                }
-                            }
-                            else
-                            {
-                                if(aRun.count())
-                                {
-                                    aRetval.append(aRun);
-                                    aRun.clear();
-                                }
-                            }
-                        }
-
-                        if(aRun.count())
-                        {
-                            // try to merge this last and first polygon; they may have been
-                            // the former polygon's start/end point
-                            if(aRetval.count())
-                            {
-                                const B2DPolygon aStartPolygon(aRetval.getB2DPolygon(0));
-
-                                if(aStartPolygon.count() && aStartPolygon.getB2DPoint(0).equal(aRun.getB2DPoint(aRun.count() - 1)))
-                                {
-                                    // append start polygon to aRun, remove from result set
-                                    aRun.append(aStartPolygon); aRun.removeDoublePoints();
-                                    aRetval.remove(0);
-                                }
-                            }
-
-                            aRetval.append(aRun);
-                        }
-                    }
+                    // line clipping, the lines are cut where they cross the clip border
+                    aRetval = clipStrokeBySweep(rCandidate, rClip, SweepFillRule::EvenOdd, bInside,
+                                                pPointLimit);
                 }
                 else
                 {
