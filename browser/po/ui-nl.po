@@ -8,16 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 12:57+0100\n"
-"PO-Revision-Date: 2026-11-12 07:46+0000\n"
-"Last-Translator: Sebastiaan Veld <notify@virtfields.nl>\n"
+"PO-Revision-Date: 2026-11-22 15:54+0000\n"
+"Last-Translator: Stephan Paternotte <stephan-"
+"p@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/nl/>\n"
-"Language: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.11.2.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -448,11 +449,10 @@ msgstr ""
 
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:107
-#, fuzzy
 msgid "No WOPI host configured: trusting the first host that connects"
 msgstr ""
 "Geen WOPI-host geconfigureerd: vertrouwen op de eerste host die verbinding "
-"maakte"
+"maakt"
 
 #: admin/src/AdminSocketServerAudit.js:53
 #: src/control/Control.ServerAuditDialog.ts:113
@@ -460,6 +460,8 @@ msgid ""
 "No WOPI host is allowed: alias_groups mode is \"groups\" but no group is "
 "defined"
 msgstr ""
+"Geen WOPI-host toegestaan: alias_groups modus is \"groups\" maar er is geen "
+"groep gedefinieerd"
 
 #: admin/src/AdminSocketServerAudit.js:58
 #: src/control/Control.ServerAuditDialog.ts:129
@@ -1722,15 +1724,14 @@ msgstr "EPUB (.epub)"
 
 #: src/app/ExportFormats.ts:65 src/control/Control.Menubar.ts:144
 #: src/control/Control.NotebookbarBuilder.js:453
-#, fuzzy
 msgid "ODF master document (.odm)"
-msgstr "ODF tekstdocument (.odt)"
+msgstr "ODF-ontwerpdocument (.odm)"
 
 #: src/app/ExportFormats.ts:66 src/app/ExportFormats.ts:78
 #: src/control/Control.Menubar.ts:145
 #: src/control/Control.NotebookbarBuilder.js:434
 msgid "ODF text document (.odt)"
-msgstr "ODF tekstdocument (.odt)"
+msgstr "ODF-tekstdocument (.odt)"
 
 #: src/app/ExportFormats.ts:67 src/app/ExportFormats.ts:79
 #: src/control/Control.Menubar.ts:146
@@ -1795,7 +1796,7 @@ msgstr "PowerPoint presentatie (.pptx)"
 
 #: src/app/ExportFormats.ts:103 src/app/ExportFormats.ts:135
 msgid "ODF Drawing (.odg)"
-msgstr "ODF tekening (.odg)"
+msgstr "ODF-tekening (.odg)"
 
 #: src/app/ExportFormats.ts:104
 msgid "HTML Document (.html)"
@@ -1827,113 +1828,111 @@ msgstr "Afbeelding (.png)"
 
 #: src/app/HandleGroups.ts:1855
 msgid "Top Left"
-msgstr ""
+msgstr "Linksboven"
 
 #: src/app/HandleGroups.ts:1856
 msgid "Top"
-msgstr ""
+msgstr "Boven"
 
 #: src/app/HandleGroups.ts:1857
 msgid "Top Right"
-msgstr ""
+msgstr "Rechtsboven"
 
 #: src/app/HandleGroups.ts:1858 src/app/HandleGroups.ts:1996
 msgid "Left"
-msgstr ""
+msgstr "Links"
 
 #: src/app/HandleGroups.ts:1859
 msgid "Center"
-msgstr ""
+msgstr "Midden"
 
 #: src/app/HandleGroups.ts:1860 src/app/HandleGroups.ts:1997
-#, fuzzy
 msgid "Right"
-msgstr "Licht"
+msgstr "Rechts"
 
 #: src/app/HandleGroups.ts:1861
 msgid "Bottom Left"
-msgstr ""
+msgstr "Linksonder"
 
 #: src/app/HandleGroups.ts:1862
 msgid "Bottom"
-msgstr ""
+msgstr "Onder"
 
 #: src/app/HandleGroups.ts:1863
 msgid "Bottom Right"
-msgstr ""
+msgstr "Rechtsonder"
 
 #: src/app/HandleGroups.ts:1951
 msgid "Gluepoint"
-msgstr ""
+msgstr "Kleefpunt"
 
 #: src/app/HandleGroups.ts:1998
 msgid "Up"
-msgstr ""
+msgstr "Omhoog"
 
 #: src/app/HandleGroups.ts:1999
 msgid "Down"
-msgstr ""
+msgstr "Omlaag"
 
 #: src/app/HandleGroups.ts:2004
 msgid "Anchor"
-msgstr ""
+msgstr "Verankering"
 
 #: src/app/HandleGroups.ts:2045
 msgid "Default gluepoints cannot be edited."
-msgstr ""
+msgstr "Standaard kleefpunten kunnen niet worden bewerkt."
 
 #: src/app/HandleGroups.ts:2863
-#, fuzzy
 msgid "Point"
-msgstr "Afdrukken"
+msgstr "Punt"
 
 #: src/app/HandleGroups.ts:2875
 msgid "To Line"
-msgstr ""
+msgstr "Aan regel"
 
 #: src/app/HandleGroups.ts:2875
 msgid "To Curve"
-msgstr ""
+msgstr "Aan curve"
 
 #: src/app/HandleGroups.ts:2882
 msgid "Corner Point"
-msgstr ""
+msgstr "Hoekpunt"
 
 #: src/app/HandleGroups.ts:2889
 msgid "Smooth Transition"
-msgstr ""
+msgstr "Vloeiende overgang"
 
 #: src/app/HandleGroups.ts:2896
 msgid "Symmetric Transition"
-msgstr ""
+msgstr "Symmetrische overgang"
 
 #: src/app/HandleGroups.ts:2905
 msgid "Split Path"
-msgstr ""
+msgstr "Pad splitsen"
 
 #: src/app/HandleGroups.ts:3420
 msgid "Motion Path"
-msgstr ""
+msgstr "Bewegingspad"
 
 #: src/app/HandleGroups.ts:3421 src/control/jsdialog/Definitions.Menu.ts:2515
 msgid "Add Point"
-msgstr ""
+msgstr "Punt toevoegen"
 
 #: src/app/HandleGroups.ts:3426
 msgid "Open Path"
-msgstr ""
+msgstr "Pad openen"
 
 #: src/app/HandleGroups.ts:3426 src/control/jsdialog/Definitions.Menu.ts:2522
 msgid "Close Path"
-msgstr ""
+msgstr "Pad sluiten"
 
 #: src/app/HandleGroups.ts:3433 src/control/jsdialog/Definitions.Menu.ts:2531
 msgid "Simplify Curves"
-msgstr ""
+msgstr "Curves vereenvoudigen"
 
 #: src/app/HandleGroups.ts:3439 src/control/jsdialog/Definitions.Menu.ts:2536
 msgid "Simplify All"
-msgstr ""
+msgstr "Alles vereenvoudigen"
 
 #: src/app/LOUtil.ts:1455
 msgid "{0} website, opens in new tab"
@@ -2007,33 +2006,34 @@ msgstr "minder dan een minuut"
 
 #: src/control/VideoBackgroundDialog.ts:24
 msgid "Clouds"
-msgstr ""
+msgstr "Wolken"
 
 #: src/control/VideoBackgroundDialog.ts:25
 msgid "Clouds at dusk"
-msgstr ""
+msgstr "Wolken bij schemering"
 
 #: src/control/VideoBackgroundDialog.ts:26
 msgid "Bokeh"
-msgstr ""
+msgstr "Bokeh"
 
 #: src/control/VideoBackgroundDialog.ts:64
 #: src/control/Control.NotebookbarImpress.js:2112
 msgid "Background Video"
-msgstr ""
+msgstr "Achtergrondvideo"
 
 #: src/control/VideoBackgroundDialog.ts:69
 msgid ""
 "The video plays behind every slide that uses the master slide of this slide."
 msgstr ""
+"De video speelt achter elke dia die de ontwerpdia van deze dia gebruikt."
 
 #: src/control/VideoBackgroundDialog.ts:98
 msgid "Remove Background Video"
-msgstr ""
+msgstr "Achtergrondvideo verwijderen"
 
 #: src/control/VideoBackgroundDialog.ts:104
 msgid "Choose Your Own Video..."
-msgstr ""
+msgstr "Kies uw eigen video…"
 
 #: src/canvas/sections/CommentListSection.ts:2301
 #: src/canvas/sections/CommentListSection.ts:2314
@@ -2440,34 +2440,28 @@ msgid "What would you like to do with this document?"
 msgstr "Wat wilt u doen met dit document?"
 
 #: src/control/Control.AIChatSidebar.ts:838
-#, fuzzy
 msgid "Good morning, {0}"
-msgstr "Goedemorgen, {0}!"
+msgstr "Goedemorgen, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:839
-#, fuzzy
 msgid "Good morning"
-msgstr "Goedemorgen!"
+msgstr "Goedemorgen"
 
 #: src/control/Control.AIChatSidebar.ts:841
-#, fuzzy
 msgid "Good afternoon, {0}"
-msgstr "Goedemiddag, {0}!"
+msgstr "Goedemiddag, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:842
-#, fuzzy
 msgid "Good afternoon"
-msgstr "Goedemiddag!"
+msgstr "Goedemiddag"
 
 #: src/control/Control.AIChatSidebar.ts:844
-#, fuzzy
 msgid "Good evening, {0}"
-msgstr "Goedenavond, {0}!"
+msgstr "Goedenavond, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:845
-#, fuzzy
 msgid "Good evening"
-msgstr "Goedenavond!"
+msgstr "Goedenavond"
 
 #: src/control/Control.AIChatSidebar.ts:896
 #: src/control/Control.AIChatSidebar.ts:2962
@@ -2517,7 +2511,7 @@ msgstr "Geselecteerde tekst als context gebruiken"
 
 #: src/control/Control.AIChatSidebar.ts:1088
 msgid "Ask AI, or type / for a saved prompt..."
-msgstr ""
+msgstr "Vraag het aan AI, of typ / voor een opgeslagen prompt…"
 
 #: src/control/Control.AIChatSidebar.ts:1091
 msgid "Message input"
@@ -2533,7 +2527,6 @@ msgstr "Bericht verzenden"
 
 #: src/control/Control.AIChatSidebar.ts:1130
 #: src/control/Control.AIChatSidebar.ts:1143
-#, fuzzy
 msgid "Set Tone"
 msgstr "Toon instellen"
 
@@ -2600,64 +2593,66 @@ msgstr "Emojifisering schakelen"
 
 #: src/control/Control.AIChatSidebar.ts:1313
 msgid "Add Prompts"
-msgstr ""
+msgstr "Prompts toevoegen"
 
 #: src/control/Control.AIChatSidebar.ts:1316
 msgid "Saved prompts"
-msgstr ""
+msgstr "Opgeslagen prompts"
 
 #: src/control/Control.AIChatSidebar.ts:1345
 msgid "My prompts"
-msgstr ""
+msgstr "Mijn prompts"
 
 #: src/control/Control.AIChatSidebar.ts:1354
 msgid "Type / in the message box to run a prompt."
-msgstr ""
+msgstr "Typ / in het berichtvak om een prompt uit te voeren."
 
 #: src/control/Control.AIChatSidebar.ts:1363
 msgid "Run prompt {0}"
-msgstr ""
+msgstr "Prompt {0} uitvoeren"
 
 #: src/control/Control.AIChatSidebar.ts:1368
 #: src/control/Control.AIChatSidebar.ts:1369
 #: src/control/Control.AIChatSidebar.ts:1424
 msgid "Edit prompt"
-msgstr ""
+msgstr "Prompt bewerken"
 
 #: src/control/Control.AIChatSidebar.ts:1385
 msgid ""
 "Save instructions you use often and run them on the selected text. Type / "
 "in the message box to run a prompt."
 msgstr ""
+"Sla instructies die u vaak gebruikt op en voer ze uit op de geselecteerde "
+"tekst. Typ / in het berichtvak om een prompt uit te voeren."
 
 #: src/control/Control.AIChatSidebar.ts:1394
 #: src/control/Control.AIChatSidebar.ts:1769
 msgid "+ Add a prompt"
-msgstr ""
+msgstr "+ Een prompt toevoegen"
 
 #: src/control/Control.AIChatSidebar.ts:1398
 #: src/control/Control.AIChatSidebar.ts:1772
 msgid "Add a prompt"
-msgstr ""
+msgstr "Een prompt toevoegen"
 
 #: src/control/Control.AIChatSidebar.ts:1418
 msgid "Back to prompts"
-msgstr ""
+msgstr "Terug naar prompts"
 
 #: src/control/Control.AIChatSidebar.ts:1424
 msgid "New prompt"
-msgstr ""
+msgstr "Nieuwe prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1434
 #: src/control/Control.AIChatSidebar.ts:1519
 #: src/control/Control.AIChatSidebar.ts:1545
 msgid "Delete prompt"
-msgstr ""
+msgstr "Prompt verwijderen"
 
 #: src/control/Control.AIChatSidebar.ts:1449
 #: src/control/Control.AIChatSidebar.ts:1451
 msgid "Save prompt"
-msgstr ""
+msgstr "Prompt opslaan"
 
 #: src/control/Control.AIChatSidebar.ts:1469
 #: src/control/backstage/HomeView.tsx:75
@@ -2670,34 +2665,34 @@ msgstr "Naam"
 
 #: src/control/Control.AIChatSidebar.ts:1476
 msgid "e.g. Meeting minutes"
-msgstr ""
+msgstr "bijv. notulen"
 
 #: src/control/Control.AIChatSidebar.ts:1478
 msgid "Prompt name"
-msgstr ""
+msgstr "Naam van de prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1483
 msgid "What should AI do with the selected text?"
-msgstr ""
+msgstr "Wat moet AI doen met de geselecteerde tekst?"
 
 #: src/control/Control.AIChatSidebar.ts:1491
 msgid ""
 "Turn the selected notes into meeting minutes with decisions and action "
 "items."
 msgstr ""
+"Zet de geselecteerde notities om in notulen met beslissingen en actiepunten."
 
 #: src/control/Control.AIChatSidebar.ts:1495
 msgid "Prompt instruction"
-msgstr ""
+msgstr "Promptinstructie"
 
 #: src/control/Control.AIChatSidebar.ts:1514
-#, fuzzy
 msgid "Delete prompt confirmation"
-msgstr "Toonbevestiging verwijderen"
+msgstr "Bbevestiging van prompt verwijderen"
 
 #: src/control/Control.AIChatSidebar.ts:1525
 msgid "The prompt \"{0}\" will be deleted."
-msgstr ""
+msgstr "De prompt \"{0}\" wordt verwijderd."
 
 #: src/control/Control.AIChatSidebar.ts:1538
 #: src/control/Control.AIChatSidebar.ts:2240
@@ -2705,17 +2700,16 @@ msgid "Cancel delete"
 msgstr "Verwijdering annuleren"
 
 #: src/control/Control.AIChatSidebar.ts:1635
-#, fuzzy
 msgid "You have reached the maximum of {0} saved prompts."
-msgstr "U heeft het maximum van {0} aangepaste tonen bereikt."
+msgstr "U heeft het maximum van {0} opgeslagen prompts bereikt."
 
 #: src/control/Control.AIChatSidebar.ts:1753
 msgid "No saved prompt matches this name."
-msgstr ""
+msgstr "Geen opgeslagen prompt komt overeen met deze naam."
 
 #: src/control/Control.AIChatSidebar.ts:1754
 msgid "You have no saved prompts yet."
-msgstr ""
+msgstr "U heeft nog geen opgeslagen prompts."
 
 #: src/control/Control.AIChatSidebar.ts:2057
 msgid "Use icon"
@@ -3925,7 +3919,7 @@ msgstr "Afsluiten"
 
 #: src/control/Control.BackstageView.ts:299
 msgid "Start something new, or continue where you left off."
-msgstr ""
+msgstr "Begin iets nieuws, of ga verder waar u bent gebleven."
 
 #: src/control/Control.BackstageView.ts:332
 #: src/control/jsdialog/Widget.ColorPicker.ts:476
@@ -3934,19 +3928,20 @@ msgstr "Recent"
 
 #: src/control/Control.BackstageView.ts:718
 msgid "Account in use"
-msgstr ""
+msgstr "Account in gebruik"
 
 #: src/control/Control.BackstageView.ts:720
 msgid "Close the windows and documents of this account before you remove it."
 msgstr ""
+"Sluit de vensters en documenten van dit account voordat u het verwijdert."
 
 #: src/control/Control.BackstageView.ts:873
 msgid "Template removed from favorites"
-msgstr ""
+msgstr "Sjabloon van favorieten verwijderd"
 
 #: src/control/Control.BackstageView.ts:874
 msgid "Template added to favorites"
-msgstr ""
+msgstr "Sjabloon aan favorieten toegevoegd"
 
 #: src/control/Control.BackstageView.ts:1188
 msgid "Document Info"
@@ -3958,7 +3953,7 @@ msgstr "Documenteigenschappen en -informatie weergeven"
 
 #: src/control/Control.BackstageView.ts:1219
 msgid "Master document, a document per chapter"
-msgstr ""
+msgstr "Ontwerpdocument, een document per hoofdstuk"
 
 #: src/control/Control.BackstageView.ts:1226
 msgid "Export Document"
@@ -4048,7 +4043,6 @@ msgid "Back to document"
 msgstr "Terug naar document"
 
 #: src/control/backstage/HomeView.tsx:57 src/control/backstage/HomeView.tsx:60
-#, fuzzy
 msgid "More templates"
 msgstr "Meer sjablonen"
 
@@ -4058,15 +4052,15 @@ msgstr "Datum gewijzigd"
 
 #: src/control/backstage/TemplatesView.tsx:106
 msgid "Remove from favorites"
-msgstr ""
+msgstr "Verwijderen uit favorieten"
 
 #: src/control/backstage/TemplatesView.tsx:107
 msgid "Add to favorites"
-msgstr ""
+msgstr "Toevoegen aan favorieten"
 
 #: src/control/backstage/TemplatesView.tsx:138
 msgid "Templates"
-msgstr ""
+msgstr "Sjablonen"
 
 #: src/control/backstage/TemplatesView.tsx:142
 msgid "Search templates"
@@ -4080,7 +4074,7 @@ msgstr "Alle"
 
 #: src/control/backstage/TemplatesView.tsx:243
 msgid "Built-in templates"
-msgstr ""
+msgstr "Ingebouwde sjablonen"
 
 #: src/control/backstage/TemplatesView.tsx:265
 #: src/control/backstage/MyTemplatesView.tsx:212
@@ -4090,40 +4084,37 @@ msgstr "Er komen geen sjablonen overeen met uw zoekopdracht."
 #: src/control/backstage/TemplatesView.tsx:266
 #: src/control/backstage/MyTemplatesView.tsx:213
 msgid "No templates of this type."
-msgstr ""
+msgstr "Geen sjablonen van dit type."
 
 #: src/control/backstage/MyTemplatesView.tsx:75
 msgid "Document template"
-msgstr ""
+msgstr "Documentsjabloon"
 
 #: src/control/backstage/MyTemplatesView.tsx:76
 msgid "Spreadsheet template"
-msgstr ""
+msgstr "Spreadsheetsjabloon"
 
 #: src/control/backstage/MyTemplatesView.tsx:77
-#, fuzzy
 msgid "Presentation template"
-msgstr "Presentatiesjablonen"
+msgstr "Presentatiesjabloon"
 
 #: src/control/backstage/MyTemplatesView.tsx:78
 msgid "Drawing template"
-msgstr ""
+msgstr "Tekeningsjabloon"
 
 #: src/control/backstage/MyTemplatesView.tsx:103
-#, fuzzy
 msgid "My templates"
-msgstr "Geen sjabloon"
+msgstr "Mijn sjablonen"
 
 #: src/control/backstage/MyTemplatesView.tsx:109
 msgid "Manage"
-msgstr ""
+msgstr "Beheren"
 
 #: src/control/backstage/MyTemplatesView.tsx:141
 #: src/control/backstage/MyTemplatesView.tsx:168
 #: src/control/backstage/MyTemplatesView.tsx:330
-#, fuzzy
 msgid "Add template"
-msgstr "Geen sjabloon"
+msgstr "Sjabloon toevoegen"
 
 #: src/control/backstage/MyTemplatesView.tsx:155
 #: src/control/backstage/MyTemplatesView.tsx:156
@@ -4132,36 +4123,38 @@ msgid "Back"
 msgstr "Terug"
 
 #: src/control/backstage/MyTemplatesView.tsx:161
-#, fuzzy
 msgid "Manage templates"
-msgstr "Meer sjablonen"
+msgstr "Sjablonen beheren"
 
 #: src/control/backstage/MyTemplatesView.tsx:174
 msgid ""
 "Rename or remove the templates you added. Built-in templates can't be "
 "changed."
 msgstr ""
+"Hernoem of verwijder de sjablonen die u hebt toegevoegd. Ingebouwde "
+"sjablonen kunnen niet worden gewijzigd."
 
 #: src/control/backstage/MyTemplatesView.tsx:176
 msgid "Templates you add will appear here and in New."
-msgstr ""
+msgstr "Sjablonen die u toevoegt, verschijnen hier en in Nieuw."
 
 #: src/control/backstage/MyTemplatesView.tsx:183
-#, fuzzy
 msgid "Search my templates"
-msgstr "Sjablonen zoeken"
+msgstr "Mijn sjablonen doorzoeken"
 
 #: src/control/backstage/MyTemplatesView.tsx:193
 msgid "No templates yet"
-msgstr ""
+msgstr "Nog geen sjablonen"
 
 #: src/control/backstage/MyTemplatesView.tsx:196
 msgid "Add a template to start new documents from your own layout."
 msgstr ""
+"Voeg een sjabloon toe om nieuwe documenten te starten vanuit uw eigen lay-"
+"out."
 
 #: src/control/backstage/MyTemplatesView.tsx:224
 msgid "Actions"
-msgstr ""
+msgstr "Acties"
 
 #: src/control/backstage/MyTemplatesView.tsx:257
 #: src/control/backstage/MyTemplatesView.tsx:451
@@ -4175,23 +4168,23 @@ msgstr "Hernoemen"
 
 #: src/control/backstage/MyTemplatesView.tsx:302
 msgid "This type of file cannot be added as a template."
-msgstr ""
+msgstr "Dit type bestand kan niet als sjabloon worden toegevoegd."
 
 #: src/control/backstage/MyTemplatesView.tsx:323
 msgid "The template could not be added."
-msgstr ""
+msgstr "Het sjabloon kan niet worden toegevoegd."
 
 #: src/control/backstage/MyTemplatesView.tsx:341
 msgid "Drop a file here, or"
-msgstr ""
+msgstr "Sleep hier een bestand naartoe, of"
 
 #: src/control/backstage/MyTemplatesView.tsx:343
 msgid "Browse"
-msgstr ""
+msgstr "Bladeren"
 
 #: src/control/backstage/MyTemplatesView.tsx:359
 msgid "Template name"
-msgstr ""
+msgstr "Sjabloonnaam"
 
 #: src/control/backstage/MyTemplatesView.tsx:403
 #: src/control/Control.NotebookbarCalc.js:1128
@@ -4203,19 +4196,19 @@ msgstr "Vervangen"
 
 #: src/control/backstage/MyTemplatesView.tsx:419
 msgid "The template could not be renamed."
-msgstr ""
+msgstr "Het sjabloon kan niet worden hernoemd."
 
 #: src/control/backstage/MyTemplatesView.tsx:424
 msgid "Rename template"
-msgstr ""
+msgstr "Sjabloon hernoemen"
 
 #: src/control/backstage/MyTemplatesView.tsx:471
 msgid "Remove this template?"
-msgstr ""
+msgstr "Dit sjabloon verwijderen?"
 
 #: src/control/backstage/MyTemplatesView.tsx:476
 msgid "\"%1\" will be removed from My templates."
-msgstr ""
+msgstr "\"%1\" wordt verwijderd uit Mijn sjablonen."
 
 #: src/control/backstage/InfoView.tsx:31 src/control/Control.Menubar.ts:434
 #: src/control/Control.Menubar.ts:1497
@@ -4256,7 +4249,7 @@ msgstr "Account bewerken"
 
 #: src/control/backstage/CloudDialogs.tsx:135
 msgid "Enter a web address, such as %1."
-msgstr ""
+msgstr "Voer een webadres in, zoals %1."
 
 #: src/control/backstage/CloudDialogs.tsx:152
 msgid "Add new account"
@@ -4334,9 +4327,8 @@ msgid "Dismiss"
 msgstr "Verwerpen"
 
 #: src/control/onboarding/OnboardingSteps.ts:26
-#, fuzzy
 msgid "Welcome to Collabora Office"
-msgstr "Welkom bij Collabora Online"
+msgstr "Welkom bij Collabora Office"
 
 #: src/control/onboarding/OnboardingSteps.ts:27
 msgid "Welcome to Collabora Online"
@@ -5049,9 +5041,8 @@ msgid "Language"
 msgstr "Taal"
 
 #: src/control/Control.Mention.ts:193
-#, fuzzy
 msgid "No search results found"
-msgstr "Geen zoekresultaten gevonden!"
+msgstr "Geen zoekresultaten gevonden"
 
 #: src/control/Control.Menubar.ts:57
 msgid "PDF Document (.pdf) as..."
@@ -5073,7 +5064,7 @@ msgstr "Exporteren als"
 
 #: src/control/Control.Menubar.ts:151
 msgid "Create Master Document..."
-msgstr ""
+msgstr "Ontwerpdocument aanmaken…"
 
 #: src/control/Control.Menubar.ts:152 src/control/Control.Menubar.ts:498
 #: src/control/Control.Menubar.ts:714 src/control/Control.Menubar.ts:891
@@ -5372,7 +5363,7 @@ msgstr "Lokale multimedia..."
 
 #: src/control/Control.Menubar.ts:569
 msgid "Background Video..."
-msgstr ""
+msgstr "Achtergrondvideo…"
 
 #: src/control/Control.Menubar.ts:610 src/control/Control.Menubar.ts:803
 #: src/control/Control.NotebookbarDraw.js:1425
@@ -6502,15 +6493,14 @@ msgstr "Alinea"
 #: src/control/Control.NotebookbarDraw.js:1675
 #: src/control/Control.NotebookbarImpress.js:1740
 #: src/control/Control.TopToolbar.js:284
-#, fuzzy
 msgid "Lines"
-msgstr "Lijn"
+msgstr "Lijnen"
 
 #: src/control/Control.NotebookbarDraw.js:1695
 #: src/control/Control.NotebookbarImpress.js:1760
 #: src/control/Control.TopToolbar.js:285
 msgid "Curves"
-msgstr ""
+msgstr "Curves"
 
 #: src/control/Control.NotebookbarImpress.js:110
 #: src/slideshow/SlideShowPresenter.ts:1205
@@ -6573,6 +6563,7 @@ msgstr "Presenteer aan Iedereen"
 #: src/control/Control.NotebookbarImpress.js:647
 msgid "Show your slideshow on every viewer's screen when you start it"
 msgstr ""
+"Toon uw diavoorstelling op het scherm van elke kijker wanneer u deze start"
 
 #: src/control/Control.NotebookbarImpress.js:767
 msgid "Slide Views"
@@ -6640,7 +6631,7 @@ msgstr "Achtergrondafbeelding"
 
 #: src/control/Control.NotebookbarImpress.js:3007
 msgid "Edit Points"
-msgstr ""
+msgstr "Punten bewerken"
 
 #: src/control/Control.NotebookbarImpress.js:3067
 msgid "Effects"
@@ -6744,7 +6735,7 @@ msgstr "Sectie toevoegen"
 
 #: src/control/Control.PartsPreview.js:893
 msgid "Start Slideshow from This Slide"
-msgstr ""
+msgstr "Diavoorstelling starten vanaf deze dia"
 
 #: src/control/Control.PartsPreview.js:1026
 msgid "with 1 other"
@@ -6840,35 +6831,35 @@ msgstr "%1, gekoppeld aan %2"
 
 #: src/control/Control.PartsPreview.js:1396
 msgid "Linked to the presentation %1 that is missing"
-msgstr ""
+msgstr "Gekoppeld aan de presentatie %1 die ontbreekt"
 
 #: src/control/Control.PartsPreview.js:1398
 msgid "Linked to the presentation %1 that has changed"
-msgstr ""
+msgstr "Gekoppeld aan de presentatie %1 die is gewijzigd"
 
 #: src/control/Control.PartsPreview.js:1400
 msgid "Linked to the presentation %1, disconnected"
-msgstr ""
+msgstr "Gekoppeld aan de presentatie %1, verbinding verbroken"
 
 #: src/control/Control.PartsPreview.js:1401
 msgid "Linked to the presentation %1"
-msgstr ""
+msgstr "Gekoppeld aan de presentatie %1"
 
 #: src/control/Control.PartsPreview.js:1406
 msgid "Linked to the slides outside the sections of %1, which is missing"
-msgstr ""
+msgstr "Gekoppeld aan de dia's buiten de secties van %1, die ontbreekt"
 
 #: src/control/Control.PartsPreview.js:1409
 msgid "Linked to the slides outside the sections of %1, which has changed"
-msgstr ""
+msgstr "Gekoppeld aan de dia's buiten de secties van %1, die is gewijzigd"
 
 #: src/control/Control.PartsPreview.js:1412
 msgid "Linked to the slides outside the sections of %1, disconnected"
-msgstr ""
+msgstr "Gekoppeld aan de dia's buiten de secties van %1, verbinding verbroken"
 
 #: src/control/Control.PartsPreview.js:1413
 msgid "Linked to the slides outside the sections of %1"
-msgstr ""
+msgstr "Gekoppeld aan de dia's buiten de secties van %1"
 
 #: src/control/Control.PartsPreview.js:1416
 msgid "Linked to a section of %1 that is missing"
@@ -6889,12 +6880,12 @@ msgstr "Gekoppeld aan een sectie van %1"
 #: src/control/Control.PartsPreview.js:1661
 msgid "%n slide"
 msgid_plural "%n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n dia"
+msgstr[1] "%n dia's"
 
 #: src/control/Control.PartsPreview.js:1662
 msgid "Toggle presentation %1"
-msgstr ""
+msgstr "Presentatie %1 schakelen"
 
 #: src/control/Control.PartsPreview.js:2111
 #: src/control/Control.PartsPreview.js:2378
@@ -6945,35 +6936,31 @@ msgstr[1] "Sectie \"%1\" en zijn %n dia's verwijderen?"
 
 #: src/control/Control.PartsPreview.js:2285
 msgid "Close Panel"
-msgstr ""
+msgstr "Paneel sluiten"
 
 #: src/control/Control.PartsPreview.js:2294
-#, fuzzy
 msgid "Collapse Presentation"
-msgstr "Presentatie sluiten"
+msgstr "Presentatie inklappen"
 
 #: src/control/Control.PartsPreview.js:2294
-#, fuzzy
 msgid "Expand Presentation"
-msgstr "Presentatie beëindigen"
+msgstr "Presentatie uitvouwen"
 
 #: src/control/Control.PartsPreview.js:2301
 msgid "Open in Panel"
-msgstr ""
+msgstr "Openen in paneel"
 
 #: src/control/Control.PartsPreview.js:2309
-#, fuzzy
 msgid "Update Presentation"
-msgstr "Presentaties filteren"
+msgstr "Presentaties bijwerken"
 
 #: src/control/Control.PartsPreview.js:2317
-#, fuzzy
 msgid "Unlink Presentation"
-msgstr "Blanco presentatie"
+msgstr "Presentatie loskoppelen"
 
 #: src/control/Control.PartsPreview.js:2324
 msgid "Unlink Presentation & Contents"
-msgstr ""
+msgstr "Presentatie & inhoud loskoppelen"
 
 #: src/control/Control.PartsPreview.js:2379
 msgid "Enter new section name:"
@@ -7050,6 +7037,8 @@ msgid ""
 "Original file can't be found. Choose it again to keep your slides up to "
 "date."
 msgstr ""
+"Het originele bestand kan niet worden gevonden. Kies het opnieuw om uw dia's "
+"up-to-date te houden."
 
 #: src/control/Control.SlideImportPane.tsx:960
 msgid "This file is here. You do not have permission to open it."
@@ -7060,6 +7049,8 @@ msgid ""
 "Slides cannot be linked from this file: the link would lead back to this "
 "presentation."
 msgstr ""
+"Dia's kunnen niet vanuit dit bestand worden gekoppeld: de koppeling zou "
+"terugleiden naar deze presentatie."
 
 #: src/control/Control.SlideImportPane.tsx:966
 msgid "This file could not be read this time."
@@ -7067,11 +7058,11 @@ msgstr "Dit bestand kon deze keer niet gelezen worden."
 
 #: src/control/Control.SlideImportPane.tsx:974
 msgid "Choose file…"
-msgstr ""
+msgstr "Kies bestand…"
 
 #: src/control/Control.SlideImportPane.tsx:982
 msgid "Try again"
-msgstr ""
+msgstr "Opnieuw proberen"
 
 #: src/control/Control.SlideImportPane.tsx:994
 #: src/control/Control.SlideImportPane.tsx:1613
@@ -7220,7 +7211,7 @@ msgstr "Alle dia's selecteren"
 
 #: src/control/Control.SlideImportPane.tsx:1634
 msgid "Link whole presentation"
-msgstr ""
+msgstr "Hele presentatie koppelen"
 
 #: src/control/Control.SlideImportPane.tsx:1642
 msgid "Update the slides linked to this file"
@@ -7252,7 +7243,7 @@ msgstr "Behoud het oorspronkelijke ontwerp"
 
 #: src/control/Control.SlideImportPane.tsx:1805
 msgid "Not supported in PPTX, please save as ODP to use links"
-msgstr ""
+msgstr "Niet ondersteund in PPTX, sla op als ODP om koppelingen te gebruiken"
 
 #: src/control/Control.SlideImportPane.tsx:1820
 msgid "Stay linked to the source file"
@@ -7283,9 +7274,8 @@ msgid "In a section linked to {0}"
 msgstr "In een sectie gekoppeld aan {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:131
-#, fuzzy
 msgid "In a presentation linked to {0}"
-msgstr "In een sectie gekoppeld aan {0}"
+msgstr "In een presentatie gekoppeld aan {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:154
 msgid "Hide the actions for this linked slide"
@@ -7306,9 +7296,8 @@ msgstr "Sectie bijwerken"
 
 #: src/control/Control.SlideLinkToolbar.tsx:195
 #: src/slideimport/SlideLinks.ts:492
-#, fuzzy
 msgid "Update presentation"
-msgstr "Presentaties filteren"
+msgstr "Presentatie bijwerken"
 
 #: src/control/Control.SlideLinkToolbar.tsx:209
 msgid "Not available"
@@ -7320,29 +7309,27 @@ msgstr "Wissel sectie %1"
 
 #: src/control/SlideLinkPanel.tsx:26
 msgid "Close the linked presentation"
-msgstr ""
+msgstr "Sluit de gekoppelde presentatie"
 
 #: src/control/SlideLinkPanel.tsx:31
-#, fuzzy
 msgid "Linked presentation %1"
-msgstr "Presentaties filteren"
+msgstr "Gekoppelde presentatie %1"
 
 #: src/control/SlideLinkPanel.tsx:54
 msgid "Slides of %1"
-msgstr ""
+msgstr "Dia's van %1"
 
 #: src/control/SlidePresentationsRow.tsx:34 src/control/LinkedViewRow.tsx:52
-#, fuzzy
 msgid "Linked presentations"
-msgstr "Presentaties filteren"
+msgstr "Gekoppelde presentaties"
 
 #: src/control/SlidePresentationsRow.tsx:44
 msgid "Expand all linked presentations"
-msgstr ""
+msgstr "Alle gekoppelde presentaties uitvouwen"
 
 #: src/control/SlidePresentationsRow.tsx:54
 msgid "Collapse all linked presentations"
-msgstr ""
+msgstr "Alle gekoppelde presentaties inklappen"
 
 #: src/slideimport/SlideImportSession.ts:352
 msgid "The slides of the source could not be read."
@@ -7371,41 +7358,36 @@ msgid "Cannot update the section: {0} no longer holds its source section."
 msgstr "Kan de sectie niet bijwerken: {0} bevat niet langer de bronsectie."
 
 #: src/slideimport/SlideLinks.ts:384
-#, fuzzy
 msgid "Cannot update the slide: {0} no longer holds its source slide."
-msgstr "Kan de sectie niet bijwerken: {0} bevat niet langer de bronsectie."
+msgstr "Kan de dia niet bijwerken: {0} bevat niet langer de brondia."
 
 #: src/slideimport/SlideLinks.ts:489
-#, fuzzy
 msgid "Update links"
-msgstr "Links bijwerken"
+msgstr "Koppelingen bijwerken"
 
 #: src/slideimport/SlideLinks.ts:493
-#, fuzzy
 msgid "Update presentations"
-msgstr "Presentaties filteren"
+msgstr "Presentaties bijwerken"
 
 #: src/slideimport/SlideLinks.ts:494
 msgid "Update sections"
 msgstr "Secties bijwerken"
 
 #: src/slideimport/SlideLinks.ts:504
-#, fuzzy
 msgid ""
 "The linked presentation will hold the slides and sections that {0} holds "
 "now. Changes made to these slides in this presentation will be lost."
 msgstr ""
-"De sectie bevat de dia's die de sectie in {0} nu bevat. Wijzigingen in deze "
-"dia's in deze presentatie gaan verloren."
+"De gekoppelde presentatie bevat de dia's en secties van {0}. Wijzigingen aan "
+"deze dia's in deze presentatie gaan verloren."
 
 #: src/slideimport/SlideLinks.ts:508
-#, fuzzy
 msgid ""
 "The section will hold the slides that {0} keeps outside its sections now. "
 "Changes made to these slides in this presentation will be lost."
 msgstr ""
-"De sectie bevat de dia's die de sectie in {0} nu bevat. Wijzigingen in deze "
-"dia's in deze presentatie gaan verloren."
+"De sectie bevat de dia's die {0} momenteel buiten zijn secties houdt. "
+"Wijzigingen aan deze dia's in deze presentatie, gaan verloren."
 
 #: src/slideimport/SlideLinks.ts:511
 msgid ""
@@ -7425,24 +7407,22 @@ msgstr ""
 "nu bevatten. Wijzigingen in deze dia's in deze presentatie gaan verloren."
 
 #: src/slideimport/SlideLinks.ts:531
-#, fuzzy
 msgid ""
 "{0} linked presentations will hold the slides and sections that their "
 "source files hold now. Changes made to these slides in this presentation "
 "will be lost."
 msgstr ""
-"{0} gekoppelde secties bevatten de dia's die hun secties in de bronbestanden "
-"nu bevatten. Wijzigingen in deze dia's in deze presentatie gaan verloren."
+"{0} gekoppelde presentaties bevatten de dia's en secties van hun "
+"bronbestanden. Wijzigingen aan deze dia's in deze presentatie gaan verloren."
 
 #: src/slideimport/SlideLinks.ts:534
-#, fuzzy
 msgid ""
 "{0} linked sections and presentations will hold the slides that their "
 "source files hold now. Changes made to these slides in this presentation "
 "will be lost."
 msgstr ""
-"{0} gekoppelde secties bevatten de dia's die hun secties in de bronbestanden "
-"nu bevatten. Wijzigingen in deze dia's in deze presentatie gaan verloren."
+"{0} gekoppelde secties en presentaties bevatten de dia's bevatten van hun "
+"bronbestanden. Wijzigingen aan deze dia's in deze presentatie gaan verloren."
 
 #: src/slideimport/SlideLinks.ts:768
 msgid ""
@@ -7453,9 +7433,9 @@ msgstr ""
 "server kan het niet lezen."
 
 #: src/slideimport/SlideLinks.ts:779
-#, fuzzy
 msgid "You do not have access to {0}, so its slides cannot be updated."
-msgstr "U heeft geen toegang tot {0}, dus de sectie kan niet worden bijgewerkt."
+msgstr ""
+"U heeft geen toegang tot {0}, dus de dia's kunnen niet worden bijgewerkt."
 
 #: src/slideimport/SlideLinks.ts:780
 msgid "{0} could not be read."
@@ -7483,9 +7463,8 @@ msgid "Unlinking the section failed."
 msgstr "Het loskoppelen van de sectie is mislukt."
 
 #: src/slideimport/SlideLinks.ts:1095
-#, fuzzy
 msgid "Unlinking the presentation failed."
-msgstr "Het loskoppelen van de sectie is mislukt."
+msgstr "Het loskoppelen van de presentatie is mislukt."
 
 #: src/slideimport/SlideLinks.ts:1109
 msgid "Updating the slides of {0} failed."
@@ -8101,7 +8080,7 @@ msgstr "Tabstop verwijderen"
 #. links to this one.
 #: src/control/LinkedViewRow.tsx:26
 msgid "%1 - linked presentation"
-msgstr ""
+msgstr "%1 - heeft presentatie gekoppeld"
 
 #: src/control/Parts.js:636 src/control/Parts.js:640
 msgid "Show sheets"
@@ -8187,21 +8166,24 @@ msgstr ""
 
 #: src/control/Permission.js:757
 msgid "Close without saving"
-msgstr ""
+msgstr "Sluiten zonder op te slaan"
 
 #: src/control/Permission.js:766
 msgid ""
 "\"%FILENAME\" could not be written. The file may be read-only or in use by "
 "another program. You can save your changes to a different file."
 msgstr ""
+"\"%FILENAME\" kan niet worden opgeslagen. Het bestand is mogelijk alleen-"
+"lezen of wordt gebruikt door een ander programma. U kunt uw wijzigingen "
+"opslaan in een ander bestand."
 
 #: src/control/Permission.js:770
 msgid "Cannot Save Document"
-msgstr ""
+msgstr "Kan document niet opslaan"
 
 #: src/control/Permission.js:784
 msgid "{0} wants to edit together"
-msgstr ""
+msgstr "{0} wil samen bewerken"
 
 #: src/control/Permission.js:785 src/control/Permission.js:808
 #: src/control/Permission.js:824
@@ -8647,7 +8629,7 @@ msgstr "Markdown kopiëren"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1840
 msgid "Merge Formatting"
-msgstr ""
+msgstr "Opmaak samenvoegen"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1853
 msgid "Inline"
@@ -8807,11 +8789,11 @@ msgstr "Watermerk"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2469
 msgid "Show"
-msgstr ""
+msgstr "Weergeven"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2474
 msgid "Add New"
-msgstr ""
+msgstr "Nieuw toevoegen"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2546
 msgid "Insert comment"
@@ -9244,6 +9226,9 @@ msgid ""
 "This file cannot be written, so the document opened read-only. Use Save As "
 "to keep your changes in a new file."
 msgstr ""
+"Dit bestand kan niet worden geschreven, dus het document is alleen-lezen "
+"geopend. Gebruik 'Opslaan als' om uw wijzigingen in een nieuw bestand te "
+"behouden."
 
 #: src/app/Socket.ts:2469
 msgid "Document is getting migrated"
@@ -9254,6 +9239,8 @@ msgid ""
 "Waiting for %USERS to decide which version of this document to keep. The "
 "document opens here once they decide."
 msgstr ""
+"Wachten tot %USERS beslissen welke versie van dit document wordt bewaard. "
+"Het document wordt hier geopend zodra zij een beslissing hebben genomen."
 
 #: src/app/Socket.ts:2834
 msgid "Document requires password to view."
@@ -9631,37 +9618,35 @@ msgstr "Commentaar van {0}: {1}"
 #. {1} its text
 #: src/layer/marker/A11yTextInput.js:363
 msgid "{0}: {1}"
-msgstr ""
+msgstr "{0}: {1}"
 
 #: src/layer/marker/A11yTextInput.js:533
 msgid "Heading level {0}"
 msgstr "Kop niveau {0}"
 
 #: src/layer/marker/A11yTextInput.js:570
-#, fuzzy
 msgid "Footnote"
-msgstr "Voetnoten"
+msgstr "Voetnoot"
 
 #: src/layer/marker/A11yTextInput.js:572
-#, fuzzy
 msgid "Endnote"
-msgstr "Eindnoten"
+msgstr "Eindnoot"
 
 #: src/layer/marker/A11yTextInput.js:580
 msgid "Out of header"
-msgstr ""
+msgstr "Vanuit kop"
 
 #: src/layer/marker/A11yTextInput.js:582
 msgid "Out of footer"
-msgstr ""
+msgstr "Vanuit voetregel"
 
 #: src/layer/marker/A11yTextInput.js:584
 msgid "Out of footnote"
-msgstr ""
+msgstr "Vanuit voetnoot"
 
 #: src/layer/marker/A11yTextInput.js:586
 msgid "Out of endnote"
-msgstr ""
+msgstr "Vanuit eindnoot"
 
 #: src/layer/marker/A11yTextInput.js:1600
 msgid "Out of table"
@@ -9723,15 +9708,15 @@ msgstr "{0} verwijderd"
 
 #: src/layer/marker/TextInput.js:532 src/layer/marker/TextInput.js:542
 msgid "Formatting changed"
-msgstr ""
+msgstr "Opmaak gewijzigd"
 
 #: src/layer/marker/TextInput.js:541
 msgid "Insertion"
-msgstr ""
+msgstr "Invoeging"
 
 #: src/layer/marker/TextInput.js:542
 msgid "Deletion"
-msgstr ""
+msgstr "Verwijdering"
 
 #: src/layer/marker/TextInput.js:598
 msgid "Placeholder"
@@ -9790,10 +9775,12 @@ msgstr "Online Editor"
 #: src/layer/tile/CanvasTileLayer.js:1490
 msgid "This document links to files in a folder the app may not read."
 msgstr ""
+"Dit document verwijst naar bestanden in een map die de app misschien niet "
+"kan lezen."
 
 #: src/layer/tile/CanvasTileLayer.js:1491
 msgid "Allow access"
-msgstr ""
+msgstr "Toegang verlenen"
 
 #: src/layer/tile/CanvasTileLayer.js:1517
 msgid "%1 started recording changes for all users."
@@ -9823,10 +9810,11 @@ msgstr "Geen opmerkingen"
 #: src/main.js:357
 msgid "This server is too old for %APP, so some features may not work."
 msgstr ""
+"Deze server is te oud voor %APP, dus sommige functies werken mogelijk niet."
 
 #: src/main.js:358
 msgid "Please ask the administrator to update it."
-msgstr ""
+msgstr "Vraag de beheerder dit bij te werken."
 
 #: src/main.js:451
 msgid "Warning! The browser you are using is not supported."
@@ -9843,7 +9831,7 @@ msgstr "Kopiëren vanuit het document is uitgeschakeld door uw beheerder"
 
 #: src/map/Clipboard.js:222
 msgid "Copying from {productname}, please paste again in a moment"
-msgstr ""
+msgstr "Kopiëren van {productname}, wacht even met opnieuw plakken"
 
 #: src/map/Clipboard.js:335
 msgid "warning: copy/paste request timed out"
@@ -9858,7 +9846,6 @@ msgid "Failed to upload the clipboard"
 msgstr "Het uploaden van het klembord is mislukt"
 
 #: src/map/Clipboard.js:1141
-#, fuzzy
 msgid "Copying to clipboard"
 msgstr "Naar klembord kopiëren"
 
@@ -9915,9 +9902,8 @@ msgid "Last saved:"
 msgstr "Laatst opgeslagen:"
 
 #: src/map/Map.js:1170
-#, fuzzy
 msgid "Please wait..."
-msgstr "Een ogenblik geduld!"
+msgstr "Even geduld…"
 
 #: src/map/handler/Map.Feedback.js:102
 msgid "Please send us your feedback"
@@ -9976,9 +9962,8 @@ msgstr "Lege diapresentatie"
 
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1453
-#, fuzzy
 msgid "All slides are hidden."
-msgstr "Alle dia's zijn verborgen!"
+msgstr "Alle dia's zijn verborgen."
 
 #: src/map/handler/Map.SlideShow.js:175
 #: src/slideshow/SlideShowPresenter.ts:1480
