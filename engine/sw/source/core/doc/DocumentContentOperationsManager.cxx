@@ -2377,24 +2377,31 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
             // What's with Flys?
         {
             // If there are FlyFrames left, delete these too
-            size_t n = 0;;
-            while (n < m_rDoc.GetSpzFrameFormats()->size())
+            for (SwNodeIndex aNodeIndex(aRg.aStart); aNodeIndex <= aRg.aEnd;)
             {
-                sw::SpzFrameFormat* pFly = (*m_rDoc.GetSpzFrameFormats())[n];
-                const SwFormatAnchor* pAnchor = &pFly->GetAnchor();
-                SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
-                if (pAnchorNode &&
-                    ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
-                     (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
-                    // note: here use <= not < like in
-                    // IsDestroyFrameAnchoredAtChar() because of the increment
-                    // of rPam in the bDoesUndo path above!
-                    aRg.aStart <= *pAnchorNode && *pAnchorNode <= aRg.aEnd.GetNode() )
+                auto const& rFlys = aNodeIndex.GetNode().GetAnchoredFlys();
+                size_t n = 0;
+                while (n < rFlys.size())
                 {
-                    m_rDoc.getIDocumentLayoutAccess().DelLayoutFormat( pFly );
-                    continue;
+                    SwFrameFormat* pFly = rFlys[n];
+                    const SwFormatAnchor* pAnchor = &pFly->GetAnchor();
+                    SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
+                    if (pAnchorNode &&
+                        ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+                         (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
+                        // note: here use <= not < like in
+                        // IsDestroyFrameAnchoredAtChar() because of the increment
+                        // of rPam in the bDoesUndo path above!
+                        aRg.aStart <= *pAnchorNode && *pAnchorNode <= aRg.aEnd.GetNode())
+                    {
+                        m_rDoc.getIDocumentLayoutAccess().DelLayoutFormat(pFly);
+                        continue;
+                    }
+                    ++n;
                 }
-                ++n;
+                if (aNodeIndex == aRg.aEnd)
+                    break;
+                ++aNodeIndex;
             }
         }
 
