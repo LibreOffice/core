@@ -75,6 +75,24 @@ def log(message):
         print(message, file=sys.stderr)
 
 
+def local_path(path):
+    """A path given as C:/... (the Windows build passes those) in this
+    Python's own form: /c/... in MSYS2, /cygdrive/c/... in Cygwin,
+    /mnt/c/... in WSL. MSYS2's os.path takes C:/... as absolute, but
+    importlib does not, and loads such a module relative to the current
+    directory. Unchanged for a native Windows Python, and where no such
+    drive is mounted."""
+    match = re.match(r"^([A-Za-z]):[/\\](.*)$", path)
+    if not match or sys.platform == "win32":
+        return path
+    drive = match.group(1).lower()
+    rest = match.group(2).replace("\\", "/")
+    for root in (f"/{drive}", f"/cygdrive/{drive}", f"/mnt/{drive}"):
+        if os.path.isdir(root):
+            return f"{root}/{rest}"
+    return path
+
+
 def load_module(name, *candidates):
     """Import one of our hyphenated scripts by path."""
     for path in candidates:
@@ -1393,6 +1411,12 @@ def main():
     sub.add_argument("--tree", required=True)
     sub.add_argument("--output", required=True)
     args = parser.parse_args()
+
+    for option in ("tree", "staging", "output", "srcdir", "builddir",
+                   "engine_builddir", "preexisting", "flatpak_manifest",
+                   "sidecar"):
+        if getattr(args, option, None):
+            setattr(args, option, local_path(getattr(args, option)))
 
     global verbose
     verbose = getattr(args, "verbose", False)
