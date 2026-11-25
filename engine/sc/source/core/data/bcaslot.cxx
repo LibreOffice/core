@@ -25,6 +25,7 @@
 #include <docsh.hxx>
 #include <brdcst.hxx>
 #include <bcaslot.hxx>
+#include <cstdlib>
 #include <scerrors.hxx>
 #include <refupdat.hxx>
 #include <bulkdatahint.hxx>
@@ -535,8 +536,10 @@ void ScBroadcastAreaSlot::FinallyEraseAreas()
 ScBroadcastAreaSlotMachine::TableSlots::TableSlots(SCSIZE nBcaSlots)
     : mnBcaSlots(nBcaSlots)
 {
-    ppSlots.reset( new ScBroadcastAreaSlot* [ nBcaSlots ] );
-    memset( ppSlots.get(), 0 , sizeof( ScBroadcastAreaSlot* ) * nBcaSlots );
+    ppSlots.reset(static_cast<ScBroadcastAreaSlot**>(
+        std::calloc(nBcaSlots, sizeof(ScBroadcastAreaSlot*))));
+    if (!ppSlots)
+        throw std::bad_alloc();
 }
 
 ScBroadcastAreaSlotMachine::TableSlots::TableSlots(TableSlots&& rOther) noexcept

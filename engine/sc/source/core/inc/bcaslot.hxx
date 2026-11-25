@@ -20,6 +20,7 @@
 #pragma once
 
 #include <memory>
+#include <o3tl/deleter.hxx>
 #include <map>
 #include <unordered_set>
 
@@ -272,7 +273,8 @@ private:
 
     private:
         SCSIZE                                    mnBcaSlots;
-        std::unique_ptr<ScBroadcastAreaSlot*[]>   ppSlots;
+        // calloc, so that the pages of the slots that stay empty are not written
+        std::unique_ptr<ScBroadcastAreaSlot*[], o3tl::free_delete> ppSlots;
 
         TableSlots( const TableSlots& ) = delete;
         TableSlots& operator=( const TableSlots& ) = delete;
