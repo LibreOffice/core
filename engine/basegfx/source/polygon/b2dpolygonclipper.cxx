@@ -21,6 +21,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <b2dpolypolygonsweep.hxx>
 #include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
@@ -451,53 +452,16 @@ namespace basegfx::utils
                         }
                     }
 
-                    // area clipping
-
-                    // First solve all polygon-self and polygon-polygon intersections.
-                    // Also get rid of some not-needed polygons (neutral, no area -> when
-                    // no intersections, these are tubes).
-                    // Now it is possible to correct the orientations in the cut-free
-                    // polygons to values corresponding to painting the utils::PolyPolygon with
-                    // a XOR-WindingRule.
-                    B2DPolyPolygon aMergePolyPolygonA = solveCrossovers(rClip);
-                    aMergePolyPolygonA = stripNeutralPolygons(aMergePolyPolygonA);
-                    aMergePolyPolygonA = correctOrientations(aMergePolyPolygonA);
-
-                    if(!bInside)
-                    {
-                        // if we want to get the outside of the clip polygon, make
-                        // it a 'Hole' in topological sense
-                        aMergePolyPolygonA.flip();
-                    }
-
-
-                    // prepare 2nd source polygon in same way
-                    B2DPolyPolygon aMergePolyPolygonB = solveCrossovers(rCandidate, pPointLimit);
+                    // area clipping, both filled even-odd
+                    aRetval = solvePolygonsBySweep(
+                        rCandidate, SweepFillRule::EvenOdd, rClip, SweepFillRule::EvenOdd,
+                        bInside ? SweepOperation::And : SweepOperation::Diff, pPointLimit);
 
                     if (pPointLimit && !*pPointLimit)
                     {
                         SAL_WARN("basegfx", "clipPolyPolygonOnPolyPolygon hit point limit");
-                        return aRetval;
+                        return B2DPolyPolygon();
                     }
-
-                    aMergePolyPolygonB = stripNeutralPolygons(aMergePolyPolygonB);
-                    aMergePolyPolygonB = correctOrientations(aMergePolyPolygonB);
-
-                    // to clip against each other, concatenate and solve all
-                    // polygon-polygon crossovers. polygon-self do not need to
-                    // be solved again, they were solved in the preparation.
-                    aRetval.append(aMergePolyPolygonA);
-                    aRetval.append(aMergePolyPolygonB);
-                    aRetval = solveCrossovers(aRetval, pPointLimit);
-
-                    // now remove neutral polygons (closed, but no area). In a last
-                    // step throw away all polygons which have a depth of less than 1
-                    // which means there was no logical AND at their position. For the
-                    // not-inside solution, the clip was flipped to define it as 'Hole',
-                    // so the removal rule is different here; remove all with a depth
-                    // of less than 0 (aka holes).
-                    aRetval = stripNeutralPolygons(aRetval);
-                    aRetval = stripDispensablePolygons(aRetval, bInside);
                 }
             }
 
