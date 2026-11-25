@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 12:57+0100\n"
-"PO-Revision-Date: 2026-11-08 15:04+0000\n"
-"Last-Translator: Andi Chandler <andibing@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-25 10:44+0000\n"
+"Last-Translator: Rob Pearson <rob.dunedin@users.noreply.hosted.weblate.org>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/en_GB/>\n"
-"Language: \n"
+"Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.11.2.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -444,7 +444,7 @@ msgstr ""
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:107
 msgid "No WOPI host configured: trusting the first host that connects"
-msgstr ""
+msgstr "No WOPI host configured: trusting the first host that connects"
 
 #: admin/src/AdminSocketServerAudit.js:53
 #: src/control/Control.ServerAuditDialog.ts:113
@@ -452,6 +452,8 @@ msgid ""
 "No WOPI host is allowed: alias_groups mode is \"groups\" but no group is "
 "defined"
 msgstr ""
+"No WOPI host is allowed: alias_groups mode is \"groups\" but no group is "
+"defined"
 
 #: admin/src/AdminSocketServerAudit.js:58
 #: src/control/Control.ServerAuditDialog.ts:129
@@ -525,13 +527,12 @@ msgid "API key lacks permissions"
 msgstr "API key lacks permissions"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:725
-#, fuzzy
 msgid ""
 "This AI host is not in the server's allowed AI host list "
 "(ai.allowed_hosts). Ask your administrator to permit it."
 msgstr ""
-"This AI host is not in the server's allowed host list (lok_allow.host). Ask "
-"your administrator to permit it."
+"This AI host is not in the server's allowed AI host list (ai.allowed_hosts). "
+"Ask your administrator to permit it."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:727
 #: src/control/Control.AIChatSidebar.ts:2927
@@ -570,9 +571,8 @@ msgstr "Provider"
 #: admin/src/integrator/AdminIntegratorSettings.ts:810
 #: admin/src/integrator/AdminIntegratorSettings.ts:4812
 #: admin/src/integrator/AdminIntegratorSettings.ts:5173
-#, fuzzy
 msgid "API key"
-msgstr "API Key"
+msgstr "API key"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:807
 #: admin/src/integrator/AdminIntegratorSettings.ts:812
@@ -585,9 +585,8 @@ msgid "Base URL"
 msgstr "Base URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:813
-#, fuzzy
 msgid "Image size"
-msgstr "Image Size"
+msgstr "Image size"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:814
 msgid "Request timeout"
@@ -595,11 +594,11 @@ msgstr "Request timeout"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:817
 msgid "Client ID"
-msgstr ""
+msgstr "Client ID"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:818
 msgid "Secret"
-msgstr ""
+msgstr "Secret"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:821
 msgid "In-document Screen Reader"
@@ -1101,15 +1100,15 @@ msgstr "Accessibility"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3158
 msgid "User interface zoom"
-msgstr ""
+msgstr "User interface zoom"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3163
 msgid "Magnify the whole window, including the document and the menus."
-msgstr ""
+msgstr "Magnify the whole window, including the document and the menus."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3169
 msgid "As per system"
-msgstr ""
+msgstr "As per system"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3204
 msgid ""
@@ -1136,6 +1135,8 @@ msgid ""
 "Credentials for the electronic signature service. They are shared by "
 "everyone on this server."
 msgstr ""
+"Credentials for the electronic signature service. They are shared by "
+"everyone on this server."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3362
 #: admin/src/integrator/AdminIntegratorSettings.ts:5760
@@ -1174,49 +1175,51 @@ msgstr "Reset"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3442
 msgid "Use the AI provider set on the server"
-msgstr ""
+msgstr "Use the AI provider set on the server"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3492
-#, fuzzy
 msgid "Providers"
 msgstr "Provider"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3495
 msgid "Managed by your admin"
-msgstr ""
+msgstr "Managed by your admin"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3501
 msgid "No providers added yet"
-msgstr ""
+msgstr "No providers added yet"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3507
 msgid ""
 "Add a provider to start using AI for text generation, image generation, or "
 "both. Your administrator's provider is filled in for you."
 msgstr ""
+"Add a provider to start using AI for text generation, image generation, or "
+"both. Your administrator's provider is filled in for you."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3515
 msgid "Add provider..."
-msgstr ""
+msgstr "Add provider..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3535
 msgid "Choose the AI provider to use for text and image generation."
-msgstr ""
+msgstr "Choose the AI provider to use for text and image generation."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3537
 msgid ""
 "Use your own AI provider instead of the one set up by your administrator. "
 "This applies only to you."
 msgstr ""
+"Use your own AI provider instead of the one set up by your administrator. "
+"This applies only to you."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3692
 msgid "seconds"
-msgstr ""
+msgstr "seconds"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3701
-#, fuzzy
 msgid "Text generation"
-msgstr "Text Generation"
+msgstr "Text generation"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3711
 #: src/control/Control.NotebookbarCalc.js:1048
@@ -1241,23 +1244,25 @@ msgid ""
 "Models without it (e.g. base llama3, gemma) can still chat but cannot use "
 "document tools."
 msgstr ""
+"To edit documents, pick a model with tool calling, e.g. gpt-4o or llama3.1. "
+"Models without it (e.g. base llama3, gemma) can still chat but cannot use "
+"document tools."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3793
-#, fuzzy
 msgid "Image generation"
-msgstr "Image Generation"
+msgstr "Image generation"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3801
 msgid "Same as text provider"
-msgstr ""
+msgstr "Same as text provider"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4156
 msgid "Required for this provider"
-msgstr ""
+msgstr "Required for this provider"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4247
 msgid "Enter an API key for this provider to list its models."
-msgstr ""
+msgstr "Enter an API key for this provider to list its models."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4263
 #: admin/src/integrator/AdminIntegratorSettings.ts:4385
@@ -1274,7 +1279,7 @@ msgstr "No models found"
 #: admin/src/integrator/AdminIntegratorSettings.ts:4335
 #: admin/src/integrator/AdminIntegratorSettings.ts:4451
 msgid "Connected"
-msgstr ""
+msgstr "Connected"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4341
 #: admin/src/integrator/AdminIntegratorSettings.ts:4457
@@ -1312,18 +1317,20 @@ msgstr "Choose what the sentence checker looks for as you type."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4738
 msgid "Remote Sentence Checkers"
-msgstr ""
+msgstr "Remote Sentence Checkers"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4742
 msgid ""
 "Checkers that run on a server. The text of the document is sent there to be "
 "checked."
 msgstr ""
+"Checkers that run on a server. The text of the document is sent there to be "
+"checked."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4777
 #: admin/src/integrator/AdminIntegratorSettings.ts:5127
 msgid "Enabled"
-msgstr ""
+msgstr "Enabled"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4789
 #: admin/src/integrator/AdminIntegratorSettings.ts:5164
@@ -1332,62 +1339,61 @@ msgid "Server URL"
 msgstr "Server URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4801
-#, fuzzy
 msgid "Username"
-msgstr "User name"
+msgstr "Username"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4823
 #: admin/src/integrator/AdminIntegratorSettings.ts:5183
 msgid "Verify the server certificate"
-msgstr ""
+msgstr "Verify the server certificate"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4831
 msgid "Enabled on this server for: {0}"
-msgstr ""
+msgstr "Enabled on this server for: {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4846
 msgid "Checking level"
-msgstr ""
+msgstr "Checking level"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4849
 msgid "Single words"
-msgstr ""
+msgstr "Single words"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4850
 msgid "Spelling"
-msgstr ""
+msgstr "Spelling"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4851
 msgid "Spelling and grammar"
-msgstr ""
+msgstr "Spelling and grammar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4861
 msgid "German spelling"
-msgstr ""
+msgstr "German spelling"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4863
 msgid "Duden recommendation"
-msgstr ""
+msgstr "Duden recommendation"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4864
 msgid "Conservative"
-msgstr ""
+msgstr "Conservative"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4865
 msgid "Progressive"
-msgstr ""
+msgstr "Progressive"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4866
 msgid "Tolerant"
-msgstr ""
+msgstr "Tolerant"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4867
 msgid "Press agencies"
-msgstr ""
+msgstr "Press agencies"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4877
 msgid "Explanations"
-msgstr ""
+msgstr "Explanations"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4880
 #: src/control/Control.AIChatSidebar.ts:187
@@ -1395,108 +1401,108 @@ msgid "Short"
 msgstr "Short"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4881
-#, fuzzy
 msgid "Long"
-msgstr "Log"
+msgstr "Long"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4882
 msgid "Long, with an example"
-msgstr ""
+msgstr "Long, with an example"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4892
 msgid "Correction profiles"
-msgstr ""
+msgstr "Correction profiles"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4902
 msgid "Dictionaries"
-msgstr ""
+msgstr "Dictionaries"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4909
 msgid "Foreign words with a German equivalent"
-msgstr ""
+msgstr "Foreign words with a German equivalent"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4910
 msgid "Archaic words"
-msgstr ""
+msgstr "Archaic words"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4911
 msgid "Regional words"
-msgstr ""
+msgstr "Regional words"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4912
 msgid "Colloquial and vulgar words"
-msgstr ""
+msgstr "Colloquial and vulgar words"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4913
 msgid "Filler words"
-msgstr ""
+msgstr "Filler words"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4914
 msgid "Offensive wording"
-msgstr ""
+msgstr "Offensive wording"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4915
 msgid "Gender-inclusive wording"
-msgstr ""
+msgstr "Gender-inclusive wording"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4916
 msgid "Complex sentences"
-msgstr ""
+msgstr "Complex sentences"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4938
 msgid "Style checks (German only)"
-msgstr ""
+msgstr "Style checks (German only)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5062
-#, fuzzy
 msgid "Translation"
-msgstr "Transition"
+msgstr "Translation"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5066
 msgid ""
 "Machine translation of the document text with the Translate command. The "
 "text is sent to the provider to be translated."
 msgstr ""
+"Machine translation of the document text with the Translate command. The "
+"text is sent to the provider to be translated."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5079
 msgid "The first one that is set up"
-msgstr ""
+msgstr "The first one that is set up"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5101
 msgid "Translating with {0}."
-msgstr ""
+msgstr "Translating with {0}."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5102
 msgid "No provider is set up: the Translate command is not offered."
-msgstr ""
+msgstr "No provider is set up: the Translate command is not offered."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5142
 msgid "API URL"
-msgstr ""
+msgstr "API URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5151
 msgid "Authentication key"
-msgstr ""
+msgstr "Authentication key"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5193
 msgid "Set up on this server."
-msgstr ""
+msgstr "Set up on this server."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5194
 msgid "Enabled on this server, but not set up."
-msgstr ""
+msgstr "Enabled on this server, but not set up."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5251
 msgid "Use the default settings"
-msgstr ""
+msgstr "Use the default settings"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5252
 msgid "Use the settings set on the server"
-msgstr ""
+msgstr "Use the settings set on the server"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5260
 msgid "Your own settings are dropped when you save."
-msgstr ""
+msgstr "Your own settings are dropped when you save."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5314
 #: admin/src/integrator/AdminIntegratorSettings.ts:5979
@@ -1530,7 +1536,7 @@ msgstr "Upload Xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:6047
 msgid "Delete {0}"
-msgstr ""
+msgstr "Delete {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:6110
 msgid "Reset to default {0}"
@@ -1579,6 +1585,8 @@ msgid ""
 "This file is a spelling dictionary, not a wordbook. Upload a list of words "
 "with one word per line."
 msgstr ""
+"This file is a spelling dictionary, not a wordbook. Upload a list of words "
+"with one word per line."
 
 #: admin/src/integrator/WordBook.ts:471
 msgid "Invalid dictionary format. Please check the file."
@@ -1686,9 +1694,8 @@ msgstr "EPUB (.epub)"
 
 #: src/app/ExportFormats.ts:65 src/control/Control.Menubar.ts:144
 #: src/control/Control.NotebookbarBuilder.js:453
-#, fuzzy
 msgid "ODF master document (.odm)"
-msgstr "ODF text document (.odt)"
+msgstr "ODF master document (.odm)"
 
 #: src/app/ExportFormats.ts:66 src/app/ExportFormats.ts:78
 #: src/control/Control.Menubar.ts:145
@@ -1791,113 +1798,111 @@ msgstr "Image (.png)"
 
 #: src/app/HandleGroups.ts:1855
 msgid "Top Left"
-msgstr ""
+msgstr "Top Left"
 
 #: src/app/HandleGroups.ts:1856
 msgid "Top"
-msgstr ""
+msgstr "Top"
 
 #: src/app/HandleGroups.ts:1857
 msgid "Top Right"
-msgstr ""
+msgstr "Top Right"
 
 #: src/app/HandleGroups.ts:1858 src/app/HandleGroups.ts:1996
 msgid "Left"
-msgstr ""
+msgstr "Left"
 
 #: src/app/HandleGroups.ts:1859
 msgid "Center"
-msgstr ""
+msgstr "Centre"
 
 #: src/app/HandleGroups.ts:1860 src/app/HandleGroups.ts:1997
-#, fuzzy
 msgid "Right"
-msgstr "Light"
+msgstr "Right"
 
 #: src/app/HandleGroups.ts:1861
 msgid "Bottom Left"
-msgstr ""
+msgstr "Bottom Left"
 
 #: src/app/HandleGroups.ts:1862
 msgid "Bottom"
-msgstr ""
+msgstr "Bottom"
 
 #: src/app/HandleGroups.ts:1863
 msgid "Bottom Right"
-msgstr ""
+msgstr "Bottom Right"
 
 #: src/app/HandleGroups.ts:1951
 msgid "Gluepoint"
-msgstr ""
+msgstr "Gluepoint"
 
 #: src/app/HandleGroups.ts:1998
 msgid "Up"
-msgstr ""
+msgstr "Up"
 
 #: src/app/HandleGroups.ts:1999
 msgid "Down"
-msgstr ""
+msgstr "Down"
 
 #: src/app/HandleGroups.ts:2004
 msgid "Anchor"
-msgstr ""
+msgstr "Anchor"
 
 #: src/app/HandleGroups.ts:2045
 msgid "Default gluepoints cannot be edited."
-msgstr ""
+msgstr "Default gluepoints cannot be edited."
 
 #: src/app/HandleGroups.ts:2863
-#, fuzzy
 msgid "Point"
-msgstr "Print"
+msgstr "Point"
 
 #: src/app/HandleGroups.ts:2875
 msgid "To Line"
-msgstr ""
+msgstr "To Line"
 
 #: src/app/HandleGroups.ts:2875
 msgid "To Curve"
-msgstr ""
+msgstr "To Curve"
 
 #: src/app/HandleGroups.ts:2882
 msgid "Corner Point"
-msgstr ""
+msgstr "Corner Point"
 
 #: src/app/HandleGroups.ts:2889
 msgid "Smooth Transition"
-msgstr ""
+msgstr "Smooth Transition"
 
 #: src/app/HandleGroups.ts:2896
 msgid "Symmetric Transition"
-msgstr ""
+msgstr "Symmetric Transition"
 
 #: src/app/HandleGroups.ts:2905
 msgid "Split Path"
-msgstr ""
+msgstr "Split Path"
 
 #: src/app/HandleGroups.ts:3420
 msgid "Motion Path"
-msgstr ""
+msgstr "Motion Path"
 
 #: src/app/HandleGroups.ts:3421 src/control/jsdialog/Definitions.Menu.ts:2515
 msgid "Add Point"
-msgstr ""
+msgstr "Add Point"
 
 #: src/app/HandleGroups.ts:3426
 msgid "Open Path"
-msgstr ""
+msgstr "Open Path"
 
 #: src/app/HandleGroups.ts:3426 src/control/jsdialog/Definitions.Menu.ts:2522
 msgid "Close Path"
-msgstr ""
+msgstr "Close Path"
 
 #: src/app/HandleGroups.ts:3433 src/control/jsdialog/Definitions.Menu.ts:2531
 msgid "Simplify Curves"
-msgstr ""
+msgstr "Simplify Curves"
 
 #: src/app/HandleGroups.ts:3439 src/control/jsdialog/Definitions.Menu.ts:2536
 msgid "Simplify All"
-msgstr ""
+msgstr "Simplify All"
 
 #: src/app/LOUtil.ts:1455
 msgid "{0} website, opens in new tab"
@@ -1944,60 +1949,61 @@ msgstr "Duplicate Style"
 #: src/app/Util.ts:319
 msgid "%n year"
 msgid_plural "%n years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n year"
+msgstr[1] "%n years"
 
 #: src/app/Util.ts:321
 msgid "%n day"
 msgid_plural "%n days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n day"
+msgstr[1] "%n days"
 
 #: src/app/Util.ts:322
 msgid "%n hour"
 msgid_plural "%n hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n hour"
+msgstr[1] "%n hours"
 
 #: src/app/Util.ts:325
 msgid "%n minute"
 msgid_plural "%n minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n minute"
+msgstr[1] "%n minutes"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
-msgstr ""
+msgstr "less than a minute"
 
 #: src/control/VideoBackgroundDialog.ts:24
 msgid "Clouds"
-msgstr ""
+msgstr "Clouds"
 
 #: src/control/VideoBackgroundDialog.ts:25
 msgid "Clouds at dusk"
-msgstr ""
+msgstr "Clouds at dusk"
 
 #: src/control/VideoBackgroundDialog.ts:26
 msgid "Bokeh"
-msgstr ""
+msgstr "Bokeh"
 
 #: src/control/VideoBackgroundDialog.ts:64
 #: src/control/Control.NotebookbarImpress.js:2112
 msgid "Background Video"
-msgstr ""
+msgstr "Background Video"
 
 #: src/control/VideoBackgroundDialog.ts:69
 msgid ""
 "The video plays behind every slide that uses the master slide of this slide."
 msgstr ""
+"The video plays behind every slide that uses the master slide of this slide."
 
 #: src/control/VideoBackgroundDialog.ts:98
 msgid "Remove Background Video"
-msgstr ""
+msgstr "Remove Background Video"
 
 #: src/control/VideoBackgroundDialog.ts:104
 msgid "Choose Your Own Video..."
-msgstr ""
+msgstr "Choose Your Own Video..."
 
 #: src/canvas/sections/CommentListSection.ts:2301
 #: src/canvas/sections/CommentListSection.ts:2314
@@ -2048,9 +2054,8 @@ msgid "Reply"
 msgstr "Reply"
 
 #: src/canvas/sections/CommentSection.ts:345
-#, fuzzy
 msgid "comment"
-msgstr "Comment"
+msgstr "comment"
 
 #: src/canvas/sections/CommentSection.ts:576
 msgid "Press Ctrl + Enter to post"
@@ -2058,7 +2063,7 @@ msgstr "Press Ctrl + Enter to post"
 
 #: src/canvas/sections/CommentSection.ts:594
 msgid "Reply to {0}"
-msgstr ""
+msgstr "Reply to {0}"
 
 #: src/canvas/sections/CommentSection.ts:664
 #: src/canvas/sections/CommentSection.ts:665
@@ -2135,7 +2140,7 @@ msgstr "Show in navigator"
 
 #: src/canvas/sections/CommentSection.ts:1828
 msgid "Press Ctrl + Enter to post, or %1 to discard"
-msgstr ""
+msgstr "Press Ctrl + Enter to post, or %1 to discard"
 
 #: src/canvas/sections/CommentSection.ts:1857
 #: src/canvas/sections/CommentSection.ts:1862
@@ -2173,11 +2178,11 @@ msgstr "Document contains unsupported media"
 
 #: src/canvas/sections/SelectionSection.ts:2207
 msgid "Waiting for redo..."
-msgstr ""
+msgstr "Waiting for redo..."
 
 #: src/canvas/sections/SelectionSection.ts:2208
 msgid "Waiting for undo..."
-msgstr ""
+msgstr "Waiting for undo..."
 
 #: src/canvas/sections/URLPopUpSection.ts:89
 #: src/control/Control.HyperlinkWizard.ts:41
@@ -2196,7 +2201,7 @@ msgstr "Remove link"
 
 #: src/canvas/sections/GroupButtonSection.ts:66
 msgid "Edit Diagram"
-msgstr ""
+msgstr "Edit Diagram"
 
 #: src/canvas/sections/FormFieldButton.ts:106
 msgid "Unfold"
@@ -2326,7 +2331,7 @@ msgstr "Casual"
 #. TRANSLATORS: such as "Formal" or a name that the user typed
 #: src/control/Control.AIChatSidebar.ts:352
 msgid "{0} tone"
-msgstr ""
+msgstr "{0} tone"
 
 #: src/control/Control.AIChatSidebar.ts:468
 msgid "Best"
@@ -2385,43 +2390,43 @@ msgstr "New conversation"
 
 #: src/control/Control.AIChatSidebar.ts:805
 msgid "What would you like to do with this spreadsheet?"
-msgstr ""
+msgstr "What would you like to do with this spreadsheet?"
 
 #: src/control/Control.AIChatSidebar.ts:807
 msgid "What would you like to do with this presentation?"
-msgstr ""
+msgstr "What would you like to do with this presentation?"
 
 #: src/control/Control.AIChatSidebar.ts:809
 msgid "What would you like to do with this drawing?"
-msgstr ""
+msgstr "What would you like to do with this drawing?"
 
 #: src/control/Control.AIChatSidebar.ts:811
 msgid "What would you like to do with this document?"
-msgstr ""
+msgstr "What would you like to do with this document?"
 
 #: src/control/Control.AIChatSidebar.ts:838
 msgid "Good morning, {0}"
-msgstr ""
+msgstr "Good morning, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:839
 msgid "Good morning"
-msgstr ""
+msgstr "Good morning"
 
 #: src/control/Control.AIChatSidebar.ts:841
 msgid "Good afternoon, {0}"
-msgstr ""
+msgstr "Good afternoon, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:842
 msgid "Good afternoon"
-msgstr ""
+msgstr "Good afternoon"
 
 #: src/control/Control.AIChatSidebar.ts:844
 msgid "Good evening, {0}"
-msgstr ""
+msgstr "Good evening, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:845
 msgid "Good evening"
-msgstr ""
+msgstr "Good evening"
 
 #: src/control/Control.AIChatSidebar.ts:896
 #: src/control/Control.AIChatSidebar.ts:2962
@@ -2471,7 +2476,7 @@ msgstr "Using selected text as context"
 
 #: src/control/Control.AIChatSidebar.ts:1088
 msgid "Ask AI, or type / for a saved prompt..."
-msgstr ""
+msgstr "Ask AI, or type / for a saved prompt..."
 
 #: src/control/Control.AIChatSidebar.ts:1091
 msgid "Message input"
@@ -2487,9 +2492,8 @@ msgstr "Send message"
 
 #: src/control/Control.AIChatSidebar.ts:1130
 #: src/control/Control.AIChatSidebar.ts:1143
-#, fuzzy
 msgid "Set Tone"
-msgstr "Set tone"
+msgstr "Set Tone"
 
 #: src/control/Control.AIChatSidebar.ts:1154
 msgid "Set tone of voice"
@@ -2554,64 +2558,66 @@ msgstr "Toggle emojify"
 
 #: src/control/Control.AIChatSidebar.ts:1313
 msgid "Add Prompts"
-msgstr ""
+msgstr "Add Prompts"
 
 #: src/control/Control.AIChatSidebar.ts:1316
 msgid "Saved prompts"
-msgstr ""
+msgstr "Saved prompts"
 
 #: src/control/Control.AIChatSidebar.ts:1345
 msgid "My prompts"
-msgstr ""
+msgstr "My prompts"
 
 #: src/control/Control.AIChatSidebar.ts:1354
 msgid "Type / in the message box to run a prompt."
-msgstr ""
+msgstr "Type / in the message box to run a prompt."
 
 #: src/control/Control.AIChatSidebar.ts:1363
 msgid "Run prompt {0}"
-msgstr ""
+msgstr "Run prompt {0}"
 
 #: src/control/Control.AIChatSidebar.ts:1368
 #: src/control/Control.AIChatSidebar.ts:1369
 #: src/control/Control.AIChatSidebar.ts:1424
 msgid "Edit prompt"
-msgstr ""
+msgstr "Edit prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1385
 msgid ""
 "Save instructions you use often and run them on the selected text. Type / "
 "in the message box to run a prompt."
 msgstr ""
+"Save instructions you use often and run them on the selected text. Type / in "
+"the message box to run a prompt."
 
 #: src/control/Control.AIChatSidebar.ts:1394
 #: src/control/Control.AIChatSidebar.ts:1769
 msgid "+ Add a prompt"
-msgstr ""
+msgstr "+ Add a prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1398
 #: src/control/Control.AIChatSidebar.ts:1772
 msgid "Add a prompt"
-msgstr ""
+msgstr "Add a prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1418
 msgid "Back to prompts"
-msgstr ""
+msgstr "Back to prompts"
 
 #: src/control/Control.AIChatSidebar.ts:1424
 msgid "New prompt"
-msgstr ""
+msgstr "New prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1434
 #: src/control/Control.AIChatSidebar.ts:1519
 #: src/control/Control.AIChatSidebar.ts:1545
 msgid "Delete prompt"
-msgstr ""
+msgstr "Delete prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1449
 #: src/control/Control.AIChatSidebar.ts:1451
 msgid "Save prompt"
-msgstr ""
+msgstr "Save prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1469
 #: src/control/backstage/HomeView.tsx:75
@@ -2624,34 +2630,34 @@ msgstr "Name"
 
 #: src/control/Control.AIChatSidebar.ts:1476
 msgid "e.g. Meeting minutes"
-msgstr ""
+msgstr "e.g. Meeting minutes"
 
 #: src/control/Control.AIChatSidebar.ts:1478
 msgid "Prompt name"
-msgstr ""
+msgstr "Prompt name"
 
 #: src/control/Control.AIChatSidebar.ts:1483
 msgid "What should AI do with the selected text?"
-msgstr ""
+msgstr "What should AI do with the selected text?"
 
 #: src/control/Control.AIChatSidebar.ts:1491
 msgid ""
 "Turn the selected notes into meeting minutes with decisions and action "
 "items."
 msgstr ""
+"Turn the selected notes into meeting minutes with decisions and action items."
 
 #: src/control/Control.AIChatSidebar.ts:1495
 msgid "Prompt instruction"
-msgstr ""
+msgstr "Prompt instruction"
 
 #: src/control/Control.AIChatSidebar.ts:1514
-#, fuzzy
 msgid "Delete prompt confirmation"
-msgstr "Delete tone confirmation"
+msgstr "Delete prompt confirmation"
 
 #: src/control/Control.AIChatSidebar.ts:1525
 msgid "The prompt \"{0}\" will be deleted."
-msgstr ""
+msgstr "The prompt \"{0}\" will be deleted."
 
 #: src/control/Control.AIChatSidebar.ts:1538
 #: src/control/Control.AIChatSidebar.ts:2240
@@ -2659,17 +2665,16 @@ msgid "Cancel delete"
 msgstr "Cancel delete"
 
 #: src/control/Control.AIChatSidebar.ts:1635
-#, fuzzy
 msgid "You have reached the maximum of {0} saved prompts."
-msgstr "You have reached the maximum of {0} custom tones."
+msgstr "You have reached the maximum of {0} saved prompts."
 
 #: src/control/Control.AIChatSidebar.ts:1753
 msgid "No saved prompt matches this name."
-msgstr ""
+msgstr "No saved prompt matches this name."
 
 #: src/control/Control.AIChatSidebar.ts:1754
 msgid "You have no saved prompts yet."
-msgstr ""
+msgstr "You have no saved prompts yet."
 
 #: src/control/Control.AIChatSidebar.ts:2057
 msgid "Use icon"
@@ -3136,21 +3141,20 @@ msgid "Reject action"
 msgstr "Reject action"
 
 #: src/control/Control.AIChatSidebar.ts:3519
-#, fuzzy
 msgid "Send"
-msgstr "Sent"
+msgstr "Send"
 
 #: src/control/Control.AIChatSidebar.ts:3521
 msgid "Send these cells"
-msgstr ""
+msgstr "Send these cells"
 
 #: src/control/Control.AIChatSidebar.ts:3527
 msgid "Do not send these cells"
-msgstr ""
+msgstr "Do not send these cells"
 
 #: src/control/Control.AIChatSidebar.ts:3544
 msgid "Nothing was sent."
-msgstr ""
+msgstr "Nothing was sent."
 
 #: src/control/Control.AIChatSidebar.ts:3567
 msgid "Applying changes..."
@@ -3242,7 +3246,7 @@ msgstr "Formula analysis timeout"
 
 #: src/control/Control.AIChatSidebar.ts:4520
 msgid "Select the content you want the assistant to work on first."
-msgstr ""
+msgstr "Select the content you want the assistant to work on first."
 
 #: src/control/Control.AIChatSidebar.ts:4536
 msgid "Analyzing formula dependencies..."
@@ -3266,11 +3270,11 @@ msgstr "Diagnose formula error in"
 
 #: src/control/Control.AIChatSidebar.ts:4594
 msgid "To diagnose the error in %1, these cells will be sent to %2:"
-msgstr ""
+msgstr "To diagnose the error in %1, these cells will be sent to %2:"
 
 #: src/control/Control.AIChatSidebar.ts:4600
 msgid "Do you want to send them?"
-msgstr ""
+msgstr "Do you want to send them?"
 
 #: src/control/Control.AIChatSidebar.ts:4620
 msgid "I have a formula error in my spreadsheet."
@@ -3280,7 +3284,7 @@ msgstr "I have a formula error in my spreadsheet."
 #. TRANSLATORS: B5, {1} the name of its sheet
 #: src/control/Control.AIChatSidebar.ts:4624
 msgid "Cell {0} (Sheet: {1}) contains:"
-msgstr ""
+msgstr "Cell {0} (Sheet: {1}) contains:"
 
 #: src/control/Control.AIChatSidebar.ts:4629
 #: src/control/Control.FormulaBarJSDialog.js:116
@@ -3314,11 +3318,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:4665
 msgid "only the cells with errors"
-msgstr ""
+msgstr "only the cells with errors"
 
 #: src/control/Control.AIChatSidebar.ts:4672
 msgid "another file, its name only"
-msgstr ""
+msgstr "another file, its name only"
 
 #: src/control/Control.AIChatSidebar.ts:4702
 msgid "formula"
@@ -4057,7 +4061,7 @@ msgstr "No template"
 #: src/control/backstage/MyTemplatesView.tsx:156
 #: src/control/onboarding/Control.OnboardingTour.ts:306
 msgid "Back"
-msgstr ""
+msgstr "Back"
 
 #: src/control/backstage/MyTemplatesView.tsx:161
 #, fuzzy

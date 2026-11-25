@@ -3,16 +3,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Calc-Intro-Template.ods\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-10-10 17:57+0000\n"
-"Last-Translator: Rob Pearson <rob.dunedin@gmail.com>\n"
+"PO-Revision-Date: 2026-11-24 14:54+0000\n"
+"Last-Translator: Rob Pearson <rob.dunedin@users.noreply.hosted.weblate.org>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
-"collabora-online/calc-intro-template/en_GB/>\n"
+"collabora-online/desktop-apps/calc-intro-template/en_GB/>\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #. content.xml (validation title)
 msgid "Try formatting"
@@ -35,15 +35,11 @@ msgstr ""
 "Stock\"."
 
 #. content.xml (validation help message)
-#, fuzzy
-#| msgid ""
-#| "For Medium Stock use condition \"Values between: 20-80\" and style "
-#| "\"Medium Stock\"."
 msgid ""
 "For High Stock use condition \"Values greater than: 80\" and style \"High "
 "Stock\"."
 msgstr ""
-"For Medium Stock use condition \"Values between: 20-80\" and style \"Medium "
+"For High Stock use condition \"Values greater than: 80\" and style \"High "
 "Stock\"."
 
 #. content.xml (validation title)
@@ -324,12 +320,18 @@ msgid ""
 "Spreadsheet, Text </2><3>and</3><4> Add-in</4><5>, making it easier to find "
 "the function you need.</5>"
 msgstr ""
+"<1>Functions are organised into categories such as Database, </1><2>Date & "
+"Time, Financial, Information, Logical, Mathematical, Array, Statistical, "
+"Spreadsheet, Text </2><3>and</3><4> Add-in</4><5>, making it easier to find "
+"the function you need.</5>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
 "<1>You can access these functions through the Function Library or by using "
 "the </1><2>Function Wizard.</2>"
 msgstr ""
+"<1>You can access these functions through the Function Library or by using "
+"the </1><2>Function Wizard.</2>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Next Chapter: 📋 Tables"
@@ -483,6 +485,8 @@ msgid ""
 "These features help you keep your table organised, highlight important "
 "information, and work more efficiently with your data."
 msgstr ""
+"These features help you keep your table organised, highlight important "
+"information, and work more efficiently with your data."
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
@@ -514,6 +518,9 @@ msgid ""
 "can be arranged, rearranged or summarised according to different points of "
 "view."
 msgstr ""
+"A table that has been created as a pivot table is an interactive table. Data "
+"can be arranged, rearranged or summarised according to different points of "
+"view."
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
@@ -550,6 +557,8 @@ msgid ""
 "Conditional formatting automatically changes how cells look based on their "
 "values, helping you quickly spot trends or important data."
 msgstr ""
+"Conditional formatting automatically changes how cells look based on their "
+"values, helping you quickly spot trends or important data."
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
@@ -596,23 +605,30 @@ msgid ""
 "Highlight important inventory data to quickly identify products that are "
 "running low on stock."
 msgstr ""
+"Highlight important inventory data to quickly identify products that are "
+"running low on stock."
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
 "<1>Low Stock</1><2> (less than 20 pcs) → </2><3>Red</3><4> background</4>"
 msgstr ""
+"<1>Low Stock</1><2> (less than 20 pcs) → </2><3>Red</3><4> background</4>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
 "<1>Medium Stock</1><2> (between 20 and 80 pcs)→ </2><3>Orange</3><4> "
 "background</4>"
 msgstr ""
+"<1>Medium Stock</1><2> (between 20 and 80 pcs)→ </2><3>Orange</3><4> "
+"background</4>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
 "<1>High Stock </1><2>(more than</2><3> </3><4>80 pcs)→ </4><5>Green</5><6> "
 "background</6>"
 msgstr ""
+"<1>High Stock </1><2>(more than</2><3> </3><4>80 pcs)→ </4><5>Green</5><6> "
+"background</6>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
@@ -722,7 +738,7 @@ msgstr "7. Your data is now displayed as a chart"
 
 #. content.xml (sheet '📊 Charts')
 msgid "Editing charts"
-msgstr ""
+msgstr "Editing charts"
 
 #. content.xml (sheet '📊 Charts')
 msgid ""
@@ -730,6 +746,9 @@ msgid ""
 "you can use the options in the sidebar or open the context menu (right "
 "click) to modify the chart."
 msgstr ""
+"To edit a chart, double click on it to activate editing mode. Once selected, "
+"you can use the options in the sidebar or open the context menu (right "
+"click) to modify the chart."
 
 #. content.xml (sheet '📊 Charts')
 msgid ""
@@ -737,14 +756,17 @@ msgid ""
 "well as change the data range or chart type. These tools allow you to "
 "customise the chart and better present your data."
 msgstr ""
+"You can add or adjust chart elements such as titles, axes, and labels, as "
+"well as change the data range or chart type. These tools allow you to "
+"customise the chart and better present your data."
 
 #. content.xml (sheet '📊 Charts')
 msgid "Next Chapter:🔍 Data & filtering"
-msgstr ""
+msgstr "Next Chapter:🔍 Data & filtering"
 
 #. content.xml (sheet name); content.xml (sheet '🔍 Data & filtering')
 msgid "🔍 Data & filtering"
-msgstr ""
+msgstr "🔍 Data & filtering"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
@@ -752,41 +774,47 @@ msgid ""
 "efficiently. You can quickly sort information or apply filters to focus only "
 "on the data that matters."
 msgstr ""
+"Data and filtering tools help you organise and explore your data more "
+"efficiently. You can quickly sort information or apply filters to focus only "
+"on the data that matters."
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
 "In this example, we will learn how to filter data to quickly find specific "
 "items in an inventory list."
 msgstr ""
+"In this example, we will learn how to filter data to quickly find specific "
+"items in an inventory list."
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Enable filtering"
-msgstr ""
+msgstr "Enable filtering"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "<1>2. Open the </1><2>Data tab </2><3>in the toolbar</3>"
-msgstr ""
+msgstr "<1>2. Open the </1><2>Data tab </2><3>in the toolbar</3>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "<1>3. Click </1><2>Auto Filter</2>"
-msgstr ""
+msgstr "<1>3. Click </1><2>Auto Filter</2>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "➜Try it: Find low stock items"
-msgstr ""
+msgstr "➜Try it: Find low stock items"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
 "Sort the Quantity [pcs] column to see which items have the lowest stock."
 msgstr ""
+"Sort the Quantity [pcs] column to see which items have the lowest stock."
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "➜Try it: Show only Electronics items"
-msgstr ""
+msgstr "➜Try it: Show only Electronics items"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Use the filter in the Category column and select Electronics."
-msgstr ""
+msgstr "Use the filter in the Category column and select Electronics."
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
@@ -794,20 +822,25 @@ msgid ""
 "filtered data, then go to the</2><3> Data tab</3><4> and click </4><5>Reset "
 "Filter</5><6>. All data will be visible again.</6>"
 msgstr ""
+"<1>💡Useful tip: </1><2>To disable the filter, select any cell within the "
+"filtered data, then go to the</2><3> Data tab</3><4> and click </4><5>Reset "
+"Filter</5><6>. All data will be visible again.</6>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Other filtering options"
-msgstr ""
+msgstr "Other filtering options"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Additional filtering options give you more control over your data."
-msgstr ""
+msgstr "Additional filtering options give you more control over your data."
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
 "<1>Auto Filter</1><2> lets you quickly filter data directly in the table "
 "using simple selections.</2>"
 msgstr ""
+"<1>Auto Filter</1><2> lets you quickly filter data directly in the table "
+"using simple selections.</2>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
@@ -815,6 +848,9 @@ msgid ""
 "specific data fields. You can also combine conditions using logical AND or "
 "OR operators.</2>"
 msgstr ""
+"<1>Standard Filter</1><2> allows you to define ranges that contain values in "
+"specific data fields. You can also combine conditions using logical AND or "
+"OR operators.</2>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
@@ -822,25 +858,30 @@ msgid ""
 "conditions. You can enter these conditions directly into the sheet for more "
 "precise and flexible filtering.</2>"
 msgstr ""
+"<1>Advanced Filter</1><2> allows you to define up to eight filter "
+"conditions. You can enter these conditions directly into the sheet for more "
+"precise and flexible filtering.</2>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Last Chapter: 🤝 Productivity & collaboration"
-msgstr ""
+msgstr "Last Chapter: 🤝 Productivity & collaboration"
 
 #. content.xml (sheet name); content.xml (sheet '🤝 Productivity &
 #. collaboration')
 msgid "🤝 Productivity & collaboration"
-msgstr ""
+msgstr "🤝 Productivity & collaboration"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
 "A range of features helps you stay productive and collaborate with others, "
 "making it easier to organise work and share information in real time."
 msgstr ""
+"A range of features helps you stay productive and collaborate with others, "
+"making it easier to organise work and share information in real time."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Document sharing"
-msgstr ""
+msgstr "Document sharing"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
@@ -848,6 +889,9 @@ msgid ""
 "document simultaneously, making it easy to share ideas, review changes, and "
 "stay aligned."
 msgstr ""
+"Work together with others in real time. Multiple users can edit the same "
+"document simultaneously, making it easy to share ideas, review changes, and "
+"stay aligned."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
@@ -856,42 +900,42 @@ msgid ""
 "cursor and follow their activity in the document. Notifications also inform "
 "you when someone joins or leaves."
 msgstr ""
+"Each user is assigned a unique colour, so you can easily see who is editing "
+"what. You can click on a user’s name or avatar to jump directly to their "
+"cursor and follow their activity in the document. Notifications also inform "
+"you when someone joins or leaves."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Start sharing your document"
-msgstr ""
+msgstr "Start sharing your document"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "1. Create new document or open existing one"
-msgstr ""
+msgstr "1. Create new document or open existing one"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "<1>2. Click on </1><2>Share button</2><3> on right top side</3>"
-msgstr ""
+msgstr "<1>2. Click on </1><2>Share button</2><3> on right top side</3>"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "<1>3. </1><2>Share</2><3> your document with others</3>"
-msgstr ""
+msgstr "<1>3. </1><2>Share</2><3> your document with others</3>"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "➜Try it: Internal shares"
-msgstr ""
+msgstr "➜Try it: Internal shares"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
-#, fuzzy
-#| msgid ""
-#| "Share a direct link with people who already have access to the document "
-#| "for quick and easy access."
 msgid ""
 "Share files within your organisation. People who already have access to the "
 "document can use the link for quick and easy access."
 msgstr ""
-"Share a direct link with people who already have access to the document for "
-"quick and easy access."
+"Share files within your organisation. People who already have access to the "
+"document can use the link for quick and easy access."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "➜Try it: External shares"
-msgstr ""
+msgstr "➜Try it: External shares"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
@@ -899,10 +943,13 @@ msgid ""
 "addresses. You can also share to Nextcloud accounts on other instances using "
 "their federated cloud ID."
 msgstr ""
+"Share files with others outside your organisation via public links and email "
+"addresses. You can also share to Nextcloud accounts on other instances using "
+"their federated cloud ID."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Shortcuts"
-msgstr ""
+msgstr "Shortcuts"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
@@ -911,6 +958,10 @@ msgid ""
 "copying, formatting, or navigating through your document, making your "
 "workflow more efficient."
 msgstr ""
+"Keyboard shortcuts help you work faster by reducing the need to use menus "
+"and clicks. They allow you to quickly perform common actions, such as "
+"copying, formatting, or navigating through your document, making your "
+"workflow more efficient."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
@@ -918,10 +969,13 @@ msgid ""
 "2><3>Help tab</3><4> and click on </4><5>Keyboard shortcuts</5><6>. You can "
 "also use the search option to quickly find specific shortcuts.</6>"
 msgstr ""
+"<1>💡Useful tip: </1><2>To find a list of all shortcuts, go to the </2><3>"
+"Help tab</3><4> and click on </4><5>Keyboard shortcuts</5><6>. You can also "
+"use the search option to quickly find specific shortcuts.</6>"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "⏯Video tutorials"
-msgstr ""
+msgstr "⏯Video tutorials"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
@@ -930,10 +984,14 @@ msgid ""
 "what you’ve learned, so you can become more confident and efficient in your "
 "work."
 msgstr ""
+"To continue learning, explore short video introductions that cover "
+"additional features. These videos offer quick guidance and help you build on "
+"what you’ve learned, so you can become more confident and efficient in your "
+"work."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Check out video tutorials"
-msgstr ""
+msgstr "Check out video tutorials"
 
 #~ msgid "5"
 #~ msgstr "5"

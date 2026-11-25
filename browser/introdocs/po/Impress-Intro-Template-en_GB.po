@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Impress-Intro-Template.odp\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-11-08 15:04+0000\n"
-"Last-Translator: Andi Chandler <andibing@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-24 14:55+0000\n"
+"Last-Translator: Rob Pearson <rob.dunedin@users.noreply.hosted.weblate.org>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "collabora-online/desktop-apps/impress-intro-template/en_GB/>\n"
 "Language: en_GB\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.11.2.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #. content.xml (slide 'page1')
 msgid "👋 Introduction"
@@ -74,6 +74,8 @@ msgid ""
 "<1>Use the </1><2>Slide navigation</2><3> on the left to reorder them by "
 "dragging, or remove ones you don’t need.</3>"
 msgstr ""
+"<1>Use the </1><2>Slide navigation</2><3> on the left to reorder them by "
+"dragging, or remove ones you don’t need.</3>"
 
 #. content.xml (slide 'page2')
 msgid ""
@@ -81,6 +83,9 @@ msgid ""
 "arrangement of placeholders for titles, text, and images. Pick the layout "
 "that fits the slide’s purpose.</3>"
 msgstr ""
+"<1>Each slide can use a </1><2>different layout </2><3>– a predefined "
+"arrangement of placeholders for titles, text, and images. Pick the layout "
+"that fits the slide’s purpose.</3>"
 
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
 #. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
@@ -91,15 +96,15 @@ msgstr "<1>➜</1><2>Try it:</2>"
 
 #. content.xml (slide 'page2')
 msgid "Add a new slide clicking “New” in Notebook bar."
-msgstr ""
+msgstr "Add a new slide clicking “New” in Notebook bar."
 
 #. content.xml (slide 'page2')
 msgid "Choose a layout for it from the layout chooser."
-msgstr ""
+msgstr "Choose a layout for it from the layout chooser."
 
 #. content.xml (slide 'page2')
 msgid "Start editing your slide."
-msgstr ""
+msgstr "Start editing your slide."
 
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
 #. (slide 'page4'); content.xml (slide 'page5'); styles.xml (master page
@@ -139,19 +144,19 @@ msgstr ""
 
 #. content.xml (slide 'page3')
 msgid "Open the View tab in the Notebook bar."
-msgstr ""
+msgstr "Open the View tab in the Notebook bar."
 
 #. content.xml (slide 'page3')
 msgid "Click “Master View” and edit your master design."
-msgstr ""
+msgstr "Click “Master View” and edit your master design."
 
 #. content.xml (slide 'page3')
 msgid "Once your master design is ready, click \"Close Master View\"."
-msgstr ""
+msgstr "Once your master design is ready, click \"Close Master View\"."
 
 #. content.xml (slide 'page3')
 msgid "Now your master is set and ready to use across all slides."
-msgstr ""
+msgstr "Now your master is set and ready to use across all slides."
 
 #. content.xml (slide 'page3')
 msgid ""
@@ -184,17 +189,22 @@ msgid ""
 "In the Notebook bar, open the Insert tab and add an object, image, table, or "
 "any other element that supports your content."
 msgstr ""
+"In the Notebook bar, open the Insert tab and add an object, image, table, or "
+"any other element that supports your content."
 
 #. content.xml (slide 'page4')
 msgid ""
 "Click on it to select it, then resize and reposition it to fit your layout."
 msgstr ""
+"Click on it to select it, then resize and reposition it to fit your layout."
 
 #. content.xml (slide 'page4')
 msgid ""
 "For editable objects like shapes or images, a contextual tab appears in the "
 "Notebook bar with all the available actions."
 msgstr ""
+"For editable objects like shapes or images, a contextual tab appears in the "
+"Notebook bar with all the available actions."
 
 #. content.xml (slide 'page4')
 msgid ""
@@ -220,21 +230,23 @@ msgstr ""
 
 #. content.xml (slide 'page5')
 msgid "Click Transition tab in Notebook bar."
-msgstr ""
+msgstr "Click Transition tab in Notebook bar."
 
 #. content.xml (slide 'page5')
 msgid "Pick a transition style you would like to use."
-msgstr ""
+msgstr "Pick a transition style you would like to use."
 
 #. content.xml (slide 'page5')
 msgid ""
 "Adjust other properties – set the duration, pick a variant, or choose timing."
 msgstr ""
+"Adjust other properties – set the duration, pick a variant, or choose timing."
 
 #. content.xml (slide 'page5')
 msgid ""
 "Click \"Apply to All Slides\" to use the same transition across your deck."
 msgstr ""
+"Click \"Apply to All Slides\" to use the same transition across your deck."
 
 #. content.xml (slide 'page5')
 msgid ""
@@ -262,19 +274,19 @@ msgstr ""
 
 #. content.xml (slide 'page6')
 msgid "Switch to the View tab in the Notebook bar and open “Notes view”."
-msgstr ""
+msgstr "Switch to the View tab in the Notebook bar and open “Notes view”."
 
 #. content.xml (slide 'page6')
 msgid "Add a speaker note to your slides."
-msgstr ""
+msgstr "Add a speaker note to your slides."
 
 #. content.xml (slide 'page6')
 msgid "When you're ready to present, open the Slide Show tab."
-msgstr ""
+msgstr "When you're ready to present, open the Slide Show tab."
 
 #. content.xml (slide 'page6')
 msgid "Pick a slide show option to start presenting."
-msgstr ""
+msgstr "Pick a slide show option to start presenting."
 
 #. content.xml (slide 'page6')
 msgid "Next Chapter: 🤝 Productivity & Collaboration"
