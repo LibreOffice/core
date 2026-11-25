@@ -58,6 +58,17 @@
             <property name="column-spacing">6</property>
             <property name="row-homogeneous">True</property>
             <child>
+              <object class="GtkImage" id="imageLinear">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">missing-image</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkRadioButton" id="linear">
                 <property name="label" translatable="yes" context="tp_Trendline|linear">_Linear</property>
                 <property name="visible">True</property>
@@ -75,6 +86,17 @@
               <packing>
                 <property name="left-attach">1</property>
                 <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="imageLogarithmic">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">missing-image</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
@@ -98,6 +120,17 @@
               </packing>
             </child>
             <child>
+              <object class="GtkImage" id="imageExponential">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">missing-image</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkRadioButton" id="exponential">
                 <property name="label" translatable="yes" context="tp_Trendline|exponential">_Exponential</property>
                 <property name="visible">True</property>
@@ -118,6 +151,17 @@
               </packing>
             </child>
             <child>
+              <object class="GtkImage" id="imagePower">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">missing-image</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkRadioButton" id="power">
                 <property name="label" translatable="yes" context="tp_Trendline|power">Po_wer</property>
                 <property name="visible">True</property>
@@ -134,50 +178,6 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkImage" id="imageLinear">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">missing-image</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkImage" id="imageLogarithmic">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">missing-image</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkImage" id="imageExponential">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">missing-image</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkImage" id="imagePower">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">missing-image</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
                 <property name="top-attach">3</property>
               </packing>
             </child>
@@ -412,6 +412,42 @@
             <property name="column-spacing">12</property>
             <property name="row-homogeneous">True</property>
             <child>
+              <object class="GtkLabel" id="label5">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="tp_Trendline|label5">Trendline _Name</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">entry_name</property>
+                <property name="xalign">0</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="label5-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|label5">Name of trend line in legend.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="entry_name">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="entry_name-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|entry_name">Name of trend line in legend.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="label7">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -427,6 +463,20 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="extrapolateForward">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <property name="adjustment">adjustmentForwardBackward</property>
+                <property name="digits">2</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
                 <property name="top-attach">1</property>
               </packing>
             </child>
@@ -447,20 +497,6 @@
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSpinButton" id="extrapolateForward">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="activates-default">True</property>
-                <property name="truncate-multiline">True</property>
-                <property name="adjustment">adjustmentForwardBackward</property>
-                <property name="digits">2</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
@@ -496,6 +532,29 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="interceptValue">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="text">0</property>
+                <property name="truncate-multiline">True</property>
+                <property name="adjustment">adjustmentForwardBackward2</property>
+                <property name="digits">2</property>
+                <accessibility>
+                  <relation type="labelled-by" target="setIntercept"/>
+                </accessibility>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="interceptValue-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|interceptValue">Value of intercept if it is forced.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
                 <property name="top-attach">3</property>
               </packing>
             </child>
@@ -537,65 +596,6 @@
                 <property name="left-attach">0</property>
                 <property name="top-attach">5</property>
                 <property name="width">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label5">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="tp_Trendline|label5">Trendline _Name</property>
-                <property name="use-underline">True</property>
-                <property name="mnemonic-widget">entry_name</property>
-                <property name="xalign">0</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="label5-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|label5">Name of trend line in legend.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="entry_name">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="activates-default">True</property>
-                <property name="truncate-multiline">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="entry_name-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|entry_name">Name of trend line in legend.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSpinButton" id="interceptValue">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="activates-default">True</property>
-                <property name="text">0</property>
-                <property name="truncate-multiline">True</property>
-                <property name="adjustment">adjustmentForwardBackward2</property>
-                <property name="digits">2</property>
-                <accessibility>
-                  <relation type="labelled-by" target="setIntercept"/>
-                </accessibility>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="interceptValue-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|interceptValue">Value of intercept if it is forced.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
