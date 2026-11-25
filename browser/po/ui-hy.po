@@ -8,11 +8,12 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 12:57+0100\n"
-"PO-Revision-Date: 2026-11-20 09:27+0000\n"
-"Last-Translator: tigran54 <tigran54@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-21 19:16+0000\n"
+"Last-Translator: Tigran Zargaryan "
+"<tigranflib@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Armenian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/hy/>\n"
-"Language: \n"
+"Language: hy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -458,6 +459,8 @@ msgid ""
 "No WOPI host is allowed: alias_groups mode is \"groups\" but no group is "
 "defined"
 msgstr ""
+"WOPI հոսթինգ թույլատրված չէ. alias_groups ռեժիմը \"groups\" է, բայց խումբ "
+"սահմանված չէ"
 
 #: admin/src/AdminSocketServerAudit.js:58
 #: src/control/Control.ServerAuditDialog.ts:129
@@ -1812,23 +1815,23 @@ msgstr "Պատկեր (.png)"
 
 #: src/app/HandleGroups.ts:1855
 msgid "Top Left"
-msgstr ""
+msgstr "Վերև ձախ"
 
 #: src/app/HandleGroups.ts:1856
 msgid "Top"
-msgstr ""
+msgstr "Վերև"
 
 #: src/app/HandleGroups.ts:1857
 msgid "Top Right"
-msgstr ""
+msgstr "Վերև աջ"
 
 #: src/app/HandleGroups.ts:1858 src/app/HandleGroups.ts:1996
 msgid "Left"
-msgstr ""
+msgstr "Ձախ"
 
 #: src/app/HandleGroups.ts:1859
 msgid "Center"
-msgstr ""
+msgstr "Կենտրոն"
 
 #: src/app/HandleGroups.ts:1860 src/app/HandleGroups.ts:1997
 msgid "Right"
@@ -1836,35 +1839,35 @@ msgstr "Աջ"
 
 #: src/app/HandleGroups.ts:1861
 msgid "Bottom Left"
-msgstr ""
+msgstr "Ներքևի ձախ"
 
 #: src/app/HandleGroups.ts:1862
 msgid "Bottom"
-msgstr ""
+msgstr "Ստորին"
 
 #: src/app/HandleGroups.ts:1863
 msgid "Bottom Right"
-msgstr ""
+msgstr "Ներքևի աջ"
 
 #: src/app/HandleGroups.ts:1951
 msgid "Gluepoint"
-msgstr ""
+msgstr "Սոսնձման կետ"
 
 #: src/app/HandleGroups.ts:1998
 msgid "Up"
-msgstr ""
+msgstr "Վեր"
 
 #: src/app/HandleGroups.ts:1999
 msgid "Down"
-msgstr ""
+msgstr "Ներքև"
 
 #: src/app/HandleGroups.ts:2004
 msgid "Anchor"
-msgstr ""
+msgstr "Խարիսխ"
 
 #: src/app/HandleGroups.ts:2045
 msgid "Default gluepoints cannot be edited."
-msgstr ""
+msgstr "Լռելյայն սոսնձման կետերը չեն կարող խմբագրվել։"
 
 #: src/app/HandleGroups.ts:2863
 msgid "Point"
@@ -1872,51 +1875,51 @@ msgstr "Կետ"
 
 #: src/app/HandleGroups.ts:2875
 msgid "To Line"
-msgstr ""
+msgstr "Գծի վրա"
 
 #: src/app/HandleGroups.ts:2875
 msgid "To Curve"
-msgstr ""
+msgstr "Կորի վրա"
 
 #: src/app/HandleGroups.ts:2882
 msgid "Corner Point"
-msgstr ""
+msgstr "Անկյունային կետ"
 
 #: src/app/HandleGroups.ts:2889
 msgid "Smooth Transition"
-msgstr ""
+msgstr "Հարթ անցում"
 
 #: src/app/HandleGroups.ts:2896
 msgid "Symmetric Transition"
-msgstr ""
+msgstr "Սիմետրիկ անցում"
 
 #: src/app/HandleGroups.ts:2905
 msgid "Split Path"
-msgstr ""
+msgstr "Բաժանված ուղի"
 
 #: src/app/HandleGroups.ts:3420
 msgid "Motion Path"
-msgstr ""
+msgstr "Շարժման ուղի"
 
 #: src/app/HandleGroups.ts:3421 src/control/jsdialog/Definitions.Menu.ts:2515
 msgid "Add Point"
-msgstr ""
+msgstr "Ավելացնել կետ"
 
 #: src/app/HandleGroups.ts:3426
 msgid "Open Path"
-msgstr ""
+msgstr "Բացել ուղին"
 
 #: src/app/HandleGroups.ts:3426 src/control/jsdialog/Definitions.Menu.ts:2522
 msgid "Close Path"
-msgstr ""
+msgstr "Փակել ուղին"
 
 #: src/app/HandleGroups.ts:3433 src/control/jsdialog/Definitions.Menu.ts:2531
 msgid "Simplify Curves"
-msgstr ""
+msgstr "Պարզեցնել կորերը"
 
 #: src/app/HandleGroups.ts:3439 src/control/jsdialog/Definitions.Menu.ts:2536
 msgid "Simplify All"
-msgstr ""
+msgstr "Պարզեցնել բոլորը"
 
 #: src/app/LOUtil.ts:1455
 msgid "{0} website, opens in new tab"
@@ -1990,33 +1993,35 @@ msgstr "մեկ րոպեից պակաս"
 
 #: src/control/VideoBackgroundDialog.ts:24
 msgid "Clouds"
-msgstr ""
+msgstr "Ամպեր"
 
 #: src/control/VideoBackgroundDialog.ts:25
 msgid "Clouds at dusk"
-msgstr ""
+msgstr "Ամպերը մթնշաղին"
 
 #: src/control/VideoBackgroundDialog.ts:26
 msgid "Bokeh"
-msgstr ""
+msgstr "Բոկե"
 
 #: src/control/VideoBackgroundDialog.ts:64
 #: src/control/Control.NotebookbarImpress.js:2112
 msgid "Background Video"
-msgstr ""
+msgstr "Ֆոնային տեսանյութ"
 
 #: src/control/VideoBackgroundDialog.ts:69
 msgid ""
 "The video plays behind every slide that uses the master slide of this slide."
 msgstr ""
+"Տեսանյութը նվագարկվում է յուրաքանչյուր սահիկի հետևում, որն օգտագործում է այս "
+"սահիկի գլխավոր սահիկը։"
 
 #: src/control/VideoBackgroundDialog.ts:98
 msgid "Remove Background Video"
-msgstr ""
+msgstr "Հեռացնել ֆոնային տեսանյութը"
 
 #: src/control/VideoBackgroundDialog.ts:104
 msgid "Choose Your Own Video..."
-msgstr ""
+msgstr "Ընտրեք ձեր սեփական տեսանյութը..."
 
 #: src/canvas/sections/CommentListSection.ts:2301
 #: src/canvas/sections/CommentListSection.ts:2314
@@ -2493,7 +2498,7 @@ msgstr "Ընտրված տեքստի օգտագործումը որպես համա
 
 #: src/control/Control.AIChatSidebar.ts:1088
 msgid "Ask AI, or type / for a saved prompt..."
-msgstr ""
+msgstr "Հարցրեք ԱԲ-ին կամ մուտքագրեք / պահպանված հուշում ստանալու համար..."
 
 #: src/control/Control.AIChatSidebar.ts:1091
 msgid "Message input"
@@ -2575,64 +2580,66 @@ msgstr "Միացնել/անջատել էմոջիացումը"
 
 #: src/control/Control.AIChatSidebar.ts:1313
 msgid "Add Prompts"
-msgstr ""
+msgstr "Ավելացնել հուշումներ"
 
 #: src/control/Control.AIChatSidebar.ts:1316
 msgid "Saved prompts"
-msgstr ""
+msgstr "Պահպանված հուշումներ"
 
 #: src/control/Control.AIChatSidebar.ts:1345
 msgid "My prompts"
-msgstr ""
+msgstr "Իմ հուշումները"
 
 #: src/control/Control.AIChatSidebar.ts:1354
 msgid "Type / in the message box to run a prompt."
-msgstr ""
+msgstr "Մուտքագրեք / հաղորդագրության դաշտում՝ հուշում գործարկելու համար։"
 
 #: src/control/Control.AIChatSidebar.ts:1363
 msgid "Run prompt {0}"
-msgstr ""
+msgstr "Գործարկել {0} հուշումը"
 
 #: src/control/Control.AIChatSidebar.ts:1368
 #: src/control/Control.AIChatSidebar.ts:1369
 #: src/control/Control.AIChatSidebar.ts:1424
 msgid "Edit prompt"
-msgstr ""
+msgstr "Խմբագրել հուշումը"
 
 #: src/control/Control.AIChatSidebar.ts:1385
 msgid ""
 "Save instructions you use often and run them on the selected text. Type / "
 "in the message box to run a prompt."
 msgstr ""
+"Պահպանեք հաճախ օգտագործվող հրահանգները և գործարկեք դրանք ընտրված տեքստի վրա: "
+"Մուտքագրեք / հաղորդագրության դաշտում՝ հուշում գործարկելու համար:"
 
 #: src/control/Control.AIChatSidebar.ts:1394
 #: src/control/Control.AIChatSidebar.ts:1769
 msgid "+ Add a prompt"
-msgstr ""
+msgstr "+ Ավելացնել հուշում"
 
 #: src/control/Control.AIChatSidebar.ts:1398
 #: src/control/Control.AIChatSidebar.ts:1772
 msgid "Add a prompt"
-msgstr ""
+msgstr "Ավելացնել հուշում"
 
 #: src/control/Control.AIChatSidebar.ts:1418
 msgid "Back to prompts"
-msgstr ""
+msgstr "Վերադառնալ հուշումներին"
 
 #: src/control/Control.AIChatSidebar.ts:1424
 msgid "New prompt"
-msgstr ""
+msgstr "Նոր հուշում"
 
 #: src/control/Control.AIChatSidebar.ts:1434
 #: src/control/Control.AIChatSidebar.ts:1519
 #: src/control/Control.AIChatSidebar.ts:1545
 msgid "Delete prompt"
-msgstr ""
+msgstr "Ջնջել հուշումը"
 
 #: src/control/Control.AIChatSidebar.ts:1449
 #: src/control/Control.AIChatSidebar.ts:1451
 msgid "Save prompt"
-msgstr ""
+msgstr "Պահպանել հուշումը"
 
 #: src/control/Control.AIChatSidebar.ts:1469
 #: src/control/backstage/HomeView.tsx:75
@@ -2645,25 +2652,26 @@ msgstr "Անուն"
 
 #: src/control/Control.AIChatSidebar.ts:1476
 msgid "e.g. Meeting minutes"
-msgstr ""
+msgstr "օրինակ՝ Հանդիպման րոպեներ"
 
 #: src/control/Control.AIChatSidebar.ts:1478
 msgid "Prompt name"
-msgstr ""
+msgstr "Հուշման անունը"
 
 #: src/control/Control.AIChatSidebar.ts:1483
 msgid "What should AI do with the selected text?"
-msgstr ""
+msgstr "Ի՞նչ պետք է անի ԱԲ-ը ընտրված տեքստի հետ։"
 
 #: src/control/Control.AIChatSidebar.ts:1491
 msgid ""
 "Turn the selected notes into meeting minutes with decisions and action "
 "items."
 msgstr ""
+"Ընտրված նշումները վերածեք նիստի րոպեների՝ որոշումներով և գործողություններով։"
 
 #: src/control/Control.AIChatSidebar.ts:1495
 msgid "Prompt instruction"
-msgstr ""
+msgstr "Արագ հրահանգ"
 
 #: src/control/Control.AIChatSidebar.ts:1514
 msgid "Delete prompt confirmation"
@@ -2671,7 +2679,7 @@ msgstr "Ջնջել հուշելու հաստատումը"
 
 #: src/control/Control.AIChatSidebar.ts:1525
 msgid "The prompt \"{0}\" will be deleted."
-msgstr ""
+msgstr "\"{0}\" հարցման տողը կջնջվի։"
 
 #: src/control/Control.AIChatSidebar.ts:1538
 #: src/control/Control.AIChatSidebar.ts:2240
@@ -2684,11 +2692,11 @@ msgstr "Դուք հասել եք պահպանված հարցումների առ�
 
 #: src/control/Control.AIChatSidebar.ts:1753
 msgid "No saved prompt matches this name."
-msgstr ""
+msgstr "Այս անվանը համապատասխանող ոչ մի պահպանված հուշում չկա։"
 
 #: src/control/Control.AIChatSidebar.ts:1754
 msgid "You have no saved prompts yet."
-msgstr ""
+msgstr "Դուք դեռ պահպանված հուշումներ չունեք։"
 
 #: src/control/Control.AIChatSidebar.ts:2057
 msgid "Use icon"
@@ -3882,7 +3890,7 @@ msgstr "Դուրս գալ"
 
 #: src/control/Control.BackstageView.ts:299
 msgid "Start something new, or continue where you left off."
-msgstr ""
+msgstr "Սկսեք ինչ-որ նոր բան, կամ շարունակեք այնտեղից, որտեղ կանգ եք առել։"
 
 #: src/control/Control.BackstageView.ts:332
 #: src/control/jsdialog/Widget.ColorPicker.ts:476
@@ -3891,19 +3899,19 @@ msgstr "Վերջերս"
 
 #: src/control/Control.BackstageView.ts:718
 msgid "Account in use"
-msgstr ""
+msgstr "Հաշիվն օգտագործվում է"
 
 #: src/control/Control.BackstageView.ts:720
 msgid "Close the windows and documents of this account before you remove it."
-msgstr ""
+msgstr "Այս հաշվի հեռացումից առաջ փակեք դրա պատուհաններն ու փաստաթղթերը։"
 
 #: src/control/Control.BackstageView.ts:873
 msgid "Template removed from favorites"
-msgstr ""
+msgstr "Ձևանմուշը հեռացվել է ընտրյալներից"
 
 #: src/control/Control.BackstageView.ts:874
 msgid "Template added to favorites"
-msgstr ""
+msgstr "Ձևանմուշն ավելացվել է ընտրյալներին"
 
 #: src/control/Control.BackstageView.ts:1188
 msgid "Document Info"
@@ -3915,7 +3923,7 @@ msgstr "Դիտել փաստաթղթի հատկությունները և տեղե
 
 #: src/control/Control.BackstageView.ts:1219
 msgid "Master document, a document per chapter"
-msgstr ""
+msgstr "Հիմնական փաստաթուղթ, մեկ փաստաթուղթ յուրաքանչյուր գլխի համար"
 
 #: src/control/Control.BackstageView.ts:1226
 msgid "Export Document"
@@ -4014,15 +4022,15 @@ msgstr "Փոփոխված ամսաթիվ"
 
 #: src/control/backstage/TemplatesView.tsx:106
 msgid "Remove from favorites"
-msgstr ""
+msgstr "Հեռացնել ընտրյալներից"
 
 #: src/control/backstage/TemplatesView.tsx:107
 msgid "Add to favorites"
-msgstr ""
+msgstr "Ավելացնել նախընտրածներին"
 
 #: src/control/backstage/TemplatesView.tsx:138
 msgid "Templates"
-msgstr ""
+msgstr "Ձևանմուշներ"
 
 #: src/control/backstage/TemplatesView.tsx:142
 msgid "Search templates"
@@ -4036,7 +4044,7 @@ msgstr "Բոլորը"
 
 #: src/control/backstage/TemplatesView.tsx:243
 msgid "Built-in templates"
-msgstr ""
+msgstr "Ներկառուցված ձևանմուշներ"
 
 #: src/control/backstage/TemplatesView.tsx:265
 #: src/control/backstage/MyTemplatesView.tsx:212
@@ -4046,15 +4054,15 @@ msgstr "Ձեր որոնմանը համապատասխանող ձևանմուշն�
 #: src/control/backstage/TemplatesView.tsx:266
 #: src/control/backstage/MyTemplatesView.tsx:213
 msgid "No templates of this type."
-msgstr ""
+msgstr "Այս տեսակի ձևանմուշներ չկան։"
 
 #: src/control/backstage/MyTemplatesView.tsx:75
 msgid "Document template"
-msgstr ""
+msgstr "Փաստաթղթի ձևանմուշ"
 
 #: src/control/backstage/MyTemplatesView.tsx:76
 msgid "Spreadsheet template"
-msgstr ""
+msgstr "Էլ․ աղյուսակի ձևանմուշ"
 
 #: src/control/backstage/MyTemplatesView.tsx:77
 msgid "Presentation template"
@@ -4062,22 +4070,21 @@ msgstr "Ներկայացման ձևանմուշ"
 
 #: src/control/backstage/MyTemplatesView.tsx:78
 msgid "Drawing template"
-msgstr ""
+msgstr "Նկարելու ձևանմուշ"
 
 #: src/control/backstage/MyTemplatesView.tsx:103
-#, fuzzy
 msgid "My templates"
-msgstr "Ավելի շատ ձևանմուշներ"
+msgstr "Իմ ձևանմուշները"
 
 #: src/control/backstage/MyTemplatesView.tsx:109
 msgid "Manage"
-msgstr ""
+msgstr "Կառավարել"
 
 #: src/control/backstage/MyTemplatesView.tsx:141
 #: src/control/backstage/MyTemplatesView.tsx:168
 #: src/control/backstage/MyTemplatesView.tsx:330
 msgid "Add template"
-msgstr ""
+msgstr "Ավելացնել ձևանմուշ"
 
 #: src/control/backstage/MyTemplatesView.tsx:155
 #: src/control/backstage/MyTemplatesView.tsx:156
@@ -4086,19 +4093,20 @@ msgid "Back"
 msgstr "Հետ"
 
 #: src/control/backstage/MyTemplatesView.tsx:161
-#, fuzzy
 msgid "Manage templates"
-msgstr "Ավելի շատ ձևանմուշներ"
+msgstr "Կառավարեք ձևանմուշները"
 
 #: src/control/backstage/MyTemplatesView.tsx:174
 msgid ""
 "Rename or remove the templates you added. Built-in templates can't be "
 "changed."
 msgstr ""
+"Վերանվանեք կամ հեռացրեք ձեր ավելացրած ձևանմուշները: Ներկառուցված "
+"ձևանմուշները չեն կարող փոփոխվել:"
 
 #: src/control/backstage/MyTemplatesView.tsx:176
 msgid "Templates you add will appear here and in New."
-msgstr ""
+msgstr "Ձեր ավելացրած ձևանմուշները կհայտնվեն այստեղ և «Նոր» բաժնում։"
 
 #: src/control/backstage/MyTemplatesView.tsx:183
 msgid "Search my templates"
@@ -4106,15 +4114,17 @@ msgstr "Որոնել իմ ձևանմուշները"
 
 #: src/control/backstage/MyTemplatesView.tsx:193
 msgid "No templates yet"
-msgstr ""
+msgstr "Դեռ չկան ձևանմուշներ"
 
 #: src/control/backstage/MyTemplatesView.tsx:196
 msgid "Add a template to start new documents from your own layout."
 msgstr ""
+"Ավելացրեք ձևանմուշ՝ ձեր սեփական դասավորությունից նոր փաստաթղթեր սկսելու համար"
+"։"
 
 #: src/control/backstage/MyTemplatesView.tsx:224
 msgid "Actions"
-msgstr ""
+msgstr "Գործողություններ"
 
 #: src/control/backstage/MyTemplatesView.tsx:257
 #: src/control/backstage/MyTemplatesView.tsx:451
@@ -4128,23 +4138,23 @@ msgstr "Անվանափոխել"
 
 #: src/control/backstage/MyTemplatesView.tsx:302
 msgid "This type of file cannot be added as a template."
-msgstr ""
+msgstr "Այս տեսակի նիշքը չի կարող ավելացվել որպես ձևանմուշ։"
 
 #: src/control/backstage/MyTemplatesView.tsx:323
 msgid "The template could not be added."
-msgstr ""
+msgstr "Ձևանմուշը չհաջողվեց ավելացնել։"
 
 #: src/control/backstage/MyTemplatesView.tsx:341
 msgid "Drop a file here, or"
-msgstr ""
+msgstr "Գցեք նիշքն այստեղ, կամ"
 
 #: src/control/backstage/MyTemplatesView.tsx:343
 msgid "Browse"
-msgstr ""
+msgstr "Զննել"
 
 #: src/control/backstage/MyTemplatesView.tsx:359
 msgid "Template name"
-msgstr ""
+msgstr "Ձևանմուշի անուն"
 
 #: src/control/backstage/MyTemplatesView.tsx:403
 #: src/control/Control.NotebookbarCalc.js:1128
@@ -4156,19 +4166,19 @@ msgstr "Փոխարինել"
 
 #: src/control/backstage/MyTemplatesView.tsx:419
 msgid "The template could not be renamed."
-msgstr ""
+msgstr "Ձևանմուշը չհաջողվեց վերանվանել։"
 
 #: src/control/backstage/MyTemplatesView.tsx:424
 msgid "Rename template"
-msgstr ""
+msgstr "Անվանափոխել ձևանմուշը"
 
 #: src/control/backstage/MyTemplatesView.tsx:471
 msgid "Remove this template?"
-msgstr ""
+msgstr "Հեռացնե՞լ այս ձևանմուշը։"
 
 #: src/control/backstage/MyTemplatesView.tsx:476
 msgid "\"%1\" will be removed from My templates."
-msgstr ""
+msgstr "\"%1\"-ը կհեռացվի Իմ ձևանմուշներից։"
 
 #: src/control/backstage/InfoView.tsx:31 src/control/Control.Menubar.ts:434
 #: src/control/Control.Menubar.ts:1497
@@ -4209,7 +4219,7 @@ msgstr "Խմբագրել հաշիվը"
 
 #: src/control/backstage/CloudDialogs.tsx:135
 msgid "Enter a web address, such as %1."
-msgstr ""
+msgstr "Մուտքագրեք վեբ հասցե, օրինակ %1:"
 
 #: src/control/backstage/CloudDialogs.tsx:152
 msgid "Add new account"
@@ -5027,7 +5037,7 @@ msgstr "Արտահանել որպես"
 
 #: src/control/Control.Menubar.ts:151
 msgid "Create Master Document..."
-msgstr ""
+msgstr "Ստեղծեք գլխավոր փաստաթուղթ..."
 
 #: src/control/Control.Menubar.ts:152 src/control/Control.Menubar.ts:498
 #: src/control/Control.Menubar.ts:714 src/control/Control.Menubar.ts:891
@@ -5326,7 +5336,7 @@ msgstr "Տեղային մուլտիմեդիա..."
 
 #: src/control/Control.Menubar.ts:569
 msgid "Background Video..."
-msgstr ""
+msgstr "Ֆոնային տեսանյութ..."
 
 #: src/control/Control.Menubar.ts:610 src/control/Control.Menubar.ts:803
 #: src/control/Control.NotebookbarDraw.js:1425
@@ -6465,7 +6475,7 @@ msgstr "Գծեր"
 #: src/control/Control.NotebookbarImpress.js:1760
 #: src/control/Control.TopToolbar.js:285
 msgid "Curves"
-msgstr ""
+msgstr "Կորեր"
 
 #: src/control/Control.NotebookbarImpress.js:110
 #: src/slideshow/SlideShowPresenter.ts:1205
@@ -6527,7 +6537,7 @@ msgstr "Ներկայացնել բոլորին"
 
 #: src/control/Control.NotebookbarImpress.js:647
 msgid "Show your slideshow on every viewer's screen when you start it"
-msgstr ""
+msgstr "Ցուցադրեք ձեր սահիկաշարը յուրաքանչյուր դիտողի էկրանին, երբ այն սկսեք"
 
 #: src/control/Control.NotebookbarImpress.js:767
 msgid "Slide Views"
@@ -6595,7 +6605,7 @@ msgstr "Հետնամասի պատկեր"
 
 #: src/control/Control.NotebookbarImpress.js:3007
 msgid "Edit Points"
-msgstr ""
+msgstr "Խմբագրել կետերը"
 
 #: src/control/Control.NotebookbarImpress.js:3067
 msgid "Effects"
@@ -6699,7 +6709,7 @@ msgstr "Ավելացնել բաժին"
 
 #: src/control/Control.PartsPreview.js:893
 msgid "Start Slideshow from This Slide"
-msgstr ""
+msgstr "Սկսեք սահիկաշարը այս սահիկից"
 
 #: src/control/Control.PartsPreview.js:1026
 msgid "with 1 other"
@@ -6795,35 +6805,35 @@ msgstr "%1, կապված է %2-ին"
 
 #: src/control/Control.PartsPreview.js:1396
 msgid "Linked to the presentation %1 that is missing"
-msgstr ""
+msgstr "Կապված է բացակայող %1 ներկայացման հետ"
 
 #: src/control/Control.PartsPreview.js:1398
 msgid "Linked to the presentation %1 that has changed"
-msgstr ""
+msgstr "Կապված է փոփոխված %1 ներկայացման հետ"
 
 #: src/control/Control.PartsPreview.js:1400
 msgid "Linked to the presentation %1, disconnected"
-msgstr ""
+msgstr "Կապված է %1 ներկայացմանը, անջատված է"
 
 #: src/control/Control.PartsPreview.js:1401
 msgid "Linked to the presentation %1"
-msgstr ""
+msgstr "Կապված է %1 ներկայացմանը"
 
 #: src/control/Control.PartsPreview.js:1406
 msgid "Linked to the slides outside the sections of %1, which is missing"
-msgstr ""
+msgstr "Կապված է %1-ի բաժիններից դուրս գտնվող սահիկների հետ, որը բացակայում է"
 
 #: src/control/Control.PartsPreview.js:1409
 msgid "Linked to the slides outside the sections of %1, which has changed"
-msgstr ""
+msgstr "Կապված է %1-ի բաժիններից դուրս գտնվող սահիկների հետ, որը փոխվել է"
 
 #: src/control/Control.PartsPreview.js:1412
 msgid "Linked to the slides outside the sections of %1, disconnected"
-msgstr ""
+msgstr "Կապված է %1-ի բաժիններից դուրս գտնվող սահիկների հետ, անջատված է"
 
 #: src/control/Control.PartsPreview.js:1413
 msgid "Linked to the slides outside the sections of %1"
-msgstr ""
+msgstr "Կապված է %1-ի բաժիններից դուրս գտնվող սահիկների հետ"
 
 #: src/control/Control.PartsPreview.js:1416
 msgid "Linked to a section of %1 that is missing"
@@ -6844,12 +6854,12 @@ msgstr "Կապված է %1-ի բաժնի հետ"
 #: src/control/Control.PartsPreview.js:1661
 msgid "%n slide"
 msgid_plural "%n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n սահիկ"
+msgstr[1] "%n սահիկներ"
 
 #: src/control/Control.PartsPreview.js:1662
 msgid "Toggle presentation %1"
-msgstr ""
+msgstr "Ցուցադրել/անջատել %1-ը"
 
 #: src/control/Control.PartsPreview.js:2111
 #: src/control/Control.PartsPreview.js:2378
@@ -6900,7 +6910,7 @@ msgstr[1] "Ջնջե՞լ \"%1\" բաժինը և դրա %n սահիկները։"
 
 #: src/control/Control.PartsPreview.js:2285
 msgid "Close Panel"
-msgstr ""
+msgstr "Փակել վահանակը"
 
 #: src/control/Control.PartsPreview.js:2294
 msgid "Collapse Presentation"
@@ -6912,12 +6922,11 @@ msgstr "Ընդլայնել Շնորհանդեսը"
 
 #: src/control/Control.PartsPreview.js:2301
 msgid "Open in Panel"
-msgstr ""
+msgstr "Բացել վահանակում"
 
 #: src/control/Control.PartsPreview.js:2309
-#, fuzzy
 msgid "Update Presentation"
-msgstr "Թարմացրեք ներկայացումները"
+msgstr "Թարմացրեք Ներկայացումը"
 
 #: src/control/Control.PartsPreview.js:2317
 msgid "Unlink Presentation"
@@ -6925,7 +6934,7 @@ msgstr "Ապահղել Շնորհանդես"
 
 #: src/control/Control.PartsPreview.js:2324
 msgid "Unlink Presentation & Contents"
-msgstr ""
+msgstr "Ապահղել ներկայացումը և բովանդակությունը"
 
 #: src/control/Control.PartsPreview.js:2379
 msgid "Enter new section name:"
@@ -7002,6 +7011,8 @@ msgid ""
 "Original file can't be found. Choose it again to keep your slides up to "
 "date."
 msgstr ""
+"Բնօրինակ նիշքը չի կարող գտնվել: Ընտրեք այն կրկին՝ ձեր սահիկները թարմացված "
+"պահելու համար:"
 
 #: src/control/Control.SlideImportPane.tsx:960
 msgid "This file is here. You do not have permission to open it."
@@ -7012,6 +7023,8 @@ msgid ""
 "Slides cannot be linked from this file: the link would lead back to this "
 "presentation."
 msgstr ""
+"Սահիկները չեն կարող հղումով կապվել այս նիշքից. հղումը կվերադառնա այս "
+"ներկայացմանը:"
 
 #: src/control/Control.SlideImportPane.tsx:966
 msgid "This file could not be read this time."
@@ -7019,11 +7032,11 @@ msgstr "Այս պահին նիշքը հնարավոր չէ կարդալ։"
 
 #: src/control/Control.SlideImportPane.tsx:974
 msgid "Choose file…"
-msgstr ""
+msgstr "Ընտրեք նիշք…"
 
 #: src/control/Control.SlideImportPane.tsx:982
 msgid "Try again"
-msgstr ""
+msgstr "Կրկին փորձեք"
 
 #: src/control/Control.SlideImportPane.tsx:994
 #: src/control/Control.SlideImportPane.tsx:1613
@@ -7172,7 +7185,7 @@ msgstr "Ընտրել բոլոր սահիկները"
 
 #: src/control/Control.SlideImportPane.tsx:1634
 msgid "Link whole presentation"
-msgstr ""
+msgstr "Հղումով կապեք ողջ ներկայացումը"
 
 #: src/control/Control.SlideImportPane.tsx:1642
 msgid "Update the slides linked to this file"
@@ -7205,6 +7218,8 @@ msgstr "Պահպանեք բնօրինակ դիզայնը"
 #: src/control/Control.SlideImportPane.tsx:1805
 msgid "Not supported in PPTX, please save as ODP to use links"
 msgstr ""
+"Չի աջակցվում PPTX-ում, խնդրում ենք պահպանել որպես ODP՝ հղումներ օգտագործելու "
+"համար"
 
 #: src/control/Control.SlideImportPane.tsx:1820
 msgid "Stay linked to the source file"
@@ -7257,9 +7272,8 @@ msgstr "Թարմացնել բաժինը"
 
 #: src/control/Control.SlideLinkToolbar.tsx:195
 #: src/slideimport/SlideLinks.ts:492
-#, fuzzy
 msgid "Update presentation"
-msgstr "Թարմացրեք ներկայացումները"
+msgstr "Թարմացրեք ներկայացումը"
 
 #: src/control/Control.SlideLinkToolbar.tsx:209
 msgid "Not available"
@@ -7271,16 +7285,15 @@ msgstr "Միացնել/անջատել %1 բաժինը"
 
 #: src/control/SlideLinkPanel.tsx:26
 msgid "Close the linked presentation"
-msgstr ""
+msgstr "Փակել հղումով կապված ներկայացումը"
 
 #: src/control/SlideLinkPanel.tsx:31
-#, fuzzy
 msgid "Linked presentation %1"
-msgstr "Կապված շնորհանդեսներ"
+msgstr "Կապված շնորհանդես %1"
 
 #: src/control/SlideLinkPanel.tsx:54
 msgid "Slides of %1"
-msgstr ""
+msgstr "%1-ի սահիկները"
 
 #: src/control/SlidePresentationsRow.tsx:34 src/control/LinkedViewRow.tsx:52
 msgid "Linked presentations"
@@ -7288,11 +7301,11 @@ msgstr "Կապված շնորհանդեսներ"
 
 #: src/control/SlidePresentationsRow.tsx:44
 msgid "Expand all linked presentations"
-msgstr ""
+msgstr "Ընդլայնեք բոլոր կապված ներկայացումները"
 
 #: src/control/SlidePresentationsRow.tsx:54
 msgid "Collapse all linked presentations"
-msgstr ""
+msgstr "Պայթեցրեք բոլոր կապված ներկայացումները"
 
 #: src/slideimport/SlideImportSession.ts:352
 msgid "The slides of the source could not be read."
@@ -7347,13 +7360,12 @@ msgstr ""
 "ներկայացման մեջ այս սահիկներում կատարված փոփոխությունները կկորչեն:"
 
 #: src/slideimport/SlideLinks.ts:508
-#, fuzzy
 msgid ""
 "The section will hold the slides that {0} keeps outside its sections now. "
 "Changes made to these slides in this presentation will be lost."
 msgstr ""
-"Բաժինը կպահի այն սահիկները, որոնք այժմ պահում է {0}-ում գտնվող իր բաժինը։ "
-"Այս ներկայացման այս սահիկներում կատարված փոփոխությունները կկորչեն։"
+"Բաժինը կպահի այն սահիկները, որոնք {0}-ը պահում է իր բաժիններից դուրս։ Այս "
+"ներկայացման մեջ այս սահիկներում կատարված փոփոխությունները կկորչեն։"
 
 #: src/slideimport/SlideLinks.ts:511
 msgid ""
@@ -7374,26 +7386,24 @@ msgstr ""
 "սահիկներում կատարված փոփոխությունները կկորչեն:"
 
 #: src/slideimport/SlideLinks.ts:531
-#, fuzzy
 msgid ""
 "{0} linked presentations will hold the slides and sections that their "
 "source files hold now. Changes made to these slides in this presentation "
 "will be lost."
 msgstr ""
-"{0} կապակցված բաժինները կպահեն այն սահիկները, որոնք այժմ պահվում են "
-"սկզբնաղբյուր նիշքերում գտնվող իրենց բաժիններում: Այս ներկայացման այս "
-"սահիկներում կատարված փոփոխությունները կկորչեն:"
+"{0} կապակցված ներկայացումները կպահեն այն սահիկներն ու բաժինները, որոնք այժմ "
+"պահվում են դրանց սկզբնաղբյուր նիշքերում: Այս ներկայացման այս սահիկներում "
+"կատարված փոփոխությունները կկորչեն:"
 
 #: src/slideimport/SlideLinks.ts:534
-#, fuzzy
 msgid ""
 "{0} linked sections and presentations will hold the slides that their "
 "source files hold now. Changes made to these slides in this presentation "
 "will be lost."
 msgstr ""
-"{0} կապակցված բաժինները կպահեն այն սահիկները, որոնք այժմ պահվում են "
-"սկզբնաղբյուր նիշքերում գտնվող իրենց բաժիններում: Այս ներկայացման այս "
-"սահիկներում կատարված փոփոխությունները կկորչեն:"
+"{0} կապակցված բաժիններն ու ներկայացումները կպահեն այն սահիկները, որոնք այժմ "
+"պահվում են դրանց սկզբնաղբյուր նիշքերում: Այս ներկայացման այս սահիկներում "
+"կատարված փոփոխությունները կկորչեն:"
 
 #: src/slideimport/SlideLinks.ts:768
 msgid ""
@@ -7404,11 +7414,10 @@ msgstr ""
 "չի կարող կարդալ այն։"
 
 #: src/slideimport/SlideLinks.ts:779
-#, fuzzy
 msgid "You do not have access to {0}, so its slides cannot be updated."
 msgstr ""
-"Դուք չունեք {0}-ին մուտք գործելու հնարավորություն, ուստի բաժինը չի կարող "
-"թարմացվել։"
+"Դուք չունեք {0}-ին մուտք գործելու հնարավորություն, ուստի դրա սահիկները չեն "
+"կարող թարմացվել։"
 
 #: src/slideimport/SlideLinks.ts:780
 msgid "{0} could not be read."
@@ -7437,9 +7446,8 @@ msgid "Unlinking the section failed."
 msgstr "Բաժնի կապի հանումը ձախողվեց։"
 
 #: src/slideimport/SlideLinks.ts:1095
-#, fuzzy
 msgid "Unlinking the presentation failed."
-msgstr "Բաժնի կապի հանումը ձախողվեց։"
+msgstr "Ներկայացման հղման կապի անջատումը չհաջողվեց։"
 
 #: src/slideimport/SlideLinks.ts:1109
 msgid "Updating the slides of {0} failed."
@@ -8061,7 +8069,7 @@ msgstr "Ջնջեք ներդիրի կանգը"
 #. links to this one.
 #: src/control/LinkedViewRow.tsx:26
 msgid "%1 - linked presentation"
-msgstr ""
+msgstr "%1 - կապված ներկայացում"
 
 #: src/control/Parts.js:636 src/control/Parts.js:640
 msgid "Show sheets"
@@ -8145,21 +8153,24 @@ msgstr ""
 
 #: src/control/Permission.js:757
 msgid "Close without saving"
-msgstr ""
+msgstr "Փակել առանց պահպանման"
 
 #: src/control/Permission.js:766
 msgid ""
 "\"%FILENAME\" could not be written. The file may be read-only or in use by "
 "another program. You can save your changes to a different file."
 msgstr ""
+"\"%FILENAME\"-ը չհաջողվեց գրել: Հնարավոր է՝ նիշքը միայն ընթերցման համար է "
+"կամ օգտագործվում է այլ ծրագրի կողմից: Կարող եք պահպանել ձեր փոփոխությունները "
+"այլ նիշքում:"
 
 #: src/control/Permission.js:770
 msgid "Cannot Save Document"
-msgstr ""
+msgstr "Հնարավոր չէ պահպանել փաստաթուղթը"
 
 #: src/control/Permission.js:784
 msgid "{0} wants to edit together"
-msgstr ""
+msgstr "{0}-ը ցանկանում է միասին խմբագրել"
 
 #: src/control/Permission.js:785 src/control/Permission.js:808
 #: src/control/Permission.js:824
@@ -8607,7 +8618,7 @@ msgstr "Պատճենել Markdown-ը"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1840
 msgid "Merge Formatting"
-msgstr ""
+msgstr "Միաձուլել ձևաչափումը"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1853
 msgid "Inline"
@@ -8767,11 +8778,11 @@ msgstr "Ջրանիշ"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2469
 msgid "Show"
-msgstr ""
+msgstr "Ցույց տալ"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2474
 msgid "Add New"
-msgstr ""
+msgstr "Ավելացնել Նոր"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2546
 msgid "Insert comment"
@@ -9204,6 +9215,9 @@ msgid ""
 "This file cannot be written, so the document opened read-only. Use Save As "
 "to keep your changes in a new file."
 msgstr ""
+"Այս նիշքը չի կարող գրվել, ուստի փաստաթուղթը բացվել է միայն ընթերցման համար: "
+"Օգտագործեք «Պահպանել որպես»՝ ձեր փոփոխությունները նոր նիշքում պահպանելու "
+"համար:"
 
 #: src/app/Socket.ts:2469
 msgid "Document is getting migrated"
@@ -9214,6 +9228,8 @@ msgid ""
 "Waiting for %USERS to decide which version of this document to keep. The "
 "document opens here once they decide."
 msgstr ""
+"Սպասում եմ %USERS-ին, որ որոշի, թե այս փաստաթղթի որ տարբերակը պահել։ "
+"Փաստաթուղթը կբացվի այստեղ, երբ նրանք որոշեն։"
 
 #: src/app/Socket.ts:2834
 msgid "Document requires password to view."
@@ -9592,37 +9608,35 @@ msgstr "Մեկնաբանությունը {0}: {1}"
 #. {1} its text
 #: src/layer/marker/A11yTextInput.js:363
 msgid "{0}: {1}"
-msgstr ""
+msgstr "{0}: {1}"
 
 #: src/layer/marker/A11yTextInput.js:533
 msgid "Heading level {0}"
 msgstr "Վերնախորագրի մակարդակ {0}"
 
 #: src/layer/marker/A11yTextInput.js:570
-#, fuzzy
 msgid "Footnote"
-msgstr "Էջատակեր"
+msgstr "Էջատակ"
 
 #: src/layer/marker/A11yTextInput.js:572
-#, fuzzy
 msgid "Endnote"
-msgstr "Տողատակեր"
+msgstr "Տողատակ"
 
 #: src/layer/marker/A11yTextInput.js:580
 msgid "Out of header"
-msgstr ""
+msgstr "Գլխագրից դուրս է"
 
 #: src/layer/marker/A11yTextInput.js:582
 msgid "Out of footer"
-msgstr ""
+msgstr "Տողատակից դուրս է"
 
 #: src/layer/marker/A11yTextInput.js:584
 msgid "Out of footnote"
-msgstr ""
+msgstr "Էջատակից դուրս է"
 
 #: src/layer/marker/A11yTextInput.js:586
 msgid "Out of endnote"
-msgstr ""
+msgstr "Վերջնանշումներից դուրս է"
 
 #: src/layer/marker/A11yTextInput.js:1600
 msgid "Out of table"
@@ -9684,15 +9698,15 @@ msgstr "{0} ջնջված"
 
 #: src/layer/marker/TextInput.js:532 src/layer/marker/TextInput.js:542
 msgid "Formatting changed"
-msgstr ""
+msgstr "Ձևաչափումը փոխվել է"
 
 #: src/layer/marker/TextInput.js:541
 msgid "Insertion"
-msgstr ""
+msgstr "Զետեղում"
 
 #: src/layer/marker/TextInput.js:542
 msgid "Deletion"
-msgstr ""
+msgstr "Ջնջում"
 
 #: src/layer/marker/TextInput.js:598
 msgid "Placeholder"
@@ -9750,10 +9764,12 @@ msgstr "Առցանց խմբագրիչ"
 #: src/layer/tile/CanvasTileLayer.js:1490
 msgid "This document links to files in a folder the app may not read."
 msgstr ""
+"Այս փաստաթուղթը հղում է կատարում այն պանակի նիշքերին, որը ծրագիրը կարող է "
+"չկարդալ։"
 
 #: src/layer/tile/CanvasTileLayer.js:1491
 msgid "Allow access"
-msgstr ""
+msgstr "Թույլատրել հասանելիություն"
 
 #: src/layer/tile/CanvasTileLayer.js:1517
 msgid "%1 started recording changes for all users."
@@ -9782,10 +9798,12 @@ msgstr "Մեկնաբանություններ չկան"
 #: src/main.js:357
 msgid "This server is too old for %APP, so some features may not work."
 msgstr ""
+"Այս սերվերը չափազանց հին է %APP-ի համար, ուստի որոշ գործառույթներ կարող են "
+"չաշխատել։"
 
 #: src/main.js:358
 msgid "Please ask the administrator to update it."
-msgstr ""
+msgstr "Խնդրեք ադմինիստրատորին այն թարմացնել։"
 
 #: src/main.js:451
 msgid "Warning! The browser you are using is not supported."
@@ -9803,6 +9821,7 @@ msgstr "Փաստաթղթից պատճենումը անջատվել է ձեր ա�
 #: src/map/Clipboard.js:222
 msgid "Copying from {productname}, please paste again in a moment"
 msgstr ""
+"Պատճենվում է {productname}-ից, խնդրում ենք կարճ ժամանակ անց կրկին տեղադրել"
 
 #: src/map/Clipboard.js:335
 msgid "warning: copy/paste request timed out"
@@ -9817,9 +9836,8 @@ msgid "Failed to upload the clipboard"
 msgstr "Չհաջողվեց վերբեռնել սեղմատախտակը"
 
 #: src/map/Clipboard.js:1141
-#, fuzzy
 msgid "Copying to clipboard"
-msgstr "Պատճենել սեղմատախտակին"
+msgstr "Պատճենում սեղմատախտակին"
 
 #: src/map/Clipboard.js:1673
 msgid ""
@@ -9875,9 +9893,8 @@ msgid "Last saved:"
 msgstr "Վերջին անգամ պահպանված:"
 
 #: src/map/Map.js:1170
-#, fuzzy
 msgid "Please wait..."
-msgstr "Խնդրում եմ սպասեք։"
+msgstr "Խնդրում եմ սպասեք..."
 
 #: src/map/handler/Map.Feedback.js:102
 msgid "Please send us your feedback"
@@ -9926,7 +9943,6 @@ msgstr "Դատարկ սահիկացուցադրություն"
 
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1453
-#, fuzzy
 msgid "All slides are hidden."
 msgstr "Բոլոր սահիկները թաքնված են։"
 
