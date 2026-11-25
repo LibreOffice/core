@@ -727,8 +727,8 @@ ZXCVBN_C_TARBALL := zxcvbn-c-2.7.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-ZXING_SHA256SUM := c3c02c29c0b519de7bd4e25b376e606e87f0761befd1282815642a2246613d14
-ZXING_TARBALL := zxing-cpp-3.1.1.tar.gz
+ZXING_SHA256SUM := eacc2495f452be751d9dd453f4d6cccd0e9a40131e002bcf54d2580ce5c19ad8
+ZXING_TARBALL := zxing-cpp-3.2.0.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
