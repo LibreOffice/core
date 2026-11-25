@@ -760,6 +760,11 @@ static UIColor *mainBackgroundColor(BOOL dark)
     scrollView.pinchGestureRecognizer.enabled = NO;
 }
 
+- (void)fontPickerViewControllerDidCancel:(UIFontPickerViewController *)viewController {
+    // The close button of the picker only tells the delegate, so dismiss the picker here.
+    [viewController dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)fontPickerViewControllerDidPickFont:(UIFontPickerViewController *)viewController {
     // Partial fix #5885 Close the font picker when a font is tapped
     // This matches the behavior of Apple apps such as Pages and Mail.
