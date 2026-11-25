@@ -2370,6 +2370,8 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                             maTabControl->SetCurPageId(maTabControl->GetPageId(aCtx.mnActPageId));
                             SdPage* pPageStandard
                                 = GetDoc()->GetSdPage(aCtx.mnActPageId, PageKind::Standard);
+                            // Drop the old page view and its references before creating a new one.
+                            mpDrawView->HideSdrPage();
                             mpDrawView->ShowSdrPage(pPageStandard);
                         }
 
