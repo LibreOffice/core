@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 12:57+0100\n"
-"PO-Revision-Date: 2026-11-19 08:00+0000\n"
+"PO-Revision-Date: 2026-11-25 10:45+0000\n"
 "Last-Translator: پرویز قادر <saraiki@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Saraiki <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/skr/>\n"
-"Language: \n"
+"Language: skr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -31,15 +31,15 @@ msgstr "ترتیباں"
 #: src/control/Control.StatusBar.js:311
 #: src/control/jsdialog/Widget.NewSlideLayoutEntry.ts:47
 msgid "Overview"
-msgstr ""
+msgstr "سر سری نظر"
 
 #: admin/admin.strings.js:18
 msgid "(current)"
-msgstr ""
+msgstr "(موجودہ)"
 
 #: admin/admin.strings.js:19
 msgid "Analytics"
-msgstr ""
+msgstr "تجزیات"
 
 #: admin/admin.strings.js:20
 msgid "History"
@@ -51,7 +51,7 @@ msgstr "لاگ"
 
 #: admin/admin.strings.js:22
 msgid "Server audit"
-msgstr ""
+msgstr "سرور آڈٹ"
 
 #: admin/admin.strings.js:23 src/control/Control.ServerAuditDialog.ts:366
 msgid "Status"
@@ -4924,7 +4924,7 @@ msgstr ""
 #: src/control/Control.Menubar.ts:176 src/control/Control.Menubar.ts:527
 #: src/control/Control.Menubar.ts:739 src/control/Control.Menubar.ts:918
 msgid "Find"
-msgstr ""
+msgstr "لبھو"
 
 #: src/control/Control.Menubar.ts:180
 msgid "Compare Changes"
@@ -4987,7 +4987,7 @@ msgstr ""
 #: src/control/Control.Menubar.ts:229 src/control/Control.Menubar.ts:572
 #: src/control/Control.Menubar.ts:769 src/control/Control.Menubar.ts:976
 msgid "Shapes ..."
-msgstr ""
+msgstr "شکلاں ..."
 
 #: src/control/Control.Menubar.ts:262 src/control/Control.Menubar.ts:578
 #: src/control/Control.Menubar.ts:772 src/control/Control.Menubar.ts:983
@@ -5120,7 +5120,7 @@ msgstr ""
 #: src/control/Control.ServerAuditDialog.ts:347
 #: src/control/Control.ServerAuditDialog.ts:348
 msgid "Server Audit"
-msgstr ""
+msgstr "سرور آڈٹ"
 
 #: src/control/Control.Menubar.ts:486 src/control/Control.Menubar.ts:706
 #: src/control/Control.Menubar.ts:879 src/control/Control.Menubar.ts:1208
