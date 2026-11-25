@@ -11264,6 +11264,10 @@ if test -z "$with_gnu_cp"; then
     # check the place where the good stuff is hidden on Solaris...
     if test -x /usr/gnu/bin/cp; then
         GNUCP=/usr/gnu/bin/cp
+    elif test -n "$WSL_ONLY_AS_HELPER"; then
+        # the build runs the cp of git-bash, a GNU cp that is not called gnucp
+        # (newer Ubuntu releases in the wsl container have a gnucp)
+        AC_PATH_PROGS(GNUCP, cp)
     else
         AC_PATH_PROGS(GNUCP, gnucp cp)
     fi
