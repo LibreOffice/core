@@ -81,8 +81,6 @@ class SwAddressListDialog : public SfxDialogController
     void TableSelectHdl(const weld::Button* pButton);
     DECL_LINK(OKHdl_Impl, weld::Button&, void);
 
-    DECL_LINK(StaticListBoxSelectHdl_Impl, void*, void);
-
 public:
     SwAddressListDialog(SwMailMergeAddressBlockPage* pParent);
     virtual ~SwAddressListDialog() override;
