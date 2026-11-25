@@ -142,6 +142,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf172878_dropDownDataBinding)
 
     // The text after 'Inline: ' should be the display value, not the actual stored value ("1").
     getParagraph(1, u"Inline: Wert 1"_ustr);
+    // The text after 'Inline2: ' should be the stored value, not the empty display value
+    getParagraph(2, u"Inline2: 1"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtPictureDataBinding)
