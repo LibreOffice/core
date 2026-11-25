@@ -1115,6 +1115,15 @@ def cyclonedx(product, spdx, image_sbom):
 
     platform_ids = {component.get("spdxId"): component
                     for component in product["platform_components"]}
+    # packages that ship files of their own; a NuGet package that does is a
+    # prebuilt binary, a header-only one is compiled into our executables
+    file_ids = {element["spdxId"] for element in graph
+                if element.get("type") == "software_File"}
+    with_files = {element["from"] for element in graph
+                  if element.get("type") == "Relationship"
+                  and element.get("relationshipType")
+                      in ("contains", "hasDistributionArtifact")
+                  and any(target in file_ids for target in element["to"])}
     components = {}
     for element in graph:
         if element.get("type") != "software_Package":
@@ -1129,7 +1138,13 @@ def cyclonedx(product, spdx, image_sbom):
         key = (name, version)
         if key in components:
             continue
-        layer = platform["layer"] if platform else "built"
+        if platform:
+            layer = platform["layer"]
+        elif identifiers.get("packageUrl", "").startswith("pkg:nuget/") \
+                and ident in with_files:
+            layer = "bundled-binary"
+        else:
+            layer = "built"
         component = {
             # the bom-ref convention of the container image's SBOM
             "bom-ref": identifiers.get("packageUrl")
