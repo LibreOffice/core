@@ -125,7 +125,7 @@
     </message>
     <message>
         <source>This folder holds the drafts and is cleaned up automatically. Choose another location.</source>
-        <translation type="unfinished"></translation>
+        <translation>W tym folderze przechowywane są wersje robocze; jest on czyszczony automatycznie. Wybierz inną lokalizację.</translation>
     </message>
     <message>
         <source>Cannot open remote document</source>
@@ -173,7 +173,7 @@
     </message>
     <message>
         <source>%1 (Draft)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (wersja robocza)</translation>
     </message>
     <message>
         <source>Template Error</source>
@@ -224,7 +224,7 @@
     <message>
         <source>Draft</source>
         <extracomment>Badge in a tab whose document is a draft, not yet saved to a file of its own</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Wersja robocza</translation>
     </message>
     <message>
         <source>Close</source>
