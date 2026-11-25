@@ -1181,9 +1181,12 @@ void XmlFilterBase::importCustomFragments(cpo::uno::Reference<css::embed::XStora
                 sType = aPair.Second;
         }
 
-        // Preserve non-standard (i.e. custom) entries.
-        if (!sType.match("http://schemas.openxmlformats.org") // OOXML/ECMA Transitional
-            && !sType.match("http://purl.oclc.org")) // OOXML Strict
+        // Keep the custom parts that have no relationships of their own.
+        // Only the part itself is kept, not the parts it refers to.
+        if (!sTarget.isEmpty()
+            && !sType.match("http://schemas.openxmlformats.org") // OOXML/ECMA Transitional
+            && !sType.match("http://purl.oclc.org") // OOXML Strict
+            && importRelations(sTarget)->size() == 0)
         {
             StreamDataSequence aDataSeq;
             if (importBinaryData(aDataSeq, sTarget))

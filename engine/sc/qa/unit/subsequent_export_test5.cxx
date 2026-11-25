@@ -1870,6 +1870,35 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf43547PictureTitleXLSX)
     assertXPath(pDoc, "//xdr:pic/xdr:nvPicPr/xdr:cNvPr", "title", u"Paid stamp title");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testSkipCustomPartWithOwnRelationships)
+{
+    // A custom part that refers to other parts is left out of the saved XLSX.
+
+    // The root relationships link a task pane part, which links a web extension part
+    createScDoc("xlsx/custom-part-with-relationships.xlsx");
+
+    save(TestFilter::XLSX);
+
+    // The task pane part and the part it refers to are not in the exported package
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    CPPUNIT_ASSERT(!xNameAccess->hasByName(u"xl/webextensions/taskpanes.xml"_ustr));
+    CPPUNIT_ASSERT(!xNameAccess->hasByName(u"xl/webextensions/webextension1.xml"_ustr));
+
+    // The root relationships do not link the task pane part
+    xmlDocUniquePtr pRelsDoc = parseExport(u"_rels/.rels"_ustr);
+    CPPUNIT_ASSERT(pRelsDoc);
+    assertXPath(pRelsDoc, "/rels:Relationships/rels:Relationship[contains(@Target,'taskpanes')]",
+                0);
+
+    // The content types have no entry for the task pane part
+    xmlDocUniquePtr pTypesDoc = parseExport(u"[Content_Types].xml"_ustr);
+    CPPUNIT_ASSERT(pTypesDoc);
+    assertXPath(pTypesDoc,
+                "/ContentType:Types/ContentType:Override[contains(@PartName,'webextensions')]", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
