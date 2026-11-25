@@ -1256,7 +1256,7 @@ void DomainMapper_Impl::PopSdt()
                 };
 
                 // Did data binding provide the value? Then replace with display text
-                if (oData.has_value() && *oData == rValues[i])
+                if (oData.has_value() && *oData == rValues[i] && !rDisplayTexts[i].isEmpty())
                 {
                     xCursor->setString(rDisplayTexts[i]);
                     oData.reset();
