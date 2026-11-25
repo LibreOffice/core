@@ -935,6 +935,7 @@ COOL_JS_LST =\
 	$(icons_js) \
 	src/control/backstage/Types.ts \
 	src/control/backstage/CloudProviderList.ts \
+	src/control/backstage/CloudProviderBuiltInList.ts \
 	src/control/backstage/CloudProviderKinds.ts \
 	src/control/backstage/Common.tsx \
 	src/control/backstage/Sidebar.tsx \

@@ -13,6 +13,7 @@
 /// <reference path="../src/dom/JSX.ts" />
 /// <reference path="../src/control/backstage/Types.ts" />
 /// <reference path="../src/control/backstage/CloudProviderList.ts" />
+/// <reference path="../src/control/backstage/CloudProviderBuiltInList.ts" />
 /// <reference path="../src/control/backstage/CloudProviderKinds.ts" />
 /// <reference path="../src/control/backstage/Common.tsx" />
 /// <reference path="../src/control/backstage/TemplatesView.tsx" />

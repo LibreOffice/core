@@ -49,8 +49,8 @@ namespace BackstageCloudKinds {
 	// The services on offer, in the order they are listed to the user. A branding that declares
 	// a list is taken at its word, even when nothing in that list is usable: the downloaded
 	// services appear only where no branding declared a list at all. Before the first download
-	// only Other is on offer. Other comes last, and exactly once: a branding that names it as
-	// well gets the translated entry, not two rows.
+	// the built-in services are on offer. Other comes last, and exactly once: a branding that
+	// names it as well gets the translated entry, not two rows.
 	export function list(): CloudKindEntry[] {
 		const branded = brandedKinds();
 		const offered = branded !== undefined ? branded : downloadedKinds();
@@ -154,7 +154,9 @@ namespace BackstageCloudKinds {
 	}
 
 	function downloadedKinds(): CloudKindEntry[] {
-		const data = downloadedList();
+		const data =
+			downloadedList() ||
+			CloudProviderList.validate(CloudProviderList.builtInList);
 		if (!data) return [];
 		return data.providers.map((provider) => ({
 			kind: provider.kind,

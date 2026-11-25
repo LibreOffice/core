@@ -48,6 +48,7 @@ describe('BackstageCloudKinds', function () {
 
 	beforeEach(function () {
 		delete globals.brandCloudProviders;
+		(CloudProviderList as any).builtInList = null;
 		storage = new MemoryStorage();
 		Object.defineProperty(globals, 'localStorage', {
 			value: storage,
