@@ -509,11 +509,14 @@ function documentChecks(skipInitializedCheck = false) {
 		});
 	}
 
-	// Wait for the sidebar to open.
+	// Wait for the sidebar to open. The dock of a presentation opens empty and the engine fills
+	// it later, so the content of the sidebar is what shows that it has arrived.
 	if (Cypress.env('INTEGRATION') !== 'nextcloud') {
 		doIfOnDesktop(function() {
-			if (Cypress.env('pdf-view') !== true)
-				cy.cGet('#sidebar-panel').should('be.visible').should('not.be.empty');
+			if (Cypress.env('pdf-view') !== true) {
+				cy.cGet('#sidebar-panel').should('be.visible');
+				cy.cGet('#sidebar-container').should('not.be.empty');
+			}
 
 			// Check that the document does not take the whole window width.
 			cy.window()
