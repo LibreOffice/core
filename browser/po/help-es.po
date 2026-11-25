@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 12:57+0200\n"
-"PO-Revision-Date: 2026-10-18 04:28+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fito@libreoffice.org>\n"
+"PO-Revision-Date: 2026-11-23 17:01+0000\n"
+"Last-Translator: Eloy Crespo <eloy@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/collabora-online/"
 "help/es/>\n"
 "Language: es\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.18.1\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -1392,7 +1392,7 @@ msgstr "Formato estándar"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:202-9
 msgid "Insert"
-msgstr "Ins"
+msgstr "Insertar"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:204-38
 msgid "Insert date"
