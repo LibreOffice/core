@@ -7,7 +7,7 @@
     <string name="failed_to_insert_image">無法插入影像</string>
     <string name="failed_to_load_file">無法判定要載入的檔案</string>
     <string name="storage_permission_required">需要儲存空間取用權</string>
-    <string name="temp_file_saving_disabled">此檔案唯讀，已停用儲存。</string>
+    <string name="temp_file_saving_disabled">由來源應用程式以唯讀方式分享。請使用「編輯副本」來進行修改。</string>
     <string name="exiting">正在離開…</string>
     <string name="rate_our_app_text">如果您喜歡的話，請到 Google Play 中給我們 5 顆星的評價。您的好評是我們的最大動力。</string>
     <string name="rate_our_app_title">感謝您使用 %1$s！</string>
@@ -23,4 +23,9 @@
     <string name="ask_for_convert_odf">確認檔案格式</string>
     <string name="use_odf">使用 ODF 格式</string>
     <string name="use_text">使用文字格式</string>
+    <string name="all_files_access_title">以唯讀模式開啟</string>
+    <string name="all_files_access_message">分享此檔案的應用程式不允許將變更儲存回該檔案。\n\n請授予「所有檔案存取權限」，讓此應用程式能寫入檔案的儲存位置，以便您在此處編輯該檔案。</string>
+    <string name="all_files_access_grant">允許存取</string>
+    <string name="do_not_ask_again">別再問了</string>
+    <string name="failed_to_save_file">無法將變更儲存至該檔案</string>
 </resources>

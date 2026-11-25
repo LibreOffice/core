@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="temp_file_saving_disabled">此檔案唯讀，已停用儲存。</string>
+    <string name="temp_file_saving_disabled">由來源應用程式以唯讀方式分享。請使用「編輯副本」來進行修改。</string>
     <string name="no_items">沒有項目</string>
     <string name="no_recent_items">請使用工具列中的資料夾圖示開啟檔案。</string>
     <string name="app_vendor">本發行版由 $VENDOR 提供。</string>
@@ -110,4 +110,5 @@
     <string name="pref_user_name_guest">來賓使用者</string>
     <string name="pref_user_name_info">新增評註時使用</string>
     <string name="pref_user_name">使用者名稱</string>
+    <string name="app_version_and_hash">版本：%1$s\ngit-hash：%2$s</string>
 </resources>

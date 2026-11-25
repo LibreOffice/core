@@ -5,47 +5,47 @@
     <name>QObject</name>
     <message>
         <source>ODF text document (.odt)</source>
-        <translation type="unfinished"></translation>
+        <translation>ODF 文字文件 (.odt)</translation>
     </message>
     <message>
         <source>Rich Text (.rtf)</source>
-        <translation type="unfinished"></translation>
+        <translation>富文本 (.rtf)</translation>
     </message>
     <message>
         <source>Word Document (.docx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Word 文件 (.docx)</translation>
     </message>
     <message>
         <source>Word 2003 Document (.doc)</source>
-        <translation type="unfinished"></translation>
+        <translation>Word 2003 文件 (.doc)</translation>
     </message>
     <message>
         <source>ODF spreadsheet (.ods)</source>
-        <translation type="unfinished"></translation>
+        <translation>ODF 試算表 (.ods)</translation>
     </message>
     <message>
         <source>Excel Spreadsheet (.xlsx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Excel 試算表 (.xlsx)</translation>
     </message>
     <message>
         <source>Excel 2003 Spreadsheet (.xls)</source>
-        <translation type="unfinished"></translation>
+        <translation>Excel 2003 試算表 (.xls)</translation>
     </message>
     <message>
         <source>ODF presentation (.odp)</source>
-        <translation type="unfinished"></translation>
+        <translation>ODF 簡報 (.odp)</translation>
     </message>
     <message>
         <source>PowerPoint Presentation (.pptx)</source>
-        <translation type="unfinished"></translation>
+        <translation>PowerPoint 簡報 (.pptx)</translation>
     </message>
     <message>
         <source>PowerPoint 2003 Presentation (.ppt)</source>
-        <translation type="unfinished"></translation>
+        <translation>PowerPoint 2003 簡報 (.ppt)</translation>
     </message>
     <message>
         <source>ODF drawing (.odg)</source>
-        <translation type="unfinished"></translation>
+        <translation>ODF 繪圖檔 (.odg)</translation>
     </message>
     <message>
         <source>Print Document</source>
@@ -117,11 +117,11 @@
     </message>
     <message>
         <source>Export Error</source>
-        <translation type="unfinished"></translation>
+        <translation>匯出錯誤</translation>
     </message>
     <message>
         <source>Failed to export the document.</source>
-        <translation type="unfinished"></translation>
+        <translation>無法匯出該文件。</translation>
     </message>
     <message>
         <source>This folder holds the drafts and is cleaned up automatically. Choose another location.</source>
@@ -129,31 +129,31 @@
     </message>
     <message>
         <source>Cannot open remote document</source>
-        <translation type="unfinished"></translation>
+        <translation>無法開啟遠端文件</translation>
     </message>
     <message>
         <source>the Collabora Online server</source>
-        <translation type="unfinished"></translation>
+        <translation>Collabora Online 伺服器</translation>
     </message>
     <message>
         <source>Add Template</source>
-        <translation type="unfinished"></translation>
+        <translation>新增範本</translation>
     </message>
     <message>
         <source>Templates and documents</source>
-        <translation type="unfinished"></translation>
+        <translation>範本與文件</translation>
     </message>
     <message>
         <source>All Files (*);;Text Documents (*.odt *.ott *.doc *.docx *.rtf *.txt);;Spreadsheets (*.ods *.ots *.xls *.xlsx *.csv);;Presentations (*.odp *.otp *.ppt *.pptx);;PDF Documents (*.pdf)</source>
-        <translation type="unfinished"></translation>
+        <translation>所有檔案 (*);; 文字文件 (*.odt *.ott *.doc *.docx *.rtf *.txt);; 試算表 (*.ods *.ots *.xls *.xlsx *.csv);; 簡報 (*.odp *.otp *.ppt *.pptx);; PDF 文件 (*.pdf)</translation>
     </message>
     <message>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>儲存檔案</translation>
     </message>
     <message>
         <source>Choose the folder that holds the files this document links to</source>
-        <translation type="unfinished"></translation>
+        <translation>請選擇存放本文件所連結之檔案的資料夾</translation>
     </message>
     <message>
         <source>Presentation</source>
