@@ -263,6 +263,8 @@ SLIDESHOW_SHADER_NAMES = \
 	VortexTransition.vert.glsl \
 	HoneycombTransition.vert.glsl \
 	HoneycombTransition.frag.glsl \
+	AirplaneTransition.vert.glsl \
+	AirplaneTransition.frag.glsl \
 	SlideQuad.vert.glsl \
 	SlideQuad.frag.glsl \
 	VectorSlideLayersStencil.vert.glsl \

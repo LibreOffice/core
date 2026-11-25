@@ -73,54 +73,11 @@ class AirplaneTransitionImp extends SimpleTransition {
 	}
 
 	protected getVertexShader(): string {
-		return `#version 300 es
-				precision mediump float;
-
-				in vec3 a_position;
-				in vec3 a_normal;
-				in vec2 a_texCoord;
-
-				uniform float u_aspect;
-				uniform float u_eyeDistance;
-
-				out vec2 v_texturePosition;
-				out vec3 v_normal;
-
-				void main(void) {
-					// Perspective projection, where the z = 0 plane fills the viewport. The
-					// x axis is in units of half slide height, so rotations keep the shape.
-					float w = (u_eyeDistance - a_position.z) / u_eyeDistance;
-					float depth = clamp(-a_position.z / 20.0, -1.0, 1.0);
-					gl_Position = vec4(a_position.x / u_aspect, a_position.y, depth * w, w);
-					v_texturePosition = a_texCoord;
-					v_normal = a_normal;
-				}
-				`;
+		return SlideshowShaders['AirplaneTransition.vert.glsl'];
 	}
 
 	protected getFragmentShader(): string {
-		return `#version 300 es
-				precision mediump float;
-
-				uniform sampler2D slideTexture;
-				uniform bool u_lit;
-
-				in vec2 v_texturePosition;
-				in vec3 v_normal;
-
-				out vec4 outColor;
-
-				void main() {
-					vec4 fragment = texture(slideTexture, v_texturePosition);
-					if (u_lit) {
-						const float ambient = 0.55;
-						vec3 lightVector = normalize(vec3(-0.3, 0.5, 1.0));
-						float light = ambient + (1.0 - ambient) * max(dot(lightVector, normalize(v_normal)), 0.0);
-						fragment.rgb *= light;
-					}
-					outColor = vec4(fragment.rgb, 1.0);
-				}
-				`;
+		return SlideshowShaders['AirplaneTransition.frag.glsl'];
 	}
 
 	private getAspect(): number {
