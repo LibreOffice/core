@@ -28,7 +28,7 @@ $(eval $(call gb_ExternalProject_use_externals,libetonyek,\
 $(call gb_ExternalProject_get_state_target,libetonyek,build) :
 	$(call gb_Trace_StartRange,libetonyek,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		export PKG_CONFIG="" \
+		export PKG_CONFIG=: \
 		&& MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
 			--with-pic \
 			$(if $(DISABLE_DYNLOADING), \
