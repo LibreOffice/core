@@ -272,8 +272,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFilterFeComposite)
     assertXPath(pDocument, "/primitive2D/transform/mask[1]/polypolygon/polygon/point", 8);
     // xor operator
     assertXPath(pDocument, "/primitive2D/transform/mask[2]/polypolygoncolor", 3);
-    assertXPath(pDocument, "/primitive2D/transform/mask[2]/polypolygon/polygon[1]/point", 8);
-    assertXPath(pDocument, "/primitive2D/transform/mask[2]/polypolygon/polygon[2]/point", 4);
+    assertXPath(pDocument, "/primitive2D/transform/mask[2]/polypolygon/polygon[1]/point", 6);
+    assertXPath(pDocument, "/primitive2D/transform/mask[2]/polypolygon/polygon[2]/point", 6);
     // in operator
     assertXPath(pDocument, "/primitive2D/transform/mask[3]/polypolygoncolor", 3);
     assertXPath(pDocument, "/primitive2D/transform/mask[3]/polypolygon/polygon/point", 4);

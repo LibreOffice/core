@@ -2157,10 +2157,10 @@ CPPUNIT_TEST_FIXTURE(Test, testExcludeClipRect)
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
-    // The clip mask polypolygon has two sub-polygons: the excluded inner rect
-    // and the outer clip rect, forming a frame-shaped clip region.
+    // The clip mask polypolygon has two sub-polygons: the outer clip rect
+    // and the excluded inner rect, forming a frame-shaped clip region.
     assertXPath(pDocument, aXPathPrefix + "group/mask/polypolygon", "path",
-                u"m1323 1319v2613h2619v-2613zm-1323-1319h5265v5251h-5265z");
+                u"m0 0h5265v5251h-5265zm1323 1319v2613h2619v-2613z");
 
     // The red fill covers the whole area, but is clipped by the mask above.
     assertXPath(pDocument, aXPathPrefix + "group/mask/polypolygoncolor", "color", u"#ff0000");

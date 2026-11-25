@@ -57,6 +57,7 @@ $(eval $(call gb_Library_add_exception_objects,basegfx,\
     basegfx/source/polygon/b2dpolygontriangulator \
     basegfx/source/polygon/b2dpolypolygon \
     basegfx/source/polygon/b2dpolypolygoncutter \
+    basegfx/source/polygon/b2dpolypolygonsweep \
     basegfx/source/polygon/b2dpolypolygontools \
     basegfx/source/polygon/b2dsvgpolypolygon \
     basegfx/source/polygon/b2dtrapezoid \

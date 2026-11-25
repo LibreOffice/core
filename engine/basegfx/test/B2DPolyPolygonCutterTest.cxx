@@ -21,7 +21,14 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <cmath>
+#include <limits>
+
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/curve/b2dcubicbezier.hxx>
+#include <basegfx/range/b2drange.hxx>
 
 namespace basegfx
 {
@@ -91,8 +98,116 @@ public:
         }
     }
 
+    void testNonzeroConformOverlappingSquares()
+    {
+        // two squares in the same direction overlap, nonzero fills the overlap once
+        B2DPolyPolygon aInput(utils::createPolygonFromRect(B2DRange(0, 0, 2, 2)));
+        aInput.append(utils::createPolygonFromRect(B2DRange(1, 1, 3, 3)));
+
+        const B2DPolyPolygon aResult(utils::createNonzeroConform(aInput));
+
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), aResult.count());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(8), aResult.getB2DPolygon(0).count());
+        CPPUNIT_ASSERT(utils::isInside(aResult, B2DPoint(1.5, 1.5)));
+        CPPUNIT_ASSERT(utils::isInside(aResult, B2DPoint(2.5, 2.5)));
+        CPPUNIT_ASSERT(!utils::isInside(aResult, B2DPoint(2.5, 0.5)));
+    }
+
+    void testNonzeroConformStar()
+    {
+        // a pentagram winds twice around its center, so nonzero fills the center
+        B2DPolygon aStar;
+        for (int a = 0; a < 5; a++)
+        {
+            const double fAngle(a * 4.0 * M_PI / 5.0);
+            aStar.append(B2DPoint(std::sin(fAngle), -std::cos(fAngle)));
+        }
+        aStar.setClosed(true);
+        CPPUNIT_ASSERT(!utils::isInside(aStar, B2DPoint(0, 0)));
+
+        const B2DPolyPolygon aResult(utils::createNonzeroConform(B2DPolyPolygon(aStar)));
+
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), aResult.count());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(10), aResult.getB2DPolygon(0).count());
+        CPPUNIT_ASSERT(utils::isInside(aResult, B2DPoint(0, 0)));
+    }
+
+    void testNonzeroConformKeepsHole()
+    {
+        // the outer square twice and the inner one twice the other way: the winding is two
+        // around the hole and zero in it
+        B2DPolygon aInner(utils::createPolygonFromRect(B2DRange(1, 1, 2, 2)));
+        aInner.flip();
+        B2DPolyPolygon aInput(utils::createPolygonFromRect(B2DRange(0, 0, 3, 3)));
+        aInput.append(utils::createPolygonFromRect(B2DRange(0, 0, 3, 3)));
+        aInput.append(aInner);
+        aInput.append(aInner);
+
+        const B2DPolyPolygon aResult(utils::createNonzeroConform(aInput));
+
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(2), aResult.count());
+        CPPUNIT_ASSERT(utils::isInside(aResult, B2DPoint(0.5, 0.5)));
+        CPPUNIT_ASSERT(!utils::isInside(aResult, B2DPoint(1.5, 1.5)));
+    }
+
+    void testNonzeroConformNotFinite()
+    {
+        // a point that is not finite leaves the polygon as it was, crossings and all
+        for (const double fBad :
+             { std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::infinity() })
+        {
+            B2DPolygon aPolygon{ { 0, 0 }, { 2, 0 }, { 0, 2 }, { 2, fBad } };
+            aPolygon.setClosed(true);
+
+            const B2DPolyPolygon aResult(utils::createNonzeroConform(B2DPolyPolygon(aPolygon)));
+
+            CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), aResult.count());
+            const B2DPolygon& rResult(aResult.getB2DPolygon(0));
+            CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), rResult.count());
+            CPPUNIT_ASSERT_EQUAL(B2DPoint(0, 2), rResult.getB2DPoint(2));
+            CPPUNIT_ASSERT(!std::isfinite(rResult.getB2DPoint(3).getY()));
+        }
+    }
+
+    void testOrKeepsCurves()
+    {
+        const B2DPolygon aLeft(utils::createPolygonFromCircle(B2DPoint(0, 0), 1.0));
+        const B2DPolygon aRight(utils::createPolygonFromCircle(B2DPoint(1, 0), 1.0));
+
+        const B2DPolyPolygon aResult(
+            utils::solvePolygonOperationOr(B2DPolyPolygon(aLeft), B2DPolyPolygon(aRight)));
+
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), aResult.count());
+        const B2DPolygon& rOutline(aResult.getB2DPolygon(0));
+        CPPUNIT_ASSERT(rOutline.areControlPointsUsed());
+        // the parts of the circles that are not cut come back as they were
+        sal_uInt32 nWhole(0);
+        for (sal_uInt32 a(0); a < rOutline.count(); a++)
+        {
+            B2DCubicBezier aSegment;
+            rOutline.getBezierSegment(a, aSegment);
+            for (const B2DPolygon& rCircle : { aLeft, aRight })
+                for (sal_uInt32 b(0); b < rCircle.count(); b++)
+                {
+                    B2DCubicBezier aInput;
+                    rCircle.getBezierSegment(b, aInput);
+                    if (aInput.equal(aSegment))
+                        nWhole++;
+                }
+        }
+        CPPUNIT_ASSERT_GREATER(sal_uInt32(0), nWhole);
+        // where the circles cross the outline turns inward
+        CPPUNIT_ASSERT(utils::isInside(aResult, B2DPoint(0.5, 0.8)));
+        CPPUNIT_ASSERT(!utils::isInside(aResult, B2DPoint(0.5, 0.9)));
+    }
+
     CPPUNIT_TEST_SUITE(b2dpolypolygoncutter);
     CPPUNIT_TEST(testMergeToSinglePolyPolygon);
+    CPPUNIT_TEST(testNonzeroConformOverlappingSquares);
+    CPPUNIT_TEST(testNonzeroConformStar);
+    CPPUNIT_TEST(testNonzeroConformKeepsHole);
+    CPPUNIT_TEST(testNonzeroConformNotFinite);
+    CPPUNIT_TEST(testOrKeepsCurves);
     CPPUNIT_TEST_SUITE_END();
 };
 

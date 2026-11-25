@@ -18,6 +18,7 @@
  */
 
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <b2dpolypolygonsweep.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
@@ -699,111 +700,8 @@ namespace basegfx::utils
 
         B2DPolyPolygon createNonzeroConform(const B2DPolyPolygon& rCandidate)
         {
-            constexpr sal_uInt32 nMaxPolygons(1000);
-            constexpr size_t nMaxCutPoints(16384);
-            if (rCandidate.count() > nMaxPolygons)
-            {
-                SAL_WARN("basegfx", "this poly is too large, " << rCandidate.count() << " elements, to be able to process timeously, falling back to ignoring the winding rule, which is likely to cause rendering artifacts");
-                return rCandidate;
-            }
-
-            B2DPolyPolygon aCandidate;
-
-            // remove all self-intersections and intersections
-            size_t nPointLimit(nMaxCutPoints);
-            if(rCandidate.count() == 1)
-            {
-                aCandidate = basegfx::utils::solveCrossovers(rCandidate.getB2DPolygon(0), &nPointLimit);
-            }
-            else
-            {
-                aCandidate = basegfx::utils::solveCrossovers(rCandidate, &nPointLimit);
-            }
-
-            if (!nPointLimit)
-            {
-                SAL_WARN("basegfx", "this poly crosses itself more than " << nMaxCutPoints << " times, too many to process timeously, falling back to ignoring the winding rule, which is likely to cause rendering artifacts");
-                return rCandidate;
-            }
-
-            // cleanup evtl. neutral polygons
-            aCandidate = basegfx::utils::stripNeutralPolygons(aCandidate);
-
-            // remove all polygons which have the same orientation as the polygon they are directly contained in
-            const sal_uInt32 nCount(aCandidate.count());
-
-            // comparing every part with every other is quadratic, and a few polygons that cross
-            // themselves often can resolve into thousands of parts
-            if (nCount > nMaxPolygons)
-            {
-                SAL_WARN("basegfx", "resolving crossovers gave " << nCount << " polygons, too many to process timeously, falling back to ignoring the winding rule, which is likely to cause rendering artifacts");
-                return rCandidate;
-            }
-
-            if(nCount > 1)
-            {
-                sal_uInt32 a, b;
-                std::vector< StripHelper > aHelpers;
-                aHelpers.resize(nCount);
-
-                for(a = 0; a < nCount; a++)
-                {
-                    const B2DPolygon& aCand(aCandidate.getB2DPolygon(a));
-                    StripHelper* pNewHelper = &(aHelpers[a]);
-                    pNewHelper->maRange = aCand.getB2DRange();
-                    pNewHelper->meOrinetation = utils::getOrientation(aCand);
-
-                    // initialize with own orientation
-                    pNewHelper->mnDepth = (pNewHelper->meOrinetation == B2VectorOrientation::Negative ? -1 : 1);
-                }
-
-                for(a = 0; a < nCount - 1; a++)
-                {
-                    const B2DPolygon& aCandA(aCandidate.getB2DPolygon(a));
-                    StripHelper& rHelperA = aHelpers[a];
-
-                    for(b = a + 1; b < nCount; b++)
-                    {
-                        const B2DPolygon& aCandB(aCandidate.getB2DPolygon(b));
-                        StripHelper& rHelperB = aHelpers[b];
-                        const bool bAInB(rHelperB.maRange.isInside(rHelperA.maRange) && utils::isInside(aCandB, aCandA, true));
-
-                        if(bAInB)
-                        {
-                            // A is inside B, add orientation of B to A
-                            rHelperA.mnDepth += (rHelperB.meOrinetation == B2VectorOrientation::Negative ? -1 : 1);
-                        }
-
-                        const bool bBInA(rHelperA.maRange.isInside(rHelperB.maRange) && utils::isInside(aCandA, aCandB, true));
-
-                        if(bBInA)
-                        {
-                            // B is inside A, add orientation of A to B
-                            rHelperB.mnDepth += (rHelperA.meOrinetation == B2VectorOrientation::Negative ? -1 : 1);
-                        }
-                    }
-                }
-
-                const B2DPolyPolygon aSource(aCandidate);
-                aCandidate.clear();
-
-                for(a = 0; a < nCount; a++)
-                {
-                    const StripHelper& rHelper = aHelpers[a];
-                    // for contained unequal oriented polygons sum will be 0
-                    // for contained equal it will be >=2 or <=-2
-                    // for free polygons (not contained) it will be 1 or -1
-                    // -> accept all which are >=-1 && <= 1
-                    bool bAcceptEntry(rHelper.mnDepth >= -1 && rHelper.mnDepth <= 1);
-
-                    if(bAcceptEntry)
-                    {
-                        aCandidate.append(aSource.getB2DPolygon(a));
-                    }
-                }
-            }
-
-            return aCandidate;
+            return solvePolygonsBySweep(rCandidate, SweepFillRule::Nonzero, B2DPolyPolygon(),
+                                        SweepFillRule::EvenOdd, SweepOperation::Fill);
         }
 
         B2DPolyPolygon stripDispensablePolygons(const B2DPolyPolygon& rCandidate, bool bKeepAboveZero)
@@ -936,15 +834,16 @@ namespace basegfx::utils
             }
             else
             {
-                // concatenate polygons, solve crossovers and throw away all sub-polygons
-                // which have a depth other than 0.
-                B2DPolyPolygon aRetval(rCandidateA);
+                // without overlap both stay as they are
+                if(!rCandidateA.getB2DRange().overlaps(rCandidateB.getB2DRange()))
+                {
+                    B2DPolyPolygon aRetval(rCandidateA);
+                    aRetval.append(rCandidateB);
+                    return aRetval;
+                }
 
-                aRetval.append(rCandidateB);
-                aRetval = solveCrossovers(aRetval);
-                aRetval = stripNeutralPolygons(aRetval);
-
-                return stripDispensablePolygons(aRetval);
+                return solvePolygonsBySweep(rCandidateA, SweepFillRule::EvenOdd, rCandidateB,
+                                            SweepFillRule::EvenOdd, SweepOperation::Or);
             }
         }
 
@@ -960,16 +859,16 @@ namespace basegfx::utils
             }
             else
             {
-                // XOR is pretty simple: By definition it is the simple concatenation of
-                // the single polygons since we imply XOR fill rule. Make it intersection-free
-                // and correct orientations
-                B2DPolyPolygon aRetval(rCandidateA);
+                // without overlap both stay as they are
+                if(!rCandidateA.getB2DRange().overlaps(rCandidateB.getB2DRange()))
+                {
+                    B2DPolyPolygon aRetval(rCandidateA);
+                    aRetval.append(rCandidateB);
+                    return aRetval;
+                }
 
-                aRetval.append(rCandidateB);
-                aRetval = solveCrossovers(aRetval);
-                aRetval = stripNeutralPolygons(aRetval);
-
-                return correctOrientations(aRetval);
+                return solvePolygonsBySweep(rCandidateA, SweepFillRule::EvenOdd, rCandidateB,
+                                            SweepFillRule::EvenOdd, SweepOperation::Xor);
             }
         }
 
@@ -1021,16 +920,14 @@ namespace basegfx::utils
                             aIntersect));
                 }
 
-                // concatenate polygons, solve crossovers and throw away all sub-polygons
-                // with a depth of < 1. This means to keep all polygons where at least two
-                // polygons do overlap.
-                B2DPolyPolygon aRetval(rCandidateA);
+                // without overlap nothing is left
+                if(!rCandidateA.getB2DRange().overlaps(rCandidateB.getB2DRange()))
+                {
+                    return B2DPolyPolygon();
+                }
 
-                aRetval.append(rCandidateB);
-                aRetval = solveCrossovers(aRetval);
-                aRetval = stripNeutralPolygons(aRetval);
-
-                return stripDispensablePolygons(aRetval, true);
+                return solvePolygonsBySweep(rCandidateA, SweepFillRule::EvenOdd, rCandidateB,
+                                            SweepFillRule::EvenOdd, SweepOperation::And);
             }
         }
 
@@ -1046,18 +943,14 @@ namespace basegfx::utils
             }
             else
             {
-                // Make B topologically to holes and append to A
-                B2DPolyPolygon aRetval(rCandidateB);
+                // without overlap A stays as it is
+                if(!rCandidateA.getB2DRange().overlaps(rCandidateB.getB2DRange()))
+                {
+                    return rCandidateA;
+                }
 
-                aRetval.flip();
-                aRetval.append(rCandidateA);
-
-                // solve crossovers and throw away all sub-polygons which have a
-                // depth other than 0.
-                aRetval = basegfx::utils::solveCrossovers(aRetval);
-                aRetval = basegfx::utils::stripNeutralPolygons(aRetval);
-
-                return basegfx::utils::stripDispensablePolygons(aRetval);
+                return solvePolygonsBySweep(rCandidateA, SweepFillRule::EvenOdd, rCandidateB,
+                                            SweepFillRule::EvenOdd, SweepOperation::Diff);
             }
         }
 

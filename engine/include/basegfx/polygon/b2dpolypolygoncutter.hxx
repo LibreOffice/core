@@ -91,11 +91,8 @@ namespace basegfx::utils
 
             Geometrically convert PolyPolygons which are proposed to
             use nonzero fill rule to a representation where evenodd
-            paint will give the same result. To do this all
-            intersections and self-intersections get solved (the
-            polygons will be rearranged if needed). Then all polygons
-            which are inside another one with the same orientation get
-            deleted
+            paint will give the same result. The result has no
+            crossings, curves stay curves
         */
         BASEGFX_DLLPUBLIC B2DPolyPolygon createNonzeroConform(const B2DPolyPolygon& rCandidate);
 
