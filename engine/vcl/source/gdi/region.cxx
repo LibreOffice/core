@@ -524,8 +524,6 @@ void vcl::Region::Union( const tools::Rectangle& rRect )
         // get this B2DPolyPolygon, solve on polygon base
         basegfx::B2DPolyPolygon aThisPolyPoly(GetAsB2DPolyPolygon());
 
-        aThisPolyPoly = basegfx::utils::prepareForPolygonOperation(aThisPolyPoly);
-
         if(!aThisPolyPoly.count())
         {
             // no local polygon, use the rectangle as new region
@@ -704,8 +702,6 @@ void vcl::Region::Exclude( const tools::Rectangle& rRect )
         // get this B2DPolyPolygon
         basegfx::B2DPolyPolygon aThisPolyPoly(GetAsB2DPolyPolygon());
 
-        aThisPolyPoly = basegfx::utils::prepareForPolygonOperation(aThisPolyPoly);
-
         if(!aThisPolyPoly.count())
         {
             // when local polygon is empty, nothing can be excluded
@@ -780,8 +776,6 @@ void vcl::Region::XOr( const tools::Rectangle& rRect )
     {
         // get this B2DPolyPolygon
         basegfx::B2DPolyPolygon aThisPolyPoly(GetAsB2DPolyPolygon());
-
-        aThisPolyPoly = basegfx::utils::prepareForPolygonOperation( aThisPolyPoly );
 
         if(!aThisPolyPoly.count())
         {
@@ -869,8 +863,6 @@ void vcl::Region::Union( const vcl::Region& rRegion )
         // get this B2DPolyPolygon
         basegfx::B2DPolyPolygon aThisPolyPoly(GetAsB2DPolyPolygon());
 
-        aThisPolyPoly = basegfx::utils::prepareForPolygonOperation(aThisPolyPoly);
-
         if(!aThisPolyPoly.count())
         {
             // when no local content, union will be equal to rRegion
@@ -880,7 +872,6 @@ void vcl::Region::Union( const vcl::Region& rRegion )
 
         // get the other B2DPolyPolygon
         basegfx::B2DPolyPolygon aOtherPolyPoly(rRegion.GetAsB2DPolyPolygon());
-        aOtherPolyPoly = basegfx::utils::prepareForPolygonOperation(aOtherPolyPoly);
 
         // use logical OR operation
         basegfx::B2DPolyPolygon aClip(basegfx::utils::solvePolygonOperationOr(aThisPolyPoly, aOtherPolyPoly));
@@ -1084,11 +1075,8 @@ void vcl::Region::Exclude( const vcl::Region& rRegion )
             return;
         }
 
-        aThisPolyPoly = basegfx::utils::prepareForPolygonOperation( aThisPolyPoly );
-
         // get the other B2DPolyPolygon
         basegfx::B2DPolyPolygon aOtherPolyPoly(rRegion.GetAsB2DPolyPolygon());
-        aOtherPolyPoly = basegfx::utils::prepareForPolygonOperation( aOtherPolyPoly );
 
         basegfx::B2DPolyPolygon aClip = basegfx::utils::solvePolygonOperationDiff( aThisPolyPoly, aOtherPolyPoly );
         *this = vcl::Region( aClip );
@@ -1170,11 +1158,8 @@ bool vcl::Region::XOr( const vcl::Region& rRegion )
             return true;
         }
 
-        aThisPolyPoly = basegfx::utils::prepareForPolygonOperation( aThisPolyPoly );
-
         // get the other B2DPolyPolygon
         basegfx::B2DPolyPolygon aOtherPolyPoly(rRegion.GetAsB2DPolyPolygon());
-        aOtherPolyPoly = basegfx::utils::prepareForPolygonOperation( aOtherPolyPoly );
 
         basegfx::B2DPolyPolygon aClip = basegfx::utils::solvePolygonOperationXor( aThisPolyPoly, aOtherPolyPoly );
         *this = vcl::Region( aClip );

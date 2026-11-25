@@ -9975,9 +9975,8 @@ void PDFWriterImpl::intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion 
 
     if( m_aGraphicsStack.front().m_bClipRegion )
     {
-        basegfx::B2DPolyPolygon aOld( basegfx::utils::prepareForPolygonOperation( m_aGraphicsStack.front().m_aClipRegion ) );
-        aRegion = basegfx::utils::prepareForPolygonOperation( aRegion );
-        m_aGraphicsStack.front().m_aClipRegion = basegfx::utils::solvePolygonOperationAnd( aOld, aRegion );
+        m_aGraphicsStack.front().m_aClipRegion = basegfx::utils::solvePolygonOperationAnd(
+            m_aGraphicsStack.front().m_aClipRegion, aRegion );
     }
     else
     {

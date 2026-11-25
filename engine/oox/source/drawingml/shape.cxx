@@ -1281,11 +1281,7 @@ lcl_getClipPolygon(CustomShapeProperties& rProperties, const awt::Rectangle& rSh
         // Combining them needs each path's own area first, which is that even-odd rule spelled out
         // as a boolean expression over its contours.
         auto contour = [](const basegfx::B2DPolyPolygon& rPath, sal_uInt32 nIndex)
-        {
-            // The operations below expect their operands oriented, which is what preparing does.
-            return basegfx::utils::prepareForPolygonOperation(
-                basegfx::B2DPolyPolygon(rPath.getB2DPolygon(nIndex)));
-        };
+        { return basegfx::B2DPolyPolygon(rPath.getB2DPolygon(nIndex)); };
 
         auto areaOf = [&contour](const basegfx::B2DPolyPolygon& rPath)
         {

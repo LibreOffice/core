@@ -200,11 +200,6 @@ void PolyPolygon::ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::P
     basegfx::B2DPolyPolygon aMergePolyPolygonA( getB2DPolyPolygon() );
     basegfx::B2DPolyPolygon aMergePolyPolygonB( rPolyPoly.getB2DPolyPolygon() );
 
-    // normalize the two polypolygons before. Force properly oriented
-    // polygons.
-    aMergePolyPolygonA = basegfx::utils::prepareForPolygonOperation( aMergePolyPolygonA );
-    aMergePolyPolygonB = basegfx::utils::prepareForPolygonOperation( aMergePolyPolygonB );
-
     switch( nOperation )
     {
         // All code extracted from svx/source/svdraw/svedtv2.cxx

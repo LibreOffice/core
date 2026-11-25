@@ -41,7 +41,7 @@ public:
             B2DPolygon poly1{ { 0, 0 }, { 1, 0 }, { 1, 1 }, { 0, 1 }, { 0, 0 } };
             B2DPolygon poly2{ { 0, 1 }, { 1, 1 }, { 1, 2 }, { 0, 2 }, { 0, 1 } };
             B2DPolyPolygon expected(
-                B2DPolygon{ { 1, 0 }, { 1, 1 }, { 1, 2 }, { 0, 2 }, { 0, 1 }, { 0, 0 } });
+                B2DPolygon{ { 0, 0 }, { 1, 0 }, { 1, 1 }, { 1, 2 }, { 0, 2 }, { 0, 1 } });
             expected.setClosed(true);
             B2DPolyPolygon result
                 = utils::mergeToSinglePolyPolygon({ B2DPolyPolygon(poly1), B2DPolyPolygon(poly2) });

@@ -808,16 +808,17 @@ namespace basegfx::utils
 
         B2DPolyPolygon prepareForPolygonOperation(const B2DPolygon& rCandidate)
         {
-            solver aSolver(rCandidate);
-            B2DPolyPolygon aRetval(stripNeutralPolygons(aSolver.getB2DPolyPolygon()));
-
-            return correctOrientations(aRetval);
+            return prepareForPolygonOperation(B2DPolyPolygon(rCandidate));
         }
 
         B2DPolyPolygon prepareForPolygonOperation(const B2DPolyPolygon& rCandidate)
         {
-            solver aSolver(rCandidate);
-            B2DPolyPolygon aRetval(stripNeutralPolygons(aSolver.getB2DPolyPolygon()));
+            // the area filled even-odd, without crossings; a polygon the sweep gives back as it
+            // was can still be one without area or turned the wrong way
+            B2DPolyPolygon aRetval(solvePolygonsBySweep(rCandidate, SweepFillRule::EvenOdd,
+                                                        B2DPolyPolygon(), SweepFillRule::EvenOdd,
+                                                        SweepOperation::Fill));
+            aRetval = stripNeutralPolygons(aRetval);
 
             return correctOrientations(aRetval);
         }
