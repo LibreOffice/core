@@ -667,7 +667,6 @@ void CollabSocketHandler::handleFetch(const std::string& stream, const std::stri
             // query parameters, so use Poco::URI to modify only the path.
             Poco::URI contentsUri(_wopiUri);
             contentsUri.setPath(contentsUri.getPath() + "/contents");
-            contentsUri.addQueryParameter("access_token", _accessToken);
             url = contentsUri.toString();
             hostChecked = true;
         }

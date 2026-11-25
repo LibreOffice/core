@@ -2093,6 +2093,76 @@ private:
     std::string fileUrlAuthorization_;
 };
 
+// A fetch of the document from the WOPI host's contents address has the access token in that
+// address once:
+class UnitCollabFetchContents: public WopiTestServer {
+public:
+    UnitCollabFetchContents(): WopiTestServer("UnitCollabFetchContents"), phase_(Phase::Connect) {}
+
+    void configure(Poco::Util::LayeredConfiguration & config) override {
+        WopiTestServer::configure(config);
+        config.setBool("client_document_loading.enable", true);
+    }
+
+    bool handleHttpRequest(
+        Poco::Net::HTTPRequest const & request, std::istream & message,
+        std::shared_ptr<StreamSocket> const & socket) override
+    {
+        Poco::URI const uri(request.getURI());
+        if (request.getMethod() == "GET" && uri.getPath() == "/wopi/files/0/contents") {
+            contentsQuery_ = uri.getQuery();
+        }
+        return WopiTestServer::handleHttpRequest(request, message, socket);
+    }
+
+    void invokeWSDTest() override {
+        switch (phase_) {
+        case Phase::Connect:
+            TRANSITION_STATE(phase_, Phase::WaitAuth);
+            // The WOPISrc, followed by the test name for the request to coolwsd:
+            collabWs_ = startCollabConnection(
+                socketPoll(),
+                Uri::encode(getWopiHostURI() + "/wopi/files/0?testname=UnitCollabFetchContents")
+                    + "&testname=UnitCollabFetchContents",
+                "anything");
+            break;
+        case Phase::WaitAuth:
+            if (!pollCollabMessage(collabWs_, "user_list")) {
+                break;
+            }
+            TRANSITION_STATE(phase_, Phase::WaitFetchUrl);
+            collabWs_->sendMessage(R"({"type":"fetch","stream":"contents","requestId":"f1"})");
+            break;
+        case Phase::WaitFetchUrl: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(collabWs_, "fetch_url");
+            if (!msg) {
+                break;
+            }
+            std::shared_ptr<http::Response const> const response = http::get(
+                helpers::getTestServerURI(),
+                msg->getValue<std::string>("url") + "&testname=UnitCollabFetchContents");
+            LOK_ASSERT_EQUAL(http::StatusCode::OK, response->statusLine().statusCode());
+            LOK_ASSERT_EQUAL(getFileContent(), response->getBody());
+            LOK_ASSERT_EQUAL(
+                std::string("testname=UnitCollabFetchContents&access_token=anything"),
+                contentsQuery_);
+            TRANSITION_STATE(phase_, Phase::Done);
+            collabWs_->asyncShutdown();
+            passTest("The contents address had the access token once");
+            break;
+        }
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    STATE_ENUM(Phase, Connect, WaitAuth, WaitFetchUrl, Done) phase_;
+
+    std::shared_ptr<http::WebSocketSession> collabWs_;
+    std::string contentsQuery_;
+};
+
 // A fetch of the document that the host answers with a temporary error once delivers the document:
 class UnitCollabFetchRetry: public WopiTestServer {
 public:
@@ -2945,7 +3015,7 @@ private:
 
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [28] { new UnitCollabProtocol(),
+    return new UnitBase* [29] { new UnitCollabProtocol(),
                                 new UnitCollabCheckFileInfoTransient(),
                                 new UnitCollabCheckFileInfoRetry(),
                                 new UnitCollabUploadRetry(), new UnitCollabUploadLanded(),
@@ -2960,7 +3030,7 @@ UnitBase** unit_create_wsd_multi(void)
                                 new UnitCollabTokenRenewal(),
                                 new UnitCollabMethods(), new UnitCollabRouting(),
                                 new UnitCollabFetchRedirect(), new UnitCollabFetchFileUrl(),
-                                new UnitCollabFetchRetry(),
+                                new UnitCollabFetchContents(), new UnitCollabFetchRetry(),
                                 new UnitCollabFetchRetryLimit(), new UnitCollabFetchNoConnection(),
                                 new UnitCollabProtocolNumber(), new UnitCollabEditorFrame(),
                                 nullptr };
