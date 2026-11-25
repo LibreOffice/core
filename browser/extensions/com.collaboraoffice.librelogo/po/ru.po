@@ -4,272 +4,275 @@ msgstr ""
 "Project-Id-Version: com.collaboraoffice.librelogo\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 11:57+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-11-21 19:16+0000\n"
+"Last-Translator: Valdemar <valdemar1st@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
+"extensions/librelogo/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Translate Toolkit 3.18.1\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: panel.js:443
 msgid "%1 has no embedded LibreLogo program."
-msgstr ""
+msgstr "В %1 нет встроенной программы LibreLogo."
 
 #: panel.js:438
 msgid "%1 is not a valid SVG file."
-msgstr ""
+msgstr "%1 не является корректным файлом SVG."
 
 #: panel.js:413
 msgid "Animation"
-msgstr ""
+msgstr "Анимация"
 
 #: ui.json:commands.back
 msgid "Back"
-msgstr ""
+msgstr "Назад"
 
 #: panel.js:414
 msgid "Beaver"
-msgstr ""
+msgstr "Бобёр"
 
 #: index.html:66
 msgid "Cancel"
-msgstr ""
+msgstr "Отмена"
 
 #: ui.json:notebookbar.group.logoCanvas
 msgid "Canvas"
-msgstr ""
+msgstr "Холст"
 
 #: ui.json:commands.clearscreen
 msgid "Clear Screen"
-msgstr ""
+msgstr "Очистить экран"
 
 #: index.html:38
 msgid "Command line"
-msgstr ""
+msgstr "Командная строка"
 
 #: index.html:46
 msgid "Copy the document text (or the selection) into the editor"
-msgstr ""
+msgstr "Копирует текст документа (или выделение) в редактор"
 
 #: panel.js:375
 msgid "Could not insert the drawing: %1"
-msgstr ""
+msgstr "Не удалось вставить рисунок: %1"
 
 #: panel.js:450
 msgid "Could not read %1: %2"
-msgstr ""
+msgstr "Не удалось прочитать %1: %2"
 
 #: panel.js:389
 msgid "Could not save %1: %2"
-msgstr ""
+msgstr "Не удалось сохранить %1: %2"
 
 #: panel.js:480
 msgid "Could not start LibreLogo: %1"
-msgstr ""
+msgstr "Не удалось запустить LibreLogo: %1"
 
 #: panel.js:386
 msgid "Downloaded %1"
-msgstr ""
+msgstr "Загружено: %1"
 
 #: panel.js:188
 msgid "Drawing removed from the document."
-msgstr ""
+msgstr "Рисунок удалён из документа."
 
 #: index.html:58
 msgid "Empty: the Writer document (or the selected text) is the program."
-msgstr ""
+msgstr "Пусто: программой является документ Writer (или выделенный текст)."
 
 #: index.html:53
 msgid "Examples"
-msgstr ""
+msgstr "Примеры"
 
 #: index.html:40
 msgid "Execute the command line (Enter)"
-msgstr ""
+msgstr "Выполнить командную строку (Enter)"
 
 #: ui.json:commands.forward
 msgid "Forward"
-msgstr ""
+msgstr "Вперёд"
 
 #: index.html:48
 msgid "From SVG"
-msgstr ""
+msgstr "Из SVG"
 
 #: index.html:46
 msgid "From document"
-msgstr ""
+msgstr "Из документа"
 
 #: ui.json:commands.home
 msgid "Home"
-msgstr ""
+msgstr "Домой"
 
 #: index.html:72
 msgid "Insert the drawing into the document after each run"
-msgstr ""
+msgstr "Вставлять рисунок в документ после каждого запуска"
 
 #: panel.js:117
 msgid "Internal error: %1"
-msgstr ""
+msgstr "Внутренняя ошибка: %1"
 
 #: ui.json:commands.left
 msgid "Left"
-msgstr ""
+msgstr "Cлева"
 
 #: manifest.json:name
 msgid "LibreLogo"
-msgstr ""
+msgstr "LibreLogo"
 
 #: index.html:55
 msgid "Load an example…"
-msgstr ""
+msgstr "Загрузить пример…"
 
 #: panel.js:458
 msgid "Loaded the document text."
-msgstr ""
+msgstr "Текст документа загружен."
 
 #: panel.js:448
 msgid "Loaded the program from %1."
-msgstr ""
+msgstr "Программа загружена из %1."
 
 #: panel.js:458
 msgid "Loaded the selected text."
-msgstr ""
+msgstr "Выделенный текст загружен."
 
 #: ui.json:notebookbar.tab
 msgid "Logo"
-msgstr ""
+msgstr "Logo"
 
 #: index.html:34
 msgid "Logo language: commands are read in this language and in English"
-msgstr ""
+msgstr "Язык Logo: команды распознаются на этом языке и на английском"
 
 #: panel.js:188
 msgid "No LibreLogo drawing in the document."
-msgstr ""
+msgstr "В документе нет рисунка LibreLogo."
 
 #: index.html:65
 msgid "OK"
-msgstr ""
+msgstr "ОК"
 
 #: index.html:71
 msgid "Options"
-msgstr ""
+msgstr "Параметры"
 
 #: index.html:73
 msgid "Place it"
-msgstr ""
+msgstr "Разместить"
 
 #: ui.json:notebookbar.group.logoProgram index.html:44
 msgid "Program"
-msgstr ""
+msgstr "Программа"
 
 #: panel.js:472
 msgid "Program written to the document."
-msgstr ""
+msgstr "Программа записана в документ."
 
 #: index.html:48
 msgid "Recover the program embedded in an exported .svg file"
-msgstr ""
+msgstr "Восстанавливает программу, встроенную в экспортированный файл .svg"
 
 #: index.html:80
 msgid "Remove the drawing from the document"
-msgstr ""
+msgstr "Удалить рисунок из документа"
 
 #: ui.json:commands.right
 msgid "Right"
-msgstr ""
+msgstr "Справа"
 
 #: panel.js:411
 msgid "Rosette"
-msgstr ""
+msgstr "Розетка"
 
 #: index.html:20
 msgid "Run"
-msgstr ""
+msgstr "Запуск"
 
 #: ui.json:commands.run
 msgid "Run Logo Program"
-msgstr ""
+msgstr "Запустить программу Logo"
 
 #: index.html:20
 msgid "Run the Logo program (Ctrl+Enter)"
-msgstr ""
+msgstr "Запустить программу Logo (Ctrl+Enter)"
 
 #: panel.js:255
 msgid "Running the document text."
-msgstr ""
+msgstr "Выполняется текст документа."
 
 #: panel.js:255
 msgid "Running the selected text."
-msgstr ""
+msgstr "Выполняется выделенный текст."
 
 #: panel.js:387
 msgid "Saved %1"
-msgstr ""
+msgstr "Сохранено: %1"
 
 #: index.html:79
 msgid "Show the turtle in the inserted drawing"
-msgstr ""
+msgstr "Показывать черепашку в вставленном рисунке"
 
 #: panel.js:410
 msgid "Square spiral"
-msgstr ""
+msgstr "Квадратная спираль"
 
 #: panel.js:409
 msgid "Star"
-msgstr ""
+msgstr "Звезда"
 
 #: ui.json:commands.stop index.html:21
 msgid "Stop"
-msgstr ""
+msgstr "Стоп"
 
 #: index.html:21
 msgid "Stop the program"
-msgstr ""
+msgstr "Остановить программу"
 
 #: panel.js:252
 msgid ""
 "The document is empty. Type a program in the editor or in the document."
-msgstr ""
+msgstr "Документ пуст. Введите программу в редакторе или в документе."
 
 #: panel.js:467
 msgid "The editor is empty, so there is no program to write to the document."
-msgstr ""
+msgstr "Редактор пуст, поэтому записывать программу в документ нечего."
 
 #: index.html:47
 msgid "To document"
-msgstr ""
+msgstr "В документ"
 
 #: panel.js:412
 msgid "Tree"
-msgstr ""
+msgstr "Дерево"
 
 #: ui.json:notebookbar.group.logoTurtle
 msgid "Turtle"
-msgstr ""
+msgstr "Черепашка"
 
 #: index.html:33
 msgid "Turtle canvas"
-msgstr ""
+msgstr "Холст черепашки"
 
 #: panel.js:90
 msgid "Using A4 page size: %1"
-msgstr ""
+msgstr "Используется размер страницы A4: %1"
 
 #: index.html:47
 msgid ""
 "Write the editor's program into the document, over the selection or at the "
 "cursor"
 msgstr ""
+"Записывает программу из редактора в документ — поверх выделения или в "
+"позиции курсора"
 
 #: index.html:76
 msgid "at the cursor, as an inline image"
-msgstr ""
+msgstr "в позиции курсора, как встроенное изображение"
 
 #: index.html:75
 msgid "on the page where the turtle drew"
-msgstr ""
+msgstr "на странице, где рисовала черепашка"

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Calc-Intro-Template.ods\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-11-17 09:31+0000\n"
+"PO-Revision-Date: 2026-11-21 19:16+0000\n"
 "Last-Translator: Valdemar <valdemar1st@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
 "desktop-apps/calc-intro-template/ru/>\n"
@@ -34,43 +34,51 @@ msgid ""
 "For Medium Stock use condition \"Values between: 20-80\" and style \"Medium "
 "Stock\"."
 msgstr ""
+"Для среднего запаса используйте условие «Значения между: 20-80» и стиль «"
+"Средний запас»."
 
 #. content.xml (validation help message)
 msgid ""
 "For High Stock use condition \"Values greater than: 80\" and style \"High "
 "Stock\"."
 msgstr ""
+"Для высокого запаса используйте условие «Значения больше: 80» и стиль «"
+"Высокий запас»."
 
 #. content.xml (validation title)
 msgid "Use other options"
-msgstr ""
+msgstr "Используйте другие параметры"
 
 #. content.xml (validation help message)
 msgid ""
 "Use Standard or Advanced Filter to narrow down your data more precisely"
 msgstr ""
+"Используйте «Стандартный фильтр» или «Расширенный фильтр» для более точного "
+"отбора данных"
 
 #. content.xml (validation title)
 msgid "Share document link"
-msgstr ""
+msgstr "Поделиться ссылкой на документ"
 
 #. content.xml (validation help message)
 msgid ""
 "Share a direct link with people who already have access to the document for "
 "quick and easy access."
 msgstr ""
+"Отправьте прямую ссылку людям, у которых уже есть доступ к документу, для "
+"быстрого и удобного доступа."
 
 #. content.xml (sheet name)
 msgid "👋 Introduction"
-msgstr ""
+msgstr "👋 Введение"
 
 #. content.xml (sheet '👋 Introduction')
 msgid "<1>Next Chapter: ✚</1><2> Formulas & Functions</2>"
-msgstr ""
+msgstr "<1>Следующая глава: ✚</1><2> Формулы и функции</2>"
 
 #. content.xml (sheet '👋 Introduction')
 msgid "👋General information"
-msgstr ""
+msgstr "👋Общая информация"
 
 #. content.xml (sheet '👋 Introduction')
 msgid ""
@@ -78,30 +86,38 @@ msgid ""
 "your data. This introduction template will help you get started and explore "
 "some of the main features of the product."
 msgstr ""
+"Электронные таблицы Collabora Office позволяют вычислять, анализировать "
+"данные и управлять ими. Этот вводный шаблон поможет вам начать работу и "
+"познакомиться с основными возможностями продукта."
 
 #. content.xml (sheet '👋 Introduction')
 msgid "Calc features – key features you can explore"
-msgstr ""
+msgstr "Возможности Calc — ключевые функции, которые стоит изучить"
 
 #. content.xml (sheet '👋 Introduction')
 msgid "Calculations (Formulas & Functions)"
-msgstr ""
+msgstr "Вычисления (формулы и функции)"
 
 #. content.xml (sheet '👋 Introduction')
 msgid ""
 "Use built-in functions to perform calculations on your data. Create formulas"
 " easily and get help with the Function Wizard."
 msgstr ""
+"Используйте встроенные функции для вычислений над данными. Легко создавайте "
+"формулы с помощью мастера функций."
 
 #. content.xml (sheet '👋 Introduction')
 msgid "Tables"
-msgstr ""
+msgstr "Таблицы"
 
 #. content.xml (sheet '👋 Introduction')
 msgid ""
 "Organise your data into structured tables. Quickly edit, sort, and filter "
 "information to keep everything clear and easy to manage."
 msgstr ""
+"Организуйте данные в структурированные таблицы. Быстро редактируйте, "
+"сортируйте и фильтруйте информацию, чтобы всё было наглядно и удобно в "
+"управлении."
 
 #. content.xml (sheet '👋 Introduction')
 msgid "Charts"
@@ -142,132 +158,144 @@ msgstr ""
 
 #. content.xml (sheet '👋 Introduction')
 msgid "Collaboration tools"
-msgstr ""
+msgstr "Средства совместной работы"
 
 #. content.xml (sheet '👋 Introduction')
 msgid ""
 "Work together in real time. Share, comment, and track changes directly in "
 "the document."
 msgstr ""
+"Работайте вместе в реальном времени. Делитесь документами, комментируйте и "
+"отслеживайте изменения прямо в документе."
 
 #. content.xml (sheet '👋 Introduction')
 msgid "Accessibility"
-msgstr ""
+msgstr "Специальные возможности"
 
 #. content.xml (sheet '👋 Introduction')
 msgid ""
 "Calc is designed with accessibility in mind, helping ensure that everyone "
 "can easily create, edit, and work with spreadsheets."
 msgstr ""
+"Calc разработан с учётом специальных возможностей, чтобы каждый мог без "
+"труда создавать электронные таблицы, редактировать их и работать с ними."
 
 #. content.xml (sheet name)
 msgid "✚ Formulas & Functions"
-msgstr ""
+msgstr "✚ Формулы и функции"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "✚Using simple functions"
-msgstr ""
+msgstr "✚Использование простых функций"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
 "We will look at a practical case to learn how to use basic Calc features and"
 " simple functions."
 msgstr ""
+"На практическом примере мы научимся использовать базовые возможности Calc и "
+"простые функции."
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Step-by-step guide – Adding values"
-msgstr ""
+msgstr "Пошаговое руководство — сложение значений"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
 "In this example we want to calculate the total number of items in stock. The"
 " SUM function allows you to quickly add numbers together."
 msgstr ""
+"В этом примере нужно подсчитать общее количество товаров на складе. Функция "
+"SUM позволяет быстро складывать числа."
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Writing formula into cell"
-msgstr ""
+msgstr "Ввод формулы в ячейку"
 
 #. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
 #. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
 #. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
 msgid "Item"
-msgstr ""
+msgstr "Товар"
 
 #. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
 #. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
 #. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
 msgid "Quantity [pcs]"
-msgstr ""
+msgstr "Количество [шт.]"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "1. Click on the cell below the Quantity column"
-msgstr ""
+msgstr "1. Щёлкните ячейку под столбцом «Количество»"
 
 #. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
 #. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
 #. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
 msgid "Laptop"
-msgstr ""
+msgstr "Ноутбук"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "<1>2. Type the formula </1><2>=SUM(E9:E11)</2>"
-msgstr ""
+msgstr "<1>2. Введите формулу </1><2>=SUM(E9:E11)</2>"
 
 #. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
 #. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
 #. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
 msgid "Mouse"
-msgstr ""
+msgstr "Мышь"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
 "<1>3. Press </1><2>Enter</2><3> to calculate the total number of items</3>"
 msgstr ""
+"<1>3. Нажмите </1><2>Enter</2><3>, чтобы подсчитать общее количество "
+"товаров</3>"
 
 #. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
 #. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
 #. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
 msgid "Notebook"
-msgstr ""
+msgstr "Блокнот"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Inserting formula via Formulas tab – Formula wizard"
-msgstr ""
+msgstr "Вставка формулы через вкладку «Формулы» — мастер функций"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "<1>2. Open </1><2>Formulas tab</2><3> in Notebook bar</3>"
-msgstr ""
+msgstr "<1>2. Откройте </1><2>вкладку «Формулы»</2><3> на панели вкладок</3>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "<1>3. Click on </1><2>Insert Function</2>"
-msgstr ""
+msgstr "<1>3. Нажмите </1><2>Вставить функцию</2>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
 "<1>4. Choose SUM from the list of functions, </1><2>=SUM ( )</2><3> should "
 "appear</3>"
 msgstr ""
+"<1>4. Выберите SUM из списка функций, </1><2>=SUM ( )</2><3> должна "
+"появиться</3>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "5. Select the cells containing the values you want to add"
-msgstr ""
+msgstr "5. Выделите ячейки со значениями, которые нужно сложить"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "<1>6. Click </1><2>OK</2><3> to insert the formula</3>"
-msgstr ""
+msgstr "<1>6. Нажмите </1><2>ОК</2><3>, чтобы вставить формулу</3>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Inserting formula via Formulas tab chosen from Category"
-msgstr ""
+msgstr "Вставка формулы через вкладку «Формулы» с выбором из категории"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "<1>3. Click on </1><2>AutoSum</2>"
-msgstr ""
+msgstr "<1>3. Нажмите </1><2>Автосумма</2>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Formulas Structure"
-msgstr ""
+msgstr "Структура формул"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
@@ -276,16 +304,22 @@ msgid ""
 " what type of calculation will be performed. The </5><6>brackets</6><7> "
 "contain the cells that the formula will use for its calculation.</7>"
 msgstr ""
+"<1>Формулы в Calc всегда начинаются со знака равенства </1><2>=</2><3>. "
+"Затем следует имя функции (например, </3><4>sum</4><5>), которое определяет "
+"тип вычисления. В </5><6>скобках</6><7> указываются ячейки, которые формула "
+"использует для вычисления.</7>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Function Library"
-msgstr ""
+msgstr "Библиотека функций"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
 "Collabora Office Calc provides a large library of built-in functions that "
 "help you perform different types of calculations and data analysis."
 msgstr ""
+"Collabora Office Calc предоставляет обширную библиотеку встроенных функций "
+"для различных типов вычислений и анализа данных."
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
@@ -294,24 +328,30 @@ msgid ""
 "Spreadsheet, Text </2><3>and</3><4> Add-in</4><5>, making it easier to find "
 "the function you need.</5>"
 msgstr ""
+"<1>Функции распределены по категориям, таким как «База данных», </1><2>«Дата "
+"и время», «Финансовые», «Информационные», «Логические», «Математические», «"
+"Массив», «Статистические», «Табличные», «Текстовые» </2><3>и</3><4> «"
+"Дополнения»</4><5>, что упрощает поиск нужной функции.</5>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
 "<1>You can access these functions through the Function Library or by using "
 "the </1><2>Function Wizard.</2>"
 msgstr ""
+"<1>Эти функции доступны через библиотеку функций или с помощью </1><2>"
+"мастера функций.</2>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Next Chapter: 📋 Tables"
-msgstr ""
+msgstr "Следующая глава: 📋 Таблицы"
 
 #. content.xml (sheet name)
 msgid "📋 Tables"
-msgstr ""
+msgstr "📋 Таблицы"
 
 #. content.xml (sheet '📋 Tables')
 msgid "📋Create a table"
-msgstr ""
+msgstr "📋Создание таблицы"
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
@@ -319,112 +359,119 @@ msgid ""
 "structured way. They make it easier to manage data, perform calculations, "
 "and visualise information."
 msgstr ""
+"Таблицы помогают наглядно и структурированно организовать большие объёмы "
+"информации. Они упрощают управление данными, выполнение вычислений и "
+"визуализацию информации."
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🎨 Conditional
 #. Formatting'); content.xml (sheet '📊 Charts'); content.xml (sheet '🔍 Data &
 #. filtering')
 msgid "Step-by-step guide"
-msgstr ""
+msgstr "Пошаговое руководство"
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
 "In this example we will learn how to create and use tables to organise data "
 "in a spreadsheet."
 msgstr ""
+"В этом примере мы научимся создавать таблицы и использовать их для "
+"организации данных в электронной таблице."
 
 #. content.xml (sheet '📋 Tables')
 msgid "Create a table from existing data"
-msgstr ""
+msgstr "Создание таблицы из имеющихся данных"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Category"
-msgstr ""
+msgstr "Категория"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Supplier"
-msgstr ""
+msgstr "Поставщик"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '📊 Charts'); content.xml
 #. (sheet '🔍 Data & filtering')
 msgid ""
 "1. Select the range of cells that contains your data (including headers)"
-msgstr ""
+msgstr "1. Выделите диапазон ячеек с данными (включая заголовки)"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Electronics"
-msgstr ""
+msgstr "Электроника"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Dell"
-msgstr ""
+msgstr "Dell"
 
 #. content.xml (sheet '📋 Tables')
 msgid "<1>2. Open the </1><2>Insert tab</2><3> in the toolbar</3>"
 msgstr ""
+"<1>2. Откройте </1><2>вкладку «Вставка»</2><3> на панели инструментов</3>"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Logitech"
-msgstr ""
+msgstr "Logitech"
 
 #. content.xml (sheet '📋 Tables')
 msgid "<1>3. Click </1><2>Table</2>"
-msgstr ""
+msgstr "<1>3. Нажмите </1><2>Таблица</2>"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Office supplies"
-msgstr ""
+msgstr "Канцтовары"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Staples"
-msgstr ""
+msgstr "Скобы"
 
 #. content.xml (sheet '📋 Tables')
 msgid "<1>4. Click </1><2>OK</2>"
-msgstr ""
+msgstr "<1>4. Нажмите </1><2>ОК</2>"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🎨 Conditional
 #. Formatting'); content.xml (sheet '📊 Charts'); content.xml (sheet '🔍 Data &
 #. filtering')
 msgid "Keyboard"
-msgstr ""
+msgstr "Клавиатура"
 
 #. content.xml (sheet '📋 Tables')
 msgid "5. Your data is now organised as a table"
-msgstr ""
+msgstr "5. Теперь ваши данные организованы в таблицу"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🎨 Conditional
 #. Formatting'); content.xml (sheet '📊 Charts'); content.xml (sheet '🔍 Data &
 #. filtering')
 msgid "Pen"
-msgstr ""
+msgstr "Ручка"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Bic"
-msgstr ""
+msgstr "Bic"
 
 #. content.xml (sheet '📋 Tables')
 msgid "Create a table from scratch"
-msgstr ""
+msgstr "Создание таблицы с нуля"
 
 #. content.xml (sheet '📋 Tables')
 msgid "<1>1. Open the </1><2>Insert tab</2><3> in the toolbar</3>"
 msgstr ""
+"<1>1. Откройте </1><2>вкладку «Вставка»</2><3> на панели инструментов</3>"
 
 #. content.xml (sheet '📋 Tables')
 msgid "<1>2. Click </1><2>Table</2>"
-msgstr ""
+msgstr "<1>2. Нажмите </1><2>Таблица</2>"
 
 #. content.xml (sheet '📋 Tables')
 msgid "3. Select the range of cells where you want to create the table"
-msgstr ""
+msgstr "3. Выделите диапазон ячеек, в котором хотите создать таблицу"
 
 #. content.xml (sheet '📋 Tables')
 msgid "5. Your table is now ready to be filled with data"
-msgstr ""
+msgstr "5. Таблица готова к заполнению данными"
 
 #. content.xml (sheet '📋 Tables')
 msgid "Editing tables"
-msgstr ""
+msgstr "Редактирование таблиц"
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
@@ -435,22 +482,32 @@ msgid ""
 "rows, and filter buttons, depending on how you want to display and work with"
 " your data."
 msgstr ""
+"После создания таблицы на панели инструментов становятся доступны "
+"дополнительные средства. Они позволяют удобнее настраивать таблицу и "
+"управлять ею. Применяйте различные стили таблиц, чтобы улучшить внешний вид "
+"данных. Вы также можете включать и отключать такие параметры, как строки "
+"заголовков, чередующиеся строки и кнопки фильтра, в зависимости от того, как "
+"вы хотите отображать данные и работать с ними."
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
 "These features help you keep your table organised, highlight important "
 "information, and work more efficiently with your data."
 msgstr ""
+"Эти возможности помогают поддерживать порядок в таблице, выделять важную "
+"информацию и эффективнее работать с данными."
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
 "<1>➜Try it: </1><2>Select your table, open tab Tables that appears in "
 "toolbar and explore.</2>"
 msgstr ""
+"<1>➜Попробуйте: </1><2>выделите таблицу, откройте появившуюся на панели "
+"инструментов вкладку «Таблицы» и изучите её возможности.</2>"
 
 #. content.xml (sheet '📋 Tables')
 msgid "Pivot table"
-msgstr ""
+msgstr "Сводная таблица"
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
@@ -459,6 +516,10 @@ msgid ""
 " of the source data, you can display the details of areas of interest, and "
 "you can create reports."
 msgstr ""
+"Сводная таблица (ранее известная как DataPilot) позволяет объединять, "
+"сравнивать и анализировать большие объёмы данных. Вы можете просматривать "
+"различные сводки исходных данных, отображать детали интересующих областей и "
+"создавать отчёты."
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
@@ -466,24 +527,28 @@ msgid ""
 " can be arranged, rearranged or summarised according to different points of "
 "view."
 msgstr ""
+"Таблица, созданная как сводная, является интерактивной. Данные можно "
+"упорядочивать, переупорядочивать и обобщать с разных точек зрения."
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
 "<1>➜Try it: </1><2>Go to the Insert tab and click Pivot Table to create one "
 "from your data.</2>"
 msgstr ""
+"<1>➜Попробуйте: </1><2>перейдите на вкладку «Вставка» и нажмите «Сводная "
+"таблица», чтобы создать её из своих данных.</2>"
 
 #. content.xml (sheet '📋 Tables')
 msgid "Next Chapter: 🎨 Conditional Formatting"
-msgstr ""
+msgstr "Следующая глава: 🎨 Условное форматирование"
 
 #. content.xml (sheet name)
 msgid "🎨 Conditional Formatting"
-msgstr ""
+msgstr "🎨 Условное форматирование"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "🎨Conditional formatting"
-msgstr ""
+msgstr "🎨Условное форматирование"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
@@ -491,12 +556,17 @@ msgid ""
 "highlight important values, show patterns, and improve readability using "
 "colours, styles, and rules."
 msgstr ""
+"Форматируйте данные, чтобы сделать их понятнее и нагляднее. Выделяйте важные "
+"значения, показывайте закономерности и повышайте читаемость с помощью "
+"цветов, стилей и правил."
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
 "Conditional formatting automatically changes how cells look based on their "
 "values, helping you quickly spot trends or important data."
 msgstr ""
+"Условное форматирование автоматически изменяет вид ячеек в зависимости от их "
+"значений, помогая быстро замечать тенденции и важные данные."
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
@@ -504,61 +574,69 @@ msgid ""
 "values in the data and make important information easier to spot at a "
 "glance."
 msgstr ""
+"В этом примере мы применим условное форматирование, чтобы выделить ключевые "
+"значения и сделать важную информацию заметной с первого взгляда."
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "Apply conditional formatting"
-msgstr ""
+msgstr "Применение условного форматирования"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "1. Select the range of cells you want to format"
-msgstr ""
+msgstr "1. Выделите диапазон ячеек, который хотите отформатировать"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "<1>2. Open the </1><2>Format tab</2><3> in the toolbar</3>"
 msgstr ""
+"<1>2. Откройте </1><2>вкладку «Формат»</2><3> на панели инструментов</3>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "<1>3. Click </1><2>Conditional formatting</2>"
-msgstr ""
+msgstr "<1>3. Нажмите </1><2>Условное форматирование</2>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "<1>4. Select the </1><2>rule</2><3> you want to apply</3>"
-msgstr ""
+msgstr "<1>4. Выберите </1><2>правило</2><3>, которое хотите применить</3>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "5. Set the condition and select a cell style"
-msgstr ""
+msgstr "5. Задайте условие и выберите стиль ячейки"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "<1>6. Click </1><2>OK</2><3> to apply</3>"
-msgstr ""
+msgstr "<1>6. Нажмите </1><2>ОК</2><3>, чтобы применить</3>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "➜Try it: Inventory stock overview"
-msgstr ""
+msgstr "➜Попробуйте: обзор складских запасов"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
 "Highlight important inventory data to quickly identify products that are "
 "running low on stock."
 msgstr ""
+"Выделите важные данные о запасах, чтобы быстро находить товары, которые "
+"заканчиваются."
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
 "<1>Low Stock</1><2> (less than 20 pcs) → </2><3>Red</3><4> background</4>"
-msgstr ""
+msgstr "<1>Низкий запас</1><2> (менее 20 шт.) → </2><3>красный</3><4> фон</4>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
 "<1>Medium Stock</1><2> (between 20 and 80 pcs)→ </2><3>Orange</3><4> "
 "background</4>"
 msgstr ""
+"<1>Средний запас</1><2> (от 20 до 80 шт.)→ </2><3>оранжевый</3><4> фон</4>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
 "<1>High Stock </1><2>(more than</2><3> </3><4>80 pcs)→ </4><5>Green</5><6> "
 "background</6>"
 msgstr ""
+"<1>Высокий запас </1><2>(более</2><3> </3><4>80 шт.)→ </4><5>зелёный</5><6> "
+"фон</6>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
@@ -567,18 +645,22 @@ msgid ""
 "in </6><7>Manage Conditional Formatting</7><8> from the </8><9>Format "
 "tab</9><10>.</10>"
 msgstr ""
+"<1>💡Полезный совет: </1><2>чтобы удалить форматирование, используйте </2><3>"
+"«Очистить прямое форматирование»</3><4> на </4><5>вкладке «Главная»</5><6> "
+"или управляйте правилами и удаляйте их в окне </6><7>«Управление условным "
+"форматированием»</7><8> на </8><9>вкладке «Формат»</9><10>.</10>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "Next Chapter: 📊 Charts"
-msgstr ""
+msgstr "Следующая глава: 📊 Диаграммы"
 
 #. content.xml (sheet name)
 msgid "📊 Charts"
-msgstr ""
+msgstr "📊 Диаграммы"
 
 #. content.xml (sheet '📊 Charts')
 msgid "📊Create a chart"
-msgstr ""
+msgstr "📊Создание диаграммы"
 
 #. content.xml (sheet '📊 Charts')
 msgid ""
@@ -586,6 +668,10 @@ msgid ""
 "can visually compare data series and view trends in the data. You can insert"
 " charts into spreadsheets, text documents, drawings and presentations."
 msgstr ""
+"Collabora Office позволяет представлять данные графически в виде диаграмм, "
+"чтобы наглядно сравнивать ряды данных и отслеживать тенденции. Диаграммы "
+"можно вставлять в электронные таблицы, текстовые документы, рисунки и "
+"презентации."
 
 #. content.xml (sheet '📊 Charts')
 msgid ""
@@ -593,71 +679,75 @@ msgid ""
 "types of charts available. On the other side, you can see an example table "
 "that can be used as a data source for creating charts."
 msgstr ""
+"В этом примере мы научимся создавать диаграммы и изучим доступные типы "
+"диаграмм. Рядом вы видите пример таблицы, которую можно использовать как "
+"источник данных для построения диаграмм."
 
 #. content.xml (sheet '📊 Charts')
 msgid "Create a chart from existing data"
-msgstr ""
+msgstr "Создание диаграммы из имеющихся данных"
 
 #. content.xml (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
 msgid "Price per piece [£]"
-msgstr ""
+msgstr "Цена за штуку [£]"
 
 #. content.xml (sheet '📊 Charts')
 msgid "<1>2. Open the </1><2>Insert tab </2><3>in the toolbar</3>"
 msgstr ""
+"<1>2. Откройте </1><2>вкладку «Вставка» </2><3>на панели инструментов</3>"
 
 #. content.xml (sheet '📊 Charts')
 msgid "<1>3. Click </1><2>Chart</2>"
-msgstr ""
+msgstr "<1>3. Нажмите </1><2>Диаграмма</2>"
 
 #. content.xml (sheet '📊 Charts')
 msgid "4. Choose the chart type and style that best fits your data"
-msgstr ""
+msgstr "4. Выберите тип и стиль диаграммы, наиболее подходящие для ваших данных"
 
 #. content.xml (sheet '📊 Charts')
 msgid "<1>5. Click </1><2>Finish</2><3> to insert the chart</3>"
-msgstr ""
+msgstr "<1>5. Нажмите </1><2>Готово</2><3>, чтобы вставить диаграмму</3>"
 
 #. content.xml (sheet '📊 Charts')
 msgid "6. Your data is now displayed as a chart"
-msgstr ""
+msgstr "6. Теперь ваши данные отображены в виде диаграммы"
 
 #. content.xml (sheet '📊 Charts')
 msgid "Create a chart via Insert tab"
-msgstr ""
+msgstr "Создание диаграммы через вкладку «Вставка»"
 
 #. content.xml (sheet '📊 Charts')
 msgid "1. Open the Insert tab in the toolbar"
-msgstr ""
+msgstr "1. Откройте вкладку «Вставка» на панели инструментов"
 
 #. content.xml (sheet '📊 Charts')
 msgid "<1>2. Click </1><2>Chart</2>"
-msgstr ""
+msgstr "<1>2. Нажмите </1><2>Диаграмма</2>"
 
 #. content.xml (sheet '📊 Charts')
 msgid "3. Choose the chart type and style that best fits your data"
-msgstr ""
+msgstr "3. Выберите тип и стиль диаграммы, наиболее подходящие для ваших данных"
 
 #. content.xml (sheet '📊 Charts')
 msgid "<1>4. Click </1><2>Next</2>"
-msgstr ""
+msgstr "<1>4. Нажмите </1><2>Далее</2>"
 
 #. content.xml (sheet '📊 Charts')
 msgid ""
 "5. Select the range of cells that contains your data (including headers)"
-msgstr ""
+msgstr "5. Выделите диапазон ячеек с данными (включая заголовки)"
 
 #. content.xml (sheet '📊 Charts')
 msgid "<1>6. Click </1><2>Finish</2><3> to insert the chart</3>"
-msgstr ""
+msgstr "<1>6. Нажмите </1><2>Готово</2><3>, чтобы вставить диаграмму</3>"
 
 #. content.xml (sheet '📊 Charts')
 msgid "7. Your data is now displayed as a chart"
-msgstr ""
+msgstr "7. Теперь ваши данные отображены в виде диаграммы"
 
 #. content.xml (sheet '📊 Charts')
 msgid "Editing charts"
-msgstr ""
+msgstr "Редактирование диаграмм"
 
 #. content.xml (sheet '📊 Charts')
 msgid ""
@@ -665,6 +755,9 @@ msgid ""
 " you can use the options in the sidebar or open the context menu (right "
 "click) to modify the chart."
 msgstr ""
+"Чтобы отредактировать диаграмму, дважды щёлкните по ней — включится режим "
+"редактирования. После выделения диаграммы используйте параметры на боковой "
+"панели или контекстное меню (правый щелчок) для её изменения."
 
 #. content.xml (sheet '📊 Charts')
 msgid ""
@@ -672,14 +765,17 @@ msgid ""
 "well as change the data range or chart type. These tools allow you to "
 "customise the chart and better present your data."
 msgstr ""
+"Вы можете добавлять и настраивать элементы диаграммы — заголовки, оси и "
+"подписи, — а также изменять диапазон данных или тип диаграммы. Эти средства "
+"позволяют настроить диаграмму и лучше представить данные."
 
 #. content.xml (sheet '📊 Charts')
 msgid "Next Chapter:🔍 Data & filtering"
-msgstr ""
+msgstr "Следующая глава:🔍 Данные и фильтрация"
 
 #. content.xml (sheet name); content.xml (sheet '🔍 Data & filtering')
 msgid "🔍 Data & filtering"
-msgstr ""
+msgstr "🔍 Данные и фильтрация"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
@@ -687,41 +783,50 @@ msgid ""
 "efficiently. You can quickly sort information or apply filters to focus only"
 " on the data that matters."
 msgstr ""
+"Средства работы с данными и фильтрации помогают эффективнее организовывать и "
+"изучать данные. Быстро сортируйте информацию или применяйте фильтры, чтобы "
+"сосредоточиться только на нужных данных."
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
 "In this example, we will learn how to filter data to quickly find specific "
 "items in an inventory list."
 msgstr ""
+"В этом примере мы научимся фильтровать данные, чтобы быстро находить нужные "
+"позиции в списке запасов."
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Enable filtering"
-msgstr ""
+msgstr "Включение фильтрации"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "<1>2. Open the </1><2>Data tab </2><3>in the toolbar</3>"
 msgstr ""
+"<1>2. Откройте </1><2>вкладку «Данные» </2><3>на панели инструментов</3>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "<1>3. Click </1><2>Auto Filter</2>"
-msgstr ""
+msgstr "<1>3. Нажмите </1><2>Автофильтр</2>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "➜Try it: Find low stock items"
-msgstr ""
+msgstr "➜Попробуйте: найдите товары с низким запасом"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
 "Sort the Quantity [pcs] column to see which items have the lowest stock."
 msgstr ""
+"Отсортируйте столбец «Количество [шт.]», чтобы увидеть, каких товаров "
+"осталось меньше всего."
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "➜Try it: Show only Electronics items"
-msgstr ""
+msgstr "➜Попробуйте: покажите только товары из категории «Электроника»"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Use the filter in the Category column and select Electronics."
 msgstr ""
+"Используйте фильтр в столбце «Категория» и выберите значение «Электроника»."
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
@@ -729,20 +834,26 @@ msgid ""
 "filtered data, then go to the</2><3> Data tab</3><4> and click </4><5>Reset "
 "Filter</5><6>. All data will be visible again.</6>"
 msgstr ""
+"<1>💡Полезный совет: </1><2>чтобы отключить фильтр, выделите любую ячейку в "
+"отфильтрованных данных, затем перейдите на</2><3> вкладку «Данные»</3><4> и "
+"нажмите </4><5>«Сбросить фильтр»</5><6>. Все данные снова станут видимыми.</"
+"6>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Other filtering options"
-msgstr ""
+msgstr "Другие параметры фильтрации"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Additional filtering options give you more control over your data."
-msgstr ""
+msgstr "Дополнительные параметры фильтрации дают больше контроля над данными."
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
 "<1>Auto Filter</1><2> lets you quickly filter data directly in the table "
 "using simple selections.</2>"
 msgstr ""
+"<1>Автофильтр</1><2> позволяет быстро фильтровать данные прямо в таблице с "
+"помощью простого выбора значений.</2>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
@@ -750,6 +861,9 @@ msgid ""
 " specific data fields. You can also combine conditions using logical AND or "
 "OR operators.</2>"
 msgstr ""
+"<1>Стандартный фильтр</1><2> позволяет задавать диапазоны значений для "
+"определённых полей данных. Условия можно объединять логическими операторами "
+"И (AND) или ИЛИ (OR).</2>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
@@ -757,25 +871,30 @@ msgid ""
 "conditions. You can enter these conditions directly into the sheet for more "
 "precise and flexible filtering.</2>"
 msgstr ""
+"<1>Расширенный фильтр</1><2> позволяет задать до восьми условий фильтрации. "
+"Эти условия можно вводить прямо на лист для более точной и гибкой "
+"фильтрации.</2>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Last Chapter: 🤝 Productivity & collaboration"
-msgstr ""
+msgstr "Последняя глава: 🤝 Продуктивность и совместная работа"
 
 #. content.xml (sheet name); content.xml (sheet '🤝 Productivity &
 #. collaboration')
 msgid "🤝 Productivity & collaboration"
-msgstr ""
+msgstr "🤝 Продуктивность и совместная работа"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
 "A range of features helps you stay productive and collaborate with others, "
 "making it easier to organise work and share information in real time."
 msgstr ""
+"Ряд возможностей помогает работать продуктивно и взаимодействовать с "
+"другими, упрощая организацию работы и обмен информацией в реальном времени."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Document sharing"
-msgstr ""
+msgstr "Общий доступ к документам"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
@@ -783,6 +902,9 @@ msgid ""
 "document simultaneously, making it easy to share ideas, review changes, and "
 "stay aligned."
 msgstr ""
+"Работайте вместе с другими в реальном времени. Несколько пользователей могут "
+"одновременно редактировать один документ, что упрощает обмен идеями, "
+"просмотр изменений и согласованную работу."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
@@ -791,36 +913,43 @@ msgid ""
 "cursor and follow their activity in the document. Notifications also inform "
 "you when someone joins or leaves."
 msgstr ""
+"Каждому пользователю назначается уникальный цвет, поэтому легко видеть, кто "
+"и что редактирует. Нажмите на имя или аватар пользователя, чтобы перейти к "
+"его курсору и следить за его действиями в документе. Уведомления также "
+"сообщают, когда кто-то присоединяется или выходит."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Start sharing your document"
-msgstr ""
+msgstr "Откройте общий доступ к документу"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "1. Create new document or open existing one"
-msgstr ""
+msgstr "1. Создайте новый документ или откройте существующий"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "<1>2. Click on </1><2>Share button</2><3> on right top side</3>"
 msgstr ""
+"<1>2. Нажмите </1><2>кнопку «Поделиться»</2><3> в правом верхнем углу</3>"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "<1>3. </1><2>Share</2><3> your document with others</3>"
-msgstr ""
+msgstr "<1>3. </1><2>Поделитесь</2><3> документом с другими</3>"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "➜Try it: Internal shares"
-msgstr ""
+msgstr "➜Попробуйте: внутренний общий доступ"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
 "Share files within your organisation. People who already have access to the "
 "document can use the link for quick and easy access."
 msgstr ""
+"Делитесь файлами внутри своей организации. Люди, у которых уже есть доступ к "
+"документу, могут использовать ссылку для быстрого и удобного доступа."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "➜Try it: External shares"
-msgstr ""
+msgstr "➜Попробуйте: внешний общий доступ"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
@@ -828,10 +957,14 @@ msgid ""
 " addresses. You can also share to Nextcloud accounts on other instances "
 "using their federated cloud ID."
 msgstr ""
+"Делитесь файлами с людьми за пределами организации через общедоступные "
+"ссылки и адреса электронной почты. Вы также можете открывать доступ учётным "
+"записям Nextcloud на других серверах, используя их федеративный облачный "
+"идентификатор."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Shortcuts"
-msgstr ""
+msgstr "Сочетания клавиш"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
@@ -840,6 +973,9 @@ msgid ""
 "copying, formatting, or navigating through your document, making your "
 "workflow more efficient."
 msgstr ""
+"Сочетания клавиш ускоряют работу, сокращая обращения к меню и щелчки мышью. "
+"Они позволяют быстро выполнять обычные действия — копирование, "
+"форматирование, навигацию по документу, — делая работу эффективнее."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
@@ -847,10 +983,14 @@ msgid ""
 "</2><3>Help tab</3><4> and click on </4><5>Keyboard shortcuts</5><6>. You "
 "can also use the search option to quickly find specific shortcuts.</6>"
 msgstr ""
+"<1>💡Полезный совет: </1><2>чтобы увидеть список всех сочетаний клавиш, "
+"перейдите на </2><3>вкладку «Справка»</3><4> и нажмите </4><5>«Сочетания "
+"клавиш»</5><6>. Также можно воспользоваться поиском, чтобы быстро найти "
+"нужное сочетание.</6>"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "⏯Video tutorials"
-msgstr ""
+msgstr "⏯Видеоуроки"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
@@ -859,7 +999,10 @@ msgid ""
 " what you’ve learned, so you can become more confident and efficient in your"
 " work."
 msgstr ""
+"Продолжайте обучение: посмотрите короткие вводные видео о дополнительных "
+"возможностях. Они дают быстрые подсказки и помогают закрепить изученное, "
+"чтобы вы работали увереннее и эффективнее."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Check out video tutorials"
-msgstr ""
+msgstr "Смотрите видеоуроки"

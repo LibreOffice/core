@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 12:57+0100\n"
-"PO-Revision-Date: 2026-11-18 23:26+0000\n"
+"PO-Revision-Date: 2026-11-22 15:54+0000\n"
 "Last-Translator: Valdemar <valdemar1st@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ru/>\n"
-"Language: \n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -451,7 +451,6 @@ msgstr ""
 
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:107
-#, fuzzy
 msgid "No WOPI host configured: trusting the first host that connects"
 msgstr "Хост WOPI не настроен: первый подключившийся хост будет доверенным"
 
@@ -461,6 +460,8 @@ msgid ""
 "No WOPI host is allowed: alias_groups mode is \"groups\" but no group is "
 "defined"
 msgstr ""
+"Не разрешён ни один хост WOPI: для alias_groups задан режим \"groups\", но "
+"не определена ни одна группа"
 
 #: admin/src/AdminSocketServerAudit.js:58
 #: src/control/Control.ServerAuditDialog.ts:129
@@ -1107,7 +1108,7 @@ msgstr "Правка"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3151
 #: admin/src/integrator/AdminIntegratorSettings.ts:5498
 msgid "Accessibility"
-msgstr "Средства доступности"
+msgstr "Специальные возможности"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3158
 msgid "User interface zoom"
@@ -1416,12 +1417,10 @@ msgid "Short"
 msgstr "Краткий"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4881
-#, fuzzy
 msgid "Long"
-msgstr "Журнал"
+msgstr "Подробно"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4882
-#, fuzzy
 msgid "Long, with an example"
 msgstr "Подробно, с примером"
 
@@ -1552,7 +1551,6 @@ msgid "Upload Xcu"
 msgstr "Загрузить Xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:6047
-#, fuzzy
 msgid "Delete {0}"
 msgstr "Удалить {0}"
 
@@ -1713,9 +1711,8 @@ msgstr "EPUB (.epub)"
 
 #: src/app/ExportFormats.ts:65 src/control/Control.Menubar.ts:144
 #: src/control/Control.NotebookbarBuilder.js:453
-#, fuzzy
 msgid "ODF master document (.odm)"
-msgstr "ODF текстовый документ (.odt)"
+msgstr "Составной документ ODF (.odm)"
 
 #: src/app/ExportFormats.ts:66 src/app/ExportFormats.ts:78
 #: src/control/Control.Menubar.ts:145
@@ -1818,117 +1815,115 @@ msgstr "Изображение (.png)"
 
 #: src/app/HandleGroups.ts:1855
 msgid "Top Left"
-msgstr ""
+msgstr "Сверху слева"
 
 #: src/app/HandleGroups.ts:1856
 msgid "Top"
-msgstr ""
+msgstr "Сверху"
 
 #: src/app/HandleGroups.ts:1857
 msgid "Top Right"
-msgstr ""
+msgstr "Сверху справа"
 
 #: src/app/HandleGroups.ts:1858 src/app/HandleGroups.ts:1996
 msgid "Left"
-msgstr ""
+msgstr "Cлева"
 
 #: src/app/HandleGroups.ts:1859
 msgid "Center"
-msgstr ""
+msgstr "По центру"
 
 #: src/app/HandleGroups.ts:1860 src/app/HandleGroups.ts:1997
-#, fuzzy
 msgid "Right"
-msgstr "Светлая"
+msgstr "Справа"
 
 #: src/app/HandleGroups.ts:1861
 msgid "Bottom Left"
-msgstr ""
+msgstr "Снизу слева"
 
 #: src/app/HandleGroups.ts:1862
 msgid "Bottom"
-msgstr ""
+msgstr "Снизу"
 
 #: src/app/HandleGroups.ts:1863
 msgid "Bottom Right"
-msgstr ""
+msgstr "Снизу справа"
 
 #: src/app/HandleGroups.ts:1951
 msgid "Gluepoint"
-msgstr ""
+msgstr "Точка соединения"
 
 #: src/app/HandleGroups.ts:1998
 msgid "Up"
-msgstr ""
+msgstr "Вверх"
 
 #: src/app/HandleGroups.ts:1999
 msgid "Down"
-msgstr ""
+msgstr "Вниз"
 
 #: src/app/HandleGroups.ts:2004
 msgid "Anchor"
-msgstr ""
+msgstr "Привязка"
 
 #: src/app/HandleGroups.ts:2045
 msgid "Default gluepoints cannot be edited."
-msgstr ""
+msgstr "Стандартные точки соединения нельзя редактировать."
 
 #: src/app/HandleGroups.ts:2863
-#, fuzzy
 msgid "Point"
-msgstr "Печать"
+msgstr "Точка"
 
 #: src/app/HandleGroups.ts:2875
 msgid "To Line"
-msgstr ""
+msgstr "В линию"
 
 #: src/app/HandleGroups.ts:2875
 msgid "To Curve"
-msgstr ""
+msgstr "В кривую"
 
 #: src/app/HandleGroups.ts:2882
 msgid "Corner Point"
-msgstr ""
+msgstr "Угловая точка"
 
 #: src/app/HandleGroups.ts:2889
 msgid "Smooth Transition"
-msgstr ""
+msgstr "Плавный переход"
 
 #: src/app/HandleGroups.ts:2896
 msgid "Symmetric Transition"
-msgstr ""
+msgstr "Симметричный переход"
 
 #: src/app/HandleGroups.ts:2905
 msgid "Split Path"
-msgstr ""
+msgstr "Разделить путь"
 
 #: src/app/HandleGroups.ts:3420
 msgid "Motion Path"
-msgstr ""
+msgstr "Путь перемещения"
 
 #: src/app/HandleGroups.ts:3421 src/control/jsdialog/Definitions.Menu.ts:2515
 msgid "Add Point"
-msgstr ""
+msgstr "Добавить точку"
 
 #: src/app/HandleGroups.ts:3426
 msgid "Open Path"
-msgstr ""
+msgstr "Разомкнуть путь"
 
 #: src/app/HandleGroups.ts:3426 src/control/jsdialog/Definitions.Menu.ts:2522
 msgid "Close Path"
-msgstr ""
+msgstr "Замкнуть путь"
 
 #: src/app/HandleGroups.ts:3433 src/control/jsdialog/Definitions.Menu.ts:2531
 msgid "Simplify Curves"
-msgstr ""
+msgstr "Упростить кривые"
 
 #: src/app/HandleGroups.ts:3439 src/control/jsdialog/Definitions.Menu.ts:2536
 msgid "Simplify All"
-msgstr ""
+msgstr "Упростить всё"
 
 #: src/app/LOUtil.ts:1455
 msgid "{0} website, opens in new tab"
-msgstr "Сайт {0}, будет открывается в новой вкладке"
+msgstr "Сайт {0}, откроется в новой вкладке"
 
 #: src/app/LOUtil.ts:1458
 msgid "file type icon"
@@ -2002,33 +1997,35 @@ msgstr "меньше минуты"
 
 #: src/control/VideoBackgroundDialog.ts:24
 msgid "Clouds"
-msgstr ""
+msgstr "Облака"
 
 #: src/control/VideoBackgroundDialog.ts:25
 msgid "Clouds at dusk"
-msgstr ""
+msgstr "Облака в сумерках"
 
 #: src/control/VideoBackgroundDialog.ts:26
 msgid "Bokeh"
-msgstr ""
+msgstr "Боке"
 
 #: src/control/VideoBackgroundDialog.ts:64
 #: src/control/Control.NotebookbarImpress.js:2112
 msgid "Background Video"
-msgstr ""
+msgstr "Фоновое видео"
 
 #: src/control/VideoBackgroundDialog.ts:69
 msgid ""
 "The video plays behind every slide that uses the master slide of this slide."
 msgstr ""
+"Видео воспроизводится на заднем плане всех слайдов, использующих образец "
+"слайда."
 
 #: src/control/VideoBackgroundDialog.ts:98
 msgid "Remove Background Video"
-msgstr ""
+msgstr "Удалить фоновое видео"
 
 #: src/control/VideoBackgroundDialog.ts:104
 msgid "Choose Your Own Video..."
-msgstr ""
+msgstr "Выбрать своё видео..."
 
 #: src/canvas/sections/CommentListSection.ts:2301
 #: src/canvas/sections/CommentListSection.ts:2314
@@ -2360,9 +2357,8 @@ msgid "{0} tone"
 msgstr "{0} тон"
 
 #: src/control/Control.AIChatSidebar.ts:468
-#, fuzzy
 msgid "Best"
-msgstr "Оптимальный"
+msgstr "Наилучший"
 
 #: src/control/Control.AIChatSidebar.ts:470
 #: src/control/Control.NotebookbarCalc.js:1075
@@ -2436,34 +2432,28 @@ msgid "What would you like to do with this document?"
 msgstr "Что вы хотите сделать с этим документом?"
 
 #: src/control/Control.AIChatSidebar.ts:838
-#, fuzzy
 msgid "Good morning, {0}"
-msgstr "Доброе утро, {0}!"
+msgstr "Доброе утро, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:839
-#, fuzzy
 msgid "Good morning"
-msgstr "Доброе утро!"
+msgstr "Доброе утро"
 
 #: src/control/Control.AIChatSidebar.ts:841
-#, fuzzy
 msgid "Good afternoon, {0}"
-msgstr "Добрый день, {0}!"
+msgstr "Добрый день, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:842
-#, fuzzy
 msgid "Good afternoon"
-msgstr "Добрый день!"
+msgstr "Добрый день"
 
 #: src/control/Control.AIChatSidebar.ts:844
-#, fuzzy
 msgid "Good evening, {0}"
-msgstr "Добрый вечер, {0}!"
+msgstr "Добрый вечер, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:845
-#, fuzzy
 msgid "Good evening"
-msgstr "Добрый вечер!"
+msgstr "Добрый вечер"
 
 #: src/control/Control.AIChatSidebar.ts:896
 #: src/control/Control.AIChatSidebar.ts:2962
@@ -2513,7 +2503,7 @@ msgstr "Использовать выделенный текст для конт
 
 #: src/control/Control.AIChatSidebar.ts:1088
 msgid "Ask AI, or type / for a saved prompt..."
-msgstr ""
+msgstr "Спросите ИИ или введите / для выбора сохранённого промпта..."
 
 #: src/control/Control.AIChatSidebar.ts:1091
 msgid "Message input"
@@ -2529,9 +2519,8 @@ msgstr "Отправить сообщение"
 
 #: src/control/Control.AIChatSidebar.ts:1130
 #: src/control/Control.AIChatSidebar.ts:1143
-#, fuzzy
 msgid "Set Tone"
-msgstr "Установить тон"
+msgstr "Задать тон"
 
 #: src/control/Control.AIChatSidebar.ts:1154
 msgid "Set tone of voice"
@@ -2596,64 +2585,66 @@ msgstr "Включить эмодзинирование"
 
 #: src/control/Control.AIChatSidebar.ts:1313
 msgid "Add Prompts"
-msgstr ""
+msgstr "Добавить промпты"
 
 #: src/control/Control.AIChatSidebar.ts:1316
 msgid "Saved prompts"
-msgstr ""
+msgstr "Сохранённые промпты"
 
 #: src/control/Control.AIChatSidebar.ts:1345
 msgid "My prompts"
-msgstr ""
+msgstr "Мои промпты"
 
 #: src/control/Control.AIChatSidebar.ts:1354
 msgid "Type / in the message box to run a prompt."
-msgstr ""
+msgstr "Введите / в поле сообщения, чтобы запустить промпт."
 
 #: src/control/Control.AIChatSidebar.ts:1363
 msgid "Run prompt {0}"
-msgstr ""
+msgstr "Запустить промпт {0}"
 
 #: src/control/Control.AIChatSidebar.ts:1368
 #: src/control/Control.AIChatSidebar.ts:1369
 #: src/control/Control.AIChatSidebar.ts:1424
 msgid "Edit prompt"
-msgstr ""
+msgstr "Изменить промпт"
 
 #: src/control/Control.AIChatSidebar.ts:1385
 msgid ""
 "Save instructions you use often and run them on the selected text. Type / "
 "in the message box to run a prompt."
 msgstr ""
+"Сохраняйте часто используемые инструкции и применяйте их к выделенному "
+"тексту. Введите / в поле сообщения, чтобы запустить промпт."
 
 #: src/control/Control.AIChatSidebar.ts:1394
 #: src/control/Control.AIChatSidebar.ts:1769
 msgid "+ Add a prompt"
-msgstr ""
+msgstr "+ Добавить промпт"
 
 #: src/control/Control.AIChatSidebar.ts:1398
 #: src/control/Control.AIChatSidebar.ts:1772
 msgid "Add a prompt"
-msgstr ""
+msgstr "Добавить промпт"
 
 #: src/control/Control.AIChatSidebar.ts:1418
 msgid "Back to prompts"
-msgstr ""
+msgstr "Назад к промптам"
 
 #: src/control/Control.AIChatSidebar.ts:1424
 msgid "New prompt"
-msgstr ""
+msgstr "Новый промпт"
 
 #: src/control/Control.AIChatSidebar.ts:1434
 #: src/control/Control.AIChatSidebar.ts:1519
 #: src/control/Control.AIChatSidebar.ts:1545
 msgid "Delete prompt"
-msgstr ""
+msgstr "Удалить промпт"
 
 #: src/control/Control.AIChatSidebar.ts:1449
 #: src/control/Control.AIChatSidebar.ts:1451
 msgid "Save prompt"
-msgstr ""
+msgstr "Сохранить промпт"
 
 #: src/control/Control.AIChatSidebar.ts:1469
 #: src/control/backstage/HomeView.tsx:75
@@ -2666,34 +2657,34 @@ msgstr "Название"
 
 #: src/control/Control.AIChatSidebar.ts:1476
 msgid "e.g. Meeting minutes"
-msgstr ""
+msgstr "например, Протокол собрания"
 
 #: src/control/Control.AIChatSidebar.ts:1478
 msgid "Prompt name"
-msgstr ""
+msgstr "Название промпта"
 
 #: src/control/Control.AIChatSidebar.ts:1483
 msgid "What should AI do with the selected text?"
-msgstr ""
+msgstr "Что должен сделать ИИ с выделенным текстом?"
 
 #: src/control/Control.AIChatSidebar.ts:1491
 msgid ""
 "Turn the selected notes into meeting minutes with decisions and action "
 "items."
 msgstr ""
+"Превратите выделенные заметки в протокол собрания с решениями и поручениями."
 
 #: src/control/Control.AIChatSidebar.ts:1495
 msgid "Prompt instruction"
-msgstr ""
+msgstr "Инструкция промпта"
 
 #: src/control/Control.AIChatSidebar.ts:1514
-#, fuzzy
 msgid "Delete prompt confirmation"
-msgstr "Убрать подтверждение тона"
+msgstr "Подтверждение удаления промпта"
 
 #: src/control/Control.AIChatSidebar.ts:1525
 msgid "The prompt \"{0}\" will be deleted."
-msgstr ""
+msgstr "Промпт \"{0}\" будет удалён."
 
 #: src/control/Control.AIChatSidebar.ts:1538
 #: src/control/Control.AIChatSidebar.ts:2240
@@ -2701,17 +2692,16 @@ msgid "Cancel delete"
 msgstr "Отменить удаление"
 
 #: src/control/Control.AIChatSidebar.ts:1635
-#, fuzzy
 msgid "You have reached the maximum of {0} saved prompts."
-msgstr "Вы достигли максимального количества в {0} пользовательских тонов."
+msgstr "Вы достигли максимального количества сохранённых промптов: {0}."
 
 #: src/control/Control.AIChatSidebar.ts:1753
 msgid "No saved prompt matches this name."
-msgstr ""
+msgstr "Сохранённый промпт с таким названием не найден."
 
 #: src/control/Control.AIChatSidebar.ts:1754
 msgid "You have no saved prompts yet."
-msgstr ""
+msgstr "У вас пока нет сохранённых промптов."
 
 #: src/control/Control.AIChatSidebar.ts:2057
 msgid "Use icon"
@@ -2900,7 +2890,6 @@ msgid "No response from AI"
 msgstr "Нет ответа от ИИ"
 
 #: src/control/Control.AIChatSidebar.ts:2901
-#, fuzzy
 msgid "AI used too many tool steps"
 msgstr "Превышено допустимое количество шагов при работе ИИ с инструментами"
 
@@ -2929,12 +2918,10 @@ msgid "Document not available"
 msgstr "Документ недоступен"
 
 #: src/control/Control.AIChatSidebar.ts:2912
-#, fuzzy
 msgid "The edited outline is not valid: {0}"
-msgstr "Изменённая структура недействительна: {0}"
+msgstr "Изменённая структура некорректна: {0}"
 
 #: src/control/Control.AIChatSidebar.ts:2914
-#, fuzzy
 msgid "Could not build any slides from the outline. Please try again."
 msgstr ""
 "Не удалось создать ни одного слайда из структуры. Пожалуйста, попробуйте еще "
@@ -3197,9 +3184,8 @@ msgid "Reject action"
 msgstr "Отклонить действие"
 
 #: src/control/Control.AIChatSidebar.ts:3519
-#, fuzzy
 msgid "Send"
-msgstr "Отправлено"
+msgstr "Отправить"
 
 #: src/control/Control.AIChatSidebar.ts:3521
 msgid "Send these cells"
@@ -3493,13 +3479,12 @@ msgstr ""
 "\"Формулы:\" содержит формулы для тех ячеек, где они заданы."
 
 #: src/control/Control.AIChatSidebar.ts:4926
-#, fuzzy
 msgid ""
 "When referencing specific cells, format each cell as a clickable link: [B2]"
 "(cell://B2)."
 msgstr ""
-"При упоминании определённых ячеек, отформатируй каждую из них в виде "
-"активной ссылки: [A1](cell://A1)."
+"При упоминании конкретных ячеек оформляй каждую из них как кликабельную "
+"ссылку: [B2](cell://A2)."
 
 #: src/control/Control.AIChatSidebar.ts:4932
 msgid "Sanity check the following spreadsheet data."
@@ -3573,7 +3558,6 @@ msgid "Unused master slides"
 msgstr "Неиспользуемые слайды-образцы"
 
 #: src/control/Control.CleanupSidebar.ts:252
-#, fuzzy
 msgid "For sharing"
 msgstr "Для отправки"
 
@@ -3594,12 +3578,10 @@ msgid "%1 DPI, quality %2 %"
 msgstr "%1 DPI, качество %2 %"
 
 #: src/control/Control.CleanupSidebar.ts:374
-#, fuzzy
 msgid "%1 can be cleaned up"
 msgstr "%1 можно оптимизировать"
 
 #: src/control/Control.CleanupSidebar.ts:376
-#, fuzzy
 msgid "%1 (%2%) can be cleaned up"
 msgstr "%1 (%2%) можно оптимизировать"
 
@@ -3722,7 +3704,7 @@ msgstr "Очистка..."
 
 #: src/control/Control.CleanupSidebar.ts:737
 msgid "Saved %1"
-msgstr "Сохранено %1"
+msgstr "Сохранено: %1"
 
 #: src/control/Control.CleanupSidebar.ts:744
 msgid "%1 thing to clean up"
@@ -3741,9 +3723,8 @@ msgstr[2] "%1 элементов для очистки"
 #: src/control/Control.NotebookbarWriter.js:502
 #: src/control/Control.SlideImportPane.tsx:1836 src/control/IFrameDialog.js:39
 #: src/map/handler/Map.Settings.ts:236
-#, fuzzy
 msgid "Options"
-msgstr "Опция"
+msgstr "Параметры"
 
 #: src/control/Control.CleanupSidebar.ts:791
 msgid "Image resolution"
@@ -3754,7 +3735,6 @@ msgid "JPEG quality (%)"
 msgstr "Качество JPEG (%)"
 
 #: src/control/Control.CleanupSidebar.ts:838
-#, fuzzy
 msgid "Prepare for sharing"
 msgstr "Подготовить к отправке"
 
@@ -3771,9 +3751,8 @@ msgid "Stop Cleanup"
 msgstr "Остановить очистку"
 
 #: src/control/Control.CleanupSidebar.ts:934
-#, fuzzy
 msgid "Scan presentation"
-msgstr "Завершить презентацию"
+msgstr "Проверить презентацию"
 
 #: src/control/Control.CleanupSidebar.ts:970
 msgid "Fix all"
@@ -3789,7 +3768,6 @@ msgid "Find what makes this presentation large, and clean it up here."
 msgstr "Определите, что увеличивает размер этой презентации, и очистите здесь."
 
 #: src/control/Control.CleanupSidebar.ts:1085
-#, fuzzy
 msgid "saves %1"
 msgstr "экономит %1"
 
@@ -3870,7 +3848,7 @@ msgstr "Сервер столкнулся с ошибкой {0} при анал�
 #: src/control/Control.NotebookbarImpress.js:89
 #: src/control/Control.NotebookbarWriter.js:74
 msgid "Home"
-msgstr "Главная"
+msgstr "Домой"
 
 #: src/control/Control.BackstageView.ts:136
 #: src/control/Control.BackstageView.ts:761
@@ -3927,7 +3905,7 @@ msgstr "Выйти"
 
 #: src/control/Control.BackstageView.ts:299
 msgid "Start something new, or continue where you left off."
-msgstr ""
+msgstr "Начните что-то новое или продолжите с того места, где остановились."
 
 #: src/control/Control.BackstageView.ts:332
 #: src/control/jsdialog/Widget.ColorPicker.ts:476
@@ -3936,19 +3914,19 @@ msgstr "Недавние"
 
 #: src/control/Control.BackstageView.ts:718
 msgid "Account in use"
-msgstr ""
+msgstr "Учётная запись используется"
 
 #: src/control/Control.BackstageView.ts:720
 msgid "Close the windows and documents of this account before you remove it."
-msgstr ""
+msgstr "Закройте окна и документы этой учётной записи перед её удалением."
 
 #: src/control/Control.BackstageView.ts:873
 msgid "Template removed from favorites"
-msgstr ""
+msgstr "Шаблон удалён из избранного"
 
 #: src/control/Control.BackstageView.ts:874
 msgid "Template added to favorites"
-msgstr ""
+msgstr "Шаблон добавлен в избранное"
 
 #: src/control/Control.BackstageView.ts:1188
 msgid "Document Info"
@@ -3960,7 +3938,7 @@ msgstr "Просмотр свойств и сведений о документ�
 
 #: src/control/Control.BackstageView.ts:1219
 msgid "Master document, a document per chapter"
-msgstr ""
+msgstr "Главный документ: отдельный документ для каждой главы"
 
 #: src/control/Control.BackstageView.ts:1226
 msgid "Export Document"
@@ -3977,9 +3955,8 @@ msgstr "Текстовый документ"
 #: src/control/Control.BackstageView.ts:1259
 #: src/control/Control.BackstageView.ts:1262
 #: src/control/Control.PartsPreview.js:188
-#, fuzzy
 msgid "Pages"
-msgstr "Страница"
+msgstr "Страницы"
 
 #: src/control/Control.BackstageView.ts:1260
 #: src/control/backstage/TemplatesView.tsx:180
@@ -3987,9 +3964,8 @@ msgid "Spreadsheet"
 msgstr "Электронная таблица"
 
 #: src/control/Control.BackstageView.ts:1260 src/control/Control.Tabs.js:218
-#, fuzzy
 msgid "Sheets"
-msgstr "~Лист"
+msgstr "Листы"
 
 #: src/control/Control.BackstageView.ts:1267
 msgid "Parts"
@@ -4004,9 +3980,8 @@ msgid "Type"
 msgstr "Тип"
 
 #: src/control/Control.BackstageView.ts:1277
-#, fuzzy
 msgid "Mode"
-msgstr "Модель"
+msgstr "Режим"
 
 #: src/control/Control.BackstageView.ts:1278
 msgid "View Only"
@@ -4053,7 +4028,6 @@ msgid "Back to document"
 msgstr "Назад к документу"
 
 #: src/control/backstage/HomeView.tsx:57 src/control/backstage/HomeView.tsx:60
-#, fuzzy
 msgid "More templates"
 msgstr "Больше шаблонов"
 
@@ -4063,15 +4037,15 @@ msgstr "Дата изменения"
 
 #: src/control/backstage/TemplatesView.tsx:106
 msgid "Remove from favorites"
-msgstr ""
+msgstr "Убрать из избранного"
 
 #: src/control/backstage/TemplatesView.tsx:107
 msgid "Add to favorites"
-msgstr ""
+msgstr "Добавить в избранное"
 
 #: src/control/backstage/TemplatesView.tsx:138
 msgid "Templates"
-msgstr ""
+msgstr "Шаблоны"
 
 #: src/control/backstage/TemplatesView.tsx:142
 msgid "Search templates"
@@ -4085,7 +4059,7 @@ msgstr "Все"
 
 #: src/control/backstage/TemplatesView.tsx:243
 msgid "Built-in templates"
-msgstr ""
+msgstr "Встроенные шаблоны"
 
 #: src/control/backstage/TemplatesView.tsx:265
 #: src/control/backstage/MyTemplatesView.tsx:212
@@ -4095,39 +4069,37 @@ msgstr "По вашему запросу шаблоны не найдены."
 #: src/control/backstage/TemplatesView.tsx:266
 #: src/control/backstage/MyTemplatesView.tsx:213
 msgid "No templates of this type."
-msgstr ""
+msgstr "Нет шаблонов этого типа."
 
 #: src/control/backstage/MyTemplatesView.tsx:75
 msgid "Document template"
-msgstr ""
+msgstr "Шаблон документа"
 
 #: src/control/backstage/MyTemplatesView.tsx:76
 msgid "Spreadsheet template"
-msgstr ""
+msgstr "Шаблон таблицы"
 
 #: src/control/backstage/MyTemplatesView.tsx:77
-#, fuzzy
 msgid "Presentation template"
-msgstr "Шаблоны презентаций"
+msgstr "Шаблон презентации"
 
 #: src/control/backstage/MyTemplatesView.tsx:78
 msgid "Drawing template"
-msgstr ""
+msgstr "Шаблон рисунка"
 
 #: src/control/backstage/MyTemplatesView.tsx:103
-#, fuzzy
 msgid "My templates"
-msgstr "Больше шаблонов"
+msgstr "Мои шаблоны"
 
 #: src/control/backstage/MyTemplatesView.tsx:109
 msgid "Manage"
-msgstr ""
+msgstr "Управление"
 
 #: src/control/backstage/MyTemplatesView.tsx:141
 #: src/control/backstage/MyTemplatesView.tsx:168
 #: src/control/backstage/MyTemplatesView.tsx:330
 msgid "Add template"
-msgstr ""
+msgstr "Добавить шаблон"
 
 #: src/control/backstage/MyTemplatesView.tsx:155
 #: src/control/backstage/MyTemplatesView.tsx:156
@@ -4136,36 +4108,38 @@ msgid "Back"
 msgstr "Назад"
 
 #: src/control/backstage/MyTemplatesView.tsx:161
-#, fuzzy
 msgid "Manage templates"
-msgstr "Больше шаблонов"
+msgstr "Управление шаблонами"
 
 #: src/control/backstage/MyTemplatesView.tsx:174
 msgid ""
 "Rename or remove the templates you added. Built-in templates can't be "
 "changed."
 msgstr ""
+"Переименовывайте или удаляйте добавленные вами шаблоны. Встроенные шаблоны "
+"изменить нельзя."
 
 #: src/control/backstage/MyTemplatesView.tsx:176
 msgid "Templates you add will appear here and in New."
-msgstr ""
+msgstr "Добавленные шаблоны появятся здесь и в разделе «Создать»."
 
 #: src/control/backstage/MyTemplatesView.tsx:183
-#, fuzzy
 msgid "Search my templates"
-msgstr "Искать шаблоны"
+msgstr "Поиск в моих шаблонах"
 
 #: src/control/backstage/MyTemplatesView.tsx:193
 msgid "No templates yet"
-msgstr ""
+msgstr "Шаблонов пока нет"
 
 #: src/control/backstage/MyTemplatesView.tsx:196
 msgid "Add a template to start new documents from your own layout."
 msgstr ""
+"Добавьте шаблон, чтобы создавать новые документы на основе собственного "
+"макета."
 
 #: src/control/backstage/MyTemplatesView.tsx:224
 msgid "Actions"
-msgstr ""
+msgstr "Действия"
 
 #: src/control/backstage/MyTemplatesView.tsx:257
 #: src/control/backstage/MyTemplatesView.tsx:451
@@ -4179,23 +4153,23 @@ msgstr "Переименовать"
 
 #: src/control/backstage/MyTemplatesView.tsx:302
 msgid "This type of file cannot be added as a template."
-msgstr ""
+msgstr "Файл этого типа нельзя добавить как шаблон."
 
 #: src/control/backstage/MyTemplatesView.tsx:323
 msgid "The template could not be added."
-msgstr ""
+msgstr "Не удалось добавить шаблон."
 
 #: src/control/backstage/MyTemplatesView.tsx:341
 msgid "Drop a file here, or"
-msgstr ""
+msgstr "Перетащите файл сюда или"
 
 #: src/control/backstage/MyTemplatesView.tsx:343
 msgid "Browse"
-msgstr ""
+msgstr "Выбрать"
 
 #: src/control/backstage/MyTemplatesView.tsx:359
 msgid "Template name"
-msgstr ""
+msgstr "Название шаблона"
 
 #: src/control/backstage/MyTemplatesView.tsx:403
 #: src/control/Control.NotebookbarCalc.js:1128
@@ -4207,19 +4181,19 @@ msgstr "Заменить"
 
 #: src/control/backstage/MyTemplatesView.tsx:419
 msgid "The template could not be renamed."
-msgstr ""
+msgstr "Не удалось переименовать шаблон."
 
 #: src/control/backstage/MyTemplatesView.tsx:424
 msgid "Rename template"
-msgstr ""
+msgstr "Переименовать шаблон"
 
 #: src/control/backstage/MyTemplatesView.tsx:471
 msgid "Remove this template?"
-msgstr ""
+msgstr "Удалить этот шаблон?"
 
 #: src/control/backstage/MyTemplatesView.tsx:476
 msgid "\"%1\" will be removed from My templates."
-msgstr ""
+msgstr "\"%1\" будет удалён из раздела «Мои шаблоны»."
 
 #: src/control/backstage/InfoView.tsx:31 src/control/Control.Menubar.ts:434
 #: src/control/Control.Menubar.ts:1497
@@ -4260,7 +4234,7 @@ msgstr "Редактировать аккаунт"
 
 #: src/control/backstage/CloudDialogs.tsx:135
 msgid "Enter a web address, such as %1."
-msgstr ""
+msgstr "Введите веб-адрес, например %1."
 
 #: src/control/backstage/CloudDialogs.tsx:152
 msgid "Add new account"
@@ -4325,9 +4299,8 @@ msgstr "Перетащите файл, чтобы открыть"
 
 #: src/control/AccessibilityNotice.tsx:34
 #: src/control/AccessibilityNotice.tsx:64
-#, fuzzy
 msgid "This mobile view is not fully accessible."
-msgstr "Это мобильное представление не обладает полной доступностью."
+msgstr "Эта мобильная версия не полностью поддерживает специальные возможности."
 
 #: src/control/AccessibilityNotice.tsx:43
 msgid "Accessibility statement"
@@ -4340,9 +4313,8 @@ msgid "Dismiss"
 msgstr "Закрыть"
 
 #: src/control/onboarding/OnboardingSteps.ts:26
-#, fuzzy
 msgid "Welcome to Collabora Office"
-msgstr "Добро пожаловать в Collabora Online"
+msgstr "Добро пожаловать в Collabora Office"
 
 #: src/control/onboarding/OnboardingSteps.ts:27
 msgid "Welcome to Collabora Online"
@@ -4444,9 +4416,8 @@ msgid "See who else is editing and share the document."
 msgstr "Узнайте, кто ещё работает с документом, и предоставьте к нему доступ."
 
 #: src/control/onboarding/OnboardingSteps.ts:112
-#, fuzzy
 msgid "The status bar"
-msgstr "Показать строку состояния"
+msgstr "Строка состояния"
 
 #: src/control/onboarding/OnboardingSteps.ts:114
 msgid ""
@@ -4468,9 +4439,8 @@ msgid "Skip"
 msgstr "Пропустить"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:313
-#, fuzzy
 msgid "Done"
-msgstr "Нет"
+msgstr "Готово"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:313
 #: src/control/Control.Zotero.js:270 src/control/Control.Zotero.js:469
@@ -5055,9 +5025,8 @@ msgid "Language"
 msgstr "Язык"
 
 #: src/control/Control.Mention.ts:193
-#, fuzzy
 msgid "No search results found"
-msgstr "Результаты поиска не найдены!"
+msgstr "Ничего не найдено"
 
 #: src/control/Control.Menubar.ts:57
 msgid "PDF Document (.pdf) as..."
@@ -5079,7 +5048,7 @@ msgstr "Экспортировать как"
 
 #: src/control/Control.Menubar.ts:151
 msgid "Create Master Document..."
-msgstr ""
+msgstr "Создать главный документ..."
 
 #: src/control/Control.Menubar.ts:152 src/control/Control.Menubar.ts:498
 #: src/control/Control.Menubar.ts:714 src/control/Control.Menubar.ts:891
@@ -5378,7 +5347,7 @@ msgstr "Мультимедиа на локальном устройстве..."
 
 #: src/control/Control.Menubar.ts:569
 msgid "Background Video..."
-msgstr ""
+msgstr "Фоновое видео..."
 
 #: src/control/Control.Menubar.ts:610 src/control/Control.Menubar.ts:803
 #: src/control/Control.NotebookbarDraw.js:1425
@@ -5715,16 +5684,14 @@ msgid "Create Slides"
 msgstr "Создать слайды"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:201
-#, fuzzy
 msgid "Generate Image"
-msgstr "Сгенерированов изображение"
+msgstr "Сгенерировать изображение"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:208
 msgid "Generate Speaker Notes"
 msgstr "Создать заметки докладчика"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:215
-#, fuzzy
 msgid "Create Formula"
 msgstr "Создать формулу"
 
@@ -5892,9 +5859,8 @@ msgstr "Сноска/Концевая сноска"
 #: src/control/Notebookbar.WriterReferencesTab.ts:313
 #: src/control/Control.NotebookbarDraw.js:1720
 #: src/control/Control.NotebookbarImpress.js:1832
-#, fuzzy
 msgid "Field"
-msgstr "Поля"
+msgstr "Поле"
 
 #: src/control/Notebookbar.WriterTableTab.ts:24
 #: src/control/Control.NotebookbarCalc.js:1874
@@ -5960,9 +5926,8 @@ msgid "Area"
 msgstr "Область"
 
 #: src/control/Control.Notebookbar.js:694
-#, fuzzy
 msgid "Line"
-msgstr "Связь"
+msgstr "Линия"
 
 #: src/control/Control.Notebookbar.js:737
 msgid "Line Width"
@@ -6387,9 +6352,8 @@ msgid "Insert Function"
 msgstr "Вставить функцию"
 
 #: src/control/Control.NotebookbarCalc.js:2185
-#, fuzzy
 msgid "Function Library"
-msgstr "Мастер функций"
+msgstr "Библиотека функций"
 
 #: src/control/Control.NotebookbarCalc.js:2199
 msgid "AutoSum"
@@ -6511,15 +6475,14 @@ msgstr "Абзац"
 #: src/control/Control.NotebookbarDraw.js:1675
 #: src/control/Control.NotebookbarImpress.js:1740
 #: src/control/Control.TopToolbar.js:284
-#, fuzzy
 msgid "Lines"
-msgstr "Связь"
+msgstr "Линии"
 
 #: src/control/Control.NotebookbarDraw.js:1695
 #: src/control/Control.NotebookbarImpress.js:1760
 #: src/control/Control.TopToolbar.js:285
 msgid "Curves"
-msgstr ""
+msgstr "Кривые"
 
 #: src/control/Control.NotebookbarImpress.js:110
 #: src/slideshow/SlideShowPresenter.ts:1205
@@ -6581,7 +6544,7 @@ msgstr "Показывать всем"
 
 #: src/control/Control.NotebookbarImpress.js:647
 msgid "Show your slideshow on every viewer's screen when you start it"
-msgstr ""
+msgstr "Показывать слайды на экране каждого зрителя при запуске показа"
 
 #: src/control/Control.NotebookbarImpress.js:767
 msgid "Slide Views"
@@ -6649,7 +6612,7 @@ msgstr "Фоновое изображение"
 
 #: src/control/Control.NotebookbarImpress.js:3007
 msgid "Edit Points"
-msgstr ""
+msgstr "Изменение геометрии"
 
 #: src/control/Control.NotebookbarImpress.js:3067
 msgid "Effects"
@@ -6753,7 +6716,7 @@ msgstr "Добавить раздел"
 
 #: src/control/Control.PartsPreview.js:893
 msgid "Start Slideshow from This Slide"
-msgstr ""
+msgstr "Начать показ слайдов с этого слайда"
 
 #: src/control/Control.PartsPreview.js:1026
 msgid "with 1 other"
@@ -6851,35 +6814,35 @@ msgstr "%1, связанный с %2"
 
 #: src/control/Control.PartsPreview.js:1396
 msgid "Linked to the presentation %1 that is missing"
-msgstr ""
+msgstr "Связан с презентацией %1, которая отсутствует"
 
 #: src/control/Control.PartsPreview.js:1398
 msgid "Linked to the presentation %1 that has changed"
-msgstr ""
+msgstr "Связан с презентацией %1, которая изменилась"
 
 #: src/control/Control.PartsPreview.js:1400
 msgid "Linked to the presentation %1, disconnected"
-msgstr ""
+msgstr "Связан с презентацией %1, связь отключена"
 
 #: src/control/Control.PartsPreview.js:1401
 msgid "Linked to the presentation %1"
-msgstr ""
+msgstr "Связан с презентацией %1"
 
 #: src/control/Control.PartsPreview.js:1406
 msgid "Linked to the slides outside the sections of %1, which is missing"
-msgstr ""
+msgstr "Связан со слайдами вне разделов презентации %1, которая отсутствует"
 
 #: src/control/Control.PartsPreview.js:1409
 msgid "Linked to the slides outside the sections of %1, which has changed"
-msgstr ""
+msgstr "Связан со слайдами вне разделов презентации %1, которая изменилась"
 
 #: src/control/Control.PartsPreview.js:1412
 msgid "Linked to the slides outside the sections of %1, disconnected"
-msgstr ""
+msgstr "Связан со слайдами вне разделов презентации %1, связь отключена"
 
 #: src/control/Control.PartsPreview.js:1413
 msgid "Linked to the slides outside the sections of %1"
-msgstr ""
+msgstr "Связан со слайдами вне разделов презентации %1"
 
 #: src/control/Control.PartsPreview.js:1416
 msgid "Linked to a section of %1 that is missing"
@@ -6900,13 +6863,13 @@ msgstr "Связано с разделом в %1"
 #: src/control/Control.PartsPreview.js:1661
 msgid "%n slide"
 msgid_plural "%n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%n слайд"
+msgstr[1] "%n слайда"
+msgstr[2] "%n слайдов"
 
 #: src/control/Control.PartsPreview.js:1662
 msgid "Toggle presentation %1"
-msgstr ""
+msgstr "Переключить презентацию %1"
 
 #: src/control/Control.PartsPreview.js:2111
 #: src/control/Control.PartsPreview.js:2378
@@ -6958,35 +6921,31 @@ msgstr[2] "Удалить раздел \"%1\" и его %n слайдов?"
 
 #: src/control/Control.PartsPreview.js:2285
 msgid "Close Panel"
-msgstr ""
+msgstr "Закрыть панель"
 
 #: src/control/Control.PartsPreview.js:2294
-#, fuzzy
 msgid "Collapse Presentation"
-msgstr "Закрыть презентацию"
+msgstr "Свернуть презентацию"
 
 #: src/control/Control.PartsPreview.js:2294
-#, fuzzy
 msgid "Expand Presentation"
-msgstr "Завершить презентацию"
+msgstr "Развернуть презентацию"
 
 #: src/control/Control.PartsPreview.js:2301
 msgid "Open in Panel"
-msgstr ""
+msgstr "Открыть в панели"
 
 #: src/control/Control.PartsPreview.js:2309
-#, fuzzy
 msgid "Update Presentation"
-msgstr "Фильтр презентаций"
+msgstr "Обновить презентацию"
 
 #: src/control/Control.PartsPreview.js:2317
-#, fuzzy
 msgid "Unlink Presentation"
-msgstr "Пустая презентация"
+msgstr "Отвязать презентацию"
 
 #: src/control/Control.PartsPreview.js:2324
 msgid "Unlink Presentation & Contents"
-msgstr ""
+msgstr "Отвязать презентацию и содержимое"
 
 #: src/control/Control.PartsPreview.js:2379
 msgid "Enter new section name:"
@@ -7063,6 +7022,8 @@ msgid ""
 "Original file can't be found. Choose it again to keep your slides up to "
 "date."
 msgstr ""
+"Исходный файл не найден. Выберите его снова, чтобы слайды оставались "
+"актуальными."
 
 #: src/control/Control.SlideImportPane.tsx:960
 msgid "This file is here. You do not have permission to open it."
@@ -7073,6 +7034,8 @@ msgid ""
 "Slides cannot be linked from this file: the link would lead back to this "
 "presentation."
 msgstr ""
+"Нельзя связать слайды из этого файла: ссылка вела бы обратно к этой "
+"презентации."
 
 #: src/control/Control.SlideImportPane.tsx:966
 msgid "This file could not be read this time."
@@ -7080,11 +7043,11 @@ msgstr "Не удалось прочитать файл."
 
 #: src/control/Control.SlideImportPane.tsx:974
 msgid "Choose file…"
-msgstr ""
+msgstr "Выбрать файл…"
 
 #: src/control/Control.SlideImportPane.tsx:982
 msgid "Try again"
-msgstr ""
+msgstr "Повторить"
 
 #: src/control/Control.SlideImportPane.tsx:994
 #: src/control/Control.SlideImportPane.tsx:1613
@@ -7104,9 +7067,8 @@ msgid "Slide {0}"
 msgstr "Слайд {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1091
-#, fuzzy
 msgid "Insert slides"
-msgstr "Вставить фигуры"
+msgstr "Вставить слайды"
 
 #: src/control/Control.SlideImportPane.tsx:1094
 msgid "Insert section \"{0}\""
@@ -7117,14 +7079,12 @@ msgid "Insert {0} from {1}"
 msgstr "Вставлено {0} из {1}"
 
 #: src/control/Control.SlideImportPane.tsx:1105
-#, fuzzy
 msgid "Insert 1 slide"
-msgstr "Вставить фигуры"
+msgstr "Вставить 1 слайд"
 
 #: src/control/Control.SlideImportPane.tsx:1106
-#, fuzzy
 msgid "Insert {0} slides"
-msgstr "Вставить фигуры"
+msgstr "Вставить слайды: {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1162
 msgid "How the section goes in"
@@ -7154,7 +7114,6 @@ msgid "{0} slides"
 msgstr "{0} слайдов"
 
 #: src/control/Control.SlideImportPane.tsx:1238
-#, fuzzy
 msgid "Inserts at the end"
 msgstr "Вставляет в конец"
 
@@ -7171,9 +7130,8 @@ msgid "Inserting slides..."
 msgstr "Вставка слайдов.."
 
 #: src/control/Control.SlideImportPane.tsx:1327
-#, fuzzy
 msgid "Import slides"
-msgstr "Вставить фигуры"
+msgstr "Импорт слайдов"
 
 #: src/control/Control.SlideImportPane.tsx:1333
 #: src/control/Control.SlideImportPane.tsx:1334
@@ -7189,7 +7147,6 @@ msgid "No presentations yet"
 msgstr "Презентаций пока нет"
 
 #: src/control/Control.SlideImportPane.tsx:1368
-#, fuzzy
 msgid ""
 "Add a presentation to browse its slides and insert them into this deck."
 msgstr "Добавьте презентацию, чтобы просмотреть её слайды и вставить их сюда."
@@ -7237,7 +7194,7 @@ msgstr "Выбрать все слайды"
 
 #: src/control/Control.SlideImportPane.tsx:1634
 msgid "Link whole presentation"
-msgstr ""
+msgstr "Связать всю презентацию"
 
 #: src/control/Control.SlideImportPane.tsx:1642
 msgid "Update the slides linked to this file"
@@ -7269,7 +7226,7 @@ msgstr "Сохранить исходный дизайн"
 
 #: src/control/Control.SlideImportPane.tsx:1805
 msgid "Not supported in PPTX, please save as ODP to use links"
-msgstr ""
+msgstr "Не поддерживается в PPTX, сохраните как ODP, чтобы использовать ссылки"
 
 #: src/control/Control.SlideImportPane.tsx:1820
 msgid "Stay linked to the source file"
@@ -7300,9 +7257,8 @@ msgid "In a section linked to {0}"
 msgstr "В разделе, связанном с {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:131
-#, fuzzy
 msgid "In a presentation linked to {0}"
-msgstr "В разделе, связанном с {0}"
+msgstr "В презентации, связанной с {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:154
 msgid "Hide the actions for this linked slide"
@@ -7323,9 +7279,8 @@ msgstr "Обновить раздел"
 
 #: src/control/Control.SlideLinkToolbar.tsx:195
 #: src/slideimport/SlideLinks.ts:492
-#, fuzzy
 msgid "Update presentation"
-msgstr "Фильтр презентаций"
+msgstr "Обновить презентацию"
 
 #: src/control/Control.SlideLinkToolbar.tsx:209
 msgid "Not available"
@@ -7337,29 +7292,27 @@ msgstr "Переключить раздел %1"
 
 #: src/control/SlideLinkPanel.tsx:26
 msgid "Close the linked presentation"
-msgstr ""
+msgstr "Закрыть связанную презентацию"
 
 #: src/control/SlideLinkPanel.tsx:31
-#, fuzzy
 msgid "Linked presentation %1"
-msgstr "Фильтр презентаций"
+msgstr "Связанная презентация %1"
 
 #: src/control/SlideLinkPanel.tsx:54
 msgid "Slides of %1"
-msgstr ""
+msgstr "Слайды презентации %1"
 
 #: src/control/SlidePresentationsRow.tsx:34 src/control/LinkedViewRow.tsx:52
-#, fuzzy
 msgid "Linked presentations"
-msgstr "Фильтр презентаций"
+msgstr "Связанные презентации"
 
 #: src/control/SlidePresentationsRow.tsx:44
 msgid "Expand all linked presentations"
-msgstr ""
+msgstr "Развернуть все связанные презентации"
 
 #: src/control/SlidePresentationsRow.tsx:54
 msgid "Collapse all linked presentations"
-msgstr ""
+msgstr "Свернуть все связанные презентации"
 
 #: src/slideimport/SlideImportSession.ts:352
 msgid "The slides of the source could not be read."
@@ -7387,41 +7340,37 @@ msgid "Cannot update the section: {0} no longer holds its source section."
 msgstr "Невозможно обновить раздел: в {0} больше нет исходного раздела."
 
 #: src/slideimport/SlideLinks.ts:384
-#, fuzzy
 msgid "Cannot update the slide: {0} no longer holds its source slide."
-msgstr "Невозможно обновить раздел: в {0} больше нет исходного раздела."
+msgstr "Не удалось обновить слайд: в {0} больше нет исходного слайда."
 
 #: src/slideimport/SlideLinks.ts:489
-#, fuzzy
 msgid "Update links"
 msgstr "Обновить ссылки"
 
 #: src/slideimport/SlideLinks.ts:493
-#, fuzzy
 msgid "Update presentations"
-msgstr "Фильтр презентаций"
+msgstr "Обновить презентации"
 
 #: src/slideimport/SlideLinks.ts:494
 msgid "Update sections"
 msgstr "Обновить разделы"
 
 #: src/slideimport/SlideLinks.ts:504
-#, fuzzy
 msgid ""
 "The linked presentation will hold the slides and sections that {0} holds "
 "now. Changes made to these slides in this presentation will be lost."
 msgstr ""
-"Раздел будет содержать слайды, которые сейчас содержит его раздел в {0}. "
-"Изменения, внесенные в эти слайды в текущей презентации, будут потеряны."
+"Связанная презентация будет содержать слайды и разделы, которые сейчас есть "
+"в {0}. Изменения, внесённые в эти слайды в этой презентации, будут потеряны."
 
 #: src/slideimport/SlideLinks.ts:508
-#, fuzzy
 msgid ""
 "The section will hold the slides that {0} keeps outside its sections now. "
 "Changes made to these slides in this presentation will be lost."
 msgstr ""
-"Раздел будет содержать слайды, которые сейчас содержит его раздел в {0}. "
-"Изменения, внесенные в эти слайды в текущей презентации, будут потеряны."
+"Раздел будет содержать слайды, которые сейчас находятся в {0} вне его "
+"разделов. Изменения, внесённые в эти слайды в этой презентации, будут "
+"потеряны."
 
 #: src/slideimport/SlideLinks.ts:511
 msgid ""
@@ -7442,25 +7391,23 @@ msgstr ""
 "презентации, будут потеряны."
 
 #: src/slideimport/SlideLinks.ts:531
-#, fuzzy
 msgid ""
 "{0} linked presentations will hold the slides and sections that their "
 "source files hold now. Changes made to these slides in this presentation "
 "will be lost."
 msgstr ""
-"Связанные разделы {0} будут содержать слайды, которые сейчас содержат их "
-"разделы в исходных файлах. Изменения, внесённые в эти слайды в текущей "
+"Связанные презентации ({0}) будут содержать слайды и разделы, которые сейчас "
+"есть в их исходных файлах. Изменения, внесённые в эти слайды в этой "
 "презентации, будут потеряны."
 
 #: src/slideimport/SlideLinks.ts:534
-#, fuzzy
 msgid ""
 "{0} linked sections and presentations will hold the slides that their "
 "source files hold now. Changes made to these slides in this presentation "
 "will be lost."
 msgstr ""
-"Связанные разделы {0} будут содержать слайды, которые сейчас содержат их "
-"разделы в исходных файлах. Изменения, внесённые в эти слайды в текущей "
+"Связанные разделы и презентации ({0}) будут содержать слайды, которые сейчас "
+"есть в их исходных файлах. Изменения, внесённые в эти слайды в этой "
 "презентации, будут потеряны."
 
 #: src/slideimport/SlideLinks.ts:768
@@ -7472,9 +7419,8 @@ msgstr ""
 "поэтому сервер не может его прочитать."
 
 #: src/slideimport/SlideLinks.ts:779
-#, fuzzy
 msgid "You do not have access to {0}, so its slides cannot be updated."
-msgstr "У вас нет доступа к {0}, поэтому раздел не может быть обновлён."
+msgstr "У вас нет доступа к {0}, поэтому его слайды не могут быть обновлены."
 
 #: src/slideimport/SlideLinks.ts:780
 msgid "{0} could not be read."
@@ -7504,9 +7450,8 @@ msgid "Unlinking the section failed."
 msgstr "Не удалось отвязать раздел."
 
 #: src/slideimport/SlideLinks.ts:1095
-#, fuzzy
 msgid "Unlinking the presentation failed."
-msgstr "Не удалось отвязать раздел."
+msgstr "Не удалось отвязать презентацию."
 
 #: src/slideimport/SlideLinks.ts:1109
 msgid "Updating the slides of {0} failed."
@@ -7592,14 +7537,13 @@ msgid "Direct network connection"
 msgstr "Прямое сетевое подключение"
 
 #: src/control/Control.ServerAuditDialog.ts:176
-#, fuzzy
 msgid ""
 "Connected with the old WebSocket URL form, which is planned for removal. "
 "Check that your proxy passes the compact form through."
 msgstr ""
-"Некоторые клиенты подключаются с использованием старого формата URL "
-"WebSocket, поддержку которого планируется прекратить. Убедитесь, что ваш "
-"прокси-сервер корректно пропускает новый компактный формат URL."
+"Подключение выполнено со старым форматом URL WebSocket, поддержку которого "
+"планируется прекратить. Убедитесь, что ваш прокси-сервер пропускает "
+"компактный формат."
 
 #: src/control/Control.ServerAuditDialog.ts:182
 msgid "Connected with the compact WebSocket URL form"
@@ -7638,9 +7582,8 @@ msgid "Alerts:"
 msgstr "Предупреждения:"
 
 #: src/control/Control.ServerAuditDialog.ts:449
-#, fuzzy
 msgid "Check warnings of your server"
-msgstr "Проверьте предупреждения безопасности вашего сервера"
+msgstr "Проверьте предупреждения вашего сервера"
 
 #: src/control/Control.ServerAuditDialog.ts:450
 msgid "OPEN"
@@ -7849,9 +7792,8 @@ msgid "Insert connectors"
 msgstr "Вставить соединители"
 
 #: src/control/Control.UIManager.ts:139
-#, fuzzy
 msgid "Main"
-msgstr "Минимальное"
+msgstr "Основной"
 
 #: src/control/Control.UIManager.ts:271
 msgid "You are currently in View mode, press {0} to edit"
@@ -8082,9 +8024,8 @@ msgid "Updating citations"
 msgstr "Обновление цитирований"
 
 #: src/control/Control.Zotero.js:1538
-#, fuzzy
 msgid "Unlinked citations"
-msgstr "Разорвать связи цитат"
+msgstr "Несвязанные цитаты"
 
 #: src/control/Control.Zotero.js:1543
 msgid ""
@@ -8128,7 +8069,7 @@ msgstr "Удалить позицию табуляции"
 #. links to this one.
 #: src/control/LinkedViewRow.tsx:26
 msgid "%1 - linked presentation"
-msgstr ""
+msgstr "%1 — связанная презентация"
 
 #: src/control/Parts.js:636 src/control/Parts.js:640
 msgid "Show sheets"
@@ -8155,9 +8096,8 @@ msgid "Wrong password provided. Please try again."
 msgstr "Неправильный пароль. Попробуйте снова."
 
 #: src/control/Permission.js:201
-#, fuzzy
 msgid "Document requires a password to edit."
-msgstr "Документ требует пароль для просмотра."
+msgstr "Для редактирования документа требуется пароль."
 
 #: src/control/Permission.js:452
 msgid "Edit locally"
@@ -8213,21 +8153,23 @@ msgstr ""
 
 #: src/control/Permission.js:757
 msgid "Close without saving"
-msgstr ""
+msgstr "Закрыть без сохранения"
 
 #: src/control/Permission.js:766
 msgid ""
 "\"%FILENAME\" could not be written. The file may be read-only or in use by "
 "another program. You can save your changes to a different file."
 msgstr ""
+"Не удалось записать \"%FILENAME\". Возможно, файл доступен только для чтения "
+"или используется другой программой. Изменения можно сохранить в другой файл."
 
 #: src/control/Permission.js:770
 msgid "Cannot Save Document"
-msgstr ""
+msgstr "Не удалось сохранить документ"
 
 #: src/control/Permission.js:784
 msgid "{0} wants to edit together"
-msgstr ""
+msgstr "{0} хочет редактировать вместе"
 
 #: src/control/Permission.js:785 src/control/Permission.js:808
 #: src/control/Permission.js:824
@@ -8401,7 +8343,6 @@ msgid "Adding selection"
 msgstr "Добавить выбор"
 
 #: src/control/Styles.js:46
-#, fuzzy
 msgid "Block selection"
 msgstr "Выделение блоком"
 
@@ -8676,7 +8617,7 @@ msgstr "Копировать Markdown"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1840
 msgid "Merge Formatting"
-msgstr ""
+msgstr "Объединить форматирование"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1853
 msgid "Inline"
@@ -8836,14 +8777,13 @@ msgstr "Водяной знак"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2469
 msgid "Show"
-msgstr ""
+msgstr "Показать"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2474
 msgid "Add New"
-msgstr ""
+msgstr "Создать"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2546
-#, fuzzy
 msgid "Insert comment"
 msgstr "Вставить комментарий"
 
@@ -8858,9 +8798,8 @@ msgid "Insert Comment"
 msgstr "Вставить комментарий"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2561
-#, fuzzy
 msgid "Insert Note"
-msgstr "Вставить дату"
+msgstr "Вставить примечание"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:36
 msgid "Dark 1"
@@ -8940,9 +8879,8 @@ msgid "Color palette"
 msgstr "Палитра цветов"
 
 #: src/control/jsdialog/Widget.Combobox.js:291
-#, fuzzy
 msgid "Open list"
-msgstr "Открыть ссылку"
+msgstr "Открыть список"
 
 #: src/control/jsdialog/Widget.Combobox.js:499
 msgid "Filter entries"
@@ -9072,9 +9010,8 @@ msgid "Entering text mode"
 msgstr "Текстовый режим"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:49
-#, fuzzy
 msgid "Insert Mode"
-msgstr "Вставить дату"
+msgstr "Режим вставки"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:54
 msgid "Selection Mode"
@@ -9102,19 +9039,16 @@ msgid "Shape Size"
 msgstr "Размер фигуры"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:79
-#, fuzzy
 msgid "Sheet Navigation"
-msgstr "Закрыть Навигацию"
+msgstr "Навигация по листам"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:81
-#, fuzzy
 msgid "Slide Navigation"
-msgstr "Закрыть Навигацию"
+msgstr "Навигация по слайдам"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:82
-#, fuzzy
 msgid "Page Navigation"
-msgstr "Закрыть Навигацию"
+msgstr "Навигация по страницам"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:88
 msgid "Your changes have been saved"
@@ -9277,6 +9211,8 @@ msgid ""
 "This file cannot be written, so the document opened read-only. Use Save As "
 "to keep your changes in a new file."
 msgstr ""
+"Этот файл недоступен для записи, поэтому документ открыт только для чтения. "
+"Используйте «Сохранить как», чтобы сохранить изменения в новый файл."
 
 #: src/app/Socket.ts:2469
 msgid "Document is getting migrated"
@@ -9287,6 +9223,8 @@ msgid ""
 "Waiting for %USERS to decide which version of this document to keep. The "
 "document opens here once they decide."
 msgstr ""
+"Ждём, пока %USERS решит, какую версию этого документа оставить. Документ "
+"откроется здесь, как только будет принято решение."
 
 #: src/app/Socket.ts:2834
 msgid "Document requires password to view."
@@ -9569,7 +9507,6 @@ msgid "Failed to load document."
 msgstr "Не удалось загрузить документ."
 
 #: src/errormessages.ts:81
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
 msgstr ""
 "Не удалось сохранить документ из-за нехватки места на диске. Документ "
@@ -9650,9 +9587,8 @@ msgid "Document cannot be exported. Please try again."
 msgstr "Документ не может быть экспортирован. Попробуйте ещё раз."
 
 #: src/layer/marker/A11yTextInput.js:111
-#, fuzzy
 msgid "Slide"
-msgstr "Слайды"
+msgstr "Слайд"
 
 #: src/layer/marker/A11yTextInput.js:334
 msgid "Comment by {0}: {1}"
@@ -9662,37 +9598,35 @@ msgstr "Комментарий от {0}: {1}"
 #. {1} its text
 #: src/layer/marker/A11yTextInput.js:363
 msgid "{0}: {1}"
-msgstr ""
+msgstr "{0}: {1}"
 
 #: src/layer/marker/A11yTextInput.js:533
 msgid "Heading level {0}"
 msgstr "Уровень заголовка {0}"
 
 #: src/layer/marker/A11yTextInput.js:570
-#, fuzzy
 msgid "Footnote"
-msgstr "Сноски"
+msgstr "Сноска"
 
 #: src/layer/marker/A11yTextInput.js:572
-#, fuzzy
 msgid "Endnote"
-msgstr "Примечания"
+msgstr "Концевая сноска"
 
 #: src/layer/marker/A11yTextInput.js:580
 msgid "Out of header"
-msgstr ""
+msgstr "Выход из верхнего колонтитула"
 
 #: src/layer/marker/A11yTextInput.js:582
 msgid "Out of footer"
-msgstr ""
+msgstr "Выход из нижнего колонтитула"
 
 #: src/layer/marker/A11yTextInput.js:584
 msgid "Out of footnote"
-msgstr ""
+msgstr "Выход из сноски"
 
 #: src/layer/marker/A11yTextInput.js:586
 msgid "Out of endnote"
-msgstr ""
+msgstr "Выход из концевой сноски"
 
 #: src/layer/marker/A11yTextInput.js:1600
 msgid "Out of table"
@@ -9756,20 +9690,19 @@ msgstr "{0} удалено"
 
 #: src/layer/marker/TextInput.js:532 src/layer/marker/TextInput.js:542
 msgid "Formatting changed"
-msgstr ""
+msgstr "Форматирование изменено"
 
 #: src/layer/marker/TextInput.js:541
 msgid "Insertion"
-msgstr ""
+msgstr "Вставка"
 
 #: src/layer/marker/TextInput.js:542
 msgid "Deletion"
-msgstr ""
+msgstr "Удаление"
 
 #: src/layer/marker/TextInput.js:598
-#, fuzzy
 msgid "Placeholder"
-msgstr "Заглушки"
+msgstr "Заполнитель"
 
 #: src/layer/marker/TextInput.js:606
 msgid "Drop-down list"
@@ -9822,10 +9755,12 @@ msgstr "Онлайн-редактор"
 #: src/layer/tile/CanvasTileLayer.js:1490
 msgid "This document links to files in a folder the app may not read."
 msgstr ""
+"Этот документ ссылается на файлы в папке, к которой у приложения может не "
+"быть доступа на чтение."
 
 #: src/layer/tile/CanvasTileLayer.js:1491
 msgid "Allow access"
-msgstr ""
+msgstr "Разрешить доступ"
 
 #: src/layer/tile/CanvasTileLayer.js:1517
 msgid "%1 started recording changes for all users."
@@ -9854,10 +9789,12 @@ msgstr "Нет комментариев"
 #: src/main.js:357
 msgid "This server is too old for %APP, so some features may not work."
 msgstr ""
+"Этот сервер слишком старый для %APP, поэтому некоторые функции могут не "
+"работать."
 
 #: src/main.js:358
 msgid "Please ask the administrator to update it."
-msgstr ""
+msgstr "Попросите администратора обновить его."
 
 #: src/main.js:451
 msgid "Warning! The browser you are using is not supported."
@@ -9874,7 +9811,7 @@ msgstr "Копирование из документа отключено ваш
 
 #: src/map/Clipboard.js:222
 msgid "Copying from {productname}, please paste again in a moment"
-msgstr ""
+msgstr "Копирование из {productname}, повторите вставку через мгновение"
 
 #: src/map/Clipboard.js:335
 msgid "warning: copy/paste request timed out"
@@ -9890,9 +9827,8 @@ msgid "Failed to upload the clipboard"
 msgstr "Не удалось загрузить буфер обмена"
 
 #: src/map/Clipboard.js:1141
-#, fuzzy
 msgid "Copying to clipboard"
-msgstr "Скопировать в буфер обмена"
+msgstr "Копирование в буфер обмена"
 
 #: src/map/Clipboard.js:1673
 msgid ""
@@ -9947,19 +9883,16 @@ msgid "Last saved:"
 msgstr "Последнее сохранение:"
 
 #: src/map/Map.js:1170
-#, fuzzy
 msgid "Please wait..."
-msgstr "Пожалуйста подождите!"
+msgstr "Пожалуйста, подождите…"
 
 #: src/map/handler/Map.Feedback.js:102
 msgid "Please send us your feedback"
 msgstr "Пожалуйста, отправьте нам свой отзыв"
 
 #: src/map/handler/Map.FileInserter.js:316
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file has no name"
-msgstr ""
-"Файл типа: {0} не может быть загружен на сервер, поскольку у файла нет имени"
+msgstr "Файл типа {0} не может быть вставлен, поскольку у файла нет имени"
 
 #: src/map/handler/Map.FileInserter.js:317
 #, javascript-format
@@ -9970,9 +9903,8 @@ msgstr ""
 "Файл типа: {0} не может быть загружен на сервер, поскольку у файла нет имени"
 
 #: src/map/handler/Map.FileInserter.js:320
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file is empty"
-msgstr "Файл типа: {0} не может быть загружен на сервер, поскольку файл пуст"
+msgstr "Файл типа {0} не может быть вставлен, поскольку файл пуст"
 
 #: src/map/handler/Map.FileInserter.js:321
 #, javascript-format
@@ -10004,9 +9936,8 @@ msgstr "Пустой показ слайдов"
 
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1453
-#, fuzzy
 msgid "All slides are hidden."
-msgstr "Все слайды скрыты!"
+msgstr "Все слайды скрыты."
 
 #: src/map/handler/Map.SlideShow.js:175
 #: src/slideshow/SlideShowPresenter.ts:1480
@@ -10125,14 +10056,12 @@ msgid "Next Slide"
 msgstr "Следующий слайд"
 
 #: src/slideshow/engine/SlideShowHandler.ts:121
-#, fuzzy
 msgid "Previous Slide"
 msgstr "Предыдущий слайд"
 
 #: src/slideshow/engine/SlideShowHandler.ts:122
-#, fuzzy
 msgid "Last Slide"
-msgstr "Вставить слайд"
+msgstr "Последний слайд"
 
 #: src/slideshow/engine/SlideShowHandler.ts:123
 #: src/slideshow/SlideShowPresenter.ts:941
@@ -10140,14 +10069,12 @@ msgid "End Show"
 msgstr "Завершить показ"
 
 #: src/slideshow/engine/SlideShowHandler.ts:124
-#, fuzzy
 msgid "Paused"
 msgstr "Пауза"
 
 #: src/slideshow/engine/SlideShowHandler.ts:125
-#, fuzzy
 msgid "Resumed"
-msgstr "Продолжить"
+msgstr "Возобновлено"
 
 #: src/slideshow/engine/SlideShowHandler.ts:401
 msgid "Animation: {0}, {1}"
@@ -10197,9 +10124,8 @@ msgid "Present to all"
 msgstr "Показывать всем"
 
 #: src/slideshow/PresenterConsole.js:43
-#, fuzzy
 msgid "Exit"
-msgstr "Правка"
+msgstr "Выход"
 
 #: src/slideshow/PresenterConsole.js:44
 msgid "Go Back"
@@ -10267,7 +10193,6 @@ msgid "Waiting for presenter to advance"
 msgstr "Ожидание перехода докладчика к следующему слайду"
 
 #: src/slideshow/SlideShowPresenter.ts:1708
-#, fuzzy
 msgid "Stop Following"
 msgstr "Остановить следование"
 
@@ -10454,12 +10379,10 @@ msgid "Get Involved"
 msgstr "Принять участие"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-#, fuzzy
 msgid "https://www.collaboraoffice.org/"
-msgstr "https://www.collaboraonline.org/"
+msgstr "https://www.collaboraoffice.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
-#, fuzzy
 msgid ""
 "Are you interested in contributing but don’t know where to start? Head over "
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://"
@@ -10472,11 +10395,11 @@ msgid ""
 "it."
 msgstr ""
 "Хотите внести вклад, но не знаете, с чего начать? Перейдите к <a "
-"target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraonline.org/"
+"target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraoffice.org/"
 "post/build-code/\">пошаговым инструкциям</a> и соберите CODE с нуля. Вы "
 "также можете помочь с <a target=\"_blank\" rel=\"noopener\" href=\"https://"
-"www.collaboraonline.org/post/translate/\">переводами</a> или <a "
-"target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraonline.org/"
+"www.collaboraoffice.org/post/translate/\">переводами</a> или <a "
+"target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraoffice.org/"
 "post/filebugs/\">отправкой отчёта об ошибке</a> с подробным описанием шагов "
 "для её воспроизведения."
 

@@ -4,93 +4,94 @@ msgstr ""
 "Project-Id-Version: com.collaboraoffice.demo-text\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 11:57+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-11-21 19:16+0000\n"
+"Last-Translator: Valdemar <valdemar1st@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
+"extensions/demo-text/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Translate Toolkit 3.18.1\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: index.html:73
 msgid "%1 (%2) applied"
-msgstr ""
+msgstr "%1 (%2) применено"
 
 #: index.html:31
 msgid "Apply"
-msgstr ""
+msgstr "Применить"
 
 #: index.html:28
 msgid "Colorize paragraphs"
-msgstr ""
+msgstr "Раскрасить абзацы"
 
 #: index.html:23
 msgid "Greeting:"
-msgstr ""
+msgstr "Приветствие:"
 
 #: index.html:35
 msgid "Paragraph number (1-based):"
-msgstr ""
+msgstr "Номер абзаца (с 1):"
 
 #: index.html:55
 msgid "Pick a color"
-msgstr ""
+msgstr "Выберите цвет"
 
 #: index.html:42
 msgid "Pick paragraph color..."
-msgstr ""
+msgstr "Выберите цвет абзаца..."
 
 #: index.html:37
 msgid "Read Nth paragraph"
-msgstr ""
+msgstr "Прочитать N-й абзац"
 
 #: manifest.json:name
 msgid "Text demo"
-msgstr ""
+msgstr "Демонстрация текста"
 
 #: index.html:70
 msgid "applying %1 (%2)..."
-msgstr ""
+msgstr "применение %1 (%2)..."
 
 #: picker.html:31
 msgid "black"
-msgstr ""
+msgstr "чёрный"
 
 #: picker.html:28
 msgid "blue"
-msgstr ""
+msgstr "синий"
 
 #: index.html:60
 msgid "cancelled"
-msgstr ""
+msgstr "отменено"
 
 #: picker.html:27
 msgid "green"
-msgstr ""
+msgstr "зелёный"
 
 #: picker.html:29
 msgid "indigo"
-msgstr ""
+msgstr "индиго"
 
 #: index.html:43
 msgid "no color picked yet"
-msgstr ""
+msgstr "цвет ещё не выбран"
 
 #: picker.html:25
 msgid "orange"
-msgstr ""
+msgstr "оранжевый"
 
 #: picker.html:24
 msgid "red"
-msgstr ""
+msgstr "красный"
 
 #: picker.html:30
 msgid "violet"
-msgstr ""
+msgstr "фиолетовый"
 
 #: picker.html:26
 msgid "yellow"
-msgstr ""
+msgstr "жёлтый"

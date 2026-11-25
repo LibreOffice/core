@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: coolwsd 25.04.7.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-06 18:17+0000\n"
-"PO-Revision-Date: 2026-11-15 22:45+0000\n"
+"PO-Revision-Date: 2026-11-21 19:16+0000\n"
 "Last-Translator: Valdemar <valdemar1st@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
 "desktop-apps/collabora-office-macos-app/ru/>\n"
@@ -70,10 +70,9 @@ msgctxt "H8h-7b-M4v.title"
 msgid "View"
 msgstr "Просмотр"
 
-#, fuzzy
 msgctxt "HyV-fh-RgO.title"
 msgid "View"
-msgstr "Просмотр"
+msgstr "Вид"
 
 msgctxt "IAo-SY-fd9.title"
 msgid "Open…"
@@ -83,7 +82,6 @@ msgctxt "KaW-ft-85H.title"
 msgid "Revert to Saved"
 msgstr "Отменить изменения"
 
-#, fuzzy
 msgctxt "Kd2-mp-pUS.title"
 msgid "Show All"
 msgstr "Показать всё"
@@ -105,10 +103,9 @@ msgctxt "Olw-nP-bQN.title"
 msgid "Hide ProductName"
 msgstr "Скрыть ProductName"
 
-#, fuzzy
 msgctxt "R4o-n2-Eq4.title"
 msgid "Zoom"
-msgstr "Увеличить"
+msgstr "Масштаб"
 
 msgctxt "Td7-aD-5lo.title"
 msgid "Window"
@@ -130,7 +127,6 @@ msgctxt "WeT-3V-zwk.title"
 msgid "Paste and Match Style"
 msgstr "Вставить и согласовать стиль"
 
-#, fuzzy
 msgctxt "aTl-1u-JFS.title"
 msgid "Print…"
 msgstr "Печатать…"
