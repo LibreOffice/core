@@ -261,7 +261,7 @@ void appendUserJson(std::ostringstream& oss,
 }
 
 /// Serialize an ExternalSession as a JSON user object.  No avatar
-/// field: we don't carry the WOPI token from the /cool/ws session
+/// field: we don't carry the avatar URL from the /cool/ws session
 /// over, so the cool.html renderer falls back to the default icon.
 std::string externalUserJson(const std::string& userId,
                              const std::string& username,
