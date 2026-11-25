@@ -70,12 +70,13 @@ std::size_t countIncomingFiles(const std::string& childRootBase, const std::stri
     for (std::filesystem::directory_iterator root(childRootBase, error), rootEnd;
          !error && root != rootEnd; root.increment(error))
     {
-        if (!root->path().filename().string().starts_with(prefix))
+        if (!root->path().filename().string<char>().starts_with(prefix))
             continue;
 
         std::error_code innerError;
         for (std::filesystem::recursive_directory_iterator
-                 it(root->path().string() + JailUtil::CHILDROOT_TMP_INCOMING_PATH, innerError),
+                 it(root->path().string<char>() + JailUtil::CHILDROOT_TMP_INCOMING_PATH,
+                    innerError),
              end;
              !innerError && it != end; it.increment(innerError))
         {
