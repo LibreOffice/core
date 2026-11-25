@@ -4491,6 +4491,22 @@ void SwTextNode::SetAttrListLevel( int nLevel )
         return;
     }
 
+    if (GetDoc().IsInMergedPaste())
+    {
+        // Merged paste: set list level relative to the paste position's level.
+        if (const SwNode* pOrigDest = GetDoc().GetMergedPasteOrigDestNode())
+        {
+            if (const SwTextNode* pOrigDestTextNode = pOrigDest->GetTextNode())
+            {
+                int nShift = pOrigDestTextNode->GetAttrListLevel();
+                if (nShift > 0)
+                {
+                    nLevel = std::min(nLevel + nShift, static_cast<int>(MAXLEVEL) - 1);
+                }
+            }
+        }
+    }
+
     SfxInt16Item aNewListLevelItem( RES_PARATR_LIST_LEVEL,
                                     static_cast<sal_Int16>(nLevel) );
     SetAttr( aNewListLevelItem );
