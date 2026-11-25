@@ -405,6 +405,7 @@
  * without an !important war. */
 #slide-import-panel .slide-import-source-menu {
 	flex-shrink: 0;
+	margin: 0;
 	position: relative;
 	width: 24px;
 	height: 24px;
@@ -424,6 +425,7 @@
  * the file is kept, and then a filled pin on a filled ground. */
 #slide-import-panel .slide-import-source-keep {
 	flex-shrink: 0;
+	margin: 0;
 	width: var(--btn-size-m);
 	height: var(--btn-size-m);
 	padding: 0;
