@@ -6489,7 +6489,8 @@ bool ChildSession::saveAs(const StringVector& tokens)
 
     // The desktop apps give no filename token, so a failure names the file from the URL.
     std::string encodedTargetName;
-    Poco::URI::encode(Poco::Path(wopiURL.getPath()).getFileName(), "", encodedTargetName);
+    const Poco::Path targetPath(FileUtil::localPathOfFileUri(wopiURL.getHost(), wopiURL.getPath()));
+    Poco::URI::encode(targetPath.getFileName(), "", encodedTargetName);
 
     success = getLOKitDocument()->saveAs(encodedURL.c_str(),
                                          format.empty() ? nullptr : format.c_str(),
