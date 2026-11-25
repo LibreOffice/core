@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 12:57+0100\n"
-"PO-Revision-Date: 2026-11-20 19:49+0000\n"
-"Last-Translator: Odnes <odnes@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-21 19:16+0000\n"
+"Last-Translator: nck nicko <nick_nick88@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/el/>\n"
 "Language: el\n"
@@ -3366,9 +3366,8 @@ msgstr "Αναφερόμενα κελιά"
 #. TRANSLATORS: Sent to the AI model. {0} is a Calc error code such
 #. TRANSLATORS: as #DIV/0!
 #: src/control/Control.AIChatSidebar.ts:4641
-#, fuzzy
 msgid "Please diagnose why this formula produces the {0} error."
-msgstr "Παρακαλώ διαγνώστε γιατί αυτή η φόρμουλα παράγει το"
+msgstr "Παρακαλώ διαγνώστε γιατί αυτή η φόρμουλα παράγει το {0} λάθος"
 
 #: src/control/Control.AIChatSidebar.ts:4645
 msgid "Explain the root cause and suggest how to fix it."
@@ -5060,9 +5059,8 @@ msgid "Language"
 msgstr "Γλώσσα"
 
 #: src/control/Control.Mention.ts:193
-#, fuzzy
 msgid "No search results found"
-msgstr "Δε βρέθηκαν αποτελέσματα αναζήτησης!"
+msgstr "Δε βρέθηκαν αποτελέσματα αναζήτησης"
 
 #: src/control/Control.Menubar.ts:57
 msgid "PDF Document (.pdf) as..."
@@ -9948,9 +9946,8 @@ msgid "Last saved:"
 msgstr "Τελευταία αποθήκευση:"
 
 #: src/map/Map.js:1170
-#, fuzzy
 msgid "Please wait..."
-msgstr "Παρακαλώ περιμένετε!"
+msgstr "Παρακαλώ περιμένετε..."
 
 #: src/map/handler/Map.Feedback.js:102
 msgid "Please send us your feedback"
@@ -10006,9 +10003,8 @@ msgstr "Κενή προβολή διαφανειών"
 
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1453
-#, fuzzy
 msgid "All slides are hidden."
-msgstr "Όλες οι διαφάνειες είναι κρυφές!"
+msgstr "Όλες οι διαφάνειες είναι κρυφές."
 
 #: src/map/handler/Map.SlideShow.js:175
 #: src/slideshow/SlideShowPresenter.ts:1480
