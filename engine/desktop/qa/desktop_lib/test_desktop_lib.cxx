@@ -316,6 +316,8 @@ public:
     void testPaintPartTile();
     void testPaintPartTileMasterPage();
     void testPaintPartTileKeepsTextEditCursor();
+    void testPaintPartTileKeepsTextSelection();
+    void testPaintPartTileThroughEditingViewKeepsTextSelection();
     void testPaintPartTileHidesGridOnOtherPart();
     void testPaintPartTileHidesGridOnActivePartPreview();
     void testPaintPartTileDifferentSchemes();
@@ -464,6 +466,8 @@ public:
     CPPUNIT_TEST(testPaintPartTile);
     CPPUNIT_TEST(testPaintPartTileMasterPage);
     CPPUNIT_TEST(testPaintPartTileKeepsTextEditCursor);
+    CPPUNIT_TEST(testPaintPartTileKeepsTextSelection);
+    CPPUNIT_TEST(testPaintPartTileThroughEditingViewKeepsTextSelection);
     CPPUNIT_TEST(testPaintPartTileHidesGridOnOtherPart);
     CPPUNIT_TEST(testPaintPartTileHidesGridOnActivePartPreview);
     CPPUNIT_TEST(testPaintPartTileDifferentSchemes);
@@ -3710,6 +3714,97 @@ void DesktopKitTest::testPaintPartTileKeepsTextEditCursor()
     // its cursor is at the cursor of the second view, on the second slide, and hidden.
     CPPUNIT_ASSERT_EQUAL(0, aView1.m_nCursorHidden);
     CPPUNIT_ASSERT_EQUAL(aCursor, aView1.m_aOwnCursor);
+}
+
+void DesktopKitTest::testPaintPartTileKeepsTextSelection()
+{
+    // A view keeps the text it has selected while a tile of a slide that another view edits is
+    // painted. The document turns form design mode off, as saved presentations usually do.
+    COKitDocumentImpl* pDocument = loadDoc("two-slides-form-design-mode-off.fodp");
+    pDocument->initializeForRendering("{}");
+    const int nView1 = pDocument->getView();
+    auto pressKey = [pDocument](int nCharCode, int nKeyCode) {
+        pDocument->postKeyEvent(COKitKeyEventType::DOWN, nCharCode, nKeyCode);
+        pDocument->postKeyEvent(COKitKeyEventType::UP, nCharCode, nKeyCode);
+        Scheduler::ProcessEventsToIdle();
+    };
+    auto typeIntoFirstShape = [&pressKey](std::string_view aText) {
+        pressKey(0, awt::Key::TAB);
+        pressKey(0, awt::Key::RETURN);
+        for (char cText : aText)
+            pressKey(cText, 0);
+    };
+    typeIntoFirstShape("abc");
+    pressKey(0, KEY_SHIFT | KEY_LEFT);
+    pressKey(0, KEY_SHIFT | KEY_LEFT);
+    CPPUNIT_ASSERT_EQUAL(std::string("bc"),
+                         pDocument->getTextSelection("text/plain;charset=utf-8"));
+
+    // The second view types on the second slide. A view in text edit does not paint for another
+    // view, so the paint below has to move the first view to the second slide and back.
+    pDocument->createView();
+    pDocument->initializeForRendering("{}");
+    const std::string aSecondSlide = pDocument->getPartId(1, 0);
+    pDocument->setPart(aSecondSlide.c_str());
+    Scheduler::ProcessEventsToIdle();
+    typeIntoFirstShape("x");
+
+    pDocument->setView(nView1);
+    std::vector<unsigned char> aPixels(256 * 256 * 4);
+    pDocument->paintPartTile(aPixels, aSecondSlide.c_str(), 0, 256, 256, 0, 0, 15000, 15000);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have failed: the selection had collapsed to its
+    // end, so nothing was selected.
+    CPPUNIT_ASSERT_EQUAL(std::string("bc"),
+                         pDocument->getTextSelection("text/plain;charset=utf-8"));
+}
+
+void DesktopKitTest::testPaintPartTileThroughEditingViewKeepsTextSelection()
+{
+    // A view can still extend the text it has selected after a view that edits text on another
+    // slide paints a tile of the slide the first view edits.
+    COKitDocumentImpl* pDocument = loadDoc("two-slides-form-design-mode-off.fodp");
+    pDocument->initializeForRendering("{}");
+    const int nView1 = pDocument->getView();
+    const std::string aFirstSlide = pDocument->getPartId(0, 0);
+    auto pressKey = [pDocument](int nCharCode, int nKeyCode) {
+        pDocument->postKeyEvent(COKitKeyEventType::DOWN, nCharCode, nKeyCode);
+        pDocument->postKeyEvent(COKitKeyEventType::UP, nCharCode, nKeyCode);
+        Scheduler::ProcessEventsToIdle();
+    };
+    auto typeIntoFirstShape = [&pressKey](std::string_view aText) {
+        pressKey(0, awt::Key::TAB);
+        pressKey(0, awt::Key::RETURN);
+        for (char cText : aText)
+            pressKey(cText, 0);
+    };
+    typeIntoFirstShape("abc");
+    pressKey(0, KEY_SHIFT | KEY_LEFT);
+    pressKey(0, KEY_SHIFT | KEY_LEFT);
+    CPPUNIT_ASSERT_EQUAL(std::string("bc"),
+                         pDocument->getTextSelection("text/plain;charset=utf-8"));
+
+    // The second view types on the second slide. A view in text edit does not paint for another
+    // view, so the paint below has to move the second view to the first slide and back.
+    pDocument->createView();
+    pDocument->initializeForRendering("{}");
+    pDocument->setPart(pDocument->getPartId(1, 0).c_str());
+    Scheduler::ProcessEventsToIdle();
+    typeIntoFirstShape("x");
+
+    std::vector<unsigned char> aPixels(256 * 256 * 4);
+    pDocument->paintPartTile(aPixels, aFirstSlide.c_str(), 0, 256, 256, 0, 0, 15000, 15000);
+    Scheduler::ProcessEventsToIdle();
+
+    // The first view extends its selection by one more character.
+    pDocument->setView(nView1);
+    pressKey(0, KEY_SHIFT | KEY_LEFT);
+
+    // Without the fix in place, this test would have failed: the selection had lost its start,
+    // so it started again at the cursor and only "a" was selected.
+    CPPUNIT_ASSERT_EQUAL(std::string("abc"),
+                         pDocument->getTextSelection("text/plain;charset=utf-8"));
 }
 
 void DesktopKitTest::testPaintPartTileMasterPage()

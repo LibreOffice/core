@@ -298,8 +298,10 @@ SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
             // creating the controllers
             ActivateControls(pPV);
 
-            // Deselect all
-            UnmarkAll();
+            // Deselect all objects. A running text edit keeps its text selection across the
+            // change of page.
+            if (!IsTextEdit())
+                UnmarkAll();
         }
         else if ( m_pFormShell && m_pFormShell->IsDesignMode() )
         {
