@@ -31,6 +31,38 @@
 
 #include <memory>
 
+namespace
+{
+/// How long one attempt of a request that converts a document may take. A conversion that waits for
+/// a new Kit takes over 5 seconds when the machine is loaded.
+constexpr std::chrono::seconds ConversionTimeout(COMMAND_TIMEOUT_SECS * 4);
+
+/// Posts the form to the path and returns the response. When no complete response comes in time,
+/// the form is posted once more. Each attempt has a request of its own, because sending a request
+/// reads its body. When forwardedFor is not empty, it is sent as the X-Forwarded-For header.
+std::shared_ptr<const http::Response> postForm(const Poco::URI& uri, const std::string& path,
+                                               const helpers::MultipartFormBody& form,
+                                               const std::string& forwardedFor = std::string())
+{
+    std::shared_ptr<const http::Response> response;
+    for (int attempt = 0; attempt < 2; ++attempt)
+    {
+        http::Request request(path, http::Request::VERB_POST);
+        if (!forwardedFor.empty())
+            request.add("X-Forwarded-For", forwardedFor);
+        form.applyTo(request);
+
+        std::shared_ptr<http::Session> session = http::Session::create(uri.toString());
+        session->setTimeout(ConversionTimeout);
+        response = session->syncRequest(request);
+        if (response->state() == http::Response::State::Complete)
+            break;
+    }
+
+    return response;
+}
+} // namespace
+
 /// Tests the HTTP GET API of coolwsd.
 class HTTPServerTest : public CPPUNIT_NS::TestFixture
 {
@@ -430,21 +462,11 @@ void HTTPServerTest::testConvertTo()
 
     TST_LOG("Convert-to odt -> txt");
 
-    auto httpSession = http::Session::create(_uri.toString());
-    httpSession->setTimeout(std::chrono::seconds(COMMAND_TIMEOUT_SECS));
-    http::Request request("/cool/convert-to", http::Request::VERB_POST);
     helpers::MultipartFormBody form;
     form.addField("format", "txt");
     form.addFile("data", srcPath);
-    form.applyTo(request);
-    auto httpResponse = httpSession->syncRequest(request);
-    if (httpResponse->state() != http::Response::State::Complete)
-    {
-        std::this_thread::sleep_for(std::chrono::seconds(COMMAND_TIMEOUT_SECS));
-        httpSession = http::Session::create(_uri.toString());
-        httpSession->setTimeout(std::chrono::seconds(COMMAND_TIMEOUT_SECS));
-        httpResponse = httpSession->syncRequest(request);
-    }
+    const std::shared_ptr<const http::Response> httpResponse =
+        postForm(_uri, "/cool/convert-to", form);
 
     std::ifstream fileStream(TDOC "/hello.txt");
     std::stringstream expectedStream;
@@ -468,21 +490,11 @@ void HTTPServerTest::testConvertTo2()
 
     TST_LOG("Convert-to #2 xlsx -> png");
 
-    auto httpSession = http::Session::create(_uri.toString());
-    httpSession->setTimeout(std::chrono::seconds(COMMAND_TIMEOUT_SECS * 2));
-    http::Request request("/cool/convert-to", http::Request::VERB_POST);
     helpers::MultipartFormBody form;
     form.addField("format", "png");
     form.addFile("data", srcPath);
-    form.applyTo(request);
-    auto httpResponse = httpSession->syncRequest(request);
-    if (httpResponse->state() != http::Response::State::Complete)
-    {
-        std::this_thread::sleep_for(std::chrono::seconds(COMMAND_TIMEOUT_SECS));
-        httpSession = http::Session::create(_uri.toString());
-        httpSession->setTimeout(std::chrono::seconds(COMMAND_TIMEOUT_SECS * 2));
-        httpResponse = httpSession->syncRequest(request);
-    }
+    const std::shared_ptr<const http::Response> httpResponse =
+        postForm(_uri, "/cool/convert-to", form);
 
     // Remove the temp files.
     FileUtil::removeFile(srcPath);
@@ -498,30 +510,18 @@ void HTTPServerTest::testConvertTo2()
 void HTTPServerTest::testConvertToWithForwardedIP_Deny()
 {
     const std::string testname = "convertToWithForwardedClientIP-Deny";
-    constexpr int TimeoutSeconds = COMMAND_TIMEOUT_SECS * 2; // Sometimes dns resolving is slow.
 
     // Test a forwarded IP which is not allowed to use convert-to feature
     TST_LOG("Converting from a disallowed IP.");
 
     const std::string srcPath = helpers::getTempFileCopyPath(TDOC, "hello.odt", testname);
 
-    auto httpSession = http::Session::create(_uri.toString());
-    httpSession->setTimeout(std::chrono::seconds(TimeoutSeconds));
-    http::Request request("/cool/convert-to", http::Request::VERB_POST);
-    LOK_ASSERT(!request.has("X-Forwarded-For"));
-    request.add("X-Forwarded-For", getNotAllowedTestServerURI().getHost() + ", " + _uri.getHost());
     helpers::MultipartFormBody form;
     form.addField("format", "txt");
     form.addFile("data", srcPath);
-    form.applyTo(request);
-    auto httpResponse = httpSession->syncRequest(request);
-    if (httpResponse->state() != http::Response::State::Complete)
-    {
-        std::this_thread::sleep_for(std::chrono::seconds(COMMAND_TIMEOUT_SECS));
-        httpSession = http::Session::create(_uri.toString());
-        httpSession->setTimeout(std::chrono::seconds(TimeoutSeconds));
-        httpResponse = httpSession->syncRequest(request);
-    }
+    const std::shared_ptr<const http::Response> httpResponse = postForm(
+        _uri, "/cool/convert-to", form,
+        getNotAllowedTestServerURI().getHost() + ", " + _uri.getHost());
 
     // Remove the temp files.
     FileUtil::removeFile(srcPath);
@@ -533,30 +533,18 @@ void HTTPServerTest::testConvertToWithForwardedIP_Deny()
 void HTTPServerTest::testConvertToWithForwardedIP_Allow()
 {
     const std::string testname = "convertToWithForwardedClientIP-Allow";
-    constexpr int TimeoutSeconds = COMMAND_TIMEOUT_SECS * 2; // Sometimes dns resolving is slow.
 
     // Test a forwarded IP which is allowed to use convert-to feature
     TST_LOG("Converting from an allowed IP.");
 
     const std::string srcPath = helpers::getTempFileCopyPath(TDOC, "hello.odt", testname);
 
-    auto httpSession = http::Session::create(_uri.toString());
-    httpSession->setTimeout(std::chrono::seconds(TimeoutSeconds));
-    http::Request request("/cool/convert-to", http::Request::VERB_POST);
-    LOK_ASSERT(!request.has("X-Forwarded-For"));
-    request.add("X-Forwarded-For", _uri.getHost() + ", " + _uri.getHost());
     helpers::MultipartFormBody form;
     form.addField("format", "txt");
     form.addFile("data", srcPath);
-    form.applyTo(request);
-    auto httpResponse = httpSession->syncRequest(request);
-    if (httpResponse->state() != http::Response::State::Complete)
-    {
-        std::this_thread::sleep_for(std::chrono::seconds(COMMAND_TIMEOUT_SECS));
-        httpSession = http::Session::create(_uri.toString());
-        httpSession->setTimeout(std::chrono::seconds(TimeoutSeconds));
-        httpResponse = httpSession->syncRequest(request);
-    }
+    const std::shared_ptr<const http::Response> httpResponse = postForm(
+        _uri, "/cool/convert-to", form,
+        _uri.getHost() + ", " + _uri.getHost());
 
     std::ifstream fileStream(TDOC "/hello.txt");
     std::stringstream expectedStream;
@@ -576,32 +564,18 @@ void HTTPServerTest::testConvertToWithForwardedIP_Allow()
 void HTTPServerTest::testConvertToWithForwardedIP_DenyMulti()
 {
     const std::string testname = "convertToWithForwardedClientIP-DenyMulti";
-    constexpr int TimeoutSeconds = COMMAND_TIMEOUT_SECS * 2; // Sometimes dns resolving is slow.
 
     // Test a forwarded header with three IPs, one is not allowed -> request is denied.
     TST_LOG("Converting from multiple IPs, on disallowed.");
 
     const std::string srcPath = helpers::getTempFileCopyPath(TDOC, "hello.odt", testname);
 
-    auto httpSession = http::Session::create(_uri.toString());
-    httpSession->setTimeout(std::chrono::seconds(TimeoutSeconds));
-    http::Request request("/cool/convert-to", http::Request::VERB_POST);
-    LOK_ASSERT(!request.has("X-Forwarded-For"));
-    request.add("X-Forwarded-For", _uri.getHost() + ", "
-                                   + getNotAllowedTestServerURI().getHost() + ", "
-                                   + _uri.getHost());
     helpers::MultipartFormBody form;
     form.addField("format", "txt");
     form.addFile("data", srcPath);
-    form.applyTo(request);
-    auto httpResponse = httpSession->syncRequest(request);
-    if (httpResponse->state() != http::Response::State::Complete)
-    {
-        std::this_thread::sleep_for(std::chrono::seconds(COMMAND_TIMEOUT_SECS));
-        httpSession = http::Session::create(_uri.toString());
-        httpSession->setTimeout(std::chrono::seconds(TimeoutSeconds));
-        httpResponse = httpSession->syncRequest(request);
-    }
+    const std::shared_ptr<const http::Response> httpResponse = postForm(
+        _uri, "/cool/convert-to", form,
+        _uri.getHost() + ", " + getNotAllowedTestServerURI().getHost() + ", " + _uri.getHost());
 
     // Remove the temp files.
     FileUtil::removeFile(srcPath);
@@ -617,21 +591,11 @@ void HTTPServerTest::testExtractDocStructure()
 
     TST_LOG("extract-document-structure");
 
-    auto httpSession = http::Session::create(_uri.toString());
-    httpSession->setTimeout(std::chrono::seconds(COMMAND_TIMEOUT_SECS * 2));
-    http::Request request("/cool/extract-document-structure", http::Request::VERB_POST);
     helpers::MultipartFormBody form;
     form.addField("filter", "contentcontrol");
     form.addFile("data", srcPath);
-    form.applyTo(request);
-    auto httpResponse = httpSession->syncRequest(request);
-    if (httpResponse->state() != http::Response::State::Complete)
-    {
-        std::this_thread::sleep_for(std::chrono::seconds(COMMAND_TIMEOUT_SECS));
-        httpSession = http::Session::create(_uri.toString());
-        httpSession->setTimeout(std::chrono::seconds(COMMAND_TIMEOUT_SECS * 2));
-        httpResponse = httpSession->syncRequest(request);
-    }
+    const std::shared_ptr<const http::Response> httpResponse =
+        postForm(_uri, "/cool/extract-document-structure", form);
 
     // Remove the temp files.
     FileUtil::removeFile(srcPath);
@@ -650,22 +614,12 @@ void HTTPServerTest::testTransformDocStructure()
 
         TST_LOG("transform-document-structure");
 
-        auto httpSession = http::Session::create(_uri.toString());
-        httpSession->setTimeout(std::chrono::seconds(COMMAND_TIMEOUT_SECS * 2));
-        http::Request request("/cool/transform-document-structure", http::Request::VERB_POST);
         helpers::MultipartFormBody form;
         form.addField("format", "docx");
         form.addField("transform", "{\"Transforms\":{\"ContentControls.ByIndex.0\":{\"content\":\"Short text\"}}}");
         form.addFile("data", srcPath);
-        form.applyTo(request);
-        auto httpResponse = httpSession->syncRequest(request);
-        if (httpResponse->state() != http::Response::State::Complete)
-        {
-            std::this_thread::sleep_for(std::chrono::seconds(COMMAND_TIMEOUT_SECS));
-            httpSession = http::Session::create(_uri.toString());
-            httpSession->setTimeout(std::chrono::seconds(COMMAND_TIMEOUT_SECS * 2));
-            httpResponse = httpSession->syncRequest(request);
-        }
+        const std::shared_ptr<const http::Response> httpResponse =
+            postForm(_uri, "/cool/transform-document-structure", form);
 
         // Remove the temp files.
         FileUtil::removeFile(srcPath);
@@ -681,22 +635,12 @@ void HTTPServerTest::testTransformDocStructure()
 
         TST_LOG("transform-document-structure-check");
 
-        auto httpSession = http::Session::create(_uri.toString());
-        httpSession->setTimeout(std::chrono::seconds(COMMAND_TIMEOUT_SECS * 2));
-        http::Request request("/cool/extract-document-structure", http::Request::VERB_POST);
         helpers::MultipartFormBody form;
         form.addField("format", "docx");
         form.addField("filter", "contentcontrol");
         form.addFile("data", srcPath2);
-        form.applyTo(request);
-        auto httpResponse = httpSession->syncRequest(request);
-        if (httpResponse->state() != http::Response::State::Complete)
-        {
-            std::this_thread::sleep_for(std::chrono::seconds(COMMAND_TIMEOUT_SECS));
-            httpSession = http::Session::create(_uri.toString());
-            httpSession->setTimeout(std::chrono::seconds(COMMAND_TIMEOUT_SECS * 2));
-            httpResponse = httpSession->syncRequest(request);
-        }
+        const std::shared_ptr<const http::Response> httpResponse =
+            postForm(_uri, "/cool/extract-document-structure", form);
 
         // Remove the temp files.
         FileUtil::removeFile(srcPath2);
@@ -714,21 +658,11 @@ void HTTPServerTest::testRenderSearchResult()
     const std::string srcPathDoc = helpers::getTempFileCopyPath(TDOC, "RenderSearchResultTest.odt", testname);
     const std::string srcPathXml = helpers::getTempFileCopyPath(TDOC, "RenderSearchResultFragment.xml", testname);
 
-    auto httpSession = http::Session::create(_uri.toString());
-    httpSession->setTimeout(std::chrono::seconds(COMMAND_TIMEOUT_SECS * 2));
-    http::Request request("/cool/render-search-result", http::Request::VERB_POST);
     helpers::MultipartFormBody form;
     form.addFile("document", srcPathDoc);
     form.addFile("result", srcPathXml);
-    form.applyTo(request);
-    auto httpResponse = httpSession->syncRequest(request);
-    if (httpResponse->state() != http::Response::State::Complete)
-    {
-        std::this_thread::sleep_for(std::chrono::seconds(COMMAND_TIMEOUT_SECS));
-        httpSession = http::Session::create(_uri.toString());
-        httpSession->setTimeout(std::chrono::seconds(COMMAND_TIMEOUT_SECS * 2));
-        httpResponse = httpSession->syncRequest(request);
-    }
+    const std::shared_ptr<const http::Response> httpResponse =
+        postForm(_uri, "/cool/render-search-result", form);
 
     // Remove the temp files.
     FileUtil::removeFile(srcPathDoc);
