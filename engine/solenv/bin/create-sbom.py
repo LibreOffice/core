@@ -26,11 +26,9 @@ sys.path.insert(0, SRCDIR + "/external/pip-wheels/dnfile-0.18.0-py3-none-any.whl
 sys.path.insert(0, SRCDIR + "/external/pip-wheels/macholib-1.16.4-py2.py3-none-any.whl")
 sys.path.insert(0, SRCDIR + "/external/pip-wheels/pefile-2024.8.26-py3-none-any.whl")
 sys.path.insert(0, SRCDIR + "/external/pip-wheels/pyelftools-0.33-py3-none-any.whl")
-# elftools is imported where ELF files are read: pyelftools 0.33 needs
-# Python 3.10, and macOS runs this with the system's, 3.9 on older ones
-import dnfile
-import macholib.MachO
-import pefile
+# The readers of executable formats are imported where files of their format
+# are read, so that a build needs only its own platform's: pyelftools 0.33
+# needs Python 3.10, and macOS runs this with the system's, 3.9 on older ones
 
 
 def target_platform():
@@ -1171,6 +1169,8 @@ def add_dependencies(files_by_package, files_by_package_extra_deps):
             return needed
 
     def get_pe_deps(abspath):
+        import dnfile
+        import pefile
         result = set()
         # Only the directories that name dependencies are loaded.
         # Loading all would also read every exception and relocation entry.
@@ -1212,6 +1212,7 @@ def add_dependencies(files_by_package, files_by_package_extra_deps):
         installed files. Absolute ones, /usr/lib and /System/Library, are kept
         whole: they are the operating system's, also when a bundled file
         happens to have the same name."""
+        import macholib.MachO
         result = set()
         for header in macholib.MachO.MachO(abspath).headers:
             for (_, _, name) in header.walkRelocatables():
