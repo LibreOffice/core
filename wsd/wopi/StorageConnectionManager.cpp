@@ -137,11 +137,6 @@ http::Request toHttpRequest(const Poco::URI& uri, const Poco::Net::HTTPRequest& 
     return httpRequest;
 }
 
-bool isAllowedWopiAddress(const std::string& address)
-{
-    return HostUtil::allowedWopiHost(address);
-}
-
 } // namespace
 
 http::Request StorageConnectionManager::createHttpRequest(const Poco::URI& uri,
@@ -208,10 +203,12 @@ StorageConnectionManager::getWopiHttpSession(const Poco::URI& uri, std::chrono::
     std::shared_ptr<http::Session> httpSession = getHttpSession(uri, timeout);
 
     // A host that is not on the list by name may be allowed through its resolved addresses, so the
-    // connection uses only the resolved addresses that the list allows.
-    if (!HostUtil::allowedWopiHost(uri.getHost(), uri.getPort()))
+    // connection uses only the resolved addresses that the list allows on the port of the URI.
+    const int port = uri.getPort();
+    if (!HostUtil::allowedWopiHost(uri.getHost(), port))
     {
-        httpSession->setAddressFilter(isAllowedWopiAddress);
+        httpSession->setAddressFilter([port](const std::string& address)
+                                      { return HostUtil::allowedWopiHost(address, port); });
     }
 
     return httpSession;
