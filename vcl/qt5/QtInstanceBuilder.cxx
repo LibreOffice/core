@@ -343,6 +343,7 @@ constexpr auto SUPPORTED_UI_FILES = frozen::make_unordered_set<std::u16string_vi
     u"modules/swriter/ui/renameobjectdialog.ui",
     u"modules/swriter/ui/rowheight.ui",
     u"modules/swriter/ui/savelabeldialog.ui",
+    u"modules/swriter/ui/selectaddressdialog.ui",
     u"modules/swriter/ui/selecttabledialog.ui",
     u"modules/swriter/ui/splittable.ui",
     u"modules/swriter/ui/stringinput.ui",
