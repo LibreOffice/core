@@ -146,10 +146,10 @@
         <child>
           <object class="GtkSpinButton" id="MTR_PADDING_LEFT">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="hexpand">True</property>
-            <property name="adjustment">adjustmentPaddingLeft</property>
             <property name="truncate-multiline">True</property>
+            <property name="adjustment">adjustmentPaddingLeft</property>
             <property name="digits">2</property>
           </object>
           <packing>
@@ -173,10 +173,10 @@
         <child>
           <object class="GtkSpinButton" id="MTR_PADDING_RIGHT">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="hexpand">True</property>
-            <property name="adjustment">adjustmentPaddingRight</property>
             <property name="truncate-multiline">True</property>
+            <property name="adjustment">adjustmentPaddingRight</property>
             <property name="digits">2</property>
           </object>
           <packing>
@@ -200,10 +200,10 @@
         <child>
           <object class="GtkSpinButton" id="MTR_PADDING_TOP">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="hexpand">True</property>
-            <property name="adjustment">adjustmentPaddingTop</property>
             <property name="truncate-multiline">True</property>
+            <property name="adjustment">adjustmentPaddingTop</property>
             <property name="digits">2</property>
           </object>
           <packing>
@@ -227,10 +227,10 @@
         <child>
           <object class="GtkSpinButton" id="MTR_PADDING_BOTTOM">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="hexpand">True</property>
-            <property name="adjustment">adjustmentPaddingBottom</property>
             <property name="truncate-multiline">True</property>
+            <property name="adjustment">adjustmentPaddingBottom</property>
             <property name="digits">2</property>
           </object>
           <packing>
@@ -269,9 +269,9 @@
         <child>
           <object class="GtkSpinButton" id="FLD_COL_NUMBER">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="adjustment">adjustmentColNumber</property>
+            <property name="can-focus">True</property>
             <property name="truncate-multiline">True</property>
+            <property name="adjustment">adjustmentColNumber</property>
             <property name="value">1</property>
           </object>
           <packing>
@@ -295,9 +295,9 @@
         <child>
           <object class="GtkSpinButton" id="MTR_FLD_COL_SPACING">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="adjustment">adjustmentColSpacing</property>
+            <property name="can-focus">True</property>
             <property name="truncate-multiline">True</property>
+            <property name="adjustment">adjustmentColSpacing</property>
             <property name="digits">2</property>
           </object>
           <packing>
