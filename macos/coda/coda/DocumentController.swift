@@ -273,14 +273,14 @@ final class DocumentController: NSDocumentController {
         } else {
             // Use the default blank template
             guard let (resName, ext) = templateNameAndExt(for: kind) else {
-                NSApp.presentError(NSError(domain: "NewDoc", code: 1, userInfo: [NSLocalizedDescriptionKey: "Template not found."]))
+                NSApp.presentError(NSError(domain: "NewDoc", code: 1, userInfo: [NSLocalizedDescriptionKey: NSLocalizedString("Template not found.", comment: "Error when the template of a new document is missing from the app")]))
                 return
             }
             templatesURL = Bundle.main.url(forResource: resName, withExtension: ext, subdirectory: "templates")
         }
 
         guard let templatesURL = templatesURL else {
-            NSApp.presentError(NSError(domain: "NewDoc", code: 1, userInfo: [NSLocalizedDescriptionKey: "Template not found."]))
+            NSApp.presentError(NSError(domain: "NewDoc", code: 1, userInfo: [NSLocalizedDescriptionKey: NSLocalizedString("Template not found.", comment: "Error when the template of a new document is missing from the app")]))
             return
         }
 
@@ -306,7 +306,7 @@ final class DocumentController: NSDocumentController {
         // then feed it the template data via your existing read(from:data:) path.
         do {
             guard let doc = try makeUntitledDocument(ofType: typeName) as? Document else {
-                throw NSError(domain: "NewDoc", code: 2, userInfo: [NSLocalizedDescriptionKey: "Unexpected document class"])
+                throw NSError(domain: "NewDoc", code: 2, userInfo: [NSLocalizedDescriptionKey: NSLocalizedString("Unexpected document class", comment: "Internal error when a document is not of the app's own kind")])
             }
 
             // mark it as new document (for better UI handling)
@@ -374,7 +374,7 @@ final class DocumentController: NSDocumentController {
         do {
             let type = try self.typeForContents(of: url)
             guard let doc = try self.makeDocument(withContentsOf: url, ofType: type) as? Document else {
-                throw NSError(domain: "Welcome", code: 1, userInfo: [NSLocalizedDescriptionKey: "Unexpected document class"])
+                throw NSError(domain: "Welcome", code: 1, userInfo: [NSLocalizedDescriptionKey: NSLocalizedString("Unexpected document class", comment: "Internal error when a document is not of the app's own kind")])
             }
 
             // Flag before windows/controllers are created, so VC will pass welcome=true into the webview

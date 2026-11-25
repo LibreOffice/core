@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-06 18:17+0000\n"
+"POT-Creation-Date: 2026-11-25 09:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
+"Language: lb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: lb\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 msgctxt "1UK-8n-QPP.title"
@@ -199,4 +199,116 @@ msgstr ""
 
 msgctxt "x3v-GG-iWU.title"
 msgid "Copy"
+msgstr ""
+
+#. Window title of a further view of an open document; %1$@ is the document's name, %2$d the number of the view
+#, objc-format
+msgid "%1$@ (view %2$d)"
+msgstr ""
+
+#. Notice above the server's own editor; %1$@ is the server's host name, %2$@ the name of this app
+#, objc-format
+msgid ""
+"%1$@ does not allow editing in %2$@, so the document is open in the server's "
+"own editor. To edit documents from %1$@ in %2$@, ask the server's "
+"administrator to allow that (client_document_loading.enable in coolwsd.xml)."
+msgstr ""
+
+#. Alert when a cloud account's address redirects elsewhere; %1$@ is the account's address, %2$@ the address it redirected to
+#, objc-format
+msgid ""
+"%1$@ redirected to %2$@, so the account was not opened. Only a redirect "
+"within the same site is followed."
+msgstr ""
+
+#. Notice above the server's own editor; %1$@ is the server's host name, %2$@ the name of this app
+#, objc-format
+msgid ""
+"%1$@ runs a version of Collabora Online that does not support editing in "
+"%2$@, so the document is open in the server's own editor."
+msgstr ""
+
+#. Title of the alert when a cloud account's address redirects elsewhere
+msgid "Account not opened"
+msgstr ""
+
+#. Folder access panel button
+msgid "Allow Access"
+msgstr ""
+
+#. Title of the page shown instead of a document that could not be opened from a server
+msgid "Cannot open remote document"
+msgstr ""
+
+#. The button that hides the notice that says why the server's own editor is shown
+msgid "Close"
+msgstr ""
+
+#. %@ is the server's address
+#, objc-format
+msgid "Could not open the document from %@."
+msgstr ""
+
+#. %@ is an error message
+#, objc-format
+msgid "Details: %@"
+msgstr ""
+
+#. Button under the notice that says why the server's own editor is shown
+msgid "Don't show again"
+msgstr ""
+
+#. About panel
+msgid "License Information"
+msgstr ""
+
+#. Toolbar button that opens a new document
+msgid "New"
+msgstr ""
+
+#. Error when the template of a new document is missing from the app
+msgid "Template not found."
+msgstr ""
+
+#. Stands in for the address of a cloud account that has none, in the alert that the account was not opened
+msgid "The account address"
+msgstr ""
+
+#. Stands in for the name of a server that has no host name, in the notices that say why the server's own editor is shown
+msgid "The server"
+msgstr ""
+
+#. Folder access panel for the files a document links to
+#, objc-format
+msgid ""
+"This document links to files the app may not read yet: %@. Choose the folder "
+"that holds them."
+msgstr ""
+
+#. Notice above the server's own editor; %1$@ is the server's host name, %2$@ the name of this app
+#, objc-format
+msgid ""
+"This version of %2$@ is too old to edit documents from %1$@, so the document "
+"is open in the server's own editor. To edit documents from %1$@ in %2$@, "
+"update your copy of %2$@."
+msgstr ""
+
+#. Internal error when a document is not of the app's own kind
+msgid "Unexpected document class"
+msgstr ""
+
+#. File name of a document that has not been saved yet; it has to be valid as a file name
+msgid "Untitled"
+msgstr ""
+
+#. About panel
+msgid "View source revision"
+msgstr ""
+
+#. Name offered in the save panel for a file an extension made, when it has no name
+msgid "file"
+msgstr ""
+
+#. Stands in for the address of a server that has none, in the message that a document could not be opened from it
+msgid "the Collabora Online server"
 msgstr ""

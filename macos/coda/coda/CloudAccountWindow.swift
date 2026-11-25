@@ -45,7 +45,9 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     // The space around the notice's text, in points:
     private static let noticeInsets = NSEdgeInsets(top: 8, left: 12, bottom: 8, right: 8)
     private static let noticeCloseWidth: CGFloat = 24
-    private let noticeDontShowAgain = NSButton(title: "Don't show again", target: nil, action: nil)
+    private let noticeDontShowAgain = NSButton(
+        title: NSLocalizedString("Don't show again", comment: "Button under the notice that says why the server's own editor is shown"),
+        target: nil, action: nil)
     // Keeps the choice of the user not to see the current notice again:
     private var dontShowNoticeAgain: (() -> Void)?
     private var editorForm: Data?
@@ -172,11 +174,12 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
     // The integrator's site, below the notice while that shows:
     private func makeContent() -> NSView {
+        let closeTitle = NSLocalizedString("Close", comment: "The button that hides the notice that says why the server's own editor is shown")
         let close = NSButton(
-            image: NSImage(systemSymbolName: "xmark", accessibilityDescription: "Close") ?? NSImage(),
+            image: NSImage(systemSymbolName: "xmark", accessibilityDescription: closeTitle) ?? NSImage(),
             target: self, action: #selector(hideNotice))
         close.isBordered = false
-        close.toolTip = "Close"
+        close.toolTip = closeTitle
         close.widthAnchor.constraint(equalToConstant: Self.noticeCloseWidth).isActive = true
         noticeDontShowAgain.target = self
         noticeDontShowAgain.action = #selector(hideNoticeAndRemember)
@@ -393,39 +396,32 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             return
         }
         let dontShowAgain = { COWrapper.hideServerEditorNotice(reason: reason, origin: origin) }
-        let server = editorUrl.host ?? "The server"
+        let server = editorUrl.host ?? NSLocalizedString("The server", comment: "Stands in for the name of a server that has no host name, in the notices that say why the server's own editor is shown")
         let app = AppDelegate.getAppName()
+        // Each notice gets the server's host name as %1$@ and the app's name as %2$@.
+        let text: String
         if reason == COWrapper.disabledReason() {
-            showNotice(
-                "\(server) does not allow editing in \(app), so the document is open in the server's own editor. "
-                + "To edit documents from \(server) in \(app), ask the server's administrator to allow that "
-                + "(client_document_loading.enable in coolwsd.xml).",
-                dontShowAgain: dontShowAgain)
+            text = NSLocalizedString("%1$@ does not allow editing in %2$@, so the document is open in the server's own editor. To edit documents from %1$@ in %2$@, ask the server's administrator to allow that (client_document_loading.enable in coolwsd.xml).", comment: "Notice above the server's own editor; %1$@ is the server's host name, %2$@ the name of this app")
         } else if reason == COWrapper.outdatedReason() {
-            showNotice(
-                "This version of \(app) is too old to edit documents from \(server), so the document is open in the "
-                + "server's own editor. To edit documents from \(server) in \(app), update your copy of \(app).",
-                dontShowAgain: dontShowAgain)
+            text = NSLocalizedString("This version of %2$@ is too old to edit documents from %1$@, so the document is open in the server's own editor. To edit documents from %1$@ in %2$@, update your copy of %2$@.", comment: "Notice above the server's own editor; %1$@ is the server's host name, %2$@ the name of this app")
         } else {
-            showNotice(
-                "\(server) runs a version of Collabora Online that does not support editing in \(app), "
-                + "so the document is open in the server's own editor.",
-                dontShowAgain: dontShowAgain)
+            text = NSLocalizedString("%1$@ runs a version of Collabora Online that does not support editing in %2$@, so the document is open in the server's own editor.", comment: "Notice above the server's own editor; %1$@ is the server's host name, %2$@ the name of this app")
         }
+        showNotice(String(format: text, server, app), dontShowAgain: dontShowAgain)
     }
 
     private func showRemoteFailure(_ error: String, in frameInfo: WKFrameInfo) {
         COWrapper.LOG_ERR("The remote bootstrap failed in the editor frame")
 
-        var server = "the Collabora Online server"
+        var server = NSLocalizedString("the Collabora Online server", comment: "Stands in for the address of a server that has none, in the message that a document could not be opened from it")
         if let editorFormUrl, let origin = Self.origin(of: editorFormUrl) {
             server = origin
         }
 
-        let title = "Cannot open remote document"
+        let title = NSLocalizedString("Cannot open remote document", comment: "Title of the page shown instead of a document that could not be opened from a server")
         let paragraphs = [
-            "Could not open the document from \(server).",
-            "Details: \(error)",
+            String(format: NSLocalizedString("Could not open the document from %@.", comment: "%@ is the server's address"), server),
+            String(format: NSLocalizedString("Details: %@", comment: "%@ is an error message"), error),
         ]
 
         let script = COWrapper.failurePageScript(title: title, paragraphs: paragraphs)
@@ -871,10 +867,8 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     }
 
     private func refuseRedirect(to targetOrigin: String) {
-        let accountOrigin = integratorOrigin ?? "The account address"
-        let text = "\(accountOrigin) redirected to \(targetOrigin), "
-            + "so the account was not opened. "
-            + "Only a redirect within the same site is followed."
+        let accountOrigin = integratorOrigin ?? NSLocalizedString("The account address", comment: "Stands in for the address of a cloud account that has none, in the alert that the account was not opened")
+        let text = String(format: NSLocalizedString("%1$@ redirected to %2$@, so the account was not opened. Only a redirect within the same site is followed.", comment: "Alert when a cloud account's address redirects elsewhere; %1$@ is the account's address, %2$@ the address it redirected to"), accountOrigin, targetOrigin)
 
         guard let window else {
             close()
@@ -882,7 +876,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         }
 
         let alert = NSAlert()
-        alert.messageText = "Account not opened"
+        alert.messageText = NSLocalizedString("Account not opened", comment: "Title of the alert when a cloud account's address redirects elsewhere")
         alert.informativeText = text
         alert.beginSheetModal(for: window) { _ in
             self.close()

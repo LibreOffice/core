@@ -529,7 +529,7 @@ class Document: NSDocument {
             fileName = fileURL.lastPathComponent
         }
         else {
-            fileName = "Untitled"
+            fileName = NSLocalizedString("Untitled", comment: "File name of a document that has not been saved yet; it has to be valid as a file name")
         }
 
         try writeTemporaryCopy(data, named: fileName)
@@ -733,7 +733,7 @@ class Document: NSDocument {
     override var displayName: String! {
         get {
             if isSecondaryView, let firstView {
-                return firstView.displayName + " (view \(viewNumber))"
+                return String(format: NSLocalizedString("%1$@ (view %2$d)", comment: "Window title of a further view of an open document; %1$@ is the document's name, %2$d the number of the view"), firstView.displayName ?? "", viewNumber)
             }
             return super.displayName
         }

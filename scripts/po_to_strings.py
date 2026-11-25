@@ -10,11 +10,19 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-# Converts .po file back to a localized storyboard .strings file
+# Converts a .po file back to a localized .strings file:
+#
+#   po_to_strings.py [--table storyboard|code] BASE.strings LANG.po OUT.strings
+#
+# The storyboard table (Main.strings) is looked up by the Interface Builder
+# object id in msgctxt; the code table (Localizable.strings) by msgid alone.
+# A string without a translation keeps its English text.
 
-import sys
+import argparse
 import json
+import re
 import subprocess
+import sys
 import polib
 
 def load_strings_via_plutil(path):
@@ -35,35 +43,49 @@ def escape_strings_value(s):
          .replace("\r", "\\r")
     )
 
+# A format specifier of String(format:), such as %@, %d, %1$@ or %.2f
+SPECIFIER = re.compile(r"%(?:\d+\$)?[-+ #0]*\d*(?:\.\d+)?(?:hh|h|ll|l|q|L|z|t|j)?[a-zA-Z@]")
+
+def specifiers(s):
+    return sorted(SPECIFIER.findall(s.replace("%%", "")))
+
 def main():
-    if len(sys.argv) != 4:
-        print("Usage: po_to_strings.py Main.strings lang.po out.strings", file=sys.stderr)
-        sys.exit(1)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--table", choices=["storyboard", "code"], default="storyboard")
+    parser.add_argument("base", help="the English .strings file")
+    parser.add_argument("po", help="the translation")
+    parser.add_argument("out", help="the localized .strings file to write")
+    args = parser.parse_args()
 
-    base_strings_path = sys.argv[1]
-    po_path = sys.argv[2]
-    out_strings_path = sys.argv[3]
-
-    base_map = load_strings_via_plutil(base_strings_path)  # key -> English
+    base_map = load_strings_via_plutil(args.base)  # key -> English
     keys = sorted(base_map.keys())
 
-    po = polib.pofile(po_path)
-    by_ctx = {e.msgctxt: e for e in po if e.msgctxt}
+    po = polib.pofile(args.po)
+    if args.table == "storyboard":
+        lookup = {e.msgctxt: e for e in po if e.msgctxt}
+    else:
+        lookup = {e.msgid: e for e in po if not e.msgctxt}
 
     lines = []
     for key in keys:
         english = str(base_map[key]) if base_map[key] is not None else ""
         translated = english
 
-        entry = by_ctx.get(key)
+        entry = lookup.get(key)
         if entry and entry.msgstr and not entry.fuzzy:
             translated = entry.msgstr
+            # A translation with other format specifiers than the English
+            # would crash String(format:), so keep the English for it.
+            if args.table == "code" and specifiers(translated) != specifiers(english):
+                print("%s: the format specifiers of the translation of \"%s\" differ, keeping English"
+                      % (args.po, english), file=sys.stderr)
+                translated = english
 
         lines.append("\"%s\" = \"%s\";\n" %
                      (escape_strings_value(key),
                       escape_strings_value(translated)))
 
-    with open(out_strings_path, "w", encoding="utf-8") as out:
+    with open(args.out, "w", encoding="utf-8") as out:
         out.writelines(lines)
 
 if __name__ == "__main__":

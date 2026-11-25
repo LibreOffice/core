@@ -120,6 +120,33 @@ Open the `macos/coda/coda.xcodeproj` project in Xcode and choose `Build and Run 
 
 That's it!
 
+### Localize the app's own strings
+
+The web editor is translated through `browser/po`, and the engine through its own
+translations. The strings of the macOS shell itself, the storyboard menus and the strings in the
+Swift sources, are translated on Weblate (the `collabora-office-macos-app` component) through
+the gettext files in `macos/coda/coda/po/`.
+
+* Mark a string in Swift code with `NSLocalizedString`. The key is the English text, as one
+  literal on one line, and the comment tells the translators what the string is and what each
+  placeholder stands for. Arguments go through `String(format:)` with positional specifiers,
+  so a translation can reorder them:
+  ```swift
+  let title = NSLocalizedString("Account not opened", comment: "Title of the alert when a cloud account's address redirects elsewhere")
+  let text = String(format: NSLocalizedString("%1$@ redirected to %2$@, so the account was not opened.", comment: "%1$@ is the account's address, %2$@ the address it redirected to"), accountOrigin, targetOrigin)
+  ```
+  A key built with string interpolation or concatenation cannot be extracted, and the app's
+  name is passed as an argument, not as the `ProductName` placeholder of the storyboard.
+* After adding or changing strings, run `make -C macos l10n`, which regenerates
+  `Base.lproj/Main.strings` and `Base.lproj/Localizable.strings`, the `po/Main.pot` template,
+  and merges the template into every `po/*.po`. Commit all of them together; Weblate picks the
+  new strings up and, where the Qt app has the same English text, suggests its translation.
+* The build turns the PO files into `<lang>.lproj/Main.strings` and
+  `<lang>.lproj/Localizable.strings`, which the Xcode build copies into the bundle. The
+  languages that ship are the ones in `engine/distro-configs/Langs.conf` that have a PO file;
+  a new language is added on Weblate.
+* To try a language, start the app with `-AppleLanguages '(de)'` as an argument.
+
 ## Managed configuration (MDM)
 
 On a managed Mac, engine settings (macro security, trusted locations, autosave,

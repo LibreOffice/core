@@ -13,10 +13,14 @@ BASE_LPROJ = $(CODA_DIR)/Base.lproj
 
 BASE_STORYBOARD = $(BASE_LPROJ)/Main.storyboard
 BASE_STRINGS    = $(BASE_LPROJ)/Main.strings
+## The NSLocalizedString() keys of the sources
+BASE_CODE_STRINGS = $(BASE_LPROJ)/Localizable.strings
+SWIFT_FILES   = $(wildcard $(CODA_DIR)/*.swift)
 POT_FILE        = $(PO_DIR)/Main.pot
 
-## Python tools (relative to top source dir)
+## Helper tools (relative to top source dir)
 IBTOOL_UTF8     = $(top_srcdir)/scripts/ibtool_utf8.sh
+GENSTRINGS_UTF8 = $(top_srcdir)/scripts/genstrings_utf8.sh
 STRINGS_TO_POT  = $(top_srcdir)/scripts/strings_to_pot.py
 PO_TO_STRINGS   = $(top_srcdir)/scripts/po_to_strings.py
 
@@ -44,18 +48,22 @@ PO_FILES = $(addprefix $(PO_DIR)/,$(addsuffix .po,$(LANGS)))
 all-local: macos-localized-strings
 
 .PHONY: macos-localized-strings
-macos-localized-strings: $(BASE_STRINGS) $(PO_FILES)
-	@echo "Generating localized Main.strings from PO files"
+macos-localized-strings: $(BASE_STRINGS) $(BASE_CODE_STRINGS) $(PO_FILES)
+	@echo "Generating localized .strings from PO files"
 	@set -e; \
 	for lang in $(LANGS); do \
 	    outdir="$(CODA_DIR)/$$lang.lproj"; \
-	    outfile="$$outdir/Main.strings"; \
-	    echo "  $$outfile"; \
+	    echo "  $$outdir"; \
 	    mkdir -p "$$outdir"; \
-	    $(PYTHON) $(PO_TO_STRINGS) \
+	    $(PYTHON) $(PO_TO_STRINGS) --table storyboard \
 	        $(BASE_STRINGS) \
 	        $(PO_DIR)/$$lang.po \
-	        "$$outfile"; \
+	        "$$outdir/Main.strings"; \
+	    $(PYTHON) $(PO_TO_STRINGS) --table code \
+	        $(BASE_CODE_STRINGS) \
+	        $(PO_DIR)/$$lang.po \
+	        "$$outdir/Localizable.strings"; \
+	    plutil -lint -s "$$outdir/Main.strings" "$$outdir/Localizable.strings"; \
 	done
 	@# The Xcode build copies every <lang>.lproj into the bundle, so drop the
 	@# ones an earlier build made for a language that no longer ships.
@@ -72,14 +80,16 @@ macos-localized-strings: $(BASE_STRINGS) $(PO_FILES)
 ## POT generation
 ## ------------------------------------------------------------
 
-## Regenerate Base.lproj/Main.strings and Main.pot
+## Regenerate Base.lproj/Main.strings, Base.lproj/Localizable.strings and Main.pot
 pot: $(POT_FILE)
 
-$(POT_FILE): $(BASE_STORYBOARD)
+$(POT_FILE): $(BASE_STORYBOARD) $(SWIFT_FILES)
 	@echo "Updating Base.strings from storyboard"
 	@$(IBTOOL_UTF8) $(BASE_STORYBOARD) $(BASE_STRINGS)
+	@echo "Extracting the strings of the sources"
+	@$(GENSTRINGS_UTF8) $(BASE_CODE_STRINGS) $(SWIFT_FILES)
 	@echo "Generating POT file"
-	@$(PYTHON) $(STRINGS_TO_POT) $(BASE_STRINGS) $(POT_FILE)
+	@$(PYTHON) $(STRINGS_TO_POT) -o $(POT_FILE) --storyboard $(BASE_STRINGS) --code $(BASE_CODE_STRINGS)
 
 ## ------------------------------------------------------------
 ## Update PO files (msgmerge)
@@ -90,7 +100,7 @@ l10n: pot
 	@set -e; \
 	for po in $(ALL_PO_FILES); do \
 	    echo "  $$po"; \
-	    msgmerge --quiet --update $$po $(POT_FILE); \
+	    msgmerge --quiet --update --previous $$po $(POT_FILE); \
 	done
 
 .PHONY: app

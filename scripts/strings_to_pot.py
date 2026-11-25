@@ -10,11 +10,20 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-# Converts a storyboard .strings file to .pot
+# Converts the macOS app's .strings files to one .pot:
+#
+#   strings_to_pot.py -o Main.pot --storyboard Main.strings [--code Localizable.strings]
+#
+# A storyboard string is identified by its Interface Builder object id, which
+# becomes the msgctxt. A code string (an NSLocalizedString() key, extracted by
+# genstrings_utf8.sh) is identified by its English text alone, so it has no
+# msgctxt; the comment of the call becomes the translator note.
 
-import sys
+import argparse
 import json
+import re
 import subprocess
+import sys
 import time
 
 HEADER = """msgid ""
@@ -44,36 +53,65 @@ def load_strings_via_plutil(path):
     )
     return json.loads(proc.stdout.decode("utf-8"))
 
+STRINGS_ESCAPES = {"n": "\n", "r": "\r", "t": "\t", '"': '"', "\\": "\\"}
+
+def unescape_strings_key(raw):
+    def repl(m):
+        esc = m.group(1)
+        if esc.startswith("U"):
+            return chr(int(esc[1:], 16))
+        return STRINGS_ESCAPES.get(esc, esc)
+    return re.sub(r"\\(U[0-9A-Fa-f]{4}|.)", repl, raw)
+
+def load_comments(path):
+    # The comments of a genstrings file, by key. plutil drops them.
+    with open(path, encoding="utf-8") as f:
+        text = f.read()
+    comments = {}
+    for m in re.finditer(r'/\*\s*(.*?)\s*\*/\s*\n"((?:[^"\\]|\\.)*)"\s*=', text, re.S):
+        key = unescape_strings_key(m.group(2))
+        lines = [line.strip() for line in m.group(1).split("\n")]
+        comments[key] = [line for line in lines if line]
+    return comments
+
 def escape_po(s):
-    return s.replace("\\", "\\\\").replace("\"", "\\\"")
+    return s.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n")
+
+def write_entry(out, key, english, comments, context):
+    for comment in comments:
+        out.write("#. %s\n" % comment)
+    if PLACEHOLDER in english:
+        out.write("#. %s\n" % PLACEHOLDER_COMMENT)
+    if context is None and "%" in english:
+        out.write("#, objc-format\n")
+    if context is not None:
+        out.write('msgctxt "%s"\n' % escape_po(context))
+    out.write('msgid "%s"\n' % escape_po(english))
+    out.write('msgstr ""\n\n')
 
 def main():
-    if len(sys.argv) != 3:
-        print("Usage: strings_to_pot.py Main.strings Main.pot", file=sys.stderr)
-        sys.exit(1)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-o", "--output", required=True, help="the .pot to write")
+    parser.add_argument("--storyboard", required=True,
+                        help="Main.strings generated from the storyboard by ibtool")
+    parser.add_argument("--code",
+                        help="Localizable.strings extracted from the sources by genstrings")
+    args = parser.parse_args()
 
-    base_path = sys.argv[1]
-    pot_path = sys.argv[2]
-
-    mapping = load_strings_via_plutil(base_path)  # key -> English
-    keys = sorted(mapping.keys())
+    storyboard = load_strings_via_plutil(args.storyboard)  # object id -> English
+    code = load_strings_via_plutil(args.code) if args.code else {}  # English -> English
+    code_comments = load_comments(args.code) if args.code else {}
 
     now = time.strftime("%Y-%m-%d %H:%M%z")
-    with open(pot_path, "w", encoding="utf-8") as out:
+    with open(args.output, "w", encoding="utf-8") as out:
         out.write(HEADER.format(date=now))
-        for key in keys:
-            english = mapping[key]
+        for key in sorted(storyboard.keys()):
+            english = storyboard[key]
             if english is None:
                 continue
-
-            english = str(english)
-
-            if PLACEHOLDER in english:
-                out.write("#. %s\n" % PLACEHOLDER_COMMENT)
-
-            out.write('msgctxt "%s"\n' % escape_po(key))
-            out.write('msgid "%s"\n' % escape_po(english))
-            out.write('msgstr ""\n\n')
+            write_entry(out, key, str(english), [], key)
+        for key in sorted(code.keys()):
+            write_entry(out, key, key, code_comments.get(key, []), None)
 
 if __name__ == "__main__":
     main()

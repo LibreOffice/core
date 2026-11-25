@@ -1,0 +1,69 @@
+/* Window title of a further view of an open document; %1$@ is the document's name, %2$d the number of the view */
+"%1$@ (view %2$d)" = "%1$@ (view %2$d)";
+
+/* Notice above the server's own editor; %1$@ is the server's host name, %2$@ the name of this app */
+"%1$@ does not allow editing in %2$@, so the document is open in the server's own editor. To edit documents from %1$@ in %2$@, ask the server's administrator to allow that (client_document_loading.enable in coolwsd.xml)." = "%1$@ does not allow editing in %2$@, so the document is open in the server's own editor. To edit documents from %1$@ in %2$@, ask the server's administrator to allow that (client_document_loading.enable in coolwsd.xml).";
+
+/* Alert when a cloud account's address redirects elsewhere; %1$@ is the account's address, %2$@ the address it redirected to */
+"%1$@ redirected to %2$@, so the account was not opened. Only a redirect within the same site is followed." = "%1$@ redirected to %2$@, so the account was not opened. Only a redirect within the same site is followed.";
+
+/* Notice above the server's own editor; %1$@ is the server's host name, %2$@ the name of this app */
+"%1$@ runs a version of Collabora Online that does not support editing in %2$@, so the document is open in the server's own editor." = "%1$@ runs a version of Collabora Online that does not support editing in %2$@, so the document is open in the server's own editor.";
+
+/* Title of the alert when a cloud account's address redirects elsewhere */
+"Account not opened" = "Account not opened";
+
+/* Folder access panel button */
+"Allow Access" = "Allow Access";
+
+/* Title of the page shown instead of a document that could not be opened from a server */
+"Cannot open remote document" = "Cannot open remote document";
+
+/* The button that hides the notice that says why the server's own editor is shown */
+"Close" = "Close";
+
+/* %@ is the server's address */
+"Could not open the document from %@." = "Could not open the document from %@.";
+
+/* %@ is an error message */
+"Details: %@" = "Details: %@";
+
+/* Button under the notice that says why the server's own editor is shown */
+"Don't show again" = "Don't show again";
+
+/* Name offered in the save panel for a file an extension made, when it has no name */
+"file" = "file";
+
+/* About panel */
+"License Information" = "License Information";
+
+/* Toolbar button that opens a new document */
+"New" = "New";
+
+/* Error when the template of a new document is missing from the app */
+"Template not found." = "Template not found.";
+
+/* Stands in for the address of a cloud account that has none, in the alert that the account was not opened */
+"The account address" = "The account address";
+
+/* Stands in for the address of a server that has none, in the message that a document could not be opened from it */
+"the Collabora Online server" = "the Collabora Online server";
+
+/* Stands in for the name of a server that has no host name, in the notices that say why the server's own editor is shown */
+"The server" = "The server";
+
+/* Folder access panel for the files a document links to */
+"This document links to files the app may not read yet: %@. Choose the folder that holds them." = "This document links to files the app may not read yet: %@. Choose the folder that holds them.";
+
+/* Notice above the server's own editor; %1$@ is the server's host name, %2$@ the name of this app */
+"This version of %2$@ is too old to edit documents from %1$@, so the document is open in the server's own editor. To edit documents from %1$@ in %2$@, update your copy of %2$@." = "This version of %2$@ is too old to edit documents from %1$@, so the document is open in the server's own editor. To edit documents from %1$@ in %2$@, update your copy of %2$@.";
+
+/* Internal error when a document is not of the app's own kind */
+"Unexpected document class" = "Unexpected document class";
+
+/* File name of a document that has not been saved yet; it has to be valid as a file name */
+"Untitled" = "Untitled";
+
+/* About panel */
+"View source revision" = "View source revision";
+

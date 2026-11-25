@@ -657,11 +657,12 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             // save it to the filesystem. The bytes travel base64 in the
             // message; write them to a temp file and offer a save panel,
             // mirroring the exportfile flow.
-            var name = "file"
+            let defaultName = NSLocalizedString("file", comment: "Name offered in the save panel for a file an extension made, when it has no name")
+            var name = defaultName
             var base64: String?
             for item in body.dropFirst("extensionsavefile ".count).components(separatedBy: " ") {
                 if item.hasPrefix("name=") {
-                    name = String(item.dropFirst("name=".count)).removingPercentEncoding ?? "file"
+                    name = String(item.dropFirst("name=".count)).removingPercentEncoding ?? defaultName
                 } else if item.hasPrefix("data=") {
                     base64 = String(item.dropFirst("data=".count))
                 }
@@ -674,7 +675,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             let sanitized = (name as NSString).lastPathComponent
             let savePanel = NSSavePanel()
             savePanel.directoryURL = FileManager.default.homeDirectoryForCurrentUser
-            savePanel.nameFieldStringValue = sanitized.isEmpty ? "file" : sanitized
+            savePanel.nameFieldStringValue = sanitized.isEmpty ? defaultName : sanitized
             savePanel.begin { result in
                 if result == .OK, let dstURL = savePanel.url {
                     do {
