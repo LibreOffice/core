@@ -103,6 +103,35 @@ describe('calcPlacedObject', function () {
 	});
 });
 
+describe('calcPlacedCaret', function () {
+	// Object 7 is shown at half its size, 100 right and 200 down.
+	const placingOf = (id: number): cool.CalcObjectPlacing | undefined =>
+		id === 7 ? { scaleX: 0.5, scaleY: 0.5, moveX: 100, moveY: 200 } : undefined;
+	const caret = new cool.Bounds(
+		new cool.Point(1000, 2000),
+		new cool.Point(1000, 2300),
+	);
+
+	it('places a caret in the text of an object as the object is placed', function () {
+		const placed = cool.calcPlacedCaret(caret, '7', placingOf);
+		nodeassert.deepStrictEqual(
+			[placed.min.x, placed.min.y, placed.max.x, placed.max.y],
+			[600, 1200, 600, 1350],
+		);
+	});
+
+	it('leaves a caret without an object as it came', function () {
+		nodeassert.strictEqual(
+			cool.calcPlacedCaret(caret, undefined, placingOf),
+			caret,
+		);
+	});
+
+	it('leaves a caret in an object that is not placed as it came', function () {
+		nodeassert.strictEqual(cool.calcPlacedCaret(caret, '8', placingOf), caret);
+	});
+});
+
 describe('calcMessageInPrintTwips', function () {
 	// The placings move print twips to tile twips. Objects 2 and 4 are in
 	// group 3. Object 5 is stretched to twice its width.

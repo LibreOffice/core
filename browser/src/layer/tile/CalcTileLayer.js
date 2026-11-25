@@ -1878,16 +1878,12 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 	// the placing of its object too.
 	_placedLikeItsObject: function (rectangle, objectId) {
 		var calcVectorManager = RenderManager.calcVectorManager();
-		if (!rectangle || !calcVectorManager || objectId === undefined)
+		if (!rectangle || !calcVectorManager)
 			return rectangle;
-		var placing = calcVectorManager.objectPlacingOf(this._selectedPart, parseInt(objectId));
-		if (!placing)
-			return rectangle;
-		var place = function (point) {
-			return new cool.Point(placing.scaleX * point.x + placing.moveX,
-				placing.scaleY * point.y + placing.moveY);
-		};
-		return new cool.Bounds(place(rectangle.min), place(rectangle.max));
+		var part = this._selectedPart;
+		return cool.calcPlacedCaret(rectangle, objectId, function (id) {
+			return calcVectorManager.objectPlacingOf(part, id);
+		});
 	},
 
 	_getTextSelectionRectangles: function (textMsg) {

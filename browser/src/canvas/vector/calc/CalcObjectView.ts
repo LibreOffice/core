@@ -70,6 +70,29 @@ namespace cool {
 		);
 	}
 
+	/// The caret in the text of a drawing object, in tile twips. The engine reports it in print
+	/// twips of the sheet, so it is placed as its object is. A caret without an object, or in an
+	/// object that is not placed, stays as it came.
+	export function calcPlacedCaret(
+		rectangle: Bounds,
+		objectId: string | number | undefined,
+		placingOf: (id: number) => CalcObjectPlacing | undefined,
+	): Bounds {
+		if (objectId === undefined) return rectangle;
+		const placing = placingOf(Number(objectId));
+		if (!placing) return rectangle;
+		return new Bounds(
+			new Point(
+				placedX(placing, rectangle.min.x),
+				placedY(placing, rectangle.min.y),
+			),
+			new Point(
+				placedX(placing, rectangle.max.x),
+				placedY(placing, rectangle.max.y),
+			),
+		);
+	}
+
 	/// The mapping of the unit square in print twips that the placing takes to the given one in
 	/// tile twips.
 	export function calcMatrixInPrintTwips(
