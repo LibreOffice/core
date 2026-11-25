@@ -1644,28 +1644,30 @@
         OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
         THE SOFTWARE.</p>
     </div>
-    <h2>Random123: a Library of Counter-Based Random Number Generators</h2>
-    <!-- Name: Random123, Vendor:, Source: sc/source/core/opencl/formulagroupcl.cxx, URL: https://github.com/DEShawResearch/random123, PURL: pkg:git/github.com/DEShawResearch/random123, Declared: BSD-3-Clause, Concluded: MPL-2.0 -->
-    <p>The following software may be included in this product: Random123: a Library of Counter-Based Random Number
-    Generators. Use of any of this software is governed by the terms of the license below:</p>
-    <p>Copyright 2010-2011, D. E. Shaw Research.</p>
-    <p>All rights reserved.</p>
-    <p>Redistribution and use in source and binary forms, with or without</p>
-    <p>modification, are permitted provided that the following conditions are</p>
-    <p>met:</p>
-    <p>* Redistributions of source code must retain the above copyright notice, this list of conditions, and the
-    following disclaimer.</p>
-    <p>* Redistributions in binary form must reproduce the above copyright notice, this list of conditions, and the
-    following disclaimer in the documentation and/or other materials provided with the distribution.</p>
-    <p>* Neither the name of D. E. Shaw Research nor the names of its contributors may be used to endorse or promote
-    products derived from this software without specific prior written permission.</p>
-    <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
-    WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-    PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-    INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
-    GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-    LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-    OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+    <div class="OPENCL">
+        <h2>Random123: a Library of Counter-Based Random Number Generators</h2>
+        <!-- Name: Random123, Vendor:, Source: sc/source/core/opencl/formulagroupcl.cxx, URL: https://github.com/DEShawResearch/random123, PURL: pkg:git/github.com/DEShawResearch/random123, Declared: BSD-3-Clause, Concluded: MPL-2.0 -->
+        <p>The following software may be included in this product: Random123: a Library of Counter-Based Random Number
+        Generators. Use of any of this software is governed by the terms of the license below:</p>
+        <p>Copyright 2010-2011, D. E. Shaw Research.</p>
+        <p>All rights reserved.</p>
+        <p>Redistribution and use in source and binary forms, with or without</p>
+        <p>modification, are permitted provided that the following conditions are</p>
+        <p>met:</p>
+        <p>* Redistributions of source code must retain the above copyright notice, this list of conditions, and the
+        following disclaimer.</p>
+        <p>* Redistributions in binary form must reproduce the above copyright notice, this list of conditions, and the
+        following disclaimer in the documentation and/or other materials provided with the distribution.</p>
+        <p>* Neither the name of D. E. Shaw Research nor the names of its contributors may be used to endorse or promote
+        products derived from this software without specific prior written permission.</p>
+        <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+        WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+        PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+        INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+        GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+        LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+        OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+    </div>
     <div class="REDLAND">
         <h2>Raptor RDF Parser Library</h2>
         <!-- Name: raptor_rdf_syntax_library, Vendor: librdf, Source: RAPTOR_TARBALL, URL: https://librdf.org/, PURL: pkg:git/github.com/dajobe/raptor, Declared: LGPL-2.1-or-later OR Apache-2.0 OR GPL-2.0-or-later, Concluded: MPL-2.0 -->
