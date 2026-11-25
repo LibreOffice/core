@@ -11884,7 +11884,7 @@ if test "$with_parquet_filter" = "yes"; then
     # FIXME: probably we should better check for it (orcus_parquet::detect() existing in the lib?)
     # but I fail to do that with C++.. So let's do this for now...
     AC_MSG_CHECKING([whether liborcus has parquet support])
-    _orcus_so=`pkg-config --variable=libdir liborcus-0.21`/liborcus-0.21.so
+    _orcus_so=`pkg-config --variable=libdir liborcus-0.22`/liborcus-0.22.so
     if objdump -p $_orcus_so | grep NEEDED | grep -q parquet; then
       AC_MSG_RESULT([yes])
     else
