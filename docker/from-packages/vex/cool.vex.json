@@ -1,9 +1,9 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "version": 6,
+  "version": 7,
   "metadata": {
-    "timestamp": "2026-11-18T21:38:49Z",
+    "timestamp": "2026-11-25T09:23:11Z",
     "supplier": {
       "name": "Collabora Productivity Ltd.",
       "url": [
@@ -307,7 +307,7 @@
       "properties": [
         {
           "name": "collabora:platforms",
-          "value": "server, windows, macos"
+          "value": "server, windows"
         }
       ]
     },
@@ -363,7 +363,7 @@
       "properties": [
         {
           "name": "collabora:platforms",
-          "value": "server, windows, macos"
+          "value": "server, windows"
         }
       ]
     },
@@ -400,7 +400,7 @@
       "properties": [
         {
           "name": "collabora:platforms",
-          "value": "server, windows, macos"
+          "value": "server, windows"
         }
       ]
     },
