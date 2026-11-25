@@ -46,8 +46,14 @@ public:
     /// per WOPISrc wins, and a report that carries no name or no persistent link keeps the
     /// recorded one. A persistent link belongs to one remote link, so recording it here takes
     /// it off any other. A view reaches a remote link by its persistent link alone, so a
-    /// report of an address not recorded yet that names none is ignored.
+    /// report of an address not recorded yet that names none is ignored. Every view that may
+    /// change the document, holds no token for a source the document does not name, and has
+    /// already asked its storage on load, asks its storage for that source.
     void setSource(DocumentBroker& docBroker, const RemoteLink& link);
+
+    /// Records the public part of each of the given remote links the way setSource does, and
+    /// asks the storage of each view for all the sources it needs from them in one request.
+    void setSources(DocumentBroker& docBroker, const std::vector<RemoteLinkRegistration>& links);
 
     /// Records the source documents the open document's own content names, which is the whole of
     /// what it names: a name reported here and nowhere else stands for a document the storage
@@ -74,8 +80,9 @@ public:
     void setViewToken(DocumentBroker& docBroker, const std::string& tag,
                       const std::string& wopiSrc, const std::string& accessToken);
 
-    /// Records that storage answers link access requests, then asks it for every
-    /// source the document names that the view holds no remote link for. Private to that view.
+    /// Records that storage answers link access requests, then asks it for every source the
+    /// document names and every other listed source that the view holds no token for. Private
+    /// to that view.
     void enableViewLinkAccess(DocumentBroker& docBroker, const std::string& tag);
 
     /// Takes the storage's answer to one view's link access request for the given sources. An
@@ -85,8 +92,8 @@ public:
                             const std::vector<std::string>& persistentLinks, unsigned statusCode,
                             const std::string& body);
 
-    /// Asks one view's storage again for the document behind one source the document names,
-    /// at the request of the user of that view. Private to that view.
+    /// Asks one view's storage again for the document behind one source the document names or
+    /// a remote link stands for, at the request of the user of that view. Private to that view.
     void resolveSource(DocumentBroker& docBroker, const std::string& tag,
                        const std::string& persistentLink);
 
@@ -224,12 +231,36 @@ private:
         return findListed(persistentLink) != _entries.end();
     }
 
+    /// True when the view is to ask its storage for the listed source of the given docKey and
+    /// persistent link: the document does not name the source, and the view holds no token for
+    /// it and has not asked for it.
+    bool needsListedSource(const View& view, const std::string& docKey,
+                           const std::string& persistentLink) const;
+
+    /// Asks the storage of every view that may change the document and has asked on load for
+    /// the listed sources of the given persistent links that it needs, in one request per view.
+    void askViewsForListedSources(DocumentBroker& docBroker,
+                                  const std::vector<std::string>& persistentLinks);
+
+    /// Records the public part of a remote link the way setSource describes, without asking any
+    /// view or sending any list. A view loses what its storage answered for a persistent link
+    /// that moves to another document, unless it holds a token for that document. False when
+    /// nothing is recorded.
+    bool recordSource(DocumentBroker& docBroker, const RemoteLink& link);
+
+    /// True when the document's own content names the source of the given persistent link.
+    bool isNamed(const std::string& persistentLink) const
+    {
+        return std::find(_namedSources.begin(), _namedSources.end(), persistentLink) !=
+               _namedSources.end();
+    }
+
     /// Asks the storage of every view, or of the given view alone, for the document behind
-    /// each source the document names that the view holds no token for and has not asked
-    /// for yet, and for the links the storage adds for the user on its own, which the
-    /// request names as DefaultsPersistentLink. A view asks once, when the document has
-    /// reported its sources, also when it reported none, so the sources editing names are
-    /// left to the user to ask for.
+    /// each source the document names and each other listed source that the view holds no
+    /// token for and has not asked for yet, and for the links the storage adds for the user on
+    /// its own, which the request names as DefaultsPersistentLink. A view asks once, when the
+    /// document has reported its sources, also when it reported none, so the sources editing
+    /// names are left to the user to ask for.
     void resolveUnlistedSources(DocumentBroker& docBroker);
     void resolveUnlistedSources(DocumentBroker& docBroker, const std::string& tag);
 
@@ -280,8 +311,9 @@ private:
                                const std::string& persistentLink,
                                const std::string& eventArguments);
 
-    /// Builds the remotelinks: list for one view: every known source,
-    /// stamped with that view's access and connection state.
+    /// Builds the remotelinks: list for one view: every source the document names, and every
+    /// other listed source the view holds a token for, stamped with that view's access and
+    /// connection state.
     std::string buildJson(const std::string& tag) const;
 
     /// Re-sends the list to one view when it changed.

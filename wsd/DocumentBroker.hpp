@@ -607,8 +607,10 @@ public:
     std::shared_ptr<ClientSession> findSessionByViewId(int viewId) const;
 
 #if !MOBILEAPP
-    /// Records the public part of a remote link, the same for every view
-    void setRemoteDocumentSource(const RemoteLink& link);
+    /// Records the public part of the given remote links, the same for every view. Each view
+    /// that holds no token for a source the document does not name asks its storage for those
+    /// sources in one request.
+    void setRemoteDocumentSources(const std::vector<RemoteLinkRegistration>& links);
 
     /// Records the source documents this document's own content names, the whole of what it
     /// names, so that a source the storage listed no remote link for is still reported, with
@@ -630,7 +632,8 @@ public:
                                     const std::string& accessToken);
 
     /// Records that one view's storage answers link access requests and asks it for the
-    /// sources this document names that no remote link stands for. Private to that view.
+    /// sources this document names and the other listed sources that the view holds no token
+    /// for. Private to that view.
     void enableRemoteDocumentLinkAccess(const std::string& tag);
 
     /// Takes the storage's answer to one view's link access request for the given sources.
@@ -638,7 +641,8 @@ public:
                                           const std::vector<std::string>& persistentLinks,
                                           unsigned statusCode, const std::string& body);
 
-    /// Asks one view's storage again for the document behind one source this document names.
+    /// Asks one view's storage again for the document behind one source this document names or
+    /// a remote link stands for.
     void resolveRemoteDocumentSource(const std::string& tag, const std::string& persistentLink);
 
     /// Records the given remote links and gives their access tokens to the view that holds the

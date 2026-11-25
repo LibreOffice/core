@@ -3473,6 +3473,412 @@ public:
     }
 };
 
+/// The first view of a document adds a source over POST /cool/links that the document does not
+/// name, and a second view joins. The second view asks the storage for the source with its own
+/// token, and is listed the source only once it can read it.
+class LinkAccessListedSourceTestServer : public LinkAccessTestServer
+{
+protected:
+    STATE_ENUM(Phase, Load, WaitLoad, Checking, WaitConnected, Done) _phase;
+
+    std::thread _checkThread;
+
+    /// The second view of the same document.
+    std::unique_ptr<UnitWebSocket> _secondWs;
+
+    /// Whether the storage lets the user of the second view read the source.
+    virtual bool secondUserMayRead() const = 0;
+
+    /// Whether the second view is open before the first view adds the source, rather than
+    /// joining after.
+    virtual bool secondViewOpensFirst() const { return false; }
+
+    /// Checks what the second view came to, once the storage's answer to it is recorded.
+    virtual void checkSecondView() = 0;
+
+    std::pair<http::StatusCode, std::string>
+    answerLinkAccess(const LinkAccessRequest& request) override
+    {
+        // A storage that answers one source at a time, with no links of its own to add.
+        if (asksDefaultsAlone(request))
+            return { http::StatusCode::NotFound, std::string() };
+        if (!secondUserMayRead())
+            return { http::StatusCode::Forbidden, std::string() };
+        return { http::StatusCode::OK, linkBody("remote-" + request.accessToken) };
+    }
+
+    explicit LinkAccessListedSourceTestServer(const std::string& name)
+        : LinkAccessTestServer(name)
+        , _phase(Phase::Load)
+    {
+    }
+
+    ~LinkAccessListedSourceTestServer()
+    {
+        if (_checkThread.joinable())
+            _checkThread.join();
+    }
+
+    /// The user of the first view adds a source, which the document does not name.
+    void addSource() { addSource(remoteWopiSrc()); }
+
+    /// The user of the first view adds the source as the document of the given WOPISrc.
+    void addSource(const std::string& wopiSrc)
+    {
+        auto registered = std::make_shared<std::promise<unsigned>>();
+        std::future<unsigned> status = registered->get_future();
+        registerRemoteLink(
+            socketPoll(), getWopiHostURI() + "/wopi/files/1", "firsttoken", wopiSrc,
+            "remotetoken", [registered](unsigned answer) { registered->set_value(answer); },
+            std::string(), SourceName);
+        LOK_ASSERT_MESSAGE("The source was not added in time",
+                           status.wait_for(std::chrono::seconds(10)) ==
+                               std::future_status::ready);
+        LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK), status.get());
+    }
+
+    /// Opens a second view of the document, which holds no token for the source.
+    void openSecondView()
+    {
+        const std::string secondWopiSrc =
+            Uri::encode(getWopiHostURI() + "/wopi/files/1?access_token=secondtoken");
+        TST_LOG("Connecting a second view: " << secondWopiSrc);
+        _secondWs = std::make_unique<UnitWebSocket>(
+            socketPoll(), "/cool/" + secondWopiSrc + "/ws", getTestname());
+        helpers::sendTextFrame(_secondWs->getWebSocket(), "load url=" + secondWopiSrc,
+                               getTestname());
+    }
+
+    /// Waits until the second view can read the source, then subscribes it to the source. The
+    /// test passes once the subscription is connected.
+    void readSourceInSecondView()
+    {
+        LOK_ASSERT_MESSAGE("The answer must be recorded as resolved",
+                           waitForBrokerState(std::string("persistent link ") + SourceName +
+                                              " access: resolved"));
+
+        TRANSITION_STATE(_phase, Phase::WaitConnected);
+        helpers::sendTextFrame(_secondWs->getWebSocket(),
+                               "remotedocsubscribe source=" + Uri::encode(SourceName),
+                               getTestname());
+    }
+
+public:
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        if (_phase != Phase::WaitLoad)
+            return true;
+
+        TRANSITION_STATE(_phase, Phase::Checking);
+        _checkThread = std::thread(
+            [this]
+            {
+                // The document names no source, so the first view asks for the storage's own
+                // links alone.
+                nameSources({});
+                LOK_ASSERT_MESSAGE("The first view must ask for the storage's own links",
+                                   waitForRequests(1));
+
+                if (secondViewOpensFirst())
+                {
+                    // The second view asks for the storage's own links alone, and then for the
+                    // source once the first view adds it.
+                    openSecondView();
+                    LOK_ASSERT_MESSAGE("The second view must ask for the storage's own links",
+                                       waitForRequests(2));
+                    addSource();
+                    LOK_ASSERT_MESSAGE("The second view must ask for the source",
+                                       waitForRequests(3));
+                    const std::vector<LinkAccessRequest> asked = requests();
+                    assertRequest(asked[0], "firsttoken", { Defaults });
+                    assertRequest(asked[1], "secondtoken", { Defaults });
+                    assertRequest(asked[2], "secondtoken", { SourceName });
+                }
+                else
+                {
+                    // The second view asks for the source with the storage's own links when it
+                    // joins.
+                    addSource();
+                    openSecondView();
+                    LOK_ASSERT_MESSAGE("The second view must ask for the source",
+                                       waitForRequests(3));
+                    const std::vector<LinkAccessRequest> asked = requests();
+                    assertRequest(asked[0], "firsttoken", { Defaults });
+                    assertRequest(asked[1], "secondtoken");
+                    assertRequest(asked[2], "secondtoken", { Defaults });
+                }
+
+                checkSecondView();
+            });
+
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (!message.starts_with("remotelinks:"))
+            return false;
+
+        TST_LOG("Got: [" << message << ']');
+
+        // The first view reads the source, and the second view is listed it only once it can
+        // read it too.
+        LOK_ASSERT_MESSAGE("A view that cannot read the source must not be listed it",
+                           message.find("\"state\":\"noaccess\"") == std::string_view::npos);
+        return false;
+    }
+
+    std::unique_ptr<http::Response>
+    assertCheckFileInfoRequest(const Poco::Net::HTTPRequest& request) override
+    {
+        // Only the second view subscribes, with the token the storage issued to it.
+        if (Poco::URI(request.getURI()).getPath().ends_with("/2"))
+        {
+            LOK_ASSERT_MESSAGE("The source must be read with the second view's own token",
+                               request.getURI().find("access_token=remote-secondtoken") !=
+                                   std::string::npos);
+        }
+
+        return nullptr;
+    }
+
+    void onDocBrokerRemoteDocumentEvent(const std::string& /*docKey*/,
+                                        const std::string& message) override
+    {
+        TST_LOG("Got: [" << message << ']');
+
+        if (message.find("event=error") != std::string::npos)
+            failTest("Unexpected remote document error: " + std::string(message));
+        else if (message.find("event=connected") != std::string::npos &&
+                 _phase == Phase::WaitConnected)
+        {
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("The second view reads a source another view added with its own token");
+        }
+    }
+
+    void invokeWSDTest() override
+    {
+        if (_phase == Phase::Load)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitLoad);
+
+            initWebsocket("/wopi/files/1?access_token=firsttoken");
+            WSD_CMD("load url=" + getWopiSrc());
+        }
+    }
+};
+
+/// The storage lets the user of the second view read the source the first view added, and the
+/// second view reads it with the token the storage gave it.
+class UnitLinkAccessListedSource : public LinkAccessListedSourceTestServer
+{
+    bool secondUserMayRead() const override { return true; }
+
+    void checkSecondView() override { readSourceInSecondView(); }
+
+public:
+    UnitLinkAccessListedSource()
+        : LinkAccessListedSourceTestServer("UnitLinkAccessListedSource")
+    {
+    }
+};
+
+/// The second view is already open when the first view adds the source. The second view asks
+/// the storage for the source then, and reads it with the token the storage gave it.
+class UnitLinkAccessListedSourceOpenView : public LinkAccessListedSourceTestServer
+{
+    bool secondUserMayRead() const override { return true; }
+
+    bool secondViewOpensFirst() const override { return true; }
+
+    void checkSecondView() override { readSourceInSecondView(); }
+
+public:
+    UnitLinkAccessListedSourceOpenView()
+        : LinkAccessListedSourceTestServer("UnitLinkAccessListedSourceOpenView")
+    {
+    }
+};
+
+/// The storage does not let the user of the second view read the source the first view added,
+/// and the second view is never listed the source.
+class UnitLinkAccessListedSourceDenied : public LinkAccessListedSourceTestServer
+{
+    bool secondUserMayRead() const override { return false; }
+
+    void checkSecondView() override
+    {
+        LOK_ASSERT_MESSAGE("The answer must be recorded as denied",
+                           waitForBrokerState(std::string("persistent link ") + SourceName +
+                                              " access: denied"));
+
+        TRANSITION_STATE(_phase, Phase::Done);
+        passTest("A second view that may not read a source another view added is not listed it");
+    }
+
+public:
+    UnitLinkAccessListedSourceDenied()
+        : LinkAccessListedSourceTestServer("UnitLinkAccessListedSourceDenied")
+    {
+    }
+};
+
+/// Asking the storage for the source the first view added fails the first time for the second
+/// view. The user of the second view has the source looked for again, and the second view then
+/// reads it with the token the storage gave it.
+class UnitLinkAccessListedSourceRetry : public LinkAccessListedSourceTestServer
+{
+    /// Whether the storage already failed the second view's question for the source.
+    std::atomic<bool> _failedOnce = false;
+
+    bool secondUserMayRead() const override { return true; }
+
+    std::pair<http::StatusCode, std::string>
+    answerLinkAccess(const LinkAccessRequest& request) override
+    {
+        if (request.persistentLink == SourceName && !_failedOnce.exchange(true))
+            return { http::StatusCode::InternalServerError, std::string() };
+        return LinkAccessListedSourceTestServer::answerLinkAccess(request);
+    }
+
+    void checkSecondView() override
+    {
+        LOK_ASSERT_MESSAGE("The answer must be recorded as failed",
+                           waitForBrokerState(std::string("persistent link ") + SourceName +
+                                              " access: failed"));
+
+        helpers::sendTextFrame(_secondWs->getWebSocket(),
+                               "remotelinkresolve source=" + Uri::encode(SourceName),
+                               getTestname());
+        LOK_ASSERT_MESSAGE("The user's request must ask the storage once more",
+                           waitForRequests(4));
+        assertRequest(requests()[3], "secondtoken", { SourceName });
+
+        readSourceInSecondView();
+    }
+
+public:
+    UnitLinkAccessListedSourceRetry()
+        : LinkAccessListedSourceTestServer("UnitLinkAccessListedSourceRetry")
+    {
+    }
+};
+
+/// The storage of the second view names another document for the source the first view added.
+/// The answer is not taken, so the source stays the document the first view added.
+class UnitLinkAccessListedSourceOtherDocument : public LinkAccessListedSourceTestServer
+{
+    bool secondUserMayRead() const override { return true; }
+
+    std::pair<http::StatusCode, std::string>
+    answerLinkAccess(const LinkAccessRequest& request) override
+    {
+        if (request.persistentLink != SourceName)
+            return LinkAccessListedSourceTestServer::answerLinkAccess(request);
+        return { http::StatusCode::OK,
+                 '{' +
+                     linkFields(SourceName, getWopiHostURI() + "/wopi/files/3",
+                                "remote-" + request.accessToken) +
+                     '}' };
+    }
+
+    void checkSecondView() override
+    {
+        LOK_ASSERT_MESSAGE("The answer must be recorded as failed",
+                           waitForBrokerState(std::string("persistent link ") + SourceName +
+                                              " access: failed"));
+
+        const std::string state = dumpBrokerState();
+        LOK_ASSERT_MESSAGE("The document the second view's storage named must not be listed",
+                           state.find("%2Ffiles%2F3") == std::string::npos);
+        LOK_ASSERT_MESSAGE("The source must still be the document the first view added",
+                           state.find(std::string("persistent link: ") + SourceName) !=
+                               std::string::npos);
+
+        TRANSITION_STATE(_phase, Phase::Done);
+        passTest("An answer naming another document leaves the listed source as it is");
+    }
+
+public:
+    UnitLinkAccessListedSourceOtherDocument()
+        : LinkAccessListedSourceTestServer("UnitLinkAccessListedSourceOtherDocument")
+    {
+    }
+};
+
+/// The second view reads the source the first view added. The first view then adds the source
+/// again as another document, and the second view asks its storage for the source once more.
+class UnitLinkAccessListedSourceMoved : public LinkAccessListedSourceTestServer
+{
+    /// The document the source stands for now.
+    std::string movedWopiSrc() const { return getWopiHostURI() + "/wopi/files/3"; }
+
+    /// Whether the first view added the source again as the other document.
+    std::atomic<bool> _moved = false;
+
+    bool secondUserMayRead() const override { return true; }
+
+    std::pair<http::StatusCode, std::string>
+    answerLinkAccess(const LinkAccessRequest& request) override
+    {
+        if (request.persistentLink != SourceName)
+            return LinkAccessListedSourceTestServer::answerLinkAccess(request);
+        return { http::StatusCode::OK,
+                 '{' +
+                     linkFields(SourceName, _moved ? movedWopiSrc() : remoteWopiSrc(),
+                                "remote-" + request.accessToken) +
+                     '}' };
+    }
+
+    /// How many views hold a token for both documents.
+    std::size_t viewsWithTwoTokens()
+    {
+        const std::string state = dumpBrokerState();
+        std::size_t count = 0;
+        for (std::size_t pos = state.find("tokens: 2"); pos != std::string::npos;
+             pos = state.find("tokens: 2", pos + 1))
+            ++count;
+        return count;
+    }
+
+    void checkSecondView() override
+    {
+        LOK_ASSERT_MESSAGE("The answer must be recorded as resolved",
+                           waitForBrokerState(std::string("persistent link ") + SourceName +
+                                              " access: resolved"));
+
+        _moved = true;
+        addSource(movedWopiSrc());
+        LOK_ASSERT_MESSAGE("The second view must ask for the moved source", waitForRequests(4));
+        assertRequest(requests()[3], "secondtoken", { SourceName });
+
+        // The first view was given a token for the other document when it added it, and the
+        // second view is given one by its storage.
+        bool bothHoldTokens = false;
+        for (int i = 0; i < 100 && !bothHoldTokens; ++i)
+        {
+            bothHoldTokens = viewsWithTwoTokens() == 2;
+            if (!bothHoldTokens)
+                std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        }
+        LOK_ASSERT_MESSAGE("The second view must hold a token for the moved source",
+                           bothHoldTokens);
+
+        TRANSITION_STATE(_phase, Phase::Done);
+        passTest("A view asks again for a source that moved to another document");
+    }
+
+public:
+    UnitLinkAccessListedSourceMoved()
+        : LinkAccessListedSourceTestServer("UnitLinkAccessListedSourceMoved")
+    {
+    }
+};
+
 /// Two views of one document each resolve the source the document names on their own: each
 /// request carries that view's own token, and the answer's token serves that view alone. The
 /// name and the time of the source reach a view once it holds a token for it; before that, the
@@ -4337,6 +4743,9 @@ UnitBase** unit_create_wsd_multi(void)
             new UnitLinkPostPersistentLink(),
             new UnitLinkAccessResolve(), new UnitLinkAccessNotFound(), new UnitLinkAccessPerView(),
             new UnitLinkAccessBatch(), new UnitLinkAccessOneByOne(), new UnitLinkAccessDefaults(),
+            new UnitLinkAccessListedSource(), new UnitLinkAccessListedSourceOpenView(),
+            new UnitLinkAccessListedSourceDenied(), new UnitLinkAccessListedSourceRetry(),
+            new UnitLinkAccessListedSourceOtherDocument(), new UnitLinkAccessListedSourceMoved(),
             new UnitRemoteDocumentPreview(), new UnitRemoteDocumentPreviewView(),
             new UnitRemoteDocumentNoExport(), nullptr
     };

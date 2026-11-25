@@ -42,6 +42,40 @@ void RemoteLinks::setSource(DocumentBroker& docBroker, const RemoteLink& link)
 {
     docBroker.assertCorrectThread();
 
+    if (!recordSource(docBroker, link))
+        return;
+
+    if (!link.persistentLink.empty())
+        askViewsForListedSources(docBroker, { link.persistentLink });
+    refreshAllViews(docBroker);
+}
+
+void RemoteLinks::setSources(DocumentBroker& docBroker,
+                             const std::vector<RemoteLinkRegistration>& links)
+{
+    docBroker.assertCorrectThread();
+
+    std::vector<std::string> persistentLinks;
+    bool recorded = false;
+    for (const RemoteLinkRegistration& link : links)
+    {
+        if (!recordSource(docBroker, link))
+            continue;
+
+        recorded = true;
+        if (!link.persistentLink.empty())
+            persistentLinks.push_back(link.persistentLink);
+    }
+
+    if (!recorded)
+        return;
+
+    askViewsForListedSources(docBroker, persistentLinks);
+    refreshAllViews(docBroker);
+}
+
+bool RemoteLinks::recordSource(DocumentBroker& docBroker, const RemoteLink& link)
+{
     // Key by the docKey, so encoded and decoded spellings of the same
     // WOPISrc resolve to one source.
     try
@@ -55,7 +89,7 @@ void RemoteLinks::setSource(DocumentBroker& docBroker, const RemoteLink& link)
             LOG_WRN("Ignoring the remote link [" << Anonymizer::anonymizeUrl(link.wopiSrc)
                                                  << "] of [" << docBroker.getDocKey()
                                                  << "]: it names no persistent link");
-            return;
+            return false;
         }
 
         // The entry keeps the WOPISrc without its query parameters.
@@ -71,20 +105,40 @@ void RemoteLinks::setSource(DocumentBroker& docBroker, const RemoteLink& link)
         // the remote link reported for it and leaves any other.
         if (!link.persistentLink.empty())
         {
+            bool moved = false;
             for (auto& it : _entries)
             {
-                if (it.second.persistentLink == link.persistentLink)
+                if (it.first != docKey && it.second.persistentLink == link.persistentLink)
+                {
                     it.second.persistentLink.clear();
+                    moved = true;
+                }
             }
             entry.persistentLink = link.persistentLink;
+
+            // What a view's storage answered for the persistent link was about the document it
+            // stood for before, so a view with no token for the new document asks again.
+            if (moved)
+            {
+                for (auto& itView : _views)
+                {
+                    View& view = itView.second;
+                    const auto itAccess = view.linkAccess.find(link.persistentLink);
+                    if (itAccess != view.linkAccess.end() &&
+                        itAccess->second != LinkAccess::Pending &&
+                        view.tokens.find(docKey) == view.tokens.end())
+                        view.linkAccess.erase(itAccess);
+                }
+            }
         }
 
-        refreshAllViews(docBroker);
+        return true;
     }
     catch (const std::exception& exc)
     {
         LOG_ERR("Ignoring the invalid remote link WOPISrc ["
                 << Anonymizer::anonymizeUrl(link.wopiSrc) << "]: " << exc.what());
+        return false;
     }
 }
 
@@ -153,8 +207,11 @@ void RemoteLinks::setNamedSources(DocumentBroker& docBroker, std::vector<std::st
         std::map<std::string, LinkAccess>& linkAccess = itView.second.linkAccess;
         for (auto it = linkAccess.begin(); it != linkAccess.end();)
         {
-            if (std::find(_namedSources.begin(), _namedSources.end(), it->first) ==
-                _namedSources.end())
+            // The question for the storage's own links keeps its record while it is in flight,
+            // so its answer is taken when it comes.
+            const bool pendingDefaults = it->first == RemoteLink::DefaultsPersistentLink &&
+                                         it->second == LinkAccess::Pending;
+            if (!pendingDefaults && !isNamed(it->first) && !isListed(it->first))
                 it = linkAccess.erase(it);
             else
                 ++it;
@@ -251,11 +308,60 @@ void RemoteLinks::resolveUnlistedSources(DocumentBroker& docBroker, const std::s
         toAsk.push_back(name);
     }
 
+    // A source another view added is listed for every view, and this view reads it only with a
+    // token of its own, which the storage gives when this user may read the source
+    for (const auto& itEntry : _entries)
+    {
+        if (needsListedSource(itView->second, itEntry.first, itEntry.second.persistentLink))
+            toAsk.push_back(itEntry.second.persistentLink);
+    }
+
     // The same request asks for the links the storage adds for the user on its own
     toAsk.push_back(RemoteLink::DefaultsPersistentLink);
     requestLinkAccess(docBroker, tag, std::move(toAsk));
 
     refreshView(docBroker, tag);
+}
+
+bool RemoteLinks::needsListedSource(const View& view, const std::string& docKey,
+                                    const std::string& persistentLink) const
+{
+    return !persistentLink.empty() && persistentLink != RemoteLink::DefaultsPersistentLink &&
+           !isNamed(persistentLink) && view.tokens.find(docKey) == view.tokens.end() &&
+           view.linkAccess.find(persistentLink) == view.linkAccess.end();
+}
+
+void RemoteLinks::askViewsForListedSources(DocumentBroker& docBroker,
+                                           const std::vector<std::string>& persistentLinks)
+{
+    // A view that has not asked on load yet asks for the sources with the rest then, and a
+    // view that may not change the document asks for none.
+    std::vector<std::pair<std::string, std::vector<std::string>>> questions;
+    for (const auto& itView : _views)
+    {
+        if (!itView.second.supportsLinkAccess || !itView.second.askedOnLoad)
+            continue;
+
+        const std::shared_ptr<ClientSession> session = docBroker.findSession(itView.first);
+        if (!session || !session->canChangeDocument())
+            continue;
+
+        std::vector<std::string> toAsk;
+        for (const std::string& persistentLink : persistentLinks)
+        {
+            const auto itEntry = findListed(persistentLink);
+            if (itEntry != _entries.end() &&
+                needsListedSource(itView.second, itEntry->first, persistentLink) &&
+                std::find(toAsk.begin(), toAsk.end(), persistentLink) == toAsk.end())
+                toAsk.push_back(persistentLink);
+        }
+
+        if (!toAsk.empty())
+            questions.emplace_back(itView.first, std::move(toAsk));
+    }
+
+    for (auto& question : questions)
+        requestLinkAccess(docBroker, question.first, std::move(question.second));
 }
 
 void RemoteLinks::resolveSource(DocumentBroker& docBroker, const std::string& tag,
@@ -267,13 +373,12 @@ void RemoteLinks::resolveSource(DocumentBroker& docBroker, const std::string& ta
     if (itView == _views.end() || !itView->second.supportsLinkAccess)
         return;
 
-    // Only a source the document names is asked for, and only once at a time: the answer to
-    // the question in flight is the answer to this one.
-    if (std::find(_namedSources.begin(), _namedSources.end(), persistentLink) ==
-        _namedSources.end())
+    // Only a source the document names or a remote link stands for is asked for, and only once
+    // at a time: the answer to the question in flight is the answer to this one.
+    if (!isNamed(persistentLink) && !isListed(persistentLink))
     {
         LOG_WRN("Not asking view [" << tag << "] for a source of [" << docBroker.getDocKey()
-                                    << "] that the document does not name");
+                                    << "] that the document does not name or list");
         return;
     }
 
@@ -567,6 +672,18 @@ void RemoteLinks::applyLinkAccessAnswer(DocumentBroker& docBroker, const std::st
         reason = "answers for another persistent link";
     else
         reason = linkProblem(docBroker, link);
+
+    // A source the document does not name stands for the document another view added, and
+    // the answer of this view's storage gives this view a token for that same document. The
+    // document's own pages name a source, so for a named one the answer says which document
+    // the source is.
+    if (reason.empty() && !isNamed(persistentLink))
+    {
+        const auto itListed = findListed(persistentLink);
+        if (itListed != _entries.end() &&
+            RequestDetails::getDocKey(link.wopiSrc) != itListed->first)
+            reason = "names another document than the one listed for the source";
+    }
 
     if (!reason.empty())
     {
@@ -1207,6 +1324,10 @@ std::string RemoteLinks::buildJson(const std::string& tag) const
         }
 
         const bool readable = state != "noaccess";
+
+        // A source the document does not name is shown only to a view that can read it.
+        if (!readable && !isNamed(it.second.persistentLink))
+            continue;
 
         Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
         entry->set("name",

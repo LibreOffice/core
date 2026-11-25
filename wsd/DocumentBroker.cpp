@@ -6722,9 +6722,9 @@ std::shared_ptr<ClientSession> DocumentBroker::findSessionByViewId(int viewId) c
 }
 
 #if !MOBILEAPP
-void DocumentBroker::setRemoteDocumentSource(const RemoteLink& link)
+void DocumentBroker::setRemoteDocumentSources(const std::vector<RemoteLinkRegistration>& links)
 {
-    _remoteLinks.setSource(*this, link);
+    _remoteLinks.setSources(*this, links);
 }
 
 void DocumentBroker::setRemoteDocumentNamedSources(std::vector<std::string> names,
@@ -6781,13 +6781,8 @@ bool DocumentBroker::registerRemoteDocumentLinks(const std::string& oneTimeToken
         if ((!byOneTimeToken && !byAccessToken) || !it.second->canChangeDocument())
             continue;
 
-        // The token is recorded first, so the list this view gets for the new source names
-        // the document from the start.
         for (const RemoteLinkRegistration& link : links)
-        {
             setRemoteDocumentViewToken(it.first, link.wopiSrc, link.accessToken);
-            setRemoteDocumentSource(link);
-        }
 
         // Consume the one-time token and hand the view its next one.
         if (byOneTimeToken)
@@ -6795,6 +6790,12 @@ bool DocumentBroker::registerRemoteDocumentLinks(const std::string& oneTimeToken
 
         registered = true;
     }
+
+    // The tokens of every view the request names are recorded first, so the list each of them
+    // gets for a new source names the document from the start, and only the other views ask
+    // their storage for it.
+    if (registered)
+        setRemoteDocumentSources(links);
 
     return registered;
 }
