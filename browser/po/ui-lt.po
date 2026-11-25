@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 12:57+0100\n"
-"PO-Revision-Date: 2026-10-26 07:43+0000\n"
+"PO-Revision-Date: 2026-11-21 19:16+0000\n"
 "Last-Translator: dukezas <dukezas@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/lt/>\n"
-"Language: \n"
+"Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "(n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.11.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -5001,9 +5001,8 @@ msgid "Language"
 msgstr "Kalba"
 
 #: src/control/Control.Mention.ts:193
-#, fuzzy
 msgid "No search results found"
-msgstr "Paieška be rezultatų!"
+msgstr "Paieška be rezultatų"
 
 #: src/control/Control.Menubar.ts:57
 msgid "PDF Document (.pdf) as..."
@@ -9853,9 +9852,8 @@ msgid "Last saved:"
 msgstr "Paskutinis išsaugojimas:"
 
 #: src/map/Map.js:1170
-#, fuzzy
 msgid "Please wait..."
-msgstr "Prašome palaukti!"
+msgstr "Prašome palaukti..."
 
 #: src/map/handler/Map.Feedback.js:102
 msgid "Please send us your feedback"
@@ -9906,9 +9904,8 @@ msgstr "Tuščia skaidrių demonstracija"
 
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1453
-#, fuzzy
 msgid "All slides are hidden."
-msgstr "Visos skaidrės paslėptos!"
+msgstr "Visos skaidrės paslėptos."
 
 #: src/map/handler/Map.SlideShow.js:175
 #: src/slideshow/SlideShowPresenter.ts:1480
