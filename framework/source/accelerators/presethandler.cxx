@@ -197,8 +197,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
         sShareLayer = sShareLayer.copy(0, nPos);
 
     // Note: May be an user uses URLs without a final slash! Check it ...
-    nPos = sShareLayer.lastIndexOf('/');
-    if (nPos != sShareLayer.getLength()-1)
+    if (!sShareLayer.endsWith('/'))
         sShareLayer += "/";
 
     sShareLayer += "soffice.cfg";
@@ -251,8 +250,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     OUString sUserLayer = xPathSettings->getBasePathUserLayer();
 
     // Note: May be an user uses URLs without a final slash! Check it ...
-    sal_Int32 nPos = sUserLayer.lastIndexOf('/');
-    if (nPos != sUserLayer.getLength()-1)
+    if (!sUserLayer.endsWith('/'))
         sUserLayer += "/";
 
     sUserLayer  += "soffice.cfg"; // storage file
