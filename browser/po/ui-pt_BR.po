@@ -12,11 +12,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 12:57+0100\n"
-"PO-Revision-Date: 2026-11-15 11:10+0000\n"
+"PO-Revision-Date: 2026-11-20 19:49+0000\n"
 "Last-Translator: H2Oufoe <regularwater@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/pt_BR/>\n"
-"Language: \n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -453,10 +453,9 @@ msgstr ""
 
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:107
-#, fuzzy
 msgid "No WOPI host configured: trusting the first host that connects"
 msgstr ""
-"Nenhum host WOPI configurado: Confiando no primeiro host que se conectou"
+"Nenhum host WOPI configurado: Confiando no primeiro host que se conectar"
 
 #: admin/src/AdminSocketServerAudit.js:53
 #: src/control/Control.ServerAuditDialog.ts:113
@@ -1726,9 +1725,8 @@ msgstr "EPUB (.epub)"
 
 #: src/app/ExportFormats.ts:65 src/control/Control.Menubar.ts:144
 #: src/control/Control.NotebookbarBuilder.js:453
-#, fuzzy
 msgid "ODF master document (.odm)"
-msgstr "Documento de texto ODF (.odt)"
+msgstr "Documento mestre ODF (.odm)"
 
 #: src/app/ExportFormats.ts:66 src/app/ExportFormats.ts:78
 #: src/control/Control.Menubar.ts:145
@@ -1831,113 +1829,111 @@ msgstr "Imagem (.png)"
 
 #: src/app/HandleGroups.ts:1855
 msgid "Top Left"
-msgstr ""
+msgstr "Superior Esquerdo"
 
 #: src/app/HandleGroups.ts:1856
 msgid "Top"
-msgstr ""
+msgstr "Acima"
 
 #: src/app/HandleGroups.ts:1857
 msgid "Top Right"
-msgstr ""
+msgstr "Superior Direito"
 
 #: src/app/HandleGroups.ts:1858 src/app/HandleGroups.ts:1996
 msgid "Left"
-msgstr ""
+msgstr "Esquerda"
 
 #: src/app/HandleGroups.ts:1859
 msgid "Center"
-msgstr ""
+msgstr "Centro"
 
 #: src/app/HandleGroups.ts:1860 src/app/HandleGroups.ts:1997
-#, fuzzy
 msgid "Right"
-msgstr "Luz"
+msgstr "Direita"
 
 #: src/app/HandleGroups.ts:1861
 msgid "Bottom Left"
-msgstr ""
+msgstr "Inferior Esquerdo"
 
 #: src/app/HandleGroups.ts:1862
 msgid "Bottom"
-msgstr ""
+msgstr "Abaixo"
 
 #: src/app/HandleGroups.ts:1863
 msgid "Bottom Right"
-msgstr ""
+msgstr "Inferior Direito"
 
 #: src/app/HandleGroups.ts:1951
 msgid "Gluepoint"
-msgstr ""
+msgstr "Ponto de conexão"
 
 #: src/app/HandleGroups.ts:1998
 msgid "Up"
-msgstr ""
+msgstr "Cima"
 
 #: src/app/HandleGroups.ts:1999
 msgid "Down"
-msgstr ""
+msgstr "Baixo"
 
 #: src/app/HandleGroups.ts:2004
 msgid "Anchor"
-msgstr ""
+msgstr "Âncora"
 
 #: src/app/HandleGroups.ts:2045
 msgid "Default gluepoints cannot be edited."
-msgstr ""
+msgstr "Os pontos de conexão padrão não podem ser editados."
 
 #: src/app/HandleGroups.ts:2863
-#, fuzzy
 msgid "Point"
-msgstr "Imprimir"
+msgstr "Ponto"
 
 #: src/app/HandleGroups.ts:2875
 msgid "To Line"
-msgstr ""
+msgstr "Para Linha"
 
 #: src/app/HandleGroups.ts:2875
 msgid "To Curve"
-msgstr ""
+msgstr "Para Curva"
 
 #: src/app/HandleGroups.ts:2882
 msgid "Corner Point"
-msgstr ""
+msgstr "Ponto de Canto"
 
 #: src/app/HandleGroups.ts:2889
 msgid "Smooth Transition"
-msgstr ""
+msgstr "Transição Suave"
 
 #: src/app/HandleGroups.ts:2896
 msgid "Symmetric Transition"
-msgstr ""
+msgstr "Transição Simétrica"
 
 #: src/app/HandleGroups.ts:2905
 msgid "Split Path"
-msgstr ""
+msgstr "Caminho Dividido"
 
 #: src/app/HandleGroups.ts:3420
 msgid "Motion Path"
-msgstr ""
+msgstr "Caminho de Movimento"
 
 #: src/app/HandleGroups.ts:3421 src/control/jsdialog/Definitions.Menu.ts:2515
 msgid "Add Point"
-msgstr ""
+msgstr "Adicionar Ponto"
 
 #: src/app/HandleGroups.ts:3426
 msgid "Open Path"
-msgstr ""
+msgstr "Abrir Caminho"
 
 #: src/app/HandleGroups.ts:3426 src/control/jsdialog/Definitions.Menu.ts:2522
 msgid "Close Path"
-msgstr ""
+msgstr "Fechar Caminho"
 
 #: src/app/HandleGroups.ts:3433 src/control/jsdialog/Definitions.Menu.ts:2531
 msgid "Simplify Curves"
-msgstr ""
+msgstr "Simplificar Curvas"
 
 #: src/app/HandleGroups.ts:3439 src/control/jsdialog/Definitions.Menu.ts:2536
 msgid "Simplify All"
-msgstr ""
+msgstr "Simplificar Tudo"
 
 #: src/app/LOUtil.ts:1455
 msgid "{0} website, opens in new tab"
@@ -2011,11 +2007,11 @@ msgstr "menos de um minuto"
 
 #: src/control/VideoBackgroundDialog.ts:24
 msgid "Clouds"
-msgstr ""
+msgstr "Nuvens"
 
 #: src/control/VideoBackgroundDialog.ts:25
 msgid "Clouds at dusk"
-msgstr ""
+msgstr "Nuvens no anoitecer"
 
 #: src/control/VideoBackgroundDialog.ts:26
 msgid "Bokeh"
@@ -2024,20 +2020,21 @@ msgstr ""
 #: src/control/VideoBackgroundDialog.ts:64
 #: src/control/Control.NotebookbarImpress.js:2112
 msgid "Background Video"
-msgstr ""
+msgstr "Vídeo no fundo"
 
 #: src/control/VideoBackgroundDialog.ts:69
 msgid ""
 "The video plays behind every slide that uses the master slide of this slide."
 msgstr ""
+"O vídeo é reproduzido atrás de cada slide que usa o slide mestre deste slide."
 
 #: src/control/VideoBackgroundDialog.ts:98
 msgid "Remove Background Video"
-msgstr ""
+msgstr "Remover Vídeo no Fundo"
 
 #: src/control/VideoBackgroundDialog.ts:104
 msgid "Choose Your Own Video..."
-msgstr ""
+msgstr "Escolha o seu próprio vídeo..."
 
 #: src/canvas/sections/CommentListSection.ts:2301
 #: src/canvas/sections/CommentListSection.ts:2314
@@ -2444,34 +2441,28 @@ msgid "What would you like to do with this document?"
 msgstr "O que gostaria de fazer com este documento?"
 
 #: src/control/Control.AIChatSidebar.ts:838
-#, fuzzy
 msgid "Good morning, {0}"
-msgstr "Bom dia, {0}!"
+msgstr "Bom dia, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:839
-#, fuzzy
 msgid "Good morning"
-msgstr "Bom dia!"
+msgstr "Bom dia"
 
 #: src/control/Control.AIChatSidebar.ts:841
-#, fuzzy
 msgid "Good afternoon, {0}"
-msgstr "Boa tarde, {0}!"
+msgstr "Boa tarde, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:842
-#, fuzzy
 msgid "Good afternoon"
-msgstr "Boa tarde!"
+msgstr "Boa tarde"
 
 #: src/control/Control.AIChatSidebar.ts:844
-#, fuzzy
 msgid "Good evening, {0}"
-msgstr "Boa noite, {0}!"
+msgstr "Boa noite, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:845
-#, fuzzy
 msgid "Good evening"
-msgstr "Boa noite!"
+msgstr "Boa noite"
 
 #: src/control/Control.AIChatSidebar.ts:896
 #: src/control/Control.AIChatSidebar.ts:2962
@@ -2537,7 +2528,6 @@ msgstr "Enviar mensagem"
 
 #: src/control/Control.AIChatSidebar.ts:1130
 #: src/control/Control.AIChatSidebar.ts:1143
-#, fuzzy
 msgid "Set Tone"
 msgstr "Definir tom"
 
@@ -2695,9 +2685,8 @@ msgid "Prompt instruction"
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:1514
-#, fuzzy
 msgid "Delete prompt confirmation"
-msgstr "Excluir confirmação de tom"
+msgstr "Excluir confirmação imediata"
 
 #: src/control/Control.AIChatSidebar.ts:1525
 msgid "The prompt \"{0}\" will be deleted."
@@ -2709,9 +2698,8 @@ msgid "Cancel delete"
 msgstr "Cancelar exclusão"
 
 #: src/control/Control.AIChatSidebar.ts:1635
-#, fuzzy
 msgid "You have reached the maximum of {0} saved prompts."
-msgstr "Você atingiu o máximo de {0} tons personalizados."
+msgstr "Você atingiu o máximo de {0} prompts salvos."
 
 #: src/control/Control.AIChatSidebar.ts:1753
 msgid "No saved prompt matches this name."
@@ -4038,7 +4026,6 @@ msgid "Back to document"
 msgstr "Voltar ao documento"
 
 #: src/control/backstage/HomeView.tsx:57 src/control/backstage/HomeView.tsx:60
-#, fuzzy
 msgid "More templates"
 msgstr "Mais modelos"
 
@@ -4048,15 +4035,15 @@ msgstr "Data de modificação"
 
 #: src/control/backstage/TemplatesView.tsx:106
 msgid "Remove from favorites"
-msgstr ""
+msgstr "Remover dos favoritos"
 
 #: src/control/backstage/TemplatesView.tsx:107
 msgid "Add to favorites"
-msgstr ""
+msgstr "Adicionar aos favoritos"
 
 #: src/control/backstage/TemplatesView.tsx:138
 msgid "Templates"
-msgstr ""
+msgstr "Modelos"
 
 #: src/control/backstage/TemplatesView.tsx:142
 msgid "Search templates"
@@ -4070,7 +4057,7 @@ msgstr "Tudo"
 
 #: src/control/backstage/TemplatesView.tsx:243
 msgid "Built-in templates"
-msgstr ""
+msgstr "Modelos incorporados"
 
 #: src/control/backstage/TemplatesView.tsx:265
 #: src/control/backstage/MyTemplatesView.tsx:212
@@ -4080,39 +4067,37 @@ msgstr "Nenhum modelo corresponde à sua pesquisa."
 #: src/control/backstage/TemplatesView.tsx:266
 #: src/control/backstage/MyTemplatesView.tsx:213
 msgid "No templates of this type."
-msgstr ""
+msgstr "Nenhum modelo desse tipo."
 
 #: src/control/backstage/MyTemplatesView.tsx:75
 msgid "Document template"
-msgstr ""
+msgstr "Modelo do documento"
 
 #: src/control/backstage/MyTemplatesView.tsx:76
 msgid "Spreadsheet template"
-msgstr ""
+msgstr "Modelo de planilha"
 
 #: src/control/backstage/MyTemplatesView.tsx:77
-#, fuzzy
 msgid "Presentation template"
-msgstr "Modelos de Apresentação"
+msgstr "Modelo de Apresentação"
 
 #: src/control/backstage/MyTemplatesView.tsx:78
 msgid "Drawing template"
-msgstr ""
+msgstr "Modelo de desenho"
 
 #: src/control/backstage/MyTemplatesView.tsx:103
-#, fuzzy
 msgid "My templates"
-msgstr "Mais modelos"
+msgstr "Meus modelos"
 
 #: src/control/backstage/MyTemplatesView.tsx:109
 msgid "Manage"
-msgstr ""
+msgstr "Gerenciar"
 
 #: src/control/backstage/MyTemplatesView.tsx:141
 #: src/control/backstage/MyTemplatesView.tsx:168
 #: src/control/backstage/MyTemplatesView.tsx:330
 msgid "Add template"
-msgstr ""
+msgstr "Adicionar modelo"
 
 #: src/control/backstage/MyTemplatesView.tsx:155
 #: src/control/backstage/MyTemplatesView.tsx:156
@@ -4121,36 +4106,38 @@ msgid "Back"
 msgstr "Voltar"
 
 #: src/control/backstage/MyTemplatesView.tsx:161
-#, fuzzy
 msgid "Manage templates"
-msgstr "Mais modelos"
+msgstr "Gerenciar modelos"
 
 #: src/control/backstage/MyTemplatesView.tsx:174
 msgid ""
 "Rename or remove the templates you added. Built-in templates can't be "
 "changed."
 msgstr ""
+"Renomeie ou remova os modelos que você adicionou. Os modelos integrados não "
+"podem ser alterados."
 
 #: src/control/backstage/MyTemplatesView.tsx:176
 msgid "Templates you add will appear here and in New."
-msgstr ""
+msgstr "Modelos que você adicionar aparecerão aqui e em Novo."
 
 #: src/control/backstage/MyTemplatesView.tsx:183
-#, fuzzy
 msgid "Search my templates"
-msgstr "Modelos de pesquisa"
+msgstr "Pesquisar meus modelos"
 
 #: src/control/backstage/MyTemplatesView.tsx:193
 msgid "No templates yet"
-msgstr ""
+msgstr "Ainda não há modelos"
 
 #: src/control/backstage/MyTemplatesView.tsx:196
 msgid "Add a template to start new documents from your own layout."
 msgstr ""
+"Adicione um modelo para iniciar novos documentos a partir do seu próprio "
+"layout."
 
 #: src/control/backstage/MyTemplatesView.tsx:224
 msgid "Actions"
-msgstr ""
+msgstr "Ações"
 
 #: src/control/backstage/MyTemplatesView.tsx:257
 #: src/control/backstage/MyTemplatesView.tsx:451
@@ -4164,23 +4151,23 @@ msgstr "Renomear"
 
 #: src/control/backstage/MyTemplatesView.tsx:302
 msgid "This type of file cannot be added as a template."
-msgstr ""
+msgstr "Esse tipo de arquivo não pode ser adicionado como modelo."
 
 #: src/control/backstage/MyTemplatesView.tsx:323
 msgid "The template could not be added."
-msgstr ""
+msgstr "O modelo não pôde ser adicionado."
 
 #: src/control/backstage/MyTemplatesView.tsx:341
 msgid "Drop a file here, or"
-msgstr ""
+msgstr "Solte um arquivo aqui, ou"
 
 #: src/control/backstage/MyTemplatesView.tsx:343
 msgid "Browse"
-msgstr ""
+msgstr "Navegar"
 
 #: src/control/backstage/MyTemplatesView.tsx:359
 msgid "Template name"
-msgstr ""
+msgstr "Nome do modelo"
 
 #: src/control/backstage/MyTemplatesView.tsx:403
 #: src/control/Control.NotebookbarCalc.js:1128
@@ -4192,19 +4179,19 @@ msgstr "Substituir"
 
 #: src/control/backstage/MyTemplatesView.tsx:419
 msgid "The template could not be renamed."
-msgstr ""
+msgstr "O modelo não pôde ser renomeado."
 
 #: src/control/backstage/MyTemplatesView.tsx:424
 msgid "Rename template"
-msgstr ""
+msgstr "Renomear modelo"
 
 #: src/control/backstage/MyTemplatesView.tsx:471
 msgid "Remove this template?"
-msgstr ""
+msgstr "Remover este modelo?"
 
 #: src/control/backstage/MyTemplatesView.tsx:476
 msgid "\"%1\" will be removed from My templates."
-msgstr ""
+msgstr "\"%1\" será removido dos Meus modelos."
 
 #: src/control/backstage/InfoView.tsx:31 src/control/Control.Menubar.ts:434
 #: src/control/Control.Menubar.ts:1497
@@ -4245,7 +4232,7 @@ msgstr "Editar conta"
 
 #: src/control/backstage/CloudDialogs.tsx:135
 msgid "Enter a web address, such as %1."
-msgstr ""
+msgstr "Insira um endereço web, como %1."
 
 #: src/control/backstage/CloudDialogs.tsx:152
 msgid "Add new account"
@@ -4323,9 +4310,8 @@ msgid "Dismiss"
 msgstr "Ignorar"
 
 #: src/control/onboarding/OnboardingSteps.ts:26
-#, fuzzy
 msgid "Welcome to Collabora Office"
-msgstr "Bem-vindo(a) ao Collabora Online"
+msgstr "Bem-vindo(a) ao Collabora Office"
 
 #: src/control/onboarding/OnboardingSteps.ts:27
 msgid "Welcome to Collabora Online"
@@ -4443,7 +4429,7 @@ msgstr ""
 
 #: src/control/onboarding/OnboardingSteps.ts:121
 msgid "You are ready to work"
-msgstr "Você está pronto para trabalhar"
+msgstr "Você está pronto(a) para trabalhar"
 
 #: src/control/onboarding/OnboardingSteps.ts:122
 msgid "You can walk through this tour again from the Help menu."
@@ -5013,7 +4999,7 @@ msgstr "Abra {name}"
 #: src/control/Control.JSDialogBuilder.js:2151
 #: src/control/Control.Menubar.ts:1085
 msgid "Rows"
-msgstr "Linhas"
+msgstr "Fileiras"
 
 #: src/control/Control.JSDialogBuilder.js:2152
 #: src/control/Control.Menubar.ts:1088
@@ -5041,9 +5027,8 @@ msgid "Language"
 msgstr "Idioma"
 
 #: src/control/Control.Mention.ts:193
-#, fuzzy
 msgid "No search results found"
-msgstr "Nenhum resultado encontrado!"
+msgstr "Nenhum resultado encontrado"
 
 #: src/control/Control.Menubar.ts:57
 msgid "PDF Document (.pdf) as..."
@@ -6499,15 +6484,14 @@ msgstr "Parágrafo"
 #: src/control/Control.NotebookbarDraw.js:1675
 #: src/control/Control.NotebookbarImpress.js:1740
 #: src/control/Control.TopToolbar.js:284
-#, fuzzy
 msgid "Lines"
-msgstr "Linha"
+msgstr "Linhas"
 
 #: src/control/Control.NotebookbarDraw.js:1695
 #: src/control/Control.NotebookbarImpress.js:1760
 #: src/control/Control.TopToolbar.js:285
 msgid "Curves"
-msgstr ""
+msgstr "Curvas"
 
 #: src/control/Control.NotebookbarImpress.js:110
 #: src/slideshow/SlideShowPresenter.ts:1205
@@ -6570,6 +6554,8 @@ msgstr "Apresentar a todos"
 #: src/control/Control.NotebookbarImpress.js:647
 msgid "Show your slideshow on every viewer's screen when you start it"
 msgstr ""
+"Mostre sua apresentação de slides na tela de cada espectador quando você "
+"iniciá-lo"
 
 #: src/control/Control.NotebookbarImpress.js:767
 msgid "Slide Views"
@@ -6637,7 +6623,7 @@ msgstr "Imagem de fundo"
 
 #: src/control/Control.NotebookbarImpress.js:3007
 msgid "Edit Points"
-msgstr ""
+msgstr "Editar Pontos"
 
 #: src/control/Control.NotebookbarImpress.js:3067
 msgid "Effects"
@@ -6837,61 +6823,61 @@ msgstr "%1, vinculado a %2"
 
 #: src/control/Control.PartsPreview.js:1396
 msgid "Linked to the presentation %1 that is missing"
-msgstr ""
+msgstr "Vinculado à apresentação %1 que está faltando"
 
 #: src/control/Control.PartsPreview.js:1398
 msgid "Linked to the presentation %1 that has changed"
-msgstr ""
+msgstr "Vinculado à apresentação %1 que foi modificada"
 
 #: src/control/Control.PartsPreview.js:1400
 msgid "Linked to the presentation %1, disconnected"
-msgstr ""
+msgstr "Vinculado à apresentação %1, desconectado"
 
 #: src/control/Control.PartsPreview.js:1401
 msgid "Linked to the presentation %1"
-msgstr ""
+msgstr "Vinculado à apresentação %1"
 
 #: src/control/Control.PartsPreview.js:1406
 msgid "Linked to the slides outside the sections of %1, which is missing"
-msgstr ""
+msgstr "Vinculado aos slides fora das seções de %1, que estão faltando"
 
 #: src/control/Control.PartsPreview.js:1409
 msgid "Linked to the slides outside the sections of %1, which has changed"
-msgstr ""
+msgstr "Vinculado aos slides fora das seções de %1, que estão modificados"
 
 #: src/control/Control.PartsPreview.js:1412
 msgid "Linked to the slides outside the sections of %1, disconnected"
-msgstr ""
+msgstr "Vinculado aos slides fora das seções de %1, desconectados"
 
 #: src/control/Control.PartsPreview.js:1413
 msgid "Linked to the slides outside the sections of %1"
-msgstr ""
+msgstr "Vinculado aos slides fora das seções de %1"
 
 #: src/control/Control.PartsPreview.js:1416
 msgid "Linked to a section of %1 that is missing"
-msgstr "Ligado a uma seção de %1 que está faltando"
+msgstr "Vinculado à uma seção de %1 que está faltando"
 
 #: src/control/Control.PartsPreview.js:1418
 msgid "Linked to a section of %1 that has changed"
-msgstr "Ligado a uma seção de %1 que foi mudado"
+msgstr "Vinculado à uma seção de %1, que estão modificados"
 
 #: src/control/Control.PartsPreview.js:1420
 msgid "Linked to a section of %1, disconnected"
-msgstr "Ligado a uma seção de %1, desconectado"
+msgstr "Vinculado à uma seção de %1, desconectado"
 
 #: src/control/Control.PartsPreview.js:1421
 msgid "Linked to a section of %1"
-msgstr "Ligado a uma seção de %1"
+msgstr "Vinculado à uma seção de %1"
 
 #: src/control/Control.PartsPreview.js:1661
 msgid "%n slide"
 msgid_plural "%n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n slide"
+msgstr[1] "%n slides"
 
 #: src/control/Control.PartsPreview.js:1662
 msgid "Toggle presentation %1"
-msgstr ""
+msgstr "Alternar a apresentação %1"
 
 #: src/control/Control.PartsPreview.js:2111
 #: src/control/Control.PartsPreview.js:2378
@@ -6942,35 +6928,31 @@ msgstr[1] "Excluir a seção \"%1\" e seus %n slides?"
 
 #: src/control/Control.PartsPreview.js:2285
 msgid "Close Panel"
-msgstr ""
+msgstr "Fechar Painel"
 
 #: src/control/Control.PartsPreview.js:2294
-#, fuzzy
 msgid "Collapse Presentation"
-msgstr "Fechar Apresentação"
+msgstr "Ocultar Apresentação"
 
 #: src/control/Control.PartsPreview.js:2294
-#, fuzzy
 msgid "Expand Presentation"
-msgstr "Terminal apresentação"
+msgstr "Expandir Apresentação"
 
 #: src/control/Control.PartsPreview.js:2301
 msgid "Open in Panel"
-msgstr ""
+msgstr "Aberto no Painel"
 
 #: src/control/Control.PartsPreview.js:2309
-#, fuzzy
 msgid "Update Presentation"
-msgstr "Filtrar apresentações"
+msgstr "Atualizar Apresentação"
 
 #: src/control/Control.PartsPreview.js:2317
-#, fuzzy
 msgid "Unlink Presentation"
-msgstr "Apresentação em branco"
+msgstr "Desvincular Apresentação"
 
 #: src/control/Control.PartsPreview.js:2324
 msgid "Unlink Presentation & Contents"
-msgstr ""
+msgstr "Desvincular Apresentação & Conteúdos"
 
 #: src/control/Control.PartsPreview.js:2379
 msgid "Enter new section name:"
@@ -7047,6 +7029,8 @@ msgid ""
 "Original file can't be found. Choose it again to keep your slides up to "
 "date."
 msgstr ""
+"O arquivo original não pode ser encontrado. Escolha-o novamente para manter "
+"seus slides atualizados."
 
 #: src/control/Control.SlideImportPane.tsx:960
 msgid "This file is here. You do not have permission to open it."
@@ -7057,6 +7041,8 @@ msgid ""
 "Slides cannot be linked from this file: the link would lead back to this "
 "presentation."
 msgstr ""
+"Slides não podem ser vinculados a partir deste arquivo: o link levaria de "
+"volta a esta apresentação."
 
 #: src/control/Control.SlideImportPane.tsx:966
 msgid "This file could not be read this time."
@@ -7064,11 +7050,11 @@ msgstr "Este arquivo não pôde ser lido desta vez."
 
 #: src/control/Control.SlideImportPane.tsx:974
 msgid "Choose file…"
-msgstr ""
+msgstr "Escolha o arquivo…"
 
 #: src/control/Control.SlideImportPane.tsx:982
 msgid "Try again"
-msgstr ""
+msgstr "Tente novamente"
 
 #: src/control/Control.SlideImportPane.tsx:994
 #: src/control/Control.SlideImportPane.tsx:1613
@@ -7122,7 +7108,7 @@ msgstr "Insira como slides separados"
 #: src/control/Control.SlideImportPane.tsx:1179
 msgid "Linked to its section in {0}. Update Links brings in later changes."
 msgstr ""
-"Vinculado à sua secção em {0}. Atualizar links traz alterações posteriores."
+"Vinculado à sua seção em {0}. Atualizar links traz alterações posteriores."
 
 #: src/control/Control.SlideImportPane.tsx:1228
 msgid "{0} of {1}"
@@ -7216,7 +7202,7 @@ msgstr "Selecionar todos os slides"
 
 #: src/control/Control.SlideImportPane.tsx:1634
 msgid "Link whole presentation"
-msgstr ""
+msgstr "Vincular a apresentação inteira"
 
 #: src/control/Control.SlideImportPane.tsx:1642
 msgid "Update the slides linked to this file"
@@ -7248,7 +7234,7 @@ msgstr "Mantenha o design original"
 
 #: src/control/Control.SlideImportPane.tsx:1805
 msgid "Not supported in PPTX, please save as ODP to use links"
-msgstr ""
+msgstr "Não suportado em PPTX, por favor, salve como ODP para usar links"
 
 #: src/control/Control.SlideImportPane.tsx:1820
 msgid "Stay linked to the source file"
@@ -7276,12 +7262,11 @@ msgstr "Vinculado a {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:130
 msgid "In a section linked to {0}"
-msgstr "Numa seção vinculada a {0}"
+msgstr "Em uma seção vinculada a {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:131
-#, fuzzy
 msgid "In a presentation linked to {0}"
-msgstr "Numa seção vinculada a {0}"
+msgstr "Em uma apresentação vinculada a {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:154
 msgid "Hide the actions for this linked slide"
@@ -7302,9 +7287,8 @@ msgstr "Atualizar seção"
 
 #: src/control/Control.SlideLinkToolbar.tsx:195
 #: src/slideimport/SlideLinks.ts:492
-#, fuzzy
 msgid "Update presentation"
-msgstr "Filtrar apresentações"
+msgstr "Atualizar apresentação"
 
 #: src/control/Control.SlideLinkToolbar.tsx:209
 msgid "Not available"
@@ -7316,29 +7300,27 @@ msgstr "Alternar seção %1"
 
 #: src/control/SlideLinkPanel.tsx:26
 msgid "Close the linked presentation"
-msgstr ""
+msgstr "Fechar a apresentação vinculada"
 
 #: src/control/SlideLinkPanel.tsx:31
-#, fuzzy
 msgid "Linked presentation %1"
-msgstr "Filtrar apresentações"
+msgstr "Apresentação vinculada %1"
 
 #: src/control/SlideLinkPanel.tsx:54
 msgid "Slides of %1"
-msgstr ""
+msgstr "Slides de %1"
 
 #: src/control/SlidePresentationsRow.tsx:34 src/control/LinkedViewRow.tsx:52
-#, fuzzy
 msgid "Linked presentations"
-msgstr "Filtrar apresentações"
+msgstr "Apresentações vinculadas"
 
 #: src/control/SlidePresentationsRow.tsx:44
 msgid "Expand all linked presentations"
-msgstr ""
+msgstr "Expandir todas as apresentações vinculadas"
 
 #: src/control/SlidePresentationsRow.tsx:54
 msgid "Collapse all linked presentations"
-msgstr ""
+msgstr "Ocultar todas as apresentações vinculadas"
 
 #: src/slideimport/SlideImportSession.ts:352
 msgid "The slides of the source could not be read."
@@ -7367,42 +7349,37 @@ msgstr ""
 "Não é possível atualizar a seção: {0} não contém mais sua seção de origem."
 
 #: src/slideimport/SlideLinks.ts:384
-#, fuzzy
 msgid "Cannot update the slide: {0} no longer holds its source slide."
 msgstr ""
-"Não é possível atualizar a seção: {0} não contém mais sua seção de origem."
+"Não é possível atualizar o slide: {0} não contém mais seu slide de origem."
 
 #: src/slideimport/SlideLinks.ts:489
-#, fuzzy
 msgid "Update links"
-msgstr "Atualizar links"
+msgstr "Atualizar vínculos"
 
 #: src/slideimport/SlideLinks.ts:493
-#, fuzzy
 msgid "Update presentations"
-msgstr "Filtrar apresentações"
+msgstr "Atualizar apresentações"
 
 #: src/slideimport/SlideLinks.ts:494
 msgid "Update sections"
 msgstr "Atualizar seções"
 
 #: src/slideimport/SlideLinks.ts:504
-#, fuzzy
 msgid ""
 "The linked presentation will hold the slides and sections that {0} holds "
 "now. Changes made to these slides in this presentation will be lost."
 msgstr ""
-"A seção irá segurar os slides que sua seção em {0} mantém agora. As "
-"alterações feitas nesses slides nesta apresentação serão perdidas."
+"A apresentação vinculada manterá os slides e seções que {0} possuem agora. "
+"As alterações feitas nos slides nessa apresentação serão perdidas."
 
 #: src/slideimport/SlideLinks.ts:508
-#, fuzzy
 msgid ""
 "The section will hold the slides that {0} keeps outside its sections now. "
 "Changes made to these slides in this presentation will be lost."
 msgstr ""
-"A seção irá segurar os slides que sua seção em {0} mantém agora. As "
-"alterações feitas nesses slides nesta apresentação serão perdidas."
+"A seção irá manter os slides que {0} mantém fora de suas seções agora. As "
+"alterações feitas nos slides nessa apresentação serão perdidas."
 
 #: src/slideimport/SlideLinks.ts:511
 msgid ""
@@ -7410,7 +7387,7 @@ msgid ""
 "made to these slides in this presentation will be lost."
 msgstr ""
 "A seção irá segurar os slides que sua seção em {0} mantém agora. As "
-"alterações feitas nesses slides nesta apresentação serão perdidas."
+"alterações feitas nos slides nessa apresentação serão perdidas."
 
 #: src/slideimport/SlideLinks.ts:527
 msgid ""
@@ -7418,31 +7395,29 @@ msgid ""
 "files hold now. Changes made to these slides in this presentation will be "
 "lost."
 msgstr ""
-"{0} seções vinculadas irá segurar os slides que suas seções nos arquivos de "
-"origem seguram agora. As alterações feitas nesses slides nesta apresentação "
+"{0} seções vinculadas irão segurar os slides que suas seções nos arquivos de "
+"origem mantém agora. As alterações feitas nos slides nessa apresentação "
 "serão perdidas."
 
 #: src/slideimport/SlideLinks.ts:531
-#, fuzzy
 msgid ""
 "{0} linked presentations will hold the slides and sections that their "
 "source files hold now. Changes made to these slides in this presentation "
 "will be lost."
 msgstr ""
-"{0} seções vinculadas irá segurar os slides que suas seções nos arquivos de "
-"origem seguram agora. As alterações feitas nesses slides nesta apresentação "
-"serão perdidas."
+"{0} apresentações vinculadas irão segurar os slides que suas seções nos "
+"arquivos de origem mantém agora. As alterações feitas nos slides nessa "
+"apresentação serão perdidas."
 
 #: src/slideimport/SlideLinks.ts:534
-#, fuzzy
 msgid ""
 "{0} linked sections and presentations will hold the slides that their "
 "source files hold now. Changes made to these slides in this presentation "
 "will be lost."
 msgstr ""
-"{0} seções vinculadas irá segurar os slides que suas seções nos arquivos de "
-"origem seguram agora. As alterações feitas nesses slides nesta apresentação "
-"serão perdidas."
+"{0} seções vinculadas e apresentações irão segurar os slides que suas seções "
+"nos arquivos de origem mantém agora. As alterações feitas nos slides nessa "
+"apresentação serão perdidas."
 
 #: src/slideimport/SlideLinks.ts:768
 msgid ""
@@ -9893,9 +9868,8 @@ msgid "Last saved:"
 msgstr "Documento salvo:"
 
 #: src/map/Map.js:1170
-#, fuzzy
 msgid "Please wait..."
-msgstr "Por favor aguarde!"
+msgstr "Por favor aguarde..."
 
 #: src/map/handler/Map.Feedback.js:102
 msgid "Please send us your feedback"
