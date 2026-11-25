@@ -12,17 +12,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 12:57+0100\n"
-"PO-Revision-Date: 2026-11-03 01:45+0000\n"
+"PO-Revision-Date: 2026-11-23 01:10+0000\n"
 "Last-Translator: Michal Várady <majkl82@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/cs/>\n"
-"Language: \n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n "
 "<= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
-"X-Generator: Weblate 2026.11.1.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -450,7 +450,6 @@ msgstr ""
 
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:107
-#, fuzzy
 msgid "No WOPI host configured: trusting the first host that connects"
 msgstr ""
 "Není nastaven žádný hostitel WOPI: důvěřuje se prvnímu hostiteli, který se "
@@ -462,6 +461,8 @@ msgid ""
 "No WOPI host is allowed: alias_groups mode is \"groups\" but no group is "
 "defined"
 msgstr ""
+"Není povolen žádný hostitel WOPI: režim alias_groups je \"groups\", ale není "
+"definována žádná skupina"
 
 #: admin/src/AdminSocketServerAudit.js:58
 #: src/control/Control.ServerAuditDialog.ts:129
@@ -1707,9 +1708,8 @@ msgstr "EPUB (.epub)"
 
 #: src/app/ExportFormats.ts:65 src/control/Control.Menubar.ts:144
 #: src/control/Control.NotebookbarBuilder.js:453
-#, fuzzy
 msgid "ODF master document (.odm)"
-msgstr "Textový dokument ODF (.odt)"
+msgstr "Hlavní dokument ODF (.odm)"
 
 #: src/app/ExportFormats.ts:66 src/app/ExportFormats.ts:78
 #: src/control/Control.Menubar.ts:145
@@ -1812,113 +1812,111 @@ msgstr "Obrázek (.png)"
 
 #: src/app/HandleGroups.ts:1855
 msgid "Top Left"
-msgstr ""
+msgstr "Vlevo nahoře"
 
 #: src/app/HandleGroups.ts:1856
 msgid "Top"
-msgstr ""
+msgstr "Nahoře"
 
 #: src/app/HandleGroups.ts:1857
 msgid "Top Right"
-msgstr ""
+msgstr "Vpravo nahoře"
 
 #: src/app/HandleGroups.ts:1858 src/app/HandleGroups.ts:1996
 msgid "Left"
-msgstr ""
+msgstr "Vlevo"
 
 #: src/app/HandleGroups.ts:1859
 msgid "Center"
-msgstr ""
+msgstr "Uprostřed"
 
 #: src/app/HandleGroups.ts:1860 src/app/HandleGroups.ts:1997
-#, fuzzy
 msgid "Right"
-msgstr "Světlé"
+msgstr "Vpravo"
 
 #: src/app/HandleGroups.ts:1861
 msgid "Bottom Left"
-msgstr ""
+msgstr "Vlevo dole"
 
 #: src/app/HandleGroups.ts:1862
 msgid "Bottom"
-msgstr ""
+msgstr "Dole"
 
 #: src/app/HandleGroups.ts:1863
 msgid "Bottom Right"
-msgstr ""
+msgstr "Vpravo dole"
 
 #: src/app/HandleGroups.ts:1951
 msgid "Gluepoint"
-msgstr ""
+msgstr "Spojovací bod"
 
 #: src/app/HandleGroups.ts:1998
 msgid "Up"
-msgstr ""
+msgstr "Nahoru"
 
 #: src/app/HandleGroups.ts:1999
 msgid "Down"
-msgstr ""
+msgstr "Dolů"
 
 #: src/app/HandleGroups.ts:2004
 msgid "Anchor"
-msgstr ""
+msgstr "Ukotvení"
 
 #: src/app/HandleGroups.ts:2045
 msgid "Default gluepoints cannot be edited."
-msgstr ""
+msgstr "Výchozí spojovací body nelze upravovat."
 
 #: src/app/HandleGroups.ts:2863
-#, fuzzy
 msgid "Point"
-msgstr "Tisk"
+msgstr "Bod"
 
 #: src/app/HandleGroups.ts:2875
 msgid "To Line"
-msgstr ""
+msgstr "Na čáru"
 
 #: src/app/HandleGroups.ts:2875
 msgid "To Curve"
-msgstr ""
+msgstr "Na křivku"
 
 #: src/app/HandleGroups.ts:2882
 msgid "Corner Point"
-msgstr ""
+msgstr "Rohový bod"
 
 #: src/app/HandleGroups.ts:2889
 msgid "Smooth Transition"
-msgstr ""
+msgstr "Hladký přechod"
 
 #: src/app/HandleGroups.ts:2896
 msgid "Symmetric Transition"
-msgstr ""
+msgstr "Symetrický přechod"
 
 #: src/app/HandleGroups.ts:2905
 msgid "Split Path"
-msgstr ""
+msgstr "Rozdělit cestu"
 
 #: src/app/HandleGroups.ts:3420
 msgid "Motion Path"
-msgstr ""
+msgstr "Dráha pohybu"
 
 #: src/app/HandleGroups.ts:3421 src/control/jsdialog/Definitions.Menu.ts:2515
 msgid "Add Point"
-msgstr ""
+msgstr "Přidat bod"
 
 #: src/app/HandleGroups.ts:3426
 msgid "Open Path"
-msgstr ""
+msgstr "Otevřít cestu"
 
 #: src/app/HandleGroups.ts:3426 src/control/jsdialog/Definitions.Menu.ts:2522
 msgid "Close Path"
-msgstr ""
+msgstr "Uzavřít cestu"
 
 #: src/app/HandleGroups.ts:3433 src/control/jsdialog/Definitions.Menu.ts:2531
 msgid "Simplify Curves"
-msgstr ""
+msgstr "Zjednodušit křivky"
 
 #: src/app/HandleGroups.ts:3439 src/control/jsdialog/Definitions.Menu.ts:2536
 msgid "Simplify All"
-msgstr ""
+msgstr "Zjednodušit vše"
 
 #: src/app/LOUtil.ts:1455
 msgid "{0} website, opens in new tab"
@@ -2000,33 +1998,35 @@ msgstr "méně než minutu"
 
 #: src/control/VideoBackgroundDialog.ts:24
 msgid "Clouds"
-msgstr ""
+msgstr "Mraky"
 
 #: src/control/VideoBackgroundDialog.ts:25
 msgid "Clouds at dusk"
-msgstr ""
+msgstr "Mraky za soumraku"
 
 #: src/control/VideoBackgroundDialog.ts:26
 msgid "Bokeh"
-msgstr ""
+msgstr "Bokeh"
 
 #: src/control/VideoBackgroundDialog.ts:64
 #: src/control/Control.NotebookbarImpress.js:2112
 msgid "Background Video"
-msgstr ""
+msgstr "Video na pozadí"
 
 #: src/control/VideoBackgroundDialog.ts:69
 msgid ""
 "The video plays behind every slide that uses the master slide of this slide."
 msgstr ""
+"Video se přehrává za každým snímkem, který používá stejnou předlohu jako "
+"tento snímek."
 
 #: src/control/VideoBackgroundDialog.ts:98
 msgid "Remove Background Video"
-msgstr ""
+msgstr "Odstranit video na pozadí"
 
 #: src/control/VideoBackgroundDialog.ts:104
 msgid "Choose Your Own Video..."
-msgstr ""
+msgstr "Vybrat vlastní video..."
 
 #: src/canvas/sections/CommentListSection.ts:2301
 #: src/canvas/sections/CommentListSection.ts:2314
@@ -2429,32 +2429,26 @@ msgid "What would you like to do with this document?"
 msgstr "Co chcete s tímto dokumentem udělat?"
 
 #: src/control/Control.AIChatSidebar.ts:838
-#, fuzzy
 msgid "Good morning, {0}"
 msgstr "Dobré ráno, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:839
-#, fuzzy
 msgid "Good morning"
 msgstr "Dobré ráno!"
 
 #: src/control/Control.AIChatSidebar.ts:841
-#, fuzzy
 msgid "Good afternoon, {0}"
 msgstr "Dobré odpoledne, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:842
-#, fuzzy
 msgid "Good afternoon"
 msgstr "Dobré odpoledne!"
 
 #: src/control/Control.AIChatSidebar.ts:844
-#, fuzzy
 msgid "Good evening, {0}"
 msgstr "Dobrý večer, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:845
-#, fuzzy
 msgid "Good evening"
 msgstr "Dobrý večer!"
 
@@ -2506,7 +2500,7 @@ msgstr "Jako kontext se používá vybraný text"
 
 #: src/control/Control.AIChatSidebar.ts:1088
 msgid "Ask AI, or type / for a saved prompt..."
-msgstr ""
+msgstr "Zeptejte se AI nebo napište / pro výběr uloženého zadání..."
 
 #: src/control/Control.AIChatSidebar.ts:1091
 msgid "Message input"
@@ -2522,7 +2516,6 @@ msgstr "Odeslat zprávu"
 
 #: src/control/Control.AIChatSidebar.ts:1130
 #: src/control/Control.AIChatSidebar.ts:1143
-#, fuzzy
 msgid "Set Tone"
 msgstr "Nastavit tón"
 
@@ -2589,64 +2582,66 @@ msgstr "Přepnout doplňování emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1313
 msgid "Add Prompts"
-msgstr ""
+msgstr "Přidat zadání"
 
 #: src/control/Control.AIChatSidebar.ts:1316
 msgid "Saved prompts"
-msgstr ""
+msgstr "Uložená zadání"
 
 #: src/control/Control.AIChatSidebar.ts:1345
 msgid "My prompts"
-msgstr ""
+msgstr "Moje zadání"
 
 #: src/control/Control.AIChatSidebar.ts:1354
 msgid "Type / in the message box to run a prompt."
-msgstr ""
+msgstr "Chcete-li spustit zadání, zadejte do pole zprávy /."
 
 #: src/control/Control.AIChatSidebar.ts:1363
 msgid "Run prompt {0}"
-msgstr ""
+msgstr "Spustit zadání {0}"
 
 #: src/control/Control.AIChatSidebar.ts:1368
 #: src/control/Control.AIChatSidebar.ts:1369
 #: src/control/Control.AIChatSidebar.ts:1424
 msgid "Edit prompt"
-msgstr ""
+msgstr "Upravit zadání"
 
 #: src/control/Control.AIChatSidebar.ts:1385
 msgid ""
 "Save instructions you use often and run them on the selected text. Type / "
 "in the message box to run a prompt."
 msgstr ""
+"Uložte si často používané pokyny a používejte je na vybraný text. Chcete-li "
+"spustit zadání, zadejte do pole zprávy /."
 
 #: src/control/Control.AIChatSidebar.ts:1394
 #: src/control/Control.AIChatSidebar.ts:1769
 msgid "+ Add a prompt"
-msgstr ""
+msgstr "+ Přidat zadání"
 
 #: src/control/Control.AIChatSidebar.ts:1398
 #: src/control/Control.AIChatSidebar.ts:1772
 msgid "Add a prompt"
-msgstr ""
+msgstr "Přidat zadání"
 
 #: src/control/Control.AIChatSidebar.ts:1418
 msgid "Back to prompts"
-msgstr ""
+msgstr "Zpět k zadáním"
 
 #: src/control/Control.AIChatSidebar.ts:1424
 msgid "New prompt"
-msgstr ""
+msgstr "Nové zadání"
 
 #: src/control/Control.AIChatSidebar.ts:1434
 #: src/control/Control.AIChatSidebar.ts:1519
 #: src/control/Control.AIChatSidebar.ts:1545
 msgid "Delete prompt"
-msgstr ""
+msgstr "Odstranit zadání"
 
 #: src/control/Control.AIChatSidebar.ts:1449
 #: src/control/Control.AIChatSidebar.ts:1451
 msgid "Save prompt"
-msgstr ""
+msgstr "Uložit zadání"
 
 #: src/control/Control.AIChatSidebar.ts:1469
 #: src/control/backstage/HomeView.tsx:75
@@ -2659,34 +2654,33 @@ msgstr "Název"
 
 #: src/control/Control.AIChatSidebar.ts:1476
 msgid "e.g. Meeting minutes"
-msgstr ""
+msgstr "např. zápis ze schůzky"
 
 #: src/control/Control.AIChatSidebar.ts:1478
 msgid "Prompt name"
-msgstr ""
+msgstr "Název zadání"
 
 #: src/control/Control.AIChatSidebar.ts:1483
 msgid "What should AI do with the selected text?"
-msgstr ""
+msgstr "Co má AI udělat s vybraným textem?"
 
 #: src/control/Control.AIChatSidebar.ts:1491
 msgid ""
 "Turn the selected notes into meeting minutes with decisions and action "
 "items."
-msgstr ""
+msgstr "Převeďte vybrané poznámky na zápis ze schůzky s rozhodnutími a úkoly."
 
 #: src/control/Control.AIChatSidebar.ts:1495
 msgid "Prompt instruction"
-msgstr ""
+msgstr "Pokyny pro zadání"
 
 #: src/control/Control.AIChatSidebar.ts:1514
-#, fuzzy
 msgid "Delete prompt confirmation"
-msgstr "Potvrzení odstranění tónu"
+msgstr "Potvrzení odstranění zadání"
 
 #: src/control/Control.AIChatSidebar.ts:1525
 msgid "The prompt \"{0}\" will be deleted."
-msgstr ""
+msgstr "Zadání „{0}“ bude odstraněno."
 
 #: src/control/Control.AIChatSidebar.ts:1538
 #: src/control/Control.AIChatSidebar.ts:2240
@@ -2694,17 +2688,16 @@ msgid "Cancel delete"
 msgstr "Zrušit odstranění"
 
 #: src/control/Control.AIChatSidebar.ts:1635
-#, fuzzy
 msgid "You have reached the maximum of {0} saved prompts."
-msgstr "Dosáhli jste maximálního počtu {0} vlastních tónů."
+msgstr "Dosáhli jste maximálního počtu uložených zadání: {0}."
 
 #: src/control/Control.AIChatSidebar.ts:1753
 msgid "No saved prompt matches this name."
-msgstr ""
+msgstr "Tomuto názvu neodpovídá žádné uložené zadání."
 
 #: src/control/Control.AIChatSidebar.ts:1754
 msgid "You have no saved prompts yet."
-msgstr ""
+msgstr "Zatím nemáte žádná uložená zadání."
 
 #: src/control/Control.AIChatSidebar.ts:2057
 msgid "Use icon"
@@ -3921,7 +3914,7 @@ msgstr "Ukončit"
 
 #: src/control/Control.BackstageView.ts:299
 msgid "Start something new, or continue where you left off."
-msgstr ""
+msgstr "Začněte něco nového nebo pokračujte tam, kde jste skončili."
 
 #: src/control/Control.BackstageView.ts:332
 #: src/control/jsdialog/Widget.ColorPicker.ts:476
@@ -3930,19 +3923,19 @@ msgstr "Poslední"
 
 #: src/control/Control.BackstageView.ts:718
 msgid "Account in use"
-msgstr ""
+msgstr "Účet se používá"
 
 #: src/control/Control.BackstageView.ts:720
 msgid "Close the windows and documents of this account before you remove it."
-msgstr ""
+msgstr "Před odebráním účtu zavřete jeho okna a dokumenty."
 
 #: src/control/Control.BackstageView.ts:873
 msgid "Template removed from favorites"
-msgstr ""
+msgstr "Šablona byla odebrána z oblíbených"
 
 #: src/control/Control.BackstageView.ts:874
 msgid "Template added to favorites"
-msgstr ""
+msgstr "Šablona byla přidána do oblíbených"
 
 #: src/control/Control.BackstageView.ts:1188
 msgid "Document Info"
@@ -3954,7 +3947,7 @@ msgstr "Zobrazit vlastnosti a informace dokumentu"
 
 #: src/control/Control.BackstageView.ts:1219
 msgid "Master document, a document per chapter"
-msgstr ""
+msgstr "Hlavní dokument, samostatný dokument pro každou kapitolu"
 
 #: src/control/Control.BackstageView.ts:1226
 msgid "Export Document"
@@ -4044,7 +4037,6 @@ msgid "Back to document"
 msgstr "Zpět k dokumentu"
 
 #: src/control/backstage/HomeView.tsx:57 src/control/backstage/HomeView.tsx:60
-#, fuzzy
 msgid "More templates"
 msgstr "Další šablony"
 
@@ -4054,15 +4046,15 @@ msgstr "Datum změny"
 
 #: src/control/backstage/TemplatesView.tsx:106
 msgid "Remove from favorites"
-msgstr ""
+msgstr "Odebrat z oblíbených"
 
 #: src/control/backstage/TemplatesView.tsx:107
 msgid "Add to favorites"
-msgstr ""
+msgstr "Přidat do oblíbených"
 
 #: src/control/backstage/TemplatesView.tsx:138
 msgid "Templates"
-msgstr ""
+msgstr "Šablony"
 
 #: src/control/backstage/TemplatesView.tsx:142
 msgid "Search templates"
@@ -4076,7 +4068,7 @@ msgstr "Vše"
 
 #: src/control/backstage/TemplatesView.tsx:243
 msgid "Built-in templates"
-msgstr ""
+msgstr "Vestavěné šablony"
 
 #: src/control/backstage/TemplatesView.tsx:265
 #: src/control/backstage/MyTemplatesView.tsx:212
@@ -4086,40 +4078,37 @@ msgstr "Žádné šablony neodpovídají vašemu hledání."
 #: src/control/backstage/TemplatesView.tsx:266
 #: src/control/backstage/MyTemplatesView.tsx:213
 msgid "No templates of this type."
-msgstr ""
+msgstr "Žádné šablony tohoto typu."
 
 #: src/control/backstage/MyTemplatesView.tsx:75
 msgid "Document template"
-msgstr ""
+msgstr "Šablona dokumentu"
 
 #: src/control/backstage/MyTemplatesView.tsx:76
 msgid "Spreadsheet template"
-msgstr ""
+msgstr "Šablona sešitu"
 
 #: src/control/backstage/MyTemplatesView.tsx:77
-#, fuzzy
 msgid "Presentation template"
-msgstr "Šablony prezentace"
+msgstr "Šablona prezentace"
 
 #: src/control/backstage/MyTemplatesView.tsx:78
 msgid "Drawing template"
-msgstr ""
+msgstr "Šablona kresby"
 
 #: src/control/backstage/MyTemplatesView.tsx:103
-#, fuzzy
 msgid "My templates"
-msgstr "Bez šablony"
+msgstr "Moje šablony"
 
 #: src/control/backstage/MyTemplatesView.tsx:109
 msgid "Manage"
-msgstr ""
+msgstr "Spravovat"
 
 #: src/control/backstage/MyTemplatesView.tsx:141
 #: src/control/backstage/MyTemplatesView.tsx:168
 #: src/control/backstage/MyTemplatesView.tsx:330
-#, fuzzy
 msgid "Add template"
-msgstr "Bez šablony"
+msgstr "Přidat šablonu"
 
 #: src/control/backstage/MyTemplatesView.tsx:155
 #: src/control/backstage/MyTemplatesView.tsx:156
@@ -4128,36 +4117,35 @@ msgid "Back"
 msgstr "Zpět"
 
 #: src/control/backstage/MyTemplatesView.tsx:161
-#, fuzzy
 msgid "Manage templates"
-msgstr "Další šablony"
+msgstr "Spravovat šablony"
 
 #: src/control/backstage/MyTemplatesView.tsx:174
 msgid ""
 "Rename or remove the templates you added. Built-in templates can't be "
 "changed."
 msgstr ""
+"Přejmenujte nebo odeberte přidané šablony. Vestavěné šablony nelze měnit."
 
 #: src/control/backstage/MyTemplatesView.tsx:176
 msgid "Templates you add will appear here and in New."
-msgstr ""
+msgstr "Přidané šablony se zobrazí zde a v nabídce Nový."
 
 #: src/control/backstage/MyTemplatesView.tsx:183
-#, fuzzy
 msgid "Search my templates"
-msgstr "Hledat šablony"
+msgstr "Hledat v mých šablonách"
 
 #: src/control/backstage/MyTemplatesView.tsx:193
 msgid "No templates yet"
-msgstr ""
+msgstr "Zatím žádné šablony"
 
 #: src/control/backstage/MyTemplatesView.tsx:196
 msgid "Add a template to start new documents from your own layout."
-msgstr ""
+msgstr "Přidejte šablonu a vytvářejte nové dokumenty podle vlastního rozvržení."
 
 #: src/control/backstage/MyTemplatesView.tsx:224
 msgid "Actions"
-msgstr ""
+msgstr "Akce"
 
 #: src/control/backstage/MyTemplatesView.tsx:257
 #: src/control/backstage/MyTemplatesView.tsx:451
@@ -4171,23 +4159,23 @@ msgstr "Přejmenovat"
 
 #: src/control/backstage/MyTemplatesView.tsx:302
 msgid "This type of file cannot be added as a template."
-msgstr ""
+msgstr "Tento typ souboru nelze přidat jako šablonu."
 
 #: src/control/backstage/MyTemplatesView.tsx:323
 msgid "The template could not be added."
-msgstr ""
+msgstr "Šablonu se nepodařilo přidat."
 
 #: src/control/backstage/MyTemplatesView.tsx:341
 msgid "Drop a file here, or"
-msgstr ""
+msgstr "Přetáhněte sem soubor nebo"
 
 #: src/control/backstage/MyTemplatesView.tsx:343
 msgid "Browse"
-msgstr ""
+msgstr "Procházet"
 
 #: src/control/backstage/MyTemplatesView.tsx:359
 msgid "Template name"
-msgstr ""
+msgstr "Název šablony"
 
 #: src/control/backstage/MyTemplatesView.tsx:403
 #: src/control/Control.NotebookbarCalc.js:1128
@@ -4199,19 +4187,19 @@ msgstr "Nahradit"
 
 #: src/control/backstage/MyTemplatesView.tsx:419
 msgid "The template could not be renamed."
-msgstr ""
+msgstr "Šablonu se nepodařilo přejmenovat."
 
 #: src/control/backstage/MyTemplatesView.tsx:424
 msgid "Rename template"
-msgstr ""
+msgstr "Přejmenovat šablonu"
 
 #: src/control/backstage/MyTemplatesView.tsx:471
 msgid "Remove this template?"
-msgstr ""
+msgstr "Odebrat tuto šablonu?"
 
 #: src/control/backstage/MyTemplatesView.tsx:476
 msgid "\"%1\" will be removed from My templates."
-msgstr ""
+msgstr "„%1“ bude odebrána z mých šablon."
 
 #: src/control/backstage/InfoView.tsx:31 src/control/Control.Menubar.ts:434
 #: src/control/Control.Menubar.ts:1497
@@ -4252,7 +4240,7 @@ msgstr "Upravit účet"
 
 #: src/control/backstage/CloudDialogs.tsx:135
 msgid "Enter a web address, such as %1."
-msgstr ""
+msgstr "Zadejte webovou adresu, například %1."
 
 #: src/control/backstage/CloudDialogs.tsx:152
 msgid "Add new account"
@@ -4330,9 +4318,8 @@ msgid "Dismiss"
 msgstr "Odmítnout"
 
 #: src/control/onboarding/OnboardingSteps.ts:26
-#, fuzzy
 msgid "Welcome to Collabora Office"
-msgstr "Vítejte v Collabora Online"
+msgstr "Vítejte v Collabora Office"
 
 #: src/control/onboarding/OnboardingSteps.ts:27
 msgid "Welcome to Collabora Online"
@@ -5047,9 +5034,8 @@ msgid "Language"
 msgstr "Jazyk"
 
 #: src/control/Control.Mention.ts:193
-#, fuzzy
 msgid "No search results found"
-msgstr "Nenalezeny žádné výsledky vyhledávání!"
+msgstr "Nenalezeny žádné výsledky vyhledávání"
 
 #: src/control/Control.Menubar.ts:57
 msgid "PDF Document (.pdf) as..."
@@ -5071,7 +5057,7 @@ msgstr "Exportovat jako"
 
 #: src/control/Control.Menubar.ts:151
 msgid "Create Master Document..."
-msgstr ""
+msgstr "Vytvořit hlavní dokument..."
 
 #: src/control/Control.Menubar.ts:152 src/control/Control.Menubar.ts:498
 #: src/control/Control.Menubar.ts:714 src/control/Control.Menubar.ts:891
@@ -5370,7 +5356,7 @@ msgstr "Lokální multimédia..."
 
 #: src/control/Control.Menubar.ts:569
 msgid "Background Video..."
-msgstr ""
+msgstr "Video na pozadí..."
 
 #: src/control/Control.Menubar.ts:610 src/control/Control.Menubar.ts:803
 #: src/control/Control.NotebookbarDraw.js:1425
@@ -6499,15 +6485,14 @@ msgstr "Odstavec"
 #: src/control/Control.NotebookbarDraw.js:1675
 #: src/control/Control.NotebookbarImpress.js:1740
 #: src/control/Control.TopToolbar.js:284
-#, fuzzy
 msgid "Lines"
-msgstr "Čára"
+msgstr "Čáry"
 
 #: src/control/Control.NotebookbarDraw.js:1695
 #: src/control/Control.NotebookbarImpress.js:1760
 #: src/control/Control.TopToolbar.js:285
 msgid "Curves"
-msgstr ""
+msgstr "Křivky"
 
 #: src/control/Control.NotebookbarImpress.js:110
 #: src/slideshow/SlideShowPresenter.ts:1205
@@ -6569,7 +6554,7 @@ msgstr "Prezentovat všem"
 
 #: src/control/Control.NotebookbarImpress.js:647
 msgid "Show your slideshow on every viewer's screen when you start it"
-msgstr ""
+msgstr "Po spuštění prezentace ji zobrazit na obrazovkách všech účastníků"
 
 #: src/control/Control.NotebookbarImpress.js:767
 msgid "Slide Views"
@@ -6637,7 +6622,7 @@ msgstr "Obrázek pozadí"
 
 #: src/control/Control.NotebookbarImpress.js:3007
 msgid "Edit Points"
-msgstr ""
+msgstr "Upravit body"
 
 #: src/control/Control.NotebookbarImpress.js:3067
 msgid "Effects"
@@ -6741,7 +6726,7 @@ msgstr "Vložit sekci"
 
 #: src/control/Control.PartsPreview.js:893
 msgid "Start Slideshow from This Slide"
-msgstr ""
+msgstr "Spustit prezentaci od tohoto snímku"
 
 #: src/control/Control.PartsPreview.js:1026
 msgid "with 1 other"
@@ -6841,35 +6826,35 @@ msgstr "%1, propojeno s %2"
 
 #: src/control/Control.PartsPreview.js:1396
 msgid "Linked to the presentation %1 that is missing"
-msgstr ""
+msgstr "Propojeno s chybějící prezentací %1"
 
 #: src/control/Control.PartsPreview.js:1398
 msgid "Linked to the presentation %1 that has changed"
-msgstr ""
+msgstr "Propojeno se změněnou prezentací %1"
 
 #: src/control/Control.PartsPreview.js:1400
 msgid "Linked to the presentation %1, disconnected"
-msgstr ""
+msgstr "Propojeno s prezentací %1, připojení přerušeno"
 
 #: src/control/Control.PartsPreview.js:1401
 msgid "Linked to the presentation %1"
-msgstr ""
+msgstr "Propojeno s prezentací %1"
 
 #: src/control/Control.PartsPreview.js:1406
 msgid "Linked to the slides outside the sections of %1, which is missing"
-msgstr ""
+msgstr "Propojeno se snímky mimo sekce chybějícího zdroje %1"
 
 #: src/control/Control.PartsPreview.js:1409
 msgid "Linked to the slides outside the sections of %1, which has changed"
-msgstr ""
+msgstr "Propojeno se snímky mimo sekce změněného zdroje %1"
 
 #: src/control/Control.PartsPreview.js:1412
 msgid "Linked to the slides outside the sections of %1, disconnected"
-msgstr ""
+msgstr "Propojeno se snímky mimo sekce dokumentu %1, připojení přerušeno"
 
 #: src/control/Control.PartsPreview.js:1413
 msgid "Linked to the slides outside the sections of %1"
-msgstr ""
+msgstr "Propojeno se snímky mimo sekce dokumentu %1"
 
 #: src/control/Control.PartsPreview.js:1416
 msgid "Linked to a section of %1 that is missing"
@@ -6890,14 +6875,14 @@ msgstr "Propojeno se sekcí ze zdroje %1"
 #: src/control/Control.PartsPreview.js:1661
 msgid "%n slide"
 msgid_plural "%n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%n snímek"
+msgstr[1] "%n snímky"
+msgstr[2] "%n snímku"
+msgstr[3] "%n snímků"
 
 #: src/control/Control.PartsPreview.js:1662
 msgid "Toggle presentation %1"
-msgstr ""
+msgstr "Sbalit nebo rozbalit prezentaci %1"
 
 #: src/control/Control.PartsPreview.js:2111
 #: src/control/Control.PartsPreview.js:2378
@@ -6950,35 +6935,31 @@ msgstr[3] "Odstranit sekci „%1“ včetně %n snímků?"
 
 #: src/control/Control.PartsPreview.js:2285
 msgid "Close Panel"
-msgstr ""
+msgstr "Zavřít panel"
 
 #: src/control/Control.PartsPreview.js:2294
-#, fuzzy
 msgid "Collapse Presentation"
-msgstr "Zavřít prezentaci"
+msgstr "Sbalit prezentaci"
 
 #: src/control/Control.PartsPreview.js:2294
-#, fuzzy
 msgid "Expand Presentation"
-msgstr "Ukončit prezentaci"
+msgstr "Rozbalit prezentaci"
 
 #: src/control/Control.PartsPreview.js:2301
 msgid "Open in Panel"
-msgstr ""
+msgstr "Otevřít v panelu"
 
 #: src/control/Control.PartsPreview.js:2309
-#, fuzzy
 msgid "Update Presentation"
-msgstr "Filtrovat prezentace"
+msgstr "Aktualizovat prezentaci"
 
 #: src/control/Control.PartsPreview.js:2317
-#, fuzzy
 msgid "Unlink Presentation"
-msgstr "Prázdná prezentace"
+msgstr "Zrušit propojení prezentace"
 
 #: src/control/Control.PartsPreview.js:2324
 msgid "Unlink Presentation & Contents"
-msgstr ""
+msgstr "Zrušit propojení prezentace a jejího obsahu"
 
 #: src/control/Control.PartsPreview.js:2379
 msgid "Enter new section name:"
@@ -7055,6 +7036,8 @@ msgid ""
 "Original file can't be found. Choose it again to keep your slides up to "
 "date."
 msgstr ""
+"Původní soubor nebyl nalezen. Chcete-li snímky průběžně aktualizovat, "
+"vyberte jej znovu."
 
 #: src/control/Control.SlideImportPane.tsx:960
 msgid "This file is here. You do not have permission to open it."
@@ -7065,6 +7048,8 @@ msgid ""
 "Slides cannot be linked from this file: the link would lead back to this "
 "presentation."
 msgstr ""
+"Z tohoto souboru nelze propojit snímky: propojení by vedlo zpět k této "
+"prezentaci."
 
 #: src/control/Control.SlideImportPane.tsx:966
 msgid "This file could not be read this time."
@@ -7072,11 +7057,11 @@ msgstr "Tento soubor se nyní nepodařilo načíst."
 
 #: src/control/Control.SlideImportPane.tsx:974
 msgid "Choose file…"
-msgstr ""
+msgstr "Vybrat soubor…"
 
 #: src/control/Control.SlideImportPane.tsx:982
 msgid "Try again"
-msgstr ""
+msgstr "Zkusit znovu"
 
 #: src/control/Control.SlideImportPane.tsx:994
 #: src/control/Control.SlideImportPane.tsx:1613
@@ -7225,7 +7210,7 @@ msgstr "Vybrat všechny snímky"
 
 #: src/control/Control.SlideImportPane.tsx:1634
 msgid "Link whole presentation"
-msgstr ""
+msgstr "Propojit celou prezentaci"
 
 #: src/control/Control.SlideImportPane.tsx:1642
 msgid "Update the slides linked to this file"
@@ -7258,6 +7243,8 @@ msgstr "Zachovat původní vzhled"
 #: src/control/Control.SlideImportPane.tsx:1805
 msgid "Not supported in PPTX, please save as ODP to use links"
 msgstr ""
+"Formát PPTX propojení nepodporuje. Chcete-li je použít, uložte soubor jako "
+"ODP."
 
 #: src/control/Control.SlideImportPane.tsx:1820
 msgid "Stay linked to the source file"
@@ -7288,9 +7275,8 @@ msgid "In a section linked to {0}"
 msgstr "V sekci propojené s dokumentem {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:131
-#, fuzzy
 msgid "In a presentation linked to {0}"
-msgstr "V sekci propojené s dokumentem {0}"
+msgstr "V prezentaci propojené s dokumentem {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:154
 msgid "Hide the actions for this linked slide"
@@ -7311,9 +7297,8 @@ msgstr "Aktualizovat sekci"
 
 #: src/control/Control.SlideLinkToolbar.tsx:195
 #: src/slideimport/SlideLinks.ts:492
-#, fuzzy
 msgid "Update presentation"
-msgstr "Filtrovat prezentace"
+msgstr "Aktualizovat prezentaci"
 
 #: src/control/Control.SlideLinkToolbar.tsx:209
 msgid "Not available"
@@ -7325,29 +7310,27 @@ msgstr "Přepnout sekci %1"
 
 #: src/control/SlideLinkPanel.tsx:26
 msgid "Close the linked presentation"
-msgstr ""
+msgstr "Zavřít propojenou prezentaci"
 
 #: src/control/SlideLinkPanel.tsx:31
-#, fuzzy
 msgid "Linked presentation %1"
-msgstr "Filtrovat prezentace"
+msgstr "Propojená prezentace %1"
 
 #: src/control/SlideLinkPanel.tsx:54
 msgid "Slides of %1"
-msgstr ""
+msgstr "Snímky dokumentu %1"
 
 #: src/control/SlidePresentationsRow.tsx:34 src/control/LinkedViewRow.tsx:52
-#, fuzzy
 msgid "Linked presentations"
-msgstr "Filtrovat prezentace"
+msgstr "Propojené prezentace"
 
 #: src/control/SlidePresentationsRow.tsx:44
 msgid "Expand all linked presentations"
-msgstr ""
+msgstr "Rozbalit všechny propojené prezentace"
 
 #: src/control/SlidePresentationsRow.tsx:54
 msgid "Collapse all linked presentations"
-msgstr ""
+msgstr "Sbalit všechny propojené prezentace"
 
 #: src/slideimport/SlideImportSession.ts:352
 msgid "The slides of the source could not be read."
@@ -7376,43 +7359,38 @@ msgstr ""
 "Sekci nelze aktualizovat: dokument {0} již neobsahuje její zdrojovou sekci."
 
 #: src/slideimport/SlideLinks.ts:384
-#, fuzzy
 msgid "Cannot update the slide: {0} no longer holds its source slide."
 msgstr ""
-"Sekci nelze aktualizovat: dokument {0} již neobsahuje její zdrojovou sekci."
+"Snímek nelze aktualizovat: dokument {0} již neobsahuje jeho zdrojový snímek."
 
 #: src/slideimport/SlideLinks.ts:489
-#, fuzzy
 msgid "Update links"
 msgstr "Aktualizovat odkazy"
 
 #: src/slideimport/SlideLinks.ts:493
-#, fuzzy
 msgid "Update presentations"
-msgstr "Filtrovat prezentace"
+msgstr "Aktualizovat prezentace"
 
 #: src/slideimport/SlideLinks.ts:494
 msgid "Update sections"
 msgstr "Aktualizovat sekce"
 
 #: src/slideimport/SlideLinks.ts:504
-#, fuzzy
 msgid ""
 "The linked presentation will hold the slides and sections that {0} holds "
 "now. Changes made to these slides in this presentation will be lost."
 msgstr ""
-"Sekce bude obsahovat snímky, které nyní obsahuje její zdrojová sekce v "
-"dokumentu {0}. Změny provedené v těchto snímcích v této prezentaci budou "
+"Propojená prezentace bude obsahovat snímky a sekce, které nyní obsahuje "
+"dokument {0}. Změny provedené v těchto snímcích v této prezentaci budou "
 "ztraceny."
 
 #: src/slideimport/SlideLinks.ts:508
-#, fuzzy
 msgid ""
 "The section will hold the slides that {0} keeps outside its sections now. "
 "Changes made to these slides in this presentation will be lost."
 msgstr ""
-"Sekce bude obsahovat snímky, které nyní obsahuje její zdrojová sekce v "
-"dokumentu {0}. Změny provedené v těchto snímcích v této prezentaci budou "
+"Sekce bude obsahovat snímky, které se nyní v dokumentu {0} nacházejí mimo "
+"jeho sekce. Změny provedené v těchto snímcích v této prezentaci budou "
 "ztraceny."
 
 #: src/slideimport/SlideLinks.ts:511
@@ -7435,26 +7413,24 @@ msgstr ""
 "této prezentaci budou ztraceny."
 
 #: src/slideimport/SlideLinks.ts:531
-#, fuzzy
 msgid ""
 "{0} linked presentations will hold the slides and sections that their "
 "source files hold now. Changes made to these slides in this presentation "
 "will be lost."
 msgstr ""
-"Propojené sekce (počet: {0}) budou obsahovat snímky, které nyní obsahují "
-"jejich sekce ve zdrojových souborech. Změny provedené v těchto snímcích v "
-"této prezentaci budou ztraceny."
+"Propojené prezentace (počet: {0}) budou obsahovat snímky a sekce, které nyní "
+"obsahují jejich zdrojové soubory. Změny provedené v těchto snímcích v této "
+"prezentaci budou ztraceny."
 
 #: src/slideimport/SlideLinks.ts:534
-#, fuzzy
 msgid ""
 "{0} linked sections and presentations will hold the slides that their "
 "source files hold now. Changes made to these slides in this presentation "
 "will be lost."
 msgstr ""
-"Propojené sekce (počet: {0}) budou obsahovat snímky, které nyní obsahují "
-"jejich sekce ve zdrojových souborech. Změny provedené v těchto snímcích v "
-"této prezentaci budou ztraceny."
+"Propojené sekce a prezentace (počet: {0}) budou obsahovat snímky, které nyní "
+"obsahují jejich zdrojové soubory. Změny provedené v těchto snímcích v této "
+"prezentaci budou ztraceny."
 
 #: src/slideimport/SlideLinks.ts:768
 msgid ""
@@ -7465,9 +7441,8 @@ msgstr ""
 "jej server nemůže načíst."
 
 #: src/slideimport/SlideLinks.ts:779
-#, fuzzy
 msgid "You do not have access to {0}, so its slides cannot be updated."
-msgstr "Nemáte přístup k dokumentu {0}, proto sekci nelze aktualizovat."
+msgstr "Nemáte přístup k dokumentu {0}, proto jeho snímky nelze aktualizovat."
 
 #: src/slideimport/SlideLinks.ts:780
 msgid "{0} could not be read."
@@ -7496,9 +7471,8 @@ msgid "Unlinking the section failed."
 msgstr "Propojení sekce se nepodařilo zrušit."
 
 #: src/slideimport/SlideLinks.ts:1095
-#, fuzzy
 msgid "Unlinking the presentation failed."
-msgstr "Propojení sekce se nepodařilo zrušit."
+msgstr "Propojení prezentace se nepodařilo zrušit."
 
 #: src/slideimport/SlideLinks.ts:1109
 msgid "Updating the slides of {0} failed."
@@ -8114,7 +8088,7 @@ msgstr "Smazat tabulátor"
 #. links to this one.
 #: src/control/LinkedViewRow.tsx:26
 msgid "%1 - linked presentation"
-msgstr ""
+msgstr "%1 – propojená prezentace"
 
 #: src/control/Parts.js:636 src/control/Parts.js:640
 msgid "Show sheets"
@@ -8198,21 +8172,23 @@ msgstr ""
 
 #: src/control/Permission.js:757
 msgid "Close without saving"
-msgstr ""
+msgstr "Zavřít bez uložení"
 
 #: src/control/Permission.js:766
 msgid ""
 "\"%FILENAME\" could not be written. The file may be read-only or in use by "
 "another program. You can save your changes to a different file."
 msgstr ""
+"Do souboru „%FILENAME“ se nepodařilo zapisovat. Soubor může být pouze pro "
+"čtení nebo jej používá jiný program. Změny můžete uložit do jiného souboru."
 
 #: src/control/Permission.js:770
 msgid "Cannot Save Document"
-msgstr ""
+msgstr "Dokument nelze uložit"
 
 #: src/control/Permission.js:784
 msgid "{0} wants to edit together"
-msgstr ""
+msgstr "{0} chce upravovat dokument společně"
 
 #: src/control/Permission.js:785 src/control/Permission.js:808
 #: src/control/Permission.js:824
@@ -8656,7 +8632,7 @@ msgstr "Kopírovat Markdown"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1840
 msgid "Merge Formatting"
-msgstr ""
+msgstr "Sloučit formátování"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1853
 msgid "Inline"
@@ -8816,11 +8792,11 @@ msgstr "Vodoznak"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2469
 msgid "Show"
-msgstr ""
+msgstr "Zobrazit"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2474
 msgid "Add New"
-msgstr ""
+msgstr "Přidat nový"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2546
 msgid "Insert comment"
@@ -9251,6 +9227,8 @@ msgid ""
 "This file cannot be written, so the document opened read-only. Use Save As "
 "to keep your changes in a new file."
 msgstr ""
+"Do tohoto souboru nelze zapisovat, proto byl dokument otevřen pouze pro "
+"čtení. Chcete-li změny zachovat v novém souboru, použijte Uložit jako."
 
 #: src/app/Socket.ts:2469
 msgid "Document is getting migrated"
@@ -9261,6 +9239,8 @@ msgid ""
 "Waiting for %USERS to decide which version of this document to keep. The "
 "document opens here once they decide."
 msgstr ""
+"Čeká se na rozhodnutí o zachované verzi tohoto dokumentu od uživatelů: "
+"%USERS. Po rozhodnutí se zde dokument otevře."
 
 #: src/app/Socket.ts:2834
 msgid "Document requires password to view."
@@ -9632,37 +9612,35 @@ msgstr "Komentář od {0}: {1}"
 #. {1} its text
 #: src/layer/marker/A11yTextInput.js:363
 msgid "{0}: {1}"
-msgstr ""
+msgstr "{0}: {1}"
 
 #: src/layer/marker/A11yTextInput.js:533
 msgid "Heading level {0}"
 msgstr "Nadpis úrovně {0}"
 
 #: src/layer/marker/A11yTextInput.js:570
-#, fuzzy
 msgid "Footnote"
-msgstr "Poznámky pod čarou"
+msgstr "Poznámka pod čarou"
 
 #: src/layer/marker/A11yTextInput.js:572
-#, fuzzy
 msgid "Endnote"
-msgstr "Vysvětlivky"
+msgstr "Vysvětlivka"
 
 #: src/layer/marker/A11yTextInput.js:580
 msgid "Out of header"
-msgstr ""
+msgstr "Opuštění záhlaví"
 
 #: src/layer/marker/A11yTextInput.js:582
 msgid "Out of footer"
-msgstr ""
+msgstr "Opuštění zápatí"
 
 #: src/layer/marker/A11yTextInput.js:584
 msgid "Out of footnote"
-msgstr ""
+msgstr "Opuštění poznámky pod čarou"
 
 #: src/layer/marker/A11yTextInput.js:586
 msgid "Out of endnote"
-msgstr ""
+msgstr "Opuštění vysvětlivky"
 
 #: src/layer/marker/A11yTextInput.js:1600
 msgid "Out of table"
@@ -9728,15 +9706,15 @@ msgstr "smazáno {0}"
 
 #: src/layer/marker/TextInput.js:532 src/layer/marker/TextInput.js:542
 msgid "Formatting changed"
-msgstr ""
+msgstr "Formátování změněno"
 
 #: src/layer/marker/TextInput.js:541
 msgid "Insertion"
-msgstr ""
+msgstr "Vložení"
 
 #: src/layer/marker/TextInput.js:542
 msgid "Deletion"
-msgstr ""
+msgstr "Odstranění"
 
 #: src/layer/marker/TextInput.js:598
 msgid "Placeholder"
@@ -9796,10 +9774,12 @@ msgstr "Online editor"
 #: src/layer/tile/CanvasTileLayer.js:1490
 msgid "This document links to files in a folder the app may not read."
 msgstr ""
+"Tento dokument je propojen se soubory ve složce, ke které aplikace nemusí "
+"mít přístup."
 
 #: src/layer/tile/CanvasTileLayer.js:1491
 msgid "Allow access"
-msgstr ""
+msgstr "Povolit přístup"
 
 #: src/layer/tile/CanvasTileLayer.js:1517
 msgid "%1 started recording changes for all users."
@@ -9828,10 +9808,11 @@ msgstr "Bez komentářů"
 #: src/main.js:357
 msgid "This server is too old for %APP, so some features may not work."
 msgstr ""
+"Tento server je pro %APP příliš starý, některé funkce proto nemusí fungovat."
 
 #: src/main.js:358
 msgid "Please ask the administrator to update it."
-msgstr ""
+msgstr "Požádejte správce o jeho aktualizaci."
 
 #: src/main.js:451
 msgid "Warning! The browser you are using is not supported."
@@ -9849,6 +9830,7 @@ msgstr "Správce zakázal kopírování z dokumentu"
 #: src/map/Clipboard.js:222
 msgid "Copying from {productname}, please paste again in a moment"
 msgstr ""
+"Kopíruje se z aplikace {productname}, zkuste vložení za chvíli zopakovat"
 
 #: src/map/Clipboard.js:335
 msgid "warning: copy/paste request timed out"
@@ -9865,9 +9847,8 @@ msgid "Failed to upload the clipboard"
 msgstr "Obsah schránky se nepodařilo nahrát"
 
 #: src/map/Clipboard.js:1141
-#, fuzzy
 msgid "Copying to clipboard"
-msgstr "Kopírovat do schránky"
+msgstr "Kopíruje se do schránky"
 
 #: src/map/Clipboard.js:1673
 msgid ""
@@ -9922,9 +9903,8 @@ msgid "Last saved:"
 msgstr "Naposledy uloženo:"
 
 #: src/map/Map.js:1170
-#, fuzzy
 msgid "Please wait..."
-msgstr "Počkejte!"
+msgstr "Počkejte..."
 
 #: src/map/handler/Map.Feedback.js:102
 msgid "Please send us your feedback"
@@ -9978,9 +9958,8 @@ msgstr "Prázdná prezentace"
 
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1453
-#, fuzzy
 msgid "All slides are hidden."
-msgstr "Všechny snímky jsou skryté!"
+msgstr "Všechny snímky jsou skryté."
 
 #: src/map/handler/Map.SlideShow.js:175
 #: src/slideshow/SlideShowPresenter.ts:1480
