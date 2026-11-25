@@ -456,8 +456,8 @@ void HostUtil::setFirstHost(const Poco::URI& uri)
         if (FirstHost.empty())
         {
             FirstHost = uri.getHost();
-            // The host comes from a request, so it is matched as that name only.
-            addWopiHost(RegexUtil::escapeRegex(uri.getHost()), 0, true);
+            // The host comes from a request, so it is matched as that name and port only.
+            addWopiHost(RegexUtil::escapeRegex(uri.getHost()), uri.getPort(), true);
         }
     }
     else if(!FirstHost.empty() && FirstHost != uri.getHost())

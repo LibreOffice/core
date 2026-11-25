@@ -112,10 +112,7 @@ public:
     {
         WopiTestServer::configure(config);
 
-        // Two WOPI hosts are allowed: the one that serves the document and OtherHost.
-        config.setString("storage.wopi.alias_groups[@mode]", "groups");
-        config.setString("storage.wopi.alias_groups.group[0].host", "127.0.0.1");
-        config.setBool("storage.wopi.alias_groups.group[0].host[@allow]", true);
+        // OtherHost is allowed as well as the WOPI host that serves the document.
         config.setString("storage.wopi.alias_groups.group[1].host", std::string(OtherHost));
         config.setBool("storage.wopi.alias_groups.group[1].host[@allow]", true);
     }

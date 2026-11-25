@@ -224,6 +224,10 @@ void HostUtilTests::testFirstHostTrustedOnlyInFirstMode()
     LOK_ASSERT_EQUAL_STR(uri.getHost(), HostUtil::FirstHost);
     LOK_ASSERT_MESSAGE("first mode trusts the connecting host",
                        HostUtil::allowedWopiHost(uri.getHost()));
+    LOK_ASSERT_MESSAGE("first mode trusts the port of the connecting host",
+                       HostUtil::allowedWopiHost(uri.getHost(), 8443));
+    LOK_ASSERT_MESSAGE("first mode trusts no other port of that host",
+                       !HostUtil::allowedWopiHost(uri.getHost(), 9000));
     LOK_ASSERT_MESSAGE("first mode trusts no other host",
                        !HostUtil::allowedWopiHost("wopi-example.com"));
 }

@@ -484,6 +484,12 @@ protected:
         // Reset to default.
         config.setBool("storage.wopi.is_legacy_server", false);
 
+        // The WOPI hosts of a test, coolwsd itself or a listener of the test's own, are on
+        // 127.0.0.1 with ports that differ from test to test.
+        config.setString("storage.wopi.alias_groups[@mode]", "groups");
+        config.setString("storage.wopi.alias_groups.group[0].host", "127.0.0.1");
+        config.setBool("storage.wopi.alias_groups.group[0].host[@allow]", true);
+
         // Reduce the save retry time.
         config.setUInt("per_document.min_time_between_saves_ms", 100);
         // Reduce the upload retry time.

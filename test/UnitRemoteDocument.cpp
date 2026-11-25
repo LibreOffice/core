@@ -921,10 +921,6 @@ public:
     {
         WopiTestServer::configure(config);
         config.setBool("remote_links.enable", true);
-        // The WOPI host that serves the documents is the only one allowed.
-        config.setString("storage.wopi.alias_groups[@mode]", "groups");
-        config.setString("storage.wopi.alias_groups.group[0].host", "127.0.0.1");
-        config.setBool("storage.wopi.alias_groups.group[0].host[@allow]", true);
     }
 
     bool onDocumentLoaded(const std::string& message) override
