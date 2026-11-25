@@ -619,8 +619,6 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
 
     // To get to SwXShape* we need an interface that is implemented by SwXShape
 
-    uno::Reference< beans::XPropertySet > xPropSet( rShape, UNO_QUERY );
-
     SwViewShell *pVSh = m_xDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
 
     SwXShape *pSwShape = SwXShape::GetSwXShapeFromXShape(rShape);
