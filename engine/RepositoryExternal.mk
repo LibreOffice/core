@@ -1187,8 +1187,10 @@ else # SYSTEM_FONTCONFIG
 
 ifneq (,$(filter FONTCONFIG,$(BUILD_TYPE)))
 
+# with MSC fontconfig is a static library, linked into cairo, and only its
+# configuration files are installed
 $(eval $(call gb_Helper_register_external_packages_for_install,fontconfig,ooo,\
-	fontconfig \
+	$(if $(filter MSC,$(COM)),fontconfig_data,fontconfig) \
 ))
 
 endif
