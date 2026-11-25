@@ -447,6 +447,7 @@
 }
 
 #slide-import-panel .slide-import-source-keep[aria-disabled='true'] {
+	opacity: 0.5;
 	cursor: default;
 }
 
