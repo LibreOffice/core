@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 12:57+0100\n"
-"PO-Revision-Date: 2026-11-17 10:31+0000\n"
+"PO-Revision-Date: 2026-11-22 20:33+0000\n"
 "Last-Translator: bittin1ddc447d824349b2 "
 "<bittin1ddc447d824349b2@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/sv/>\n"
-"Language: \n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -447,9 +447,8 @@ msgstr ""
 
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:107
-#, fuzzy
 msgid "No WOPI host configured: trusting the first host that connects"
-msgstr "Ingen WOPI-värd konfigurerad: lita på den första värden som ansluter"
+msgstr "Ingen WOPI-värd konfigurerad: litar på den första värden som ansluter"
 
 #: admin/src/AdminSocketServerAudit.js:53
 #: src/control/Control.ServerAuditDialog.ts:113
@@ -457,6 +456,8 @@ msgid ""
 "No WOPI host is allowed: alias_groups mode is \"groups\" but no group is "
 "defined"
 msgstr ""
+"Ingen WOPI-värd tillåts:alias_groups läget är ”groups”, men ingen grupp har "
+"definierats"
 
 #: admin/src/AdminSocketServerAudit.js:58
 #: src/control/Control.ServerAuditDialog.ts:129
@@ -1708,9 +1709,8 @@ msgstr "EPub (.epub)"
 
 #: src/app/ExportFormats.ts:65 src/control/Control.Menubar.ts:144
 #: src/control/Control.NotebookbarBuilder.js:453
-#, fuzzy
 msgid "ODF master document (.odm)"
-msgstr "ODF textdokument (.odt)"
+msgstr "ODF huvuddokument (.odm)"
 
 #: src/app/ExportFormats.ts:66 src/app/ExportFormats.ts:78
 #: src/control/Control.Menubar.ts:145
@@ -1813,113 +1813,111 @@ msgstr "Bild (.png)"
 
 #: src/app/HandleGroups.ts:1855
 msgid "Top Left"
-msgstr ""
+msgstr "Övre vänster"
 
 #: src/app/HandleGroups.ts:1856
 msgid "Top"
-msgstr ""
+msgstr "Överst"
 
 #: src/app/HandleGroups.ts:1857
 msgid "Top Right"
-msgstr ""
+msgstr "Övre höger"
 
 #: src/app/HandleGroups.ts:1858 src/app/HandleGroups.ts:1996
 msgid "Left"
-msgstr ""
+msgstr "Vänster"
 
 #: src/app/HandleGroups.ts:1859
 msgid "Center"
-msgstr ""
+msgstr "Mitten"
 
 #: src/app/HandleGroups.ts:1860 src/app/HandleGroups.ts:1997
-#, fuzzy
 msgid "Right"
-msgstr "Ljust"
+msgstr "Höger"
 
 #: src/app/HandleGroups.ts:1861
 msgid "Bottom Left"
-msgstr ""
+msgstr "Längst ner till vänster"
 
 #: src/app/HandleGroups.ts:1862
 msgid "Bottom"
-msgstr ""
+msgstr "Längst ner"
 
 #: src/app/HandleGroups.ts:1863
 msgid "Bottom Right"
-msgstr ""
+msgstr "Längst ner till höger"
 
 #: src/app/HandleGroups.ts:1951
 msgid "Gluepoint"
-msgstr ""
+msgstr "Limpunkt"
 
 #: src/app/HandleGroups.ts:1998
 msgid "Up"
-msgstr ""
+msgstr "Upp"
 
 #: src/app/HandleGroups.ts:1999
 msgid "Down"
-msgstr ""
+msgstr "Ned"
 
 #: src/app/HandleGroups.ts:2004
 msgid "Anchor"
-msgstr ""
+msgstr "Ankare"
 
 #: src/app/HandleGroups.ts:2045
 msgid "Default gluepoints cannot be edited."
-msgstr ""
+msgstr "Standardlimpunkter kan inte redigeras."
 
 #: src/app/HandleGroups.ts:2863
-#, fuzzy
 msgid "Point"
-msgstr "Skriv ut"
+msgstr "Punkt"
 
 #: src/app/HandleGroups.ts:2875
 msgid "To Line"
-msgstr ""
+msgstr "Till rad"
 
 #: src/app/HandleGroups.ts:2875
 msgid "To Curve"
-msgstr ""
+msgstr "Till kurva"
 
 #: src/app/HandleGroups.ts:2882
 msgid "Corner Point"
-msgstr ""
+msgstr "Hörnpunkt"
 
 #: src/app/HandleGroups.ts:2889
 msgid "Smooth Transition"
-msgstr ""
+msgstr "Smidig övergång"
 
 #: src/app/HandleGroups.ts:2896
 msgid "Symmetric Transition"
-msgstr ""
+msgstr "Symmetrisk övergång"
 
 #: src/app/HandleGroups.ts:2905
 msgid "Split Path"
-msgstr ""
+msgstr "Dela väg"
 
 #: src/app/HandleGroups.ts:3420
 msgid "Motion Path"
-msgstr ""
+msgstr "Rörelseväg"
 
 #: src/app/HandleGroups.ts:3421 src/control/jsdialog/Definitions.Menu.ts:2515
 msgid "Add Point"
-msgstr ""
+msgstr "Lägg till punkt"
 
 #: src/app/HandleGroups.ts:3426
 msgid "Open Path"
-msgstr ""
+msgstr "Öppen väg"
 
 #: src/app/HandleGroups.ts:3426 src/control/jsdialog/Definitions.Menu.ts:2522
 msgid "Close Path"
-msgstr ""
+msgstr "Stäng väg"
 
 #: src/app/HandleGroups.ts:3433 src/control/jsdialog/Definitions.Menu.ts:2531
 msgid "Simplify Curves"
-msgstr ""
+msgstr "Förenkla kurvor"
 
 #: src/app/HandleGroups.ts:3439 src/control/jsdialog/Definitions.Menu.ts:2536
 msgid "Simplify All"
-msgstr ""
+msgstr "Förenkla alla"
 
 #: src/app/LOUtil.ts:1455
 msgid "{0} website, opens in new tab"
@@ -1993,33 +1991,34 @@ msgstr "mindre än en minut"
 
 #: src/control/VideoBackgroundDialog.ts:24
 msgid "Clouds"
-msgstr ""
+msgstr "Moln"
 
 #: src/control/VideoBackgroundDialog.ts:25
 msgid "Clouds at dusk"
-msgstr ""
+msgstr "Moln i skymningen"
 
 #: src/control/VideoBackgroundDialog.ts:26
 msgid "Bokeh"
-msgstr ""
+msgstr "Bokeh"
 
 #: src/control/VideoBackgroundDialog.ts:64
 #: src/control/Control.NotebookbarImpress.js:2112
 msgid "Background Video"
-msgstr ""
+msgstr "Bakgrundsvideo"
 
 #: src/control/VideoBackgroundDialog.ts:69
 msgid ""
 "The video plays behind every slide that uses the master slide of this slide."
 msgstr ""
+"Videon spelas upp bakom varje bild som använder huvudbilden för den bilden."
 
 #: src/control/VideoBackgroundDialog.ts:98
 msgid "Remove Background Video"
-msgstr ""
+msgstr "Ta bort bakgrundsvideo"
 
 #: src/control/VideoBackgroundDialog.ts:104
 msgid "Choose Your Own Video..."
-msgstr ""
+msgstr "Välj din egen video..."
 
 #: src/canvas/sections/CommentListSection.ts:2301
 #: src/canvas/sections/CommentListSection.ts:2314
@@ -2425,34 +2424,28 @@ msgid "What would you like to do with this document?"
 msgstr "Vad skulle du vilja göra med detta dokument?"
 
 #: src/control/Control.AIChatSidebar.ts:838
-#, fuzzy
 msgid "Good morning, {0}"
-msgstr "God morgon, {0}!"
+msgstr "God morgon, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:839
-#, fuzzy
 msgid "Good morning"
-msgstr "God morgon!"
+msgstr "God morgon"
 
 #: src/control/Control.AIChatSidebar.ts:841
-#, fuzzy
 msgid "Good afternoon, {0}"
-msgstr "God eftermiddag, {0}!"
+msgstr "God eftermiddag, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:842
-#, fuzzy
 msgid "Good afternoon"
-msgstr "God eftermiddag!"
+msgstr "God eftermiddag"
 
 #: src/control/Control.AIChatSidebar.ts:844
-#, fuzzy
 msgid "Good evening, {0}"
-msgstr "God kväll, {0}!"
+msgstr "God kväll, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:845
-#, fuzzy
 msgid "Good evening"
-msgstr "God kväll!"
+msgstr "God kväll"
 
 #: src/control/Control.AIChatSidebar.ts:896
 #: src/control/Control.AIChatSidebar.ts:2962
@@ -2502,7 +2495,7 @@ msgstr "Använda markerad text som kontext"
 
 #: src/control/Control.AIChatSidebar.ts:1088
 msgid "Ask AI, or type / for a saved prompt..."
-msgstr ""
+msgstr "Fråga AI, eller skriv / för en sparad prompt..."
 
 #: src/control/Control.AIChatSidebar.ts:1091
 msgid "Message input"
@@ -2518,9 +2511,8 @@ msgstr "Skicka iväg meddelandet"
 
 #: src/control/Control.AIChatSidebar.ts:1130
 #: src/control/Control.AIChatSidebar.ts:1143
-#, fuzzy
 msgid "Set Tone"
-msgstr "Ange tonalitet"
+msgstr "Ställ in ton"
 
 #: src/control/Control.AIChatSidebar.ts:1154
 msgid "Set tone of voice"
@@ -2585,64 +2577,66 @@ msgstr "Växla emojifiera"
 
 #: src/control/Control.AIChatSidebar.ts:1313
 msgid "Add Prompts"
-msgstr ""
+msgstr "Lägg till promptar"
 
 #: src/control/Control.AIChatSidebar.ts:1316
 msgid "Saved prompts"
-msgstr ""
+msgstr "Sparade promptar"
 
 #: src/control/Control.AIChatSidebar.ts:1345
 msgid "My prompts"
-msgstr ""
+msgstr "Mina promptar"
 
 #: src/control/Control.AIChatSidebar.ts:1354
 msgid "Type / in the message box to run a prompt."
-msgstr ""
+msgstr "Skriv / i meddelanderutan för att köra en prompt."
 
 #: src/control/Control.AIChatSidebar.ts:1363
 msgid "Run prompt {0}"
-msgstr ""
+msgstr "Kör prompt {0}"
 
 #: src/control/Control.AIChatSidebar.ts:1368
 #: src/control/Control.AIChatSidebar.ts:1369
 #: src/control/Control.AIChatSidebar.ts:1424
 msgid "Edit prompt"
-msgstr ""
+msgstr "Redigera prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1385
 msgid ""
 "Save instructions you use often and run them on the selected text. Type / "
 "in the message box to run a prompt."
 msgstr ""
+"Spara instruktioner som du använder ofta och kör dem på den markerade "
+"texten. Skriv / i meddelanderutan för att köra en prompt."
 
 #: src/control/Control.AIChatSidebar.ts:1394
 #: src/control/Control.AIChatSidebar.ts:1769
 msgid "+ Add a prompt"
-msgstr ""
+msgstr "+ Lägg till en prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1398
 #: src/control/Control.AIChatSidebar.ts:1772
 msgid "Add a prompt"
-msgstr ""
+msgstr "Lägg till en prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1418
 msgid "Back to prompts"
-msgstr ""
+msgstr "Tillbaka till promptar"
 
 #: src/control/Control.AIChatSidebar.ts:1424
 msgid "New prompt"
-msgstr ""
+msgstr "Ny prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1434
 #: src/control/Control.AIChatSidebar.ts:1519
 #: src/control/Control.AIChatSidebar.ts:1545
 msgid "Delete prompt"
-msgstr ""
+msgstr "Radera prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1449
 #: src/control/Control.AIChatSidebar.ts:1451
 msgid "Save prompt"
-msgstr ""
+msgstr "Spara prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1469
 #: src/control/backstage/HomeView.tsx:75
@@ -2655,34 +2649,35 @@ msgstr "Namn"
 
 #: src/control/Control.AIChatSidebar.ts:1476
 msgid "e.g. Meeting minutes"
-msgstr ""
+msgstr "t.ex. mötesprotokoll"
 
 #: src/control/Control.AIChatSidebar.ts:1478
 msgid "Prompt name"
-msgstr ""
+msgstr "Prompt namn"
 
 #: src/control/Control.AIChatSidebar.ts:1483
 msgid "What should AI do with the selected text?"
-msgstr ""
+msgstr "Vad ska AI göra med den markerade texten?"
 
 #: src/control/Control.AIChatSidebar.ts:1491
 msgid ""
 "Turn the selected notes into meeting minutes with decisions and action "
 "items."
 msgstr ""
+"Förvandla de valda anteckningarna till mötesprotokoll med beslut och "
+"åtgärdspunkter."
 
 #: src/control/Control.AIChatSidebar.ts:1495
 msgid "Prompt instruction"
-msgstr ""
+msgstr "Prompt instruktion"
 
 #: src/control/Control.AIChatSidebar.ts:1514
-#, fuzzy
 msgid "Delete prompt confirmation"
-msgstr "Ta bort bekräftelse för tonalitet"
+msgstr "Radera promptbekräftelse"
 
 #: src/control/Control.AIChatSidebar.ts:1525
 msgid "The prompt \"{0}\" will be deleted."
-msgstr ""
+msgstr "Prompt \"{0}\" kommer att raderas."
 
 #: src/control/Control.AIChatSidebar.ts:1538
 #: src/control/Control.AIChatSidebar.ts:2240
@@ -2690,17 +2685,16 @@ msgid "Cancel delete"
 msgstr "Avbryt borttagning"
 
 #: src/control/Control.AIChatSidebar.ts:1635
-#, fuzzy
 msgid "You have reached the maximum of {0} saved prompts."
-msgstr "Du har nått maxantalet {0} för anpassade tonaliteter."
+msgstr "Du har nått det maximala antalet av {0} sparade prompter."
 
 #: src/control/Control.AIChatSidebar.ts:1753
 msgid "No saved prompt matches this name."
-msgstr ""
+msgstr "Ingen sparad prompt matchar detta namn."
 
 #: src/control/Control.AIChatSidebar.ts:1754
 msgid "You have no saved prompts yet."
-msgstr ""
+msgstr "Du har inga sparade prompter än."
 
 #: src/control/Control.AIChatSidebar.ts:2057
 msgid "Use icon"
@@ -3891,7 +3885,7 @@ msgstr "Avsluta"
 
 #: src/control/Control.BackstageView.ts:299
 msgid "Start something new, or continue where you left off."
-msgstr ""
+msgstr "Starta något nytt, eller fortsätt där du slutade."
 
 #: src/control/Control.BackstageView.ts:332
 #: src/control/jsdialog/Widget.ColorPicker.ts:476
@@ -3900,19 +3894,19 @@ msgstr "Nyligen"
 
 #: src/control/Control.BackstageView.ts:718
 msgid "Account in use"
-msgstr ""
+msgstr "Kontot används"
 
 #: src/control/Control.BackstageView.ts:720
 msgid "Close the windows and documents of this account before you remove it."
-msgstr ""
+msgstr "Stäng fönstren och dokumenten för det här kontot innan du tar bort det."
 
 #: src/control/Control.BackstageView.ts:873
 msgid "Template removed from favorites"
-msgstr ""
+msgstr "Mall borttagen från favoriter"
 
 #: src/control/Control.BackstageView.ts:874
 msgid "Template added to favorites"
-msgstr ""
+msgstr "Mall tillagd i favoriter"
 
 #: src/control/Control.BackstageView.ts:1188
 msgid "Document Info"
@@ -3924,7 +3918,7 @@ msgstr "Visa dokumentegenskaper och information"
 
 #: src/control/Control.BackstageView.ts:1219
 msgid "Master document, a document per chapter"
-msgstr ""
+msgstr "Huvuddokument, ett dokument per kapitel"
 
 #: src/control/Control.BackstageView.ts:1226
 msgid "Export Document"
@@ -4014,9 +4008,8 @@ msgid "Back to document"
 msgstr "Tillbaka till dokumentet"
 
 #: src/control/backstage/HomeView.tsx:57 src/control/backstage/HomeView.tsx:60
-#, fuzzy
 msgid "More templates"
-msgstr "Fler mallar"
+msgstr "Mer mallar"
 
 #: src/control/backstage/HomeView.tsx:77
 msgid "Modified Date"
@@ -4024,15 +4017,15 @@ msgstr "Ändringsdatum"
 
 #: src/control/backstage/TemplatesView.tsx:106
 msgid "Remove from favorites"
-msgstr ""
+msgstr "Ta bort från favoriter"
 
 #: src/control/backstage/TemplatesView.tsx:107
 msgid "Add to favorites"
-msgstr ""
+msgstr "Lägg till i favoriter"
 
 #: src/control/backstage/TemplatesView.tsx:138
 msgid "Templates"
-msgstr ""
+msgstr "Mallar"
 
 #: src/control/backstage/TemplatesView.tsx:142
 msgid "Search templates"
@@ -4046,7 +4039,7 @@ msgstr "Allt"
 
 #: src/control/backstage/TemplatesView.tsx:243
 msgid "Built-in templates"
-msgstr ""
+msgstr "Inbyggda mallar"
 
 #: src/control/backstage/TemplatesView.tsx:265
 #: src/control/backstage/MyTemplatesView.tsx:212
@@ -4056,39 +4049,37 @@ msgstr "Inga mallar hittades för din sökning."
 #: src/control/backstage/TemplatesView.tsx:266
 #: src/control/backstage/MyTemplatesView.tsx:213
 msgid "No templates of this type."
-msgstr ""
+msgstr "Inga mallar av denna typ."
 
 #: src/control/backstage/MyTemplatesView.tsx:75
 msgid "Document template"
-msgstr ""
+msgstr "Dokumentmall"
 
 #: src/control/backstage/MyTemplatesView.tsx:76
 msgid "Spreadsheet template"
-msgstr ""
+msgstr "Kalkylbladsmall"
 
 #: src/control/backstage/MyTemplatesView.tsx:77
-#, fuzzy
 msgid "Presentation template"
-msgstr "Presentationsmallar"
+msgstr "Presentationsmall"
 
 #: src/control/backstage/MyTemplatesView.tsx:78
 msgid "Drawing template"
-msgstr ""
+msgstr "Ritningsmall"
 
 #: src/control/backstage/MyTemplatesView.tsx:103
-#, fuzzy
 msgid "My templates"
-msgstr "Fler mallar"
+msgstr "Mina mallar"
 
 #: src/control/backstage/MyTemplatesView.tsx:109
 msgid "Manage"
-msgstr ""
+msgstr "Hantera"
 
 #: src/control/backstage/MyTemplatesView.tsx:141
 #: src/control/backstage/MyTemplatesView.tsx:168
 #: src/control/backstage/MyTemplatesView.tsx:330
 msgid "Add template"
-msgstr ""
+msgstr "Lägg till mall"
 
 #: src/control/backstage/MyTemplatesView.tsx:155
 #: src/control/backstage/MyTemplatesView.tsx:156
@@ -4097,36 +4088,36 @@ msgid "Back"
 msgstr "Tillbaka"
 
 #: src/control/backstage/MyTemplatesView.tsx:161
-#, fuzzy
 msgid "Manage templates"
-msgstr "Fler mallar"
+msgstr "Hantera mallar"
 
 #: src/control/backstage/MyTemplatesView.tsx:174
 msgid ""
 "Rename or remove the templates you added. Built-in templates can't be "
 "changed."
 msgstr ""
+"Byt namn på eller ta bort de mallar du har lagt till. Inbyggda mallar kan "
+"inte ändras."
 
 #: src/control/backstage/MyTemplatesView.tsx:176
 msgid "Templates you add will appear here and in New."
-msgstr ""
+msgstr "Mallar som du lägger till visas här och under Nytt."
 
 #: src/control/backstage/MyTemplatesView.tsx:183
-#, fuzzy
 msgid "Search my templates"
-msgstr "Sök mall"
+msgstr "Sök mina mallar"
 
 #: src/control/backstage/MyTemplatesView.tsx:193
 msgid "No templates yet"
-msgstr ""
+msgstr "Inga mallar ännu"
 
 #: src/control/backstage/MyTemplatesView.tsx:196
 msgid "Add a template to start new documents from your own layout."
-msgstr ""
+msgstr "Lägg till en mall för att skapa nya dokument utifrån din egen layout."
 
 #: src/control/backstage/MyTemplatesView.tsx:224
 msgid "Actions"
-msgstr ""
+msgstr "Åtgärder"
 
 #: src/control/backstage/MyTemplatesView.tsx:257
 #: src/control/backstage/MyTemplatesView.tsx:451
@@ -4140,23 +4131,23 @@ msgstr "Byt namn"
 
 #: src/control/backstage/MyTemplatesView.tsx:302
 msgid "This type of file cannot be added as a template."
-msgstr ""
+msgstr "Denna typ av fil kan inte läggas till som en mall."
 
 #: src/control/backstage/MyTemplatesView.tsx:323
 msgid "The template could not be added."
-msgstr ""
+msgstr "Mallen kunde inte läggas till."
 
 #: src/control/backstage/MyTemplatesView.tsx:341
 msgid "Drop a file here, or"
-msgstr ""
+msgstr "Släpp en fil här, eller"
 
 #: src/control/backstage/MyTemplatesView.tsx:343
 msgid "Browse"
-msgstr ""
+msgstr "Bläddra"
 
 #: src/control/backstage/MyTemplatesView.tsx:359
 msgid "Template name"
-msgstr ""
+msgstr "Mallnamn"
 
 #: src/control/backstage/MyTemplatesView.tsx:403
 #: src/control/Control.NotebookbarCalc.js:1128
@@ -4168,19 +4159,19 @@ msgstr "Ersätt"
 
 #: src/control/backstage/MyTemplatesView.tsx:419
 msgid "The template could not be renamed."
-msgstr ""
+msgstr "Mallen kunde inte döpas om."
 
 #: src/control/backstage/MyTemplatesView.tsx:424
 msgid "Rename template"
-msgstr ""
+msgstr "Byt namn på mall"
 
 #: src/control/backstage/MyTemplatesView.tsx:471
 msgid "Remove this template?"
-msgstr ""
+msgstr "Ta bort denna mall?"
 
 #: src/control/backstage/MyTemplatesView.tsx:476
 msgid "\"%1\" will be removed from My templates."
-msgstr ""
+msgstr "”%1” kommer att tas bort från Mina mallar."
 
 #: src/control/backstage/InfoView.tsx:31 src/control/Control.Menubar.ts:434
 #: src/control/Control.Menubar.ts:1497
@@ -4221,7 +4212,7 @@ msgstr "Redigera konto"
 
 #: src/control/backstage/CloudDialogs.tsx:135
 msgid "Enter a web address, such as %1."
-msgstr ""
+msgstr "Ange en webbadress, till exempel %1."
 
 #: src/control/backstage/CloudDialogs.tsx:152
 msgid "Add new account"
@@ -4299,7 +4290,6 @@ msgid "Dismiss"
 msgstr "Avfärda"
 
 #: src/control/onboarding/OnboardingSteps.ts:26
-#, fuzzy
 msgid "Welcome to Collabora Office"
 msgstr "Välkommen till Collabora Online"
 
@@ -5012,9 +5002,8 @@ msgid "Language"
 msgstr "Språk"
 
 #: src/control/Control.Mention.ts:193
-#, fuzzy
 msgid "No search results found"
-msgstr "Inga sökresultat hittades!"
+msgstr "Inga sökresultat hittades"
 
 #: src/control/Control.Menubar.ts:57
 msgid "PDF Document (.pdf) as..."
@@ -5036,7 +5025,7 @@ msgstr "Exportera som"
 
 #: src/control/Control.Menubar.ts:151
 msgid "Create Master Document..."
-msgstr ""
+msgstr "Skapa huvuddokument..."
 
 #: src/control/Control.Menubar.ts:152 src/control/Control.Menubar.ts:498
 #: src/control/Control.Menubar.ts:714 src/control/Control.Menubar.ts:891
@@ -5335,7 +5324,7 @@ msgstr "Lokal multimedia..."
 
 #: src/control/Control.Menubar.ts:569
 msgid "Background Video..."
-msgstr ""
+msgstr "Bakgrundsvideo..."
 
 #: src/control/Control.Menubar.ts:610 src/control/Control.Menubar.ts:803
 #: src/control/Control.NotebookbarDraw.js:1425
@@ -6464,15 +6453,14 @@ msgstr "Paragraf"
 #: src/control/Control.NotebookbarDraw.js:1675
 #: src/control/Control.NotebookbarImpress.js:1740
 #: src/control/Control.TopToolbar.js:284
-#, fuzzy
 msgid "Lines"
-msgstr "Rad"
+msgstr "Rader"
 
 #: src/control/Control.NotebookbarDraw.js:1695
 #: src/control/Control.NotebookbarImpress.js:1760
 #: src/control/Control.TopToolbar.js:285
 msgid "Curves"
-msgstr ""
+msgstr "Kurvor"
 
 #: src/control/Control.NotebookbarImpress.js:110
 #: src/slideshow/SlideShowPresenter.ts:1205
@@ -6534,7 +6522,7 @@ msgstr "Presentera till alla"
 
 #: src/control/Control.NotebookbarImpress.js:647
 msgid "Show your slideshow on every viewer's screen when you start it"
-msgstr ""
+msgstr "Visa ditt bildspel på varje tittares skärm när du startar det"
 
 #: src/control/Control.NotebookbarImpress.js:767
 msgid "Slide Views"
@@ -6602,7 +6590,7 @@ msgstr "Bakgrundsbild"
 
 #: src/control/Control.NotebookbarImpress.js:3007
 msgid "Edit Points"
-msgstr ""
+msgstr "Redigera punkter"
 
 #: src/control/Control.NotebookbarImpress.js:3067
 msgid "Effects"
@@ -6706,7 +6694,7 @@ msgstr "Lägga till avsnitt"
 
 #: src/control/Control.PartsPreview.js:893
 msgid "Start Slideshow from This Slide"
-msgstr ""
+msgstr "Starta bildspel från den här bilden"
 
 #: src/control/Control.PartsPreview.js:1026
 msgid "with 1 other"
@@ -6802,35 +6790,35 @@ msgstr "%1, länkad till %2"
 
 #: src/control/Control.PartsPreview.js:1396
 msgid "Linked to the presentation %1 that is missing"
-msgstr ""
+msgstr "Länkad till presentation %1 som saknas"
 
 #: src/control/Control.PartsPreview.js:1398
 msgid "Linked to the presentation %1 that has changed"
-msgstr ""
+msgstr "Länkad till presentation %1 som har ändrats"
 
 #: src/control/Control.PartsPreview.js:1400
 msgid "Linked to the presentation %1, disconnected"
-msgstr ""
+msgstr "Länkad till presentation %1, frånkopplad"
 
 #: src/control/Control.PartsPreview.js:1401
 msgid "Linked to the presentation %1"
-msgstr ""
+msgstr "Länkad till presentation %1"
 
 #: src/control/Control.PartsPreview.js:1406
 msgid "Linked to the slides outside the sections of %1, which is missing"
-msgstr ""
+msgstr "Länkad till bilderna utanför avsnitten i %1, som saknas"
 
 #: src/control/Control.PartsPreview.js:1409
 msgid "Linked to the slides outside the sections of %1, which has changed"
-msgstr ""
+msgstr "Länkad till bilderna utanför avsnitten i %1, vilket har ändrats"
 
 #: src/control/Control.PartsPreview.js:1412
 msgid "Linked to the slides outside the sections of %1, disconnected"
-msgstr ""
+msgstr "Länkad till bilderna utanför avsnitten i %1, frånkopplad"
 
 #: src/control/Control.PartsPreview.js:1413
 msgid "Linked to the slides outside the sections of %1"
-msgstr ""
+msgstr "Länkad till bilderna utanför avsnitten i %1"
 
 #: src/control/Control.PartsPreview.js:1416
 msgid "Linked to a section of %1 that is missing"
@@ -6851,12 +6839,12 @@ msgstr "Länkad till en sektion av %1"
 #: src/control/Control.PartsPreview.js:1661
 msgid "%n slide"
 msgid_plural "%n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n bild"
+msgstr[1] "%n bilder"
 
 #: src/control/Control.PartsPreview.js:1662
 msgid "Toggle presentation %1"
-msgstr ""
+msgstr "Växla presentation %1"
 
 #: src/control/Control.PartsPreview.js:2111
 #: src/control/Control.PartsPreview.js:2378
@@ -6907,35 +6895,31 @@ msgstr[1] "Ta bort avsnitt \"%1\" och dess %n bilder?"
 
 #: src/control/Control.PartsPreview.js:2285
 msgid "Close Panel"
-msgstr ""
+msgstr "Stäng panel"
 
 #: src/control/Control.PartsPreview.js:2294
-#, fuzzy
 msgid "Collapse Presentation"
-msgstr "Stäng presentation"
+msgstr "Fäll ihop presentation"
 
 #: src/control/Control.PartsPreview.js:2294
-#, fuzzy
 msgid "Expand Presentation"
-msgstr "Avsluta presentation"
+msgstr "Expandera presentation"
 
 #: src/control/Control.PartsPreview.js:2301
 msgid "Open in Panel"
-msgstr ""
+msgstr "Öppna i panel"
 
 #: src/control/Control.PartsPreview.js:2309
-#, fuzzy
 msgid "Update Presentation"
-msgstr "Filtrera presentationer"
+msgstr "Uppdatera presentation"
 
 #: src/control/Control.PartsPreview.js:2317
-#, fuzzy
 msgid "Unlink Presentation"
-msgstr "Tom presentation"
+msgstr "Avlänka presentation"
 
 #: src/control/Control.PartsPreview.js:2324
 msgid "Unlink Presentation & Contents"
-msgstr ""
+msgstr "Avlänka Koppla bort presentation & innehåll"
 
 #: src/control/Control.PartsPreview.js:2379
 msgid "Enter new section name:"
@@ -7012,6 +6996,8 @@ msgid ""
 "Original file can't be found. Choose it again to keep your slides up to "
 "date."
 msgstr ""
+"Originalfilen hittades inte. Välj den på nytt för att hålla dina bildspel "
+"uppdaterade."
 
 #: src/control/Control.SlideImportPane.tsx:960
 msgid "This file is here. You do not have permission to open it."
@@ -7022,6 +7008,8 @@ msgid ""
 "Slides cannot be linked from this file: the link would lead back to this "
 "presentation."
 msgstr ""
+"Det går inte att länka till bildspel från den här filen: länken skulle leda "
+"tillbaka till den här presentationen."
 
 #: src/control/Control.SlideImportPane.tsx:966
 msgid "This file could not be read this time."
@@ -7029,11 +7017,11 @@ msgstr "Den här filen gick inte att läsa den här gången."
 
 #: src/control/Control.SlideImportPane.tsx:974
 msgid "Choose file…"
-msgstr ""
+msgstr "Välj fil…"
 
 #: src/control/Control.SlideImportPane.tsx:982
 msgid "Try again"
-msgstr ""
+msgstr "Försök igen"
 
 #: src/control/Control.SlideImportPane.tsx:994
 #: src/control/Control.SlideImportPane.tsx:1613
@@ -7181,7 +7169,7 @@ msgstr "Välj alla bilder"
 
 #: src/control/Control.SlideImportPane.tsx:1634
 msgid "Link whole presentation"
-msgstr ""
+msgstr "Länka hela presentationen"
 
 #: src/control/Control.SlideImportPane.tsx:1642
 msgid "Update the slides linked to this file"
@@ -7213,7 +7201,7 @@ msgstr "Behåll den ursprungliga designen"
 
 #: src/control/Control.SlideImportPane.tsx:1805
 msgid "Not supported in PPTX, please save as ODP to use links"
-msgstr ""
+msgstr "Stöds inte i PPTX; spara som ODP för att kunna använda länkar"
 
 #: src/control/Control.SlideImportPane.tsx:1820
 msgid "Stay linked to the source file"
@@ -7244,9 +7232,8 @@ msgid "In a section linked to {0}"
 msgstr "I en sektion länkad till {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:131
-#, fuzzy
 msgid "In a presentation linked to {0}"
-msgstr "I en sektion länkad till {0}"
+msgstr "I en presentation länkad till {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:154
 msgid "Hide the actions for this linked slide"
@@ -7267,9 +7254,8 @@ msgstr "Uppdatera sektion"
 
 #: src/control/Control.SlideLinkToolbar.tsx:195
 #: src/slideimport/SlideLinks.ts:492
-#, fuzzy
 msgid "Update presentation"
-msgstr "Filtrera presentationer"
+msgstr "Uppdatera presentation"
 
 #: src/control/Control.SlideLinkToolbar.tsx:209
 msgid "Not available"
@@ -7281,29 +7267,27 @@ msgstr "Växla avsnitt %1"
 
 #: src/control/SlideLinkPanel.tsx:26
 msgid "Close the linked presentation"
-msgstr ""
+msgstr "Stäng den länkade presentationen"
 
 #: src/control/SlideLinkPanel.tsx:31
-#, fuzzy
 msgid "Linked presentation %1"
-msgstr "Filtrera presentationer"
+msgstr "Länkad presentation %1"
 
 #: src/control/SlideLinkPanel.tsx:54
 msgid "Slides of %1"
-msgstr ""
+msgstr "Bilder från %1"
 
 #: src/control/SlidePresentationsRow.tsx:34 src/control/LinkedViewRow.tsx:52
-#, fuzzy
 msgid "Linked presentations"
-msgstr "Filtrera presentationer"
+msgstr "Länkade presentationer"
 
 #: src/control/SlidePresentationsRow.tsx:44
 msgid "Expand all linked presentations"
-msgstr ""
+msgstr "Expandera alla länkade presentationer"
 
 #: src/control/SlidePresentationsRow.tsx:54
 msgid "Collapse all linked presentations"
-msgstr ""
+msgstr "Fäll ihop alla länkade presentationer"
 
 #: src/slideimport/SlideImportSession.ts:352
 msgid "The slides of the source could not be read."
@@ -7332,44 +7316,39 @@ msgstr ""
 "Kan inte uppdatera sektionen: {0} innehåller inte längre sin källsektion."
 
 #: src/slideimport/SlideLinks.ts:384
-#, fuzzy
 msgid "Cannot update the slide: {0} no longer holds its source slide."
 msgstr ""
-"Kan inte uppdatera sektionen: {0} innehåller inte längre sin källsektion."
+"Det går inte att uppdatera bilden: {0} innehåller inte längre sin källbild."
 
 #: src/slideimport/SlideLinks.ts:489
-#, fuzzy
 msgid "Update links"
 msgstr "Uppdatera länkar"
 
 #: src/slideimport/SlideLinks.ts:493
-#, fuzzy
 msgid "Update presentations"
-msgstr "Filtrera presentationer"
+msgstr "Uppdatera presentationer"
 
 #: src/slideimport/SlideLinks.ts:494
 msgid "Update sections"
 msgstr "Uppdatera sektioner"
 
 #: src/slideimport/SlideLinks.ts:504
-#, fuzzy
 msgid ""
 "The linked presentation will hold the slides and sections that {0} holds "
 "now. Changes made to these slides in this presentation will be lost."
 msgstr ""
-"Denna sektion kommer att innehålla de bildspel som dess motsvarighet i {0} "
-"innehåller nu. Ändringar som görs i dessa bildspel i den här presentationen "
-"kommer att gå förlorade."
+"Den länkade presentationen kommer att innehålla de bildspel och avsnitt som "
+"{0} innehåller nu. Ändringar som görs i dessa bildspel i den här "
+"presentationen kommer att gå förlorade."
 
 #: src/slideimport/SlideLinks.ts:508
-#, fuzzy
 msgid ""
 "The section will hold the slides that {0} keeps outside its sections now. "
 "Changes made to these slides in this presentation will be lost."
 msgstr ""
-"Denna sektion kommer att innehålla de bildspel som dess motsvarighet i {0} "
-"innehåller nu. Ändringar som görs i dessa bildspel i den här presentationen "
-"kommer att gå förlorade."
+"Denna sektion kommer att innehålla de bildspel som {0} för närvarande har "
+"utanför sina avsnitt. Ändringar som görs i dessa bildspel i den här "
+"presentationen kommer att gå förlorade."
 
 #: src/slideimport/SlideLinks.ts:511
 msgid ""
@@ -7391,26 +7370,24 @@ msgstr ""
 "bildspel i den här presentationen kommer att gå förlorade."
 
 #: src/slideimport/SlideLinks.ts:531
-#, fuzzy
 msgid ""
 "{0} linked presentations will hold the slides and sections that their "
 "source files hold now. Changes made to these slides in this presentation "
 "will be lost."
 msgstr ""
-"{0} länkade sektioner kommer att innehålla de bildspel som deras "
-"motsvarigheter i källfilerna innehåller nu. Ändringar som görs i dessa "
-"bildspel i den här presentationen kommer att gå förlorade."
+"{0} länkade presentationer kommer att innehålla de bilder och avsnitt som "
+"deras källfiler nu innehåller. Ändringar som görs i dessa bildspel i den "
+"aktuella presentationen kommer att gå förlorade."
 
 #: src/slideimport/SlideLinks.ts:534
-#, fuzzy
 msgid ""
 "{0} linked sections and presentations will hold the slides that their "
 "source files hold now. Changes made to these slides in this presentation "
 "will be lost."
 msgstr ""
-"{0} länkade sektioner kommer att innehålla de bildspel som deras "
-"motsvarigheter i källfilerna innehåller nu. Ändringar som görs i dessa "
-"bildspel i den här presentationen kommer att gå förlorade."
+"{0} länkade sektioner och presentationer kommer att innehålla de bilder som "
+"deras källfiler nu innehåller. Ändringar som görs i dessa bilder i den här "
+"presentationen kommer att gå förlorade."
 
 #: src/slideimport/SlideLinks.ts:768
 msgid ""
@@ -7421,9 +7398,8 @@ msgstr ""
 "inte läsa det."
 
 #: src/slideimport/SlideLinks.ts:779
-#, fuzzy
 msgid "You do not have access to {0}, so its slides cannot be updated."
-msgstr "Du har inte åtkomst till {0}, så sektionen kan inte uppdateras."
+msgstr "Du har inte åtkomst till {0}, så dess bilder kan inte uppdateras."
 
 #: src/slideimport/SlideLinks.ts:780
 msgid "{0} could not be read."
@@ -7451,9 +7427,8 @@ msgid "Unlinking the section failed."
 msgstr "Avlänking av sektion misslyckades."
 
 #: src/slideimport/SlideLinks.ts:1095
-#, fuzzy
 msgid "Unlinking the presentation failed."
-msgstr "Avlänking av sektion misslyckades."
+msgstr "Avlänking av presentation misslyckades."
 
 #: src/slideimport/SlideLinks.ts:1109
 msgid "Updating the slides of {0} failed."
@@ -8071,7 +8046,7 @@ msgstr "Ta bort tabbstopp"
 #. links to this one.
 #: src/control/LinkedViewRow.tsx:26
 msgid "%1 - linked presentation"
-msgstr ""
+msgstr "%1 - länkad presentation"
 
 #: src/control/Parts.js:636 src/control/Parts.js:640
 msgid "Show sheets"
@@ -8155,21 +8130,23 @@ msgstr ""
 
 #: src/control/Permission.js:757
 msgid "Close without saving"
-msgstr ""
+msgstr "Stäng utan att spara"
 
 #: src/control/Permission.js:766
 msgid ""
 "\"%FILENAME\" could not be written. The file may be read-only or in use by "
 "another program. You can save your changes to a different file."
 msgstr ""
+"\"%FILENAME\" kunde inte skrivas. Filen kan vara skrivskyddad eller användas "
+"av ett annat program. Du kan spara dina ändringar i en annan fil."
 
 #: src/control/Permission.js:770
 msgid "Cannot Save Document"
-msgstr ""
+msgstr "Kan inte spara dokument"
 
 #: src/control/Permission.js:784
 msgid "{0} wants to edit together"
-msgstr ""
+msgstr "{0} vill redigera tillsammans"
 
 #: src/control/Permission.js:785 src/control/Permission.js:808
 #: src/control/Permission.js:824
@@ -8614,7 +8591,7 @@ msgstr "Kopiera Markdown"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1840
 msgid "Merge Formatting"
-msgstr ""
+msgstr "Sammanfoga formatering"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1853
 msgid "Inline"
@@ -8774,11 +8751,11 @@ msgstr "Vattenmärke"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2469
 msgid "Show"
-msgstr ""
+msgstr "Visa"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2474
 msgid "Add New"
-msgstr ""
+msgstr "Lägg till ny"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2546
 msgid "Insert comment"
@@ -9208,6 +9185,8 @@ msgid ""
 "This file cannot be written, so the document opened read-only. Use Save As "
 "to keep your changes in a new file."
 msgstr ""
+"Denna fil kan inte skrivas till, så dokumentet öppnades i skrivskyddat läge. "
+"Använd ”Spara som” för att spara dina ändringar i en ny fil."
 
 #: src/app/Socket.ts:2469
 msgid "Document is getting migrated"
@@ -9218,6 +9197,8 @@ msgid ""
 "Waiting for %USERS to decide which version of this document to keep. The "
 "document opens here once they decide."
 msgstr ""
+"Väntar på att %USERS ska avgöra vilken version av detta dokument som ska "
+"behållas. Dokumentet öppnas här så snart de har bestämt sig."
 
 #: src/app/Socket.ts:2834
 msgid "Document requires password to view."
@@ -9585,37 +9566,35 @@ msgstr "Kommentar av {0}: {1}"
 #. {1} its text
 #: src/layer/marker/A11yTextInput.js:363
 msgid "{0}: {1}"
-msgstr ""
+msgstr "{0}: {1}"
 
 #: src/layer/marker/A11yTextInput.js:533
 msgid "Heading level {0}"
 msgstr "Rubriknivå {0}"
 
 #: src/layer/marker/A11yTextInput.js:570
-#, fuzzy
 msgid "Footnote"
-msgstr "Fotnoter"
+msgstr "Fotnot"
 
 #: src/layer/marker/A11yTextInput.js:572
-#, fuzzy
 msgid "Endnote"
-msgstr "Slutnoter"
+msgstr "Slutnot"
 
 #: src/layer/marker/A11yTextInput.js:580
 msgid "Out of header"
-msgstr ""
+msgstr "Utanför rubrik"
 
 #: src/layer/marker/A11yTextInput.js:582
 msgid "Out of footer"
-msgstr ""
+msgstr "Utanför sidfoten"
 
 #: src/layer/marker/A11yTextInput.js:584
 msgid "Out of footnote"
-msgstr ""
+msgstr "Utanför fotnoten"
 
 #: src/layer/marker/A11yTextInput.js:586
 msgid "Out of endnote"
-msgstr ""
+msgstr "Utanför slutnoten"
 
 #: src/layer/marker/A11yTextInput.js:1600
 msgid "Out of table"
@@ -9677,15 +9656,15 @@ msgstr "{0} borttagna"
 
 #: src/layer/marker/TextInput.js:532 src/layer/marker/TextInput.js:542
 msgid "Formatting changed"
-msgstr ""
+msgstr "Formateringen har ändrats"
 
 #: src/layer/marker/TextInput.js:541
 msgid "Insertion"
-msgstr ""
+msgstr "Införande"
 
 #: src/layer/marker/TextInput.js:542
 msgid "Deletion"
-msgstr ""
+msgstr "Radering"
 
 #: src/layer/marker/TextInput.js:598
 msgid "Placeholder"
@@ -9744,10 +9723,12 @@ msgstr "Online redigerare"
 #: src/layer/tile/CanvasTileLayer.js:1490
 msgid "This document links to files in a folder the app may not read."
 msgstr ""
+"Detta dokument länkar till filer i en mapp som programmet kanske inte kan "
+"läsa."
 
 #: src/layer/tile/CanvasTileLayer.js:1491
 msgid "Allow access"
-msgstr ""
+msgstr "Tillåt åtkomst"
 
 #: src/layer/tile/CanvasTileLayer.js:1517
 msgid "%1 started recording changes for all users."
@@ -9776,10 +9757,12 @@ msgstr "Inga kommentarer"
 #: src/main.js:357
 msgid "This server is too old for %APP, so some features may not work."
 msgstr ""
+"Den här servern är för gammal för %APP, så vissa funktioner kanske inte "
+"fungerar."
 
 #: src/main.js:358
 msgid "Please ask the administrator to update it."
-msgstr ""
+msgstr "Be administratören att uppdatera den."
 
 #: src/main.js:451
 msgid "Warning! The browser you are using is not supported."
@@ -9798,7 +9781,7 @@ msgstr "Kopiering från dokumentet har inaktiverats av din administratör"
 
 #: src/map/Clipboard.js:222
 msgid "Copying from {productname}, please paste again in a moment"
-msgstr ""
+msgstr "Kopierar från {productname}, vänligen klistra in igen om en stund"
 
 #: src/map/Clipboard.js:335
 msgid "warning: copy/paste request timed out"
@@ -9813,9 +9796,8 @@ msgid "Failed to upload the clipboard"
 msgstr "Misslyckades med att ladda upp klippbordet"
 
 #: src/map/Clipboard.js:1141
-#, fuzzy
 msgid "Copying to clipboard"
-msgstr "Kopiera till urklipp"
+msgstr "Kopierar till urklipp"
 
 #: src/map/Clipboard.js:1673
 msgid ""
@@ -9870,9 +9852,8 @@ msgid "Last saved:"
 msgstr "Senast sparad:"
 
 #: src/map/Map.js:1170
-#, fuzzy
 msgid "Please wait..."
-msgstr "Vänligen vänta!"
+msgstr "Vänligen vänta..."
 
 #: src/map/handler/Map.Feedback.js:102
 msgid "Please send us your feedback"
@@ -9925,7 +9906,6 @@ msgstr "Tomt bildspel"
 
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1453
-#, fuzzy
 msgid "All slides are hidden."
 msgstr "Alla bilder är dolda"
 

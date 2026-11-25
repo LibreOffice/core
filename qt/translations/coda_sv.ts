@@ -125,7 +125,7 @@
     </message>
     <message>
         <source>This folder holds the drafts and is cleaned up automatically. Choose another location.</source>
-        <translation type="unfinished"></translation>
+        <translation>Den här mappen innehåller utkast och rensas automatiskt. Välj en annan plats.</translation>
     </message>
     <message>
         <source>Cannot open remote document</source>
@@ -137,15 +137,15 @@
     </message>
     <message>
         <source>Add Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till mall</translation>
     </message>
     <message>
         <source>Templates and documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Mallar och dokument</translation>
     </message>
     <message>
         <source>All Files (*);;Text Documents (*.odt *.ott *.doc *.docx *.rtf *.txt);;Spreadsheets (*.ods *.ots *.xls *.xlsx *.csv);;Presentations (*.odp *.otp *.ppt *.pptx);;PDF Documents (*.pdf)</source>
-        <translation type="unfinished"></translation>
+        <translation>Alla filer (*);;Textdokument (*.odt *.ott *.doc *.docx *.rtf *.txt);;Kalkylblad (*.ods *.ots *.xls *.xlsx *.csv);;Presentationer (*.odp *.otp *.ppt *.pptx);;PDF-dokument (*.pdf)</translation>
     </message>
     <message>
         <source>Save File</source>
@@ -153,7 +153,7 @@
     </message>
     <message>
         <source>Choose the folder that holds the files this document links to</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj mappen som innehåller filerna som det här dokumentet länkar till</translation>
     </message>
     <message>
         <source>Presentation</source>
@@ -173,7 +173,7 @@
     </message>
     <message>
         <source>%1 (Draft)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (Utkast)</translation>
     </message>
     <message>
         <source>Template Error</source>
@@ -197,11 +197,11 @@
     </message>
     <message>
         <source>Account not opened</source>
-        <translation type="unfinished"></translation>
+        <translation>Konto inte öppnat</translation>
     </message>
     <message>
         <source>%1 redirected to %2, so the account was not opened. Only a redirect within the same site is followed.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 omdirigerades till %2, så kontot öppnades inte. Endast omdirigeringar inom samma webbplats följs.</translation>
     </message>
 </context>
 <context>
@@ -209,22 +209,22 @@
     <message>
         <source>Close tab</source>
         <extracomment>Tooltip of the button that closes a tab</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Stäng flik</translation>
     </message>
     <message>
         <source>New</source>
         <extracomment>Tooltip of the + button at the end of the tab strip</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ny</translation>
     </message>
     <message>
         <source>(untitled)</source>
         <extracomment>The name in a tab whose document has no name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>(utan titel)</translation>
     </message>
     <message>
         <source>Draft</source>
         <extracomment>Badge in a tab whose document is a draft, not yet saved to a file of its own</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Utkast</translation>
     </message>
     <message>
         <source>Close</source>
