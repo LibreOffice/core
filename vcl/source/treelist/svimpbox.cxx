@@ -1780,6 +1780,8 @@ void SvImpLBox::EntryInserted( SvTreeListEntry* pEntry )
     m_aVerSBar->SetRange(Range(0, static_cast<tools::Long>(m_rView.GetVisibleCount()) - 1));
     SyncVerThumb(); // if something was inserted before the thumb
     ShowVerSBar();
+    Size aSize;
+    AdjustScrollBars(aSize);
     ShowCursor( true );
     if (m_pStartEntry != m_rView.First() && (m_nFlags & LBoxFlags::Filling))
         m_rView.PaintImmediately();
