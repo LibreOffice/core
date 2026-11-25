@@ -13,16 +13,9 @@
     Which objects to select are determined by a rectangle. The objects inside the rectangle are selected.
     When user presses the mouse button and moves the mouse, they start to draw a selection rectangle.
     When they release the mouse button, rectangle is drawn.
-    This class's purpose is to catch the selection rectangle's current properties:
-        * Core side sends ".uno:Position" state change for mouse moves (whether there is a selection rectangle or not).
-        * When user presses the mouse button and moves the mouse, core side sends the ".uno:Context=Mark objects" state change.
-        * Core side sends ".uno:Size" as user moves the mouse (while holding the pressed mouse button).
-
-    * Since mouse position is sent regardless of the selection, we will keep track of last mouse position.
-        * No need to do anything special for this. State map variable should have it. Just fetch it as soon as we get "Mark objects" context.
-    * We will listen to ".uno:Context=Mark objects" state change.
-    * We will activate selection section when there is a selection.
-    * Since this class has the data, selection section should be only drawing the rectangle.
+    Core side sends ".uno:MarkingObjects=true" while the mouse draws a frame to mark objects, and
+    ".uno:MarkingObjects=false" when the frame is gone. This class switches the selection section
+    on while the last state is true.
 */
 
 class ImpressSelectionMiddleware {

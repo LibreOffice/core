@@ -131,6 +131,9 @@ public:
     virtual void    Resize() override;
 
     void            ShowMousePosInfo(const ::tools::Rectangle& rRect, ::sd::Window const * pWin);
+    /** Tell the client whether the mouse draws a frame to mark objects, when this has changed
+        since the client was last told. */
+    void            NotifyMarkingObjects();
 
     virtual void    ChangeEditMode (EditMode eMode, bool bIsLayerModeActive);
 
@@ -541,6 +544,8 @@ private:
     bool                                                  mbPastePossible;
     bool                                                  mbMouseButtonDown;
     bool                                                  mbMouseSelecting;
+    /** True when the client was last told that the mouse draws a frame to mark objects. */
+    bool                                                  mbMarkingObjects = false;
     std::unique_ptr<AnnotationManager> mpAnnotationManager;
     std::unique_ptr<ViewOverlayManager> mpViewOverlayManager;
     std::vector<std::unique_ptr<SdrExternalToolEdit>> m_ExternalEdits;

@@ -450,6 +450,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
     }
 
     ShowMousePosInfo(aRect, pWin);
+    NotifyMarkingObjects();
 
     SvxBmpMask* pBmpMask = nullptr;
     if (mbPipette && GetViewFrame()->HasChildWindow(SvxBmpMaskChildWindow::GetChildWindowId()))
@@ -529,6 +530,7 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
         FreshNavigatrTree();
     }
     mbMouseSelecting = false;
+    NotifyMarkingObjects();
 }
 
 void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
@@ -933,6 +935,22 @@ void DrawViewShell::ShowMousePosInfo(const ::tools::Rectangle& rRect,
     rBindings.Invalidate(SID_CONTEXT);
     rBindings.Invalidate(SID_ATTR_POSITION);
     rBindings.Invalidate(SID_ATTR_SIZE);
+}
+
+void DrawViewShell::NotifyMarkingObjects()
+{
+    ViewShellBase& rBase = GetViewShellBase();
+    if (!rBase.hasKitClient())
+        return;
+
+    const bool bMarkingObjects = mpDrawView && mpDrawView->IsMarkObj();
+    if (bMarkingObjects == mbMarkingObjects)
+        return;
+
+    mbMarkingObjects = bMarkingObjects;
+    rBase.viewCallback(COKitCallbackType::STATE_CHANGED,
+                       bMarkingObjects ? ".uno:MarkingObjects=true"_ostr
+                                       : ".uno:MarkingObjects=false"_ostr);
 }
 
 void DrawViewShell::LockInput()

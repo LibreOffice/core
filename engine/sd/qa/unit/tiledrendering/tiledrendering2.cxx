@@ -8,6 +8,7 @@
  */
 
 #include <config_pdfimport.h>
+#include <algorithm>
 #include <unotools/tempfile.hxx>
 #include <sdtiledrenderingtest.hxx>
 
@@ -829,6 +830,39 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testHandleDragAcrossPreviewOfOtherSli
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!pView->IsDragObj());
     CPPUNIT_ASSERT(pView->IsObjMarked(pObject));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMarkingObjectsStateFollowsFrameDrag)
+{
+    // Given a slide whose title starts 1.4 cm from the left edge, so the strip left of it is
+    // empty:
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView;
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    Scheduler::ProcessEventsToIdle();
+    aView.m_aStateChanged.clear();
+
+    // When the mouse is pressed in that strip and dragged down inside it:
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, 300, 300, 1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOVE, 700, 3000, 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the mouse draws a frame to mark objects, and the client is told so:
+    CPPUNIT_ASSERT(pView->IsMarkObj());
+    auto hasState = [&aView](const std::string& rState) {
+        return std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(), rState)
+               != aView.m_aStateChanged.end();
+    };
+    CPPUNIT_ASSERT(hasState(".uno:MarkingObjects=true"));
+    CPPUNIT_ASSERT(!hasState(".uno:MarkingObjects=false"));
+
+    // And when the button is released, the client is told that the frame is gone:
+    aView.m_aStateChanged.clear();
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, 700, 3000, 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pView->IsMarkObj());
+    CPPUNIT_ASSERT(hasState(".uno:MarkingObjects=false"));
 }
 
 #if ENABLE_PDFIMPORT

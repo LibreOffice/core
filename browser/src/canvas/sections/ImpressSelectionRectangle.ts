@@ -26,11 +26,14 @@ class SelectionRectangle extends CanvasSectionObject {
 
 		this.sectionProperties.positionOnMouseDown = null;
 		this.sectionProperties.selectionSize = null;
-		this.sectionProperties.active = true;
+		this.sectionProperties.active = false;
 	}
 
 	public setActive(active: boolean) {
+		if (this.sectionProperties.active === active) return;
+
 		this.sectionProperties.active = active;
+		if (this.containerObject) this.containerObject.requestReDraw();
 	}
 
 	public onMouseMove(
@@ -49,6 +52,8 @@ class SelectionRectangle extends CanvasSectionObject {
 				point.pX - this.sectionProperties.positionOnMouseDown.pX,
 				point.pY - this.sectionProperties.positionOnMouseDown.pY,
 			];
+
+			if (this.sectionProperties.active) this.containerObject.requestReDraw();
 		}
 	}
 
@@ -65,7 +70,19 @@ class SelectionRectangle extends CanvasSectionObject {
 		this.sectionProperties.positionOnMouseDown = point;
 	}
 
+	// The section is added while the document is on screen, so it places itself right away.
+	public onInitialize(): void {
+		this.onNewDocumentTopLeft();
+	}
+
+	public onResize(): void {
+		this.onNewDocumentTopLeft();
+	}
+
+	// The section covers the viewed part of the document, so it takes the size of the anchor.
 	public onNewDocumentTopLeft(): void {
+		const anchorSize = this.containerObject.getDocumentAnchorSection().size;
+		this.size = [anchorSize[0], anchorSize[1]];
 		this.setPosition(
 			app.activeDocument.activeLayout.viewedRectangle.pX1,
 			app.activeDocument.activeLayout.viewedRectangle.pY1,

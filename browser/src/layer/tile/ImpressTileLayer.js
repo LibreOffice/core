@@ -190,11 +190,9 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		}
 	},
 
-	_selectionContextChanged: function (newContext) {
-		if (newContext === 'Mark objects')
-			app.activeDocument.selectionMiddleware.activate();
-		else if (newContext === '')
-			app.activeDocument.selectionMiddleware.deactivate();
+	_markingObjectsChanged: function (marking) {
+		if (marking) app.activeDocument.selectionMiddleware.activate();
+		else app.activeDocument.selectionMiddleware.deactivate();
 	},
 
 	_isPCWInsideFlex: function () {
