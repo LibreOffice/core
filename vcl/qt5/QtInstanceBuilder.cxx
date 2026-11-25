@@ -553,6 +553,7 @@ constexpr auto SUPPORTED_WITH_QT_PARENT = frozen::make_unordered_set<std::u16str
     u"modules/schart/ui/tp_RangeChooser.ui",
     u"modules/schart/ui/tp_Scale.ui",
     u"modules/schart/ui/tp_SeriesToAxis.ui",
+    u"modules/schart/ui/tp_Trendline.ui",
     u"modules/schart/ui/tp_axisLabel.ui",
     u"modules/sdraw/ui/drawprinteroptions.ui",
     u"modules/sdraw/ui/paranumberingtab.ui",
