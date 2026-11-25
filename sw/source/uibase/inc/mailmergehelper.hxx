@@ -54,13 +54,16 @@ namespace SwMailMergeHelper
                             weld::Window* pDialogParentWindow = nullptr);
 }
 
-struct SwAddressPreview_Impl;
-
 // Preview window used to show the possible selection of address blocks
 // and also the resulting address filled with database data
 class SW_DLLPUBLIC SwAddressPreview final : public weld::CustomWidgetController
 {
-    std::unique_ptr<SwAddressPreview_Impl> m_pImpl;
+    std::vector<OUString> m_aAddresses;
+    sal_uInt16 m_nRows;
+    sal_uInt16 m_nColumns;
+    sal_uInt16 m_nSelectedAddress;
+    bool m_bEnableScrollBar;
+
     std::unique_ptr<weld::ScrolledWindow> m_xVScrollBar;
     Link<LinkParamNone*,void> m_aSelectHdl;
 
