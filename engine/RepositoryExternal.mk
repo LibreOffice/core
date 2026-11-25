@@ -1076,22 +1076,20 @@ $(eval $(call gb_Helper_register_external_packages_for_install,cairo,ooo,\
 
 ifeq ($(COM)-$(ENABLE_HEADLESS),MSC-TRUE)
 
-$(eval $(call gb_Helper_register_external_libraries_for_install,pixman,PLAINLIBS_OOO,ooo,\
-	pixman \
-))
-
 $(eval $(call gb_Helper_register_external_libraries_for_install,cairo,PLAINLIBS_OOO,ooo,\
 	cairo \
 ))
 
+# pixman is a static library here, linked into cairo
 define gb_LinkTarget__use_pixman
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,pixman)/pixman \
+	-I$(gb_UnpackedTarball_workdir)/pixman/pixman \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_use_libraries,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	pixman \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),pixman)
 
 endef
 

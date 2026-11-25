@@ -41,10 +41,10 @@ $(eval $(call gb_Library_use_static_libraries,cairo, \
 	expat \
 	fontconfig \
 	freetype \
-	pixman \
 ))
 
 $(eval $(call gb_Library_use_externals,cairo,\
+	pixman \
 	zlib \
 ))
 
