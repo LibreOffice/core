@@ -829,6 +829,7 @@ void ToolBarManager::dispose()
         {
             return;
         }
+        m_bDisposed = true; // early, as SendMessage can release the SolarMutex
 
         RemoveControllers();
 
@@ -879,10 +880,7 @@ void ToolBarManager::dispose()
         m_xContext.clear();
 
         // stop timer to prevent timer events after dispose
-        // do it last because other calls could restart timer in StateChanged()
         m_aAsyncUpdateControllersTimer.Stop();
-
-        m_bDisposed = true;
     }
 }
 
@@ -991,7 +989,6 @@ void ToolBarManager::elementReplaced( const css::ui::ConfigurationEvent& Event )
 void ToolBarManager::RemoveControllers()
 {
     DBG_TESTSOLARMUTEX();
-    assert(!m_bDisposed);
 
     m_aSubToolBarControllerMap.clear();
 
