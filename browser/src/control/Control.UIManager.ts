@@ -509,7 +509,8 @@ class UIManager extends window.L.Control {
 	 * them. A spreadsheet also needs its grid lines redrawn in the new colour.
 	 */
 	refreshUIAfterThemeChange(): void {
-		if (!window.mode.isSmallScreenDevice())
+		// The interactive preview has no menubar or toolbar to repaint.
+		if (!window.mode.isInteractivePreview() && !window.mode.isSmallScreenDevice())
 			this.refreshAfterThemeChange();
 
 		// Both app.sectionContainer and app.map._docLayer are absent when a theme
@@ -919,6 +920,13 @@ class UIManager extends window.L.Control {
 		app.console.debug('UIManager: initialize specialized UI for: ' + docType);
 		if (window.mode.isInteractivePreview()) {
 			this.disableComments();
+			// The preview drops the menubar and the toolbars, but the document
+			// canvas still needs the theme: data-bg-theme selects
+			// --color-background-document, which is the background of every Calc
+			// cell that has no fill of its own. Without it the canvas is cleared
+			// with whatever colour was used last, so the sheet flickers between
+			// grey and black and its text becomes unreadable.
+			this.initDarkModeFromSettings();
 			return;
 		}
 
