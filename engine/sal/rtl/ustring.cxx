@@ -698,6 +698,59 @@ void rtl_uString_newReplaceAllFromIndexUtf16LUtf16L(
     rtl::str::newReplaceAllFromIndex(newStr, str, from, fromLength, to, toLength, fromIndex);
 }
 
+void rtl_uString_newReplaceAllFromIndexUtf16LUtf16LUtf16L(
+    rtl_uString ** s, sal_Unicode const * s1Buffer, sal_Int32 s1Length, sal_Unicode const * from,
+    sal_Int32 fromLength, sal_Unicode const * to, sal_Int32 toLength, sal_Int32 fromIndex) noexcept
+{
+    assert(s != nullptr);
+    assert(s1Buffer != nullptr);
+    assert(s1Length >= 0);
+    assert(fromLength >= 0);
+    assert(from != nullptr || fromLength == 0);
+    assert(toLength >= 0);
+    assert(to != nullptr || toLength == 0);
+    assert(fromIndex >= 0 && fromIndex <= s1Length);
+    sal_Int32 i = rtl::str::indexOfStr_WithLength(s1Buffer + fromIndex, s1Length - fromIndex,
+                                        from, fromLength);
+    if (i >= 0)
+    {
+        if (s1Length - fromLength > SAL_MAX_INT32 - toLength)
+            std::abort();
+        i += fromIndex;
+        sal_Int32 nCapacity = s1Length + (toLength - fromLength);
+        if (fromLength < toLength)
+        {
+            // Pre-allocate up to 16 replacements more
+            const sal_Int32 nMaxMoreFinds = (s1Length - i - fromLength) / fromLength;
+            const sal_Int32 nIncrease = toLength - fromLength;
+            const sal_Int32 nMoreReplacements = std::min(
+                { nMaxMoreFinds, (SAL_MAX_INT32 - nCapacity) / nIncrease, sal_Int32(16) });
+            nCapacity += nMoreReplacements * nIncrease;
+        }
+        const auto pOld = *s;
+        *s = rtl::str::Alloc<rtl_uString>(nCapacity);
+        (*s)->length = 0;
+        fromIndex = 0;
+        do
+        {
+            rtl::str::stringbuffer_insert(s, &nCapacity, (*s)->length, s1Buffer + fromIndex, i);
+            rtl::str::stringbuffer_insert(s, &nCapacity, (*s)->length, to, toLength);
+            fromIndex += i + fromLength;
+            i = rtl::str::indexOfStr_WithLength(s1Buffer + fromIndex, s1Length - fromIndex,
+                                      from, fromLength);
+        } while (i >= 0);
+        // the rest
+        rtl::str::stringbuffer_insert(s, &nCapacity, (*s)->length,
+                            s1Buffer + fromIndex, s1Length - fromIndex);
+        if (pOld)
+            rtl::str::release(pOld); // Must be last in case *s == s1
+    }
+    else
+        rtl::str::newFromStr_WithLength(s, s1Buffer, s1Length);
+
+    RTL_LOG_STRING_NEW(*s);
+}
+
 sal_Int32 rtl_ustr_getLength(const sal_Unicode* pStr) noexcept
 {
     return rtl::str::getLength(pStr);

@@ -790,18 +790,21 @@ void ScGlobal::AddQuotes( OUString& rString, sal_Unicode cQuote, bool bEscapeEmb
 
 void ScGlobal::EraseQuotes( OUString& rString, sal_Unicode cQuote, bool bUnescapeEmbedded )
 {
-    if ( IsQuoted( rString, cQuote ) )
+    if (!IsQuoted( rString, cQuote ))
+        return;
+    if (bUnescapeEmbedded)
     {
-        rString = rString.copy( 1, rString.getLength() - 2 );
-        if (bUnescapeEmbedded)
-        {
-            sal_Unicode pQ[3];
-            pQ[0] = pQ[1] = cQuote;
-            pQ[2] = 0;
-            OUString aQuotes( pQ );
-            rString = rString.replaceAll( aQuotes, OUStringChar(cQuote));
-        }
+        // use views and direct calls to underlying OUString API to avoid temporary allocations
+        std::u16string_view aTmp = rString.subView( 1, rString.getLength() - 2 );
+        sal_Unicode pFrom[] { cQuote, cQuote, 0 };
+        sal_Unicode pTo[] { cQuote, 0 };
+        rtl_uString * s = nullptr;
+        rtl_uString_newReplaceAllFromIndexUtf16LUtf16LUtf16L(
+            &s, aTmp.data(), aTmp.size(), pFrom, 2, pTo, 1, /*fromIndex*/0);
+        rString = OUString(s, SAL_NO_ACQUIRE);
     }
+    else
+        rString = rString.copy( 1, rString.getLength() - 2 );
 }
 
 sal_Int32 ScGlobal::GetAutoSumArgStart( const OUString& rFormula, bool bSubTotal )
