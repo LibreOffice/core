@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 12:57+0100\n"
-"PO-Revision-Date: 2026-11-19 23:06+0000\n"
+"PO-Revision-Date: 2026-11-21 23:04+0000\n"
 "Last-Translator: Alexander Gabilondo "
 "<alexgab@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Basque <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/eu/>\n"
-"Language: \n"
+"Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1283,7 +1283,7 @@ msgstr "Testu hornitzailearen berdina"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4156
 msgid "Required for this provider"
-msgstr ""
+msgstr "Beharrezkoa hornitzaile honetarako"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4247
 msgid "Enter an API key for this provider to list its models."
@@ -1304,7 +1304,7 @@ msgstr "Ez da eredurik aurkitu"
 #: admin/src/integrator/AdminIntegratorSettings.ts:4335
 #: admin/src/integrator/AdminIntegratorSettings.ts:4451
 msgid "Connected"
-msgstr ""
+msgstr "Konektatuta"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4341
 #: admin/src/integrator/AdminIntegratorSettings.ts:4457
@@ -1344,7 +1344,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4738
 msgid "Remote Sentence Checkers"
-msgstr ""
+msgstr "Urruneko esaldi-zuzentzaileak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4742
 msgid ""
@@ -1355,13 +1355,13 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:4777
 #: admin/src/integrator/AdminIntegratorSettings.ts:5127
 msgid "Enabled"
-msgstr ""
+msgstr "Gaituta"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4789
 #: admin/src/integrator/AdminIntegratorSettings.ts:5164
 #: src/control/backstage/CloudDialogs.tsx:166
 msgid "Server URL"
-msgstr ""
+msgstr "Zerbitzariaren URLa"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4801
 #, fuzzy
@@ -1371,7 +1371,7 @@ msgstr "Erabiltzaile-izena"
 #: admin/src/integrator/AdminIntegratorSettings.ts:4823
 #: admin/src/integrator/AdminIntegratorSettings.ts:5183
 msgid "Verify the server certificate"
-msgstr ""
+msgstr "Egiaztatu zerbitzariaren ziurtagiria"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4831
 msgid "Enabled on this server for: {0}"
@@ -1387,11 +1387,11 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4850
 msgid "Spelling"
-msgstr ""
+msgstr "Ortografia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4851
 msgid "Spelling and grammar"
-msgstr ""
+msgstr "Ortografia eta gramatika"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4861
 msgid "German spelling"
@@ -1403,28 +1403,28 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4864
 msgid "Conservative"
-msgstr ""
+msgstr "Kontserbadorea"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4865
 msgid "Progressive"
-msgstr ""
+msgstr "Progresiboa"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4866
 msgid "Tolerant"
-msgstr ""
+msgstr "Tolerantea"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4867
 msgid "Press agencies"
-msgstr ""
+msgstr "Prentsa agentziak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4877
 msgid "Explanations"
-msgstr ""
+msgstr "Azalpenak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4880
 #: src/control/Control.AIChatSidebar.ts:187
 msgid "Short"
-msgstr ""
+msgstr "Laburra"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4881
 #, fuzzy
@@ -1433,15 +1433,15 @@ msgstr "Egunkaria"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4882
 msgid "Long, with an example"
-msgstr ""
+msgstr "Luzea, adibide batekin"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4892
 msgid "Correction profiles"
-msgstr ""
+msgstr "Zuzenketa-profilak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4902
 msgid "Dictionaries"
-msgstr ""
+msgstr "Hiztegiak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4909
 msgid "Foreign words with a German equivalent"
