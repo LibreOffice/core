@@ -672,7 +672,6 @@
                 <property name="top-attach">2</property>
               </packing>
             </child>
-
             <child>
               <object class="GtkCheckButton" id="checkAcrossSpread">
                 <property name="label" translatable="yes" context="textflowpage|checkAcrossSpread">Spread</property>
@@ -693,7 +692,6 @@
                 <property name="top-attach">3</property>
               </packing>
             </child>
-
             <child>
               <object class="GtkLabel" id="labelSpreadEndZone">
                 <property name="visible">True</property>
