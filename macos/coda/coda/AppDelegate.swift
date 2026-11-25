@@ -50,20 +50,88 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self?.documentController.presentStartupBackstage(calledFromStartup: true)
         }
 
-        // Now remove the Share menu item, as we haven't implemented sharing yet.
-        if let mainMenu = NSApp.mainMenu,
-            let fileMenuItem = mainMenu.item(withTitle: "File"),
-            let fileSubmenu = fileMenuItem.submenu,
-            let shareItem = fileSubmenu.item(withTitle: "Share") {
-            fileSubmenu.removeItem(shareItem)
-            if let editMenu = NSApp.mainMenu?.item(withTitle: "Edit")?.submenu {
-                let itemsToRemove = ["Writing Tools", "AutoFill", "Start Dictation", "Emoji & Symbols"]
-                for title in itemsToRemove {
-                    if let item = editMenu.item(withTitle: title) {
-                        editMenu.removeItem(item)
-                    }
-                }
+        removeInjectedMenuItems()
+    }
+
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        // AppKit would add the Writing Tools items to the Edit menu; the web editor has its own.
+        if #available(macOS 15.2, *),
+           let mainMenu = NSApp.mainMenu,
+           let editMenu = Self.menu(in: mainMenu, containingAction: NSSelectorFromString("undo:")) {
+            editMenu.automaticallyInsertsWritingToolsItems = false
+        }
+    }
+
+    /**
+     * AppKit adds its own items to the File and Edit menus: Share, Writing Tools, AutoFill,
+     * Start Dictation and Emoji & Symbols. Sharing is not implemented, and the rest belong
+     * to native text views, not to the web editor. Their titles are in the user's language
+     * (and so are ours, from Main.strings), so they cannot be found by name. Instead, keep
+     * the items the storyboard defines, identified by their action, and drop everything else.
+     * A new item in the storyboard's File or Edit menu needs its action added here.
+     */
+    private func removeInjectedMenuItems() {
+        guard let mainMenu = NSApp.mainMenu else { return }
+
+        if let fileMenu = Self.menu(in: mainMenu, containingAction: NSSelectorFromString("openDocument:")) {
+            Self.keepOnly(actions: ["newDocument:", "openDocument:", "clearRecentDocuments:",
+                                    "performClose:", "saveDocument:", "saveDocumentAs:",
+                                    "revertDocumentToSaved:", "runPageLayout:", "printDocument:"],
+                          in: fileMenu)
+        }
+        if let editMenu = Self.menu(in: mainMenu, containingAction: NSSelectorFromString("undo:")) {
+            Self.keepOnly(actions: ["undo:", "redo:", "cut:", "copy:", "paste:", "pasteAsPlainText:"],
+                          in: editMenu)
+        }
+    }
+
+    /**
+     * Find the (sub)menu that has an item with the given action.
+     */
+    private static func menu(in menu: NSMenu, containingAction action: Selector) -> NSMenu? {
+        for item in menu.items {
+            if item.action == action {
+                return menu
             }
+            if let sub = item.submenu, let found = Self.menu(in: sub, containingAction: action) {
+                return found
+            }
+        }
+        return nil
+    }
+
+    /**
+     * Remove every item of the menu whose action is not listed. An item with a submenu stays
+     * when something in that submenu is listed (Open Recent, through Clear Menu). Separators
+     * stay, except where removing items left them doubled or at an end of the menu.
+     */
+    private static func keepOnly(actions: [String], in menu: NSMenu) {
+        let keep = Set(actions.map(NSSelectorFromString))
+        func isKept(_ item: NSMenuItem) -> Bool {
+            if let action = item.action, keep.contains(action) {
+                return true
+            }
+            if let sub = item.submenu {
+                return sub.items.contains(where: isKept)
+            }
+            return false
+        }
+        for item in menu.items where !item.isSeparatorItem && !isKept(item) {
+            menu.removeItem(item)
+        }
+        var previousWasSeparator = true
+        for item in menu.items {
+            if item.isSeparatorItem {
+                if previousWasSeparator {
+                    menu.removeItem(item)
+                }
+                previousWasSeparator = true
+            } else {
+                previousWasSeparator = false
+            }
+        }
+        if let last = menu.items.last, last.isSeparatorItem {
+            menu.removeItem(last)
         }
     }
 

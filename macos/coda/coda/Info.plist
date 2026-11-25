@@ -14,47 +14,6 @@
 	<string>$(APP_BUNDLE_NAME)</string>
 	<key>CFBundleIconFile</key>
 	<string>AppIcon</string>
-	<key>CFBundleLocalizations</key>
-	<array>
-		<string>ar</string>
-		<string>ca</string>
-		<string>cs</string>
-		<string>cy</string>
-		<string>da</string>
-		<string>de</string>
-		<string>el</string>
-		<string>en-GB</string>
-		<string>es</string>
-		<string>eu</string>
-		<string>fi</string>
-		<string>fr</string>
-		<string>ga</string>
-		<string>gl</string>
-		<string>he</string>
-		<string>hr</string>
-		<string>hu</string>
-		<string>hy</string>
-		<string>id</string>
-		<string>is</string>
-		<string>it</string>
-		<string>ja</string>
-		<string>kk</string>
-		<string>ko</string>
-		<string>nl</string>
-		<string>pl</string>
-		<string>pt-BR</string>
-		<string>pt</string>
-		<string>ro</string>
-		<string>ru</string>
-		<string>sk</string>
-		<string>sl</string>
-		<string>sq</string>
-		<string>sv</string>
-		<string>tr</string>
-		<string>uk</string>
-		<string>zh-Hans</string>
-		<string>zh-Hant</string>
-	</array>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
