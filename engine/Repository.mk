@@ -163,7 +163,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 
 $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	$(if $(filter WNT,$(OS)), \
-		odbcconfig \
+		$(call gb_Helper_optional,DBCONNECTIVITY,odbcconfig) \
 	) \
 ))
 
@@ -332,7 +332,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	oox \
 	$(call gb_Helper_optional,OPENCL,opencl) \
 	passwordcontainer \
-	pcr \
+	$(call gb_Helper_optional,DBCONNECTIVITY,pcr) \
 	pdffilter \
 	$(if $(ENABLE_RUST_UNO),rust_uno-cpp) \
 	$(call gb_Helper_optional,SCRIPTING,protocolhandler) \
