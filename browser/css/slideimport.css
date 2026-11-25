@@ -434,7 +434,7 @@
 	cursor: pointer;
 }
 
-#slide-import-panel .slide-import-source-keep:hover:not(:disabled):not(.kept) {
+#slide-import-panel .slide-import-source-keep:hover:not([aria-disabled='true']):not(.kept) {
 	background-color: var(--color-background-dark) !important;
 }
 
@@ -444,7 +444,7 @@
 	background-image: url('images/slide-import-source-kept.svg');
 }
 
-#slide-import-panel .slide-import-source-keep:disabled {
+#slide-import-panel .slide-import-source-keep[aria-disabled='true'] {
 	cursor: default;
 }
 

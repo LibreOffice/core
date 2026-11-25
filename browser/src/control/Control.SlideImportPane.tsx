@@ -1558,10 +1558,17 @@ class SlideImportPane {
     const keep = this.keepState(source);
     if (keep === 'none') return '';
     const kept = keep !== 'offered';
-    let tip = _('Click to add the presentation');
-    if (keep === 'kept') tip = _('Click to remove the presentation');
-    else if (keep === 'linked')
-      tip = _('The presentation is linked, so it cannot be removed');
+    const linked = keep === 'linked';
+    const tip =
+      linked ?
+        _('Kept in this presentation because it is linked')
+      : _('Keep in this presentation');
+    const description =
+      linked ? tip : (
+        _(
+          'Anyone who opens this presentation will find it under Slide sources.',
+        )
+      );
     return (
       <button
         class={'slide-import-source-keep' + (kept ? ' kept' : '')}
@@ -1570,11 +1577,13 @@ class SlideImportPane {
           '{0}',
           source.name,
         )}
+        aria-description={description}
         data-cooltip={tip}
-        disabled={keep === 'linked'}
-        onClick={() =>
-          SlideImportSession.keepRemoteLink(source.persistentLink, !kept)
-        }
+        aria-disabled={linked ? 'true' : 'false'}
+        onClick={() => {
+          if (linked) return;
+          SlideImportSession.keepRemoteLink(source.persistentLink, !kept);
+        }}
       />
     );
   }
