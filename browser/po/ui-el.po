@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 12:57+0100\n"
-"PO-Revision-Date: 2026-11-21 19:16+0000\n"
-"Last-Translator: nck nicko <nick_nick88@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-23 14:20+0000\n"
+"Last-Translator: geonetor <geonetor@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/el/>\n"
 "Language: el\n"
@@ -459,6 +459,8 @@ msgid ""
 "No WOPI host is allowed: alias_groups mode is \"groups\" but no group is "
 "defined"
 msgstr ""
+"Κανένας κεντρικός υπολογιστής WOPI δεν επιτρέπεται: η λειτουργία "
+"alias_groups είναι \"groups\" αλλά δεν έχει οριστεί καμία ομάδα"
 
 #: admin/src/AdminSocketServerAudit.js:58
 #: src/control/Control.ServerAuditDialog.ts:129
@@ -1351,18 +1353,20 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4738
 msgid "Remote Sentence Checkers"
-msgstr ""
+msgstr "Απομακρυσμένοι Ελεγκτές Προτάσεων"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4742
 msgid ""
 "Checkers that run on a server. The text of the document is sent there to be "
 "checked."
 msgstr ""
+"Ελεγκτές που τρέχουν σε διακομιστή. Το κείμενο του εγγράφου αποστέλλεται "
+"εκεί για έλεγχο."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4777
 #: admin/src/integrator/AdminIntegratorSettings.ts:5127
 msgid "Enabled"
-msgstr ""
+msgstr "Ενεργοποιημένο"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4789
 #: admin/src/integrator/AdminIntegratorSettings.ts:5164
@@ -1378,55 +1382,55 @@ msgstr "Όνομα χρήστη"
 #: admin/src/integrator/AdminIntegratorSettings.ts:4823
 #: admin/src/integrator/AdminIntegratorSettings.ts:5183
 msgid "Verify the server certificate"
-msgstr ""
+msgstr "Επαληθεύστε το πιστοποιητικό του διακομιστή"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4831
 msgid "Enabled on this server for: {0}"
-msgstr ""
+msgstr "Ενεργοποιήθηκε σε αυτόν τον διακομιστή για: {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4846
 msgid "Checking level"
-msgstr ""
+msgstr "Επίπεδο ελέγχου"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4849
 msgid "Single words"
-msgstr ""
+msgstr "Μονές λέξεις"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4850
 msgid "Spelling"
-msgstr ""
+msgstr "Ορθογραφία"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4851
 msgid "Spelling and grammar"
-msgstr ""
+msgstr "Ορθογραφία και γραμματική"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4861
 msgid "German spelling"
-msgstr ""
+msgstr "Γερμανική ορθογραφία"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4863
 msgid "Duden recommendation"
-msgstr ""
+msgstr "Σύσταση Duden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4864
 msgid "Conservative"
-msgstr ""
+msgstr "Συντηρητικός"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4865
 msgid "Progressive"
-msgstr ""
+msgstr "Προοδευτικός"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4866
 msgid "Tolerant"
-msgstr ""
+msgstr "Ανεκτικός"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4867
 msgid "Press agencies"
-msgstr ""
+msgstr "Πρακτορεία Τύπου"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4877
 msgid "Explanations"
-msgstr ""
+msgstr "Εξηγήσεις"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4880
 #: src/control/Control.AIChatSidebar.ts:187
@@ -1440,51 +1444,51 @@ msgstr "Σύνδεση"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4882
 msgid "Long, with an example"
-msgstr ""
+msgstr "Μακρύ, με ένα παράδειγμα"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4892
 msgid "Correction profiles"
-msgstr ""
+msgstr "Προφίλ διόρθωσης"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4902
 msgid "Dictionaries"
-msgstr ""
+msgstr "Λεξικά"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4909
 msgid "Foreign words with a German equivalent"
-msgstr ""
+msgstr "Ξένες λέξεις με γερμανικό αντίστοιχο"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4910
 msgid "Archaic words"
-msgstr ""
+msgstr "Αρχαϊκές λέξεις"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4911
 msgid "Regional words"
-msgstr ""
+msgstr "Περιφερειακές λέξεις"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4912
 msgid "Colloquial and vulgar words"
-msgstr ""
+msgstr "Καθημερινές και χυδαίες λέξεις"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4913
 msgid "Filler words"
-msgstr ""
+msgstr "Λέξεις γεμίσματος"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4914
 msgid "Offensive wording"
-msgstr ""
+msgstr "Προσβλητική διατύπωση"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4915
 msgid "Gender-inclusive wording"
-msgstr ""
+msgstr "Γλώσσα που περιλαμβάνει όλα τα φύλα"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4916
 msgid "Complex sentences"
-msgstr ""
+msgstr "Σύνθετες προτάσεις"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4938
 msgid "Style checks (German only)"
-msgstr ""
+msgstr "Έλεγχοι στυλ (μόνο Γερμανικά)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5062
 #, fuzzy
@@ -1496,46 +1500,48 @@ msgid ""
 "Machine translation of the document text with the Translate command. The "
 "text is sent to the provider to be translated."
 msgstr ""
+"Μηχανική μετάφραση του κειμένου του εγγράφου με την εντολή Μετάφραση. Το "
+"κείμενο αποστέλλεται στον πάροχο για μετάφραση."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5079
 msgid "The first one that is set up"
-msgstr ""
+msgstr "Το πρώτο που έχει στηθεί"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5101
 msgid "Translating with {0}."
-msgstr ""
+msgstr "Μετάφραση με {0}."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5102
 msgid "No provider is set up: the Translate command is not offered."
-msgstr ""
+msgstr "Δεν έχει ρυθμιστεί πάροχος: η εντολή Μετάφραση δεν προσφέρεται."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5142
 msgid "API URL"
-msgstr ""
+msgstr "URL API"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5151
 msgid "Authentication key"
-msgstr ""
+msgstr "Κλειδί αυθεντικοποίησης"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5193
 msgid "Set up on this server."
-msgstr ""
+msgstr "Ρύθμιση σε αυτόν τον διακομιστή."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5194
 msgid "Enabled on this server, but not set up."
-msgstr ""
+msgstr "Ενεργοποιημένο σε αυτόν τον διακομιστή, αλλά δεν έχει ρυθμιστεί."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5251
 msgid "Use the default settings"
-msgstr ""
+msgstr "Χρησιμοποιήστε τις προεπιλεγμένες ρυθμίσεις"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5252
 msgid "Use the settings set on the server"
-msgstr ""
+msgstr "Χρησιμοποίησε τις ρυθμίσεις που έχουν οριστεί στον διακομιστή"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5260
 msgid "Your own settings are dropped when you save."
-msgstr ""
+msgstr "Οι δικές σας ρυθμίσεις απορρίπτονται όταν κάνετε αποθήκευση."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5314
 #: admin/src/integrator/AdminIntegratorSettings.ts:5979
@@ -1619,6 +1625,8 @@ msgid ""
 "This file is a spelling dictionary, not a wordbook. Upload a list of words "
 "with one word per line."
 msgstr ""
+"Αυτό το αρχείο είναι ένα ορθογραφικό λεξικό, όχι ένα βιβλίο λέξεων. Ανεβάστε "
+"μια λίστα λέξεων με μία λέξη ανά γραμμή."
 
 #: admin/src/integrator/WordBook.ts:471
 msgid "Invalid dictionary format. Please check the file."
@@ -1834,23 +1842,23 @@ msgstr "Εικόνα (.png)"
 
 #: src/app/HandleGroups.ts:1855
 msgid "Top Left"
-msgstr ""
+msgstr "Επάνω αριστερά"
 
 #: src/app/HandleGroups.ts:1856
 msgid "Top"
-msgstr ""
+msgstr "Κορυφή"
 
 #: src/app/HandleGroups.ts:1857
 msgid "Top Right"
-msgstr ""
+msgstr "Επάνω δεξιά"
 
 #: src/app/HandleGroups.ts:1858 src/app/HandleGroups.ts:1996
 msgid "Left"
-msgstr ""
+msgstr "Αριστερά"
 
 #: src/app/HandleGroups.ts:1859
 msgid "Center"
-msgstr ""
+msgstr "Κέντρο"
 
 #: src/app/HandleGroups.ts:1860 src/app/HandleGroups.ts:1997
 #, fuzzy
@@ -1859,15 +1867,15 @@ msgstr "Φωτεινό"
 
 #: src/app/HandleGroups.ts:1861
 msgid "Bottom Left"
-msgstr ""
+msgstr "Κάτω αριστερά"
 
 #: src/app/HandleGroups.ts:1862
 msgid "Bottom"
-msgstr ""
+msgstr "Κάτω"
 
 #: src/app/HandleGroups.ts:1863
 msgid "Bottom Right"
-msgstr ""
+msgstr "Κάτω δεξιά"
 
 #: src/app/HandleGroups.ts:1951
 msgid "Gluepoint"
@@ -1875,7 +1883,7 @@ msgstr ""
 
 #: src/app/HandleGroups.ts:1998
 msgid "Up"
-msgstr ""
+msgstr "Επάνω"
 
 #: src/app/HandleGroups.ts:1999
 msgid "Down"
