@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 12:57+0100\n"
 "PO-Revision-Date: 2026-11-23 17:01+0000\n"
-"Last-Translator: Simonth <simonth@users.noreply.hosted.weblate.org>\n"
+"Last-Translator: xincrement <xincrement@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/da/>\n"
 "Language: da\n"
@@ -447,7 +447,6 @@ msgstr ""
 
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:107
-#, fuzzy
 msgid "No WOPI host configured: trusting the first host that connects"
 msgstr ""
 "Ingen WOPI-vært er konfigureret: Den første vært, der opretter forbindelse, "
@@ -1712,9 +1711,8 @@ msgstr "EPUB (.epub)"
 
 #: src/app/ExportFormats.ts:65 src/control/Control.Menubar.ts:144
 #: src/control/Control.NotebookbarBuilder.js:453
-#, fuzzy
 msgid "ODF master document (.odm)"
-msgstr "ODF-tekstdokument (.odt)"
+msgstr "ODF master document (.odm)"
 
 #: src/app/ExportFormats.ts:66 src/app/ExportFormats.ts:78
 #: src/control/Control.Menubar.ts:145
@@ -1836,9 +1834,8 @@ msgid "Center"
 msgstr "Centrér"
 
 #: src/app/HandleGroups.ts:1860 src/app/HandleGroups.ts:1997
-#, fuzzy
 msgid "Right"
-msgstr "Lys"
+msgstr "Højre"
 
 #: src/app/HandleGroups.ts:1861
 msgid "Bottom Left"
@@ -1854,7 +1851,7 @@ msgstr "Nederst Til Højre"
 
 #: src/app/HandleGroups.ts:1951
 msgid "Gluepoint"
-msgstr ""
+msgstr "Bindepunkt"
 
 #: src/app/HandleGroups.ts:1998
 msgid "Up"
@@ -1870,60 +1867,59 @@ msgstr "Anker"
 
 #: src/app/HandleGroups.ts:2045
 msgid "Default gluepoints cannot be edited."
-msgstr ""
+msgstr "Standard bindeled kan ikke redigeres."
 
 #: src/app/HandleGroups.ts:2863
-#, fuzzy
 msgid "Point"
-msgstr "Udskriv"
+msgstr "Punkt"
 
 #: src/app/HandleGroups.ts:2875
 msgid "To Line"
-msgstr ""
+msgstr "Til Linje"
 
 #: src/app/HandleGroups.ts:2875
 msgid "To Curve"
-msgstr ""
+msgstr "Til Kurve"
 
 #: src/app/HandleGroups.ts:2882
 msgid "Corner Point"
-msgstr ""
+msgstr "Hjørnepunkt"
 
 #: src/app/HandleGroups.ts:2889
 msgid "Smooth Transition"
-msgstr ""
+msgstr "Glat Overgang"
 
 #: src/app/HandleGroups.ts:2896
 msgid "Symmetric Transition"
-msgstr ""
+msgstr "Symmetrisk Overgang"
 
 #: src/app/HandleGroups.ts:2905
 msgid "Split Path"
-msgstr ""
+msgstr "Opdelt Sti"
 
 #: src/app/HandleGroups.ts:3420
 msgid "Motion Path"
-msgstr ""
+msgstr "Bevægelsessti"
 
 #: src/app/HandleGroups.ts:3421 src/control/jsdialog/Definitions.Menu.ts:2515
 msgid "Add Point"
-msgstr ""
+msgstr "Tilføj Punkt"
 
 #: src/app/HandleGroups.ts:3426
 msgid "Open Path"
-msgstr ""
+msgstr "Åbn Sti"
 
 #: src/app/HandleGroups.ts:3426 src/control/jsdialog/Definitions.Menu.ts:2522
 msgid "Close Path"
-msgstr ""
+msgstr "Luk Sti"
 
 #: src/app/HandleGroups.ts:3433 src/control/jsdialog/Definitions.Menu.ts:2531
 msgid "Simplify Curves"
-msgstr ""
+msgstr "Simplificér Kurver"
 
 #: src/app/HandleGroups.ts:3439 src/control/jsdialog/Definitions.Menu.ts:2536
 msgid "Simplify All"
-msgstr ""
+msgstr "Simplificér Alle"
 
 #: src/app/LOUtil.ts:1455
 msgid "{0} website, opens in new tab"
@@ -2013,9 +2009,11 @@ msgid "Background Video"
 msgstr "Baggrundsvideo"
 
 #: src/control/VideoBackgroundDialog.ts:69
+#, fuzzy
 msgid ""
 "The video plays behind every slide that uses the master slide of this slide."
 msgstr ""
+"Videoen afspilles bag hvert dias, der benytter master diaset for dette dias."
 
 #: src/control/VideoBackgroundDialog.ts:98
 msgid "Remove Background Video"
@@ -2074,9 +2072,8 @@ msgid "Reply"
 msgstr "Besvar"
 
 #: src/canvas/sections/CommentSection.ts:345
-#, fuzzy
 msgid "comment"
-msgstr "Kommentar"
+msgstr "kommentar"
 
 #: src/canvas/sections/CommentSection.ts:576
 msgid "Press Ctrl + Enter to post"
@@ -2515,9 +2512,8 @@ msgstr "Send besked"
 
 #: src/control/Control.AIChatSidebar.ts:1130
 #: src/control/Control.AIChatSidebar.ts:1143
-#, fuzzy
 msgid "Set Tone"
-msgstr "Angiv tone"
+msgstr "Angiv Tone"
 
 #: src/control/Control.AIChatSidebar.ts:1154
 msgid "Set tone of voice"
@@ -2673,9 +2669,8 @@ msgid "Prompt instruction"
 msgstr "Prompt instruktion"
 
 #: src/control/Control.AIChatSidebar.ts:1514
-#, fuzzy
 msgid "Delete prompt confirmation"
-msgstr "Bekræft sletning af tone"
+msgstr "Slet prompt bekræftelse"
 
 #: src/control/Control.AIChatSidebar.ts:1525
 msgid "The prompt \"{0}\" will be deleted."
@@ -2687,9 +2682,8 @@ msgid "Cancel delete"
 msgstr "Annullér sletning"
 
 #: src/control/Control.AIChatSidebar.ts:1635
-#, fuzzy
 msgid "You have reached the maximum of {0} saved prompts."
-msgstr "Du har nået grænsen på {0} brugerdefinerede toner."
+msgstr "Du har nået maksimumgrænsen på {0} gemte prompts."
 
 #: src/control/Control.AIChatSidebar.ts:1753
 msgid "No saved prompt matches this name."
@@ -3174,9 +3168,8 @@ msgid "Reject action"
 msgstr "Afvis handling"
 
 #: src/control/Control.AIChatSidebar.ts:3519
-#, fuzzy
 msgid "Send"
-msgstr "Afsendt"
+msgstr "Send"
 
 #: src/control/Control.AIChatSidebar.ts:3521
 msgid "Send these cells"
@@ -3319,7 +3312,7 @@ msgstr "Jeg har en formelfejl i mit regneark."
 #. TRANSLATORS: B5, {1} the name of its sheet
 #: src/control/Control.AIChatSidebar.ts:4624
 msgid "Cell {0} (Sheet: {1}) contains:"
-msgstr ""
+msgstr "Celle {0} (Regneark: {1}) indeholder:"
 
 #: src/control/Control.AIChatSidebar.ts:4629
 #: src/control/Control.FormulaBarJSDialog.js:116
@@ -3336,9 +3329,8 @@ msgstr "Celler, der henvises til"
 #. TRANSLATORS: Sent to the AI model. {0} is a Calc error code such
 #. TRANSLATORS: as #DIV/0!
 #: src/control/Control.AIChatSidebar.ts:4641
-#, fuzzy
 msgid "Please diagnose why this formula produces the {0} error."
-msgstr "Undersøg, hvorfor denne formel giver fejlen"
+msgstr "Venligst undersøg, hvorfor denne formel giver {0} fejlen."
 
 #: src/control/Control.AIChatSidebar.ts:4645
 msgid "Explain the root cause and suggest how to fix it."
