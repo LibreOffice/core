@@ -8,17 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 12:57+0100\n"
-"PO-Revision-Date: 2026-11-06 13:20+0000\n"
-"Last-Translator: Mette Kærgaard Hansen "
-"<mkh_brain@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-23 14:20+0000\n"
+"Last-Translator: xincrement <xincrement@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/da/>\n"
-"Language: \n"
+"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.11.2.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -456,10 +455,13 @@ msgstr ""
 
 #: admin/src/AdminSocketServerAudit.js:53
 #: src/control/Control.ServerAuditDialog.ts:113
+#, fuzzy
 msgid ""
 "No WOPI host is allowed: alias_groups mode is \"groups\" but no group is "
 "defined"
 msgstr ""
+"Ingen WOPI vært har tilladelse: alias_groups mode er \"groups\" men ingen "
+"grupper er defineret"
 
 #: admin/src/AdminSocketServerAudit.js:58
 #: src/control/Control.ServerAuditDialog.ts:129
@@ -1815,23 +1817,23 @@ msgstr "Billede (.png)"
 
 #: src/app/HandleGroups.ts:1855
 msgid "Top Left"
-msgstr ""
+msgstr "Øverst til venstre"
 
 #: src/app/HandleGroups.ts:1856
 msgid "Top"
-msgstr ""
+msgstr "Top"
 
 #: src/app/HandleGroups.ts:1857
 msgid "Top Right"
-msgstr ""
+msgstr "Øverst Til Højre"
 
 #: src/app/HandleGroups.ts:1858 src/app/HandleGroups.ts:1996
 msgid "Left"
-msgstr ""
+msgstr "Venstre"
 
 #: src/app/HandleGroups.ts:1859
 msgid "Center"
-msgstr ""
+msgstr "Centrér"
 
 #: src/app/HandleGroups.ts:1860 src/app/HandleGroups.ts:1997
 #, fuzzy
@@ -1840,15 +1842,15 @@ msgstr "Lys"
 
 #: src/app/HandleGroups.ts:1861
 msgid "Bottom Left"
-msgstr ""
+msgstr "Nederst Til Venstre"
 
 #: src/app/HandleGroups.ts:1862
 msgid "Bottom"
-msgstr ""
+msgstr "Nederst"
 
 #: src/app/HandleGroups.ts:1863
 msgid "Bottom Right"
-msgstr ""
+msgstr "Nederst Til Højre"
 
 #: src/app/HandleGroups.ts:1951
 msgid "Gluepoint"
@@ -1856,15 +1858,15 @@ msgstr ""
 
 #: src/app/HandleGroups.ts:1998
 msgid "Up"
-msgstr ""
+msgstr "Op"
 
 #: src/app/HandleGroups.ts:1999
 msgid "Down"
-msgstr ""
+msgstr "Ned"
 
 #: src/app/HandleGroups.ts:2004
 msgid "Anchor"
-msgstr ""
+msgstr "Anker"
 
 #: src/app/HandleGroups.ts:2045
 msgid "Default gluepoints cannot be edited."
@@ -1968,47 +1970,47 @@ msgstr "Duplikér typografi"
 #: src/app/Util.ts:319
 msgid "%n year"
 msgid_plural "%n years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n år"
+msgstr[1] "%n år"
 
 #: src/app/Util.ts:321
 msgid "%n day"
 msgid_plural "%n days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n dag"
+msgstr[1] "%n dage"
 
 #: src/app/Util.ts:322
 msgid "%n hour"
 msgid_plural "%n hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n time"
+msgstr[1] "%n timer"
 
 #: src/app/Util.ts:325
 msgid "%n minute"
 msgid_plural "%n minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n minut"
+msgstr[1] "%n minuter"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
-msgstr ""
+msgstr "mindre en et minut"
 
 #: src/control/VideoBackgroundDialog.ts:24
 msgid "Clouds"
-msgstr ""
+msgstr "Skyer"
 
 #: src/control/VideoBackgroundDialog.ts:25
 msgid "Clouds at dusk"
-msgstr ""
+msgstr "Skyer i skumringen"
 
 #: src/control/VideoBackgroundDialog.ts:26
 msgid "Bokeh"
-msgstr ""
+msgstr "Slør"
 
 #: src/control/VideoBackgroundDialog.ts:64
 #: src/control/Control.NotebookbarImpress.js:2112
 msgid "Background Video"
-msgstr ""
+msgstr "Baggrundsvideo"
 
 #: src/control/VideoBackgroundDialog.ts:69
 msgid ""
@@ -2017,11 +2019,11 @@ msgstr ""
 
 #: src/control/VideoBackgroundDialog.ts:98
 msgid "Remove Background Video"
-msgstr ""
+msgstr "Fjern Baggrundsvideo"
 
 #: src/control/VideoBackgroundDialog.ts:104
 msgid "Choose Your Own Video..."
-msgstr ""
+msgstr "Vælg Din Egen Video..."
 
 #: src/canvas/sections/CommentListSection.ts:2301
 #: src/canvas/sections/CommentListSection.ts:2314
@@ -2082,7 +2084,7 @@ msgstr "Tryk på Ctrl + Enter for at sende"
 
 #: src/canvas/sections/CommentSection.ts:594
 msgid "Reply to {0}"
-msgstr ""
+msgstr "Svar til {0}"
 
 #: src/canvas/sections/CommentSection.ts:664
 #: src/canvas/sections/CommentSection.ts:665
@@ -2197,11 +2199,11 @@ msgstr "Dokumentet indeholder medieindhold som ikke understøttes"
 
 #: src/canvas/sections/SelectionSection.ts:2207
 msgid "Waiting for redo..."
-msgstr ""
+msgstr "Afventer gendan..."
 
 #: src/canvas/sections/SelectionSection.ts:2208
 msgid "Waiting for undo..."
-msgstr ""
+msgstr "Venter på fortrydelse..."
 
 #: src/canvas/sections/URLPopUpSection.ts:89
 #: src/control/Control.HyperlinkWizard.ts:41
@@ -2352,7 +2354,7 @@ msgstr "Uformel"
 #. TRANSLATORS: such as "Formal" or a name that the user typed
 #: src/control/Control.AIChatSidebar.ts:352
 msgid "{0} tone"
-msgstr ""
+msgstr "{0} tone"
 
 #: src/control/Control.AIChatSidebar.ts:468
 msgid "Best"
@@ -2427,27 +2429,27 @@ msgstr "Hvad vil du gøre med dette dokument?"
 
 #: src/control/Control.AIChatSidebar.ts:838
 msgid "Good morning, {0}"
-msgstr ""
+msgstr "Godmorgen, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:839
 msgid "Good morning"
-msgstr ""
+msgstr "Godmorgen"
 
 #: src/control/Control.AIChatSidebar.ts:841
 msgid "Good afternoon, {0}"
-msgstr ""
+msgstr "God eftermiddag, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:842
 msgid "Good afternoon"
-msgstr ""
+msgstr "God eftermiddag"
 
 #: src/control/Control.AIChatSidebar.ts:844
 msgid "Good evening, {0}"
-msgstr ""
+msgstr "Godaften, {0}"
 
 #: src/control/Control.AIChatSidebar.ts:845
 msgid "Good evening"
-msgstr ""
+msgstr "Godaften"
 
 #: src/control/Control.AIChatSidebar.ts:896
 #: src/control/Control.AIChatSidebar.ts:2962
@@ -2497,7 +2499,7 @@ msgstr "Bruger den markerede tekst som kontekst"
 
 #: src/control/Control.AIChatSidebar.ts:1088
 msgid "Ask AI, or type / for a saved prompt..."
-msgstr ""
+msgstr "Spørg AI, eller skriv / for en gemt prompt..."
 
 #: src/control/Control.AIChatSidebar.ts:1091
 msgid "Message input"
@@ -2580,29 +2582,29 @@ msgstr "Slå emoji til eller fra"
 
 #: src/control/Control.AIChatSidebar.ts:1313
 msgid "Add Prompts"
-msgstr ""
+msgstr "Tilføj Prompts"
 
 #: src/control/Control.AIChatSidebar.ts:1316
 msgid "Saved prompts"
-msgstr ""
+msgstr "Gemte Prompts"
 
 #: src/control/Control.AIChatSidebar.ts:1345
 msgid "My prompts"
-msgstr ""
+msgstr "Mine prompts"
 
 #: src/control/Control.AIChatSidebar.ts:1354
 msgid "Type / in the message box to run a prompt."
-msgstr ""
+msgstr "Skriv / i beskedboksen, for at køre et prompt."
 
 #: src/control/Control.AIChatSidebar.ts:1363
 msgid "Run prompt {0}"
-msgstr ""
+msgstr "Kør prompt {0}"
 
 #: src/control/Control.AIChatSidebar.ts:1368
 #: src/control/Control.AIChatSidebar.ts:1369
 #: src/control/Control.AIChatSidebar.ts:1424
 msgid "Edit prompt"
-msgstr ""
+msgstr "Redigér prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1385
 msgid ""
@@ -2613,31 +2615,31 @@ msgstr ""
 #: src/control/Control.AIChatSidebar.ts:1394
 #: src/control/Control.AIChatSidebar.ts:1769
 msgid "+ Add a prompt"
-msgstr ""
+msgstr "+ Tilføj til prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1398
 #: src/control/Control.AIChatSidebar.ts:1772
 msgid "Add a prompt"
-msgstr ""
+msgstr "Tilføj til prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1418
 msgid "Back to prompts"
-msgstr ""
+msgstr "Tilbage til prompts"
 
 #: src/control/Control.AIChatSidebar.ts:1424
 msgid "New prompt"
-msgstr ""
+msgstr "Ny prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1434
 #: src/control/Control.AIChatSidebar.ts:1519
 #: src/control/Control.AIChatSidebar.ts:1545
 msgid "Delete prompt"
-msgstr ""
+msgstr "Slet prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1449
 #: src/control/Control.AIChatSidebar.ts:1451
 msgid "Save prompt"
-msgstr ""
+msgstr "Gem prompt"
 
 #: src/control/Control.AIChatSidebar.ts:1469
 #: src/control/backstage/HomeView.tsx:75
@@ -2650,25 +2652,25 @@ msgstr "Navn"
 
 #: src/control/Control.AIChatSidebar.ts:1476
 msgid "e.g. Meeting minutes"
-msgstr ""
+msgstr "f.eks mødereferat"
 
 #: src/control/Control.AIChatSidebar.ts:1478
 msgid "Prompt name"
-msgstr ""
+msgstr "Prompt navn"
 
 #: src/control/Control.AIChatSidebar.ts:1483
 msgid "What should AI do with the selected text?"
-msgstr ""
+msgstr "Hvad burde AI gøre med den valgte tekst?"
 
 #: src/control/Control.AIChatSidebar.ts:1491
 msgid ""
 "Turn the selected notes into meeting minutes with decisions and action "
 "items."
-msgstr ""
+msgstr "Omdan de valgte noter til et mødereferat med beslutninger og opgaver."
 
 #: src/control/Control.AIChatSidebar.ts:1495
 msgid "Prompt instruction"
-msgstr ""
+msgstr "Prompt instruktion"
 
 #: src/control/Control.AIChatSidebar.ts:1514
 #, fuzzy
@@ -2677,7 +2679,7 @@ msgstr "Bekræft sletning af tone"
 
 #: src/control/Control.AIChatSidebar.ts:1525
 msgid "The prompt \"{0}\" will be deleted."
-msgstr ""
+msgstr "Prompten \"{0}\" vil blive slettet."
 
 #: src/control/Control.AIChatSidebar.ts:1538
 #: src/control/Control.AIChatSidebar.ts:2240
@@ -2691,11 +2693,11 @@ msgstr "Du har nået grænsen på {0} brugerdefinerede toner."
 
 #: src/control/Control.AIChatSidebar.ts:1753
 msgid "No saved prompt matches this name."
-msgstr ""
+msgstr "Ingen prompt matcher dette navn."
 
 #: src/control/Control.AIChatSidebar.ts:1754
 msgid "You have no saved prompts yet."
-msgstr ""
+msgstr "Du har ingen gemte prompts endnu."
 
 #: src/control/Control.AIChatSidebar.ts:2057
 msgid "Use icon"
@@ -3178,15 +3180,15 @@ msgstr "Afsendt"
 
 #: src/control/Control.AIChatSidebar.ts:3521
 msgid "Send these cells"
-msgstr ""
+msgstr "Send disse celler"
 
 #: src/control/Control.AIChatSidebar.ts:3527
 msgid "Do not send these cells"
-msgstr ""
+msgstr "Send ikke disse celler"
 
 #: src/control/Control.AIChatSidebar.ts:3544
 msgid "Nothing was sent."
-msgstr ""
+msgstr "Intet var sendt."
 
 #: src/control/Control.AIChatSidebar.ts:3567
 msgid "Applying changes..."
@@ -3303,11 +3305,11 @@ msgstr "Undersøg formelfejl i"
 
 #: src/control/Control.AIChatSidebar.ts:4594
 msgid "To diagnose the error in %1, these cells will be sent to %2:"
-msgstr ""
+msgstr "For at diagnosticere fejlen i %1, bliver disse celler sendt til %2:"
 
 #: src/control/Control.AIChatSidebar.ts:4600
 msgid "Do you want to send them?"
-msgstr ""
+msgstr "Ønsker du at sende dem?"
 
 #: src/control/Control.AIChatSidebar.ts:4620
 msgid "I have a formula error in my spreadsheet."
@@ -3352,11 +3354,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:4665
 msgid "only the cells with errors"
-msgstr ""
+msgstr "kun cellerne med fejl"
 
 #: src/control/Control.AIChatSidebar.ts:4672
 msgid "another file, its name only"
-msgstr ""
+msgstr "en anden fil, kun dens navn"
 
 #: src/control/Control.AIChatSidebar.ts:4702
 msgid "formula"
@@ -3734,7 +3736,7 @@ msgstr "Oprydningsstatus"
 
 #: src/control/Control.CleanupSidebar.ts:913
 msgid "Stop Cleanup"
-msgstr ""
+msgstr "Stop Cleanup"
 
 #: src/control/Control.CleanupSidebar.ts:934
 msgid "Scan presentation"
@@ -3892,7 +3894,7 @@ msgstr "Afslut"
 
 #: src/control/Control.BackstageView.ts:299
 msgid "Start something new, or continue where you left off."
-msgstr ""
+msgstr "Start noget nyt, eller fortsæt hvor du slap."
 
 #: src/control/Control.BackstageView.ts:332
 #: src/control/jsdialog/Widget.ColorPicker.ts:476
@@ -3901,19 +3903,19 @@ msgstr "Seneste"
 
 #: src/control/Control.BackstageView.ts:718
 msgid "Account in use"
-msgstr ""
+msgstr "Konto i brug"
 
 #: src/control/Control.BackstageView.ts:720
 msgid "Close the windows and documents of this account before you remove it."
-msgstr ""
+msgstr "Luk vinduerne og dokumenterne for denne konto før du fjerner den."
 
 #: src/control/Control.BackstageView.ts:873
 msgid "Template removed from favorites"
-msgstr ""
+msgstr "Skabelon fjernet fra favoritter"
 
 #: src/control/Control.BackstageView.ts:874
 msgid "Template added to favorites"
-msgstr ""
+msgstr "Skabelon tilføjet til favoritter"
 
 #: src/control/Control.BackstageView.ts:1188
 msgid "Document Info"
