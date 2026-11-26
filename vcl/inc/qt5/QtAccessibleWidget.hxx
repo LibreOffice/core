@@ -39,9 +39,6 @@ namespace com::sun::star::accessibility
 class XAccessibleTable;
 }
 
-class QtFrame;
-class QtWidget;
-
 class QtAccessibleWidget : public QObject,
                            public QAccessibleInterface,
                            public QAccessibleActionInterface,
