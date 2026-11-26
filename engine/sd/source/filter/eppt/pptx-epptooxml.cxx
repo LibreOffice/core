@@ -1820,6 +1820,11 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
                 pPresetTransition = "airplane";
                 bOOXmlSpecificTransition = true;
                 break;
+            case animations::TransitionSubType::DRAPE:
+                nTransition = XML_fade;
+                pPresetTransition = "drape";
+                bOOXmlSpecificTransition = true;
+                break;
             case animations::TransitionSubType::CORNERSIN: // Inside turning cube
                 pInverted = "true";
                 [[fallthrough]];

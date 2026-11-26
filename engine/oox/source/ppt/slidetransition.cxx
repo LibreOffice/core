@@ -476,6 +476,11 @@ namespace oox::ppt {
             mnTransitionType = TransitionType::MISCSHAPEWIPE;
             mnTransitionSubType = TransitionSubType::AIRPLANE;
         }
+        else if (sPresetTransition == u"drape")
+        {
+            mnTransitionType = TransitionType::MISCSHAPEWIPE;
+            mnTransitionSubType = TransitionSubType::DRAPE;
+        }
         else
         {
             mnTransitionType = 0;

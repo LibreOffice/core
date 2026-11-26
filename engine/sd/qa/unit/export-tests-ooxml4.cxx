@@ -2144,6 +2144,34 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testViewSettingsAreDiscardedInStrict)
     assertXPath(pRels, "/rels:Relationships/rels:Relationship[@Target='viewProps.xml']", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testDrapeTransition)
+{
+    // Given a document with a drape slide transition on its second slide:
+    createSdImpressDoc("pptx/drape-transition.pptx");
+
+    // When importing that document:
+    uno::Reference<beans::XPropertySet> xPage(getPage(1), uno::UNO_QUERY);
+
+    // Then make sure the transition is not lost:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 21 (MISCSHAPEWIPE)
+    // - Actual  : 0
+    // i.e. the drape preset transition was not imported.
+    CPPUNIT_ASSERT_EQUAL(animations::TransitionType::MISCSHAPEWIPE,
+                         xPage->getPropertyValue(u"TransitionType"_ustr).get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(animations::TransitionSubType::DRAPE,
+                         xPage->getPropertyValue(u"TransitionSubtype"_ustr).get<sal_Int16>());
+
+    // And when exporting that document back to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then make sure the transition is written back:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide2.xml"_ustr);
+    assertXPath(pXmlDoc, "//mc:AlternateContent/mc:Choice/p:transition/p15:prstTrans", "prst",
+                u"drape");
+    assertXPath(pXmlDoc, "//mc:AlternateContent/mc:Choice", "Requires", u"p15");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -158,6 +158,9 @@ constants TransitionSubType
         TransitionType::FADE.
     */
     const short MORPHBYCHARACTER = 123;
+    /** Drape transition, used with TransitionType::MISCSHAPEWIPE.
+    */
+    const short DRAPE = 124;
 };
 
 
