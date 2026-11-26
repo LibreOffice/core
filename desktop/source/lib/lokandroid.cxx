@@ -38,7 +38,7 @@ T* getHandle(JNIEnv* pEnv, jobject aObject)
 
 const char* copyJavaString(JNIEnv* pEnv, jstring aJavaString)
 {
-    const char* pTemp = pEnv->GetStringUTFChars(aJavaString, NULL);
+    const char* pTemp = pEnv->GetStringUTFChars(aJavaString, nullptr);
     const char* pClone = strdup(pTemp);
     pEnv->ReleaseStringUTFChars(aJavaString, pTemp);
 
@@ -99,7 +99,7 @@ void messageCallback(int nType, const char* pPayload, void* pData)
 
     if(status < 0)
     {
-        status = pJavaVM->AttachCurrentThread(&pEnv, NULL);
+        status = pJavaVM->AttachCurrentThread(&pEnv, nullptr);
         if(status < 0)
         {
             return;
@@ -133,8 +133,8 @@ extern "C" SAL_JNI_EXPORT jobject JNICALL Java_org_libreoffice_kit_Office_docume
 
     LibreOfficeKitDocument* pDocument = pLibreOfficeKit->pClass->documentLoad(pLibreOfficeKit, aCloneDocumentPath);
 
-    if (pDocument == NULL)
-        return NULL;
+    if (pDocument == nullptr)
+        return nullptr;
 
     jobject aHandle = pEnv->NewDirectByteBuffer((void*) pDocument, sizeof(LibreOfficeKitDocument));
 
@@ -147,7 +147,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_setDocume
     LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
 
     char const* pUrl = copyJavaString(pEnv, sUrl);
-    if (sPassword == NULL) {
+    if (sPassword == nullptr) {
         pLibreOfficeKit->pClass->setDocumentPassword(pLibreOfficeKit, pUrl, nullptr);
     } else {
         char const* pPassword = copyJavaString(pEnv, sPassword);
@@ -291,7 +291,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_initial
     (JNIEnv* pEnv, jobject aObject)
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
-    pDocument->pClass->initializeForRendering(pDocument, NULL);
+    pDocument->pClass->initializeForRendering(pDocument, nullptr);
 }
 
 extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_saveAs
@@ -299,9 +299,9 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_saveAs
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
 
-    const char* pUrl = pEnv->GetStringUTFChars(sUrl, NULL);
-    const char* pFormat = pEnv->GetStringUTFChars(sFormat, NULL);
-    const char* pOptions = pEnv->GetStringUTFChars(sOptions, NULL);
+    const char* pUrl = pEnv->GetStringUTFChars(sUrl, nullptr);
+    const char* pFormat = pEnv->GetStringUTFChars(sFormat, nullptr);
+    const char* pOptions = pEnv->GetStringUTFChars(sOptions, nullptr);
 
     int result = pDocument->pClass->saveAs(pDocument, pUrl, pFormat, pOptions);
 
@@ -331,15 +331,15 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postUno
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
 
-    const char* pCommand = pEnv->GetStringUTFChars(command, NULL);
+    const char* pCommand = pEnv->GetStringUTFChars(command, nullptr);
     const char* pArguments = nullptr;
-    if (arguments != NULL)
-        pArguments = pEnv->GetStringUTFChars(arguments, NULL);
+    if (arguments != nullptr)
+        pArguments = pEnv->GetStringUTFChars(arguments, nullptr);
 
     pDocument->pClass->postUnoCommand(pDocument, pCommand, pArguments, bNotifyWhenFinished);
 
     pEnv->ReleaseStringUTFChars(command, pCommand);
-    if (arguments != NULL)
+    if (arguments != nullptr)
         pEnv->ReleaseStringUTFChars(arguments, pArguments);
 }
 
@@ -355,7 +355,7 @@ extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getT
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
 
-    const char* pMimeType = pEnv->GetStringUTFChars(mimeType, NULL);
+    const char* pMimeType = pEnv->GetStringUTFChars(mimeType, nullptr);
 
     char* pUsedMimeType = 0;
     LibreOfficeKitDocumentClass* pcls = pDocument->pClass;
@@ -372,8 +372,8 @@ extern "C" SAL_JNI_EXPORT jboolean JNICALL Java_org_libreoffice_kit_Document_pas
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
 
-    const char* pMimeType = pEnv->GetStringUTFChars(mimeType, NULL);
-    const char* pData = pEnv->GetStringUTFChars(data, NULL);
+    const char* pMimeType = pEnv->GetStringUTFChars(mimeType, nullptr);
+    const char* pData = pEnv->GetStringUTFChars(data, nullptr);
     const size_t nSize = pEnv->GetStringLength(data);
 
     LibreOfficeKitDocumentClass* pcls = pDocument->pClass;
@@ -403,7 +403,7 @@ extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getC
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
 
-    const char* pCommand = pEnv->GetStringUTFChars(command, NULL);
+    const char* pCommand = pEnv->GetStringUTFChars(command, nullptr);
 
     char* pValue = pDocument->pClass->getCommandValues(pDocument, pCommand);
 
