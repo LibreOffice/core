@@ -53,6 +53,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -2173,7 +2174,8 @@ void SwEditShell::ClassifyDocPerHighestParagraphClass()
         sHighestClass = aHelper.GetHigherClass(sHighestClass, aClassificationCategory);
     }
 
-    if (aClassificationCategory != sHighestClass)
+    // The message box only informs, and under COKit it has no parent to reach the client.
+    if (aClassificationCategory != sHighestClass && !comphelper::COKit::isActive())
     {
         std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
                                                        VclMessageType::Question, VclButtonsType::Ok,

@@ -6641,6 +6641,22 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAnimatedImageMirroring)
                          getAnimatedImages(*pXTextDocument).begin()->second.get<int>("mirror"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSaveRaisesParagraphClassification)
+{
+    // Given a General Business document with a Confidential paragraph:
+    createDoc("paragraph-classification.odt");
+
+    // When saving it:
+    save(TestFilter::ODT);
+
+    // Then the save completes and the saved document is Confidential:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"meta.xml"_ustr);
+    assertXPathContent(pXmlDoc,
+                       "/office:document-meta/office:meta/meta:user-defined[@meta:name='"
+                       "urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Name']",
+                       u"Confidential");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
