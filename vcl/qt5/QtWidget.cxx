@@ -28,15 +28,11 @@
 
 #include <window.h>
 
-#include <comphelper/OAccessible.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/qt/QtUtils.hxx>
-
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 
 #include <QtCore/QMimeData>
 #include <QtGui/QDrag>
