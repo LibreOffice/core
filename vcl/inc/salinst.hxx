@@ -153,7 +153,7 @@ public:
     // SalTimer
     virtual SalTimer*       CreateSalTimer() = 0;
     // SalSystem
-    virtual SalSystem*      CreateSalSystem() = 0;
+    virtual std::unique_ptr<SalSystem> CreateSalSystem() = 0;
     // SalBitmap
     virtual std::shared_ptr<SalBitmap> CreateSalBitmap() = 0;
 

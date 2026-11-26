@@ -449,7 +449,7 @@ SalTimer* QtInstance::CreateSalTimer()
     return m_pTimer;
 }
 
-SalSystem* QtInstance::CreateSalSystem() { return new QtSystem; }
+std::unique_ptr<SalSystem> QtInstance::CreateSalSystem() { return std::make_unique<QtSystem>(); }
 
 bool QtInstance::ImplYield(bool bWait, bool bHandleAllCurrentEvents)
 {

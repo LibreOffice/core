@@ -62,9 +62,9 @@ public:
     virtual void ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage) override;
 };
 
-SalSystem *IosSalInstance::CreateSalSystem()
+std::unique_ptr<SalSystem> IosSalInstance::CreateSalSystem()
 {
-    return new IosSalSystem();
+    return new std::make_unique<IosSalSystem>();
 }
 
 class IosSalFrame : public SvpSalFrame

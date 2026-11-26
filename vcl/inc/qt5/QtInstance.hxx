@@ -178,7 +178,7 @@ public:
     virtual std::unique_ptr<SalMenuItem> CreateMenuItem(const SalItemParams&) override;
 
     virtual SalTimer* CreateSalTimer() override;
-    virtual SalSystem* CreateSalSystem() override;
+    virtual std::unique_ptr<SalSystem> CreateSalSystem() override;
 
     virtual bool DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
     virtual bool AnyInput(VclInputFlags nType) override;

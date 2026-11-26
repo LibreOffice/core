@@ -63,7 +63,7 @@ public:
     virtual void                PostPrintersChanged() override;
 
     virtual SalTimer*           CreateSalTimer() override;
-    virtual SalSystem*          CreateSalSystem() override;
+    virtual std::unique_ptr<SalSystem> CreateSalSystem() override;
     virtual std::shared_ptr<SalBitmap>  CreateSalBitmap() override;
     virtual std::unique_ptr<SalSession> CreateSalSession() override;
     virtual OpenGLContext*      CreateOpenGLContext() override;

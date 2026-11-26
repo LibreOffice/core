@@ -265,9 +265,9 @@ SalTimer* SvpSalInstance::CreateSalTimer()
     return new SvpSalTimer( this );
 }
 
-SalSystem* SvpSalInstance::CreateSalSystem()
+std::unique_ptr<SalSystem> SvpSalInstance::CreateSalSystem()
 {
-    return new SvpSalSystem();
+    return std::make_unique<SvpSalSystem>();
 }
 
 std::shared_ptr<SalBitmap> SvpSalInstance::CreateSalBitmap()

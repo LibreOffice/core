@@ -35,7 +35,7 @@ public:
     virtual ~AndroidSalInstance();
     static AndroidSalInstance* getInstance();
 
-    virtual SalSystem* CreateSalSystem() override;
+    virtual std::unique_ptr<SalSystem> CreateSalSystem() override;
 
     // frame management
     void GetWorkArea(AbsoluteScreenPixelRectangle& rRect);

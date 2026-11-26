@@ -30,9 +30,9 @@ GtkSalSystem *GtkSalSystem::GetSingleton()
     return pSingleton;
 }
 
-SalSystem *GtkInstance::CreateSalSystem()
+std::unique_ptr<SalSystem> GtkInstance::CreateSalSystem()
 {
-    return GtkSalSystem::GetSingleton();
+    return std::unique_ptr<GtkSalSystem>(GtkSalSystem::GetSingleton());
 }
 
 GtkSalSystem::GtkSalSystem()

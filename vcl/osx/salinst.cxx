@@ -783,9 +783,9 @@ SalTimer* AquaSalInstance::CreateSalTimer()
     return new AquaSalTimer();
 }
 
-SalSystem* AquaSalInstance::CreateSalSystem()
+std::unique_ptr<SalSystem> AquaSalInstance::CreateSalSystem()
 {
-    return new AquaSalSystem();
+    return std::make_unique<AquaSalSystem>();
 }
 
 std::shared_ptr<SalBitmap> AquaSalInstance::CreateSalBitmap()

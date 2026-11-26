@@ -80,7 +80,7 @@ SalSystem* ImplGetSalSystem()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( ! pSVData->mpSalSystem )
-        pSVData->mpSalSystem.reset( pSVData->mpDefInst->CreateSalSystem() );
+        pSVData->mpSalSystem = pSVData->mpDefInst->CreateSalSystem();
     return pSVData->mpSalSystem.get();
 }
 

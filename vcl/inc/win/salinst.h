@@ -59,7 +59,7 @@ public:
                                                      tools::Long &nDX, tools::Long &nDY,
                                                      DeviceFormat eFormat, const SystemGraphicsData& rData ) override;
     virtual SalTimer*           CreateSalTimer() override;
-    virtual SalSystem*          CreateSalSystem() override;
+    virtual std::unique_ptr<SalSystem> CreateSalSystem() override;
     virtual std::shared_ptr<SalBitmap> CreateSalBitmap() override;
     virtual bool                IsMainThread() const override;
 

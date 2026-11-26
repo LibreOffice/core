@@ -238,7 +238,7 @@ public:
     virtual SalFrame*           CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
     virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;
     virtual SalObject* CreateObject(SalFrame* pParent, SystemWindowData* pWindowData) override;
-    virtual SalSystem*          CreateSalSystem() override;
+    virtual std::unique_ptr<SalSystem> CreateSalSystem() override;
     virtual SalInfoPrinter* CreateInfoPrinter(SalPrinterQueueInfo& rPrinterQueueInfo,
                                               ImplJobSetup& rJobSetup) override;
     virtual std::unique_ptr<SalPrinter> CreatePrinter( SalInfoPrinter* pInfoPrinter ) override;

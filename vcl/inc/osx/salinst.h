@@ -89,7 +89,7 @@ public:
                                                    DeviceFormat eFormat,
                                                    const SystemGraphicsData& rData ) override;
     virtual SalTimer*       CreateSalTimer() override;
-    virtual SalSystem*      CreateSalSystem() override;
+    virtual std::unique_ptr<SalSystem> CreateSalSystem() override;
     virtual std::shared_ptr<SalBitmap> CreateSalBitmap() override;
     virtual bool            DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
     virtual bool            AnyInput( VclInputFlags nType ) override;

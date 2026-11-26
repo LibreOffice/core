@@ -19,7 +19,7 @@ class HeadlessSalInstance : public SvpSalInstance
 public:
     explicit HeadlessSalInstance(std::unique_ptr<SalYieldMutex> pMutex);
 
-    virtual SalSystem* CreateSalSystem() override;
+    virtual std::unique_ptr<SalSystem> CreateSalSystem() override;
 };
 
 HeadlessSalInstance::HeadlessSalInstance(std::unique_ptr<SalYieldMutex> pMutex)
@@ -40,9 +40,9 @@ public:
     }
 };
 
-SalSystem *HeadlessSalInstance::CreateSalSystem()
+std::unique_ptr<SalSystem> HeadlessSalInstance::CreateSalSystem()
 {
-    return new HeadlessSalSystem();
+    return std::make_unique<HeadlessSalSystem>();
 }
 
 }

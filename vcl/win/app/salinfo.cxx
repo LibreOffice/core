@@ -32,9 +32,9 @@
 
 #include <unordered_map>
 
-SalSystem* WinSalInstance::CreateSalSystem()
+std::unique_ptr<SalSystem> WinSalInstance::CreateSalSystem()
 {
-    return new WinSalSystem();
+    return std::make_unique<WinSalSystem>();
 }
 
 WinSalSystem::~WinSalSystem()

@@ -160,7 +160,7 @@ public:
     // SalTimer
     SAL_DLLPRIVATE virtual SalTimer* CreateSalTimer() override;
     // SalSystem
-    SAL_DLLPRIVATE virtual SalSystem* CreateSalSystem() override;
+    SAL_DLLPRIVATE virtual std::unique_ptr<SalSystem> CreateSalSystem() override;
     // SalBitmap
     virtual std::shared_ptr<SalBitmap> CreateSalBitmap() override;
 

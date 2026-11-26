@@ -27,9 +27,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/thread.h>
 
-SalSystem* X11SalInstance::CreateSalSystem()
+std::unique_ptr<SalSystem> X11SalInstance::CreateSalSystem()
 {
-    return new X11SalSystem();
+    return std::make_unique<X11SalSystem>();
 }
 
 X11SalSystem::~X11SalSystem()

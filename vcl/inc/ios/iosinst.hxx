@@ -39,7 +39,7 @@ public:
     virtual ~IosSalInstance();
     static IosSalInstance* getInstance();
 
-    SalSystem* CreateSalSystem() override;
+    std::unique_ptr<SalSystem> CreateSalSystem() override;
 
     void GetWorkArea(AbsoluteScreenPixelRectangle& rRect);
     SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;

@@ -90,9 +90,9 @@ public:
     virtual void ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage) override;
 };
 
-SalSystem *AndroidSalInstance::CreateSalSystem()
+std::unique_ptr<SalSystem> AndroidSalInstance::CreateSalSystem()
 {
-    return new AndroidSalSystem();
+    return std::make_unique<AndroidSalSystem>();
 }
 
 class AndroidSalFrame : public SvpSalFrame
