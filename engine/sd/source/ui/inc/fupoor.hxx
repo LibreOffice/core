@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <sal/types.h>
 #include <vcl/timer.hxx>
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
@@ -44,7 +45,7 @@ class Window;
 /**
  * Base class for all functions
  */
-class FuPoor : public SimpleReferenceComponent
+class SAL_DLLPUBLIC_RTTI FuPoor : public SimpleReferenceComponent
 {
 public:
     static const int HITPIX = 2;                   // hit tolerance in pixel
