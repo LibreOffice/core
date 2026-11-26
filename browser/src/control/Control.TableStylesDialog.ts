@@ -24,15 +24,15 @@ class TableStylesDialog {
 
 	constructor() {
 		this.isCalc = app.map.getDocType() === 'spreadsheet';
-		this.iconViewId = this.isCalc
-			? 'tablestyles_design'
-			: 'table-design-styles';
+		this.iconViewId =
+			this.isCalc ? 'tablestyles_design' : 'table-design-styles';
 	}
 
 	private getIconViewJSON(): IconViewJSON {
-		const gallery = this.isCalc
-			? app.tableStyles.generateIconViewJSON()
-			: app.tableStyleGallery.generateTableStylesJSON();
+		const gallery =
+			this.isCalc ?
+				app.tableStyles.generateIconViewJSON()
+			:	app.tableStyleGallery.generateTableStylesJSON();
 		return {
 			...gallery,
 			singleclickactivate: false,
