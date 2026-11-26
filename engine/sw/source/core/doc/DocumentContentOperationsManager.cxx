@@ -4057,7 +4057,6 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     const size_t nArrLen = m_rDoc.GetSpzFrameFormats()->size();
 
     SwTextBoxHelper::SavedLink aOldTextBoxes;
-    SwTextBoxHelper::saveLinks(*m_rDoc.GetSpzFrameFormats(), aOldTextBoxes);
 
     const SwPosition* pCopiedStt = nullptr;
     const SwPosition* pCopiedEnd = nullptr;
@@ -4130,6 +4129,14 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         {
             aSet.insert( ZSortFly( pFormat, pAnchor, nArrLen + aSet.size() ));
         }
+    }
+
+    // Only links whose formats are copied can be used by restoreLinks().
+    for (const ZSortFly& rFly : aSet)
+    {
+        if (SwFrameFormat* pTextBox =
+                SwTextBoxHelper::getOtherTextBoxFormat(rFly.GetFormat(), RES_DRAWFRMFMT))
+            aOldTextBoxes.emplace(rFly.GetFormat(), pTextBox);
     }
 
     // Store all copied (and also the newly created) frames in another array.
