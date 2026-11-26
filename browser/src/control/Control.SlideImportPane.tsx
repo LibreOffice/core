@@ -872,6 +872,15 @@ class SlideImportPane {
     return links.linkedSourceOf({ persistentLink: source.persistentLink });
   }
 
+  // Whether a presentation of this document holds the whole of the source.
+  private isLinkedAsWhole(source: SlideImportPaneSource): boolean {
+    const linked = this.linkedSource(source);
+    if (!linked) return false;
+    return this.map.slideLinks
+      .getPresentations()
+      .some((link: SlideLink) => link.source === linked);
+  }
+
   // What the pane says of a source: whether pages of this document are
   // linked to it, and when it cannot be reached, why. A linked source shows
   // the icon that the link badge on its slides shows, and red is kept for a
@@ -1692,11 +1701,12 @@ class SlideImportPane {
 
     // The whole file goes in as one presentation linked to it, in a document whose format
     // keeps links. The pane inserts one file at a time, so the entry waits for an insert that
-    // is running.
+    // is running. A file that a presentation of this document already holds has no entry.
     if (
       source.slides.length &&
       this.session.formatKeepsLinks() &&
-      this.session.state !== 'inserting'
+      this.session.state !== 'inserting' &&
+      !this.isLinkedAsWhole(source)
     )
       entries.push({
         id: 'linkwhole',
