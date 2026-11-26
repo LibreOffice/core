@@ -1261,12 +1261,13 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
 
         if ( bSavePos || bSaveOtherPos )
         {
-            // A UNO bookmark belongs to a UNO text range or to a temporary position, and a DDE
-            // bookmark to the DDE link of a copied selection. Both are created and deleted
-            // outside undo, so the history must not restore them: undo could run after the
-            // bookmark is gone.
+            // A UNO bookmark belongs to a UNO text range or to a temporary position, a DDE
+            // bookmark to the DDE link of a copied selection, and a navigator reminder to the
+            // reminders of the navigator. They are created and deleted outside undo, so the
+            // history must not restore them: undo could run after the bookmark is gone.
             if (type != IDocumentMarkAccess::MarkType::UNO_BOOKMARK
-                && type != IDocumentMarkAccess::MarkType::DDE_BOOKMARK)
+                && type != IDocumentMarkAccess::MarkType::DDE_BOOKMARK
+                && type != IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER)
             {
                 if( !m_pHistory )
                     m_pHistory.reset( new SwHistory );

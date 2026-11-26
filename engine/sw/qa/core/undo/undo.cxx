@@ -26,6 +26,8 @@
 #include <sfx2/kit/helper.hxx>
 
 #include <unotxdoc.hxx>
+#include <IDocumentMarkAccess.hxx>
+#include <IMark.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <swdtflvr.hxx>
@@ -761,6 +763,37 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testDefaultTabStopChangeUndo)
 
     pWrtShell->Redo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), pDoc->GetDefault(RES_PARATR_TABSTOP)[0].GetTabPos());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testUndoDeleteAfterNavigatorReminderIsGone)
+{
+    // Given a document where "bcd" of "abcdef" has a navigator reminder, and "ab" is deleted,
+    // which moves the start of the reminder:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert2(u"abcdef"_ustr);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 5, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, u".uno:SetReminder"_ustr, {});
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    const SwMarkName aReminder = (*pMarkAccess->getAllMarksBegin())->GetName();
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+    pWrtShell->DelRight();
+
+    // When five more reminders are set, which removes the oldest one without undo, and the
+    // deletion is undone:
+    for (int i = 0; i < 5; ++i)
+        dispatchCommand(mxComponent, u".uno:SetReminder"_ustr, {});
+    CPPUNIT_ASSERT(bool(pMarkAccess->findMark(aReminder) == pMarkAccess->getAllMarksEnd()));
+    pWrtShell->Undo();
+
+    // Then the text is back. Without the fix in place, the undo of the deletion looked for the
+    // reminder to restore its other end, and crashed, as the reminder was gone.
+    CPPUNIT_ASSERT_EQUAL(u"abcdef"_ustr,
+                         pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
