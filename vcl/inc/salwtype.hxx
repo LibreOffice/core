@@ -203,10 +203,6 @@ struct SalExtTextInputPosEvent
     }
 };
 
-struct SalInputContextChangeEvent
-{
-};
-
 struct SalSurroundingTextRequestEvent
 {
     OUString        maText;         // Text
