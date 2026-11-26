@@ -255,9 +255,9 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                     {
                         std::unique_ptr<char[]> pByteStrings(new char[nLen]());
                         r.ReadBytes(pByteStrings.get(), nLen);
-                        for (size_t j = 0; j < mvStringOffsets.size(); j++)
+                        for (const sal_uInt32 nStringOffset : mvStringOffsets)
                         {
-                            sal_uInt16 nOff2 = static_cast<sal_uInt16>(mvStringOffsets[j]);
+                            sal_uInt16 nOff2 = static_cast<sal_uInt16>(nStringOffset);
                             const sal_uInt32 nAvail = nLen - nOff2;
                             const char* pByteString = pByteStrings.get() + nOff2;
                             OUString aStr(pByteString, strnlen(pByteString, nAvail), eCharSet);
