@@ -289,12 +289,13 @@ class SlideImportSession {
 
 	// Inserts every slide of the source after the slide the user is on, linked as one
 	// presentation that records the source under the given name, as far as a link keeps it.
+	// A slide of a linked presentation puts the new one after the end of that presentation.
 	public insertWhole(name: string): void {
 		if (this.state !== 'ready' || !this.canLink) return;
 
 		this.requestInsert({
 			slides: [],
-			at: this.insertAt(),
+			at: this.insertWholeAt(),
 			whole: true,
 			name: SlideImportSession.recordableName(name),
 		});
@@ -308,6 +309,30 @@ class SlideImportSession {
 		return docLayer && docLayer._selectedPart !== undefined ?
 				docLayer._selectedPart + 1
 			:	this.map.getNumberOfParts();
+	}
+
+	// The slide a whole presentation goes in before, counted from zero. The new presentation
+	// stays outside every linked presentation, so when a linked presentation holds the slide
+	// the user is on, the insert moves to the slide after the last slide of the outermost one.
+	private insertWholeAt(): number {
+		const at = this.insertAt();
+		const links = this.map.slideLinks;
+		const impress = app.impress;
+		if (!links || !impress || !impress.partList) return at;
+
+		const info = impress.partList[at - 1];
+		if (!info) return at;
+
+		const chain: SlideLink[] = links.linksOf(info.part);
+		for (let i = chain.length - 1; i >= 0; i--) {
+			const link = chain[i];
+			if (link.unit !== 'presentation' || !link.slides.length) continue;
+			const last = impress.getIndexFromPart(
+				link.slides[link.slides.length - 1],
+			);
+			return last < 0 ? at : last + 1;
+		}
+		return at;
 	}
 
 	// A thumbnail dragged onto the slides list drops here. pos follows the

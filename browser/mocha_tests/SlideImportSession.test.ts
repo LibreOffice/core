@@ -22,6 +22,7 @@ describe('SlideImportSession', function () {
 	let savedSocket: any;
 	let savedEvents: any;
 	let savedRemoteLinks: any;
+	let savedImpress: any;
 
 	// The source the pane has open, its slides on show, and the time the
 	// storage reports for it.
@@ -99,6 +100,7 @@ describe('SlideImportSession', function () {
 		savedSocket = app.socket;
 		savedEvents = app.events;
 		savedRemoteLinks = (app as any).remoteLinks;
+		savedImpress = (app as any).impress;
 		(app as any).socket = {
 			sendMessage: (message: string) => sent.push(message),
 		};
@@ -122,7 +124,37 @@ describe('SlideImportSession', function () {
 		(app as any).socket = savedSocket;
 		(app as any).events = savedEvents;
 		(app as any).remoteLinks = savedRemoteLinks;
+		(app as any).impress = savedImpress;
 	});
+
+	// The document has five slides, the parts p0 to p4, counted from zero. The
+	// parts p1 to p3 hold a linked presentation, and p2 and p3 are a linked
+	// section under it.
+	function documentHoldsPresentation(): void {
+		const parts = ['p0', 'p1', 'p2', 'p3', 'p4'];
+		(app as any).impress = {
+			partList: parts.map((part) => ({ part: part })),
+			getIndexFromPart: (part: string) => parts.indexOf(part),
+		};
+		const presentationLink = {
+			unit: 'presentation',
+			id: 'presentation-1',
+			slides: ['p1', 'p2', 'p3'],
+		};
+		const sectionLink = {
+			unit: 'section',
+			id: 'section-1',
+			slides: ['p2', 'p3'],
+		};
+		map.slideLinks = {
+			linksOf: (part: string) => {
+				if (part === 'p1') return [presentationLink];
+				if (part === 'p2' || part === 'p3')
+					return [sectionLink, presentationLink];
+				return [];
+			},
+		};
+	}
 
 	it('links the whole source as one presentation after the slide on show', function () {
 		sourceShown();
@@ -210,6 +242,45 @@ describe('SlideImportSession', function () {
 		nodeassert.equal(session.getPendingInsert().at, 5);
 		pagesStaged();
 		nodeassert.deepEqual(sent, [insertOf(5) + ' link=1' + time + presentation]);
+	});
+
+	it('links the whole source after a linked presentation that holds the slide on show', function () {
+		documentHoldsPresentation();
+		map._docLayer._selectedPart = 1;
+		sourceShown();
+		session.insertWhole(source);
+
+		nodeassert.equal(session.getPendingInsert().at, 4);
+		pagesStaged();
+		nodeassert.deepEqual(sent, [insertOf(4) + ' link=1' + time + presentation]);
+	});
+
+	it('links the whole source after the presentation when the slide is in a section of it', function () {
+		documentHoldsPresentation();
+		map._docLayer._selectedPart = 2;
+		sourceShown();
+		session.insertWhole(source);
+
+		nodeassert.equal(session.getPendingInsert().at, 4);
+	});
+
+	it('links the whole source after a slide outside every linked presentation', function () {
+		documentHoldsPresentation();
+		map._docLayer._selectedPart = 0;
+		sourceShown();
+		session.insertWhole(source);
+
+		nodeassert.equal(session.getPendingInsert().at, 1);
+	});
+
+	it('inserts picked slides after the slide on show inside a linked presentation', function () {
+		documentHoldsPresentation();
+		map._docLayer._selectedPart = 1;
+		sourceShown();
+		session.setSelection([0]);
+		session.insertSelected();
+
+		nodeassert.equal(session.getPendingInsert().at, 2);
 	});
 
 	it('does not link the whole source while another insert runs', function () {
