@@ -158,12 +158,7 @@ sub write_MO_ALL_LANG_EXCEPT_EN_US_AND_QTZ
 sub write_EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG
 {
     my $first = 1;
-    my $source;
-    if ($ENV{'ENABLE_HTMLHELP'} eq 'TRUE') {
-        $source = 'html-help'; # found in instsetoo_native/util/openoffice.lst.in's {filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists
-    } else {
-        $source = 'HelpTarget';
-    }
+    my $source = 'html-help'; # found in instsetoo_native/util/openoffice.lst.in's {filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists
     print OUTFILE "#define EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(name) ";
     foreach $lang (@helplangs) {
         print OUTFILE ";" unless $first;

@@ -77,16 +77,10 @@ gb_Gallery_get_workdir = $(error please use plain gb_Gallery_workdir instead)
 gb_Gallery_workdir := $(WORKDIR)/Gallery
 gb_GeneratedPackage_get_target = $(WORKDIR)/GeneratedPackage/$(1).filelist
 gb_GeneratedPackage_get_target_for_build = $(WORKDIR_FOR_BUILD)/GeneratedPackage/$(1).filelist
-gb_HelpIndexTarget_get_target = $(WORKDIR)/HelpIndexTarget/$(1).done
-gb_HelpJarTarget_get_target = $(WORKDIR)/HelpJarTarget/$(1).done
-gb_HelpLinkTarget_get_preparation_target = $(WORKDIR)/HelpLinkTarget/$(1).prepare
-gb_HelpLinkTarget_get_target = $(WORKDIR)/HelpLinkTarget/$(1).done
 gb_HelpTarget_get_filelist = $(WORKDIR)/HelpTarget/$(1).filelist
 gb_HelpTarget_get_linked_target = $(WORKDIR)/HelpTarget/$(1).translate
 gb_HelpTarget_get_target = $(WORKDIR)/HelpTarget/$(1).zip
 gb_HelpTarget_get_translation_target = $(call gb_HelpTarget_get_filelist,$(1))
-gb_HelpTarget_get_workdir = $(error please use plain gb_HelpTarget_workdir)
-gb_HelpTarget_workdir := $(WORKDIR)/HelpTarget
 gb_HelpTranslatePartTarget_get_target = $(WORKDIR)/HelpTranslatePartTarget/$(1)/done
 gb_HelpTranslatePartTarget_get_translated_target = $(WORKDIR)/HelpTranslatePartTarget/$(1)/$(2).xhp
 gb_HelpTranslatePartTarget_get_workdir = $(error please use plain gb_HelpTranslatePartTarget_workdir instead)
@@ -254,9 +248,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	Gallery \
 	GeneratedPackage \
 	HelpTarget \
-	HelpIndexTarget \
-	HelpJarTarget \
-	HelpLinkTarget \
 	HelpTranslatePartTarget \
 	HelpTranslateTarget \
 	HelpTreeTarget \

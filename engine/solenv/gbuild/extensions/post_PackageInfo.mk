@@ -30,14 +30,8 @@ define gb_PackageInfo_emit_binaries_command
 
 endef
 
-define gb_PackageInfo_emit_help_for_one_target
-$(foreach suf,cfg db ht idxl/_0.cfs idxl/segments_3 idxl/segments.gen jar key tree,$(if $(wildcard $(INSTDIR)/help/$(1).$(suf)),echo "help/$(1).$(suf)" >> $(2) && )) true
-
-endef
-
 define gb_PackageInfo_emit_help_for_one_lang
 @touch $(foreach suf,executables libraries files,$(gb_PackageInfo_get_target)/help-$(1).$(suf))
-$(foreach target,$(gb_AllLangHelp_ALLTARGETS),$(call gb_PackageInfo_emit_help_for_one_target,$(1)/$(target),$(gb_PackageInfo_get_target)/help-$(1).files))
 $(foreach suf,html css,$(foreach file,$(wildcard $(INSTDIR)/help/$(1)/*.$(suf)),echo "$(patsubst $(INSTDIR)/%,%,$(file))" >> $(gb_PackageInfo_get_target)/help-$(1).files && )) true
 @echo " $(foreach suf,executables libraries files,$(gb_PackageInfo_get_target)/help-$(1).$(suf)) \\" >> $(WORKDIR)/Dep/packageinfo.d
 
