@@ -15,7 +15,6 @@
 #include <mdds/multi_type_matrix.hpp>
 
 #include <iostream>
-#include <tuple>
 
 namespace svl {
 
@@ -28,8 +27,8 @@ namespace {
 
 struct matrix_traits
 {
-    using numeric_element_block = mdds::mtv::double_element_block;
-    using element_blocks = std::tuple<string_block>;
+    typedef string_block string_element_block;
+    typedef mdds::mtv::uint16_element_block integer_element_block;
 };
 
 }
@@ -85,7 +84,7 @@ void GridPrinter::print( const char* pHeader ) const
     {
         for (size_t col = 0; col < ns.column; ++col)
         {
-            OUString aStr = mpImpl->maMatrix.get<OUString>(row, col);
+            OUString aStr = mpImpl->maMatrix.get_string(row, col);
             if (aColWidths[col] < aStr.getLength())
                 aColWidths[col] = aStr.getLength();
         }
@@ -110,7 +109,7 @@ void GridPrinter::print( const char* pHeader ) const
         std::cout << "| ";
         for (size_t col = 0; col < ns.column; ++col)
         {
-            OUString aStr = mpImpl->maMatrix.get<OUString>(row, col);
+            OUString aStr = mpImpl->maMatrix.get_string(row, col);
             size_t nPadding = aColWidths[col] - aStr.getLength();
             aBuf.append(aStr);
             for (size_t i = 0; i < nPadding; ++i)
