@@ -178,33 +178,33 @@ char const* GraphicMimeTypeHelper::GetExtensionForConvertDataFormat(ConvertDataF
     return pExt;
 }
 
-static auto GetMediaMimes() -> std::map<OString, OString> const&
+static auto GetMediaMimes() -> std::map<OUString, OUString> const&
 {
-    static std::map<OString, OString> const mimes = {
-        { "mp4"_ostr, "video/mp4"_ostr },
-        { "ts"_ostr, "video/MP2T"_ostr },
-        { "mpeg"_ostr, "video/mpeg"_ostr },
-        { "mpg"_ostr, "video/mpeg"_ostr },
-        { "mkv"_ostr, "video/x-matroska"_ostr },
-        { "webm"_ostr, "video/webm"_ostr },
-        { "ogv"_ostr, "video/ogg"_ostr },
-        { "mov"_ostr, "video/quicktime"_ostr },
-        { "wmv"_ostr, "video/x-ms-wmv"_ostr },
-        { "avi"_ostr, "video/x-msvideo"_ostr },
-        { "flv"_ostr, "video/x-flv"_ostr },
-        { "m4a"_ostr, "audio/mp4"_ostr },
-        { "aac"_ostr, "audio/aac"_ostr },
-        { "mp3"_ostr,
-          "audio/mpeg"_ostr }, // https://bugs.chromium.org/p/chromium/issues/detail?id=227004
-        { "ogg"_ostr, "audio/ogg"_ostr },
-        { "oga"_ostr, "audio/ogg"_ostr },
-        { "opus"_ostr, "audio/ogg"_ostr },
-        { "flac"_ostr, "audio/flac"_ostr }, // missing at IANA?
+    static std::map<OUString, OUString> const mimes = {
+        { u"mp4"_ustr, u"video/mp4"_ustr },
+        { u"ts"_ustr, u"video/MP2T"_ustr },
+        { u"mpeg"_ustr, u"video/mpeg"_ustr },
+        { u"mpg"_ustr, u"video/mpeg"_ustr },
+        { u"mkv"_ustr, u"video/x-matroska"_ustr },
+        { u"webm"_ustr, u"video/webm"_ustr },
+        { u"ogv"_ustr, u"video/ogg"_ustr },
+        { u"mov"_ustr, u"video/quicktime"_ustr },
+        { u"wmv"_ustr, u"video/x-ms-wmv"_ustr },
+        { u"avi"_ustr, u"video/x-msvideo"_ustr },
+        { u"flv"_ustr, u"video/x-flv"_ustr },
+        { u"m4a"_ustr, u"audio/mp4"_ustr },
+        { u"aac"_ustr, u"audio/aac"_ustr },
+        { u"mp3"_ustr,
+          u"audio/mpeg"_ustr }, // https://bugs.chromium.org/p/chromium/issues/detail?id=227004
+        { u"ogg"_ustr, u"audio/ogg"_ustr },
+        { u"oga"_ustr, u"audio/ogg"_ustr },
+        { u"opus"_ustr, u"audio/ogg"_ustr },
+        { u"flac"_ustr, u"audio/flac"_ustr }, // missing at IANA?
         // note there is RFC 2631 but i got the impression that vnd.wave
         // requires specifying the codec in the container; also this page
         // says "Historic" whatever that means:
         // https://www.iana.org/assignments/wave-avi-codec-registry/wave-avi-codec-registry.xhtml
-        { "wav"_ostr, "audio/x-wav"_ostr },
+        { u"wav"_ustr, u"audio/x-wav"_ustr },
     };
     return mimes;
 }
@@ -222,7 +222,7 @@ auto IsMediaMimeType(OUString const& rMimeType) -> bool
         auto const& rMap(GetMediaMimes());
         for (auto const& it : rMap)
         {
-            mimes.insert(OStringToOUString(it.second, RTL_TEXTENCODING_UTF8));
+            mimes.insert(it.second);
         }
     }
     return rMimeType == AVMEDIA_MIMETYPE_COMMON || mimes.find(rMimeType) != mimes.end();
@@ -232,13 +232,12 @@ auto GuessMediaMimeType(::std::u16string_view rFileName) -> OUString
 {
     if (auto const i = rFileName.rfind('.'); i != ::std::string_view::npos)
     {
-        OString const ext(
-            OUStringToOString(rFileName.substr(i + 1), RTL_TEXTENCODING_UTF8).toAsciiLowerCase());
+        OUString const ext(OUString(rFileName.substr(i + 1)).toAsciiLowerCase());
         auto const& rMap(GetMediaMimes());
         auto const it(rMap.find(ext));
         if (it != rMap.end())
         {
-            return OStringToOUString(it->second, RTL_TEXTENCODING_ASCII_US);
+            return it->second;
         }
     }
     return OUString();
