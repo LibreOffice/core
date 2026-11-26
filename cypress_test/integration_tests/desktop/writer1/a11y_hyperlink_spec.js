@@ -160,7 +160,11 @@ describe(['tagdesktop'], 'Writer hyperlinks for the reader', { testIsolation: fa
 	it('typing in the link leaves the reader focused on the editable', function () {
 		// a modifier holds for the rest of a type() call
 		helper.typeIntoDocument('{ctrl}{home}');
-		helper.typeIntoDocument('{rightarrow}'.repeat(10) + 'x');
+		helper.typeIntoDocument('{rightarrow}'.repeat(10));
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+		helper.typeIntoDocument('x');
 		cy.then(function () {
 			return helper.processToIdle(win);
 		});
