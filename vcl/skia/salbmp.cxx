@@ -164,25 +164,8 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp)
 
 bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, [[maybe_unused]] SalGraphics& rGraphics)
 {
-    const SkiaSalBitmap& src = static_cast<const SkiaSalBitmap&>(rSalBmp);
-    assert(mReadAccessCount == 0);
-    assert(&rSalBmp != this);
-    assert(rGraphics.GetBitCount() == src.mBitCount);
-    ResetAllData();
-    mImage = src.mImage;
-    mImageImmutable = src.mImageImmutable;
-    mAlphaImage = src.mAlphaImage;
-    mBuffer = src.mBuffer;
-    mPalette = src.mPalette;
-    mBitCount = src.mBitCount;
-    mSize = src.mSize;
-    mPixelsSize = src.mPixelsSize;
-    mScanlineSize = src.mScanlineSize;
-    mScaleQuality = src.mScaleQuality;
-    mEraseColorSet = src.mEraseColorSet;
-    mEraseColor = src.mEraseColor;
-    SAL_INFO("vcl.skia.trace", "create(" << this << "): (" << &src << ")");
-    return true;
+    assert(rGraphics.GetBitCount() == static_cast<const SkiaSalBitmap&>(rSalBmp).mBitCount);
+    return Create(rSalBmp);
 }
 
 Size SkiaSalBitmap::GetSize() const { return mSize; }
