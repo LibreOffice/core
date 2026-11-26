@@ -56,10 +56,12 @@ class RenderManager {
 		const kind = RenderManager.kindFor(docType);
 		if (!RenderManager._instance || RenderManager._instance.kind() !== kind) {
 			// The replaced manager releases everything it holds, such as
-			// the font faces it registered on the document.
+			// the font faces it registered on the document. The new manager is
+			// in place first, so whatever the release sets off, such as a
+			// listener that asks for the part on view, reaches the new manager.
 			const previous = RenderManager._instance;
-			if (previous) previous.discardAllCache();
 			RenderManager._instance = RenderManager.newManager(kind);
+			if (previous) previous.discardAllCache();
 			// The tasks that wait for the first visuals move to the new
 			// manager. The provisional manager made before the document type
 			// is known shows no content when the document draws from vectors.
