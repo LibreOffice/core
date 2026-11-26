@@ -2363,8 +2363,7 @@ void Bitmap::AdjustTransparency(sal_uInt8 cTrans)
 
 // Shift alpha transparent pixels between cppcanvas/ implementations
 // and vcl in a generally grotesque and under-performing fashion
-bool Bitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& xBitmapCanvas,
-                    const Size&)
+bool Bitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& xBitmapCanvas)
 {
     css::uno::Reference< css::beans::XFastPropertySet > xFastPropertySet( xBitmapCanvas, css::uno::UNO_QUERY );
     if( xFastPropertySet )

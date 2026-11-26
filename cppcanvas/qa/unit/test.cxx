@@ -75,7 +75,7 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testComposite)
     CPPUNIT_ASSERT(xCanvas.is());
 
     // a huge canvas ...
-    Size aSize(1, 1);
+    const Size aSize(1, 1);
     uno::Reference<rendering::XBitmap> xBitmap = xCanvas->getDevice()->createCompatibleAlphaBitmap(
         vcl::unotools::integerSize2DFromSize(aSize));
     CPPUNIT_ASSERT(xBitmap.is());
@@ -87,7 +87,7 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testComposite)
     {
         // clear the canvas and basic sanity check ...
         xBitmapCanvas->clear();
-        CPPUNIT_ASSERT(aBitmap.Create(xBitmapCanvas, aSize));
+        CPPUNIT_ASSERT(aBitmap.Create(xBitmapCanvas));
         CPPUNIT_ASSERT(aBitmap.HasAlpha());
     }
 

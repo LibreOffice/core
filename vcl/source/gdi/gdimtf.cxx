@@ -401,7 +401,7 @@ bool GDIMetaFile::ImplPlayWithRenderer(OutputDevice& rOut, const Point& rPos, Si
         if (!xCanvas.is())
             return false;
 
-        Size aSize (rDestSize.Width () + 1, rDestSize.Height () + 1);
+        const Size aSize(rDestSize.Width() + 1, rDestSize.Height() + 1);
         uno::Reference<rendering::XBitmap> xBitmap = xCanvas->getDevice ()->createCompatibleAlphaBitmap (vcl::unotools::integerSize2DFromSize( aSize));
         if( xBitmap.is () )
         {
@@ -422,7 +422,7 @@ bool GDIMetaFile::ImplPlayWithRenderer(OutputDevice& rOut, const Point& rPos, Si
                 xMtfRenderer->draw( rDestSize.Width(), rDestSize.Height() );
 
                 Bitmap aBitmap;
-                if( aBitmap.Create( xBitmapCanvas, aSize ) )
+                if (aBitmap.Create(xBitmapCanvas))
                 {
                     if (rOut.GetMapMode().GetMapUnit() == MapUnit::MapPixel)
                         rOut.DrawBitmap( rPos, aBitmap );

@@ -626,9 +626,7 @@ public:
                                 bool msoBrightness = false );
 
     /// populate from a canvas implementation
-    bool                Create(
-                            const css::uno::Reference< css::rendering::XBitmapCanvas > &xBitmapCanvas,
-                            const Size &rSize );
+    bool Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& xBitmapCanvas);
 
     SAL_DLLPRIVATE void ChangeColorAlpha( BitmapColor aColorFrom, sal_Int8 nAlphaTo );
 
