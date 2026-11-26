@@ -32,6 +32,8 @@
 #include <fmtfsize.hxx>
 #include <fmtinfmt.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
+#include <IMark.hxx>
 #include <ndtxt.hxx>
 #include <txatbase.hxx>
 
@@ -295,6 +297,40 @@ CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testCopyShapeBitmapBackground)
     // - Actual  : rgba[000000ff]
     // i.e. the "transparent" area of the shape turned black (BMP has no alpha channel)
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aBitmap.GetPixelColor(0, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testUndoDeleteAfterDdeBookmarkIsGone)
+{
+    // Given a document where "ab" of "abcdef" is deleted and the deletion is undone:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert2(u"abcdef"_ustr);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 6, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+    pWrtShell->DelRight();
+    pWrtShell->Undo();
+
+    // When "bcd" is copied, which puts a DDE bookmark on it, the deletion of "ab" is redone,
+    // which changes the text of the bookmark, so its link removes it without undo, and the
+    // deletion is undone again:
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 6, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->Copy();
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    CPPUNIT_ASSERT_EQUAL(IDocumentMarkAccess::MarkType::DDE_BOOKMARK,
+                         IDocumentMarkAccess::GetType(**pMarkAccess->getAllMarksBegin()));
+    pWrtShell->Redo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+    pWrtShell->Undo();
+
+    // Then the text is back. Without the fix in place, the undo of the deletion looked for the
+    // bookmark to restore its other end, and crashed, as the bookmark was gone.
+    CPPUNIT_ASSERT_EQUAL(u"abcdef"_ustr,
+                         pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
