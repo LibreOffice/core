@@ -273,7 +273,7 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics& rSGraphics )
     return bRet;
 }
 
-bool WinSalBitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas, Size& /*rSize*/ )
+bool WinSalBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& rBitmapCanvas)
 {
     css::uno::Reference< css::beans::XFastPropertySet >
         xFastPropertySet( rBitmapCanvas, css::uno::UNO_QUERY );

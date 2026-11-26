@@ -2363,8 +2363,8 @@ void Bitmap::AdjustTransparency(sal_uInt8 cTrans)
 
 // Shift alpha transparent pixels between cppcanvas/ implementations
 // and vcl in a generally grotesque and under-performing fashion
-bool Bitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas > &xBitmapCanvas,
-                       const Size &rSize )
+bool Bitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& xBitmapCanvas,
+                    const Size&)
 {
     css::uno::Reference< css::beans::XFastPropertySet > xFastPropertySet( xBitmapCanvas, css::uno::UNO_QUERY );
     if( xFastPropertySet )
@@ -2380,8 +2380,7 @@ bool Bitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas > 
     }
 
     std::shared_ptr<SalBitmap> pSalBmp = GetSalInstance()->CreateSalBitmap();
-    Size aLocalSize(rSize);
-    if( pSalBmp->Create( xBitmapCanvas, aLocalSize ) )
+    if (pSalBmp->Create(xBitmapCanvas))
     {
         *this = Bitmap(std::move(pSalBmp));
         return true;

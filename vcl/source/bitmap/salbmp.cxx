@@ -92,10 +92,7 @@ sal_uInt16 SalBitmap::GetBitCount() const
     }
 }
 
-bool SalBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>&, Size&)
-{
-    return false;
-}
+bool SalBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>&) { return false; }
 
 #if defined(_WIN32)
 bool SalBitmap::GetSystemData(BitmapSystemData&) { return false; }
