@@ -2160,7 +2160,7 @@ AC_SUBST([CAP_LIBS])
 dnl config for qtapp frontend for cool
 AS_IF([test "$ENABLE_QTAPP" = true],
       [
-       PKG_CHECK_MODULES([QT6], [Qt6Core >= 6.6 Qt6Widgets Qt6Gui Qt6Network Qt6WebSockets Qt6WebEngineCore Qt6WebChannel Qt6WebEngineWidgets Qt6DBus Qt6PrintSupport])
+       PKG_CHECK_MODULES([QT6], [Qt6Core >= 6.6 Qt6Widgets Qt6Gui Qt6Network Qt6WebSockets Qt6WebEngineCore >= 6.8 Qt6WebChannel Qt6WebEngineWidgets Qt6DBus Qt6PrintSupport])
 
        dnl Locate qtpaths6 for Qt6 tool discovery
        dnl FreeBSD ports keep the Qt tools out of the PATH, under
