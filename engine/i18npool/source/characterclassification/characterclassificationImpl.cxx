@@ -18,7 +18,7 @@
  */
 
 #include <cppuhelper/supportsservice.hxx>
-#include <characterclassificationImpl.hxx>
+#include <i18npool/characterclassification.hxx>
 #include <localedata.hxx>
 #include <cclass_unicode.hxx>
 #include <cpo/uno/XComponentContext.hpp>
@@ -30,70 +30,70 @@ using namespace com::sun::star::lang;
 
 namespace i18npool {
 
-CharacterClassificationImpl::CharacterClassificationImpl(
+CharacterClassification::CharacterClassification(
         const Reference < XComponentContext >& rxContext ) : m_xContext( rxContext )
 {
     m_xUCI = new cclass_Unicode(m_xContext);
 }
 
-CharacterClassificationImpl::~CharacterClassificationImpl() {
+CharacterClassification::~CharacterClassification() {
 }
 
 
 OUString
-CharacterClassificationImpl::toUpper( const OUString& Text, sal_Int32 nPos,
+CharacterClassification::toUpper( const OUString& Text, sal_Int32 nPos,
         sal_Int32 nCount, const Locale& rLocale )
 {
     return m_xUCI->toUpper(Text, nPos, nCount, rLocale);
 }
 
 OUString
-CharacterClassificationImpl::toLower( const OUString& Text, sal_Int32 nPos,
+CharacterClassification::toLower( const OUString& Text, sal_Int32 nPos,
         sal_Int32 nCount, const Locale& rLocale )
 {
     return m_xUCI->toLower(Text, nPos, nCount, rLocale);
 }
 
 OUString
-CharacterClassificationImpl::toTitle( const OUString& Text, sal_Int32 nPos,
+CharacterClassification::toTitle( const OUString& Text, sal_Int32 nPos,
         sal_Int32 nCount, const Locale& rLocale )
 {
     return m_xUCI->toTitle(Text, nPos, nCount, rLocale);
 }
 
 sal_Int16
-CharacterClassificationImpl::getType( const OUString& Text, sal_Int32 nPos )
+CharacterClassification::getType( const OUString& Text, sal_Int32 nPos )
 {
     return m_xUCI->getType(Text, nPos);
 }
 
 sal_Int16
-CharacterClassificationImpl::getCharacterDirection( const OUString& Text, sal_Int32 nPos )
+CharacterClassification::getCharacterDirection( const OUString& Text, sal_Int32 nPos )
 {
     return m_xUCI->getCharacterDirection(Text, nPos);
 }
 
 sal_Int16
-CharacterClassificationImpl::getScript( const OUString& Text, sal_Int32 nPos )
+CharacterClassification::getScript( const OUString& Text, sal_Int32 nPos )
 {
     return m_xUCI->getScript(Text, nPos);
 }
 
 sal_Int32
-CharacterClassificationImpl::getCharacterType( const OUString& Text, sal_Int32 nPos,
+CharacterClassification::getCharacterType( const OUString& Text, sal_Int32 nPos,
         const Locale& rLocale )
 {
     return m_xUCI->getCharacterType(Text, nPos, rLocale);
 }
 
 sal_Int32
-CharacterClassificationImpl::getStringType( const OUString& Text, sal_Int32 nPos,
+CharacterClassification::getStringType( const OUString& Text, sal_Int32 nPos,
         sal_Int32 nCount, const Locale& rLocale )
 {
     return m_xUCI->getStringType(Text, nPos, nCount, rLocale);
 }
 
-ParseResult CharacterClassificationImpl::parseAnyToken(
+ParseResult CharacterClassification::parseAnyToken(
         const OUString& Text, sal_Int32 nPos, const Locale& rLocale,
         sal_Int32 startCharTokenType, const OUString& userDefinedCharactersStart,
         sal_Int32 contCharTokenType, const OUString& userDefinedCharactersCont )
@@ -104,7 +104,7 @@ ParseResult CharacterClassificationImpl::parseAnyToken(
 }
 
 
-ParseResult CharacterClassificationImpl::parsePredefinedToken(
+ParseResult CharacterClassification::parsePredefinedToken(
         sal_Int32 nTokenType, const OUString& Text, sal_Int32 nPos,
         const Locale& rLocale, sal_Int32 startCharTokenType,
         const OUString& userDefinedCharactersStart, sal_Int32 contCharTokenType,
@@ -116,19 +116,19 @@ ParseResult CharacterClassificationImpl::parsePredefinedToken(
 }
 
 OUString
-CharacterClassificationImpl::getImplementationName()
+CharacterClassification::getImplementationName()
 {
     return u"com.sun.star.i18n.CharacterClassification"_ustr;
 }
 
 bool
-CharacterClassificationImpl::supportsService(const OUString& rServiceName)
+CharacterClassification::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString >
-CharacterClassificationImpl::getSupportedServiceNames()
+CharacterClassification::getSupportedServiceNames()
 {
     return { u"com.sun.star.i18n.CharacterClassification"_ustr };
 }
@@ -140,7 +140,7 @@ com_sun_star_i18n_CharacterClassification_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
-    return cppu::acquire(new i18npool::CharacterClassificationImpl(context));
+    return cppu::acquire(new i18npool::CharacterClassification(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

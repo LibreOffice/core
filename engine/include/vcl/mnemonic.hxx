@@ -23,8 +23,7 @@
 #include <cpo/uno/Reference.h>
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
-
-namespace com::sun::star::i18n { class XCharacterClassification; }
+#include <i18npool/characterclassification.hxx>
 
 // Mnemonic Chars, which we want support
 // Latin 0-9
@@ -56,7 +55,7 @@ class VCL_DLLPUBLIC MnemonicGenerator
     sal_Unicode m_cMnemonic;
     // 0 == Mnemonic; >0 == count of characters
     sal_uInt8               maMnemonics[MAX_MNEMONICS];
-    cpo::uno::Reference< css::i18n::XCharacterClassification > mxCharClass;
+    rtl::Reference< i18npool::CharacterClassification > mxCharClass;
 
     SAL_DLLPRIVATE static sal_uInt16 ImplGetMnemonicIndex( sal_Unicode c );
     SAL_DLLPRIVATE sal_Unicode ImplFindMnemonic( const OUString& rKey );
@@ -69,7 +68,7 @@ public:
 
     void                RegisterMnemonic( const OUString& rKey );
     [[nodiscard]] OUString CreateMnemonic(const OUString& rKey);
-    cpo::uno::Reference< css::i18n::XCharacterClassification > const & GetCharClass();
+    rtl::Reference< i18npool::CharacterClassification > const & GetCharClass();
 
     // returns a string where all '~'-characters and CJK mnemonics of the form (~A) are completely removed
     static OUString EraseAllMnemonicChars( const OUString& rStr );

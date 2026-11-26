@@ -25,6 +25,7 @@
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <comphelper/singletonref.hxx>
+#include <i18npool/characterclassification.hxx>
 #include <tools/lazydelete.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
@@ -34,7 +35,6 @@
 #include <mutex>
 #include <string_view>
 
-namespace com::sun::star::i18n { class XCharacterClassification; }
 namespace com::sun::star::i18n { class XLocaleData; }
 
 namespace com::sun::star
@@ -141,7 +141,7 @@ namespace connectivity
         sal_Int32                   m_nFormatKey;   // numberformat, which should be used
         sal_Int32                   m_nDateFormatKey;
         cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
-        cpo::uno::Reference< css::i18n::XCharacterClassification> m_xCharClass;
+        rtl::Reference< i18npool::CharacterClassification> m_xCharClass;
         static tools::DeleteOnDeinit<cpo::uno::Reference< css::i18n::XLocaleData>>& getLocaleData();
 
         // convert a string into double trim it to scale of _nscale and then transform it back to string

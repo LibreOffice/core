@@ -1121,7 +1121,7 @@ OUString OSQLParser::stringToDouble(const OUString& _rValue,sal_Int16 _nScale)
 {
     OUString aValue;
     if(!m_xCharClass.is())
-        m_xCharClass  = CharacterClassification::create( m_xContext );
+        m_xCharClass  = new i18npool::CharacterClassification( m_xContext );
     auto& s_xLocaleData = getLocaleData();
     if( s_xLocaleData.get() )
     {

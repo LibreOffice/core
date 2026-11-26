@@ -42,7 +42,7 @@
 #include <COKit/COKit.hxx>
 #include <unotools/resmgr.hxx>
 
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <i18npool/characterclassification.hxx>
 #include "vcleventlisteners.hxx"
 #include "print.h"
 #include "salwtype.hxx"
@@ -399,7 +399,7 @@ struct ImplSVData
     std::unordered_map< int, OUString > maPaperNames;
     std::unordered_set<CacheOwner*> maCacheOwners;
 
-    cpo::uno::Reference<css::i18n::XCharacterClassification> m_xCharClass;
+    rtl::Reference<i18npool::CharacterClassification> m_xCharClass;
 
 #if defined _WIN32
     cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> m_xSystemClipboard;
@@ -421,7 +421,7 @@ struct ImplSVData
     void dumpState(rtl::OStringBuffer &rState);
 };
 
-cpo::uno::Reference<css::i18n::XCharacterClassification> const& ImplGetCharClass();
+rtl::Reference<i18npool::CharacterClassification> const& ImplGetCharClass();
 
 void        ImplDeInitSVData();
 VCL_PLUGIN_PUBLIC basegfx::SystemDependentDataManager& ImplGetSystemDependentDataManager();

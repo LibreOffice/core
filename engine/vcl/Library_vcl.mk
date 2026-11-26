@@ -64,6 +64,7 @@ $(eval $(call gb_Library_use_libraries,vcl,\
     cppuhelper \
     drawinglayercore \
     i18nlangtag \
+    i18npool \
     i18nutil \
     $(if $(ENABLE_JAVA),jvmaccess) \
     $(if $(filter OPENCL,$(BUILD_TYPE)),opencl) \

@@ -61,6 +61,7 @@ $(eval $(call gb_Library_use_libraries,xo,\
     cppuhelper \
     docmodel \
     i18nlangtag \
+    i18npool \
     sal \
     salhelper \
     sax \

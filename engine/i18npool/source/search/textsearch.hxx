@@ -22,6 +22,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/util/XTextSearch2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <rtl/ref.hxx>
 
 #include <map>
 #include <memory>
@@ -32,9 +33,9 @@
 #include <unicode/uversion.h>
 
 namespace com::sun::star::i18n { class XBreakIterator; }
-namespace com::sun::star::i18n { class XCharacterClassification; }
 namespace com::sun::star::i18n { class XExtendedTransliteration; }
 namespace cpo::uno { class XComponentContext; }
+namespace i18npool { class CharacterClassification; }
 
 
 class WLevDistance;
@@ -53,7 +54,7 @@ class TextSearch: public cppu::WeakImplHelper
     OUString sSrchStr;
     OUString sSrchStr2;
 
-    mutable cpo::uno::Reference< css::i18n::XCharacterClassification > xCharClass;
+    mutable rtl::Reference< i18npool::CharacterClassification > xCharClass;
 
     cpo::uno::Reference< css::i18n::XExtendedTransliteration > xTranslit;
     cpo::uno::Reference< css::i18n::XExtendedTransliteration > xTranslit2;

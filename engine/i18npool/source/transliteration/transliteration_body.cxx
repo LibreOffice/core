@@ -30,7 +30,7 @@
 #include <comphelper/sequence.hxx>
 #include <o3tl/temporary.hxx>
 
-#include <characterclassificationImpl.hxx>
+#include <i18npool/characterclassification.hxx>
 
 #include <transliteration_body.hxx>
 #include <memory>
@@ -246,7 +246,7 @@ static OUString transliterate_titlecase_Impl(
     if (!aText.isEmpty())
     {
         const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
-        rtl::Reference< CharacterClassificationImpl > xCharClassImpl( new CharacterClassificationImpl( xContext ) );
+        rtl::Reference< CharacterClassification > xCharClassImpl( new CharacterClassification( xContext ) );
 
         // because xCharClassImpl.toTitle does not handle ligatures or Beta but will raise
         // an exception we need to handle the first chara manually...

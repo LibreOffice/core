@@ -1011,7 +1011,7 @@ bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
                 if( !xCharClass.is() )
                 {
                     const_cast < XMLTransformerBase * >(this)
-                        ->xCharClass = CharacterClassification::create( comphelper::getProcessComponentContext() );
+                        ->xCharClass = new i18npool::CharacterClassification( comphelper::getProcessComponentContext() );
                 }
                 sal_Int16 nType = xCharClass->getType( rName, i );
 

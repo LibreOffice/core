@@ -33,7 +33,7 @@ using namespace ::cpo;
 MenuContentHandler::MenuContentHandler(uno::Reference<frame::XFrame> const& xFrame)
     : m_xContext(comphelper::getProcessComponentContext())
     , m_xFrame(xFrame)
-    , m_xCharacterClassification(i18n::CharacterClassification::create(m_xContext))
+    , m_xCharacterClassification(new i18npool::CharacterClassification(m_xContext))
     , m_xURLTransformer(util::URLTransformer::create(m_xContext))
     , m_sModuleLongName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame))
 {

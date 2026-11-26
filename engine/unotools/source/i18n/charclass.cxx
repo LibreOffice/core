@@ -21,6 +21,7 @@
 #include <unotools/charclass.hxx>
 #include <rtl/character.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <i18npool/characterclassification.hxx>
 
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <utility>
@@ -35,13 +36,13 @@ CharClass::CharClass(
             )
     : maLanguageTag(std::move( aLanguageTag))
 {
-    xCC = CharacterClassification::create( rxContext );
+    xCC = new i18npool::CharacterClassification( rxContext );
 }
 
 CharClass::CharClass( LanguageTag aLanguageTag )
     : maLanguageTag(std::move( aLanguageTag))
 {
-    xCC = CharacterClassification::create( comphelper::getProcessComponentContext() );
+    xCC = new i18npool::CharacterClassification( comphelper::getProcessComponentContext() );
 }
 
 CharClass::~CharClass()

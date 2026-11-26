@@ -27,9 +27,10 @@
 #include <com/sun/star/i18n/ParseResult.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <cpo/uno/Reference.hxx>
+#include <rtl/ref.hxx>
 
 namespace cpo::uno { class XComponentContext; }
-namespace com::sun::star::i18n { class XCharacterClassification; }
+namespace i18npool { class CharacterClassification; }
 
 inline constexpr sal_Int32 nCharClassAlphaType =
     css::i18n::KCharacterType::UPPER |
@@ -64,7 +65,7 @@ inline constexpr sal_Int32 nCharClassBaseType =
 class UNOTOOLS_DLLPUBLIC CharClass
 {
     LanguageTag                 maLanguageTag;
-    cpo::uno::Reference< css::i18n::XCharacterClassification >    xCC;
+    rtl::Reference< i18npool::CharacterClassification >    xCC;
 
     CharClass(const CharClass&) = delete;
     CharClass& operator=(const CharClass&) = delete;

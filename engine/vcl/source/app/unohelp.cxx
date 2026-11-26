@@ -29,6 +29,7 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
+#include <i18npool/characterclassification.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::cpo;
@@ -39,9 +40,9 @@ uno::Reference < i18n::XBreakIterator > vcl::unohelper::CreateBreakIterator()
     return i18n::BreakIterator::create(xContext);
 }
 
-uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacterClassification()
+rtl::Reference < i18npool::CharacterClassification > vcl::unohelper::CreateCharacterClassification()
 {
-    return i18n::CharacterClassification::create( comphelper::getProcessComponentContext() );
+    return new i18npool::CharacterClassification( comphelper::getProcessComponentContext() );
 }
 
 float vcl::unohelper::ConvertFontWidth( FontWidth eWidth )

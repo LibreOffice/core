@@ -33,16 +33,13 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <i18npool/characterclassification.hxx>
 #include <rtl/ref.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/namespacemap.hxx>
 
 #include "TransformerActions.hxx"
 #include "TransformerTokenMap.hxx"
-
-namespace com::sun::star {
-    namespace i18n { class XCharacterClassification; }
-}
 
 class XMLTransformerContext;
 struct XMLTransformerActionInit;
@@ -58,7 +55,7 @@ class XMLTransformerBase : public cppu::WeakImplHelper<css::xml::sax::XExtendedD
 
     cpo::uno::Reference< css::xml::sax::XDocumentHandler >            m_xHandler;     // the handlers
     cpo::uno::Reference< css::beans::XPropertySet >                   m_xPropSet;
-    cpo::uno::Reference< css::i18n::XCharacterClassification >        xCharClass;
+    rtl::Reference< i18npool::CharacterClassification >               xCharClass;
 
     OUString m_aExtPathPrefix;
     OUString m_aClass;

@@ -25,6 +25,7 @@
 #include <optional>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <rtl/ref.hxx>
+#include "i18npooldllapi.h"
 
 namespace cpo::uno { class XComponentContext; }
 
@@ -32,7 +33,7 @@ namespace i18npool {
 
 class cclass_Unicode;
 
-class CharacterClassificationImpl final : public cppu::WeakImplHelper
+class I18NPOOL_DLLPUBLIC CharacterClassification final : public cppu::WeakImplHelper
 <
     css::i18n::XCharacterClassification,
     css::lang::XServiceInfo
@@ -40,8 +41,11 @@ class CharacterClassificationImpl final : public cppu::WeakImplHelper
 {
 public:
 
-    CharacterClassificationImpl( const cpo::uno::Reference < cpo::uno::XComponentContext >& rxContext );
-    virtual ~CharacterClassificationImpl() override;
+    CharacterClassification( const cpo::uno::Reference < cpo::uno::XComponentContext >& rxContext );
+    virtual ~CharacterClassification() override;
+
+    CharacterClassification& operator=( CharacterClassification const & ) = delete; // MSVC workaround
+    CharacterClassification( CharacterClassification const & ) = delete; // MSVC workaround
 
     virtual OUString toUpper( const OUString& Text,
         sal_Int32 nPos, sal_Int32 nCount, const css::lang::Locale& rLocale ) override;

@@ -21,7 +21,7 @@
 #include <chaptercollator.hxx>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/ParseResult.hpp>
-#include <com/sun/star/i18n/CharacterClassification.hpp>
+#include <i18npool/characterclassification.hxx>
 
 using namespace ::com::sun::star::lang;
 using namespace ::cpo::uno;
@@ -32,7 +32,7 @@ namespace i18npool {
 
 ChapterCollator::ChapterCollator( const Reference < XComponentContext >& rxContext ) : CollatorImpl(rxContext)
 {
-    cclass = CharacterClassification::create( rxContext );
+    cclass = new i18npool::CharacterClassification( rxContext );
 }
 
 ChapterCollator::~ChapterCollator()

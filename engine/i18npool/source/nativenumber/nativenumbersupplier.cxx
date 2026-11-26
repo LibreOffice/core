@@ -19,6 +19,7 @@
 
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <i18npool/characterclassification.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
 #include <nativenumbersupplier.hxx>
@@ -633,6 +634,8 @@ OUString getNumberText(const Locale& rLocale, const OUString& rNumberString,
 }
 }
 
+NativeNumberSupplierService::NativeNumberSupplierService() {}
+
 OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNumberString, const Locale& rLocale,
                                                             sal_Int16 nNativeNumberMode,
                                                             Sequence<sal_Int32>* pOffset,
@@ -684,7 +687,7 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
             OUString aStr = getNumberText(rLocale, aNumberString, rNativeNumberParams.substr(nStripCase));
 
             if (!xCharClass.is())
-                xCharClass = CharacterClassification::create(comphelper::getProcessComponentContext());
+                xCharClass = new i18npool::CharacterClassification(comphelper::getProcessComponentContext());
 
             switch (Casings[nCasing].eCasing)
             {

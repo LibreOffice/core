@@ -54,6 +54,7 @@ $(eval $(call gb_Library_use_libraries,sfx,\
     drawinglayer \
     fwk \
     i18nlangtag \
+    i18npool \
     i18nutil \
     sal \
     salhelper \

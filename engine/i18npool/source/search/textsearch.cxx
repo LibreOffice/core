@@ -31,6 +31,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <i18nutil/transliteration.hxx>
+#include <i18npool/characterclassification.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
@@ -591,7 +592,7 @@ bool TextSearch::IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const
     if( '\x7f' != rStr[nPos])
     {
         if ( !xCharClass.is() )
-             xCharClass = CharacterClassification::create( m_xContext );
+             xCharClass = new i18npool::CharacterClassification( m_xContext );
         sal_Int32 nCType = xCharClass->getCharacterType( rStr, nPos,
                 aSrchPara.Locale );
         if( 0 != (( KCharacterType::DIGIT | KCharacterType::ALPHA |

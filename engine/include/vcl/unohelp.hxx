@@ -25,19 +25,20 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <rtl/ref.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
 
 namespace com::sun::star::i18n {
     class XBreakIterator;
-    class XCharacterClassification;
 }
+namespace i18npool { class CharacterClassification; }
 
 namespace vcl::unohelper
 {
 VCL_DLLPUBLIC cpo::uno::Reference < css::i18n::XBreakIterator > CreateBreakIterator();
-cpo::uno::Reference < css::i18n::XCharacterClassification> CreateCharacterClassification();
+rtl::Reference < i18npool::CharacterClassification> CreateCharacterClassification();
 VCL_DLLPUBLIC float               ConvertFontWidth( FontWidth eWidth );
 VCL_DLLPUBLIC FontWidth           ConvertFontWidth( float f );
 VCL_DLLPUBLIC float               ConvertFontWeight( FontWeight eWeight );

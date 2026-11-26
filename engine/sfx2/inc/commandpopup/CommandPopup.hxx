@@ -15,8 +15,8 @@
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <i18npool/characterclassification.hxx>
 
 #include <functional>
 #include <unordered_set>
@@ -48,7 +48,7 @@ class MenuContentHandler final
 private:
     cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     cpo::uno::Reference<css::frame::XFrame> m_xFrame;
-    cpo::uno::Reference<css::i18n::XCharacterClassification> m_xCharacterClassification;
+    rtl::Reference<i18npool::CharacterClassification> m_xCharacterClassification;
     cpo::uno::Reference<css::util::XURLTransformer> m_xURLTransformer;
 
     MenuContent m_aMenuContent;

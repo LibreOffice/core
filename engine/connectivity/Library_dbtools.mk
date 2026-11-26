@@ -39,6 +39,7 @@ $(eval $(call gb_Library_use_libraries,dbtools,\
 	tl \
 	comphelper \
 	i18nlangtag \
+	i18npool \
 	svt \
 	vcl \
 ))

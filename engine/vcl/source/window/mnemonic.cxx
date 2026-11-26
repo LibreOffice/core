@@ -26,6 +26,7 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <i18npool/characterclassification.hxx>
 #include <rtl/character.hxx>
 #include <sal/log.hxx>
 
@@ -84,7 +85,7 @@ sal_Unicode MnemonicGenerator::ImplFindMnemonic( const OUString& rKey )
 
 void MnemonicGenerator::RegisterMnemonic( const OUString& rKey )
 {
-    uno::Reference < i18n::XCharacterClassification > xCharClass = GetCharClass();
+    rtl::Reference < i18npool::CharacterClassification > xCharClass = GetCharClass();
 
     // Don't crash even when we don't have access to i18n service
     if ( !xCharClass.is() )
@@ -306,7 +307,7 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
     return rKey;
 }
 
-uno::Reference< i18n::XCharacterClassification > const & MnemonicGenerator::GetCharClass()
+rtl::Reference< i18npool::CharacterClassification > const & MnemonicGenerator::GetCharClass()
 {
     if ( !mxCharClass.is() )
         mxCharClass = vcl::unohelper::CreateCharacterClassification();

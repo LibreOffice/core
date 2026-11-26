@@ -23,6 +23,7 @@ $(eval $(call gb_Library_use_libraries,i18nsearch,\
 	comphelper \
 	cppu \
 	cppuhelper \
+	i18npool \
 	sal \
 ))
 

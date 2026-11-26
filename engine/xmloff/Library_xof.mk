@@ -40,6 +40,7 @@ $(eval $(call gb_Library_use_libraries,xof,\
     comphelper \
     cppu \
     cppuhelper \
+    i18npool \
     sal \
     salhelper \
     tl \

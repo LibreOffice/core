@@ -44,6 +44,7 @@ $(eval $(call gb_CppunitTest_use_libraries,xmloff_uxmloff, \
     cppuhelper \
     docmodel \
     i18nlangtag \
+    i18npool \
     sal \
     salhelper \
 	sax \

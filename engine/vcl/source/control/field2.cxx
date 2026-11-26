@@ -64,7 +64,7 @@ using namespace ::cpo;
 #define EDITMASK_ALLCHAR       'x'
 #define EDITMASK_UPPERALLCHAR  'X'
 
-uno::Reference< i18n::XCharacterClassification > const & ImplGetCharClass()
+rtl::Reference< i18npool::CharacterClassification > const & ImplGetCharClass()
 {
     ImplSVData *const pSVData = ImplGetSVData();
     assert(pSVData);

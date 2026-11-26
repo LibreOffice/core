@@ -19,8 +19,9 @@
 #pragma once
 
 #include "collatorImpl.hxx"
+#include <rtl/ref.hxx>
 
-namespace com::sun::star::i18n { class XCharacterClassification; }
+namespace i18npool { class CharacterClassification; }
 
 namespace i18npool {
 
@@ -46,7 +47,7 @@ public:
 
 private:
     // CharacterClassification Implementation
-    cpo::uno::Reference< css::i18n::XCharacterClassification > cclass;
+    rtl::Reference< i18npool::CharacterClassification > cclass;
 };
 
 }

@@ -22,8 +22,9 @@
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <rtl/ref.hxx>
 
-namespace com::sun::star::i18n { class XCharacterClassification; }
+namespace i18npool { class CharacterClassification; }
 
 namespace i18npool {
 
@@ -37,7 +38,7 @@ class NativeNumberSupplierService final : public cppu::WeakImplHelper
 >
 {
 public:
-        NativeNumberSupplierService() {}
+        NativeNumberSupplierService();
 
         // Methods
         virtual OUString getNativeNumberString( const OUString& aNumberString,
@@ -77,7 +78,7 @@ private:
         static bool isValidNatNumImpl( const css::lang::Locale& aLocale,
                 sal_Int16 nNativeNumberMode );
         css::lang::Locale aLocale;
-        mutable cpo::uno::Reference< css::i18n::XCharacterClassification > xCharClass;
+        mutable rtl::Reference< i18npool::CharacterClassification > xCharClass;
 };
 
 }

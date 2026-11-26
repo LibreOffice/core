@@ -45,9 +45,9 @@
 #include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
-#include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <basegfx/vector/b3dvector.hxx>
+#include <i18npool/characterclassification.hxx>
 
 #include <sax/tools/converter.hxx>
 #include <comphelper/sequence.hxx>
@@ -69,7 +69,7 @@ struct SvXMLUnitConverter::Impl
     SvtSaveOptions::ODFSaneDefaultVersion m_eODFVersion;
     util::Date m_aNullDate;
     mutable uno::Reference< text::XNumberingTypeInfo > m_xNumTypeInfo;
-    mutable uno::Reference< i18n::XCharacterClassification > m_xCharClass;
+    mutable rtl::Reference< i18npool::CharacterClassification > m_xCharClass;
     uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     Impl(uno::Reference<cpo::uno::XComponentContext> xContext,
@@ -864,7 +864,7 @@ OUString SvXMLUnitConverter::encodeStyleName(
             {
                 if (!m_pImpl->m_xCharClass.is())
                 {
-                    m_pImpl->m_xCharClass = CharacterClassification::create( m_pImpl->m_xContext );
+                    m_pImpl->m_xCharClass = new i18npool::CharacterClassification( m_pImpl->m_xContext );
                 }
                 sal_Int16 nType = m_pImpl->m_xCharClass->getType(rName, i);
 
