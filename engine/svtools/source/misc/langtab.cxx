@@ -269,7 +269,7 @@ const OUString& SvtLanguageTableImpl::GetString( const LanguageType eType ) cons
 
     // Obtain from ICU, or a geeky but usable-in-a-pinch lang-tag.
     OUString sLangTag( lcl_getDescription( LanguageTag(nLang)));
-    SAL_WARN("svtools.misc", "Language: 0x"
+    SAL_INFO("svtools.misc", "Language: 0x"
         << std::hex << nLang
         << " with unknown name, so returning generated: "
         << sLangTag);
