@@ -18,6 +18,12 @@ ifneq ($(OS),WNT)
 $(eval $(call gb_StaticLibrary_use_external_project,expat,expat,full))
 endif
 
+ifneq ($(COM),MSC)
+$(eval $(call gb_StaticLibrary_add_cflags,expat,\
+	-fno-strict-aliasing \
+))
+endif
+
 $(eval $(call gb_StaticLibrary_set_include,expat,\
     -I$(gb_UnpackedTarball_workdir)/expat \
     $$(INCLUDE) \
