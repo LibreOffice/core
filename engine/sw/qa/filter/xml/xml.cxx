@@ -9,10 +9,16 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
+
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <editeng/fhgtitem.hxx>
 
+#include <doc.hxx>
 #include <frameformats.hxx>
 #include <frmatr.hxx>
+#include <ndtxt.hxx>
 #include <swtable.hxx>
 #include <docsh.hxx>
 #include <IDocumentRedlineAccess.hxx>
@@ -194,6 +200,62 @@ CPPUNIT_TEST_FIXTURE(Test, testFormatCharstyleDirectOdtImport)
     // - Actual  : 240
     // i.e. the redline didn't contain a correct old font size (direct format).
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(24 * 20), rOldFontSize.GetHeight());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testMergedPasteListLevelShiftOdt)
+{
+    // Given a Writer document whose last paragraph is an empty list item at UI list level 2 (attr
+    // level 1), with the cursor on it:
+    createSwDoc("merged-paste-list-target.odt");
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    SwNodes& rNodes = pDoc->GetNodes();
+    SwTextNode* pOrigDest = nullptr;
+    for (SwNodeOffset i = rNodes.Count() - 1; i >= SwNodeOffset(0); --i)
+    {
+        SwTextNode* pCandidate = rNodes[i]->GetTextNode();
+        if (pCandidate)
+        {
+            pOrigDest = pCandidate;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pOrigDest);
+    CPPUNIT_ASSERT_EQUAL(1, pOrigDest->GetAttrListLevel());
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetCursor()->GetPoint()->Assign(*pOrigDest, pOrigDest->GetText().getLength());
+
+    // When pasting a three-level list through the ODT path, with merged paste:
+    pDoc->SetInMergedPaste(true);
+    pDoc->SetMergedPasteOrigDestNode(pOrigDest);
+    comphelper::ScopeGuard g(
+        [pDoc]
+        {
+            pDoc->SetInMergedPaste(false);
+            pDoc->SetMergedPasteOrigDestNode(nullptr);
+        });
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs = { comphelper::makePropertyValue(
+        u"Name"_ustr, createFileURL(u"merged-paste-list-source.odt")) };
+    dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aArgs);
+
+    // Then the pasted "Level 3" bullet (clipboard attr level 2) is attr level 3 (UI level 4), the
+    // clipboard's own depth shifted by the paste position's level:
+    SwTextNode* pLevel3Node = nullptr;
+    for (SwNodeOffset i(0); i < rNodes.Count(); ++i)
+    {
+        SwTextNode* pCandidate = rNodes[i]->GetTextNode();
+        if (pCandidate && pCandidate->GetText() == u"Level 3")
+        {
+            pLevel3Node = pCandidate;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pLevel3Node);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3
+    // - Actual  : 1
+    // i.e. the last pasted paragraph's level was the target's own level, not
+    // the clipboard's depth shifted by the paste position's level.
+    CPPUNIT_ASSERT_EQUAL(3, pLevel3Node->GetAttrListLevel());
 }
 }
 

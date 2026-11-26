@@ -40,6 +40,8 @@
 #include <xmloff/ProgressBarHelper.hxx>
 #include <doc.hxx>
 #include <drawdoc.hxx>
+#include <hintids.hxx>
+#include <svl/intitem.hxx>
 #include <svx/compatflags.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
@@ -905,6 +907,35 @@ void SwXMLImport::MergeListsAtDocumentInsertPosition(SwDoc *pDoc)
     }
 }
 
+namespace
+{
+// Merged paste: copy list level from the previous node to rNextNd.
+void MergeTextNodeListLevel(const SwDoc& rDoc, SwTextNode& rNextNd)
+{
+    if (!rDoc.IsInMergedPaste())
+    {
+        return;
+    }
+
+    SwNodeIndex aPrevIdx(rNextNd);
+    --aPrevIdx;
+    const SwTextNode* pPrev = aPrevIdx.GetNode().GetTextNode();
+    if (!pPrev)
+    {
+        return;
+    }
+
+    const SwAttrSet* pAttrSet = pPrev->GetpSwAttrSet();
+    if (!pAttrSet || pAttrSet->GetItemState(RES_PARATR_LIST_LEVEL, false) != SfxItemState::SET)
+    {
+        return;
+    }
+
+    rNextNd.SetAttr(
+        SfxInt16Item(RES_PARATR_LIST_LEVEL, static_cast<sal_Int16>(pPrev->GetAttrListLevel())));
+}
+}
+
 SwDoc* SwXMLImport::endDocAdjustNodes()
 {
     SwDoc *pDoc = nullptr;
@@ -1039,6 +1070,7 @@ SwDoc* SwXMLImport::endDocAdjustNodes()
                     }
 
                     pPaM->SetMark(); pPaM->DeleteMark();
+                    MergeTextNodeListLevel(*pDoc, *pNextNd);
                     pNextNd->JoinPrev();
 
                     // Remove line break that has been inserted by the import,
@@ -1047,6 +1079,7 @@ SwDoc* SwXMLImport::endDocAdjustNodes()
                     if( pNextNd->CanJoinPrev(/* &pPos->nNode*/ ) && !endNodeFound &&
                          *m_oSttNdIdx != pPos->GetNode() )
                     {
+                        MergeTextNodeListLevel(*pDoc, *pNextNd);
                         pNextNd->JoinPrev();
                     }
                 }

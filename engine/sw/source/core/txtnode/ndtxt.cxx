@@ -2321,6 +2321,14 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
         }
     }
 
+    if (pDest->GetDoc().IsInMergedPaste() && HasSwAttrSet()
+        && GetpSwAttrSet()->GetItemState(RES_PARATR_LIST_LEVEL, false) == SfxItemState::SET)
+    {
+        // Merged paste: make sure the pasted node's level nests inside the
+        // paste position, instead of simple copying.
+        pDest->SetAttrListLevel(GetAttrListLevel());
+    }
+
     bool const bUndoNodes = !pOtherDoc
                             && GetDoc().GetIDocumentUndoRedo().IsUndoNodes(GetNodes());
 
