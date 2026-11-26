@@ -9154,7 +9154,11 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject )
     if (!writeBuffer(aLine)) return false;
 
     if( nMaskObject )
-        return writeBitmapMaskObject( nMaskObject, rObject.m_aBitmap.CreateAlphaMask() );
+    {
+        if (!writeBitmapMaskObject( nMaskObject, rObject.m_aBitmap.CreateAlphaMask() )) {
+            return false;
+        }
+    }
 
     writeReferenceXObject(rObject.m_aReferenceXObject);
 
