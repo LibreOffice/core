@@ -107,12 +107,12 @@ public:
             SetPosSize(0, 0, viewWidth, viewHeight, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT);
     }
 
-    virtual void GetWorkArea(AbsoluteScreenPixelRectangle& rRect)
+    virtual void GetWorkArea(AbsoluteScreenPixelRectangle& rRect) override
     {
         AndroidSalInstance::getInstance()->GetWorkArea( rRect );
     }
 
-    virtual void UpdateSettings( AllSettings &rSettings )
+    virtual void UpdateSettings(AllSettings& rSettings) override
     {
         // FIXME: is 14 point enough ?
         vcl::Font aFont( OUString( "Roboto" ), Size( 0, 14 ) );

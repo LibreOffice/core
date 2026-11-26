@@ -35,18 +35,19 @@ public:
     virtual ~AndroidSalInstance();
     static AndroidSalInstance* getInstance();
 
-    virtual SalSystem* CreateSalSystem();
+    virtual SalSystem* CreateSalSystem() override;
 
     // frame management
     void GetWorkArea(AbsoluteScreenPixelRectangle& rRect);
-    SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle);
-    SalFrame* CreateChildFrame(SystemParentData* pParent, SalFrameStyleFlags nStyle);
+    virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
+    virtual SalFrame* CreateChildFrame(SystemParentData* pParent,
+                                       SalFrameStyleFlags nStyle) override;
 
     // mainloop pieces
-    virtual bool AnyInput(VclInputFlags nType);
+    virtual bool AnyInput(VclInputFlags nType) override;
 
-    virtual void updateMainThread();
-    virtual void releaseMainThread();
+    virtual void updateMainThread() override;
+    virtual void releaseMainThread() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
