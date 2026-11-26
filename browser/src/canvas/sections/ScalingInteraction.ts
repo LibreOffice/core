@@ -216,12 +216,12 @@ class ScalingInteraction extends SelectionInteraction {
 				this.at = point.clone();
 				this.reached = this.shapeFor(point);
 				const dragged = this.draggedHandle();
-				return dragged
-					? [
+				return dragged ?
+						[
 							dragged.point.x * app.twipsToPixels - this.edgeToHandle[0],
 							dragged.point.y * app.twipsToPixels - this.edgeToHandle[1],
 						]
-					: null;
+					:	null;
 			};
 			handleAt(HandleScaling.ontoTheLine(handleAt, to, snapped));
 			return;

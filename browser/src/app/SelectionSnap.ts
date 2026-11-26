@@ -476,9 +476,9 @@ class SelectionSnap {
 
 		// The dot on the dragged thing's own middle follows where it lands now.
 		this.draggedCenter =
-			this.centerToCenterX || this.centerToCenterY
-				? [landed[0] + box[2] / 2, landed[1] + box[3] / 2]
-				: null;
+			this.centerToCenterX || this.centerToCenterY ?
+				[landed[0] + box[2] / 2, landed[1] + box[3] / 2]
+			:	null;
 
 		for (let axis = 0; axis < 2; axis++) {
 			const spacing = found[axis];
@@ -694,11 +694,9 @@ class SelectionSnap {
 
 		// The edges the dragged thing lies on, or else the one place it lined up with.
 		const across =
-			this.edgesX.length > 0
-				? this.edgesX
-				: this.closestX !== null && !this.spacingX
-					? [this.closestX]
-					: [];
+			this.edgesX.length > 0 ? this.edgesX
+			: this.closestX !== null && !this.spacingX ? [this.closestX]
+			: [];
 		for (const x of across)
 			this.drawXAxis(
 				section,
@@ -708,11 +706,9 @@ class SelectionSnap {
 			);
 
 		const down =
-			this.edgesY.length > 0
-				? this.edgesY
-				: this.closestY !== null && !this.spacingY
-					? [this.closestY]
-					: [];
+			this.edgesY.length > 0 ? this.edgesY
+			: this.closestY !== null && !this.spacingY ? [this.closestY]
+			: [];
 		for (const y of down)
 			this.drawYAxis(
 				section,
