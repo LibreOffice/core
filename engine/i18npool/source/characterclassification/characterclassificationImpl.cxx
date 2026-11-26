@@ -20,7 +20,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <characterclassificationImpl.hxx>
 #include <localedata.hxx>
-
+#include <cclass_unicode.hxx>
 #include <cpo/uno/XComponentContext.hpp>
 
 using namespace ::cpo::uno;
@@ -33,8 +33,7 @@ namespace i18npool {
 CharacterClassificationImpl::CharacterClassificationImpl(
         const Reference < XComponentContext >& rxContext ) : m_xContext( rxContext )
 {
-    if (createLocaleSpecificCharacterClassification(u"Unicode"_ustr, Locale()))
-        xUCI = cachedItem->xCI;
+    m_xUCI = new cclass_Unicode(m_xContext);
 }
 
 CharacterClassificationImpl::~CharacterClassificationImpl() {
@@ -45,59 +44,53 @@ OUString
 CharacterClassificationImpl::toUpper( const OUString& Text, sal_Int32 nPos,
         sal_Int32 nCount, const Locale& rLocale )
 {
-    return getLocaleSpecificCharacterClassification(rLocale)->toUpper(Text, nPos, nCount, rLocale);
+    return m_xUCI->toUpper(Text, nPos, nCount, rLocale);
 }
 
 OUString
 CharacterClassificationImpl::toLower( const OUString& Text, sal_Int32 nPos,
         sal_Int32 nCount, const Locale& rLocale )
 {
-    return getLocaleSpecificCharacterClassification(rLocale)->toLower(Text, nPos, nCount, rLocale);
+    return m_xUCI->toLower(Text, nPos, nCount, rLocale);
 }
 
 OUString
 CharacterClassificationImpl::toTitle( const OUString& Text, sal_Int32 nPos,
         sal_Int32 nCount, const Locale& rLocale )
 {
-    return getLocaleSpecificCharacterClassification(rLocale)->toTitle(Text, nPos, nCount, rLocale);
+    return m_xUCI->toTitle(Text, nPos, nCount, rLocale);
 }
 
 sal_Int16
 CharacterClassificationImpl::getType( const OUString& Text, sal_Int32 nPos )
 {
-    if (xUCI.is())
-        return xUCI->getType(Text, nPos);
-    throw RuntimeException();
+    return m_xUCI->getType(Text, nPos);
 }
 
 sal_Int16
 CharacterClassificationImpl::getCharacterDirection( const OUString& Text, sal_Int32 nPos )
 {
-    if (xUCI.is())
-        return xUCI->getCharacterDirection(Text, nPos);
-    throw RuntimeException();
+    return m_xUCI->getCharacterDirection(Text, nPos);
 }
 
 sal_Int16
 CharacterClassificationImpl::getScript( const OUString& Text, sal_Int32 nPos )
 {
-    if (xUCI.is())
-        return xUCI->getScript(Text, nPos);
-    throw RuntimeException();
+    return m_xUCI->getScript(Text, nPos);
 }
 
 sal_Int32
 CharacterClassificationImpl::getCharacterType( const OUString& Text, sal_Int32 nPos,
         const Locale& rLocale )
 {
-    return getLocaleSpecificCharacterClassification(rLocale)->getCharacterType(Text, nPos, rLocale);
+    return m_xUCI->getCharacterType(Text, nPos, rLocale);
 }
 
 sal_Int32
 CharacterClassificationImpl::getStringType( const OUString& Text, sal_Int32 nPos,
         sal_Int32 nCount, const Locale& rLocale )
 {
-    return getLocaleSpecificCharacterClassification(rLocale)->getStringType(Text, nPos, nCount, rLocale);
+    return m_xUCI->getStringType(Text, nPos, nCount, rLocale);
 }
 
 ParseResult CharacterClassificationImpl::parseAnyToken(
@@ -105,7 +98,7 @@ ParseResult CharacterClassificationImpl::parseAnyToken(
         sal_Int32 startCharTokenType, const OUString& userDefinedCharactersStart,
         sal_Int32 contCharTokenType, const OUString& userDefinedCharactersCont )
 {
-    return getLocaleSpecificCharacterClassification(rLocale)->parseAnyToken(Text, nPos, rLocale,
+    return m_xUCI->parseAnyToken(Text, nPos, rLocale,
             startCharTokenType,userDefinedCharactersStart,
             contCharTokenType, userDefinedCharactersCont);
 }
@@ -117,75 +110,9 @@ ParseResult CharacterClassificationImpl::parsePredefinedToken(
         const OUString& userDefinedCharactersStart, sal_Int32 contCharTokenType,
         const OUString& userDefinedCharactersCont )
 {
-    return getLocaleSpecificCharacterClassification(rLocale)->parsePredefinedToken(
+    return m_xUCI->parsePredefinedToken(
             nTokenType, Text, nPos, rLocale, startCharTokenType, userDefinedCharactersStart,
             contCharTokenType, userDefinedCharactersCont);
-}
-
-bool CharacterClassificationImpl::createLocaleSpecificCharacterClassification(const OUString& serviceName, const Locale& rLocale)
-{
-    // to share service between same Language but different Country code, like zh_CN and zh_SG
-    for (size_t l = 0; l < lookupTable.size(); l++) {
-        cachedItem = lookupTable[l];
-        if (serviceName == cachedItem->aName) {
-            lookupTable.emplace_back( rLocale, serviceName, cachedItem->xCI );
-            cachedItem = lookupTable.back();
-            return true;
-        }
-    }
-
-    Reference < XInterface > xI = m_xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.i18n.CharacterClassification_" + serviceName, m_xContext);
-
-    Reference < XCharacterClassification > xCI;
-    if ( xI.is() ) {
-        xCI.set( xI, UNO_QUERY );
-        if (xCI.is()) {
-            lookupTable.emplace_back( rLocale, serviceName, xCI );
-            cachedItem = lookupTable.back();
-            return true;
-        }
-    }
-    return false;
-}
-
-Reference < XCharacterClassification > const &
-CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Locale& rLocale)
-{
-    // reuse instance if locale didn't change
-    if (cachedItem && cachedItem->equals(rLocale))
-        return cachedItem->xCI;
-    else {
-        for (const auto & i : lookupTable) {
-            cachedItem = i;
-            if (cachedItem->equals(rLocale))
-                return cachedItem->xCI;
-        }
-
-        // Load service with name <base>_<lang>_<country> or
-        // <base>_<bcp47> and fallbacks.
-        bool bLoaded = createLocaleSpecificCharacterClassification(
-                LocaleDataImpl::getFirstLocaleServiceName( rLocale), rLocale);
-        if (!bLoaded)
-        {
-            ::std::vector< OUString > aFallbacks( LocaleDataImpl::getFallbackLocaleServiceNames( rLocale));
-            for (const auto& rFallback : aFallbacks)
-            {
-                bLoaded = createLocaleSpecificCharacterClassification(rFallback, rLocale);
-                if (bLoaded)
-                    break;
-            }
-        }
-        if (bLoaded)
-            return cachedItem->xCI;
-        else if (xUCI.is())
-        {
-            lookupTable.emplace_back( rLocale, u"Unicode"_ustr, xUCI );
-            cachedItem = lookupTable.back();
-            return cachedItem->xCI;
-        }
-    }
-    throw RuntimeException();
 }
 
 OUString

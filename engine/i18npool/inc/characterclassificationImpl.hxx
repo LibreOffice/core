@@ -24,10 +24,13 @@
 #include <vector>
 #include <optional>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <rtl/ref.hxx>
 
 namespace cpo::uno { class XComponentContext; }
 
 namespace i18npool {
+
+class cclass_Unicode;
 
 class CharacterClassificationImpl final : public cppu::WeakImplHelper
 <
@@ -68,29 +71,8 @@ public:
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 private:
-    struct lookupTableItem {
-        lookupTableItem(css::lang::Locale _aLocale, OUString _aName,
-                        cpo::uno::Reference < XCharacterClassification > _xCI) :
-            aLocale(std::move(_aLocale)), aName(std::move(_aName)), xCI(std::move(_xCI)) {};
-        css::lang::Locale aLocale;
-        OUString aName;
-        cpo::uno::Reference < XCharacterClassification > xCI;
-        bool equals(const css::lang::Locale& rLocale) const {
-            return aLocale.Language == rLocale.Language &&
-                aLocale.Country == rLocale.Country &&
-                aLocale.Variant == rLocale.Variant;
-        };
-    };
-    std::vector<lookupTableItem> lookupTable;
-    std::optional<lookupTableItem> cachedItem;
-
     cpo::uno::Reference < cpo::uno::XComponentContext > m_xContext;
-    cpo::uno::Reference < XCharacterClassification > xUCI;
-
-    /// @throws cpo::uno::RuntimeException
-    cpo::uno::Reference < XCharacterClassification > const & getLocaleSpecificCharacterClassification(const css::lang::Locale& rLocale);
-    bool createLocaleSpecificCharacterClassification(const OUString& serviceName, const css::lang::Locale& rLocale);
-
+    rtl::Reference< cclass_Unicode > m_xUCI;
 };
 
 }
