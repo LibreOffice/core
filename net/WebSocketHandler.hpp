@@ -734,7 +734,9 @@ private:
         if (!socket.getInBuffer().empty())
             return true;
 
-        pollfd pollFd{ socket.getFD(), POLLIN, 0 };
+        pollfd pollFd{};
+        pollFd.fd = socket.getFD(); // SOCKET on Windows, so not in the braces
+        pollFd.events = POLLIN;
         return net::pollDescriptors(&pollFd, 1, 0) > 0 && (pollFd.revents & POLLIN);
     }
 
