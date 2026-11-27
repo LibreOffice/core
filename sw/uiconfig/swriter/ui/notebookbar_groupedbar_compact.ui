@@ -796,13 +796,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuEdit-UseHeaderFooterMenu">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:UseHeaderFooterMenu</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="MenuEdit-separator7">
         <property name="visible">True</property>
         <property name="can_focus">False</property>

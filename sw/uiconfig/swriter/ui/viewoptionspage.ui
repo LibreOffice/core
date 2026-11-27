@@ -237,9 +237,6 @@
                         <property name="top-attach">3</property>
                       </packing>
                     </child>
-                    <child>
-                      <placeholder/>
-                    </child>
                   </object>
                 </child>
                 <child type="label">
@@ -569,7 +566,7 @@
                 <property name="label-xalign">0</property>
                 <property name="shadow-type">none</property>
                 <child>
-                  <!-- n-columns=2 n-rows=2 -->
+                  <!-- n-columns=2 n-rows=3 -->
                   <object class="GtkGrid" id="grid4">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -759,6 +756,28 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkCheckButton" id="cbHeaderFooter">
+                        <property name="label" translatable="yes" context="viewoptionspage|cbHeaderFooter">Use _header/footer menu</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cbHeaderFooter-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|cbHeaderFooter">If checked, a widget pops-up when clicking the header or footer area with options to add content.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
                       <placeholder/>
                     </child>
                   </object>
@@ -921,8 +940,8 @@
                         <property name="receives-default">False</property>
                         <property name="margin-start">12</property>
                         <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
                         <property name="active">True</property>
+                        <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="zoomoptimal-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|zoomoptimal">Resizes the display to fit the width of the text in the document at the moment the command is started.</property>
@@ -990,7 +1009,7 @@
                         <property name="draw-indicator">True</property>
                         <property name="group">zoomoptimal</property>
                         <child internal-child="accessible">
-                          <object class="AtkObject" id="zomm100pc-atkobject">
+                          <object class="AtkObject" id="zoom100pc-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|zomm100pc">Displays the document at its actual size.</property>
                           </object>
                         </child>
@@ -1030,11 +1049,11 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="hexpand">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment2</property>
                         <accessibility>
                           <relation type="labelled-by" target="zoomcustom"/>
                         </accessibility>
-                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="zoomvalue-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|zoomvalue">Enter the zoom factor at which you want to display the document. Enter a percentage in the box.</property>
@@ -1045,24 +1064,6 @@
                         <property name="left-attach">1</property>
                         <property name="top-attach">6</property>
                       </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                   </object>
                 </child>

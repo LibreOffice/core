@@ -163,7 +163,6 @@ sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuPage-PageColumnDial
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuPage-BorderDialog'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuPage-InsertPageHeader'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuPage-InsertPageFooter'] button-no-label
-sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuPage-UseHeaderFooterMenu'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuPage-PageDialog'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuPrint-ShowSinglePage'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuPrint-ShowTwoPages'] button-no-label

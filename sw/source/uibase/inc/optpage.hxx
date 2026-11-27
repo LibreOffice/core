@@ -91,7 +91,9 @@ class SwContentOptPage final : public SfxTabPage
     std::unique_ptr<weld::RadioButton> m_xZoom100RB;
     std::unique_ptr<weld::RadioButton> m_xZoomCustomRB;
     std::unique_ptr<weld::MetricSpinButton> m_xZoomValue;
+    std::unique_ptr<weld::CheckButton> m_xHeaderFooterCB;
 
+    DECL_STATIC_LINK(SwContentOptPage, CheckBoxHdl, weld::Toggleable&, void);
     DECL_LINK(VertRulerHdl, weld::Toggleable&, void);
     DECL_LINK(ShowOutlineContentVisibilityButtonHdl, weld::Toggleable&, void);
     DECL_LINK(ZoomHdl, weld::Toggleable&, void);

@@ -60,6 +60,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/request.hxx>
 #include <svl/ctloptions.hxx>
 #include <svl/eitem.hxx>
 #include <svl/cjkoptions.hxx>
@@ -139,6 +140,7 @@ SwContentOptPage::SwContentOptPage(weld::Container* pPage, weld::DialogControlle
     , m_xZoom100RB(m_xBuilder->weld_radio_button(u"zoom100pc"_ustr))
     , m_xZoomCustomRB(m_xBuilder->weld_radio_button(u"zoomcustom"_ustr))
     , m_xZoomValue(m_xBuilder->weld_metric_spin_button(u"zoomvalue"_ustr, FieldUnit::PERCENT))
+    , m_xHeaderFooterCB(m_xBuilder->weld_check_button(u"cbHeaderFooter"_ustr))
 {
     m_xShowOutlineContentVisibilityButton->connect_toggled(LINK(this, SwContentOptPage, ShowOutlineContentVisibilityButtonHdl));
 
@@ -361,6 +363,9 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
     lcl_SelectMetricLB(*m_xMetricLB, SID_ATTR_METRIC, *rSet);
     lcl_SelectMetricLB(*m_xHMetric, FN_HSCROLL_METRIC, *rSet);
     lcl_SelectMetricLB(*m_xVMetric, FN_VSCROLL_METRIC, *rSet);
+
+    m_xHeaderFooterCB->set_active( SwViewOption::GetCurrentViewOptions().IsUseHeaderFooterMenu() );
+    m_xHeaderFooterCB->connect_toggled(LINK(this, SwContentOptPage, CheckBoxHdl));
 }
 
 OUString SwContentOptPage::GetAllStrings()
@@ -470,6 +475,18 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
     }
 
     return bRet;
+}
+
+IMPL_STATIC_LINK_NOARG(SwContentOptPage, CheckBoxHdl, weld::Toggleable&, void)
+{
+    SfxViewShell* pCurrentShell = SfxViewShell::Current();
+    SwView* pView = dynamic_cast<SwView*>(pCurrentShell);
+    if (pView)
+    {
+        SfxViewFrame& rViewFrm = pView->GetViewShell()->GetViewFrame();
+        SfxRequest aRequest(rViewFrm, FN_USE_HEADERFOOTERMENU);
+        pView->ExecViewOptions(aRequest);
+    }
 }
 
 IMPL_LINK(SwContentOptPage, VertRulerHdl, weld::Toggleable&, rBox, void)
