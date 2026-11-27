@@ -32,10 +32,12 @@ public:
 private:
     void testMinus();
     void testNospace();
+    void testTdf116239_superscript_plus();
 
     CPPUNIT_TEST_SUITE(ParseTest);
     CPPUNIT_TEST(testMinus);
     CPPUNIT_TEST(testNospace);
+    CPPUNIT_TEST(testTdf116239_superscript_plus);
     CPPUNIT_TEST_SUITE_END();
 
     SmDocShellRef mxDocShell;
@@ -117,6 +119,31 @@ void ParseTest::testNospace()
     CPPUNIT_ASSERT_EQUAL(SmNodeType::Expression, pNode001->GetType());
     CPPUNIT_ASSERT(static_cast<const SmExpressionNode *>(pNode001)->IsUseExtraSpaces());
     CPPUNIT_ASSERT_EQUAL(size_t(2), pNode00->GetNumSubNodes());
+}
+
+void ParseTest::testTdf116239_superscript_plus()
+{
+    auto pNode = SmParser5().Parse(u"M^{+}"_ustr);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pNode->GetNumSubNodes());
+    const SmNode *pNode0 = pNode->GetSubNode(0);
+    CPPUNIT_ASSERT(pNode0);
+    CPPUNIT_ASSERT_EQUAL(SmNodeType::Line, pNode0->GetType());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pNode0->GetNumSubNodes());
+
+    const SmNode *pNode00 = pNode0->GetSubNode(0);
+    CPPUNIT_ASSERT(pNode00);
+    CPPUNIT_ASSERT_EQUAL(SmNodeType::SubSup, pNode00->GetType());
+
+    const auto *pSubSup = static_cast<const SmSubSupNode *>(pNode00);
+    const SmNode *pBody = pSubSup->GetBody();
+    CPPUNIT_ASSERT(pBody);
+    CPPUNIT_ASSERT_EQUAL(SmNodeType::Text, pBody->GetType());
+    CPPUNIT_ASSERT_EQUAL(u"M"_ustr, pBody->GetToken().aText);
+
+    const SmNode *pSup = pSubSup->GetSubSup(RSUP); //
+    CPPUNIT_ASSERT(pSup);
+    CPPUNIT_ASSERT_EQUAL(SmNodeType::UnHor, pSup->GetType());
+    CPPUNIT_ASSERT_EQUAL(u"+"_ustr, pSup->GetToken().aText);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ParseTest);
