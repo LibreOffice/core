@@ -18,10 +18,20 @@ icns_sizes := 16x16 16x16@2x 32x32 32x32@2x 128x128 128x128@2x 256x256 256x256@2
 $(icns_WRKDIR)/.dir:
 	mkdir -p $(@D) && touch $@
 
-# the writer, calc, impress, draw & base app-icons are gone...
-$(icns_WRKDIR)/main.icns: $(foreach size,$(icns_sizes),$(icns_SRCDIR)/app-launcher/main.iconset/icon_$(size).png) | $(icns_WRKDIR)/.dir
-	$(call gb_Output_announce,$(@F),$(true),ICNS,4)
-	iconutil -c icns -o $@ $(<D)
+# actool invocation creates all three files, (the icns files now only contains low-res icons)
+# the --output-partial-info-plist is a required switch, but we just specify it in the Info.plist.in directly
+# unfortunately it doesn't report error with exit status, but only via messages, and it also doesn't
+# complain if not all images defined in the Contents.json are present, so the recipe is not
+# all that reliable/error checking by it claiming it did (re)create all files is a bit hacky…
+$(icns_WRKDIR)/Assets.car $(icns_WRKDIR)/AppIcon.icns $(icns_WRKDIR)/ignored.plist &: $(addprefix $(icns_SRCDIR)/Assets.xcassets/AppIcon.appiconset/,Contents.json $(foreach size,$(icns_sizes),icon_$(size).png)) | $(icns_WRKDIR)/.dir
+	$(call gb_Output_announce,$(@F),$(true),CAR,4)
+	actool $(icns_SRCDIR)/Assets.xcassets --compile $(@D) --output-format human-readable-text --platform macosx --app-icon AppIcon \
+	    --minimum-deployment-target $(MACOSX_DEPLOYMENT_TARGET) --output-partial-info-plist $(@D)/ignored.plist \
+	| awk '$(if $(verbose),{print $$0}) \
+	    /$(subst /,\/,$(icns_WRKDIR)/Assets.car)/    {catalog=1} \
+	    /$(subst /,\/,$(icns_WRKDIR)/AppIcon.icns)/  {icon=1} \
+	    /$(subst /,\/,$(icns_WRKDIR)/ignored.plist)/ {plist=1} \
+	    END {if (!(catalog && icon && plist)) {print "Error: actool did not create all required files" > "/dev/stderr"; exit 1}}'
 
 $(icns_WRKDIR)/generic-%.icns: $(foreach size,$(icns_sizes),$(icns_SRCDIR)/mime-generic/%.iconset/icon_$(size).png) | $(icns_WRKDIR)/.dir
 	$(call gb_Output_announce,$(@F),$(true),ICNS,3)
@@ -35,7 +45,7 @@ $(eval $(call gb_Package_Package,sysui_osxicons,$(gb_CustomTarget_workdir)/sysui
 $(call gb_Package_get_clean_target,sysui_osxicons): $(call gb_CustomTarget_get_clean_target,sysui/icns)
 
 $(eval $(call gb_Package_add_files_with_dir,sysui_osxicons,Resources,\
-    main.icns \
+    AppIcon.icns Assets.car \
     $(foreach type,$(icns_mimetypes),generic-$(type).icns oasis-$(type).icns) \
 ))
 
