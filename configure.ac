@@ -644,8 +644,13 @@ cd $BUILDDIR
 git_date=`git -C $SRC_ROOT log -1 --pretty=format:"%cd" --date=format:'%Y' 2>/dev/null`
 LIBO_THIS_YEAR=${git_date:-2026}
 AC_DEFINE_UNQUOTED(LIBO_THIS_YEAR,$LIBO_THIS_YEAR)
-# commit-time in unix epoch timestamp format in prep for reproducible builds
-SOURCE_DATE_EPOCH=`git -C $SRC_ROOT log -1 --pretty=%ct 2>/dev/null`
+if test -f $SRC_ROOT/sources.ver; then
+    # tarball creation time in unix epoch timestamp format in prep for reproducible builds
+    SOURCE_DATE_EPOCH=`stat -c %Y $SRC_ROOT/sources.ver`
+else
+    # commit-time in unix epoch timestamp format in prep for reproducible builds
+    SOURCE_DATE_EPOCH=`git -C $SRC_ROOT log -1 --pretty=%ct 2>/dev/null`
+fi
 AC_SUBST(SOURCE_DATE_EPOCH)
 
 x_Cygwin=[\#]
