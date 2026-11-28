@@ -28,7 +28,6 @@ EditLine* EditLine::Clone() const
     EditLine* pLine = new EditLine;
     pLine->maPositions = maPositions;
     pLine->mnStartPosX = mnStartPosX;
-    pLine->mnNextLinePosXDiff = mnNextLinePosXDiff;
     pLine->mnStart = mnStart;
     pLine->mnEnd = mnEnd;
     pLine->mnStartPortion = mnStartPortion;

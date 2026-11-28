@@ -33,7 +33,6 @@ private:
     std::vector<sal_Bool> maKashidaPositions;
     sal_Int32 mnTextWidth = 0;
     sal_Int32 mnStartPosX = 0;
-    sal_Int32 mnNextLinePosXDiff = 0;
     sal_Int32 mnStart = 0; // could be replaced by nStartPortion
     sal_Int32 mnEnd = 0; // could be replaced by nEndPortion
     sal_Int32 mnStartPortion = 0;
@@ -98,8 +97,6 @@ public:
 
     sal_Int32 GetStartPosX() const { return mnStartPosX; }
     void SetStartPosX(sal_Int32 nStart);
-    sal_Int32 GetNextLinePosXDiff() const { return mnNextLinePosXDiff; }
-    void SetNextLinePosXDiff(sal_Int32 nDiff) { mnNextLinePosXDiff = nDiff; }
     Size CalcTextSize(ParaPortion& rParaPortion);
 
     bool IsInvalid() const { return mbInvalid; }

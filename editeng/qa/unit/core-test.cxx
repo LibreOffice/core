@@ -2097,64 +2097,6 @@ CPPUNIT_TEST_FIXTURE(Test, testCreateLines)
     // CPPUNIT_ASSERT_MESSAGE("INTENTIONALLY FALSE", false);
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf154248MultilineFieldWrapping)
-{
-    // If field wrapping changes, this test may need to be updated
-
-    // Create Outliner instance
-    Outliner aOutliner(mpItemPool.get(), OutlinerMode::TextObject);
-    aOutliner.SetCalcFieldValueHdl(LINK(nullptr, Test, CalcFieldValueHdl));
-
-    // Create EditEngine's instance
-    EditEngine& aEditEngine = aOutliner.GetEditEngine();
-    aEditEngine.SetPaperSize(Size(2000, 2000));
-    aEditEngine.SetText(u"ABC  DEF ABC DEFGH"_ustr);
-    // Positions Ref     ....*4............
-
-    // Get Field Item for inserting URLs in text
-    SvxURLField aURLField(u"http://not.a.real.link"_ustr,
-                          u"Really long hyperlink text that won't fit in 1 line, no matter what."_ustr,
-                          SvxURLFormat::Repr);
-    SvxFieldItem aField(aURLField, EE_FEATURE_FIELD);
-
-    // Insert URL
-    EditDoc& rDoc = aEditEngine.GetEditDoc();
-    ContentNode* pNode = &rDoc.GetObject(0);
-    EditSelection aSel(EditPaM(pNode, 4), EditPaM(pNode, 4));
-    aEditEngine.InsertField(aSel, aField);
-
-    // Assert Field Count
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aEditEngine.GetFieldInfo(0).size());
-
-    aEditEngine.QuickFormatDoc(false);
-    CPPUNIT_ASSERT_EQUAL(true, aEditEngine.IsFormatted());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEditEngine.GetParagraphCount());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aEditEngine.GetLineCount(0));
-
-    ParaPortionList& rParagraphPortionList = aEditEngine.GetParaPortions();
-    EditLineList& rLines = rParagraphPortionList.getRef(0).GetLines();
-    {
-        EditLine const& rLine = rLines[0];
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rLine.GetStart());
-        // Line 1 contains the beginning of the link.
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rLine.GetEnd());
-    }
-
-    {
-        EditLine const& rLine = rLines[1];
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rLine.GetStart());
-        //Line 2 contains the end of the link and the text that follows it
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(14), rLine.GetEnd());
-    }
-
-    {
-        EditLine const& rLine = rLines[2];
-        //line 3 contains the last word that does not fit in line 2
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(14), rLine.GetStart());
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(19), rLine.GetEnd());
-    }
-}
-
 // tdf#151748: Verify that editeng produces an empty kashida array if the line does not have room
 CPPUNIT_TEST_FIXTURE(Test, testTdf151748StaleKashidaArray)
 {
