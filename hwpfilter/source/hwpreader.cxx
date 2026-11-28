@@ -1699,15 +1699,17 @@ void HwpReader::makePageStyle()
                 mxList->addAttribute(u"fo:border"_ustr, sXML_CDATA, u"0.039cm double #000000"_ustr);
                 break;
         }
-
-        mxList->addAttribute(u"fo:padding-left"_ustr, sXML_CDATA,
-                             OUString::number(WTI(hwpinfo.bordermargin[0])) + "inch");
-        mxList->addAttribute(u"fo:padding-right"_ustr, sXML_CDATA,
-                             OUString::number(WTI(hwpinfo.bordermargin[1])) + "inch");
-        mxList->addAttribute(u"fo:padding-top"_ustr, sXML_CDATA,
-                             OUString::number(WTI(hwpinfo.bordermargin[2])) + "inch");
-        mxList->addAttribute(u"fo:padding-bottom"_ustr, sXML_CDATA,
-                             OUString::number(WTI(hwpinfo.bordermargin[3])) + "inch");
+        if (hwpinfo.borderline)
+        {
+            mxList->addAttribute(u"fo:padding-left"_ustr, sXML_CDATA,
+                                 OUString::number(WTI(hwpinfo.bordermargin[0])) + "inch");
+            mxList->addAttribute(u"fo:padding-right"_ustr, sXML_CDATA,
+                                 OUString::number(WTI(hwpinfo.bordermargin[1])) + "inch");
+            mxList->addAttribute(u"fo:padding-top"_ustr, sXML_CDATA,
+                                 OUString::number(WTI(hwpinfo.bordermargin[2])) + "inch");
+            mxList->addAttribute(u"fo:padding-bottom"_ustr, sXML_CDATA,
+                                 OUString::number(WTI(hwpinfo.bordermargin[3])) + "inch");
+        }
 
         /* background color */
         if (hwpinfo.back_info.isset)
