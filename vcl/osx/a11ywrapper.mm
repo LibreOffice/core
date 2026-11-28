@@ -1500,6 +1500,36 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
         return NSMakeRange( NSNotFound, 0 );
 }
 
+// Setters of the NSAccessibility protocol. AppKit calls these when another
+// process sets an attribute, and NSAccessibilityElement's own implementations
+// ignore the value, so forward them to -accessibilitySetValue:forAttribute:.
+// isAccessibilitySelectorAllowed: only allows them for settable attributes.
+
+- (void)setAccessibilityValue:(id)value
+{
+    [ self accessibilitySetValue: value forAttribute: NSAccessibilityValueAttribute ];
+}
+
+- (void)setAccessibilityFocused:(BOOL)bFocused
+{
+    [ self accessibilitySetValue: [ NSNumber numberWithBool: bFocused ] forAttribute: NSAccessibilityFocusedAttribute ];
+}
+
+- (void)setAccessibilitySelectedText:(NSString *)pSelectedText
+{
+    [ self accessibilitySetValue: pSelectedText forAttribute: NSAccessibilitySelectedTextAttribute ];
+}
+
+- (void)setAccessibilitySelectedTextRange:(NSRange)aRange
+{
+    [ self accessibilitySetValue: [ NSValue valueWithRange: aRange ] forAttribute: NSAccessibilitySelectedTextRangeAttribute ];
+}
+
+- (void)setAccessibilitySelectedChildren:(NSArray *)pSelectedChildren
+{
+    [ self accessibilitySetValue: pSelectedChildren forAttribute: NSAccessibilitySelectedChildrenAttribute ];
+}
+
 - (NSAttributedString *)accessibilityAttributedStringForRange:(NSRange)aRange
 {
     return [ self accessibilityAttributeValue: NSAccessibilityAttributedStringForRangeParameterizedAttribute forParameter: [ NSValue valueWithRange: aRange ] ];
